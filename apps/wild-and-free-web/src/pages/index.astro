@@ -2,10 +2,27 @@
 import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+type HealthStatus = {
+  status: string;
+  engine: string;
+  crew: string;
+  timestamp: string;
+};
+
+let health: HealthStatus | null = null;
+
+try {
+  const res = await fetch('http://localhost:3000/gateway/health');
+  if (res.ok) health = (await res.json()) as HealthStatus;
+} catch {
+  health = null;
+}
 ---
 
 <Layout>
+	<h1>Service Health</h1>
+	<p>Status: {health?.status ?? 'unavailable'}</p>
+	<p>Engine: {health?.engine ?? 'unavailable'}</p>
+	<p>Crew: {health?.crew ?? 'unavailable'}</p>
 	<Welcome />
 </Layout>
