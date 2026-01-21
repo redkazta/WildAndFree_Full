@@ -1,28 +1,75 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import ArtistGrid from '../components/ArtistGrid.astro';
 
-type HealthStatus = {
-  status: string;
-  engine: string;
-  crew: string;
-  timestamp: string;
+type Artist = {
+  id: string;
+  name: string;
+  role: string;
+  image_url: string;
 };
 
-let health: HealthStatus | null = null;
+type TenantConfig = {
+  id: string;
+  name: string;
+  primary_color: string;
+  secondary_color: string;
+  modules: Record<string, boolean>;
+};
+
+type GatewayConfigResponse = {
+  tenant_id: string;
+  config: TenantConfig;
+  data: { crew_name: string; artists: Artist[] };
+};
+
+let gatewayConfig: GatewayConfigResponse | null = null;
 
 try {
-  const res = await fetch('http://localhost:3000/gateway/health');
-  if (res.ok) health = (await res.json()) as HealthStatus;
+  const res = await fetch('http://localhost:3000/gateway/config');
+  if (res.ok) gatewayConfig = (await res.json()) as GatewayConfigResponse;
 } catch {
-  health = null;
+  gatewayConfig = null;
 }
+
+const config: TenantConfig = gatewayConfig?.config ?? {
+  id: 'wild-and-free',
+  name: 'Wild and Free',
+  primary_color: '#3245ff',
+  secondary_color: '#bc52ee',
+  modules: { wallet: true, events: true },
+};
+
+const artists: Artist[] = gatewayConfig?.data.artists ?? [
+  {
+    id: 'a1',
+    name: 'Nova K',
+    role: 'Rapper',
+    image_url: 'https://images.unsplash.com/photo-1520975958221-7f61d4d6df4b?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 'a2',
+    name: 'Sable',
+    role: 'Producer',
+    image_url: 'https://images.unsplash.com/photo-1520975693413-35e0000c0e4e?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 'a3',
+    name: 'Mira V',
+    role: 'Rapper',
+    image_url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 'a4',
+    name: 'Kairo',
+    role: 'DJ',
+    image_url: 'https://images.unsplash.com/photo-1520975753545-c9a7d1551b77?auto=format&fit=crop&w=800&q=80',
+  },
+];
 ---
 
-<Layout>
-	<h1>Service Health</h1>
-	<p>Status: {health?.status ?? 'unavailable'}</p>
-	<p>Engine: {health?.engine ?? 'unavailable'}</p>
-	<p>Crew: {health?.crew ?? 'unavailable'}</p>
-	<Welcome />
+<Layout config={config}>
+	<Hero crewName={config.name} />
+	<ArtistGrid artists={artists} />
 </Layout>

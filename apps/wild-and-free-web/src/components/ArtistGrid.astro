@@ -1,0 +1,76 @@
+---
+import ArtistCard from './ArtistCard.astro';
+
+export type Props = {
+  artists: Array<{
+    id: string;
+    name: string;
+    role: string;
+    image_url: string;
+  }>;
+};
+
+const { artists } = Astro.props;
+---
+
+<section id="artists" class="section">
+	<div class="heading">
+		<h2 class="title">Artists</h2>
+		<p class="note">Built for pressure. Engineered for late nights.</p>
+	</div>
+	<div class="grid">
+		{artists.map((artist) => <ArtistCard artist={artist} />)}
+	</div>
+</section>
+
+<style>
+	.section {
+		padding: 26px 0 72px;
+	}
+
+	.heading {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 16px;
+		margin-bottom: 18px;
+	}
+
+	.title {
+		margin: 0;
+		font-size: 20px;
+		letter-spacing: -0.02em;
+	}
+
+	.note {
+		margin: 0;
+		color: rgba(255, 255, 255, 0.7);
+		font-size: 14px;
+	}
+
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(1, minmax(0, 1fr));
+		gap: 14px;
+	}
+
+	@media (min-width: 680px) {
+		.grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 16px;
+		}
+	}
+
+	@media (min-width: 980px) {
+		.grid {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+	}
+
+	@media (min-width: 1280px) {
+		.grid {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+		}
+	}
+</style>
+

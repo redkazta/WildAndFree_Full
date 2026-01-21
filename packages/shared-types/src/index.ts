@@ -15,8 +15,16 @@ export interface TenantConfig {
   modules: TenantModules;
 }
 
+export interface Artist {
+  id: string;
+  name: string;
+  role: string;
+  image_url: string;
+}
+
 export interface TenantInitData {
   crew_name: string;
+  artists: Artist[];
 }
 
 export interface TenantInitResponse {

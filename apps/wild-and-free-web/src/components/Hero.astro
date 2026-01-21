@@ -1,0 +1,84 @@
+---
+export type Props = {
+  crewName: string;
+};
+
+const { crewName } = Astro.props;
+---
+
+<section class="hero">
+	<p class="tag">Musicians Hub</p>
+	<h1 class="title">{crewName}</h1>
+	<p class="subtitle">Dark. Minimal. Built to move as one.</p>
+	<div class="actions">
+		<a class="button" href="#artists">Meet the artists</a>
+	</div>
+</section>
+
+<style>
+	.hero {
+		padding: 72px 0 36px;
+	}
+
+	.tag {
+		margin: 0 0 14px;
+		letter-spacing: 0.28em;
+		text-transform: uppercase;
+		color: rgba(255, 255, 255, 0.72);
+		font-size: 12px;
+	}
+
+	.title {
+		margin: 0;
+		font-size: clamp(46px, 7vw, 96px);
+		line-height: 0.95;
+		letter-spacing: -0.04em;
+		background: linear-gradient(
+			135deg,
+			rgba(255, 255, 255, 0.95) 0%,
+			rgba(255, 255, 255, 0.75) 40%,
+			color-mix(in srgb, var(--primary-color) 60%, white 40%) 100%
+		);
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+	}
+
+	.subtitle {
+		margin: 18px 0 0;
+		color: rgba(255, 255, 255, 0.7);
+		font-size: 16px;
+		max-width: 52ch;
+	}
+
+	.actions {
+		margin-top: 26px;
+	}
+
+	.button {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 12px 16px;
+		border-radius: 12px;
+		text-decoration: none;
+		color: #0b0b0b;
+		background: var(--primary-color);
+		box-shadow:
+			0 0 0 1px color-mix(in srgb, var(--primary-color) 40%, transparent 60%),
+			0 18px 42px color-mix(in srgb, var(--primary-color) 20%, transparent 80%);
+		transition:
+			transform 160ms ease,
+			box-shadow 160ms ease,
+			filter 160ms ease;
+	}
+
+	.button:hover {
+		transform: translateY(-1px);
+		filter: saturate(1.15);
+		box-shadow:
+			0 0 0 1px color-mix(in srgb, var(--primary-color) 60%, transparent 40%),
+			0 22px 52px color-mix(in srgb, var(--primary-color) 28%, transparent 72%);
+	}
+</style>
+

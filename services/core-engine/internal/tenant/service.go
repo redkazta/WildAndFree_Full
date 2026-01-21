@@ -17,11 +17,19 @@ type Config struct {
 
 type InitData struct {
 	CrewName string `json:"crew_name"`
+	Artists  []Artist `json:"artists"`
 }
 
 type InitResponse struct {
 	Config Config   `json:"config"`
 	Data   InitData `json:"data"`
+}
+
+type Artist struct {
+	ID       string `json:"id"`
+	Name     string `json:"name"`
+	Role     string `json:"role"`
+	ImageURL string `json:"image_url"`
 }
 
 func LoadInit(tenantID string) (InitResponse, bool, error) {
@@ -39,8 +47,49 @@ func LoadInit(tenantID string) (InitResponse, bool, error) {
 		Config: cfg,
 		Data: InitData{
 			CrewName: cfg.Name,
+			Artists:  mockArtists(tenantID),
 		},
 	}, true, nil
+}
+
+func mockArtists(tenantID string) []Artist {
+	if tenantID == "wild-and-free" {
+		return []Artist{
+			{
+				ID:       "a1",
+				Name:     "Nova K",
+				Role:     "Rapper",
+				ImageURL: "https://images.unsplash.com/photo-1520975958221-7f61d4d6df4b?auto=format&fit=crop&w=800&q=80",
+			},
+			{
+				ID:       "a2",
+				Name:     "Sable",
+				Role:     "Producer",
+				ImageURL: "https://images.unsplash.com/photo-1520975693413-35e0000c0e4e?auto=format&fit=crop&w=800&q=80",
+			},
+			{
+				ID:       "a3",
+				Name:     "Mira V",
+				Role:     "Rapper",
+				ImageURL: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80",
+			},
+			{
+				ID:       "a4",
+				Name:     "Kairo",
+				Role:     "DJ",
+				ImageURL: "https://images.unsplash.com/photo-1520975753545-c9a7d1551b77?auto=format&fit=crop&w=800&q=80",
+			},
+		}
+	}
+
+	return []Artist{
+		{
+			ID:       "a1",
+			Name:     "Unknown",
+			Role:     "Artist",
+			ImageURL: "https://images.unsplash.com/photo-1520975958221-7f61d4d6df4b?auto=format&fit=crop&w=800&q=80",
+		},
+	}
 }
 
 func loadConfigs() (map[string]Config, error) {
@@ -65,4 +114,3 @@ func loadConfigs() (map[string]Config, error) {
 
 	return configs, nil
 }
-
