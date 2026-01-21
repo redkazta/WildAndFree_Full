@@ -10,38 +10,35 @@ type Artist = {
   image_url: string;
 };
 
-type TenantConfig = {
-  id: string;
+type Tenant = {
   name: string;
   primary_color: string;
   secondary_color: string;
-  modules: Record<string, boolean>;
+  logo_text: string;
 };
 
-type GatewayConfigResponse = {
-  tenant_id: string;
-  config: TenantConfig;
-  data: { crew_name: string; artists: Artist[] };
+type GatewayInitResponse = {
+  tenant: Tenant;
+  artists: Artist[];
 };
 
-let gatewayConfig: GatewayConfigResponse | null = null;
+let init: GatewayInitResponse | null = null;
 
 try {
-  const res = await fetch('http://localhost:3000/gateway/config');
-  if (res.ok) gatewayConfig = (await res.json()) as GatewayConfigResponse;
+  const res = await fetch('http://localhost:3000/gateway/init');
+  if (res.ok) init = (await res.json()) as GatewayInitResponse;
 } catch {
-  gatewayConfig = null;
+  init = null;
 }
 
-const config: TenantConfig = gatewayConfig?.config ?? {
-  id: 'wild-and-free',
+const tenant: Tenant = init?.tenant ?? {
   name: 'Wild and Free',
-  primary_color: '#3245ff',
-  secondary_color: '#bc52ee',
-  modules: { wallet: true, events: true },
+  primary_color: '#00FF41',
+  secondary_color: '#0a0a0a',
+  logo_text: 'W&F',
 };
 
-const artists: Artist[] = gatewayConfig?.data.artists ?? [
+const artists: Artist[] = init?.artists ?? [
   {
     id: 'a1',
     name: 'Nova K',
@@ -57,19 +54,13 @@ const artists: Artist[] = gatewayConfig?.data.artists ?? [
   {
     id: 'a3',
     name: 'Mira V',
-    role: 'Rapper',
-    image_url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: 'a4',
-    name: 'Kairo',
     role: 'DJ',
     image_url: 'https://images.unsplash.com/photo-1520975753545-c9a7d1551b77?auto=format&fit=crop&w=800&q=80',
   },
 ];
 ---
 
-<Layout config={config}>
-	<Hero crewName={config.name} />
+<Layout tenant={tenant}>
+	<Hero crewName={tenant.name} />
 	<ArtistGrid artists={artists} />
 </Layout>

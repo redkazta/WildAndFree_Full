@@ -1,15 +1,14 @@
 ---
 export type Props = {
-  config: {
-    id: string;
+  tenant: {
     name: string;
     primary_color: string;
     secondary_color: string;
-    modules: Record<string, boolean>;
+    logo_text: string;
   };
 };
 
-const { config } = Astro.props;
+const { tenant } = Astro.props;
 ---
 
 <!doctype html>
@@ -19,7 +18,7 @@ const { config } = Astro.props;
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>{config.name}</title>
+		<title>{tenant.name}</title>
 	</head>
 	<body>
 		<div class="wrap">
@@ -28,9 +27,9 @@ const { config } = Astro.props;
 	</body>
 </html>
 
-<style define:vars={{ primaryColor: config.primary_color }}>
+<style define:vars={{ primary: tenant.primary_color }}>
 	:global(:root) {
-		--primary-color: var(--primaryColor);
+		--primary-color: var(--primary);
 	}
 
 	:global(html) {
@@ -47,7 +46,7 @@ const { config } = Astro.props;
 		background:
 			radial-gradient(
 				1200px 600px at 10% 10%,
-				color-mix(in srgb, var(--primary-color) 16%, transparent 84%),
+				color-mix(in srgb, var(--primary) 16%, transparent 84%),
 				transparent 60%
 			),
 			radial-gradient(900px 500px at 90% 20%, rgba(255, 255, 255, 0.06), transparent 55%),

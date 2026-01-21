@@ -6,11 +6,21 @@
   "exports": {
     ".": {
       "types": "./index.d.ts"
+    },
+    "./tenant.config": {
+      "types": "./tenant.config.d.ts",
+      "default": "./tenant.config.js"
     }
   },
   "files": [
     "index.d.ts",
     "index.ts",
-    "tenant-config.json"
-  ]
+    "tenant-config.json",
+    "tenant.config.ts",
+    "tenant.config.d.ts",
+    "tenant.config.js"
+  ],
+  "scripts": {
+    "dev": "node -e \"\""
+  }
 }

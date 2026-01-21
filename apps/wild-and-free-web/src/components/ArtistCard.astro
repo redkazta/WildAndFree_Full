@@ -55,12 +55,18 @@ const { artist } = Astro.props;
 		bottom: 0;
 		padding: 14px 14px 12px;
 		background: linear-gradient(to top, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0));
+		opacity: 0;
+		transform: translateY(6px);
+		transition:
+			opacity 160ms ease,
+			transform 160ms ease;
 	}
 
 	.name {
 		margin: 0;
 		font-size: 16px;
 		letter-spacing: -0.01em;
+		font-weight: 700;
 	}
 
 	.role {
@@ -71,14 +77,18 @@ const { artist } = Astro.props;
 
 	.card:hover {
 		transform: translateY(-2px);
-		border-color: color-mix(in srgb, var(--primary-color) 55%, rgba(255, 255, 255, 0.12) 45%);
+		border-color: color-mix(in srgb, var(--primary) 55%, rgba(255, 255, 255, 0.12) 45%);
 		box-shadow:
-			0 0 0 1px color-mix(in srgb, var(--primary-color) 55%, transparent 45%),
+			0 0 0 1px color-mix(in srgb, var(--primary) 55%, transparent 45%),
 			0 18px 54px rgba(0, 0, 0, 0.6);
 	}
 
 	.card:hover img {
 		transform: scale(1.06);
 	}
-</style>
 
+	.card:hover .overlay {
+		opacity: 1;
+		transform: translateY(0);
+	}
+</style>

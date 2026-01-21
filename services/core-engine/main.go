@@ -16,6 +16,13 @@ type HealthStatus struct {
 	Timestamp string `json:"timestamp"`
 }
 
+type Artist struct {
+	ID       string `json:"id"`
+	Name     string `json:"name"`
+	Role     string `json:"role"`
+	ImageURL string `json:"image_url"`
+}
+
 func main() {
 	mux := http.NewServeMux()
 
@@ -27,6 +34,33 @@ func main() {
 			Engine:    "Go",
 			Crew:      "Wild and Free",
 			Timestamp: time.Now().UTC().Format(time.RFC3339),
+		}
+
+		_ = json.NewEncoder(w).Encode(payload)
+	})
+
+	mux.HandleFunc("GET /api/v1/artists", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+
+		payload := []Artist{
+			{
+				ID:       "a1",
+				Name:     "Nova K",
+				Role:     "Rapper",
+				ImageURL: "https://images.unsplash.com/photo-1520975958221-7f61d4d6df4b?auto=format&fit=crop&w=800&q=80",
+			},
+			{
+				ID:       "a2",
+				Name:     "Sable",
+				Role:     "Producer",
+				ImageURL: "https://images.unsplash.com/photo-1520975693413-35e0000c0e4e?auto=format&fit=crop&w=800&q=80",
+			},
+			{
+				ID:       "a3",
+				Name:     "Mira V",
+				Role:     "DJ",
+				ImageURL: "https://images.unsplash.com/photo-1520975753545-c9a7d1551b77?auto=format&fit=crop&w=800&q=80",
+			},
 		}
 
 		_ = json.NewEncoder(w).Encode(payload)

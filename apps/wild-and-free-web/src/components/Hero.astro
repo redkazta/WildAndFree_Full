@@ -37,7 +37,7 @@ const { crewName } = Astro.props;
 			135deg,
 			rgba(255, 255, 255, 0.95) 0%,
 			rgba(255, 255, 255, 0.75) 40%,
-			color-mix(in srgb, var(--primary-color) 60%, white 40%) 100%
+			color-mix(in srgb, var(--primary) 60%, white 40%) 100%
 		);
 		-webkit-background-clip: text;
 		background-clip: text;
@@ -63,10 +63,10 @@ const { crewName } = Astro.props;
 		border-radius: 12px;
 		text-decoration: none;
 		color: #0b0b0b;
-		background: var(--primary-color);
+		background: var(--primary);
 		box-shadow:
-			0 0 0 1px color-mix(in srgb, var(--primary-color) 40%, transparent 60%),
-			0 18px 42px color-mix(in srgb, var(--primary-color) 20%, transparent 80%);
+			0 0 0 1px color-mix(in srgb, var(--primary) 40%, transparent 60%),
+			0 18px 42px color-mix(in srgb, var(--primary) 20%, transparent 80%);
 		transition:
 			transform 160ms ease,
 			box-shadow 160ms ease,
@@ -77,8 +77,7 @@ const { crewName } = Astro.props;
 		transform: translateY(-1px);
 		filter: saturate(1.15);
 		box-shadow:
-			0 0 0 1px color-mix(in srgb, var(--primary-color) 60%, transparent 40%),
-			0 22px 52px color-mix(in srgb, var(--primary-color) 28%, transparent 72%);
+			0 0 0 1px color-mix(in srgb, var(--primary) 60%, transparent 40%),
+			0 22px 52px color-mix(in srgb, var(--primary) 28%, transparent 72%);
 	}
 </style>
-
