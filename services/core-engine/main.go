@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 	"time"
+
+	"core-engine/internal/tenant"
 )
 
 type HealthStatus struct {
@@ -30,6 +32,23 @@ func main() {
 		_ = json.NewEncoder(w).Encode(payload)
 	})
 
+	mux.HandleFunc("GET /api/v1/tenant/{id}/init", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+
+		tenantID := r.PathValue("id")
+		payload, ok, err := tenant.LoadInit(tenantID)
+		if err != nil {
+			http.Error(w, "failed to load tenant", http.StatusInternalServerError)
+			return
+		}
+		if !ok {
+			http.Error(w, "tenant not found", http.StatusNotFound)
+			return
+		}
+
+		_ = json.NewEncoder(w).Encode(payload)
+	})
+
 	server := &http.Server{
 		Addr:              ":8080",
 		Handler:           mux,
@@ -39,4 +58,3 @@ func main() {
 	log.Println("Core Engine Starting...")
 	log.Fatal(server.ListenAndServe())
 }
-

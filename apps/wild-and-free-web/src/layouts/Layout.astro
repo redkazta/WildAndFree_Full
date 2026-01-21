@@ -1,3 +1,37 @@
+---
+type TenantConfig = {
+  id: string;
+  name: string;
+  primary_color: string;
+  secondary_color: string;
+  modules: Record<string, boolean>;
+};
+
+type GatewayConfigResponse = {
+  tenant_id: string;
+  config: TenantConfig;
+  data: { crew_name: string };
+};
+
+let gatewayConfig: GatewayConfigResponse | null = null;
+
+try {
+  const headers = new Headers();
+  const res = await fetch('http://localhost:3000/gateway/config', { headers });
+  if (res.ok) gatewayConfig = (await res.json()) as GatewayConfigResponse;
+} catch {
+  gatewayConfig = null;
+}
+
+const config = gatewayConfig?.config ?? {
+  id: 'wild-and-free',
+  name: 'Wild and Free',
+  primary_color: '#3245ff',
+  secondary_color: '#bc52ee',
+  modules: {},
+};
+---
+
 <!doctype html>
 <html lang="en">
 	<head>
@@ -5,14 +39,28 @@
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>{config.name}</title>
 	</head>
 	<body>
+		<header>
+			<h1>{config.name}</h1>
+		</header>
+		{config.modules.wallet && <section>Wallet enabled</section>}
+		{config.modules.events && <section>Events enabled</section>}
 		<slot />
 	</body>
 </html>
 
-<style>
+<style define:vars={{ primaryColor: config.primary_color, secondaryColor: config.secondary_color }}>
+	:global(:root) {
+		--primary: var(--primaryColor);
+		--secondary: var(--secondaryColor);
+	}
+
+	:global(body) {
+		color: var(--primary);
+	}
+
 	html,
 	body {
 		margin: 0;
