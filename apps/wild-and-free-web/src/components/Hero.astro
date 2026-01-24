@@ -7,77 +7,93 @@ const { crewName } = Astro.props;
 ---
 
 <section class="hero">
-	<p class="tag">Musicians Hub</p>
-	<h1 class="title">{crewName}</h1>
-	<p class="subtitle">Dark. Minimal. Built to move as one.</p>
-	<div class="actions">
-		<a class="button" href="#artists">Meet the artists</a>
+	<div class="content">
+		<p class="tag">Musicians Hub</p>
+		<h1 class="title">{crewName}</h1>
+		<p class="subtitle">Dark. Minimal. Built to move as one.</p>
+		<div class="actions">
+			<a class="button" href="#artists">
+				<span>Explore Crew</span>
+			</a>
+		</div>
 	</div>
 </section>
 
 <style>
 	.hero {
-		padding: 72px 0 36px;
+		min-height: 80vh;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		padding: 120px 0 60px;
+		position: relative;
 	}
 
 	.tag {
-		margin: 0 0 14px;
-		letter-spacing: 0.28em;
+		margin: 0 0 24px;
+		letter-spacing: 0.4em;
 		text-transform: uppercase;
-		color: rgba(255, 255, 255, 0.72);
-		font-size: 12px;
+		color: var(--primary-color);
+		font-size: 11px;
+		font-weight: 700;
 	}
 
 	.title {
 		margin: 0;
-		font-size: clamp(46px, 7vw, 96px);
-		line-height: 0.95;
-		letter-spacing: -0.04em;
-		background: linear-gradient(
-			135deg,
-			rgba(255, 255, 255, 0.95) 0%,
-			rgba(255, 255, 255, 0.75) 40%,
-			color-mix(in srgb, var(--primary) 60%, white 40%) 100%
-		);
-		-webkit-background-clip: text;
-		background-clip: text;
+		font-size: clamp(64px, 12vw, 180px);
+		line-height: 0.85;
+		letter-spacing: -0.06em;
+		text-transform: uppercase;
+		font-weight: 900;
 		color: transparent;
+		-webkit-text-stroke: 1px rgba(255, 255, 255, 0.4);
+		position: relative;
+		z-index: 1;
+	}
+	
+	.title::before {
+		content: attr(data-text);
+		position: absolute;
+		top: 0;
+		left: 0;
+		color: #fff;
+		opacity: 0.1;
+		filter: blur(12px);
+		z-index: -1;
 	}
 
 	.subtitle {
-		margin: 18px 0 0;
-		color: rgba(255, 255, 255, 0.7);
-		font-size: 16px;
-		max-width: 52ch;
+		margin: 32px 0 0;
+		color: #888;
+		font-size: 18px;
+		max-width: 40ch;
+		line-height: 1.5;
+		font-weight: 300;
 	}
 
 	.actions {
-		margin-top: 26px;
+		margin-top: 48px;
 	}
 
 	.button {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		padding: 12px 16px;
-		border-radius: 12px;
+		padding: 16px 32px;
 		text-decoration: none;
-		color: #0b0b0b;
-		background: var(--primary);
-		box-shadow:
-			0 0 0 1px color-mix(in srgb, var(--primary) 40%, transparent 60%),
-			0 18px 42px color-mix(in srgb, var(--primary) 20%, transparent 80%);
-		transition:
-			transform 160ms ease,
-			box-shadow 160ms ease,
-			filter 160ms ease;
+		color: #000;
+		background: var(--primary-color);
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		font-size: 14px;
+		clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+		transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
 	}
 
 	.button:hover {
-		transform: translateY(-1px);
-		filter: saturate(1.15);
-		box-shadow:
-			0 0 0 1px color-mix(in srgb, var(--primary) 60%, transparent 40%),
-			0 22px 52px color-mix(in srgb, var(--primary) 28%, transparent 72%);
+		transform: translateY(-2px);
+		box-shadow: 0 10px 30px -10px var(--primary-color);
+		filter: brightness(1.1);
 	}
 </style>

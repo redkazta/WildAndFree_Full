@@ -21,6 +21,14 @@ const { tenant } = Astro.props;
 		<title>{tenant.name}</title>
 	</head>
 	<body>
+		<header class="site-header">
+			<div class="wrap header-content">
+				<div class="logo">{tenant.logo_text}</div>
+				<nav>
+					<a href="#artists" class="nav-link">Artists</a>
+				</nav>
+			</div>
+		</header>
 		<div class="wrap">
 			<slot />
 		</div>
@@ -33,30 +41,61 @@ const { tenant } = Astro.props;
 	}
 
 	:global(html) {
-		background: #050505;
+		background: #000000;
 		color: #ffffff;
-		font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
-			'Apple Color Emoji', 'Segoe UI Emoji';
+		font-family: 'Inter', system-ui, -apple-system, sans-serif;
 	}
 
 	:global(body) {
 		margin: 0;
 		min-height: 100vh;
-		color: rgba(255, 255, 255, 0.92);
-		background:
-			radial-gradient(
-				1200px 600px at 10% 10%,
-				color-mix(in srgb, var(--primary) 16%, transparent 84%),
-				transparent 60%
-			),
-			radial-gradient(900px 500px at 90% 20%, rgba(255, 255, 255, 0.06), transparent 55%),
+		color: #ededed;
+		background: 
+			radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--primary) 15%, transparent), transparent 40%),
 			#050505;
 	}
 
 	.wrap {
-		max-width: 1200px;
+		max-width: 1400px;
 		margin: 0 auto;
-		padding: 0 18px;
+		padding: 0 24px;
+	}
+
+	.site-header {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		z-index: 100;
+		padding: 24px 0;
+		backdrop-filter: blur(8px);
+		border-bottom: 1px solid rgba(255,255,255,0.05);
+	}
+
+	.header-content {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.logo {
+		font-weight: 900;
+		font-size: 24px;
+		letter-spacing: -0.05em;
+		color: #fff;
+	}
+
+	.nav-link {
+		color: rgba(255,255,255,0.6);
+		text-decoration: none;
+		font-size: 14px;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		transition: color 0.2s;
+	}
+
+	.nav-link:hover {
+		color: var(--primary-color);
 	}
 
 	:global(:root) {
