@@ -56,10 +56,9 @@ const { config } = Astro.props;
 				const menuToggle = document.querySelector('.menu-toggle');
 				if (menuToggle) {
 					menuToggle.addEventListener('click', () => {
-						// The sidebar component will handle this
-						const sidebar = document.getElementById('sidebar');
-						if (sidebar && (window as any).sidebarStore) {
-							(window as any).sidebarStore.toggle();
+						// Toggle sidebar using the global sidebarStore
+						if (window.sidebarStore) {
+							window.sidebarStore.toggle();
 						}
 					});
 				}
