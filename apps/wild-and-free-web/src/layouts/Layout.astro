@@ -1,14 +1,13 @@
 ---
 export type Props = {
-  tenant: {
+  config: {
     name: string;
     primary_color: string;
     secondary_color: string;
-    logo_text: string;
   };
 };
 
-const { tenant } = Astro.props;
+const { config } = Astro.props;
 ---
 
 <!doctype html>
@@ -18,12 +17,12 @@ const { tenant } = Astro.props;
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>{tenant.name}</title>
+		<title>{config.name}</title>
 	</head>
 	<body>
 		<header class="site-header">
 			<div class="wrap header-content">
-				<div class="logo">{tenant.logo_text}</div>
+				<div class="logo">W&F</div>
 				<nav class="main-nav">
 					<a href="#artists" class="nav-link">Artists</a>
 					<a href="#events" class="nav-link">Events</a>
@@ -40,7 +39,7 @@ const { tenant } = Astro.props;
 	</body>
 </html>
 
-<style define:vars={{ primary: tenant.primary_color }}>
+<style define:vars={{ primary: config.primary_color }}>
 	:global(:root) {
 		--primary-color: var(--primary);
 	}
