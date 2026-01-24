@@ -67,9 +67,94 @@ const artists: Artist[] = gatewayConfig?.data.artists ?? [
   },
   {
     id: 'a4',
-    name: 'Kairo',
+    name: 'Echo',
     role: 'DJ',
-    image_url: 'https://images.unsplash.com/photo-1520975753545-c9a7d1551b77?auto=format&fit=crop&w=800&q=80',
+    image_url: 'https://images.unsplash.com/photo-1589578236639-5381345b6687?auto=format&fit=crop&w=800&q=80',
+  },
+];
+
+// Mock data for music tracks
+const tracks = [
+  {
+    id: 't1',
+    title: 'No Rules',
+    artist: 'Nova K',
+    duration: '3:24',
+    cover_url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80',
+  },
+  {
+    id: 't2',
+    title: 'Midnight Dreams',
+    artist: 'Sable',
+    duration: '4:12',
+    cover_url: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=400&q=80',
+  },
+  {
+    id: 't3',
+    title: 'Street Lights',
+    artist: 'Mira V',
+    duration: '2:58',
+    cover_url: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?auto=format&fit=crop&w=400&q=80',
+  },
+  {
+    id: 't4',
+    title: 'Underground',
+    artist: 'Echo',
+    duration: '3:45',
+    cover_url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80',
+  },
+];
+
+// Mock data for events
+const events = [
+  {
+    id: 'e1',
+    title: 'Wild Gvng Live',
+    date: '2024-02-15',
+    location: 'Club Underground',
+    description: 'Noche de beats y líricas crudas con nuestros artistas principales.',
+  },
+  {
+    id: 'e2',
+    title: 'Battle de Freestyle',
+    date: '2024-02-22',
+    location: 'Barrio Centro',
+    description: 'Competencia de freestyle con premios para los mejores MCs.',
+  },
+  {
+    id: 'e3',
+    title: 'Beatmakers Session',
+    date: '2024-03-01',
+    location: 'Estudio 404',
+    description: 'Sesión de creación de beats en vivo con productores locales.',
+  },
+];
+
+// Mock data for shop products
+const products = [
+  {
+    id: 'p1',
+    name: 'Wild Gvng Hoodie',
+    price: '$45',
+    image_url: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=400&q=80',
+  },
+  {
+    id: 'p2',
+    name: 'Logo Cap',
+    price: '$25',
+    image_url: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=400&q=80',
+  },
+  {
+    id: 'p3',
+    name: 'Sticker Pack',
+    price: '$15',
+    image_url: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=400&q=80',
+  },
+  {
+    id: 'p4',
+    name: 'Limited Tee',
+    price: '$35',
+    image_url: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=400&q=80',
   },
 ];
 ---
