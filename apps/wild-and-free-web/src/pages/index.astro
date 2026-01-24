@@ -96,6 +96,42 @@ const artists: Artist[] = gatewayConfig?.data.artists ?? [
 
 	<div class="content-separator"></div>
 
+	<section id="artistas" class="artists-section">
+		<div class="artists-content">
+			<SectionHeader title="Artistas" subtitle="El talento que mueve el movimiento" />
+			<ArtistGrid artists={artists} />
+		</div>
+	</section>
+
+	<div class="content-separator"></div>
+
+	<section id="music" class="music-section">
+		<div class="music-content">
+			<SectionHeader title="Música" subtitle="Los beats que definen la cultura" />
+			<MusicGrid tracks={tracks} />
+		</div>
+	</section>
+
+	<div class="content-separator"></div>
+
+	<section id="events" class="events-section">
+		<div class="events-content">
+			<SectionHeader title="Eventos" subtitle="Donde el movimiento cobra vida" />
+			<EventsList events={events} />
+		</div>
+	</section>
+
+	<div class="content-separator"></div>
+
+	<section id="shop" class="shop-section">
+		<div class="shop-content">
+			<SectionHeader title="Tienda" subtitle="El estilo que representa" />
+			<ShopGrid products={products} />
+		</div>
+	</section>
+
+	<div class="content-separator"></div>
+
 	<section id="about" class="about-section">
 		<div class="about-content">
 			<SectionHeader title="La Historia" subtitle="Quiénes somos" />
@@ -171,12 +207,16 @@ const artists: Artist[] = gatewayConfig?.data.artists ?? [
 		margin: 120px 0;
 	}
 
-	.about-section {
+	.artists-section,
+	.music-section,
+	.events-section,
+	.shop-section,
+	.about-section,
+	.wild-free-section {
 		padding: 0 24px;
 	}
 
 	.wild-free-section {
-		padding: 0 24px;
 		background: linear-gradient(135deg, rgba(0, 255, 65, 0.05) 0%, transparent 50%);
 		border: 1px solid rgba(0, 255, 65, 0.1);
 		border-radius: 8px;
