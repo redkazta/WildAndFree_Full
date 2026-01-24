@@ -62,5 +62,103 @@ const artists: Artist[] = init?.artists ?? [
 
 <Layout tenant={tenant}>
 	<Hero crewName={tenant.name} />
+	
+	<div class="content-separator"></div>
+
 	<ArtistGrid artists={artists} />
+
+	<div class="content-separator"></div>
+
+	<section id="events" class="placeholder-section">
+		<h2 class="section-title">Upcoming Events</h2>
+		<div class="placeholder-box">
+			<p>No events scheduled yet.</p>
+		</div>
+	</section>
+
+	<div class="content-separator"></div>
+
+	<section id="shop" class="placeholder-section">
+		<h2 class="section-title">Official Shop</h2>
+		<div class="placeholder-box">
+			<p>Merch drop coming soon.</p>
+		</div>
+	</section>
+
+	<div class="content-separator"></div>
+
+	<section id="login" class="join-section">
+		<div class="join-content">
+			<h2 class="join-title">Join the Crew</h2>
+			<p class="join-text">Exclusive access to drops, tickets, and behind the scenes content.</p>
+			<a href="/login" class="join-button">Member Login</a>
+		</div>
+	</section>
 </Layout>
+
+<style>
+	.content-separator {
+		height: 1px;
+		background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+		margin: 80px 0;
+	}
+
+	.placeholder-section {
+		padding: 40px 0;
+		text-align: center;
+	}
+
+	.section-title {
+		font-size: 32px;
+		text-transform: uppercase;
+		margin-bottom: 40px;
+		letter-spacing: -0.02em;
+	}
+
+	.placeholder-box {
+		border: 1px dashed rgba(255,255,255,0.1);
+		padding: 60px;
+		border-radius: 12px;
+		color: rgba(255,255,255,0.4);
+		font-size: 14px;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+	}
+
+	.join-section {
+		padding: 100px 0;
+		text-align: center;
+		background: radial-gradient(circle at center, rgba(255,255,255,0.03) 0%, transparent 70%);
+	}
+
+	.join-title {
+		font-size: 48px;
+		text-transform: uppercase;
+		font-weight: 900;
+		margin-bottom: 16px;
+		letter-spacing: -0.03em;
+	}
+
+	.join-text {
+		color: #888;
+		margin-bottom: 32px;
+		font-size: 18px;
+	}
+
+	.join-button {
+		display: inline-block;
+		padding: 16px 48px;
+		background: #fff;
+		color: #000;
+		text-decoration: none;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+		transition: transform 0.2s;
+	}
+
+	.join-button:hover {
+		transform: scale(1.05);
+	}
+</style>

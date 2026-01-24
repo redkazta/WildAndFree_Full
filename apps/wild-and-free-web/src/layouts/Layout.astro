@@ -24,14 +24,19 @@ const { tenant } = Astro.props;
 		<header class="site-header">
 			<div class="wrap header-content">
 				<div class="logo">{tenant.logo_text}</div>
-				<nav>
+				<nav class="main-nav">
 					<a href="#artists" class="nav-link">Artists</a>
+					<a href="#events" class="nav-link">Events</a>
+					<a href="#shop" class="nav-link">Shop</a>
 				</nav>
+				<div class="auth-actions">
+					<a href="/login" class="login-btn">Login</a>
+				</div>
 			</div>
 		</header>
-		<div class="wrap">
+		<main>
 			<slot />
-		</div>
+		</main>
 	</body>
 </html>
 
@@ -44,15 +49,14 @@ const { tenant } = Astro.props;
 		background: #000000;
 		color: #ffffff;
 		font-family: 'Inter', system-ui, -apple-system, sans-serif;
+		scroll-behavior: smooth;
 	}
 
 	:global(body) {
 		margin: 0;
 		min-height: 100vh;
 		color: #ededed;
-		background: 
-			radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--primary) 15%, transparent), transparent 40%),
-			#050505;
+		background: #050505;
 	}
 
 	.wrap {
@@ -66,13 +70,17 @@ const { tenant } = Astro.props;
 		top: 0;
 		left: 0;
 		right: 0;
-		z-index: 100;
-		padding: 24px 0;
-		backdrop-filter: blur(8px);
-		border-bottom: 1px solid rgba(255,255,255,0.05);
+		z-index: 1000;
+		height: 80px;
+		display: flex;
+		align-items: center;
+		background: rgba(0, 0, 0, 0.8);
+		backdrop-filter: blur(12px);
+		border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 	}
 
 	.header-content {
+		width: 100%;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
@@ -80,22 +88,48 @@ const { tenant } = Astro.props;
 
 	.logo {
 		font-weight: 900;
-		font-size: 24px;
+		font-size: 28px;
 		letter-spacing: -0.05em;
 		color: #fff;
+		text-transform: uppercase;
+	}
+
+	.main-nav {
+		display: flex;
+		gap: 32px;
 	}
 
 	.nav-link {
-		color: rgba(255,255,255,0.6);
+		color: rgba(255, 255, 255, 0.6);
 		text-decoration: none;
-		font-size: 14px;
+		font-size: 13px;
+		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
-		transition: color 0.2s;
+		transition: all 0.2s;
 	}
 
 	.nav-link:hover {
-		color: var(--primary-color);
+		color: #fff;
+		text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+	}
+
+	.login-btn {
+		padding: 8px 20px;
+		border: 1px solid rgba(255, 255, 255, 0.2);
+		color: #fff;
+		text-decoration: none;
+		font-size: 12px;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		font-weight: 700;
+		transition: all 0.2s;
+	}
+
+	.login-btn:hover {
+		background: var(--primary-color);
+		border-color: var(--primary-color);
+		color: #000;
 	}
 
 	:global(:root) {
