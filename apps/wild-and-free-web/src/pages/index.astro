@@ -79,6 +79,23 @@ const artists: Artist[] = gatewayConfig?.data.artists ?? [
 	
 	<div class="content-separator"></div>
 
+	<section id="wild-and-free" class="wild-free-section">
+		<div class="wild-free-content">
+			<SectionHeader title="WILD AND FREE" subtitle="La liga original" />
+			<div class="wild-free-grid">
+				<div class="wild-free-text">
+					<p>El movimiento que inició todo. WILD AND FREE no es solo un nombre, es una filosofía de vida que representa libertad absoluta, autenticidad cruda y resistencia contra lo establecido.</p>
+					<p>Desde los primeros beats en los sótanos hasta los escenarios más grandes, mantenemos viva la esencia del underground.</p>
+				</div>
+				<div class="wild-free-image">
+					<img src="https://images.unsplash.com/photo-1493225255756-d9584f8606e9?auto=format&fit=crop&w=800&q=80" alt="WILD AND FREE" loading="lazy" />
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<div class="content-separator"></div>
+
 	<section id="about" class="about-section">
 		<div class="about-content">
 			<SectionHeader title="La Historia" subtitle="Quiénes somos" />
@@ -158,6 +175,15 @@ const artists: Artist[] = gatewayConfig?.data.artists ?? [
 		padding: 0 24px;
 	}
 
+	.wild-free-section {
+		padding: 0 24px;
+		background: linear-gradient(135deg, rgba(0, 255, 65, 0.05) 0%, transparent 50%);
+		border: 1px solid rgba(0, 255, 65, 0.1);
+		border-radius: 8px;
+		margin: 0 24px;
+	}
+
+	.wild-free-grid,
 	.about-grid {
 		display: grid;
 		grid-template-columns: 1fr;
@@ -165,14 +191,17 @@ const artists: Artist[] = gatewayConfig?.data.artists ?? [
 		align-items: center;
 		max-width: 1000px;
 		margin: 0 auto;
+		padding: 60px 0;
 	}
 
 	@media (min-width: 768px) {
+		.wild-free-grid,
 		.about-grid {
 			grid-template-columns: 1fr 1fr;
 		}
 	}
 
+	.wild-free-text p,
 	.about-text p {
 		color: #ccc;
 		line-height: 1.8;
@@ -180,6 +209,7 @@ const artists: Artist[] = gatewayConfig?.data.artists ?? [
 		font-size: 16px;
 	}
 
+	.wild-free-image img,
 	.about-image img {
 		width: 100%;
 		border-radius: 4px;
@@ -187,6 +217,7 @@ const artists: Artist[] = gatewayConfig?.data.artists ?? [
 		transition: filter 0.3s;
 	}
 
+	.wild-free-image img:hover,
 	.about-image img:hover {
 		filter: grayscale(0%);
 	}

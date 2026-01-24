@@ -1,4 +1,7 @@
 ---
+import SidebarLeft from '../components/SidebarLeft.astro';
+import { sidebarStore } from '../components/sidebarStore.js';
+
 export type Props = {
   config: {
     name: string;
@@ -11,7 +14,7 @@ const { config } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="es">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
@@ -22,21 +25,30 @@ const { config } = Astro.props;
 	<body>
 		<header class="site-header">
 			<div class="wrap header-content">
-				<div class="logo">W&F</div>
-				<nav class="main-nav">
-					<a href="#artists" class="nav-link">Artistas</a>
-					<a href="#music" class="nav-link">Música</a>
-					<a href="#events" class="nav-link">Eventos</a>
-					<a href="#shop" class="nav-link">Tienda</a>
-				</nav>
-				<div class="auth-actions">
+				<div class="header-left">
+					<button class="menu-toggle" onclick="sidebarStore.toggle()">
+						<span></span>
+						<span></span>
+						<span></span>
+					</button>
+					<div class="logo">WG</div>
+				</div>
+				<div class="header-center">
+					<div class="main-title">WILD AND FREE</div>
+				</div>
+				<div class="header-right">
 					<a href="/login" class="login-btn">Acceder</a>
 				</div>
 			</div>
 		</header>
-		<main>
-			<slot />
-		</main>
+		
+		<div class="layout-container">
+			<SidebarLeft isOpen={false} onClose={() => sidebarStore.close()} />
+			
+			<main class="main-content">
+				<slot />
+			</main>
+		</div>
 	</body>
 </html>
 
@@ -59,6 +71,23 @@ const { config } = Astro.props;
 		background: #050505;
 	}
 
+	.layout-container {
+		display: flex;
+		min-height: 100vh;
+	}
+
+	.main-content {
+		flex: 1;
+		margin-left: 0;
+		transition: margin-left 0.3s ease;
+	}
+
+	@media (min-width: 1024px) {
+		.main-content {
+			margin-left: 320px;
+		}
+	}
+
 	.wrap {
 		max-width: 1400px;
 		margin: 0 auto;
@@ -74,44 +103,72 @@ const { config } = Astro.props;
 		height: 80px;
 		display: flex;
 		align-items: center;
-		background: rgba(0, 0, 0, 0.8);
+		background: rgba(0, 0, 0, 0.9);
 		backdrop-filter: blur(12px);
 		border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 	}
 
 	.header-content {
 		width: 100%;
+		display: grid;
+		grid-template-columns: 1fr auto 1fr;
+		align-items: center;
+		gap: 24px;
+	}
+
+	.header-left {
 		display: flex;
-		justify-content: space-between;
+		align-items: center;
+		gap: 16px;
+	}
+
+	.header-center {
+		text-align: center;
+	}
+
+	.header-right {
+		display: flex;
+		justify-content: flex-end;
 		align-items: center;
 	}
 
 	.logo {
 		font-weight: 900;
-		font-size: 28px;
+		font-size: 24px;
 		letter-spacing: -0.05em;
 		color: #fff;
 		text-transform: uppercase;
 	}
 
-	.main-nav {
-		display: flex;
-		gap: 32px;
+	.main-title {
+		font-size: 20px;
+		font-weight: 900;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: #fff;
+		opacity: 0.9;
 	}
 
-	.nav-link {
-		color: rgba(255, 255, 255, 0.6);
-		text-decoration: none;
-		font-size: 13px;
-		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
+	.menu-toggle {
+		background: none;
+		border: none;
+		color: #fff;
+		cursor: pointer;
+		padding: 8px;
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+
+	.menu-toggle span {
+		width: 20px;
+		height: 2px;
+		background: currentColor;
 		transition: all 0.2s;
 	}
 
-	.nav-link:hover {
-		color: #fff;
-		text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+	.menu-toggle:hover span {
+		background: var(--primary-color);
 	}
 
 	.login-btn {
