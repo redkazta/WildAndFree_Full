@@ -26,7 +26,7 @@ const { config } = Astro.props;
 		<header class="site-header">
 			<div class="wrap header-content">
 				<div class="header-left">
-					<button class="menu-toggle" onclick="sidebarStore.toggle()">
+					<button class="menu-toggle">
 						<span></span>
 						<span></span>
 						<span></span>
@@ -43,12 +43,28 @@ const { config } = Astro.props;
 		</header>
 		
 		<div class="layout-container">
-			<SidebarLeft isOpen={false} onClose={() => sidebarStore.close()} />
+			<SidebarLeft />
 			
 			<main class="main-content">
 				<slot />
 			</main>
 		</div>
+		
+		<script>
+			// Handle menu toggle for sidebar
+			document.addEventListener('DOMContentLoaded', () => {
+				const menuToggle = document.querySelector('.menu-toggle');
+				if (menuToggle) {
+					menuToggle.addEventListener('click', () => {
+						// The sidebar component will handle this
+						const sidebar = document.getElementById('sidebar');
+						if (sidebar && (window as any).sidebarStore) {
+							(window as any).sidebarStore.toggle();
+						}
+					});
+				}
+			});
+		</script>
 	</body>
 </html>
 

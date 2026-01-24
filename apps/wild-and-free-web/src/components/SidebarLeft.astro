@@ -1,16 +1,11 @@
 ---
-export type Props = {
-  isOpen: boolean;
-  onClose: () => void;
-};
-
-const { isOpen, onClose } = Astro.props;
+// No props needed - we'll use client-side JavaScript
 ---
 
-<aside class:list={["sidebar", { "sidebar--open": isOpen }]}>
+<aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
     <h3 class="sidebar-title">Wild Gvng</h3>
-    <button class="close-btn" on:click={onClose}>✕</button>
+    <button class="close-btn">✕</button>
   </div>
   <nav class="sidebar-nav">
     <a href="#artistas" class="nav-item">Artistas</a>
@@ -28,6 +23,54 @@ const { isOpen, onClose } = Astro.props;
     <p class="sidebar-tagline">Built to move as one.</p>
   </div>
 </aside>
+
+<script>
+  // Client-side sidebar functionality
+  const sidebarStore = {
+    isOpen: false,
+    
+    open() {
+      this.isOpen = true;
+      const sidebar = document.getElementById('sidebar');
+      if (sidebar) {
+        sidebar.classList.add('sidebar--open');
+        document.documentElement.style.overflow = 'hidden';
+      }
+    },
+    
+    close() {
+      this.isOpen = false;
+      const sidebar = document.getElementById('sidebar');
+      if (sidebar) {
+        sidebar.classList.remove('sidebar--open');
+        document.documentElement.style.overflow = '';
+      }
+    },
+    
+    toggle() {
+      this.isOpen ? this.close() : this.open();
+    }
+  };
+
+  // Make it available globally
+  (window as any).sidebarStore = sidebarStore;
+
+  // Initialize event listeners
+  document.addEventListener('DOMContentLoaded', () => {
+    const closeBtn = document.querySelector('.close-btn');
+    const locationBtn = document.querySelector('.location-btn');
+    
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => sidebarStore.close());
+    }
+    
+    if (locationBtn) {
+      locationBtn.addEventListener('click', () => {
+        alert('Selector de ubicación - próximamente');
+      });
+    }
+  });
+</script>
 
 <style>
   .sidebar {
