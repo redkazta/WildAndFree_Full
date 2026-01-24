@@ -31,13 +31,13 @@ const health = {
 const tenantInit = {
   config: {
     id: 'wild-and-free',
-    name: 'Wild and Free',
+    name: 'Wild Gvng',
     primary_color: '#00FF41',
     secondary_color: '#0a0a0a',
     modules: { wallet: true, events: true },
   },
   data: {
-    crew_name: 'Wild and Free',
+    crew_name: 'Wild Gvng',
   },
 };
 

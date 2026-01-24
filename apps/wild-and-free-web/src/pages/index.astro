@@ -79,29 +79,58 @@ const artists: Artist[] = gatewayConfig?.data.artists ?? [
 	
 	<div class="content-separator"></div>
 
+	<section id="about" class="about-section">
+		<div class="about-content">
+			<SectionHeader title="La Historia" subtitle="Quiénes somos" />
+			<div class="about-grid">
+				<div class="about-text">
+					<p>Nacidos en el underground, forjados en el asfalto. Wild Gvng no es solo un colectivo, es un movimiento. Fusionamos trap, drill y sonidos experimentales para crear una atmósfera única que desafía lo convencional.</p>
+					<p>Desde nuestros inicios en los barrios bajos hasta los escenarios más grandes, nuestra misión sigue siendo la misma: autenticidad cruda y sonido sin filtros.</p>
+				</div>
+				<div class="about-image">
+					<img src="https://images.unsplash.com/photo-1493225255756-d9584f8606e9?auto=format&fit=crop&w=800&q=80" alt="Crew History" loading="lazy" />
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<div class="content-separator"></div>
+
 	<section id="artists">
-		<SectionHeader title="The Roster" subtitle="Meet the crew" />
+		<SectionHeader title="El Roster" subtitle="Conoce al equipo" />
 		<ArtistGrid artists={artists} />
 	</section>
 
 	<div class="content-separator"></div>
 
+	<section id="featured-video" class="video-section">
+		<SectionHeader title="En Foco" subtitle="Último lanzamiento visual" />
+		<div class="video-container">
+			<div class="video-placeholder">
+				<div class="play-icon">▶</div>
+				<p>Reproducir Video Oficial</p>
+			</div>
+		</div>
+	</section>
+
+	<div class="content-separator"></div>
+
 	<section id="music">
-		<SectionHeader title="Latest Drops" subtitle="Fresh from the studio" />
+		<SectionHeader title="Lanzamientos" subtitle="Fresco del estudio" />
 		<MusicGrid />
 	</section>
 
 	<div class="content-separator"></div>
 
 	<section id="events">
-		<SectionHeader title="Tour Dates" subtitle="Catch us live" />
+		<SectionHeader title="Fechas Tour" subtitle="Venos en vivo" />
 		<EventsList />
 	</section>
 
 	<div class="content-separator"></div>
 
 	<section id="shop">
-		<SectionHeader title="Official Merch" subtitle="Wear the movement" />
+		<SectionHeader title="Merch Oficial" subtitle="Viste el movimiento" />
 		<ShopGrid />
 	</section>
 
@@ -109,9 +138,9 @@ const artists: Artist[] = gatewayConfig?.data.artists ?? [
 
 	<section id="login" class="join-section">
 		<div class="join-content">
-			<h2 class="join-title">Join the Crew</h2>
-			<p class="join-text">Exclusive access to drops, tickets, and behind the scenes content.</p>
-			<a href="/login" class="join-button">Member Login</a>
+			<h2 class="join-title">Únete a la Crew</h2>
+			<p class="join-text">Acceso exclusivo a drops, tickets y contenido detrás de escenas.</p>
+			<a href="/login" class="join-button">Acceso Miembros</a>
 		</div>
 	</section>
 
@@ -123,6 +152,74 @@ const artists: Artist[] = gatewayConfig?.data.artists ?? [
 		height: 1px;
 		background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
 		margin: 120px 0;
+	}
+
+	.about-section {
+		padding: 0 24px;
+	}
+
+	.about-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 48px;
+		align-items: center;
+		max-width: 1000px;
+		margin: 0 auto;
+	}
+
+	@media (min-width: 768px) {
+		.about-grid {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+
+	.about-text p {
+		color: #ccc;
+		line-height: 1.8;
+		margin-bottom: 24px;
+		font-size: 16px;
+	}
+
+	.about-image img {
+		width: 100%;
+		border-radius: 4px;
+		filter: grayscale(100%);
+		transition: filter 0.3s;
+	}
+
+	.about-image img:hover {
+		filter: grayscale(0%);
+	}
+
+	.video-section {
+		text-align: center;
+	}
+
+	.video-container {
+		max-width: 1000px;
+		margin: 0 auto;
+		aspect-ratio: 16/9;
+		background: #111;
+		border: 1px solid rgba(255,255,255,0.1);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		transition: border-color 0.3s;
+	}
+
+	.video-container:hover {
+		border-color: var(--primary-color);
+	}
+
+	.video-placeholder {
+		color: rgba(255,255,255,0.5);
+	}
+
+	.play-icon {
+		font-size: 48px;
+		margin-bottom: 16px;
+		color: var(--primary-color);
 	}
 
 	.join-section {
