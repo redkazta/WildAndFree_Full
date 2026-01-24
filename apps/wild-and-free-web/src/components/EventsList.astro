@@ -1,0 +1,119 @@
+---
+const events = [
+  {
+    date: "MAR 15",
+    city: "Buenos Aires",
+    venue: "Niceto Club",
+    status: "Tickets Available"
+  },
+  {
+    date: "MAR 22",
+    city: "Cordoba",
+    venue: "Club Paraguay",
+    status: "Sold Out"
+  },
+  {
+    date: "APR 05",
+    city: "Rosario",
+    venue: "Studio Theater",
+    status: "Selling Fast"
+  }
+];
+---
+
+<div class="events-list">
+  {events.map((event) => (
+    <div class="event-row">
+      <div class="date">{event.date}</div>
+      <div class="details">
+        <div class="city">{event.city}</div>
+        <div class="venue">{event.venue}</div>
+      </div>
+      <div class="action">
+        <button class={`ticket-btn ${event.status === 'Sold Out' ? 'sold-out' : ''}`} disabled={event.status === 'Sold Out'}>
+          {event.status}
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .events-list {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .event-row {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    padding: 24px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    align-items: center;
+    gap: 24px;
+    transition: background-color 0.2s;
+  }
+
+  .event-row:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+  }
+
+  .date {
+    font-weight: 900;
+    font-size: 18px;
+    color: var(--primary-color);
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+
+  .city {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .venue {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .ticket-btn {
+    padding: 12px 24px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .ticket-btn:hover:not(:disabled) {
+    background: #fff;
+    color: #000;
+  }
+
+  .ticket-btn.sold-out {
+    border-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.3);
+    cursor: not-allowed;
+    text-decoration: line-through;
+  }
+
+  @media (max-width: 640px) {
+    .event-row {
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: 16px;
+    }
+    
+    .action {
+      display: flex;
+      justify-content: center;
+    }
+  }
+</style>

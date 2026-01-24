@@ -2,6 +2,11 @@
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
 import ArtistGrid from '../components/ArtistGrid.astro';
+import MusicGrid from '../components/MusicGrid.astro';
+import EventsList from '../components/EventsList.astro';
+import ShopGrid from '../components/ShopGrid.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import Footer from '../components/Footer.astro';
 
 type Artist = {
   id: string;
@@ -10,35 +15,38 @@ type Artist = {
   image_url: string;
 };
 
-type Tenant = {
+type TenantConfig = {
+  id: string;
   name: string;
   primary_color: string;
   secondary_color: string;
-  logo_text: string;
+  modules: Record<string, boolean>;
 };
 
-type GatewayInitResponse = {
-  tenant: Tenant;
-  artists: Artist[];
+type GatewayConfigResponse = {
+  tenant_id: string;
+  config: TenantConfig;
+  data: { crew_name: string; artists: Artist[] };
 };
 
-let init: GatewayInitResponse | null = null;
+let gatewayConfig: GatewayConfigResponse | null = null;
 
 try {
-  const res = await fetch('http://localhost:3000/gateway/init');
-  if (res.ok) init = (await res.json()) as GatewayInitResponse;
+  const res = await fetch('http://localhost:3000/gateway/config');
+  if (res.ok) gatewayConfig = (await res.json()) as GatewayConfigResponse;
 } catch {
-  init = null;
+  gatewayConfig = null;
 }
 
-const tenant: Tenant = init?.tenant ?? {
+const config: TenantConfig = gatewayConfig?.config ?? {
+  id: 'wild-and-free',
   name: 'Wild and Free',
-  primary_color: '#00FF41',
-  secondary_color: '#0a0a0a',
-  logo_text: 'W&F',
+  primary_color: '#3245ff',
+  secondary_color: '#bc52ee',
+  modules: { wallet: true, events: true },
 };
 
-const artists: Artist[] = init?.artists ?? [
+const artists: Artist[] = gatewayConfig?.data.artists ?? [
   {
     id: 'a1',
     name: 'Nova K',
@@ -54,35 +62,47 @@ const artists: Artist[] = init?.artists ?? [
   {
     id: 'a3',
     name: 'Mira V',
+    role: 'Rapper',
+    image_url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 'a4',
+    name: 'Kairo',
     role: 'DJ',
     image_url: 'https://images.unsplash.com/photo-1520975753545-c9a7d1551b77?auto=format&fit=crop&w=800&q=80',
   },
 ];
 ---
 
-<Layout tenant={tenant}>
-	<Hero crewName={tenant.name} />
+<Layout config={config}>
+	<Hero crewName={config.name} />
 	
 	<div class="content-separator"></div>
 
-	<ArtistGrid artists={artists} />
-
-	<div class="content-separator"></div>
-
-	<section id="events" class="placeholder-section">
-		<h2 class="section-title">Upcoming Events</h2>
-		<div class="placeholder-box">
-			<p>No events scheduled yet.</p>
-		</div>
+	<section id="artists">
+		<SectionHeader title="The Roster" subtitle="Meet the crew" />
+		<ArtistGrid artists={artists} />
 	</section>
 
 	<div class="content-separator"></div>
 
-	<section id="shop" class="placeholder-section">
-		<h2 class="section-title">Official Shop</h2>
-		<div class="placeholder-box">
-			<p>Merch drop coming soon.</p>
-		</div>
+	<section id="music">
+		<SectionHeader title="Latest Drops" subtitle="Fresh from the studio" />
+		<MusicGrid />
+	</section>
+
+	<div class="content-separator"></div>
+
+	<section id="events">
+		<SectionHeader title="Tour Dates" subtitle="Catch us live" />
+		<EventsList />
+	</section>
+
+	<div class="content-separator"></div>
+
+	<section id="shop">
+		<SectionHeader title="Official Merch" subtitle="Wear the movement" />
+		<ShopGrid />
 	</section>
 
 	<div class="content-separator"></div>
@@ -94,41 +114,22 @@ const artists: Artist[] = init?.artists ?? [
 			<a href="/login" class="join-button">Member Login</a>
 		</div>
 	</section>
+
+	<Footer />
 </Layout>
 
 <style>
 	.content-separator {
 		height: 1px;
 		background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-		margin: 80px 0;
-	}
-
-	.placeholder-section {
-		padding: 40px 0;
-		text-align: center;
-	}
-
-	.section-title {
-		font-size: 32px;
-		text-transform: uppercase;
-		margin-bottom: 40px;
-		letter-spacing: -0.02em;
-	}
-
-	.placeholder-box {
-		border: 1px dashed rgba(255,255,255,0.1);
-		padding: 60px;
-		border-radius: 12px;
-		color: rgba(255,255,255,0.4);
-		font-size: 14px;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
+		margin: 120px 0;
 	}
 
 	.join-section {
 		padding: 100px 0;
 		text-align: center;
 		background: radial-gradient(circle at center, rgba(255,255,255,0.03) 0%, transparent 70%);
+		border: 1px solid rgba(255,255,255,0.05);
 	}
 
 	.join-title {

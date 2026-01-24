@@ -1,0 +1,51 @@
+---
+export type Props = {
+  title: string;
+  subtitle?: string;
+};
+
+const { title, subtitle } = Astro.props;
+---
+
+<div class="section-header">
+  <h2 class="title" data-text={title}>{title}</h2>
+  {subtitle && <p class="subtitle">{subtitle}</p>}
+</div>
+
+<style>
+  .section-header {
+    margin-bottom: 48px;
+    text-align: center;
+    position: relative;
+  }
+
+  .title {
+    font-size: clamp(32px, 5vw, 64px);
+    text-transform: uppercase;
+    font-weight: 900;
+    margin: 0;
+    letter-spacing: -0.02em;
+    color: #fff;
+    position: relative;
+    display: inline-block;
+  }
+
+  .title::before {
+    content: attr(data-text);
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--primary-color);
+    z-index: -1;
+    opacity: 0.5;
+  }
+
+  .subtitle {
+    margin-top: 16px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+</style>
