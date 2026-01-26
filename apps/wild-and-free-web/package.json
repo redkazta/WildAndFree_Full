@@ -1,5 +1,6 @@
 {
   "name": "wild-and-free-web",
+  "description": "Wild Gvng web (Astro)",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
