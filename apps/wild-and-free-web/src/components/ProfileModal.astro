@@ -91,7 +91,6 @@
 
 .profile-actions {
 	display: flex;
-	flex-direction: column;
 	gap: 12px;
 }
 
@@ -108,6 +107,20 @@
 	text-transform: uppercase;
 	letter-spacing: 0.05em;
 	cursor: pointer;
+}
+
+.profile-actions .profile-btn {
+	flex: 1;
+}
+
+.profile-actions {
+	flex-direction: row;
+}
+
+@media (max-width: 420px) {
+	.profile-actions {
+		flex-direction: column;
+	}
 }
 
 .btn-primary.profile-btn {
