@@ -1,0 +1,23 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout config={{ name: "Wild Gvng - Auth", primary_color: "#C98300", secondary_color: "#8A0303" }}>
+  <main style="min-height: 100vh; display: grid; place-items: center; padding: 120px 24px 60px;">
+    <div style="max-width: 520px; width: 100%; background: rgba(17,17,17,0.9); border: 1px solid rgba(201,131,0,0.22); border-radius: 16px; padding: 28px; text-align: center;">
+      <h1 style="margin: 0 0 8px 0; font-family: 'Noto Sans JP', sans-serif; font-size: 18px; letter-spacing: 0.08em; text-transform: uppercase;">Procesando sesión</h1>
+      <p style="margin: 0; color: rgba(255,255,255,0.65); font-family: 'Noto Sans JP', sans-serif; font-size: 14px;">Un momento…</p>
+    </div>
+  </main>
+</Layout>
+
+<script type="module">
+  import { supabase } from '../../lib/supabaseClient'
+
+  try {
+    await supabase.auth.exchangeCodeForSession(window.location.href)
+  } finally {
+    window.location.replace('/')
+  }
+</script>
+
