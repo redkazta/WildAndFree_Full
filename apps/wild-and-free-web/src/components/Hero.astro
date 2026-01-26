@@ -8,13 +8,47 @@ const { crewName } = Astro.props;
 
 <section class="hero">
 	<div class="banner-bg"></div>
+	<div class="banner-overlay"></div>
 	<div class="content">
-		<p class="tag">Musicians Hub</p>
-		<h1 class="title" data-text={crewName}>{crewName}</h1>
-		<p class="subtitle">Oscuro. Minimalista. Creado para moverse como uno.</p>
+		<div class="hero-text">
+			<p class="tag">
+				<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" class="tag-icon">
+					<path d="M8 0C5.79 0 4 1.79 4 4C4 6.21 5.79 8 8 8C10.21 8 12 6.21 12 4C12 1.79 10.21 0 8 0ZM8 10C5.33 10 0 11.34 0 14V16H16V14C16 11.34 10.67 10 8 10Z"/>
+				</svg>
+				WILD GVNG
+			</p>
+			<h1 class="title" data-text={crewName}>
+				<span class="title-line">WILD</span>
+				<span class="title-line">GVNG</span>
+			</h1>
+			<p class="subtitle">El movimiento que redefine la cultura</p>
+		</div>
+		<div class="hero-stats">
+			<div class="stat">
+				<span class="stat-number">12+</span>
+				<span class="stat-label">Artistas</span>
+			</div>
+			<div class="stat">
+				<span class="stat-number">50+</span>
+				<span class="stat-label">Tracks</span>
+			</div>
+			<div class="stat">
+				<span class="stat-number">100K+</span>
+				<span class="stat-label">Fans</span>
+			</div>
+		</div>
 		<div class="actions">
-			<a class="button" href="#artists">
+			<a class="button primary" href="#artists">
+				<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+					<path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+				</svg>
 				<span>Explorar Crew</span>
+			</a>
+			<a class="button secondary" href="#music">
+				<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+					<path d="M11 6.64a1 1 0 0 0-1.243-.97l-1 .25A1 1 0 0 0 8 6.89v4.306A2.572 2.572 0 0 0 7 11c-.5 0-.974.134-1.338.377-.36.24-.662.628-.662 1.123s.301.883.662 1.123c.364.243.839.377 1.338.377.5 0 .974-.134 1.338-.377.36-.24.662-.628.662-1.123V8.89l4-1v-.256Z"/>
+				</svg>
+				<span>Escuchar Música</span>
 			</a>
 		</div>
 	</div>
@@ -22,13 +56,14 @@ const { crewName } = Astro.props;
 
 <style>
 	.hero {
-		min-height: 90vh;
+		min-height: 100vh;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		padding: 120px 0 60px;
 		position: relative;
 		overflow: hidden;
+		background: linear-gradient(135deg, #000 0%, #111 100%);
 	}
 
 	.banner-bg {
@@ -37,15 +72,30 @@ const { crewName } = Astro.props;
 		background-image: url('https://images.unsplash.com/photo-1493225255756-d9584f8606e9?auto=format&fit=crop&w=2000&q=80');
 		background-size: cover;
 		background-position: center;
-		filter: grayscale(100%) contrast(1.2) brightness(0.4);
+		filter: grayscale(100%) contrast(1.5) brightness(0.3);
 		z-index: -2;
+		opacity: 0.6;
+		animation: slowZoom 20s ease-in-out infinite alternate;
+	}
+
+	@keyframes slowZoom {
+		0% { transform: scale(1); }
+		100% { transform: scale(1.1); }
+	}
+
+	.banner-overlay {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(135deg, rgba(201, 131, 0, 0.15) 0%, transparent 40%, rgba(138, 3, 3, 0.15) 100%);
+		z-index: -1;
+		mix-blend-mode: overlay;
 	}
 
 	.hero::after {
 		content: '';
 		position: absolute;
 		inset: 0;
-		background: linear-gradient(to bottom, rgba(5,5,5,0.3), #050505);
+		background: linear-gradient(to bottom, rgba(5,5,5,0.2), #000);
 		z-index: -1;
 	}
 
@@ -56,28 +106,59 @@ const { crewName } = Astro.props;
 		margin: 0 auto;
 		width: 100%;
 		padding: 0 24px;
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 60px;
+		align-items: center;
+	}
+
+	.hero-text {
+		text-align: center;
 	}
 
 	.tag {
-		margin: 0 0 24px;
-		letter-spacing: 0.4em;
+		margin: 0 0 16px;
+		letter-spacing: 0.3em;
 		text-transform: uppercase;
 		color: var(--primary-color);
-		font-size: 11px;
+		font-size: 14px;
 		font-weight: 700;
+		opacity: 0.9;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+	}
+
+	.tag-icon {
+		width: 16px;
+		height: 16px;
+		opacity: 0.8;
 	}
 
 	.title {
 		margin: 0;
-		font-size: clamp(64px, 12vw, 180px);
-		line-height: 0.85;
-		letter-spacing: -0.06em;
+		font-size: clamp(100px, 18vw, 240px);
+		line-height: 0.8;
+		letter-spacing: 0.05em;
 		text-transform: uppercase;
 		font-weight: 900;
 		color: transparent;
-		-webkit-text-stroke: 1px rgba(255, 255, 255, 0.4);
+		-webkit-text-stroke: 3px rgba(255, 255, 255, 0.9);
 		position: relative;
 		z-index: 1;
+		margin-bottom: 24px;
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+		font-family: 'Noto Sans JP', sans-serif;
+	}
+
+	.title-line {
+		display: block;
+		font-weight: 900;
+		letter-spacing: 0.08em;
+		text-align: center;
 	}
 	
 	.title::before {
@@ -86,43 +167,159 @@ const { crewName } = Astro.props;
 		top: 0;
 		left: 0;
 		color: #fff;
-		opacity: 0.1;
-		filter: blur(12px);
+		opacity: 0.15;
+		filter: blur(8px);
 		z-index: -1;
+		transform: scale(1.1);
 	}
 
 	.subtitle {
-		margin: 32px 0 0;
-		color: #888;
+		margin: 0;
+		color: #fff;
 		font-size: 18px;
-		max-width: 40ch;
-		line-height: 1.5;
+		max-width: 25ch;
+		line-height: 1.6;
 		font-weight: 300;
+		text-align: center;
+		margin: 0 auto;
+		opacity: 0.8;
+		letter-spacing: 0.05em;
+		font-family: 'Noto Sans JP', sans-serif;
+	}
+
+	.hero-stats {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 40px;
+		margin: 40px 0;
+	}
+
+	.stat {
+		text-align: center;
+		padding: 20px;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		background: rgba(0, 0, 0, 0.3);
+		backdrop-filter: blur(10px);
+		transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+		position: relative;
+		overflow: hidden;
+	}
+
+	.stat::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: -100%;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(90deg, transparent, rgba(201, 131, 0, 0.1), transparent);
+		transition: left 0.5s ease;
+	}
+
+	.stat:hover::before {
+		left: 100%;
+	}
+
+	.stat:hover {
+		transform: translateY(-2px);
+		border-color: rgba(201, 131, 0, 0.3);
+		box-shadow: 0 8px 24px -8px rgba(201, 131, 0, 0.2);
+	}
+
+	.stat-number {
+		display: block;
+		font-size: 36px;
+		font-weight: 900;
+		color: var(--primary-color);
+		margin-bottom: 8px;
+	}
+
+	.stat-label {
+		display: block;
+		font-size: 14px;
+		color: #888;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
 	}
 
 	.actions {
-		margin-top: 48px;
+		display: flex;
+		gap: 24px;
+		justify-content: center;
+		margin-top: 40px;
+		flex-wrap: wrap;
 	}
 
 	.button {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		padding: 16px 32px;
+		gap: 8px;
+		padding: 18px 36px;
 		text-decoration: none;
-		color: #000;
-		background: var(--primary-color);
 		font-weight: 700;
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 		font-size: 14px;
-		clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+		transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+		border: 2px solid transparent;
+		min-width: 180px;
+	}
+
+	.button svg {
+		width: 16px;
+		height: 16px;
 		transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
 	}
 
-	.button:hover {
+	.button.primary {
+		background: var(--primary-color);
+		color: #000;
+		border-color: var(--primary-color);
+	}
+
+	.button.primary:hover {
+		background: transparent;
+		color: var(--primary-color);
 		transform: translateY(-2px);
 		box-shadow: 0 10px 30px -10px var(--primary-color);
-		filter: brightness(1.1);
+	}
+
+	.button.primary:hover svg {
+		transform: translateX(2px);
+	}
+
+	.button.secondary {
+		background: transparent;
+		color: var(--secondary-color);
+		border-color: var(--secondary-color);
+	}
+
+	.button.secondary:hover {
+		background: var(--secondary-color);
+		color: #fff;
+		transform: translateY(-2px);
+		box-shadow: 0 10px 30px -10px var(--secondary-color);
+	}
+
+	.button.secondary:hover svg {
+		transform: translateX(2px);
+	}
+
+	@media (max-width: 768px) {
+		.hero-stats {
+			grid-template-columns: 1fr;
+			gap: 20px;
+		}
+		
+		.actions {
+			flex-direction: column;
+			align-items: center;
+		}
+		
+		.button {
+			width: 100%;
+			max-width: 300px;
+		}
 	}
 </style>

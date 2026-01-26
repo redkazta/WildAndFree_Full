@@ -1,0 +1,354 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout config={{
+  name: "Wild Gvng - Configuración",
+  primary_color: "#C98300",
+  secondary_color: "#8A0303"
+}}>
+  <div class="config-container">
+    <div class="config-header">
+      <h1>Configuración</h1>
+      <p>Personaliza tu experiencia en Wild Gvng</p>
+    </div>
+
+    <div class="config-sections">
+      <div class="config-section">
+        <h3>Perfil</h3>
+        <div class="config-item">
+          <div class="config-info">
+            <span class="config-label">Nombre de Usuario</span>
+            <span class="config-value">@usuario_wild</span>
+          </div>
+          <button class="config-action">Editar</button>
+        </div>
+        <div class="config-item">
+          <div class="config-info">
+            <span class="config-label">Correo Electrónico</span>
+            <span class="config-value">usuario@wildgvng.com</span>
+          </div>
+          <button class="config-action">Cambiar</button>
+        </div>
+        <div class="config-item">
+          <div class="config-info">
+            <span class="config-label">Contraseña</span>
+            <span class="config-value">••••••••</span>
+          </div>
+          <button class="config-action">Cambiar</button>
+        </div>
+      </div>
+
+      <div class="config-section">
+        <h3>Preferencias</h3>
+        <div class="config-item">
+          <div class="config-info">
+            <span class="config-label">Idioma</span>
+            <span class="config-value">Español</span>
+          </div>
+          <button class="config-action">Cambiar</button>
+        </div>
+        <div class="config-item">
+          <div class="config-info">
+            <span class="config-label">Ubicación</span>
+            <span class="config-value">🇲🇽 México</span>
+          </div>
+          <button class="config-action">Cambiar</button>
+        </div>
+        <div class="config-item">
+          <div class="config-info">
+            <span class="config-label">Notificaciones</span>
+            <span class="config-value">Activadas</span>
+          </div>
+          <button class="config-action toggle active">Desactivar</button>
+        </div>
+      </div>
+
+      <div class="config-section">
+        <h3>Privacidad</h3>
+        <div class="config-item">
+          <div class="config-info">
+            <span class="config-label">Perfil Público</span>
+            <span class="config-value">Sí</span>
+          </div>
+          <button class="config-action toggle active">Desactivar</button>
+        </div>
+        <div class="config-item">
+          <div class="config-info">
+            <span class="config-label">Historial de Reproducción</span>
+            <span class="config-value">Guardado</span>
+          </div>
+          <button class="config-action toggle active">Desactivar</button>
+        </div>
+        <div class="config-item">
+          <div class="config-info">
+            <span class="config-label">Datos de Uso</span>
+            <span class="config-value">Compartidos</span>
+          </div>
+          <button class="config-action toggle">Activar</button>
+        </div>
+      </div>
+
+      <div class="config-section">
+        <h3>Membresía</h3>
+        <div class="config-item">
+          <div class="config-info">
+            <span class="config-label">Plan Actual</span>
+            <span class="config-value">Premium</span>
+          </div>
+          <button class="config-action">Administrar</button>
+        </div>
+        <div class="config-item">
+          <div class="config-info">
+            <span class="config-label">Método de Pago</span>
+            <span class="config-value">**** **** **** 1234</span>
+          </div>
+          <button class="config-action">Cambiar</button>
+        </div>
+        <div class="config-item">
+          <div class="config-info">
+            <span class="config-label">Renovación</span>
+            <span class="config-value">15 de Febrero, 2024</span>
+          </div>
+          <button class="config-action">Ver</button>
+        </div>
+      </div>
+
+      <div class="config-section danger">
+        <h3>Zona de Peligro</h3>
+        <div class="config-item">
+          <div class="config-info">
+            <span class="config-label">Exportar Datos</span>
+            <span class="config-value">Descargar información de tu cuenta</span>
+          </div>
+          <button class="config-action danger">Exportar</button>
+        </div>
+        <div class="config-item">
+          <div class="config-info">
+            <span class="config-label">Eliminar Cuenta</span>
+            <span class="config-value">Esta acción es permanente</span>
+          </div>
+          <button class="config-action danger">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .config-container {
+    min-height: 100vh;
+    padding: 80px 20px 40px;
+    background: linear-gradient(135deg, #000 0%, #111 50%, #000 100%);
+    position: relative;
+  }
+
+  .config-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 20% 80%, rgba(201, 131, 0, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(138, 3, 3, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .config-header {
+    max-width: 1200px;
+    margin: 0 auto 40px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .config-header h1 {
+    font-size: 48px;
+    font-weight: 900;
+    margin: 0 0 16px;
+    color: #fff;
+    font-family: 'Noto Sans JP', sans-serif;
+    letter-spacing: 0.02em;
+  }
+
+  .config-header p {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.7);
+    font-family: 'Noto Sans JP', sans-serif;
+    margin: 0;
+  }
+
+  .config-sections {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .config-section {
+    background: rgba(17, 17, 17, 0.8);
+    border: 1px solid rgba(201, 131, 0, 0.2);
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 24px;
+    backdrop-filter: blur(10px);
+  }
+
+  .config-section h3 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+    font-family: 'Noto Sans JP', sans-serif;
+    margin: 0 0 24px;
+    letter-spacing: 0.02em;
+  }
+
+  .config-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .config-item:last-child {
+    border-bottom: none;
+  }
+
+  .config-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .config-label {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+
+  .config-value {
+    font-size: 16px;
+    color: #fff;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 500;
+  }
+
+  .config-action {
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    color: #fff;
+    font-size: 14px;
+    font-family: 'Noto Sans JP', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .config-action:hover {
+    background: rgba(201, 131, 0, 0.1);
+    border-color: var(--primary-color);
+  }
+
+  .config-action.toggle {
+    background: rgba(76, 175, 80, 0.1);
+    border-color: rgba(76, 175, 80, 0.3);
+    color: #4CAF50;
+  }
+
+  .config-action.toggle.active {
+    background: rgba(255, 68, 68, 0.1);
+    border-color: rgba(255, 68, 68, 0.3);
+    color: #ff4444;
+  }
+
+  .config-action.toggle:hover {
+    background: rgba(76, 175, 80, 0.2);
+    border-color: #4CAF50;
+  }
+
+  .config-action.toggle.active:hover {
+    background: rgba(255, 68, 68, 0.2);
+    border-color: #ff4444;
+  }
+
+  .config-action.danger {
+    background: rgba(255, 68, 68, 0.1);
+    border-color: rgba(255, 68, 68, 0.3);
+    color: #ff4444;
+  }
+
+  .config-action.danger:hover {
+    background: rgba(255, 68, 68, 0.2);
+    border-color: #ff4444;
+  }
+
+  .config-section.danger {
+    border-color: rgba(255, 68, 68, 0.2);
+    background: rgba(255, 68, 68, 0.05);
+  }
+
+  .config-section.danger h3 {
+    color: #ff4444;
+  }
+
+  @media (max-width: 768px) {
+    .config-header h1 {
+      font-size: 36px;
+    }
+
+    .config-section {
+      padding: 24px;
+    }
+
+    .config-item {
+      flex-direction: column;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .config-action {
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  // Toggle functionality for configuration items
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggleButtons = document.querySelectorAll('.config-action.toggle');
+    
+    toggleButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        if (button.classList.contains('active')) {
+          button.classList.remove('active');
+          button.textContent = button.textContent.replace('Desactivar', 'Activar');
+        } else {
+          button.classList.add('active');
+          button.textContent = button.textContent.replace('Activar', 'Desactivar');
+        }
+      });
+    });
+
+    // Regular action buttons
+    const actionButtons = document.querySelectorAll('.config-action:not(.toggle):not(.danger)');
+    actionButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        alert('Función de configuración - Próximamente');
+      });
+    });
+
+    // Danger action buttons
+    const dangerButtons = document.querySelectorAll('.config-action.danger');
+    dangerButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        if (confirm('¿Estás seguro de que quieres realizar esta acción?')) {
+          alert('Acción de configuración realizada');
+        }
+      });
+    });
+  });
+</script>

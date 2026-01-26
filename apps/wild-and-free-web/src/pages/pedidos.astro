@@ -1,0 +1,347 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout config={{
+  name: "Wild Gvng - Mis Pedidos",
+  primary_color: "#C98300",
+  secondary_color: "#8A0303"
+}}>
+  <div class="orders-container">
+    <div class="orders-header">
+      <h1>Mis Pedidos</h1>
+      <p>Historial de tus compras en Wild Gvng</p>
+    </div>
+
+    <div class="orders-list">
+      <div class="order-card">
+        <div class="order-header">
+          <div class="order-info">
+            <span class="order-number">Pedido #WG2024001</span>
+            <span class="order-date">15 de Enero, 2024</span>
+          </div>
+          <span class="order-status delivered">Entregado</span>
+        </div>
+        <div class="order-items">
+          <div class="order-item">
+            <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=80&h=80&fit=crop" alt="Producto" class="item-image">
+            <div class="item-details">
+              <h4>Hoodie Wild Gvng</h4>
+              <p>Talla: M • Color: Negro</p>
+              <span class="item-price">$65.00</span>
+            </div>
+            <span class="item-quantity">x1</span>
+          </div>
+          <div class="order-item">
+            <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=80&h=80&fit=crop" alt="Producto" class="item-image">
+            <div class="item-details">
+              <h4>Album Urbano</h4>
+              <p>Formato: Digital</p>
+              <span class="item-price">$25.00</span>
+            </div>
+            <span class="item-quantity">x1</span>
+          </div>
+        </div>
+        <div class="order-footer">
+          <div class="order-total">
+            <span>Total: $90.00</span>
+          </div>
+          <button class="order-action">Ver Detalles</button>
+        </div>
+      </div>
+
+      <div class="order-card">
+        <div class="order-header">
+          <div class="order-info">
+            <span class="order-number">Pedido #WG2024002</span>
+            <span class="order-date">8 de Enero, 2024</span>
+          </div>
+          <span class="order-status processing">En Proceso</span>
+        </div>
+        <div class="order-items">
+          <div class="order-item">
+            <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=80&h=80&fit=crop" alt="Producto" class="item-image">
+            <div class="item-details">
+              <h4>Ticket Show Wild Gvng</h4>
+              <p>Fecha: 25 de Febrero, 2024</p>
+              <span class="item-price">$45.00</span>
+            </div>
+            <span class="item-quantity">x2</span>
+          </div>
+        </div>
+        <div class="order-footer">
+          <div class="order-total">
+            <span>Total: $90.00</span>
+          </div>
+          <button class="order-action">Ver Detalles</button>
+        </div>
+      </div>
+
+      <div class="order-card">
+        <div class="order-header">
+          <div class="order-info">
+            <span class="order-number">Pedido #WG2024003</span>
+            <span class="order-date">2 de Enero, 2024</span>
+          </div>
+          <span class="order-status shipped">Enviado</span>
+        </div>
+        <div class="order-items">
+          <div class="order-item">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop" alt="Producto" class="item-image">
+            <div class="item-details">
+              <h4>Playera Signature</h4>
+              <p>Talla: L • Color: Blanco</p>
+              <span class="item-price">$35.00</span>
+            </div>
+            <span class="item-quantity">x1</span>
+          </div>
+        </div>
+        <div class="order-footer">
+          <div class="order-total">
+            <span>Total: $35.00</span>
+          </div>
+          <button class="order-action">Ver Detalles</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .orders-container {
+    min-height: 100vh;
+    padding: 80px 20px 40px;
+    background: linear-gradient(135deg, #000 0%, #111 50%, #000 100%);
+    position: relative;
+  }
+
+  .orders-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 20% 80%, rgba(201, 131, 0, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(138, 3, 3, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .orders-header {
+    max-width: 1200px;
+    margin: 0 auto 40px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .orders-header h1 {
+    font-size: 48px;
+    font-weight: 900;
+    margin: 0 0 16px;
+    color: #fff;
+    font-family: 'Noto Sans JP', sans-serif;
+    letter-spacing: 0.02em;
+  }
+
+  .orders-header p {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.7);
+    font-family: 'Noto Sans JP', sans-serif;
+    margin: 0;
+  }
+
+  .orders-list {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .order-card {
+    background: rgba(17, 17, 17, 0.8);
+    border: 1px solid rgba(201, 131, 0, 0.2);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+  }
+
+  .order-card:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(201, 131, 0, 0.1);
+  }
+
+  .order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(201, 131, 0, 0.1);
+  }
+
+  .order-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .order-number {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+
+  .order-date {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+
+  .order-status {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Noto Sans JP', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .order-status.delivered {
+    background: rgba(76, 175, 80, 0.1);
+    color: #4CAF50;
+    border: 1px solid rgba(76, 175, 80, 0.3);
+  }
+
+  .order-status.processing {
+    background: rgba(255, 152, 0, 0.1);
+    color: #FF9800;
+    border: 1px solid rgba(255, 152, 0, 0.3);
+  }
+
+  .order-status.shipped {
+    background: rgba(33, 150, 243, 0.1);
+    color: #2196F3;
+    border: 1px solid rgba(33, 150, 243, 0.3);
+  }
+
+  .order-items {
+    margin-bottom: 20px;
+  }
+
+  .order-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    margin-bottom: 12px;
+  }
+
+  .order-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .item-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+
+  .item-details {
+    flex: 1;
+  }
+
+  .item-details h4 {
+    margin: 0 0 4px 0;
+    font-size: 16px;
+    color: #fff;
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+
+  .item-details p {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+
+  .item-price {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--primary-color);
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+
+  .item-quantity {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+
+  .order-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+    border-top: 1px solid rgba(201, 131, 0, 0.1);
+  }
+
+  .order-total {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+
+  .order-action {
+    padding: 10px 20px;
+    background: var(--primary-color);
+    border: none;
+    border-radius: 6px;
+    color: #000;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Noto Sans JP', sans-serif;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+
+  .order-action:hover {
+    background: #e69500;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(201, 131, 0, 0.3);
+  }
+
+  @media (max-width: 768px) {
+    .orders-header h1 {
+      font-size: 36px;
+    }
+
+    .order-header {
+      flex-direction: column;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .order-item {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .order-footer {
+      flex-direction: column;
+      gap: 16px;
+      text-align: center;
+    }
+  }
+</style>

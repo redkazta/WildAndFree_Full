@@ -40,9 +40,9 @@ try {
 
 const config: TenantConfig = gatewayConfig?.config ?? {
   id: 'wild-and-free',
-  name: 'Wild and Free',
-  primary_color: '#3245ff',
-  secondary_color: '#bc52ee',
+  name: 'Wild Gvng',
+  primary_color: 'rgb(201, 131, 0)',
+  secondary_color: 'rgb(138, 3, 3)',
   modules: { wallet: true, events: true },
 };
 
@@ -166,7 +166,7 @@ const products = [
 
 	<section id="wild-and-free" class="wild-free-section">
 		<div class="wild-free-content">
-			<SectionHeader title="WILD AND FREE" subtitle="La liga original" />
+			<SectionHeader title="La Historia" subtitle="WILD AND FREE - La liga original" />
 			<div class="wild-free-grid">
 				<div class="wild-free-text">
 					<p>El movimiento que inició todo. WILD AND FREE no es solo un nombre, es una filosofía de vida que representa libertad absoluta, autenticidad cruda y resistencia contra lo establecido.</p>
@@ -183,7 +183,10 @@ const products = [
 
 	<section id="artistas" class="artists-section">
 		<div class="artists-content">
-			<SectionHeader title="Artistas" subtitle="El talento que mueve el movimiento" />
+			<div class="section-header-with-link">
+				<SectionHeader title="Artistas" subtitle="El talento que mueve el movimiento" />
+				<a href="/artistas" class="view-all-link">Ver todos →</a>
+			</div>
 			<ArtistGrid artists={artists} />
 		</div>
 	</section>
@@ -192,7 +195,10 @@ const products = [
 
 	<section id="music" class="music-section">
 		<div class="music-content">
-			<SectionHeader title="Música" subtitle="Los beats que definen la cultura" />
+			<div class="section-header-with-link">
+				<SectionHeader title="Música" subtitle="Los beats que definen la cultura" />
+				<a href="/musica" class="view-all-link">Ver todos →</a>
+			</div>
 			<MusicGrid tracks={tracks} />
 		</div>
 	</section>
@@ -201,7 +207,10 @@ const products = [
 
 	<section id="events" class="events-section">
 		<div class="events-content">
-			<SectionHeader title="Eventos" subtitle="Donde el movimiento cobra vida" />
+			<div class="section-header-with-link">
+				<SectionHeader title="Eventos" subtitle="Donde el movimiento cobra vida" />
+				<a href="/eventos" class="view-all-link">Ver todos →</a>
+			</div>
 			<EventsList events={events} />
 		</div>
 	</section>
@@ -210,7 +219,10 @@ const products = [
 
 	<section id="shop" class="shop-section">
 		<div class="shop-content">
-			<SectionHeader title="Tienda" subtitle="El estilo que representa" />
+			<div class="section-header-with-link">
+				<SectionHeader title="Tienda" subtitle="El estilo que representa" />
+				<a href="/tienda" class="view-all-link">Ver todos →</a>
+			</div>
 			<ShopGrid products={products} />
 		</div>
 	</section>
@@ -414,5 +426,31 @@ const products = [
 
 	.join-button:hover {
 		transform: scale(1.05);
+	}
+
+	.section-header-with-link {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 40px;
+	}
+
+	.view-all-link {
+		color: var(--primary-color);
+		text-decoration: none;
+		font-size: 14px;
+		font-weight: 500;
+		font-family: 'Noto Sans JP', sans-serif;
+		letter-spacing: 0.05em;
+		padding: 8px 16px;
+		border: 1px solid rgba(201, 131, 0, 0.3);
+		border-radius: 6px;
+		transition: all 0.2s;
+	}
+
+	.view-all-link:hover {
+		background: rgba(201, 131, 0, 0.1);
+		border-color: var(--primary-color);
+		transform: translateY(-1px);
 	}
 </style>

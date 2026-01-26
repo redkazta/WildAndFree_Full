@@ -1,5 +1,6 @@
 ---
 import SidebarLeft from '../components/SidebarLeft.astro';
+import ProfileModal from '../components/ProfileModal.astro';
 import { sidebarStore } from '../components/sidebarStore.js';
 
 export type Props = {
@@ -21,8 +22,818 @@ const { config } = Astro.props;
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{config.name}</title>
+		
+		<!-- Google Fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+		
+		<style>
+			:root {
+				--primary: {config.primary_color};
+				--secondary: {config.secondary_color};
+				--primary-color: {config.primary_color};
+				--secondary-color: {config.secondary_color};
+			}
+			
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+			
+			body {
+				font-family: 'Noto Sans JP', sans-serif;
+				background: #111;
+				color: #fff;
+				line-height: 1.6;
+				overflow-x: hidden;
+			}
+			
+			/* Header Styles */
+			.site-header {
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				z-index: 1000;
+				background: rgba(0, 0, 0, 0.95);
+				backdrop-filter: blur(10px);
+				border-bottom: 1px solid rgba(201, 131, 0, 0.2);
+			}
+			
+			.header-content {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding: 16px 24px;
+				max-width: 1400px;
+				margin: 0 auto;
+			}
+			
+			.header-left {
+				display: flex;
+				align-items: center;
+				gap: 20px;
+			}
+			
+			.header-center {
+				flex: 1;
+				display: flex;
+				justify-content: center;
+			}
+			
+			.header-right {
+				display: flex;
+				align-items: center;
+				gap: 16px;
+			}
+			
+			/* Logo */
+			.logo {
+				display: flex;
+				flex-direction: column;
+				line-height: 1;
+			}
+			
+			.logo-text {
+				display: flex;
+				flex-direction: column;
+				font-weight: 900;
+				font-size: 24px;
+				letter-spacing: 0.1em;
+			}
+			
+			.logo-line {
+				color: #fff;
+				transition: all 0.3s ease;
+			}
+			
+			.logo-line:first-child {
+				color: var(--primary-color);
+			}
+			
+			/* Navigation */
+			.main-nav {
+				display: flex;
+				gap: 32px;
+			}
+			
+			.nav-link {
+				color: #fff;
+				text-decoration: none;
+				font-weight: 500;
+				font-size: 14px;
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				transition: all 0.2s ease;
+				padding: 8px 16px;
+				border-radius: 4px;
+				display: flex;
+				align-items: center;
+				gap: 8px;
+			}
+			
+			.nav-link:hover {
+				color: var(--primary-color);
+				background: rgba(201, 131, 0, 0.1);
+			}
+			
+			.nav-icon {
+				margin-right: 6px;
+				opacity: 0.8;
+				transition: all 0.2s ease;
+			}
+			
+			.nav-link:hover .nav-icon {
+				opacity: 1;
+				transform: translateY(-1px);
+			}
+			
+			/* Header Actions */
+			.header-actions {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				position: relative;
+			}
+			
+			.action-btn {
+				background: none;
+				border: none;
+				color: #fff;
+				cursor: pointer;
+				padding: 8px;
+				border-radius: 4px;
+				transition: all 0.2s ease;
+				position: relative;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+			
+			.action-btn:hover {
+				color: var(--primary-color);
+				background: rgba(201, 131, 0, 0.1);
+			}
+			
+			.action-wrapper {
+				position: relative;
+			}
+			
+			.badge {
+				position: absolute;
+				top: -4px;
+				right: -4px;
+				background: var(--primary-color);
+				color: #000;
+				font-size: 10px;
+				font-weight: 700;
+				padding: 2px 6px;
+				border-radius: 10px;
+				min-width: 16px;
+				height: 16px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+			
+			.login-btn {
+				background: var(--primary-color);
+				color: #000;
+				text-decoration: none;
+				padding: 10px 20px;
+				border-radius: 4px;
+				font-weight: 600;
+				font-size: 14px;
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+				transition: all 0.2s ease;
+			}
+			
+			.login-btn:hover {
+				background: #fff;
+				transform: translateY(-2px);
+			}
+			
+			/* Menu Toggle */
+			.menu-toggle {
+				background: none;
+				border: none;
+				cursor: pointer;
+				padding: 8px;
+				display: flex;
+				flex-direction: column;
+				gap: 4px;
+			}
+			
+			.hamburger-lines {
+				display: flex;
+				flex-direction: column;
+				gap: 4px;
+			}
+			
+			.hamburger-lines span {
+				width: 20px;
+				height: 2px;
+				background: #fff;
+				transition: all 0.3s ease;
+			}
+			
+			.menu-toggle:hover .hamburger-lines span {
+				background: var(--primary-color);
+			}
+			
+			/* Layout Container */
+			.layout-container {
+				display: flex;
+				min-height: 100vh;
+				padding-top: 80px;
+			}
+			
+			/* Main Content */
+			main {
+				flex: 1;
+				padding: 24px;
+				max-width: 1400px;
+				margin: 0 auto;
+				width: 100%;
+			}
+			
+			.modal-footer {
+				display: flex;
+				gap: 10px;
+				margin-top: 16px;
+			}
+
+			.btn-primary,
+			.btn-secondary {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				gap: 8px;
+				padding: 10px 14px;
+				border-radius: 8px;
+				font-size: 13px;
+				font-weight: 700;
+				letter-spacing: 0.02em;
+				text-decoration: none;
+				cursor: pointer;
+				transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+				white-space: nowrap;
+			}
+
+			.btn-primary {
+				background: var(--primary-color);
+				color: #000;
+				border: 1px solid transparent;
+			}
+
+			.btn-primary:hover {
+				background: #fff;
+				transform: translateY(-1px);
+			}
+
+			.btn-secondary {
+				background: rgba(255, 255, 255, 0.06);
+				color: #fff;
+				border: 1px solid rgba(255, 255, 255, 0.18);
+			}
+
+			.btn-secondary:hover {
+				background: rgba(255, 255, 255, 0.1);
+				border-color: rgba(255, 255, 255, 0.3);
+				transform: translateY(-1px);
+			}
+
+			.wishlist-items {
+				display: flex;
+				flex-direction: column;
+				gap: 10px;
+			}
+
+			.wishlist-item {
+				display: grid;
+				grid-template-columns: 44px 1fr auto;
+				align-items: center;
+				gap: 12px;
+				padding: 10px;
+				border-radius: 10px;
+				border: 1px solid rgba(201, 131, 0, 0.15);
+				background: rgba(255, 255, 255, 0.04);
+				color: #fff;
+				text-decoration: none;
+				transition: background 0.15s ease, border-color 0.15s ease;
+			}
+
+			.wishlist-item:hover {
+				background: rgba(201, 131, 0, 0.08);
+				border-color: rgba(201, 131, 0, 0.35);
+			}
+
+			.wishlist-thumb {
+				width: 44px;
+				height: 44px;
+				border-radius: 10px;
+				overflow: hidden;
+				border: 1px solid rgba(255, 255, 255, 0.12);
+			}
+
+			.wishlist-thumb img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				display: block;
+			}
+
+			.wishlist-meta {
+				min-width: 0;
+			}
+
+			.wishlist-name {
+				font-size: 13px;
+				font-weight: 800;
+				letter-spacing: 0.02em;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+
+			.wishlist-sub {
+				font-size: 12px;
+				color: rgba(255, 255, 255, 0.6);
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				margin-top: 2px;
+			}
+
+			.wishlist-price {
+				font-size: 12px;
+				font-weight: 900;
+				color: var(--primary-color);
+			}
+
+			.cart-items {
+				display: flex;
+				flex-direction: column;
+				gap: 12px;
+			}
+
+			.cart-item {
+				display: grid;
+				grid-template-columns: 52px 1fr auto;
+				gap: 12px;
+				align-items: center;
+				padding: 10px;
+				border-radius: 10px;
+				border: 1px solid rgba(255, 255, 255, 0.12);
+				background: rgba(255, 255, 255, 0.04);
+			}
+
+			.cart-item-image {
+				width: 52px;
+				height: 52px;
+				border-radius: 10px;
+				overflow: hidden;
+				border: 1px solid rgba(255, 255, 255, 0.12);
+			}
+
+			.cart-item-image img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				display: block;
+			}
+
+			.cart-item-info h4 {
+				font-size: 13px;
+				font-weight: 800;
+				margin: 0 0 2px 0;
+			}
+
+			.cart-item-info p {
+				font-size: 12px;
+				margin: 0;
+				color: rgba(255, 255, 255, 0.6);
+			}
+
+			.cart-item-info .price {
+				display: inline-block;
+				margin-top: 6px;
+				font-size: 12px;
+				font-weight: 900;
+				color: var(--primary-color);
+			}
+
+			.cart-item-actions {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				font-size: 12px;
+				color: rgba(255, 255, 255, 0.8);
+			}
+
+			.quantity-btn {
+				width: 28px;
+				height: 28px;
+				border-radius: 8px;
+				border: 1px solid rgba(255, 255, 255, 0.18);
+				background: rgba(255, 255, 255, 0.06);
+				color: #fff;
+				cursor: pointer;
+				transition: background 0.15s ease, border-color 0.15s ease;
+			}
+
+			.quantity-btn:hover {
+				background: rgba(255, 255, 255, 0.1);
+				border-color: rgba(255, 255, 255, 0.3);
+			}
+
+			.cart-total {
+				margin-top: 14px;
+				padding-top: 12px;
+				border-top: 1px solid rgba(255, 255, 255, 0.12);
+				display: flex;
+				flex-direction: column;
+				gap: 8px;
+			}
+
+			.total-line {
+				display: flex;
+				justify-content: space-between;
+				font-size: 12px;
+				color: rgba(255, 255, 255, 0.75);
+			}
+
+			.total-line.final {
+				font-size: 13px;
+				font-weight: 900;
+				color: #fff;
+			}
+			
+			/* Profile Modal Styles */
+			.profile-header {
+				display: flex;
+				align-items: center;
+				gap: 16px;
+				margin-bottom: 24px;
+				padding-bottom: 20px;
+				border-bottom: 1px solid rgba(201, 131, 0, 0.2);
+			}
+			
+			.profile-avatar {
+				width: 64px;
+				height: 64px;
+				border-radius: 50%;
+				overflow: hidden;
+				border: 2px solid var(--primary-color);
+			}
+			
+			.profile-avatar img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+			
+			.profile-info h4 {
+				font-size: 16px;
+				font-weight: 600;
+				margin: 0 0 4px 0;
+				color: #fff;
+			}
+			
+			.profile-info p {
+				font-size: 14px;
+				color: rgba(255, 255, 255, 0.6);
+				margin: 0;
+			}
+			
+			.profile-menu {
+				display: flex;
+				flex-direction: column;
+				gap: 8px;
+			}
+			
+			.profile-link {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				padding: 12px 16px;
+				color: #fff;
+				text-decoration: none;
+				border-radius: 6px;
+				transition: all 0.2s ease;
+				font-size: 14px;
+				font-family: 'Noto Sans JP', sans-serif;
+			}
+			
+			.profile-link:hover {
+				background: rgba(201, 131, 0, 0.1);
+			}
+			
+			/* Location Modal */
+			.location-form {
+				display: flex;
+				flex-direction: column;
+				gap: 16px;
+			}
+			
+			.form-group {
+				display: flex;
+				flex-direction: column;
+				gap: 8px;
+			}
+			
+			.form-group label {
+				font-size: 12px;
+				color: rgba(255, 255, 255, 0.7);
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				font-family: 'Noto Sans JP', sans-serif;
+			}
+			
+			.zipcode-input,
+			.city-input,
+			.country-select {
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid rgba(201, 131, 0, 0.2);
+				border-radius: 6px;
+				padding: 12px 16px;
+				color: #fff;
+				font-family: 'Noto Sans JP', sans-serif;
+				font-size: 14px;
+				transition: all 0.2s;
+			}
+			
+			.zipcode-input:focus,
+			.city-input:focus,
+			.country-select:focus {
+				outline: none;
+				border-color: var(--primary-color);
+				background: rgba(201, 131, 0, 0.1);
+				box-shadow: 0 0 0 2px rgba(201, 131, 0, 0.2);
+			}
+			
+			.country-select {
+				cursor: pointer;
+			}
+			
+			.country-select option {
+				background: #111;
+				color: #fff;
+			}
+			
+			.location-grid {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 12px;
+			}
+			
+			.location-option {
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid rgba(201, 131, 0, 0.2);
+				border-radius: 6px;
+				padding: 16px;
+				color: #fff;
+				cursor: pointer;
+				transition: all 0.2s;
+				font-family: 'Noto Sans JP', sans-serif;
+				font-size: 14px;
+			}
+			
+			.location-option:hover {
+				background: rgba(201, 131, 0, 0.1);
+				border-color: var(--primary-color);
+			}
+			
+			/* Profile Modal Enhanced */
+			.profile-authenticated {
+				display: block;
+			}
+			
+			.profile-guest {
+				text-align: center;
+				padding: 20px 0;
+			}
+			
+			.profile-login-prompt {
+				margin-bottom: 24px;
+			}
+			
+			.profile-login-prompt h4 {
+				margin: 0 0 8px 0;
+				color: #fff;
+				font-size: 16px;
+				font-family: 'Noto Sans JP', sans-serif;
+			}
+			
+			.profile-login-prompt p {
+				margin: 0;
+				color: rgba(255, 255, 255, 0.6);
+				font-size: 14px;
+				font-family: 'Noto Sans JP', sans-serif;
+			}
+			
+			.profile-actions {
+				display: flex;
+				flex-direction: column;
+				gap: 12px;
+			}
+			
+			.profile-btn {
+				width: 100%;
+				text-align: center;
+				text-decoration: none;
+				padding: 12px 16px;
+				border-radius: 6px;
+				font-size: 14px;
+				font-weight: 600;
+				font-family: 'Noto Sans JP', sans-serif;
+				transition: all 0.2s;
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+				cursor: pointer;
+			}
+			
+			.btn-primary.profile-btn {
+				background: var(--primary-color);
+				color: #000;
+				border: none;
+			}
+			
+			.btn-primary.profile-btn:hover {
+				background: #fff;
+				transform: translateY(-2px);
+			}
+			
+			.btn-secondary.profile-btn {
+				background: transparent;
+				color: var(--primary-color);
+				border: 1px solid var(--primary-color);
+			}
+			
+			.btn-secondary.profile-btn:hover {
+				background: var(--primary-color);
+				color: #000;
+			}
+			
+			.logout-btn {
+				width: 100%;
+				padding: 12px 16px;
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid rgba(255, 255, 255, 0.3);
+				color: rgba(255, 255, 255, 0.7);
+				border-radius: 6px;
+				font-size: 14px;
+				font-weight: 600;
+				font-family: 'Noto Sans JP', sans-serif;
+				cursor: pointer;
+				transition: all 0.2s;
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+			}
+			
+			.logout-btn:hover {
+				background: rgba(255, 255, 255, 0.1);
+				color: #fff;
+				border-color: #fff;
+			}
+			
+			/* Responsive */
+			@media (max-width: 768px) {
+				.header-center {
+					display: none;
+				}
+				
+				.header-content {
+					padding: 12px 16px;
+				}
+				
+				.main-nav {
+					flex-direction: column;
+					gap: 16px;
+				}
+				
+				.modal {
+					min-width: 280px;
+					padding: 20px;
+				}
+			}
+		</style>
+		<style is:global>
+			.modal-overlay {
+				position: fixed;
+				inset: 0;
+				background: rgba(0, 0, 0, 0.8);
+				backdrop-filter: blur(5px);
+				z-index: 2000;
+				opacity: 0;
+				visibility: hidden;
+				transition: all 0.3s ease;
+			}
+
+			.modal-overlay.active {
+				opacity: 1;
+				visibility: visible;
+			}
+
+			.modal {
+				position: fixed;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%) scale(0.9);
+				background: #111;
+				border: 1px solid rgba(201, 131, 0, 0.3);
+				border-radius: 12px;
+				padding: 16px;
+				width: 360px;
+				max-width: 92vw;
+				max-height: 90vh;
+				overflow-y: auto;
+				z-index: 2001;
+				opacity: 0;
+				visibility: hidden;
+				pointer-events: none;
+				box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+				transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+			}
+
+			.modal-header {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 10px;
+				padding-bottom: 12px;
+				margin-bottom: 12px;
+				border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+			}
+
+			.modal-title {
+				font-size: 13px;
+				font-weight: 900;
+				letter-spacing: 0.08em;
+				text-transform: uppercase;
+				margin: 0;
+			}
+
+			.modal-close {
+				background: transparent;
+				border: 1px solid rgba(255, 255, 255, 0.16);
+				color: rgba(255, 255, 255, 0.8);
+				width: 32px;
+				height: 32px;
+				border-radius: 10px;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				cursor: pointer;
+				transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+			}
+
+			.modal-close:hover {
+				background: rgba(255, 255, 255, 0.08);
+				border-color: rgba(255, 255, 255, 0.28);
+				color: #fff;
+			}
+
+			.modal-content {
+				color: #fff;
+			}
+
+			.modal.active {
+				opacity: 1;
+				visibility: visible;
+				transform: translate(-50%, -50%) scale(1);
+				pointer-events: auto;
+			}
+
+			.action-wrapper .modal {
+				position: absolute;
+				top: calc(100% + 8px);
+				right: 0;
+				left: auto;
+				transform: none;
+				transform-origin: top right;
+			}
+
+			.action-wrapper .modal.active {
+				transform: none;
+			}
+
+			@media (max-width: 768px) {
+				.action-wrapper .modal {
+					position: fixed;
+					top: 88px;
+					left: 16px;
+					right: 16px;
+					max-width: calc(100vw - 32px);
+					width: auto;
+				}
+			}
+		</style>
 	</head>
-	<body>
+	<body style="--primary: {config.primary_color}; --secondary: {config.secondary_color};">
 		<header class="site-header">
 			<div class="wrap header-content">
 				<div class="header-left">
@@ -33,13 +844,220 @@ const { config } = Astro.props;
 							<span></span>
 						</div>
 					</button>
-					<div class="logo">WildGaming</div>
+					<div class="logo">
+						<div class="logo-text">
+							<span class="logo-line">WILD</span>
+							<span class="logo-line">GVNG</span>
+						</div>
+					</div>
 				</div>
+				
 				<div class="header-center">
-					<div class="main-title">WILD AND FREE</div>
+					<nav class="main-nav">
+						<a href="/artistas" class="nav-link">
+							<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" class="nav-icon">
+								<path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+							</svg>
+							Artistas
+						</a>
+						<a href="/musica" class="nav-link">
+							<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" class="nav-icon">
+								<path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+							</svg>
+							Música
+						</a>
+						<a href="/eventos" class="nav-link">
+							<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" class="nav-icon">
+								<path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/>
+							</svg>
+							Eventos
+						</a>
+						<a href="/tienda" class="nav-link">
+							<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" class="nav-icon">
+								<path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+							</svg>
+							Tienda
+						</a>
+					</nav>
 				</div>
+				
 				<div class="header-right">
-					<a href="/login" class="login-btn">Acceder</a>
+					<div class="header-actions">
+						<div class="action-wrapper">
+								<button class="action-btn location-btn" aria-label="Ubicación" title="Elegir ubicación" data-modal="location">
+									<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+										<path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+									</svg>
+								</button>
+								<!-- Modal de Ubicación -->
+								<div class="modal" id="location-modal">
+									<div class="modal-header">
+										<h3 class="modal-title">Seleccionar Ubicación</h3>
+										<button class="modal-close" aria-label="Cerrar">
+											<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+												<path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+											</svg>
+										</button>
+									</div>
+									<div class="modal-content">
+										<div class="location-form">
+											<div class="form-group">
+												<label for="zipcode">Código Postal:</label>
+												<input type="text" id="zipcode" placeholder="Ej: 06600" maxlength="5" class="zipcode-input">
+											</div>
+											<div class="form-group">
+												<label for="city">Ciudad:</label>
+												<input type="text" id="city" placeholder="Ej: Ciudad de México" class="city-input">
+											</div>
+											<div class="form-group">
+												<label for="country">País:</label>
+												<select id="country" class="country-select">
+													<option value="">Selecciona un país</option>
+													<option value="MX">🇲🇽 México</option>
+													<option value="US">🇺🇸 Estados Unidos</option>
+													<option value="JP">🇯🇵 Japón</option>
+													<option value="KR">🇰🇷 Corea del Sur</option>
+													<option value="AR">🇦🇷 Argentina</option>
+													<option value="CO">🇨🇴 Colombia</option>
+													<option value="ES">🇪🇸 España</option>
+												</select>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button class="btn-secondary" id="detect-location">Detectar Ubicación</button>
+											<button class="btn-primary" id="save-location">Guardar Ubicación</button>
+										</div>
+									</div>
+								</div>
+						</div>
+						<div class="action-wrapper">
+								<button class="action-btn wishlist-btn" aria-label="Wishlist" title="Mi wishlist" data-modal="wishlist">
+									<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+										<path d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314Z"/>
+									</svg>
+									<span class="badge">3</span>
+								</button>
+								<!-- Modal de Wishlist -->
+								<div class="modal" id="wishlist-modal">
+									<div class="modal-header">
+										<h3 class="modal-title">Mi Wishlist</h3>
+										<button class="modal-close" aria-label="Cerrar">
+											<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+												<path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+											</svg>
+										</button>
+									</div>
+									<div class="modal-content">
+										<div class="wishlist-items">
+											<a class="wishlist-item" href="/tienda">
+												<div class="wishlist-thumb">
+													<img src="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2780%27%20height%3D%2780%27%20viewBox%3D%270%200%2080%2080%27%3E%3Cdefs%3E%3ClinearGradient%20id%3D%27g%27%20x1%3D%270%27%20y1%3D%270%27%20x2%3D%271%27%20y2%3D%271%27%3E%3Cstop%20stop-color%3D%27%23C98300%27/%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27%238A0303%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%2780%27%20height%3D%2780%27%20rx%3D%2710%27%20fill%3D%27url(%23g)%27/%3E%3Ctext%20x%3D%2750%25%27%20y%3D%2754%25%27%20font-size%3D%2712%27%20text-anchor%3D%27middle%27%20fill%3D%27white%27%20font-family%3D%27Arial%27%3EWILD%3C/text%3E%3C/svg%3E" alt="Producto">
+												</div>
+												<div class="wishlist-meta">
+													<div class="wishlist-name">Wild Gvng Tee</div>
+													<div class="wishlist-sub">Negro · Talla L</div>
+												</div>
+												<div class="wishlist-price">$35</div>
+											</a>
+											<a class="wishlist-item" href="/tienda">
+												<div class="wishlist-thumb">
+													<img src="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2780%27%20height%3D%2780%27%20viewBox%3D%270%200%2080%2080%27%3E%3Cdefs%3E%3ClinearGradient%20id%3D%27g%27%20x1%3D%270%27%20y1%3D%271%27%20x2%3D%271%27%20y2%3D%270%27%3E%3Cstop%20stop-color%3D%27%238A0303%27/%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27%23C98300%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%2780%27%20height%3D%2780%27%20rx%3D%2710%27%20fill%3D%27url(%23g)%27/%3E%3Ctext%20x%3D%2750%25%27%20y%3D%2754%25%27%20font-size%3D%2712%27%20text-anchor%3D%27middle%27%20fill%3D%27white%27%20font-family%3D%27Arial%27%3EGVNG%3C/text%3E%3C/svg%3E" alt="Producto">
+												</div>
+												<div class="wishlist-meta">
+													<div class="wishlist-name">Red Mafia Cap</div>
+													<div class="wishlist-sub">Rojo · Unitalla</div>
+												</div>
+												<div class="wishlist-price">$22</div>
+											</a>
+										</div>
+										<div class="modal-footer">
+											<a href="/tienda" class="btn-secondary">Ver tienda</a>
+											<a href="/tienda" class="btn-primary">Ir a comprar</a>
+										</div>
+									</div>
+								</div>
+						</div>
+						<div class="action-wrapper">
+								<button class="action-btn cart-btn" aria-label="Carrito" title="Mi carrito" data-modal="cart">
+									<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+										<path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+									</svg>
+									<span class="badge">2</span>
+								</button>
+								<!-- Modal de Carrito -->
+								<div class="modal" id="cart-modal">
+									<div class="modal-header">
+										<h3 class="modal-title">Mi Carrito</h3>
+										<button class="modal-close" aria-label="Cerrar">
+											<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+												<path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+											</svg>
+										</button>
+									</div>
+									<div class="modal-content">
+										<div class="cart-items">
+											<div class="cart-item">
+												<div class="cart-item-image">
+													<img src="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2776%27%20height%3D%2776%27%20viewBox%3D%270%200%2076%2076%27%3E%3Cdefs%3E%3ClinearGradient%20id%3D%27g%27%20x1%3D%270%27%20y1%3D%270%27%20x2%3D%271%27%20y2%3D%271%27%3E%3Cstop%20stop-color%3D%27%23000000%27/%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27%23C98300%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%2776%27%20height%3D%2776%27%20rx%3D%2710%27%20fill%3D%27url(%23g)%27/%3E%3Cpath%20d%3D%27M20%2028h36v6H20z%27%20fill%3D%27%23ffffff%27%20opacity%3D%270.25%27/%3E%3Cpath%20d%3D%27M20%2040h28v6H20z%27%20fill%3D%27%23ffffff%27%20opacity%3D%270.25%27/%3E%3C/svg%3E" alt="Producto">
+												</div>
+												<div class="cart-item-info">
+													<h4>Wild Gvng Hoodie</h4>
+													<p>Talla: M</p>
+													<span class="price">¥8,500</span>
+												</div>
+												<div class="cart-item-actions">
+													<button class="quantity-btn">-</button>
+													<span>1</span>
+													<button class="quantity-btn">+</button>
+												</div>
+											</div>
+											<div class="cart-item">
+												<div class="cart-item-image">
+													<img src="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2776%27%20height%3D%2776%27%20viewBox%3D%270%200%2076%2076%27%3E%3Cdefs%3E%3ClinearGradient%20id%3D%27g%27%20x1%3D%270%27%20y1%3D%271%27%20x2%3D%271%27%20y2%3D%270%27%3E%3Cstop%20stop-color%3D%27%238A0303%27/%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27%23000000%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%2776%27%20height%3D%2776%27%20rx%3D%2710%27%20fill%3D%27url(%23g)%27/%3E%3Ccircle%20cx%3D%2738%27%20cy%3D%2738%27%20r%3D%2716%27%20fill%3D%27%23ffffff%27%20opacity%3D%270.18%27/%3E%3C/svg%3E" alt="Producto">
+												</div>
+												<div class="cart-item-info">
+													<h4>Wild Gvng Tee</h4>
+													<p>Talla: L</p>
+													<span class="price">¥3,200</span>
+												</div>
+												<div class="cart-item-actions">
+													<button class="quantity-btn">-</button>
+													<span>1</span>
+													<button class="quantity-btn">+</button>
+												</div>
+											</div>
+										</div>
+										<div class="cart-total">
+											<div class="total-line">
+												<span>Subtotal:</span>
+												<span>$85.00</span>
+											</div>
+											<div class="total-line">
+												<span>Envío:</span>
+												<span>$5.00</span>
+											</div>
+											<div class="total-line final">
+												<span>Total:</span>
+												<span>$90.00</span>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<a href="/tienda" class="btn-secondary">Seguir comprando</a>
+											<a href="/checkout" class="btn-primary">Proceder al Pago</a>
+										</div>
+									</div>
+								</div>
+						</div>
+						<div class="action-wrapper">
+								<button class="action-btn profile-btn" aria-label="Perfil" title="Mi perfil" data-modal="profile">
+									<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+										<path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+									</svg>
+								</button>
+								<ProfileModal />
+						</div>
+						<a href="/login" class="login-btn">Iniciar Sesión</a>
+					</div>
 				</div>
 			</div>
 		</header>
@@ -47,10 +1065,13 @@ const { config } = Astro.props;
 		<div class="layout-container">
 			<SidebarLeft />
 			
-			<main class="main-content">
+			<main>
 				<slot />
 			</main>
 		</div>
+		
+		<!-- Modal Overlay -->
+		<div class="modal-overlay" id="modal-overlay"></div>
 		
 		<script>
 			// Handle menu toggle for sidebar
@@ -64,176 +1085,291 @@ const { config } = Astro.props;
 						}
 					});
 				}
+
+				// Handle header action buttons
+				const locationBtn = document.querySelector('.location-btn');
+				const wishlistBtn = document.querySelector('.wishlist-btn');
+				const cartBtn = document.querySelector('.cart-btn');
+				const profileBtn = document.querySelector('.profile-btn');
+
+				// Modal system
+				const modalOverlay = document.getElementById('modal-overlay');
+				const modals = document.querySelectorAll('.modal');
+				const modalCloseBtns = document.querySelectorAll('.modal-close');
+
+				const isTouchDevice = window.matchMedia('(hover: none), (pointer: coarse)').matches || 'ontouchstart' in window;
+				const hoverCapable = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+				const detectLocationBtn = document.querySelector('#location-modal #detect-location');
+				const saveLocationBtn = document.querySelector('#location-modal #save-location');
+				const zipcodeInput = document.querySelector('#location-modal #zipcode');
+				const cityInput = document.querySelector('#location-modal #city');
+				const countrySelect = document.querySelector('#location-modal #country');
+
+				function syncSavedLocationToForm() {
+					const savedLocation = localStorage.getItem('userLocation');
+					if (!savedLocation) return;
+					try {
+						const location = JSON.parse(savedLocation);
+						if (zipcodeInput) zipcodeInput.value = location.zipcode || '';
+						if (cityInput) cityInput.value = location.city || '';
+						if (countrySelect) countrySelect.value = location.country || '';
+					} catch (e) {
+						console.error('Error al cargar ubicación guardada:', e);
+					}
+				}
+
+				function setButtonExpanded(modalId) {
+					const map = {
+						'location-modal': locationBtn,
+						'wishlist-modal': wishlistBtn,
+						'cart-modal': cartBtn,
+						'profile-modal': profileBtn
+					};
+					Object.entries(map).forEach(([id, btn]) => {
+						if (!btn) return;
+						btn.setAttribute('aria-expanded', id === modalId ? 'true' : 'false');
+					});
+				}
+
+				function closeAllPanels() {
+					modalOverlay.classList.remove('active');
+					modals.forEach(modal => {
+						modal.classList.remove('active');
+						modal.setAttribute('aria-hidden', 'true');
+					});
+					setButtonExpanded(null);
+				}
+
+				function openPanel(modalId) {
+					const targetModal = document.getElementById(modalId);
+					if (!targetModal) return;
+
+					modals.forEach(modal => {
+						if (modal !== targetModal) {
+							modal.classList.remove('active');
+							modal.setAttribute('aria-hidden', 'true');
+						}
+					});
+
+					targetModal.classList.add('active');
+					targetModal.setAttribute('aria-hidden', 'false');
+					setButtonExpanded(modalId);
+					modalOverlay.classList.remove('active');
+
+					if (modalId === 'location-modal') {
+						syncSavedLocationToForm();
+					}
+				}
+
+				function togglePanel(modalId) {
+					const targetModal = document.getElementById(modalId);
+					if (!targetModal) return;
+					if (targetModal.classList.contains('active')) {
+						closeAllPanels();
+						return;
+					}
+					openPanel(modalId);
+				}
+
+				// Modal event listeners
+				if (modalOverlay) {
+					modalOverlay.addEventListener('click', (e) => {
+						if (e.target === modalOverlay) {
+							closeAllPanels();
+						}
+					});
+				}
+
+				modalCloseBtns.forEach(btn => {
+					btn.addEventListener('click', (e) => {
+						e.preventDefault();
+						closeAllPanels();
+					});
+				});
+
+				[locationBtn, wishlistBtn, cartBtn, profileBtn].forEach(btn => {
+					if (btn) btn.setAttribute('aria-expanded', 'false');
+				});
+				modals.forEach(modal => modal.setAttribute('aria-hidden', 'true'));
+
+				function bindPanel(button, modalId) {
+					if (!button) return;
+					const wrapper = button.closest('.action-wrapper');
+					if (!wrapper) return;
+
+					if (hoverCapable && !isTouchDevice) {
+						let leaveTimeout = null;
+						wrapper.addEventListener('pointerenter', () => {
+							clearTimeout(leaveTimeout);
+							openPanel(modalId);
+						});
+						wrapper.addEventListener('pointerleave', () => {
+							leaveTimeout = setTimeout(() => {
+								closeAllPanels();
+							}, 120);
+						});
+					} else {
+						button.addEventListener('click', (e) => {
+							e.preventDefault();
+							e.stopPropagation();
+							togglePanel(modalId);
+						});
+					}
+				}
+
+				bindPanel(locationBtn, 'location-modal');
+				bindPanel(wishlistBtn, 'wishlist-modal');
+				bindPanel(cartBtn, 'cart-modal');
+				bindPanel(profileBtn, 'profile-modal');
+
+				document.addEventListener('click', (e) => {
+					if (!isTouchDevice) return;
+					const active = document.querySelector('.modal.active');
+					if (!active) return;
+					if (e.target.closest('.action-wrapper')) return;
+					closeAllPanels();
+				});
+
+				closeAllPanels();
+
+				// Detectar ubicación automáticamente
+				if (detectLocationBtn) {
+					detectLocationBtn.addEventListener('click', () => {
+						if (navigator.geolocation) {
+							detectLocationBtn.textContent = 'Detectando...';
+							detectLocationBtn.disabled = true;
+							
+							navigator.geolocation.getCurrentPosition(
+								(position) => {
+									// Simular datos basados en geolocalización
+									console.log('Ubicación detectada:', position.coords);
+									
+									// Aquí normalmente harías una llamada a una API de geocoding
+									// Por ahora, simularemos una ubicación
+									zipcodeInput.value = '06600';
+									cityInput.value = 'Ciudad de México';
+									countrySelect.value = 'MX';
+									
+									detectLocationBtn.textContent = 'Detectar Ubicación';
+									detectLocationBtn.disabled = false;
+								},
+								(error) => {
+									console.error('Error al detectar ubicación:', error);
+									alert('No se pudo detectar tu ubicación. Por favor, ingrésala manualmente.');
+									detectLocationBtn.textContent = 'Detectar Ubicación';
+									detectLocationBtn.disabled = false;
+								}
+							);
+						} else {
+							alert('Tu navegador no soporta geolocalización.');
+						}
+					});
+				}
+
+				// Guardar ubicación
+				if (saveLocationBtn) {
+					saveLocationBtn.addEventListener('click', () => {
+						const zipcode = zipcodeInput.value.trim();
+						const city = cityInput.value.trim();
+						const country = countrySelect.value;
+						
+						if (!zipcode || !city || !country) {
+							alert('Por favor, completa todos los campos.');
+							return;
+						}
+						
+						// Validar código postal (solo números para MX)
+						if (country === 'MX' && !/^\d{5}$/.test(zipcode)) {
+							alert('El código postal debe tener 5 dígitos.');
+							return;
+						}
+						
+						console.log('Ubicación guardada:', { zipcode, city, country });
+						
+						// Guardar en localStorage
+						localStorage.setItem('userLocation', JSON.stringify({
+							zipcode,
+							city,
+							country,
+							timestamp: Date.now()
+						}));
+						
+						// Actualizar el botón del header
+						const locationBtn = document.querySelector('.location-btn');
+						if (locationBtn) {
+							locationBtn.setAttribute('title', `Ubicación: ${city}, ${country} (${zipcode})`);
+						}
+						
+						closeAllPanels();
+						alert('Ubicación guardada exitosamente.');
+					});
+				}
+
+				// Función para actualizar UI según autenticación
+				function updateAuthUI() {
+					const isAuthenticated = localStorage.getItem('userAuth') === 'true';
+					const profileAuth = document.getElementById('profile-authenticated');
+					const profileGuest = document.getElementById('profile-guest');
+					const loginBtn = document.querySelector('.login-btn');
+					
+					if (isAuthenticated) {
+						// Mostrar perfil autenticado
+						if (profileAuth) profileAuth.style.display = 'block';
+						if (profileGuest) profileGuest.style.display = 'none';
+						if (loginBtn) loginBtn.style.display = 'none';
+						
+						// Cargar datos del perfil
+						const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+						const profileName = document.getElementById('profile-name');
+						const profileEmail = document.getElementById('profile-email');
+						const profileAvatar = document.getElementById('profile-avatar');
+						
+						if (profileName) profileName.textContent = userProfile.name || 'Usuario Wild';
+						if (profileEmail) profileEmail.textContent = userProfile.email || 'miembro@wildgvng.com';
+						if (profileAvatar && userProfile.avatar) profileAvatar.src = userProfile.avatar;
+					} else {
+						// Mostrar perfil invitado
+						if (profileAuth) profileAuth.style.display = 'none';
+						if (profileGuest) profileGuest.style.display = 'block';
+						if (loginBtn) loginBtn.style.display = 'block';
+					}
+				}
+
+				// Cargar estado de autenticación al inicio
+				updateAuthUI();
+
+				// Logout button
+				const logoutBtn = document.getElementById('logout-btn');
+				if (logoutBtn) {
+					logoutBtn.addEventListener('click', () => {
+						// Limpiar datos de autenticación
+						localStorage.removeItem('userAuth');
+						localStorage.removeItem('userProfile');
+						
+						// Actualizar UI
+						updateAuthUI();
+						closeAllPanels();
+						
+						console.log('Sesión cerrada');
+					});
+				}
+
+				// Simulación de autenticación (para pruebas)
+				// En producción, esto vendría de tu backend
+				function simulateLogin() {
+					localStorage.setItem('userAuth', 'true');
+					localStorage.setItem('userProfile', JSON.stringify({
+						name: 'Usuario Wild',
+						email: 'miembro@wildgvng.com',
+						avatar: "data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2780%27%20height%3D%2780%27%20viewBox%3D%270%200%2080%2080%27%3E%3Cdefs%3E%3CradialGradient%20id%3D%27g%27%20cx%3D%2730%25%27%20cy%3D%2720%25%27%20r%3D%2780%25%27%3E%3Cstop%20stop-color%3D%27%23C98300%27/%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27%23000000%27/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect%20width%3D%2780%27%20height%3D%2780%27%20rx%3D%2740%27%20fill%3D%27url(%23g)%27/%3E%3Cpath%20d%3D%27M40%2042c7.2%200%2013-5.8%2013-13s-5.8-13-13-13-13%205.8-13%2013%205.8%2013%2013%2013z%27%20fill%3D%27%23ffffff%27%20opacity%3D%270.18%27/%3E%3Cpath%20d%3D%27M18%2070c4.8-12.2%2016.4-18%2022-18s17.2%205.8%2022%2018%27%20fill%3D%27%23ffffff%27%20opacity%3D%270.18%27/%3E%3C/svg%3E"
+					}));
+					updateAuthUI();
+				}
+
+				// Para pruebas: descomenta la siguiente línea para simular un usuario autenticado
+				// simulateLogin();
 			});
 		</script>
 	</body>
 </html>
-
-<style define:vars={{ primary: config.primary_color }}>
-	:global(:root) {
-		--primary-color: var(--primary);
-	}
-
-	:global(html) {
-		background: #000000;
-		color: #ffffff;
-		font-family: 'Inter', system-ui, -apple-system, sans-serif;
-		scroll-behavior: smooth;
-	}
-
-	:global(body) {
-		margin: 0;
-		min-height: 100vh;
-		color: #ededed;
-		background: #050505;
-	}
-
-	.layout-container {
-		display: flex;
-		min-height: 100vh;
-	}
-
-	.main-content {
-		flex: 1;
-		margin-left: 0;
-		transition: margin-left 0.3s ease;
-	}
-
-	@media (min-width: 1024px) {
-		.main-content {
-			margin-left: 320px;
-		}
-	}
-
-	.wrap {
-		max-width: 1400px;
-		margin: 0 auto;
-		padding: 0 24px;
-	}
-
-	.site-header {
-		position: fixed;
-		top: 0;
-		left: 0;
-		right: 0;
-		z-index: 1000;
-		height: 60px;
-		display: flex;
-		align-items: center;
-		background: #131921;
-		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-	}
-
-	.header-content {
-		width: 100%;
-		display: grid;
-		grid-template-columns: auto 1fr auto;
-		align-items: center;
-		gap: 24px;
-		padding: 0 24px;
-		max-width: 1400px;
-		margin: 0 auto;
-	}
-
-	.header-left {
-		display: flex;
-		align-items: center;
-		gap: 16px;
-	}
-
-	.header-center {
-		text-align: center;
-	}
-
-	.header-right {
-		display: flex;
-		justify-content: flex-end;
-		align-items: center;
-	}
-
-	.logo {
-		font-weight: 900;
-		font-size: 20px;
-		letter-spacing: -0.02em;
-		color: #fff;
-		text-transform: uppercase;
-		cursor: pointer;
-		transition: all 0.2s;
-	}
-
-	.logo:hover {
-		color: var(--primary-color);
-	}
-
-	.main-title {
-		font-size: 18px;
-		font-weight: 800;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-		color: #fff;
-		opacity: 0.9;
-	}
-
-	.menu-toggle {
-		background: none;
-		border: none;
-		color: #fff;
-		cursor: pointer;
-		padding: 8px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 36px;
-		height: 36px;
-		border-radius: 4px;
-		transition: all 0.2s;
-	}
-
-	.menu-toggle:hover {
-		background: rgba(255, 255, 255, 0.1);
-	}
-
-	.hamburger-lines {
-		display: flex;
-		flex-direction: column;
-		gap: 3px;
-		width: 16px;
-	}
-
-	.hamburger-lines span {
-		width: 100%;
-		height: 2px;
-		background: currentColor;
-		transition: all 0.2s;
-		border-radius: 1px;
-	}
-
-	.menu-toggle:hover .hamburger-lines span {
-		background: var(--primary-color);
-	}
-
-	.login-btn {
-		padding: 6px 16px;
-		background: transparent;
-		border: 1px solid rgba(255, 255, 255, 0.3);
-		color: #fff;
-		text-decoration: none;
-		font-size: 12px;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		font-weight: 600;
-		border-radius: 4px;
-		transition: all 0.2s;
-	}
-
-	.login-btn:hover {
-		background: var(--primary-color);
-		border-color: var(--primary-color);
-		color: #000;
-	}
-
-	:global(:root) {
-		color-scheme: dark;
-	}
-</style>

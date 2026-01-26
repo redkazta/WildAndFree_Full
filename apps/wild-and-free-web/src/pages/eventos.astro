@@ -1,0 +1,778 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const events = [
+  {
+    id: 1,
+    title: 'Wild Gvng Tour 2024',
+    date: '2024-02-15',
+    time: '20:00',
+    venue: 'Tokyo Dome',
+    city: 'Tokio',
+    image: 'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=800&h=400&fit=crop',
+    price: '¥8,000',
+    status: 'Disponible',
+    description: 'La gira más esperada del año con todos los artistas de Wild Gvng'
+  },
+  {
+    id: 2,
+    title: 'Neon Nights Festival',
+    date: '2024-03-01',
+    time: '19:00',
+    venue: 'Osaka Castle Hall',
+    city: 'Osaka',
+    image: 'https://images.unsplash.com/photo-1506157786151-b8491531f063?w=800&h=400&fit=crop',
+    price: '¥6,500',
+    status: 'Disponible',
+    description: 'Una noche llena de música electrónica y trap'
+  },
+  {
+    id: 3,
+    title: 'Underground Sessions',
+    date: '2024-03-20',
+    time: '22:00',
+    venue: 'Shibuya Club',
+    city: 'Tokio',
+    image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=400&fit=crop',
+    price: '¥3,500',
+    status: 'Próximamente',
+    description: 'Sesiones íntimas con los artistas emergentes de Wild Gvng'
+  },
+  {
+    id: 4,
+    title: 'Drill Masters Live',
+    date: '2024-04-10',
+    time: '21:00',
+    venue: 'Nagoya Arena',
+    city: 'Nagoya',
+    image: 'https://images.unsplash.com/photo-1472653437278-36ea0a46098d?w=800&h=400&fit=crop',
+    price: '¥5,000',
+    status: 'Disponible',
+    description: 'El mejor drill japonés en vivo'
+  }
+];
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('es-ES', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+};
+---
+
+<Layout config={{
+  name: "Wild Gvng - Eventos",
+  primary_color: "#C98300",
+  secondary_color: "#8A0303"
+}}>
+  <main class="events-page">
+    <div class="page-header">
+      <div class="container">
+        <h1 class="page-title">
+          <span class="title-line">PRÓXIMOS</span>
+          <span class="title-line">EVENTOS</span>
+        </h1>
+        <p class="page-subtitle">Vive la experiencia Wild Gvng en vivo</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="events-grid">
+        {events.map((event) => (
+          <div class="event-card">
+            <div class="event-image">
+              <img src={event.image} alt={event.title} />
+              <div class="event-overlay">
+                <div class="event-date-badge">
+                  <span class="day">{new Date(event.date).getDate()}</span>
+                  <span class="month">{new Date(event.date).toLocaleDateString('es-ES', { month: 'short' }).toUpperCase()}</span>
+                </div>
+              </div>
+            </div>
+            <div class="event-info">
+              <div class="event-header">
+                <h3 class="event-title">{event.title}</h3>
+                <span class={`event-status ${event.status.toLowerCase().replace(' ', '-')}`}>
+                  {event.status}
+                </span>
+              </div>
+              <p class="event-description">{event.description}</p>
+              <div class="event-details">
+                <div class="detail-item">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M8 0a1 1 0 0 1 1 1v1h2a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h2V1a1 1 0 0 1 1-1zM2 5v9h12V5H2z"/>
+                  </svg>
+                  <span>{formatDate(event.date)}</span>
+                </div>
+                <div class="detail-item">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
+                  </svg>
+                  <span>{event.time}</span>
+                </div>
+                <div class="detail-item">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
+                    <path d="M8 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 1a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                  </svg>
+                  <span>{event.venue}, {event.city}</span>
+                </div>
+              </div>
+              <div class="event-footer">
+                <div class="event-price">
+                  <span class="price-label">Desde</span>
+                  <span class="price-value">{event.price}</span>
+                </div>
+                <button class={`btn-tickets ${event.status === 'Disponible' ? 'available' : 'soon'}`}>
+                  {event.status === 'Disponible' ? 'Comprar Boletos' : 'Notificarme'}
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Event Modal -->
+    <div class="event-modal" id="event-modal">
+      <div class="modal-overlay" id="modal-overlay"></div>
+      <div class="modal-content">
+        <button class="modal-close" id="modal-close">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+        <div class="modal-header">
+          <h2 id="modal-title">Detalles del Evento</h2>
+        </div>
+        <div class="modal-body">
+          <div class="ticket-selection">
+            <h3>Selecciona tus boletos</h3>
+            <div class="ticket-types">
+              <div class="ticket-type">
+                <div class="ticket-info">
+                  <h4>General</h4>
+                  <p>Acceso general al evento</p>
+                </div>
+                <div class="ticket-price">¥8,000</div>
+                <div class="ticket-quantity">
+                  <button class="qty-btn minus">-</button>
+                  <span class="qty-value">0</span>
+                  <button class="qty-btn plus">+</button>
+                </div>
+              </div>
+              <div class="ticket-type">
+                <div class="ticket-info">
+                  <h4>VIP</h4>
+                  <p>Acceso VIP + Meet & Greet</p>
+                </div>
+                <div class="ticket-price">¥15,000</div>
+                <div class="ticket-quantity">
+                  <button class="qty-btn minus">-</button>
+                  <span class="qty-value">0</span>
+                  <button class="qty-btn plus">+</button>
+                </div>
+              </div>
+            </div>
+            <div class="total-price">
+              <span>Total:</span>
+              <span id="total-amount">¥0</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" id="modal-cancel">Cancelar</button>
+          <button class="btn-primary" id="modal-confirm">Añadir al Carrito</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .events-page {
+    min-height: 100vh;
+    padding-top: 80px;
+  }
+
+  .page-header {
+    background: linear-gradient(135deg, #000 0%, #111 100%);
+    padding: 120px 0 80px;
+    text-align: center;
+    border-bottom: 1px solid rgba(201, 131, 0, 0.3);
+  }
+
+  .page-title {
+    font-size: clamp(60px, 10vw, 120px);
+    font-weight: 900;
+    margin: 0 0 24px;
+    line-height: 0.8;
+    letter-spacing: 0.05em;
+    font-family: 'Noto Sans JP', sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .title-line {
+    display: block;
+    color: transparent;
+    -webkit-text-stroke: 2px rgba(255, 255, 255, 0.9);
+  }
+
+  .page-subtitle {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 32px;
+    padding: 80px 0;
+  }
+
+  .event-card {
+    background: linear-gradient(135deg, #111 0%, #000 100%);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    border: 1px solid rgba(201, 131, 0, 0.1);
+  }
+
+  .event-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(201, 131, 0, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  }
+
+  .event-image {
+    position: relative;
+    aspect-ratio: 2/1;
+    overflow: hidden;
+  }
+
+  .event-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .event-card:hover .event-image img {
+    transform: scale(1.1);
+  }
+
+  .event-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(201, 131, 0, 0.3) 0%, rgba(138, 3, 3, 0.3) 100%);
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding: 16px;
+  }
+
+  .event-date-badge {
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .day {
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--primary-color);
+    line-height: 1;
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+
+  .month {
+    font-size: 12px;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+  }
+
+  .event-info {
+    padding: 24px;
+  }
+
+  .event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+  }
+
+  .event-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+    color: #fff;
+    font-family: 'Noto Sans JP', sans-serif;
+    flex: 1;
+  }
+
+  .event-status {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .event-status.disponible {
+    background: rgba(34, 197, 94, 0.2);
+    color: #22c55e;
+    border: 1px solid #22c55e;
+  }
+
+  .event-status.próximamente {
+    background: rgba(201, 131, 0, 0.2);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+  }
+
+  .event-description {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0 0 24px;
+  }
+
+  .event-details {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .detail-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+  }
+
+  .detail-item svg {
+    opacity: 0.8;
+    color: var(--primary-color);
+  }
+
+  .event-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 24px;
+    border-top: 1px solid rgba(201, 131, 0, 0.1);
+  }
+
+  .event-price {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .price-label {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .price-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+
+  .btn-tickets {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+
+  .btn-tickets.available {
+    background: var(--primary-color);
+    color: #000;
+  }
+
+  .btn-tickets.available:hover {
+    background: #fff;
+    transform: translateY(-2px);
+  }
+
+  .btn-tickets.soon {
+    background: transparent;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+  }
+
+  .btn-tickets.soon:hover {
+    background: rgba(201, 131, 0, 0.1);
+  }
+
+  /* Modal Styles */
+  .event-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .event-modal.active {
+    display: flex;
+  }
+
+  .modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+  }
+
+  .modal-content {
+    background: linear-gradient(135deg, #111 0%, #000 100%);
+    border-radius: 12px;
+    border: 1px solid rgba(201, 131, 0, 0.3);
+    max-width: 500px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+  }
+
+  .modal-close:hover {
+    color: var(--primary-color);
+    background: rgba(201, 131, 0, 0.1);
+  }
+
+  .modal-header {
+    padding: 24px;
+    border-bottom: 1px solid rgba(201, 131, 0, 0.1);
+  }
+
+  .modal-header h2 {
+    margin: 0;
+    color: #fff;
+    font-size: 20px;
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+
+  .modal-body {
+    padding: 24px;
+  }
+
+  .ticket-selection h3 {
+    margin: 0 0 16px;
+    color: #fff;
+    font-size: 16px;
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+
+  .ticket-types {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .ticket-type {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: rgba(201, 131, 0, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(201, 131, 0, 0.1);
+  }
+
+  .ticket-info {
+    flex: 1;
+  }
+
+  .ticket-info h4 {
+    margin: 0 0 4px;
+    color: #fff;
+    font-size: 14px;
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+
+  .ticket-info p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 12px;
+  }
+
+  .ticket-price {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--primary-color);
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+
+  .ticket-quantity {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .qty-btn {
+    background: none;
+    border: 1px solid rgba(201, 131, 0, 0.3);
+    color: #fff;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+
+  .qty-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+  }
+
+  .qty-value {
+    min-width: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .total-price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background: rgba(201, 131, 0, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(201, 131, 0, 0.2);
+  }
+
+  .total-price span:first-child {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+  }
+
+  .total-price span:last-child {
+    color: var(--primary-color);
+    font-size: 20px;
+    font-weight: 700;
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+
+  .modal-footer {
+    display: flex;
+    gap: 12px;
+    padding: 24px;
+    border-top: 1px solid rgba(201, 131, 0, 0.1);
+  }
+
+  .btn-secondary,
+  .btn-primary {
+    flex: 1;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+  }
+
+  .btn-primary {
+    background: var(--primary-color);
+    color: #000;
+  }
+
+  .btn-primary:hover {
+    background: #fff;
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    .events-grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+      padding: 40px 0;
+    }
+
+    .event-header {
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .event-footer {
+      flex-direction: column;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .page-header {
+      padding: 80px 0 60px;
+    }
+
+    .ticket-type {
+      flex-direction: column;
+      text-align: center;
+      gap: 12px;
+    }
+
+    .modal-footer {
+      flex-direction: column;
+    }
+  }
+</style>
+
+<script>
+  // Event modal functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('event-modal');
+    const overlay = document.getElementById('modal-overlay');
+    const closeBtn = document.getElementById('modal-close');
+    const cancelBtn = document.getElementById('modal-cancel');
+    const confirmBtn = document.getElementById('modal-confirm');
+    const ticketButtons = document.querySelectorAll('.btn-tickets.available');
+    const qtyButtons = document.querySelectorAll('.qty-btn');
+    const totalAmount = document.getElementById('total-amount');
+
+    let quantities = { general: 0, vip: 0 };
+    let prices = { general: 8000, vip: 15000 };
+
+    // Open modal
+    ticketButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    // Close modal
+    function closeModal() {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    [closeBtn, overlay, cancelBtn].forEach(element => {
+      element.addEventListener('click', closeModal);
+    });
+
+    // Quantity buttons
+    qtyButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const ticketType = btn.closest('.ticket-type');
+        const type = ticketType.querySelector('h4').textContent.toLowerCase().includes('vip') ? 'vip' : 'general';
+        const qtyValue = ticketType.querySelector('.qty-value');
+        
+        if (btn.classList.contains('plus')) {
+          quantities[type]++;
+        } else if (btn.classList.contains('minus') && quantities[type] > 0) {
+          quantities[type]--;
+        }
+        
+        qtyValue.textContent = quantities[type];
+        updateTotal();
+      });
+    });
+
+    // Update total
+    function updateTotal() {
+      const total = (quantities.general * prices.general) + (quantities.vip * prices.vip);
+      totalAmount.textContent = `¥${total.toLocaleString()}`;
+    }
+
+    // Confirm purchase
+    confirmBtn.addEventListener('click', () => {
+      const total = (quantities.general * prices.general) + (quantities.vip * prices.vip);
+      if (total > 0) {
+        alert(`Boletos añadidos al carrito:\nGeneral: ${quantities.general}\nVIP: ${quantities.vip}\nTotal: ¥${total.toLocaleString()}`);
+        closeModal();
+        // Reset quantities
+        quantities = { general: 0, vip: 0 };
+        document.querySelectorAll('.qty-value').forEach(el => el.textContent = '0');
+        updateTotal();
+      } else {
+        alert('Por favor selecciona al menos un boleto');
+      }
+    });
+
+    // Keyboard support
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('active')) {
+        closeModal();
+      }
+    });
+  });
+</script>

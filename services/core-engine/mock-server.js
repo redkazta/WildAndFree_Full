@@ -32,8 +32,8 @@ const tenantInit = {
   config: {
     id: 'wild-and-free',
     name: 'Wild Gvng',
-    primary_color: '#00FF41',
-    secondary_color: '#0a0a0a',
+    primary_color: '#C98300',
+    secondary_color: '#8A0303',
     modules: { wallet: true, events: true },
   },
   data: {
