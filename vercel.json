@@ -1,8 +1,8 @@
 {
   "framework": "astro",
   "installCommand": "corepack enable && pnpm install --frozen-lockfile",
-  "buildCommand": "pnpm --filter wild-and-free-web build",
-  "outputDirectory": "apps/wild-and-free-web/dist",
+  "buildCommand": "pnpm --filter wild-and-free-web build && rm -rf dist && cp -R apps/wild-and-free-web/dist dist",
+  "outputDirectory": "dist",
   "github": {
     "silent": true
   }
