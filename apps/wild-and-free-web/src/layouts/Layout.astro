@@ -30,10 +30,10 @@ const { config } = Astro.props;
 		
 		<style>
 			:root {
-				--primary: {config.primary_color};
-				--secondary: {config.secondary_color};
-				--primary-color: {config.primary_color};
-				--secondary-color: {config.secondary_color};
+				--primary-color: #C98300;
+				--secondary-color: #8A0303;
+				--primary: var(--primary-color);
+				--secondary: var(--secondary-color);
 			}
 			
 			* {
