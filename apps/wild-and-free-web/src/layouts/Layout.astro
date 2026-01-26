@@ -32,6 +32,8 @@ const { config } = Astro.props;
 			:root {
 				--primary-color: #C98300;
 				--secondary-color: #8A0303;
+				--red-detail: rgba(138, 3, 3, 0.25);
+				--red-detail-strong: rgba(138, 3, 3, 0.45);
 				--primary: var(--primary-color);
 				--secondary: var(--secondary-color);
 			}
@@ -59,7 +61,8 @@ const { config } = Astro.props;
 				z-index: 1000;
 				background: rgba(0, 0, 0, 0.95);
 				backdrop-filter: blur(10px);
-				border-bottom: 1px solid rgba(201, 131, 0, 0.2);
+				border-bottom: 1px solid rgba(201, 131, 0, 0.18);
+				box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55), 0 1px 0 var(--red-detail);
 			}
 			
 			.header-content {
@@ -136,7 +139,7 @@ const { config } = Astro.props;
 			
 			.nav-link:hover {
 				color: var(--primary-color);
-				background: rgba(201, 131, 0, 0.1);
+				background: linear-gradient(90deg, rgba(201, 131, 0, 0.12), rgba(138, 3, 3, 0.08));
 			}
 			
 			.nav-icon {
@@ -174,7 +177,7 @@ const { config } = Astro.props;
 			
 			.action-btn:hover {
 				color: var(--primary-color);
-				background: rgba(201, 131, 0, 0.1);
+				background: linear-gradient(90deg, rgba(201, 131, 0, 0.12), rgba(138, 3, 3, 0.08));
 			}
 			
 			.action-wrapper {
@@ -209,6 +212,7 @@ const { config } = Astro.props;
 				text-transform: uppercase;
 				letter-spacing: 0.05em;
 				transition: all 0.2s ease;
+				box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35), 0 1px 0 var(--red-detail);
 			}
 			
 			.login-btn:hover {
@@ -744,7 +748,8 @@ const { config } = Astro.props;
 				left: 50%;
 				transform: translate(-50%, -50%) scale(0.9);
 				background: #111;
-				border: 1px solid rgba(201, 131, 0, 0.3);
+				border: 1px solid rgba(201, 131, 0, 0.22);
+				box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55), 0 1px 0 var(--red-detail);
 				border-radius: 12px;
 				padding: 16px;
 				width: 360px;
@@ -885,8 +890,9 @@ const { config } = Astro.props;
 					<div class="header-actions">
 						<div class="action-wrapper">
 								<button class="action-btn location-btn" aria-label="Ubicación" title="Elegir ubicación" data-modal="location">
-									<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-										<path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+									<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+										<path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
+										<path d="M8 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
 									</svg>
 								</button>
 								<!-- Modal de Ubicación -->

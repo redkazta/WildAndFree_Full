@@ -4,10 +4,6 @@
 
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <div class="sidebar-logo">
-      <span class="logo-line">WILD</span>
-      <span class="logo-line">GVNG</span>
-    </div>
     <button class="close-btn" aria-label="Cerrar menú">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
         <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
@@ -68,8 +64,8 @@
     <div class="nav-section">
       <h4 class="nav-section-title">Configuración</h4>
       <button class="location-btn nav-item">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M8 0C5.79 0 4 1.79 4 4C4 6.21 5.79 8 8 8C10.21 8 12 6.21 12 4C12 1.79 10.21 0 8 0ZM8 10C5.33 10 0 11.34 0 14V16H16V14C16 11.34 10.67 10 8 10Z"/>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
         </svg>
         Elegir Ubicación
       </button>
@@ -84,13 +80,17 @@
   // Client-side sidebar functionality
   window.sidebarStore = {
     isOpen: false,
+    scrollbarWidth: 0,
     
     open() {
       this.isOpen = true;
       const sidebar = document.getElementById('sidebar');
       if (sidebar) {
         sidebar.classList.add('sidebar--open');
+        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+        this.scrollbarWidth = scrollbarWidth;
         document.documentElement.style.overflow = 'hidden';
+        document.documentElement.style.paddingRight = scrollbarWidth > 0 ? `${scrollbarWidth}px` : '';
       }
     },
     
@@ -100,6 +100,7 @@
       if (sidebar) {
         sidebar.classList.remove('sidebar--open');
         document.documentElement.style.overflow = '';
+        document.documentElement.style.paddingRight = '';
       }
     },
     
@@ -133,7 +134,8 @@
     width: 320px;
     height: 100vh;
     background: linear-gradient(180deg, #000 0%, #111 100%);
-    border-right: 1px solid rgba(201, 131, 0, 0.3);
+    border-right: 1px solid rgba(201, 131, 0, 0.18);
+    box-shadow: 18px 0 60px rgba(0, 0, 0, 0.55), 1px 0 0 rgba(138, 3, 3, 0.22) inset;
     z-index: 2000;
     transition: left 0.3s cubic-bezier(0.23, 1, 0.32, 1);
     display: flex;
@@ -148,29 +150,11 @@
 
   .sidebar-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     padding: 20px 24px;
-    border-bottom: 1px solid rgba(201, 131, 0, 0.3);
+    border-bottom: 1px solid rgba(201, 131, 0, 0.18);
     background: linear-gradient(90deg, #000 0%, #111 100%);
-  }
-
-  .sidebar-logo {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-    font-weight: 900;
-    font-size: 14px;
-    letter-spacing: 0.2em;
-    color: #fff;
-    text-transform: uppercase;
-    font-family: 'Noto Sans JP', sans-serif;
-  }
-
-  .sidebar-logo .logo-line {
-    display: block;
-    font-weight: 900;
-    letter-spacing: 0.25em;
   }
 
   .close-btn {
@@ -238,9 +222,8 @@
 
   .nav-item:hover {
     color: var(--primary-color);
-    background: rgba(201, 131, 0, 0.1);
-    transform: translateX(4px);
-    border-left-color: var(--primary-color);
+    background: linear-gradient(90deg, rgba(201, 131, 0, 0.12), rgba(138, 3, 3, 0.08));
+    border-left-color: rgba(138, 3, 3, 0.45);
   }
 
   .nav-item:hover svg {
@@ -268,9 +251,8 @@
   }
 
   .location-btn:hover {
-    background: rgba(201, 131, 0, 0.1);
-    transform: translateX(4px);
-    border-left-color: var(--primary-color);
+    background: linear-gradient(90deg, rgba(201, 131, 0, 0.12), rgba(138, 3, 3, 0.08));
+    border-left-color: rgba(138, 3, 3, 0.45);
   }
 
   .location-btn svg {
