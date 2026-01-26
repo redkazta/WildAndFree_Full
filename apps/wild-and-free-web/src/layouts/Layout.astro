@@ -222,6 +222,26 @@ const { config } = Astro.props;
 				background: #fff;
 				transform: translateY(-2px);
 			}
+
+			.register-btn {
+				background: rgba(255, 255, 255, 0.06);
+				color: #fff;
+				text-decoration: none;
+				padding: 10px 16px;
+				border-radius: 4px;
+				font-weight: 700;
+				font-size: 13px;
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+				border: 1px solid rgba(255, 255, 255, 0.18);
+				transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+			}
+
+			.register-btn:hover {
+				background: linear-gradient(90deg, rgba(201, 131, 0, 0.14), rgba(138, 3, 3, 0.10));
+				border-color: var(--red-detail-strong);
+				transform: translateY(-1px);
+			}
 			
 			/* Menu Toggle */
 			.menu-toggle {
@@ -1066,6 +1086,7 @@ const { config } = Astro.props;
 								<ProfileModal />
 						</div>
 						<a href="/login" class="login-btn">Iniciar Sesión</a>
+						<a href="/registro" class="register-btn">Registrarse</a>
 					</div>
 				</div>
 			</div>
@@ -1344,12 +1365,14 @@ const { config } = Astro.props;
 					const profileAuth = document.getElementById('profile-authenticated');
 					const profileGuest = document.getElementById('profile-guest');
 					const loginBtn = document.querySelector('.login-btn');
+					const registerBtn = document.querySelector('.register-btn');
 					
 					if (isAuthenticated) {
 						// Mostrar perfil autenticado
 						if (profileAuth) profileAuth.style.display = 'block';
 						if (profileGuest) profileGuest.style.display = 'none';
 						if (loginBtn) loginBtn.style.display = 'none';
+						if (registerBtn) registerBtn.style.display = 'none';
 						
 						// Cargar datos del perfil
 						const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
@@ -1365,6 +1388,7 @@ const { config } = Astro.props;
 						if (profileAuth) profileAuth.style.display = 'none';
 						if (profileGuest) profileGuest.style.display = 'block';
 						if (loginBtn) loginBtn.style.display = 'block';
+						if (registerBtn) registerBtn.style.display = 'inline-flex';
 					}
 				}
 
