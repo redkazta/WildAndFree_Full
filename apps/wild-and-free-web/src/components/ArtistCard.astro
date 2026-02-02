@@ -20,8 +20,14 @@ const { artist } = Astro.props;
 	/>
 	<div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-40 transition-opacity duration-500"></div>
 	<div class="absolute inset-x-0 bottom-0 p-8 space-y-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-		<p class="text-[10px] font-black uppercase tracking-[0.2em] text-orange-500">Artist // {artist.role}</p>
+		<p class="text-[10px] font-black uppercase tracking-[0.2em] text-orange-500">Artista // {artist.role}</p>
 		<h3 class="text-3xl font-black uppercase tracking-tighter text-white drop-shadow-md">{artist.name}</h3>
+		{artist.stats && (
+			<div class="flex items-center gap-4 pt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+				<span class="text-[9px] font-black text-white/60 uppercase tracking-widest">{artist.stats.seguidores} seguidores</span>
+				<span class="text-[9px] font-black text-white/60 uppercase tracking-widest">{artist.stats.oyentes} oyentes</span>
+			</div>
+		)}
 	</div>
 </a>
 

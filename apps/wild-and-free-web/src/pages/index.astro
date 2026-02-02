@@ -50,26 +50,30 @@ const artists: Artist[] = gatewayConfig?.data.artists ?? [
   {
     id: 'a1',
     name: 'Nova K',
-    role: 'Rapper',
+    role: 'Rapero',
     image_url: 'https://images.unsplash.com/photo-1520975958221-7f61d4d6df4b?auto=format&fit=crop&w=800&q=80',
+    stats: { seguidores: '2.4M', oyentes: '850K' }
   },
   {
     id: 'a2',
     name: 'Sable',
-    role: 'Producer',
+    role: 'Productor',
     image_url: 'https://images.unsplash.com/photo-1520975693413-35e0000c0e4e?auto=format&fit=crop&w=800&q=80',
+    stats: { seguidores: '1.2M', oyentes: '400K' }
   },
   {
     id: 'a3',
     name: 'Mira V',
-    role: 'Rapper',
+    role: 'Rapera',
     image_url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80',
+    stats: { seguidores: '1.8M', oyentes: '600K' }
   },
   {
     id: 'a4',
     name: 'Echo',
     role: 'DJ',
     image_url: 'https://images.unsplash.com/photo-1589578236639-5381345b6687?auto=format&fit=crop&w=800&q=80',
+    stats: { seguidores: '950K', oyentes: '300K' }
   },
 ];
 
@@ -105,56 +109,57 @@ const tracks = [
   },
 ];
 
-// Mock data for events
+// Mock data for events with ticket info
 const events = [
   {
     id: 'e1',
-    title: 'Wild Gvng Live',
-    date: '2024-02-15',
-    location: 'Club Underground',
-    description: 'Noche de beats y líricas crudas con nuestros artistas principales.',
+    title: 'Wild Night CDMX',
+    date: '15 MAR 2024',
+    location: { nombre: 'Foro Indie Rocks', ciudad: 'CDMX' },
+    status: 'disponible',
+    tickets: {
+      precio_min: 450,
+      tipos: [
+        { nombre: 'General', precio: 450, stock: 200 },
+        { nombre: 'VIP', precio: 950, stock: 50 }
+      ]
+    },
+    image_url: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'e2',
-    title: 'Battle de Freestyle',
-    date: '2024-02-22',
-    location: 'Barrio Centro',
-    description: 'Competencia de freestyle con premios para los mejores MCs.',
-  },
-  {
-    id: 'e3',
-    title: 'Beatmakers Session',
-    date: '2024-03-01',
-    location: 'Estudio 404',
-    description: 'Sesión de creación de beats en vivo con productores locales.',
-  },
+    title: 'Urban Fest GDL',
+    date: '22 MAR 2024',
+    location: { nombre: 'C3 Stage', ciudad: 'Guadalajara' },
+    status: 'proximo',
+    tickets: { precio_min: 350, tipos: [] },
+    image_url: 'https://images.unsplash.com/photo-1459749411177-042180ce673c?auto=format&fit=crop&w=800&q=80',
+  }
 ];
 
-// Mock data for shop products
+// Mock data for products with variations
 const products = [
   {
     id: 'p1',
     name: 'Sudadera Wild Gvng',
-    price: '$45',
+    description: 'Sudadera premium de algodón con bordado de alta densidad. Diseñada para resistir la calle.',
+    price_base: 45,
     image_url: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=400&q=80',
+    atributos: {
+      tallas: ['S', 'M', 'L', 'XL'],
+      colores: [{ nombre: 'Negro', hex: '#000' }, { nombre: 'Gris', hex: '#888' }]
+    }
   },
   {
     id: 'p2',
     name: 'Gorra Logo',
-    price: '$25',
+    description: 'Gorra snapback clásica con el logo oficial en relieve.',
+    price_base: 25,
     image_url: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=400&q=80',
-  },
-  {
-    id: 'p3',
-    name: 'Pack Stickers',
-    price: '$15',
-    image_url: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=400&q=80',
-  },
-  {
-    id: 'p4',
-    name: 'Camiseta Edición Limitada',
-    price: '$35',
-    image_url: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=400&q=80',
+    atributos: {
+      tallas: ['Única'],
+      colores: [{ nombre: 'Negro', hex: '#000' }]
+    }
   },
 ];
 ---
