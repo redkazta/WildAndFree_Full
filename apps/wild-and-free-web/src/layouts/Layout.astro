@@ -60,10 +60,75 @@ const { config } = Astro.props;
 				left: 0 !important;
 			}
 
+			.sidebar-open main, 
+			.sidebar-open header {
+				transform: translateX(320px);
+			}
+
 			.sidebar-open main {
-				opacity: 0.2;
-				filter: blur(15px);
+				opacity: 0.4;
+				filter: blur(8px);
 				pointer-events: none;
+			}
+
+			header, main {
+				transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.5s ease, filter 0.5s ease;
+			}
+
+			/* Floating Popovers Design */
+			.popover {
+				position: absolute;
+				top: calc(100% + 15px);
+				right: 0;
+				width: 350px;
+				background: rgba(10, 10, 10, 0.95);
+				backdrop-filter: blur(25px);
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				border-radius: 24px;
+				box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+				opacity: 0;
+				visibility: hidden;
+				transform: translateY(10px) scale(0.95);
+				transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+				z-index: 1100;
+				overflow: hidden;
+			}
+
+			.popover.active {
+				opacity: 1;
+				visibility: visible;
+				transform: translateY(0) scale(1);
+			}
+
+			.popover-header {
+				padding: 20px 24px;
+				border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+			}
+
+			.popover-title {
+				font-size: 14px;
+				font-weight: 900;
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				color: #fff;
+			}
+
+			.popover-content {
+				padding: 24px;
+				max-height: 400px;
+				overflow-y: auto;
+			}
+
+			/* Custom Scrollbar for Popover */
+			.popover-content::-webkit-scrollbar {
+				width: 4px;
+			}
+			.popover-content::-webkit-scrollbar-thumb {
+				background: rgba(255, 255, 255, 0.1);
+				border-radius: 10px;
 			}
 
 			.text-contrast {
@@ -76,7 +141,7 @@ const { config } = Astro.props;
 		</style>
 	</head>
 	<body class="bg-black text-white selection:bg-orange-500/30 selection:text-orange-200 overflow-x-hidden" style={`--primary: ${config.primary_color}; --secondary: ${config.secondary_color};`}>
-		<header class="fixed top-0 left-0 right-0 z-[1000] bg-black/90 backdrop-blur-2xl border-b border-white/10 shadow-2xl transition-all duration-500">
+		<header class="fixed top-0 left-0 right-0 z-[1000] bg-black/90 backdrop-blur-2xl border-b border-white/10 shadow-2xl">
 			<div class="max-w-[1440px] mx-auto px-6 h-20 flex items-center justify-between">
 				<div class="flex items-center gap-6">
 					<button id="menu-toggle" class="group flex flex-col gap-1.5 p-3 -ml-3 hover:bg-white/10 rounded-xl transition-all duration-300" aria-label="Menú">
@@ -110,22 +175,97 @@ const { config } = Astro.props;
 				<div class="flex items-center gap-2 md:gap-6">
 					<!-- Header Action Icons -->
 					<div class="hidden sm:flex items-center gap-1 border-r border-white/10 pr-4 mr-2">
-						<button class="p-2.5 text-white hover:text-orange-500 hover:bg-white/5 rounded-lg transition-all" title="Ubicación">
-							<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-						</button>
-						<button class="p-2.5 text-white hover:text-orange-500 hover:bg-white/5 rounded-lg transition-all relative" title="Favoritos">
-							<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-							<span class="absolute top-1.5 right-1.5 w-4 h-4 bg-orange-500 text-black text-[10px] font-black rounded-full flex items-center justify-center">0</span>
-						</button>
-						<button class="p-2.5 text-white hover:text-orange-500 hover:bg-white/5 rounded-lg transition-all relative" title="Carrito">
-							<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-							<span class="absolute top-1.5 right-1.5 w-4 h-4 bg-orange-500 text-black text-[10px] font-black rounded-full flex items-center justify-center">0</span>
-						</button>
+						<div class="relative group/pop">
+							<button class="popover-trigger p-2.5 text-white hover:text-orange-500 hover:bg-white/5 rounded-lg transition-all" data-target="location-popover">
+								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+							</button>
+							<div id="location-popover" class="popover">
+								<div class="popover-header">
+									<span class="popover-title">Ubicación</span>
+								</div>
+								<div class="popover-content">
+									<div class="space-y-4">
+										<p class="text-sm text-white/60">Selecciona tu zona para ver eventos cercanos.</p>
+										<div class="grid grid-cols-2 gap-2">
+											<button class="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-xs font-bold hover:bg-orange-500 hover:text-black transition-all">CDMX</button>
+											<button class="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-xs font-bold hover:bg-orange-500 hover:text-black transition-all">Madrid</button>
+											<button class="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-xs font-bold hover:bg-orange-500 hover:text-black transition-all">Bogotá</button>
+											<button class="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-xs font-bold hover:bg-orange-500 hover:text-black transition-all">Buenos Aires</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="relative group/pop">
+							<button class="popover-trigger p-2.5 text-white hover:text-orange-500 hover:bg-white/5 rounded-lg transition-all relative" data-target="wishlist-popover">
+								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+								<span class="absolute top-1.5 right-1.5 w-4 h-4 bg-orange-500 text-black text-[10px] font-black rounded-full flex items-center justify-center shadow-lg shadow-orange-500/40">3</span>
+							</button>
+							<div id="wishlist-popover" class="popover">
+								<div class="popover-header">
+									<span class="popover-title">Wishlist (3)</span>
+								</div>
+								<div class="popover-content">
+									<div class="space-y-4">
+										<div class="flex items-center gap-4 group/item">
+											<div class="w-12 h-12 rounded-lg bg-white/5 overflow-hidden">
+												<img src="https://images.unsplash.com/photo-1520975958221-7f61d4d6df4b?auto=format&fit=crop&w=100&q=80" class="w-full h-full object-cover" />
+											</div>
+											<div class="flex-1">
+												<h4 class="text-xs font-black uppercase">Wild Hoodie</h4>
+												<p class="text-[10px] text-orange-500 font-bold">$85.00</p>
+											</div>
+											<button class="text-white/20 hover:text-red-500 transition-colors">
+												<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+											</button>
+										</div>
+										<button class="w-full py-3 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-orange-500 transition-all">Ver Favoritos</button>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="relative group/pop">
+							<button class="popover-trigger p-2.5 text-white hover:text-orange-500 hover:bg-white/5 rounded-lg transition-all relative" data-target="cart-popover">
+								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+								<span class="absolute top-1.5 right-1.5 w-4 h-4 bg-orange-500 text-black text-[10px] font-black rounded-full flex items-center justify-center shadow-lg shadow-orange-500/40">2</span>
+							</button>
+							<div id="cart-popover" class="popover">
+								<div class="popover-header">
+									<span class="popover-title">Tu Carrito</span>
+								</div>
+								<div class="popover-content">
+									<div class="space-y-6">
+										<div class="flex items-center gap-4">
+											<div class="w-16 h-16 rounded-xl bg-white/5 overflow-hidden">
+												<img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=150&q=80" class="w-full h-full object-cover" />
+											</div>
+											<div class="flex-1">
+												<h4 class="text-xs font-black uppercase">Official Tee</h4>
+												<p class="text-[10px] text-white/40">Talla: L</p>
+												<p class="text-xs font-black mt-1">$35.00</p>
+											</div>
+										</div>
+										<div class="border-t border-white/5 pt-4 space-y-4">
+											<div class="flex justify-between items-center">
+												<span class="text-[10px] font-bold text-white/40 uppercase">Subtotal</span>
+												<span class="text-sm font-black">$120.00</span>
+											</div>
+											<button class="w-full py-4 bg-orange-500 text-black text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-white transition-all shadow-xl shadow-orange-500/20">Finalizar Compra</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 
 					<div class="flex items-center gap-4">
-						<a href="/login" class="hidden sm:block text-[12px] font-extrabold uppercase tracking-[0.15em] text-white hover:text-orange-500 transition-colors">Entrar</a>
-						<a href="/registro" class="px-8 py-3 bg-white text-black text-[12px] font-black uppercase tracking-[0.15em] rounded-full hover:bg-orange-500 transition-all duration-300 transform hover:-translate-y-0.5 shadow-xl shadow-white/10">Unirse</a>
+						<a href="/login" class="hidden sm:block text-[12px] font-extrabold uppercase tracking-[0.15em] text-white/60 hover:text-white transition-all transform hover:scale-105">Entrar</a>
+						<a href="/registro" class="group relative px-8 py-3.5 bg-white text-black text-[12px] font-black uppercase tracking-[0.15em] rounded-2xl hover:bg-orange-500 transition-all duration-500 transform hover:-translate-y-1 shadow-2xl shadow-white/5">
+							<span class="relative z-10">Unirse</span>
+							<div class="absolute inset-0 rounded-2xl bg-gradient-to-r from-orange-500 to-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-0"></div>
+						</a>
 					</div>
 				</div>
 			</div>
@@ -133,7 +273,7 @@ const { config } = Astro.props;
 		
 		<SidebarLeft />
 		
-		<main class="transition-all duration-500">
+		<main class="pt-20">
 			<slot />
 		</main>
 		
@@ -150,12 +290,41 @@ const { config } = Astro.props;
 				});
 			}
 
-			// Close sidebar when clicking outside
+			// Popover Logic
+			const triggers = document.querySelectorAll('.popover-trigger');
+			const popovers = document.querySelectorAll('.popover');
+
+			triggers.forEach(trigger => {
+				trigger.addEventListener('click', (e) => {
+					e.stopPropagation();
+					const targetId = trigger.getAttribute('data-target');
+					const targetPopover = document.getElementById(targetId);
+					
+					const isActive = targetPopover?.classList.contains('active');
+					
+					// Close all popovers
+					popovers.forEach(p => p.classList.remove('active'));
+					
+					if (!isActive) {
+						targetPopover?.classList.add('active');
+					}
+				});
+			});
+
+			// Close everything when clicking outside
 			document.addEventListener('click', (e) => {
+				// Sidebar
 				if (body.classList.contains('sidebar-open')) {
 					if (sidebar && !sidebar.contains(e.target as Node) && !menuToggle?.contains(e.target as Node)) {
 						body.classList.remove('sidebar-open');
 					}
+				}
+
+				// Popovers
+				const isTrigger = (e.target as HTMLElement).closest('.popover-trigger');
+				const isPopover = (e.target as HTMLElement).closest('.popover');
+				if (!isTrigger && !isPopover) {
+					popovers.forEach(p => p.classList.remove('active'));
 				}
 			});
 
@@ -163,11 +332,11 @@ const { config } = Astro.props;
 			const header = document.querySelector('header');
 			window.addEventListener('scroll', () => {
 				if (window.scrollY > 50) {
-					header?.classList.add('bg-black/95', 'py-4');
-					header?.classList.remove('bg-black/80', 'py-6');
+					header?.classList.add('bg-black/95', 'py-2');
+					header?.classList.remove('bg-black/90', 'py-0');
 				} else {
-					header?.classList.add('bg-black/80', 'py-6');
-					header?.classList.remove('bg-black/95', 'py-4');
+					header?.classList.add('bg-black/90', 'py-0');
+					header?.classList.remove('bg-black/95', 'py-2');
 				}
 			});
 		</script>
