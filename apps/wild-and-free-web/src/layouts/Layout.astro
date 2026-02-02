@@ -94,26 +94,37 @@ const { config } = Astro.props;
 			/* Floating Popovers Design */
 			.popover {
 				position: absolute;
-				top: calc(100% + 15px);
+				top: 100%;
 				right: 0;
 				width: 350px;
-				background: rgba(10, 10, 10, 0.95);
+				background: rgba(10, 10, 10, 0.98);
 				backdrop-filter: blur(25px);
 				border: 1px solid rgba(255, 255, 255, 0.1);
 				border-radius: 24px;
-				box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+				box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
 				opacity: 0;
 				visibility: hidden;
-				transform: translateY(10px) scale(0.95);
+				transform: translateY(15px) scale(0.95);
 				transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
 				z-index: 1100;
 				overflow: hidden;
+				margin-top: 10px;
 			}
 
-			.popover.active {
+			.group\/pop:hover .popover {
 				opacity: 1;
 				visibility: visible;
 				transform: translateY(0) scale(1);
+			}
+
+			.popover::before {
+				content: '';
+				position: absolute;
+				top: -10px;
+				left: 0;
+				right: 0;
+				height: 10px;
+				background: transparent;
 			}
 
 			.popover-header {
@@ -277,11 +288,35 @@ const { config } = Astro.props;
 					</div>
 
 					<div class="flex items-center gap-4">
-						<a href="/login" class="hidden sm:block text-[12px] font-extrabold uppercase tracking-[0.15em] text-white/60 hover:text-white transition-all transform hover:scale-105">Entrar</a>
-						<a href="/registro" class="group relative px-8 py-3.5 bg-white text-black text-[12px] font-black uppercase tracking-[0.15em] rounded-2xl hover:bg-orange-500 transition-all duration-500 transform hover:-translate-y-1 shadow-2xl shadow-white/5">
-							<span class="relative z-10">Unirse</span>
-							<div class="absolute inset-0 rounded-2xl bg-gradient-to-r from-orange-500 to-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-0"></div>
-						</a>
+						<div class="relative group/pop">
+							<a href="/login" class="hidden sm:block text-[12px] font-extrabold uppercase tracking-[0.15em] text-white/60 hover:text-white transition-all py-4">Entrar</a>
+							<div class="popover w-64 right-0">
+								<div class="popover-header"><span class="popover-title">Tu Cuenta</span></div>
+								<div class="popover-content space-y-4">
+									<p class="text-[10px] text-white/40 uppercase font-black">Accede a contenido exclusivo</p>
+									<a href="/login" class="block w-full py-3 bg-white text-black text-center text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-orange-500 hover:text-white transition-all">Iniciar Sesión</a>
+									<a href="/perfil" class="block text-center text-[10px] text-white/60 hover:text-orange-500 font-black uppercase tracking-widest">Mi Perfil</a>
+								</div>
+							</div>
+						</div>
+
+						<div class="relative group/pop">
+							<a href="/registro" class="group relative px-8 py-3.5 bg-white text-black text-[12px] font-black uppercase tracking-[0.15em] rounded-2xl hover:bg-orange-500 transition-all duration-500 transform hover:-translate-y-1 shadow-2xl shadow-white/5">
+								<span class="relative z-10">Unirse</span>
+								<div class="absolute inset-0 rounded-2xl bg-gradient-to-r from-orange-500 to-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-0"></div>
+							</a>
+							<div class="popover w-72 right-0">
+								<div class="popover-header"><span class="popover-title">Sé parte de la Crew</span></div>
+								<div class="popover-content space-y-4">
+									<ul class="space-y-2">
+										<li class="flex items-center gap-2 text-[10px] text-white font-bold uppercase tracking-widest"><span class="text-orange-500">✓</span> Acceso anticipado</li>
+										<li class="flex items-center gap-2 text-[10px] text-white font-bold uppercase tracking-widest"><span class="text-orange-500">✓</span> Merch exclusiva</li>
+										<li class="flex items-center gap-2 text-[10px] text-white font-bold uppercase tracking-widest"><span class="text-orange-500">✓</span> Eventos VIP</li>
+									</ul>
+									<a href="/registro" class="block w-full py-3 bg-orange-500 text-white text-center text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-white hover:text-black transition-all">Registrarse Ahora</a>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
