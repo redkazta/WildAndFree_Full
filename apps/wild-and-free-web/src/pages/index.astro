@@ -77,21 +77,21 @@ const artists: Artist[] = gatewayConfig?.data.artists ?? [
 const tracks = [
   {
     id: 't1',
-    title: 'No Rules',
+    title: 'Sin Reglas',
     artist: 'Nova K',
     duration: '3:24',
     cover_url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80',
   },
   {
     id: 't2',
-    title: 'Midnight Dreams',
+    title: 'Sueños de Medianoche',
     artist: 'Sable',
     duration: '4:12',
     cover_url: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=400&q=80',
   },
   {
     id: 't3',
-    title: 'Street Lights',
+    title: 'Luces de Calle',
     artist: 'Mira V',
     duration: '2:58',
     cover_url: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?auto=format&fit=crop&w=400&q=80',
@@ -101,7 +101,7 @@ const tracks = [
     title: 'Underground',
     artist: 'Echo',
     duration: '3:45',
-    cover_url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80',
+    cover_url: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80',
   },
 ];
 
@@ -134,25 +134,25 @@ const events = [
 const products = [
   {
     id: 'p1',
-    name: 'Wild Gvng Hoodie',
+    name: 'Sudadera Wild Gvng',
     price: '$45',
     image_url: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=400&q=80',
   },
   {
     id: 'p2',
-    name: 'Logo Cap',
+    name: 'Gorra Logo',
     price: '$25',
     image_url: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=400&q=80',
   },
   {
     id: 'p3',
-    name: 'Sticker Pack',
+    name: 'Pack Stickers',
     price: '$15',
     image_url: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=400&q=80',
   },
   {
     id: 'p4',
-    name: 'Limited Tee',
+    name: 'Camiseta Edición Limitada',
     price: '$35',
     image_url: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=400&q=80',
   },
@@ -204,7 +204,7 @@ const products = [
 		<section id="music" class="space-y-12">
 			<div class="flex items-end justify-between border-b border-white/10 pb-8">
 				<div class="space-y-2">
-					<h2 class="text-4xl md:text-5xl font-black tracking-tighter text-white">LATEST DROPS</h2>
+					<h2 class="text-4xl md:text-5xl font-black tracking-tighter text-white uppercase">ÚLTIMOS LANZAMIENTOS</h2>
 					<p class="text-orange-500 font-black uppercase tracking-[0.3em] text-[10px] md:text-xs">Los beats que definen la cultura</p>
 				</div>
 				<a href="/musica" class="group flex items-center gap-2 text-white font-black uppercase tracking-[0.2em] text-[10px] hover:text-orange-500 transition-all">
@@ -232,7 +232,7 @@ const products = [
 		<section id="events" class="space-y-12">
 			<div class="flex items-end justify-between border-b border-white/5 pb-8">
 				<div class="space-y-2">
-					<h2 class="text-4xl font-black tracking-tighter text-white">TOUR DATES</h2>
+					<h2 class="text-4xl font-black tracking-tighter text-white uppercase">PRÓXIMAS FECHAS</h2>
 					<p class="text-orange-500 font-black uppercase tracking-widest text-sm">Donde el movimiento cobra vida</p>
 				</div>
 				<a href="/eventos" class="group flex items-center gap-2 text-orange-500 font-bold uppercase tracking-widest text-xs hover:text-white transition-colors">
@@ -247,7 +247,7 @@ const products = [
 		<section id="shop" class="space-y-12">
 			<div class="flex items-end justify-between border-b border-white/5 pb-8">
 				<div class="space-y-2">
-					<h2 class="text-4xl font-black tracking-tighter text-white">OFFICIAL MERCH</h2>
+					<h2 class="text-4xl font-black tracking-tighter text-white uppercase">MERCH OFICIAL</h2>
 					<p class="text-orange-500 font-black uppercase tracking-widest text-sm">Viste el movimiento</p>
 				</div>
 				<a href="/tienda" class="group flex items-center gap-2 text-orange-500 font-bold uppercase tracking-widest text-xs hover:text-white transition-colors">

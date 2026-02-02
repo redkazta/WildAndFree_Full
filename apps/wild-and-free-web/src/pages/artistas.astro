@@ -9,7 +9,7 @@ const artists = [
     genre: 'Trap',
     followers: '2.1M',
     tracks: 24,
-    role: 'Rapper'
+    role: 'Rapero'
   },
   {
     id: '2',
@@ -18,7 +18,7 @@ const artists = [
     genre: 'Drill',
     followers: '1.8M',
     tracks: 18,
-    role: 'Rapper'
+    role: 'Rapero'
   },
   {
     id: '4',
@@ -36,7 +36,7 @@ const artists = [
     genre: 'Electronic',
     followers: '890K',
     tracks: 12,
-    role: 'Producer'
+    role: 'Productor'
   },
   {
     id: '6',
@@ -50,18 +50,18 @@ const artists = [
   {
     id: 'a1',
     name: 'Nova K',
-    role: 'Rapper',
+    role: 'Rapero',
     image: 'https://images.unsplash.com/photo-1520975958221-7f61d4d6df4b?auto=format&fit=crop&w=800&q=80',
-    genre: 'Rapper',
+    genre: 'Rapero',
     followers: '2.4M',
     tracks: 32
   },
   {
     id: 'a2',
     name: 'Sable',
-    role: 'Producer',
+    role: 'Productor',
     image: 'https://images.unsplash.com/photo-1520975693413-35e0000c0e4e?auto=format&fit=crop&w=800&q=80',
-    genre: 'Producer',
+    genre: 'Productor',
     followers: '1.2M',
     tracks: 45
   }
@@ -95,11 +95,11 @@ const config = {
             />
             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-40 transition-opacity duration-500"></div>
             <div class="absolute inset-x-0 bottom-0 p-8 space-y-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-              <p class="text-[10px] font-black uppercase tracking-[0.2em] text-orange-500">Artist // {artist.role}</p>
+              <p class="text-[10px] font-black uppercase tracking-[0.2em] text-orange-500">Artista // {artist.role}</p>
               <h3 class="text-3xl font-black uppercase tracking-tighter text-white drop-shadow-md">{artist.name}</h3>
               <div class="flex items-center gap-4 pt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
-                <span class="text-[10px] font-black text-white/60 uppercase tracking-widest">{artist.followers} fans</span>
-                <span class="text-[10px] font-black text-white/60 uppercase tracking-widest">{artist.tracks} tracks</span>
+                <span class="text-[10px] font-black text-white/60 uppercase tracking-widest">{artist.followers} seguidores</span>
+                <span class="text-[10px] font-black text-white/60 uppercase tracking-widest">{artist.tracks} canciones</span>
               </div>
             </div>
           </a>

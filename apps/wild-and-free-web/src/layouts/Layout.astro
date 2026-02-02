@@ -197,7 +197,7 @@ const { config } = Astro.props;
 							</button>
 							<div id="location-popover" class="popover">
 								<div class="popover-header">
-									<span class="popover-title">Ubicación</span>
+									<span class="popover-title">Ubicación: CDMX</span>
 								</div>
 								<div class="popover-content">
 									<div class="space-y-4">
@@ -220,17 +220,17 @@ const { config } = Astro.props;
 							</button>
 							<div id="wishlist-popover" class="popover">
 								<div class="popover-header">
-									<span class="popover-title">Wishlist (3)</span>
+									<span class="popover-title">Favoritos (3)</span>
 								</div>
 								<div class="popover-content">
 									<div class="space-y-4">
 										<div class="flex items-center gap-4 group/item">
 											<div class="w-12 h-12 rounded-lg bg-white/5 overflow-hidden">
-												<img src="https://images.unsplash.com/photo-1520975958221-7f61d4d6df4b?auto=format&fit=crop&w=100&q=80" class="w-full h-full object-cover" />
+												<img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=100&q=80" class="w-full h-full object-cover" />
 											</div>
 											<div class="flex-1">
-												<h4 class="text-xs font-black uppercase">Wild Hoodie</h4>
-												<p class="text-[10px] text-orange-500 font-bold">$85.00</p>
+												<h4 class="text-xs font-black uppercase">Hoodie Wild</h4>
+												<p class="text-[10px] text-orange-500 font-bold">$45.00</p>
 											</div>
 											<button class="text-white/20 hover:text-red-500 transition-colors">
 												<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
@@ -258,7 +258,7 @@ const { config } = Astro.props;
 												<img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=150&q=80" class="w-full h-full object-cover" />
 											</div>
 											<div class="flex-1">
-												<h4 class="text-xs font-black uppercase">Official Tee</h4>
+												<h4 class="text-xs font-black uppercase">Camiseta Oficial</h4>
 												<p class="text-[10px] text-white/40">Talla: L</p>
 												<p class="text-xs font-black mt-1">$35.00</p>
 											</div>
@@ -377,6 +377,38 @@ const { config } = Astro.props;
 					closeSidebar();
 					popovers.forEach(p => p.classList.remove('active'));
 				}
+			});
+
+			// User Data Logic (Mock for Supabase integration)
+			const userData = {
+				location: 'CDMX',
+				wishlistCount: 3,
+				cartCount: 2
+			};
+
+			// Update UI with user data
+			const updateUserDataUI = () => {
+				const wishlistBadge = document.querySelector('[data-target="wishlist-popover"] span');
+				const cartBadge = document.querySelector('[data-target="cart-popover"] span');
+				const locationText = document.querySelector('[data-target="location-popover"] .popover-title');
+				const sidebarLocation = document.querySelector('.location-btn');
+
+				if (wishlistBadge) wishlistBadge.textContent = userData.wishlistCount.toString();
+				if (cartBadge) cartBadge.textContent = userData.cartCount.toString();
+				if (locationText) locationText.textContent = `Ubicación: ${userData.location}`;
+				if (sidebarLocation) sidebarLocation.textContent = `Ubicación: ${userData.location}`;
+			};
+
+			updateUserDataUI();
+
+			// Location Selection
+			const locationButtons = document.querySelectorAll('#location-popover button');
+			locationButtons.forEach(btn => {
+				btn.addEventListener('click', () => {
+					userData.location = btn.textContent?.trim() || 'CDMX';
+					updateUserDataUI();
+					popovers.forEach(p => p.classList.remove('active'));
+				});
 			});
 
 			// Header background on scroll

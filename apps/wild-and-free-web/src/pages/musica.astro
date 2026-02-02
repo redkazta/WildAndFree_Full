@@ -4,9 +4,9 @@ import Layout from '../layouts/Layout.astro';
 const tracks = [
   {
     id: 1,
-    title: 'Neon Nights',
+    title: 'Noches de Neón',
     artist: 'Lil Kiro',
-    album: 'City Lights',
+    album: 'Luces de Ciudad',
     duration: '3:24',
     cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop&crop=face',
     plays: '2.1M'
@@ -15,34 +15,34 @@ const tracks = [
     id: 2,
     title: 'Tokyo Drift',
     artist: 'Neon Ghost',
-    album: 'Midnight Sessions',
+    album: 'Sesiones de Medianoche',
     duration: '4:12',
     cover: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face',
     plays: '1.8M'
   },
   {
     id: 4,
-    title: 'Shadow Realm',
+    title: 'Reino de Sombras',
     artist: 'Shadow V',
-    album: 'Dark Matter',
+    album: 'Materia Oscura',
     duration: '3:58',
     cover: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop&crop=face',
     plays: '1.5M'
   },
   {
     id: 5,
-    title: 'Crystal Clear',
+    title: 'Cristalino',
     artist: 'Crystal Wave',
-    album: 'Waves',
+    album: 'Ondas',
     duration: '3:33',
     cover: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=300&h=300&fit=crop&crop=face',
     plays: '890K'
   },
   {
     id: 6,
-    title: 'Midnight Drive',
+    title: 'Paseo de Medianoche',
     artist: 'Midnight Rider',
-    album: 'Night Rider',
+    album: 'Jinete Nocturno',
     duration: '4:01',
     cover: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&h=300&fit=crop&crop=face',
     plays: '2.7M'
@@ -52,7 +52,7 @@ const tracks = [
 const albums = [
   {
     id: 1,
-    title: 'City Lights',
+    title: 'Luces de Ciudad',
     artist: 'Lil Kiro',
     cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=face',
     year: '2024',
@@ -60,7 +60,7 @@ const albums = [
   },
   {
     id: 2,
-    title: 'Midnight Sessions',
+    title: 'Sesiones de Medianoche',
     artist: 'Neon Ghost',
     cover: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
     year: '2024',
@@ -105,7 +105,7 @@ const albums = [
               <div class="album-info">
                 <h3 class="album-title">{album.title}</h3>
                 <p class="album-artist">{album.artist}</p>
-                <p class="album-meta">{album.year} • {album.tracks} tracks</p>
+                <p class="album-meta">{album.year} • {album.tracks} canciones</p>
               </div>
             </div>
           ))}
@@ -114,7 +114,7 @@ const albums = [
 
       <!-- Popular Tracks -->
       <section class="popular-tracks">
-        <h2 class="section-title">Tracks Populares</h2>
+        <h2 class="section-title">Canciones Populares</h2>
         <div class="tracks-list">
           {tracks.map((track, index) => (
             <div class="track-item">
@@ -132,7 +132,7 @@ const albums = [
                 <span class="track-duration">{track.duration}</span>
               </div>
               <div class="track-actions">
-                <button class="action-btn" aria-label="Añadir a playlist">
+                <button class="action-btn" aria-label="Añadir a lista">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                     <path d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
                   </svg>
