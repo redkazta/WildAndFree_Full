@@ -280,13 +280,29 @@ const { config } = Astro.props;
 		<script>
 			// Menu Toggle Logic
 			const menuToggle = document.getElementById('menu-toggle');
+			const sidebarClose = document.getElementById('sidebar-close');
 			const body = document.body;
 			const sidebar = document.getElementById('sidebar');
+
+			const toggleSidebar = () => {
+				body.classList.toggle('sidebar-open');
+			};
+
+			const closeSidebar = () => {
+				body.classList.remove('sidebar-open');
+			};
 
 			if (menuToggle) {
 				menuToggle.addEventListener('click', (e) => {
 					e.stopPropagation();
-					body.classList.toggle('sidebar-open');
+					toggleSidebar();
+				});
+			}
+
+			if (sidebarClose) {
+				sidebarClose.addEventListener('click', (e) => {
+					e.stopPropagation();
+					closeSidebar();
 				});
 			}
 
@@ -313,10 +329,13 @@ const { config } = Astro.props;
 
 			// Close everything when clicking outside
 			document.addEventListener('click', (e) => {
-				// Sidebar
+				// Sidebar: Close if open and clicking outside sidebar OR clicking on main content
 				if (body.classList.contains('sidebar-open')) {
-					if (sidebar && !sidebar.contains(e.target as Node) && !menuToggle?.contains(e.target as Node)) {
-						body.classList.remove('sidebar-open');
+					const isClickInsideSidebar = sidebar?.contains(e.target as Node);
+					const isClickOnToggle = menuToggle?.contains(e.target as Node);
+					
+					if (!isClickInsideSidebar && !isClickOnToggle) {
+						closeSidebar();
 					}
 				}
 
@@ -324,6 +343,14 @@ const { config } = Astro.props;
 				const isTrigger = (e.target as HTMLElement).closest('.popover-trigger');
 				const isPopover = (e.target as HTMLElement).closest('.popover');
 				if (!isTrigger && !isPopover) {
+					popovers.forEach(p => p.classList.remove('active'));
+				}
+			});
+
+			// Close on ESC key
+			document.addEventListener('keydown', (e) => {
+				if (e.key === 'Escape') {
+					closeSidebar();
 					popovers.forEach(p => p.classList.remove('active'));
 				}
 			});
