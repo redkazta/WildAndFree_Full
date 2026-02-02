@@ -7,10 +7,13 @@ import Layout from '../layouts/Layout.astro';
   primary_color: "#C98300",
   secondary_color: "#8A0303"
 }}>
-  <div class="profile-container">
+  <div class="profile-container opacity-0 transition-opacity duration-500" id="profile-main">
     <div class="profile-header-section">
       <div class="profile-avatar-large">
-        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&h=120&fit=crop" alt="Avatar">
+        <div id="avatar-placeholder" class="w-full h-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-4xl font-black text-white uppercase">
+          WG
+        </div>
+        <img id="profile-avatar-img" src="" alt="Avatar" class="hidden">
         <button class="avatar-edit">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
             <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
@@ -18,21 +21,21 @@ import Layout from '../layouts/Layout.astro';
         </button>
       </div>
       <div class="profile-info-main">
-        <h1>Usuario Wild</h1>
-        <p class="username">@usuario_wild</p>
-        <p class="bio">Miembro de Wild Gvng • Amante del hip-hop urbano</p>
+        <h1 id="profile-name">Cargando...</h1>
+        <p class="username" id="profile-username">@usuario</p>
+        <p class="bio" id="profile-bio">Cargando biografía...</p>
         <div class="profile-stats">
           <div class="stat">
-            <span class="stat-number">127</span>
+            <span class="stat-number" id="stat-following">0</span>
             <span class="stat-label">Siguiendo</span>
           </div>
           <div class="stat">
-            <span class="stat-number">2.4K</span>
+            <span class="stat-number" id="stat-followers">0</span>
             <span class="stat-label">Seguidores</span>
           </div>
           <div class="stat">
-            <span class="stat-number">89</span>
-            <span class="stat-label">Playlists</span>
+            <span class="stat-number" id="stat-favorites">0</span>
+            <span class="stat-label">Favoritos</span>
           </div>
         </div>
       </div>
@@ -611,25 +614,65 @@ import Layout from '../layouts/Layout.astro';
 </style>
 
 <script>
-  // Tab functionality
-  document.addEventListener('DOMContentLoaded', () => {
+  import { supabase } from '../lib/supabase';
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    const profileMain = document.getElementById('profile-main');
+    
+    // 1. Check Session
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (!session) {
+      window.location.href = '/login';
+      return;
+    }
+
+    // 2. Fetch Profile Data
+    const { data: profile, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', session.user.id)
+      .single();
+
+    if (error) {
+      console.error('Error fetching profile:', error);
+      return;
+    }
+
+    // 3. Update UI
+    const nameEl = document.getElementById('profile-name');
+    const usernameEl = document.getElementById('profile-username');
+    const bioEl = document.getElementById('profile-bio');
+    const avatarImg = document.getElementById('profile-avatar-img') as HTMLImageElement;
+    const avatarPlaceholder = document.getElementById('avatar-placeholder');
+
+    if (nameEl) nameEl.textContent = profile.nombre || 'Usuario Wild';
+    if (usernameEl) usernameEl.textContent = `@${profile.nombre?.toLowerCase().replace(/\s/g, '_') || 'usuario'}`;
+    if (bioEl) bioEl.textContent = profile.bio || 'Miembro de Wild Gvng • Amante del hip-hop urbano';
+    
+    if (profile.avatar_url && avatarImg) {
+      avatarImg.src = profile.avatar_url;
+      avatarImg.classList.remove('hidden');
+      avatarPlaceholder?.classList.add('hidden');
+    } else if (avatarPlaceholder) {
+      avatarPlaceholder.textContent = profile.nombre?.substring(0, 2).toUpperCase() || 'WG';
+    }
+
+    // 4. Show Content
+    profileMain?.classList.remove('opacity-0');
+
+    // Tab functionality
     const tabs = document.querySelectorAll('.tab');
     const tabContents = document.querySelectorAll('.tab-content');
 
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
-        const targetTab = tab.dataset.tab;
-        
-        // Remove active class from all tabs and contents
+        const targetTab = (tab as HTMLElement).dataset.tab;
         tabs.forEach(t => t.classList.remove('active'));
         tabContents.forEach(content => content.classList.remove('active'));
-        
-        // Add active class to clicked tab and corresponding content
         tab.classList.add('active');
-        const targetContent = document.getElementById(targetTab);
-        if (targetContent) {
-          targetContent.classList.add('active');
-        }
+        const targetContent = document.getElementById(targetTab!);
+        if (targetContent) targetContent.classList.add('active');
       });
     });
 
