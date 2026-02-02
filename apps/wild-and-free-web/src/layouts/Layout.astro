@@ -60,9 +60,14 @@ const { config } = Astro.props;
 				left: 0 !important;
 			}
 
+			.sidebar-open #sidebar-trigger {
+				transform: translateX(-100px);
+				opacity: 0;
+			}
+
 			.sidebar-open main, 
 			.sidebar-open header {
-				transform: translateX(80px);
+				transform: none;
 			}
 
 			.sidebar-open main {
@@ -87,7 +92,7 @@ const { config } = Astro.props;
 				visibility: visible;
 			}
 
-			header, main {
+			header, main, #sidebar-trigger {
 				transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.5s ease, filter 0.5s ease;
 			}
 
@@ -95,7 +100,7 @@ const { config } = Astro.props;
 			.popover {
 				position: absolute;
 				top: 100%;
-				right: 0;
+				left: 50%;
 				width: 350px;
 				background: rgba(10, 10, 10, 0.98);
 				backdrop-filter: blur(10px);
@@ -104,7 +109,7 @@ const { config } = Astro.props;
 				box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
 				opacity: 0;
 				visibility: hidden;
-				transform: translateY(15px) scale(0.95);
+				transform: translateX(-50%) translateY(15px) scale(0.95);
 				transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
 				z-index: 1100;
 				overflow: hidden;
@@ -114,7 +119,7 @@ const { config } = Astro.props;
 			.group\/pop:hover .popover {
 				opacity: 1;
 				visibility: visible;
-				transform: translateY(0) scale(1);
+				transform: translateX(-50%) translateY(0) scale(1);
 			}
 
 			.popover::before {
@@ -165,22 +170,40 @@ const { config } = Astro.props;
 			.text-muted {
 				color: rgba(255, 255, 255, 0.65);
 			}
+
+			/* Mobile Adaptations */
+			@media (max-width: 768px) {
+				.popover {
+					width: 90vw;
+					left: 50%;
+					transform: translateX(-50%) translateY(10px) scale(0.98);
+				}
+				
+				#sidebar {
+					width: 85vw;
+					left: -85vw;
+				}
+				
+				.sidebar-open #sidebar {
+					left: 0 !important;
+				}
+			}
 		</style>
 	</head>
 	<body class="bg-black text-white selection:bg-orange-500/30 selection:text-orange-200 overflow-x-hidden" style={`--primary: ${config.primary_color}; --secondary: ${config.secondary_color};`}>
 		<header class="fixed top-0 left-0 right-0 z-[1000] bg-black/90 backdrop-blur-2xl border-b border-white/10 shadow-2xl">
 			<div class="max-w-[1440px] mx-auto px-6 h-20 flex items-center justify-between">
-				<div class="flex items-center gap-6">
-					<button id="menu-toggle" class="group flex flex-col gap-1.5 p-3 -ml-3 hover:bg-white/10 rounded-xl transition-all duration-300" aria-label="Menú">
-						<span class="w-6 h-0.5 bg-white group-hover:bg-orange-500 transition-all duration-300"></span>
-						<span class="w-6 h-0.5 bg-white group-hover:bg-orange-500 transition-all duration-300"></span>
-						<span class="w-6 h-0.5 bg-white group-hover:bg-orange-500 transition-all duration-300"></span>
+				<div class="flex items-center gap-8">
+					<button id="sidebar-trigger" class="p-2 text-white hover:text-orange-500 transition-all transform active:scale-90" aria-label="Abrir menú">
+						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
 					</button>
-					<a href="/" class="flex flex-col leading-none group">
-						<div class="text-2xl font-black tracking-[0.15em] transition-transform duration-300 group-hover:scale-105">
-							<span class="text-orange-500">WILD</span>
-							<span class="text-white">GVNG</span>
+
+					<a href="/" class="flex flex-col items-start group">
+						<div class="flex items-baseline gap-1">
+							<span class="text-3xl font-black tracking-tighter text-orange-500 italic leading-none group-hover:scale-105 transition-transform origin-left">WILD</span>
+							<span class="text-3xl font-black tracking-tighter text-white italic leading-none group-hover:scale-105 transition-transform origin-left">GVNG</span>
 						</div>
+						<div class="h-1 w-full bg-gradient-to-r from-orange-500 to-transparent rounded-full mt-1 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
 					</a>
 				</div>
 				
@@ -290,10 +313,10 @@ const { config } = Astro.props;
 					<div class="flex items-center gap-4">
 						<div class="relative group/pop">
 							<a href="/login" class="hidden sm:block text-[12px] font-extrabold uppercase tracking-[0.15em] text-white/60 hover:text-white transition-all py-4">Entrar</a>
-							<div class="popover w-64 right-0">
-								<div class="popover-header"><span class="popover-title">Tu Cuenta</span></div>
+							<div class="popover w-64">
+								<div class="popover-header"><span class="popover-title text-center block w-full">Tu Cuenta</span></div>
 								<div class="popover-content space-y-4">
-									<p class="text-[10px] text-white/40 uppercase font-black">Accede a contenido exclusivo</p>
+									<p class="text-[10px] text-white/40 uppercase font-black text-center">Accede a contenido exclusivo</p>
 									<a href="/login" class="block w-full py-3 bg-white text-black text-center text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-orange-500 hover:text-white transition-all">Iniciar Sesión</a>
 									<a href="/perfil" class="block text-center text-[10px] text-white/60 hover:text-orange-500 font-black uppercase tracking-widest">Mi Perfil</a>
 								</div>
@@ -305,13 +328,13 @@ const { config } = Astro.props;
 								<span class="relative z-10">Unirse</span>
 								<div class="absolute inset-0 rounded-2xl bg-gradient-to-r from-orange-500 to-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-0"></div>
 							</a>
-							<div class="popover w-72 right-0">
-								<div class="popover-header"><span class="popover-title">Sé parte de la Crew</span></div>
+							<div class="popover w-72">
+								<div class="popover-header"><span class="popover-title text-center block w-full">Sé parte de la Crew</span></div>
 								<div class="popover-content space-y-4">
 									<ul class="space-y-2">
-										<li class="flex items-center gap-2 text-[10px] text-white font-bold uppercase tracking-widest"><span class="text-orange-500">✓</span> Acceso anticipado</li>
-										<li class="flex items-center gap-2 text-[10px] text-white font-bold uppercase tracking-widest"><span class="text-orange-500">✓</span> Merch exclusiva</li>
-										<li class="flex items-center gap-2 text-[10px] text-white font-bold uppercase tracking-widest"><span class="text-orange-500">✓</span> Eventos VIP</li>
+										<li class="flex items-center justify-center gap-2 text-[10px] text-white font-bold uppercase tracking-widest"><span class="text-orange-500">✓</span> Acceso anticipado</li>
+										<li class="flex items-center justify-center gap-2 text-[10px] text-white font-bold uppercase tracking-widest"><span class="text-orange-500">✓</span> Merch exclusiva</li>
+										<li class="flex items-center justify-center gap-2 text-[10px] text-white font-bold uppercase tracking-widest"><span class="text-orange-500">✓</span> Eventos VIP</li>
 									</ul>
 									<a href="/registro" class="block w-full py-3 bg-orange-500 text-white text-center text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-white hover:text-black transition-all">Registrarse Ahora</a>
 								</div>
@@ -331,7 +354,7 @@ const { config } = Astro.props;
 		
 		<script>
 			// Menu Toggle Logic
-			const menuToggle = document.getElementById('menu-toggle');
+			const menuToggle = document.getElementById('sidebar-trigger');
 			const sidebarClose = document.getElementById('sidebar-close');
 			const sidebarOverlay = document.getElementById('sidebar-overlay');
 			const body = document.body;
