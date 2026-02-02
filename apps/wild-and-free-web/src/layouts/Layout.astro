@@ -62,20 +62,20 @@ const { config } = Astro.props;
 
 			.sidebar-open main, 
 			.sidebar-open header {
-				transform: translateX(320px);
+				transform: translateX(80px);
 			}
 
 			.sidebar-open main {
-				opacity: 0.4;
-				filter: blur(8px);
+				opacity: 0.6;
+				filter: blur(4px);
 				pointer-events: none;
 			}
 
 			#sidebar-overlay {
 				position: fixed;
 				inset: 0;
-				background: rgba(0, 0, 0, 0.6);
-				backdrop-filter: blur(4px);
+				background: rgba(0, 0, 0, 0.4);
+				backdrop-filter: blur(2px);
 				z-index: 1500;
 				opacity: 0;
 				visibility: hidden;
@@ -98,7 +98,7 @@ const { config } = Astro.props;
 				right: 0;
 				width: 350px;
 				background: rgba(10, 10, 10, 0.98);
-				backdrop-filter: blur(25px);
+				backdrop-filter: blur(10px);
 				border: 1px solid rgba(255, 255, 255, 0.1);
 				border-radius: 24px;
 				box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
@@ -208,16 +208,16 @@ const { config } = Astro.props;
 							</button>
 							<div id="location-popover" class="popover">
 								<div class="popover-header">
-									<span class="popover-title">Ubicación: CDMX</span>
+									<span class="popover-title">Ubicación: Torreón Coahuila</span>
 								</div>
 								<div class="popover-content">
 									<div class="space-y-4">
 										<p class="text-sm text-white/60">Selecciona tu zona para ver eventos cercanos.</p>
 										<div class="grid grid-cols-2 gap-2">
-											<button class="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-xs font-bold hover:bg-orange-500 hover:text-black transition-all">CDMX</button>
-											<button class="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-xs font-bold hover:bg-orange-500 hover:text-black transition-all">Madrid</button>
-											<button class="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-xs font-bold hover:bg-orange-500 hover:text-black transition-all">Bogotá</button>
-											<button class="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-xs font-bold hover:bg-orange-500 hover:text-black transition-all">Buenos Aires</button>
+											<button class="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-xs font-bold hover:bg-orange-500 hover:text-black transition-all">Torreón</button>
+											<button class="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-xs font-bold hover:bg-orange-500 hover:text-black transition-all">Gómez Palacio</button>
+											<button class="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-xs font-bold hover:bg-orange-500 hover:text-black transition-all">Lerdo</button>
+											<button class="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-xs font-bold hover:bg-orange-500 hover:text-black transition-all">Monterrey</button>
 										</div>
 									</div>
 								</div>
@@ -416,7 +416,7 @@ const { config } = Astro.props;
 
 			// User Data Logic (Mock for Supabase integration)
 			const userData = {
-				location: 'CDMX',
+				location: 'Torreón Coahuila',
 				wishlistCount: 3,
 				cartCount: 2
 			};
