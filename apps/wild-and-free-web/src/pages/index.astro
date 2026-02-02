@@ -162,295 +162,121 @@ const products = [
 <Layout config={config}>
 	<Hero crewName={config.name} />
 	
-	<div class="content-separator"></div>
-
-	<section id="wild-and-free" class="wild-free-section">
-		<div class="wild-free-content">
-			<SectionHeader title="La Historia" subtitle="WILD AND FREE - La liga original" />
-			<div class="wild-free-grid">
-				<div class="wild-free-text">
-					<p>El movimiento que inició todo. WILD AND FREE no es solo un nombre, es una filosofía de vida que representa libertad absoluta, autenticidad cruda y resistencia contra lo establecido.</p>
-					<p>Desde los primeros beats en los sótanos hasta los escenarios más grandes, mantenemos viva la esencia del underground.</p>
+	<main class="max-w-[1400px] mx-auto px-6 space-y-32 py-20">
+		<!-- Historia Section -->
+		<section id="wild-and-free" class="relative group overflow-hidden rounded-3xl bg-gradient-to-br from-white/[0.03] to-transparent border border-white/5 p-8 md:p-16">
+			<div class="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-orange-500/10 blur-[100px] rounded-full group-hover:bg-orange-500/20 transition-colors duration-700"></div>
+			<div class="relative grid md:grid-cols-2 gap-12 items-center">
+				<div class="space-y-6">
+					<div class="inline-block px-4 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-500 text-xs font-bold uppercase tracking-widest">
+						La liga original
+					</div>
+					<h2 class="text-4xl md:text-6xl font-black tracking-tighter leading-none">
+						WILD <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-600">AND FREE</span>
+					</h2>
+					<div class="space-y-4 text-lg text-white font-medium leading-relaxed">
+						<p>El movimiento que inició todo. WILD AND FREE no es solo un nombre, es una filosofía de vida que representa libertad absoluta, autenticidad cruda y resistencia contra lo establecido.</p>
+						<p>Desde los primeros beats en los sótanos hasta los escenarios más grandes, mantenemos viva la esencia del underground.</p>
+					</div>
 				</div>
-				<div class="wild-free-image">
-					<img src="https://images.unsplash.com/photo-1493225255756-d9584f8606e9?auto=format&fit=crop&w=800&q=80" alt="WILD AND FREE" loading="lazy" />
+				<div class="relative group aspect-square rounded-2xl overflow-hidden shadow-2xl shadow-black/50">
+					<img src="https://images.unsplash.com/photo-1493225255756-d9584f8606e9?auto=format&fit=crop&w=800&q=80" alt="WILD AND FREE" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100" loading="lazy" />
+					<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60 group-hover:opacity-20 transition-opacity"></div>
 				</div>
 			</div>
-		</div>
-	</section>
+		</section>
 
-	<div class="content-separator"></div>
-
-	<section id="artistas" class="artists-section">
-		<div class="artists-content">
-			<div class="section-header-with-link">
-				<SectionHeader title="Artistas" subtitle="El talento que mueve el movimiento" />
-				<a href="/artistas" class="view-all-link">Ver todos →</a>
+		<!-- Artistas Section -->
+		<section id="artistas" class="space-y-12">
+			<div class="flex items-end justify-between border-b border-white/5 pb-8">
+				<div class="space-y-2">
+					<h2 class="text-4xl font-black tracking-tighter">ARTISTAS</h2>
+					<p class="text-white font-black uppercase tracking-widest text-sm">El talento que mueve el movimiento</p>
+				</div>
+				<a href="/artistas" class="group flex items-center gap-2 text-orange-500 font-bold uppercase tracking-widest text-xs hover:text-white transition-colors">
+					Ver todos 
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="transform group-hover:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+				</a>
 			</div>
 			<ArtistGrid artists={artists} />
-		</div>
-	</section>
+		</section>
 
-	<div class="content-separator"></div>
-
-	<section id="music" class="music-section">
-		<div class="music-content">
-			<div class="section-header-with-link">
-				<SectionHeader title="Música" subtitle="Los beats que definen la cultura" />
-				<a href="/musica" class="view-all-link">Ver todos →</a>
+		<!-- Música Section -->
+		<section id="music" class="space-y-12">
+			<div class="flex items-end justify-between border-b border-white/5 pb-8">
+				<div class="space-y-2">
+					<h2 class="text-4xl font-black tracking-tighter">LATEST DROPS</h2>
+					<p class="text-white font-black uppercase tracking-widest text-sm">Los beats que definen la cultura</p>
+				</div>
+				<a href="/musica" class="group flex items-center gap-2 text-orange-500 font-bold uppercase tracking-widest text-xs hover:text-white transition-colors">
+					Ver catálogo
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="transform group-hover:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+				</a>
 			</div>
 			<MusicGrid tracks={tracks} />
-		</div>
-	</section>
+		</section>
 
-	<div class="content-separator"></div>
+		<!-- Video Destacado -->
+		<section id="featured-video" class="relative rounded-3xl overflow-hidden aspect-video group cursor-pointer shadow-2xl">
+			<img src="https://images.unsplash.com/photo-1493225255756-d9584f8606e9?auto=format&fit=crop&w=1200&q=80" alt="Video Preview" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000" />
+			<div class="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-colors flex flex-col items-center justify-center gap-6">
+				<div class="w-24 h-24 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center group-hover:scale-110 group-hover:bg-orange-500 transition-all duration-500">
+					<svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" class="text-white group-hover:text-black transform translate-x-1"><path d="M8 5v14l11-7z"/></svg>
+				</div>
+				<div class="text-center space-y-2">
+					<h3 class="text-2xl font-black tracking-widest uppercase">Video Oficial</h3>
+					<p class="text-white font-black uppercase tracking-widest text-sm">Último lanzamiento visual</p>
+				</div>
+			</div>
+		</section>
 
-	<section id="events" class="events-section">
-		<div class="events-content">
-			<div class="section-header-with-link">
-				<SectionHeader title="Eventos" subtitle="Donde el movimiento cobra vida" />
-				<a href="/eventos" class="view-all-link">Ver todos →</a>
+		<!-- Eventos Section -->
+		<section id="events" class="space-y-12">
+			<div class="flex items-end justify-between border-b border-white/5 pb-8">
+				<div class="space-y-2">
+					<h2 class="text-4xl font-black tracking-tighter">TOUR DATES</h2>
+					<p class="text-white font-black uppercase tracking-widest text-sm">Donde el movimiento cobra vida</p>
+				</div>
+				<a href="/eventos" class="group flex items-center gap-2 text-orange-500 font-bold uppercase tracking-widest text-xs hover:text-white transition-colors">
+					Ver todos
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="transform group-hover:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+				</a>
 			</div>
 			<EventsList events={events} />
-		</div>
-	</section>
+		</section>
 
-	<div class="content-separator"></div>
-
-	<section id="shop" class="shop-section">
-		<div class="shop-content">
-			<div class="section-header-with-link">
-				<SectionHeader title="Tienda" subtitle="El estilo que representa" />
-				<a href="/tienda" class="view-all-link">Ver todos →</a>
+		<!-- Shop Section -->
+		<section id="shop" class="space-y-12">
+			<div class="flex items-end justify-between border-b border-white/5 pb-8">
+				<div class="space-y-2">
+					<h2 class="text-4xl font-black tracking-tighter">OFFICIAL MERCH</h2>
+					<p class="text-white font-black uppercase tracking-widest text-sm">Viste el movimiento</p>
+				</div>
+				<a href="/tienda" class="group flex items-center gap-2 text-orange-500 font-bold uppercase tracking-widest text-xs hover:text-white transition-colors">
+					Ver tienda
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="transform group-hover:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+				</a>
 			</div>
 			<ShopGrid products={products} />
-		</div>
-	</section>
+		</section>
 
-	<div class="content-separator"></div>
-
-	<section id="about" class="about-section">
-		<div class="about-content">
-			<SectionHeader title="La Historia" subtitle="Quiénes somos" />
-			<div class="about-grid">
-				<div class="about-text">
-					<p>Nacidos en el underground, forjados en el asfalto. Wild Gvng no es solo un colectivo, es un movimiento. Fusionamos trap, drill y sonidos experimentales para crear una atmósfera única que desafía lo convencional.</p>
-					<p>Desde nuestros inicios en los barrios bajos hasta los escenarios más grandes, nuestra misión sigue siendo la misma: autenticidad cruda y sonido sin filtros.</p>
-				</div>
-				<div class="about-image">
-					<img src="https://images.unsplash.com/photo-1493225255756-d9584f8606e9?auto=format&fit=crop&w=800&q=80" alt="Crew History" loading="lazy" />
-				</div>
+		<!-- CTA Section -->
+		<section id="login" class="relative rounded-[3rem] overflow-hidden bg-white py-24 px-8 text-black text-center group">
+			<div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-orange-500/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
+			<div class="relative max-w-2xl mx-auto space-y-8">
+				<h2 class="text-5xl md:text-7xl font-black tracking-tighter leading-none">ÚNETE A LA CREW</h2>
+				<p class="text-lg md:text-xl font-black text-black/80">Acceso exclusivo a drops, tickets y contenido detrás de escenas.</p>
+				<a href="/login" class="inline-flex items-center gap-4 px-10 py-5 bg-black text-white text-lg font-black uppercase tracking-widest rounded-full hover:bg-orange-500 hover:text-black transition-all duration-300 transform hover:-translate-y-1 shadow-xl shadow-black/10">
+					Acceso Miembros
+					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+				</a>
 			</div>
-		</div>
-	</section>
-
-	<div class="content-separator"></div>
-
-	<section id="artists">
-		<SectionHeader title="El Roster" subtitle="Conoce al equipo" />
-		<ArtistGrid artists={artists} />
-	</section>
-
-	<div class="content-separator"></div>
-
-	<section id="featured-video" class="video-section">
-		<SectionHeader title="En Foco" subtitle="Último lanzamiento visual" />
-		<div class="video-container">
-			<div class="video-placeholder">
-				<div class="play-icon">▶</div>
-				<p>Reproducir Video Oficial</p>
-			</div>
-		</div>
-	</section>
-
-	<div class="content-separator"></div>
-
-	<section id="music">
-		<SectionHeader title="Lanzamientos" subtitle="Fresco del estudio" />
-		<MusicGrid />
-	</section>
-
-	<div class="content-separator"></div>
-
-	<section id="events">
-		<SectionHeader title="Fechas Tour" subtitle="Venos en vivo" />
-		<EventsList />
-	</section>
-
-	<div class="content-separator"></div>
-
-	<section id="shop">
-		<SectionHeader title="Merch Oficial" subtitle="Viste el movimiento" />
-		<ShopGrid />
-	</section>
-
-	<div class="content-separator"></div>
-
-	<section id="login" class="join-section">
-		<div class="join-content">
-			<h2 class="join-title">Únete a la Crew</h2>
-			<p class="join-text">Acceso exclusivo a drops, tickets y contenido detrás de escenas.</p>
-			<a href="/login" class="join-button">Acceso Miembros</a>
-		</div>
-	</section>
+		</section>
+	</main>
 
 	<Footer />
 </Layout>
 
 <style>
-	.content-separator {
-		height: 1px;
-		background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-		margin: 120px 0;
-	}
-
-	.artists-section,
-	.music-section,
-	.events-section,
-	.shop-section,
-	.about-section,
-	.wild-free-section {
-		padding: 0 24px;
-	}
-
-	.wild-free-section {
-		background: linear-gradient(135deg, rgba(0, 255, 65, 0.05) 0%, transparent 50%);
-		border: 1px solid rgba(0, 255, 65, 0.1);
-		border-radius: 8px;
-		margin: 0 24px;
-	}
-
-	.wild-free-grid,
-	.about-grid {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: 48px;
-		align-items: center;
-		max-width: 1000px;
-		margin: 0 auto;
-		padding: 60px 0;
-	}
-
-	@media (min-width: 768px) {
-		.wild-free-grid,
-		.about-grid {
-			grid-template-columns: 1fr 1fr;
-		}
-	}
-
-	.wild-free-text p,
-	.about-text p {
-		color: #ccc;
-		line-height: 1.8;
-		margin-bottom: 24px;
-		font-size: 16px;
-	}
-
-	.wild-free-image img,
-	.about-image img {
-		width: 100%;
-		border-radius: 4px;
-		filter: grayscale(100%);
-		transition: filter 0.3s;
-	}
-
-	.wild-free-image img:hover,
-	.about-image img:hover {
-		filter: grayscale(0%);
-	}
-
-	.video-section {
-		text-align: center;
-	}
-
-	.video-container {
-		max-width: 1000px;
-		margin: 0 auto;
-		aspect-ratio: 16/9;
-		background: #111;
-		border: 1px solid rgba(255,255,255,0.1);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		cursor: pointer;
-		transition: border-color 0.3s;
-	}
-
-	.video-container:hover {
-		border-color: var(--primary-color);
-	}
-
-	.video-placeholder {
-		color: rgba(255,255,255,0.5);
-	}
-
-	.play-icon {
-		font-size: 48px;
-		margin-bottom: 16px;
-		color: var(--primary-color);
-	}
-
-	.join-section {
-		padding: 100px 0;
-		text-align: center;
-		background: radial-gradient(circle at center, rgba(255,255,255,0.03) 0%, transparent 70%);
-		border: 1px solid rgba(255,255,255,0.05);
-	}
-
-	.join-title {
-		font-size: 48px;
-		text-transform: uppercase;
-		font-weight: 900;
-		margin-bottom: 16px;
-		letter-spacing: -0.03em;
-	}
-
-	.join-text {
-		color: #888;
-		margin-bottom: 32px;
-		font-size: 18px;
-	}
-
-	.join-button {
-		display: inline-block;
-		padding: 16px 48px;
-		background: #fff;
-		color: #000;
-		text-decoration: none;
-		font-weight: 700;
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
-		clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
-		transition: transform 0.2s;
-	}
-
-	.join-button:hover {
-		transform: scale(1.05);
-	}
-
-	.section-header-with-link {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		margin-bottom: 40px;
-	}
-
-	.view-all-link {
-		color: var(--primary-color);
-		text-decoration: none;
-		font-size: 14px;
-		font-weight: 500;
-		font-family: 'Noto Sans JP', sans-serif;
-		letter-spacing: 0.05em;
-		padding: 8px 16px;
-		border: 1px solid rgba(201, 131, 0, 0.3);
-		border-radius: 6px;
-		transition: all 0.2s;
-	}
-
-	.view-all-link:hover {
-		background: rgba(201, 131, 0, 0.1);
-		border-color: var(--primary-color);
-		transform: translateY(-1px);
-	}
+	/* Eliminamos los estilos antiguos para usar Tailwind puro */
 </style>

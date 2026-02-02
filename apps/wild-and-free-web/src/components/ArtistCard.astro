@@ -11,91 +11,20 @@ export type Props = {
 const { artist } = Astro.props;
 ---
 
-<article class="card">
-	<div class="media">
-		<img src={artist.image_url} alt={artist.name} loading="lazy" />
-		<div class="overlay">
-			<div class="info">
-				<p class="role">{artist.role}</p>
-				<p class="name">{artist.name}</p>
-			</div>
-		</div>
+<article class="group relative aspect-[3/4] overflow-hidden rounded-2xl bg-[#111] border border-white/5 hover:border-orange-500/50 transition-all duration-500">
+	<img 
+		src={artist.image_url} 
+		alt={artist.name} 
+		loading="lazy" 
+		class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110"
+	/>
+	<div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-40 transition-opacity duration-500"></div>
+	<div class="absolute inset-x-0 bottom-0 p-8 space-y-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+		<p class="text-[10px] font-black uppercase tracking-[0.2em] text-orange-500">Artist // {artist.role}</p>
+		<h3 class="text-3xl font-black uppercase tracking-tighter text-white drop-shadow-md">{artist.name}</h3>
 	</div>
 </article>
 
 <style>
-	.card {
-		position: relative;
-		background: #000;
-		border: 1px solid rgba(255, 255, 255, 0.1);
-		transition: all 0.3s ease;
-	}
-
-	.media {
-		position: relative;
-		aspect-ratio: 3 / 4;
-		overflow: hidden;
-	}
-
-	img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		filter: grayscale(100%) contrast(1.1);
-		transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-	}
-
-	.overlay {
-		position: absolute;
-		inset: 0;
-		background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 50%);
-		display: flex;
-		flex-direction: column;
-		justify-content: flex-end;
-		padding: 24px;
-		opacity: 0.8;
-		transition: opacity 0.3s ease;
-	}
-
-	.info {
-		transform: translateY(10px);
-		transition: transform 0.3s ease;
-	}
-
-	.name {
-		margin: 0;
-		font-size: 24px;
-		font-weight: 900;
-		text-transform: uppercase;
-		letter-spacing: -0.02em;
-		color: #fff;
-		line-height: 1;
-	}
-
-	.role {
-		margin: 0 0 8px;
-		font-size: 11px;
-		text-transform: uppercase;
-		letter-spacing: 0.2em;
-		color: var(--primary-color);
-		font-weight: 700;
-	}
-
-	.card:hover {
-		border-color: var(--primary-color);
-		transform: translateY(-4px);
-	}
-
-	.card:hover img {
-		filter: grayscale(0%) contrast(1.1);
-		transform: scale(1.05);
-	}
-
-	.card:hover .overlay {
-		opacity: 1;
-	}
-
-	.card:hover .info {
-		transform: translateY(0);
-	}
+	/* Usando Tailwind */
 </style>

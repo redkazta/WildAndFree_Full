@@ -2,77 +2,59 @@
 // No props needed - we'll use client-side JavaScript
 ---
 
-<aside class="sidebar" id="sidebar">
-  <nav class="sidebar-nav">
-    <div class="nav-section">
-      <div class="nav-section-header">
-        <h4 class="nav-section-title">Explorar</h4>
-        <button class="close-btn" aria-label="Cerrar menú">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
-          </svg>
+<aside class="fixed top-0 left-[-320px] lg:left-0 w-80 h-screen bg-black/95 backdrop-blur-2xl border-r border-white/5 z-[2000] transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] flex flex-col shadow-2xl" id="sidebar">
+  <div class="p-8 flex flex-col h-full">
+    <div class="space-y-12">
+      <!-- Nav Section -->
+      <div class="space-y-6">
+        <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">Explorar</h4>
+        <nav class="flex flex-col gap-2">
+          <a href="/artistas" class="group flex items-center gap-4 py-3 text-sm font-black uppercase tracking-widest text-white hover:text-orange-500 transition-all">
+            <span class="w-1.5 h-1.5 rounded-full bg-white/20 group-hover:bg-orange-500 transition-colors"></span>
+            Artistas
+          </a>
+          <a href="/musica" class="group flex items-center gap-4 py-3 text-sm font-black uppercase tracking-widest text-white hover:text-orange-500 transition-all">
+            <span class="w-1.5 h-1.5 rounded-full bg-white/20 group-hover:bg-orange-500 transition-colors"></span>
+            Música
+          </a>
+          <a href="/eventos" class="group flex items-center gap-4 py-3 text-sm font-black uppercase tracking-widest text-white hover:text-orange-500 transition-all">
+            <span class="w-1.5 h-1.5 rounded-full bg-white/20 group-hover:bg-orange-500 transition-colors"></span>
+            Eventos
+          </a>
+          <a href="/tienda" class="group flex items-center gap-4 py-3 text-sm font-black uppercase tracking-widest text-white hover:text-orange-500 transition-all">
+            <span class="w-1.5 h-1.5 rounded-full bg-white/20 group-hover:bg-orange-500 transition-colors"></span>
+            Tienda
+          </a>
+        </nav>
+      </div>
+
+      <!-- Account Section -->
+      <div class="space-y-6">
+        <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">Cuenta</h4>
+        <nav class="flex flex-col gap-2">
+          <a href="/login" class="group flex items-center gap-4 py-3 text-sm font-black uppercase tracking-widest text-white hover:text-orange-500 transition-all">
+            <span class="w-1.5 h-1.5 rounded-full bg-white/20 group-hover:bg-orange-500 transition-colors"></span>
+            Login
+          </a>
+          <a href="/perfil" class="group flex items-center gap-4 py-3 text-sm font-black uppercase tracking-widest text-white hover:text-orange-500 transition-all">
+            <span class="w-1.5 h-1.5 rounded-full bg-white/20 group-hover:bg-orange-500 transition-colors"></span>
+            Mi Perfil
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Footer Sidebar -->
+    <div class="mt-auto pt-8 border-t border-white/5 space-y-6">
+      <div class="flex items-center gap-4">
+        <button class="location-btn w-full py-4 px-6 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] text-white/60 hover:bg-white/10 hover:text-white transition-all">
+          Ubicación: CDMX
         </button>
       </div>
-      <a href="/artistas" class="nav-item">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
-        </svg>
-        Artistas
-      </a>
-      <a href="/musica" class="nav-item">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M11 6.64a1 1 0 0 0-1.243-.97l-1 .25A1 1 0 0 0 8 6.89v4.306A2.572 2.572 0 0 0 7 11c-.5 0-.974.134-1.338.377-.36.24-.662.628-.662 1.123s.301.883.662 1.123c.364.243.839.377 1.338.377.5 0 .974-.134 1.338-.377.36-.24.662-.628.662-1.123V8.89l4-1v-.256Z"/>
-        </svg>
-        Música
-      </a>
-      <a href="/eventos" class="nav-item">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
-        </svg>
-        Eventos
-      </a>
-      <a href="/tienda" class="nav-item">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-.623l-1.844 6.456a.75.75 0 0 1-.722.544H3.69a.75.75 0 0 1-.722-.544L1.123 8H.5a.5.5 0 0 1-.5-.5v-1A.5.5 0 0 1 .5 6h1.717L5.07 1.243a.5.5 0 0 1 .686-.172zM3.883 7l1.442 5.045a.25.25 0 0 0 .241.174h6.868a.25.25 0 0 0 .241-.174L12.117 7H3.883z"/>
-        </svg>
-        Tienda
-      </a>
+      <div class="text-center">
+        <div class="text-[10px] font-black tracking-[0.3em] text-orange-500/40">WILD GVNG © 2024</div>
+      </div>
     </div>
-    
-    <div class="nav-section">
-      <h4 class="nav-section-title">Cuenta</h4>
-      <a href="/login" class="nav-item">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
-        </svg>
-        Iniciar Sesión
-      </a>
-      <a href="/perfil" class="nav-item">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
-        </svg>
-        Mi Perfil
-      </a>
-      <a href="/pedidos" class="nav-item">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-        </svg>
-        Mis Pedidos
-      </a>
-    </div>
-    
-    <div class="nav-section">
-      <h4 class="nav-section-title">Configuración</h4>
-      <button class="location-btn nav-item">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-        </svg>
-        Elegir Ubicación
-      </button>
-    </div>
-  </nav>
-  <div class="sidebar-footer">
-    <p class="sidebar-tagline">Built to move as one.</p>
   </div>
 </aside>
 

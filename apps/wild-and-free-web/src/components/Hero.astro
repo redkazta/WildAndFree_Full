@@ -6,320 +6,92 @@ export type Props = {
 const { crewName } = Astro.props;
 ---
 
-<section class="hero">
-	<div class="banner-bg"></div>
-	<div class="banner-overlay"></div>
-	<div class="content">
-		<div class="hero-text">
-			<p class="tag">
-				<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" class="tag-icon">
-					<path d="M8 0C5.79 0 4 1.79 4 4C4 6.21 5.79 8 8 8C10.21 8 12 6.21 12 4C12 1.79 10.21 0 8 0ZM8 10C5.33 10 0 11.34 0 14V16H16V14C16 11.34 10.67 10 8 10Z"/>
-				</svg>
-				WILD GVNG
-			</p>
-			<h1 class="title" data-text={crewName}>
-				<span class="title-line">WILD</span>
-				<span class="title-line">GVNG</span>
-			</h1>
-			<p class="subtitle">El movimiento que redefine la cultura</p>
-		</div>
-		<div class="hero-stats">
-			<div class="stat">
-				<span class="stat-number">12+</span>
-				<span class="stat-label">Artistas</span>
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+	<!-- Background Elements -->
+	<div class="absolute inset-0 z-0">
+		<div class="absolute inset-0 bg-black/60 z-10"></div>
+		<img 
+			src="https://images.unsplash.com/photo-1493225255756-d9584f8606e9?auto=format&fit=crop&w=2000&q=80" 
+			alt="Background" 
+			class="w-full h-full object-cover grayscale brightness-50 scale-110 animate-[pulse_10s_ease-in-out_infinite]"
+		/>
+		<!-- Animated Gradient Orbs -->
+		<div class="absolute top-1/4 left-1/4 w-96 h-96 bg-orange-500/20 blur-[120px] rounded-full animate-pulse"></div>
+		<div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-red-600/20 blur-[120px] rounded-full animate-pulse delay-1000"></div>
+	</div>
+
+	<div class="relative z-10 max-w-[1400px] mx-auto px-6 w-full grid lg:grid-cols-2 gap-20 items-center">
+		<div class="space-y-10 text-center lg:text-left">
+			<div class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
+				<span class="relative flex h-2 w-2">
+					<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+					<span class="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
+				</span>
+				<span class="text-[10px] font-black uppercase tracking-[0.3em] text-white/80">Est. 2024 · La Liga Original</span>
 			</div>
-			<div class="stat">
-				<span class="stat-number">50+</span>
-				<span class="stat-label">Tracks</span>
+			
+			<div class="space-y-4">
+				<h1 class="text-7xl md:text-8xl lg:text-[10rem] font-black leading-[0.85] tracking-tighter">
+					<span class="block text-white">WILD</span>
+					<span class="block text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-red-500 to-orange-500 bg-[length:200%_auto] animate-[gradient_8s_linear_infinite]">GVNG</span>
+				</h1>
+				<p class="text-xl md:text-2xl text-white font-bold max-w-xl mx-auto lg:mx-0 leading-relaxed drop-shadow-lg">
+					El movimiento que redefine la cultura urbana. Sonido crudo, libertad absoluta.
+				</p>
 			</div>
-			<div class="stat">
-				<span class="stat-number">100K+</span>
-				<span class="stat-label">Fans</span>
+
+			<div class="flex flex-wrap items-center justify-center lg:justify-start gap-6 pt-4">
+				<a href="#artistas" class="px-10 py-5 bg-white text-black text-sm font-black uppercase tracking-[0.2em] rounded-full hover:bg-orange-500 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-orange-500/20">
+					Explorar Crew
+				</a>
+				<a href="#music" class="px-10 py-5 bg-white/5 border border-white/10 text-white text-sm font-black uppercase tracking-[0.2em] rounded-full hover:bg-white/10 transition-all duration-300 backdrop-blur-md">
+					Escuchar Música
+				</a>
 			</div>
 		</div>
-		<div class="actions">
-			<a class="button primary" href="#artists">
-				<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-					<path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
-				</svg>
-				<span>Explorar Crew</span>
-			</a>
-			<a class="button secondary" href="#music">
-				<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-					<path d="M11 6.64a1 1 0 0 0-1.243-.97l-1 .25A1 1 0 0 0 8 6.89v4.306A2.572 2.572 0 0 0 7 11c-.5 0-.974.134-1.338.377-.36.24-.662.628-.662 1.123s.301.883.662 1.123c.364.243.839.377 1.338.377.5 0 .974-.134 1.338-.377.36-.24.662-.628.662-1.123V8.89l4-1v-.256Z"/>
-				</svg>
-				<span>Escuchar Música</span>
-			</a>
+
+		<div class="hidden lg:grid grid-cols-2 gap-6 rotate-3 transform hover:rotate-0 transition-transform duration-1000">
+			<div class="space-y-6 pt-12">
+				<div class="aspect-[3/4] rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+					<img src="https://images.unsplash.com/photo-1520975958221-7f61d4d6df4b?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="Artist" />
+				</div>
+				<div class="aspect-square rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-orange-500 flex items-center justify-center p-8">
+					<div class="text-center">
+						<div class="text-5xl font-black text-black leading-none">50+</div>
+						<div class="text-xs font-bold text-black/60 uppercase tracking-widest mt-2">Tracks</div>
+					</div>
+				</div>
+			</div>
+			<div class="space-y-6">
+				<div class="aspect-square rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-white/5 backdrop-blur-xl flex items-center justify-center p-8">
+					<div class="text-center text-white">
+						<div class="text-5xl font-black leading-none">12+</div>
+						<div class="text-xs font-bold text-white/40 uppercase tracking-widest mt-2">Artistas</div>
+					</div>
+				</div>
+				<div class="aspect-[3/4] rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+					<img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="Artist" />
+				</div>
+			</div>
 		</div>
+	</div>
+
+	<!-- Scroll Indicator -->
+	<div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4">
+		<div class="w-[1px] h-20 bg-gradient-to-b from-transparent via-white/20 to-orange-500 animate-[scroll_2s_ease-in-out_infinite]"></div>
 	</div>
 </section>
 
 <style>
-	.hero {
-		min-height: 100vh;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		padding: 120px 0 60px;
-		position: relative;
-		overflow: hidden;
-		background: linear-gradient(135deg, #000 0%, #111 100%);
+	@keyframes gradient {
+		0% { background-position: 0% 50%; }
+		50% { background-position: 100% 50%; }
+		100% { background-position: 0% 50%; }
 	}
 
-	.banner-bg {
-		position: absolute;
-		inset: 0;
-		background-image: url('https://images.unsplash.com/photo-1493225255756-d9584f8606e9?auto=format&fit=crop&w=2000&q=80');
-		background-size: cover;
-		background-position: center;
-		filter: grayscale(100%) contrast(1.5) brightness(0.3);
-		z-index: -2;
-		opacity: 0.6;
-		animation: slowZoom 20s ease-in-out infinite alternate;
-	}
-
-	@keyframes slowZoom {
-		0% { transform: scale(1); }
-		100% { transform: scale(1.1); }
-	}
-
-	.banner-overlay {
-		position: absolute;
-		inset: 0;
-		background: linear-gradient(135deg, rgba(201, 131, 0, 0.15) 0%, transparent 40%, rgba(138, 3, 3, 0.15) 100%);
-		z-index: -1;
-		mix-blend-mode: overlay;
-	}
-
-	.hero::after {
-		content: '';
-		position: absolute;
-		inset: 0;
-		background: linear-gradient(to bottom, rgba(5,5,5,0.2), #000);
-		z-index: -1;
-	}
-
-	.content {
-		position: relative;
-		z-index: 1;
-		max-width: 1400px;
-		margin: 0 auto;
-		width: 100%;
-		padding: 0 24px;
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: 60px;
-		align-items: center;
-	}
-
-	.hero-text {
-		text-align: center;
-	}
-
-	.tag {
-		margin: 0 0 16px;
-		letter-spacing: 0.3em;
-		text-transform: uppercase;
-		color: var(--primary-color);
-		font-size: 14px;
-		font-weight: 700;
-		opacity: 0.9;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 8px;
-	}
-
-	.tag-icon {
-		width: 16px;
-		height: 16px;
-		opacity: 0.8;
-	}
-
-	.title {
-		margin: 0;
-		font-size: clamp(100px, 18vw, 240px);
-		line-height: 0.8;
-		letter-spacing: 0.05em;
-		text-transform: uppercase;
-		font-weight: 900;
-		color: transparent;
-		-webkit-text-stroke: 3px rgba(255, 255, 255, 0.9);
-		position: relative;
-		z-index: 1;
-		margin-bottom: 24px;
-		display: flex;
-		flex-direction: column;
-		gap: 0;
-		font-family: 'Noto Sans JP', sans-serif;
-	}
-
-	.title-line {
-		display: block;
-		font-weight: 900;
-		letter-spacing: 0.08em;
-		text-align: center;
-	}
-	
-	.title::before {
-		content: attr(data-text);
-		position: absolute;
-		top: 0;
-		left: 0;
-		color: #fff;
-		opacity: 0.15;
-		filter: blur(8px);
-		z-index: -1;
-		transform: scale(1.1);
-	}
-
-	.subtitle {
-		margin: 0;
-		color: #fff;
-		font-size: 18px;
-		max-width: 25ch;
-		line-height: 1.6;
-		font-weight: 300;
-		text-align: center;
-		margin: 0 auto;
-		opacity: 0.8;
-		letter-spacing: 0.05em;
-		font-family: 'Noto Sans JP', sans-serif;
-	}
-
-	.hero-stats {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: 40px;
-		margin: 40px 0;
-	}
-
-	.stat {
-		text-align: center;
-		padding: 20px;
-		border: 1px solid rgba(255, 255, 255, 0.1);
-		background: rgba(0, 0, 0, 0.3);
-		backdrop-filter: blur(10px);
-		transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-		position: relative;
-		overflow: hidden;
-	}
-
-	.stat::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: -100%;
-		width: 100%;
-		height: 100%;
-		background: linear-gradient(90deg, transparent, rgba(201, 131, 0, 0.1), transparent);
-		transition: left 0.5s ease;
-	}
-
-	.stat:hover::before {
-		left: 100%;
-	}
-
-	.stat:hover {
-		transform: translateY(-2px);
-		border-color: rgba(201, 131, 0, 0.3);
-		box-shadow: 0 8px 24px -8px rgba(201, 131, 0, 0.2);
-	}
-
-	.stat-number {
-		display: block;
-		font-size: 36px;
-		font-weight: 900;
-		color: var(--primary-color);
-		margin-bottom: 8px;
-	}
-
-	.stat-label {
-		display: block;
-		font-size: 14px;
-		color: #888;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-	}
-
-	.actions {
-		display: flex;
-		gap: 24px;
-		justify-content: center;
-		margin-top: 40px;
-		flex-wrap: wrap;
-	}
-
-	.button {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		gap: 8px;
-		padding: 18px 36px;
-		text-decoration: none;
-		font-weight: 700;
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
-		font-size: 14px;
-		transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-		border: 2px solid transparent;
-		min-width: 180px;
-	}
-
-	.button svg {
-		width: 16px;
-		height: 16px;
-		transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-	}
-
-	.button.primary {
-		background: var(--primary-color);
-		color: #000;
-		border-color: var(--primary-color);
-	}
-
-	.button.primary:hover {
-		background: transparent;
-		color: var(--primary-color);
-		transform: translateY(-2px);
-		box-shadow: 0 10px 30px -10px var(--primary-color);
-	}
-
-	.button.primary:hover svg {
-		transform: translateX(2px);
-	}
-
-	.button.secondary {
-		background: transparent;
-		color: var(--secondary-color);
-		border-color: var(--secondary-color);
-	}
-
-	.button.secondary:hover {
-		background: var(--secondary-color);
-		color: #fff;
-		transform: translateY(-2px);
-		box-shadow: 0 10px 30px -10px var(--secondary-color);
-	}
-
-	.button.secondary:hover svg {
-		transform: translateX(2px);
-	}
-
-	@media (max-width: 768px) {
-		.hero-stats {
-			grid-template-columns: 1fr;
-			gap: 20px;
-		}
-		
-		.actions {
-			flex-direction: column;
-			align-items: center;
-		}
-		
-		.button {
-			width: 100%;
-			max-width: 300px;
-		}
+	@keyframes scroll {
+		0% { transform: translateY(-20px); opacity: 0; }
+		50% { opacity: 1; }
+		100% { transform: translateY(20px); opacity: 0; }
 	}
 </style>
