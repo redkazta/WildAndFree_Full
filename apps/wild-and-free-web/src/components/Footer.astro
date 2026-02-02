@@ -2,156 +2,59 @@
 const year = new Date().getFullYear();
 ---
 
-<footer class="site-footer">
-  <div class="footer-content">
-    <div class="footer-top">
-      <div class="brand">
-        <div class="footer-logo">
-          <span class="logo-line">WILD</span>
-          <span class="logo-line">GVNG</span>
+<footer class="bg-black border-t border-white/10 pt-24 pb-12 px-6">
+  <div class="max-w-[1400px] mx-auto space-y-16">
+    <div class="flex flex-col md:flex-row justify-between items-start gap-12">
+      <div class="space-y-6">
+        <div class="text-3xl font-black tracking-[0.2em]">
+          <span class="text-orange-500">WILD</span>
+          <span class="text-white">GVNG</span>
+        </div>
+        <p class="text-white font-bold text-sm tracking-widest max-w-xs">
+          Redefiniendo la cultura urbana desde el underground hasta la cima.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-12 md:gap-24">
+        <div class="space-y-6">
+          <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-orange-500/80">Navegación</h4>
+          <ul class="space-y-4">
+            <li><a href="/artistas" class="text-sm font-black text-white hover:text-orange-500 transition-colors">Artistas</a></li>
+            <li><a href="/musica" class="text-sm font-black text-white hover:text-orange-500 transition-colors">Música</a></li>
+            <li><a href="/eventos" class="text-sm font-black text-white hover:text-orange-500 transition-colors">Eventos</a></li>
+            <li><a href="/tienda" class="text-sm font-black text-white hover:text-orange-500 transition-colors">Tienda</a></li>
+          </ul>
+        </div>
+        <div class="space-y-6">
+          <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-orange-500/80">Cuenta</h4>
+          <ul class="space-y-4">
+            <li><a href="/login" class="text-sm font-black text-white hover:text-orange-500 transition-colors">Login</a></li>
+            <li><a href="/registro" class="text-sm font-black text-white hover:text-orange-500 transition-colors">Registro</a></li>
+            <li><a href="/perfil" class="text-sm font-black text-white hover:text-orange-500 transition-colors">Mi Perfil</a></li>
+          </ul>
+        </div>
+        <div class="space-y-6">
+          <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-orange-500/80">Social</h4>
+          <div class="flex gap-4">
+            <a href="#" class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-all">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+            </a>
+            <a href="#" class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-orange-500 hover:text-black transition-all">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.01 0 0 0-1.94-1.42C18.88 4.67 12 4.67 12 4.67s-6.88 0-8.6.33a2.78 2.01 0 0 0-1.94 1.42A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.01 0 0 0 1.94 1.42c1.72.33 8.6.33 8.6.33s6.88 0 8.6-.33a2.78 2.01 0 0 0 1.94-1.42A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"></path><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"></polygon></svg>
+            </a>
+          </div>
         </div>
       </div>
-      <div class="social-links">
-        <a href="#" class="social-link" aria-label="Instagram">
-          <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
-            <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.703.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.282.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"/>
-          </svg>
-        </a>
-        <a href="#" class="social-link" aria-label="YouTube">
-          <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
-            <path d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.082 2.06l-.008.105-.009.104c-.05.572-.124 1.14-.235 1.558a2.007 2.007 0 0 1-1.415 1.42c-1.16.312-5.569.334-6.18.335h-.142c-.309 0-1.587-.006-2.927-.052l-.17-.006-.087-.004-.171-.007-.171-.007c-1.11-.049-2.167-.128-2.654-.26a2.007 2.007 0 0 1-1.415-1.419c-.111-.417-.185-.986-.235-1.558L.09 9.82l-.008-.104A31.4 31.4 0 0 1 0 7.68v-.123c.002-.215.01-.958.064-1.778l.007-.103.003-.052.008-.104.022-.26.01-.104c.048-.519.119-1.023.22-1.402a2.007 2.007 0 0 1 1.415-1.42c.487-.13 1.544-.21 2.654-.26l.17-.007.172-.006.086-.003.171-.007A99.788 99.788 0 0 1 7.858 2h.193zM6.4 5.209v4.566l2.97-2.283L6.4 5.209z"/>
-          </svg>
-        </a>
-        <a href="#" class="social-link" aria-label="SoundCloud">
-          <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
-            <path d="M1.175 8.521c-.456 0-.82.358-.82.821 0 .358.275.666.613.72.23.053.299.345.568.345.23 0 .275-.092.275-.229 0-.092-.046-.184-.092-.23l-.23-.138c-.092-.092-.138-.184-.138-.32 0-.23.138-.413.366-.413.275 0 .413.184.413.46 0 .184-.092.413-.275.504l-.23.138c-.092.046-.138.138-.138.23 0 .137.092.275.229.275.275 0 .504-.275.504-.55 0-.275-.184-.55-.46-.55-.23 0-.413.138-.413.413 0 .092.046.184.092.23l.23.137c.092.092.138.184.138.32 0 .23-.138.413-.366.413-.275 0-.413-.184-.413-.46 0-.184.092-.413.275-.504l.23-.138c.092-.046.138-.138-.138-.23 0-.137-.092-.275-.229-.275-.275 0-.504.275-.504.55 0 .275.184.55.46.55.23 0 .413-.138.413-.413 0-.092-.046-.184-.092-.23l-.23-.137c-.092-.092-.138-.184-.138-.32 0-.23.138-.413.366-.413.275 0 .413.184.413.46 0 .184-.092.413-.275.504l-.23.138c-.092.046-.138.138-.138.23 0 .137.092.275.229.275.275 0 .504-.275.504-.55 0-.275-.184-.55-.46-.55zm3.22 0c-.23 0-.413.184-.413.413 0 .23.184.413.413.413.23 0 .413-.184.413-.413 0-.23-.184-.413-.413-.413zm1.372 0c-.23 0-.413.184-.413.413 0 .23.184.413.413.413.23 0 .413-.184.413-.413 0-.23-.184-.413-.413-.413zm1.372 0c-.23 0-.413.184-.413.413 0 .23.184.413.413.413.23 0 .413-.184.413-.413 0-.23-.184-.413-.413-.413zm1.372 0c-.23 0-.413.184-.413.413 0 .23.184.413.413.413.23 0 .413-.184.413-.413 0-.23-.184-.413-.413-.413zm1.372 0c-.23 0-.413.184-.413.413 0 .23.184.413.413.413.23 0 .413-.184.413-.413 0-.23-.184-.413-.413-.413zm1.372 0c-.23 0-.413.184-.413.413 0 .23.184.413.413.413.23 0 .413-.184.413-.413 0-.23-.184-.413-.413-.413zm1.372 0c-.23 0-.413.184-.413.413 0 .23.184.413.413.413.23 0 .413-.184.413-.413 0-.23-.184-.413-.413-.413z"/>
-          </svg>
-        </a>
-      </div>
     </div>
-    <div class="footer-bottom">
-      <p class="copyright">&copy; {year} Wild Gvng. Todos los derechos reservados.</p>
-      <div class="legal">
-        <a href="#">Privacidad</a>
-        <a href="#">Términos</a>
+
+    <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+      <p class="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">
+        &copy; {year} Wild Gvng. Todos los derechos reservados.
+      </p>
+      <div class="flex gap-8">
+        <a href="#" class="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 hover:text-white transition-colors">Privacidad</a>
+        <a href="#" class="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 hover:text-white transition-colors">Términos</a>
       </div>
     </div>
   </div>
 </footer>
-
-<style>
-  .site-footer {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 80px 0 40px;
-    margin-top: 120px;
-  }
-
-  .footer-top {
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-    margin-bottom: 60px;
-  }
-
-  @media (min-width: 768px) {
-    .footer-top {
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: flex-start;
-    }
-  }
-
-  .footer-logo {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-    font-weight: 900;
-    font-size: 32px;
-    letter-spacing: 0.2em;
-    color: #fff;
-    text-transform: uppercase;
-    font-family: 'Noto Sans JP', sans-serif;
-    margin: 0 0 8px;
-  }
-
-  .footer-logo .logo-line {
-    display: block;
-    font-weight: 900;
-    letter-spacing: 0.25em;
-  }
-
-  .tagline {
-    color: rgba(255, 255, 255, 0.6);
-    margin: 0;
-    font-size: 12px;
-    letter-spacing: 0.05em;
-    font-family: 'Noto Sans JP', sans-serif;
-    font-weight: 300;
-  }
-
-  .social-links {
-    display: flex;
-    gap: 24px;
-    flex-wrap: wrap;
-  }
-
-  .social-link {
-    color: #fff;
-    text-decoration: none;
-    padding: 8px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-  }
-
-  .social-link:hover {
-    color: var(--primary-color);
-    background: rgba(201, 131, 0, 0.2);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px -8px var(--primary-color);
-  }
-
-  .social-link svg {
-    width: 20px;
-    height: 20px;
-  }
-
-  .footer-bottom {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    padding-top: 32px;
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.4);
-  }
-
-  @media (min-width: 768px) {
-    .footer-bottom {
-      flex-direction: row;
-      justify-content: space-between;
-    }
-  }
-
-  .legal {
-    display: flex;
-    gap: 24px;
-  }
-
-  .legal a {
-    color: inherit;
-    text-decoration: none;
-    transition: color 0.2s;
-    font-family: 'Noto Sans JP', sans-serif;
-    letter-spacing: 0.02em;
-  }
-
-  .legal a:hover {
-    color: var(--primary-color);
-  }
-</style>

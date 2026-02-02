@@ -71,6 +71,22 @@ const { config } = Astro.props;
 				pointer-events: none;
 			}
 
+			#sidebar-overlay {
+				position: fixed;
+				inset: 0;
+				background: rgba(0, 0, 0, 0.6);
+				backdrop-filter: blur(4px);
+				z-index: 1500;
+				opacity: 0;
+				visibility: hidden;
+				transition: all 0.5s ease;
+			}
+
+			.sidebar-open #sidebar-overlay {
+				opacity: 1;
+				visibility: visible;
+			}
+
 			header, main {
 				transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.5s ease, filter 0.5s ease;
 			}
@@ -271,6 +287,7 @@ const { config } = Astro.props;
 			</div>
 		</header>
 		
+		<div id="sidebar-overlay"></div>
 		<SidebarLeft />
 		
 		<main class="pt-20">
@@ -281,6 +298,7 @@ const { config } = Astro.props;
 			// Menu Toggle Logic
 			const menuToggle = document.getElementById('menu-toggle');
 			const sidebarClose = document.getElementById('sidebar-close');
+			const sidebarOverlay = document.getElementById('sidebar-overlay');
 			const body = document.body;
 			const sidebar = document.getElementById('sidebar');
 
@@ -302,6 +320,12 @@ const { config } = Astro.props;
 			if (sidebarClose) {
 				sidebarClose.addEventListener('click', (e) => {
 					e.stopPropagation();
+					closeSidebar();
+				});
+			}
+
+			if (sidebarOverlay) {
+				sidebarOverlay.addEventListener('click', () => {
 					closeSidebar();
 				});
 			}

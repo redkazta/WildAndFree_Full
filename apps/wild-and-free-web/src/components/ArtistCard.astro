@@ -11,7 +11,7 @@ export type Props = {
 const { artist } = Astro.props;
 ---
 
-<article class="group relative aspect-[3/4] overflow-hidden rounded-2xl bg-[#111] border border-white/5 hover:border-orange-500/50 transition-all duration-500">
+<a href={`/artista/${artist.id}`} class="block group relative aspect-[3/4] overflow-hidden rounded-3xl bg-[#111] border border-white/5 hover:border-orange-500/50 transition-all duration-500 shadow-2xl">
 	<img 
 		src={artist.image_url} 
 		alt={artist.name} 
@@ -23,7 +23,7 @@ const { artist } = Astro.props;
 		<p class="text-[10px] font-black uppercase tracking-[0.2em] text-orange-500">Artist // {artist.role}</p>
 		<h3 class="text-3xl font-black uppercase tracking-tighter text-white drop-shadow-md">{artist.name}</h3>
 	</div>
-</article>
+</a>
 
 <style>
 	/* Usando Tailwind */

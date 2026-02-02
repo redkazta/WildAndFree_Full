@@ -188,14 +188,13 @@ const products = [
 
 		<!-- Artistas Section -->
 		<section id="artistas" class="space-y-12">
-			<div class="flex items-end justify-between border-b border-white/5 pb-8">
+			<div class="flex items-end justify-between border-b border-white/10 pb-8">
 				<div class="space-y-2">
-					<h2 class="text-4xl font-black tracking-tighter text-white">ARTISTAS</h2>
-					<p class="text-orange-500 font-black uppercase tracking-widest text-sm">El talento que mueve el movimiento</p>
+					<h2 class="text-4xl md:text-5xl font-black tracking-tighter text-white">ARTISTAS</h2>
+					<p class="text-orange-500 font-black uppercase tracking-[0.3em] text-[10px] md:text-xs">El talento que mueve el movimiento</p>
 				</div>
-				<a href="/artistas" class="group flex items-center gap-2 text-orange-500 font-bold uppercase tracking-widest text-xs hover:text-white transition-colors">
-					Ver todos 
-					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="transform group-hover:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+				<a href="/artistas" class="group flex items-center gap-2 text-white font-black uppercase tracking-[0.2em] text-[10px] hover:text-orange-500 transition-all">
+					Ver todos <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
 				</a>
 			</div>
 			<ArtistGrid artists={artists} />
@@ -203,14 +202,13 @@ const products = [
 
 		<!-- Música Section -->
 		<section id="music" class="space-y-12">
-			<div class="flex items-end justify-between border-b border-white/5 pb-8">
+			<div class="flex items-end justify-between border-b border-white/10 pb-8">
 				<div class="space-y-2">
-					<h2 class="text-4xl font-black tracking-tighter text-white">LATEST DROPS</h2>
-					<p class="text-orange-500 font-black uppercase tracking-widest text-sm">Los beats que definen la cultura</p>
+					<h2 class="text-4xl md:text-5xl font-black tracking-tighter text-white">LATEST DROPS</h2>
+					<p class="text-orange-500 font-black uppercase tracking-[0.3em] text-[10px] md:text-xs">Los beats que definen la cultura</p>
 				</div>
-				<a href="/musica" class="group flex items-center gap-2 text-orange-500 font-bold uppercase tracking-widest text-xs hover:text-white transition-colors">
-					Ver catálogo
-					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="transform group-hover:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+				<a href="/musica" class="group flex items-center gap-2 text-white font-black uppercase tracking-[0.2em] text-[10px] hover:text-orange-500 transition-all">
+					Ver música <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
 				</a>
 			</div>
 			<MusicGrid tracks={tracks} />

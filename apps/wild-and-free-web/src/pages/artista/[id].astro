@@ -1,0 +1,106 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const artists = [
+    { id: 'a1', name: 'Nova K', role: 'Rapper', image: 'https://images.unsplash.com/photo-1520975958221-7f61d4d6df4b?auto=format&fit=crop&w=800&q=80', bio: 'Nova K es una de las voces más disruptivas de la escena actual. Con líricas crudas y un flow inigualable, redefine lo que significa ser libre en la ciudad.' },
+    { id: 'a2', name: 'Sable', role: 'Producer', image: 'https://images.unsplash.com/photo-1520975693413-35e0000c0e4e?auto=format&fit=crop&w=800&q=80', bio: 'El arquitecto sonoro detrás de los beats más pesados. Sable fusiona lo industrial con lo orgánico para crear paisajes sonoros únicos.' },
+    { id: 'a3', name: 'Mira V', role: 'Rapper', image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80', bio: 'Mira V trae la elegancia al asfalto. Sus letras son un viaje introspectivo mezclado con la energía vibrante del movimiento urbano.' },
+    { id: 'a4', name: 'Echo', role: 'DJ', image: 'https://images.unsplash.com/photo-1589578236639-5381345b6687?auto=format&fit=crop&w=800&q=80', bio: 'Echo no solo toca música, crea experiencias. Maestro de los platos y buscador incansable de sonidos olvidados.' },
+    { id: '1', name: 'Lil Kiro', role: 'Trap', image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=800&fit=crop&crop=face', bio: 'Lil Kiro es la energía pura del trap. Desde el underground hasta la cima, su sonido es inconfundible.' },
+    { id: '2', name: 'Neon Ghost', role: 'Drill', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=800&fit=crop&crop=face', bio: 'Neon Ghost acecha en las sombras del drill. Ritmos oscuros y letras que cuentan la verdad de las calles.' },
+    { id: '4', name: 'Shadow V', role: 'Hip Hop', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=800&h=800&fit=crop&crop=face', bio: 'Shadow V mantiene viva la llama del hip hop clásico con un giro moderno. Poesía en movimiento.' },
+    { id: '5', name: 'Crystal Wave', role: 'Electronic', image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&h=800&fit=crop&crop=face', bio: 'Crystal Wave rompe las barreras de los géneros. Electrónica experimental para mentes libres.' },
+    { id: '6', name: 'Midnight Rider', role: 'Trap', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&h=800&fit=crop&crop=face', bio: 'Midnight Rider domina la noche. Sonidos profundos que te transportan a otra dimensión.' }
+  ];
+
+  return artists.map(artist => ({
+    params: { id: artist.id },
+    props: { artist }
+  }));
+}
+
+const { artist } = Astro.props;
+
+const config = {
+  name: `Wild Gvng - ${artist.name}`,
+  primary_color: "#C98300",
+  secondary_color: "#8A0303"
+};
+---
+
+<Layout config={config}>
+  <main class="min-h-screen bg-black pt-32 pb-20 px-6">
+    <div class="max-w-6xl mx-auto space-y-20">
+      <!-- Artist Hero -->
+      <section class="grid md:grid-cols-2 gap-12 items-center">
+        <div class="relative group aspect-square rounded-3xl overflow-hidden shadow-2xl shadow-orange-500/10">
+          <img src={artist.image} alt={artist.name} class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+        </div>
+        
+        <div class="space-y-8">
+          <div class="space-y-2">
+            <span class="inline-block px-4 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-500 text-xs font-black uppercase tracking-[0.3em]">
+              {artist.role} // Official Artist
+            </span>
+            <h1 class="text-6xl md:text-8xl font-black tracking-tighter text-white uppercase leading-none">
+              {artist.name}
+            </h1>
+          </div>
+          
+          <p class="text-xl text-white font-bold leading-relaxed max-w-xl">
+            {artist.bio}
+          </p>
+          
+          <div class="flex flex-wrap gap-4 pt-4">
+            <button class="px-8 py-4 bg-white text-black text-xs font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-orange-500 transition-all transform hover:-translate-y-1">Seguir</button>
+            <button class="px-8 py-4 bg-white/5 border border-white/10 text-white text-xs font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-white/10 transition-all transform hover:-translate-y-1">Compartir</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Stats / Content Grid -->
+      <section class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {[
+          { label: 'Followers', value: '2.4M' },
+          { label: 'Monthly Listeners', value: '850K' },
+          { label: 'Tracks', value: '32' },
+          { label: 'Events', value: '12' }
+        ].map(stat => (
+          <div class="p-8 rounded-3xl bg-white/[0.03] border border-white/5 space-y-1 hover:border-orange-500/30 transition-colors">
+            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">{stat.label}</p>
+            <p class="text-3xl font-black text-white tracking-tighter">{stat.value}</p>
+          </div>
+        ))}
+      </section>
+
+      <!-- Latest Tracks Placeholder -->
+      <section class="space-y-12">
+        <div class="flex items-end justify-between border-b border-white/10 pb-8">
+          <div class="space-y-2">
+            <h2 class="text-4xl font-black tracking-tighter text-white uppercase">Latest Releases</h2>
+            <p class="text-orange-500 font-black uppercase tracking-[0.3em] text-xs">Lo más reciente de {artist.name}</p>
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {[1, 2, 3, 4].map(i => (
+            <div class="group flex items-center gap-6 p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.05] transition-all cursor-pointer">
+              <div class="w-20 h-20 rounded-xl bg-white/5 overflow-hidden">
+                <img src={`https://images.unsplash.com/photo-${1500000000000 + i}?auto=format&fit=crop&w=150&q=80`} class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" />
+              </div>
+              <div class="flex-1">
+                <h4 class="text-lg font-black uppercase text-white tracking-tight">Track Title #{i}</h4>
+                <p class="text-xs font-black text-orange-500 tracking-[0.1em] uppercase">Album Name</p>
+              </div>
+              <div class="text-white/20 group-hover:text-orange-500 transition-colors">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  </main>
+</Layout>
