@@ -172,25 +172,27 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <script type="module">
-  import { supabase } from '../lib/supabaseClient'
+  import { supabase } from '../lib/supabase'
 
   const form = document.querySelector('.register-form')
-  const googleBtn = document.querySelector('.social-btn.google')
+  const googleBtn = document.querySelector('.social-btn')
 
   if (googleBtn) {
     googleBtn.addEventListener('click', async () => {
-      await supabase.auth.signInWithOAuth({
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: { redirectTo: `${window.location.origin}/auth/callback` }
       })
+      if (error) alert(error.message)
     })
   }
 
   if (form) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault()
+      const submitBtn = form.querySelector('button[type="submit"]')
+      const originalText = submitBtn.textContent
 
-      const firstName = document.getElementById('firstName')?.value?.trim()
       const fullName = document.getElementById('fullName')?.value?.trim()
       const username = document.getElementById('username')?.value?.trim()
       const email = document.getElementById('email')?.value?.trim()
@@ -200,27 +202,26 @@ import Layout from '../layouts/Layout.astro';
       const location = document.getElementById('location')?.value
       const birthdate = document.getElementById('birthdate')?.value
 
-      if (!email || !password || !phone || !fullName) return
+      if (!email || !password || !fullName) return
+      
       if (password !== confirmPassword) {
         alert('Las contraseñas no coinciden.')
         return
       }
 
-      const phoneDigits = phone.replace(/[^\d+]/g, '')
-      if (phoneDigits.length < 8) {
-        alert('Ingresa un número de teléfono válido.')
-        return
-      }
+      submitBtn.disabled = true
+      submitBtn.textContent = 'Creando cuenta...'
+      submitBtn.style.opacity = '0.5'
 
       const { error } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: {
-            full_name: fullName,
-            phone: phoneDigits,
+            nombre: fullName,
             username: username || null,
-            location,
+            phone: phone || null,
+            ubicacion: location || 'Torreón Coahuila',
             birthdate
           },
           emailRedirectTo: `${window.location.origin}/auth/callback`
@@ -229,10 +230,13 @@ import Layout from '../layouts/Layout.astro';
 
       if (error) {
         alert(error.message)
+        submitBtn.disabled = false
+        submitBtn.textContent = originalText
+        submitBtn.style.opacity = '1'
         return
       }
 
-      alert('Cuenta creada. Revisa tu correo para confirmar.')
+      alert('¡Registro exitoso! Por favor revisa tu correo para confirmar tu cuenta.')
       window.location.href = '/login'
     })
   }

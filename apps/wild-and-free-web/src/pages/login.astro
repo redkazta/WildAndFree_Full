@@ -82,32 +82,46 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <script type="module">
-  import { supabase } from '../lib/supabaseClient'
+  import { supabase } from '../lib/supabase'
 
   const form = document.querySelector('.login-form')
-  const googleBtn = document.querySelector('.social-btn.google')
+  const googleBtn = document.querySelector('.social-btn')
 
   if (googleBtn) {
     googleBtn.addEventListener('click', async () => {
-      await supabase.auth.signInWithOAuth({
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: { redirectTo: `${window.location.origin}/auth/callback` }
       })
+      if (error) alert(error.message)
     })
   }
 
   if (form) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault()
+      const submitBtn = form.querySelector('button[type="submit"]')
+      const originalText = submitBtn.textContent
+      
       const email = document.getElementById('email')?.value?.trim()
       const password = document.getElementById('password')?.value
+      
       if (!email || !password) return
 
+      submitBtn.disabled = true
+      submitBtn.textContent = 'Iniciando sesión...'
+      submitBtn.style.opacity = '0.5'
+
       const { error } = await supabase.auth.signInWithPassword({ email, password })
+      
       if (error) {
         alert(error.message)
+        submitBtn.disabled = false
+        submitBtn.textContent = originalText
+        submitBtn.style.opacity = '1'
         return
       }
+      
       window.location.href = '/'
     })
   }

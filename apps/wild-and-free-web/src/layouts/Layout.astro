@@ -310,7 +310,7 @@ const { config } = Astro.props;
 						</div>
 					</div>
 
-					<div class="flex items-center gap-4">
+					<div class="flex items-center gap-4 auth-actions-container">
 						<div class="relative group/pop">
 							<a href="/login" class="hidden sm:block text-[12px] font-extrabold uppercase tracking-[0.15em] text-white/60 hover:text-white transition-all py-4">Entrar</a>
 							<div class="popover w-64">
@@ -353,6 +353,8 @@ const { config } = Astro.props;
 		</main>
 		
 		<script>
+			import { supabase } from '../lib/supabase';
+
 			// Menu Toggle Logic
 			const menuToggle = document.getElementById('sidebar-trigger');
 			const sidebarClose = document.getElementById('sidebar-close');
@@ -387,6 +389,58 @@ const { config } = Astro.props;
 					closeSidebar();
 				});
 			}
+
+			// Auth & Session Logic
+			const authContainer = document.querySelector('.auth-actions-container');
+			
+			const updateAuthUI = async () => {
+				const { data: { session } } = await supabase.auth.getSession();
+				
+				if (session) {
+					// User is logged in
+					const { data: profile } = await supabase
+						.from('profiles')
+						.select('*')
+						.eq('id', session.user.id)
+						.single();
+
+					if (authContainer) {
+						authContainer.innerHTML = `
+							<div class="relative group/pop">
+								<button class="flex items-center gap-3 px-4 py-2 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all">
+									<div class="w-8 h-8 rounded-full bg-gradient-to-r from-orange-500 to-red-600 flex items-center justify-center text-[10px] font-black uppercase">
+										${profile?.nombre?.substring(0, 2) || 'WG'}
+									</div>
+									<span class="hidden md:block text-[10px] font-black uppercase tracking-widest text-white/60">${profile?.nombre?.split(' ')[0] || 'Usuario'}</span>
+								</button>
+								<div class="popover w-64">
+									<div class="popover-header"><span class="popover-title text-center block w-full">Mi Cuenta</span></div>
+									<div class="popover-content space-y-4">
+										<a href="/perfil" class="block w-full py-3 bg-white text-black text-center text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-orange-500 hover:text-white transition-all">Ver Perfil</a>
+										<a href="/configuracion" class="block text-center text-[10px] text-white/60 hover:text-orange-500 font-black uppercase tracking-widest">Configuración</a>
+										<button id="logout-btn" class="block w-full text-center text-[10px] text-red-500 hover:text-red-400 font-black uppercase tracking-widest pt-2 border-t border-white/5">Cerrar Sesión</button>
+									</div>
+								</div>
+							</div>
+						`;
+
+						document.getElementById('logout-btn')?.addEventListener('click', async () => {
+							await supabase.auth.signOut();
+							window.location.reload();
+						});
+					}
+
+					// Update other UI elements with real data
+					if (profile?.ubicacion) {
+						const locationTitle = document.querySelector('#location-popover .popover-title');
+						const sidebarLocBtn = document.querySelector('.location-btn');
+						if (locationTitle) locationTitle.textContent = `Ubicación: ${profile.ubicacion}`;
+						if (sidebarLocBtn) sidebarLocBtn.textContent = `Ubicación: ${profile.ubicacion}`;
+					}
+				}
+			};
+
+			updateAuthUI();
 
 			// Popover Logic
 			const triggers = document.querySelectorAll('.popover-trigger');
@@ -437,7 +491,7 @@ const { config } = Astro.props;
 				}
 			});
 
-			// User Data Logic (Mock for Supabase integration)
+			// User Data Logic (Mock for Supabase integration - keeping this for wishlist/cart for now)
 			const userData = {
 				location: 'Torreón Coahuila',
 				wishlistCount: 3,
@@ -453,8 +507,8 @@ const { config } = Astro.props;
 
 				if (wishlistBadge) wishlistBadge.textContent = userData.wishlistCount.toString();
 				if (cartBadge) cartBadge.textContent = userData.cartCount.toString();
-				if (locationText) locationText.textContent = `Ubicación: ${userData.location}`;
-				if (sidebarLocation) sidebarLocation.textContent = `Ubicación: ${userData.location}`;
+				if (locationText && !locationText.textContent?.includes('Torreón')) locationText.textContent = `Ubicación: ${userData.location}`;
+				if (sidebarLocation && !sidebarLocation.textContent?.includes('Torreón')) sidebarLocation.textContent = `Ubicación: ${userData.location}`;
 			};
 
 			updateUserDataUI();
@@ -463,7 +517,7 @@ const { config } = Astro.props;
 			const locationButtons = document.querySelectorAll('#location-popover button');
 			locationButtons.forEach(btn => {
 				btn.addEventListener('click', () => {
-					userData.location = btn.textContent?.trim() || 'CDMX';
+					userData.location = btn.textContent?.trim() || 'Torreón Coahuila';
 					updateUserDataUI();
 					popovers.forEach(p => p.classList.remove('active'));
 				});
