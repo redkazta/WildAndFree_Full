@@ -3,14 +3,22 @@ import Layout from '../../layouts/Layout.astro';
 import { supabase } from '../../lib/supabase';
 
 export async function getStaticPaths() {
-  const { data: dbArtists } = await supabase.from('artists').select('slug');
+  let dbSlugs: string[] = [];
+  
+  try {
+    const { data: dbArtists } = await supabase.from('artists').select('slug');
+    if (dbArtists) {
+      dbSlugs = dbArtists.map(a => a.slug);
+    }
+  } catch (e) {
+    console.warn('Could not fetch artists from Supabase during build, using mock data only.');
+  }
   
   const mockSlugs = [
     'lil-kiro', 'neon-ghost', 'shadow-v', 'crystal-wave', 
     'midnight-rider', 'nova-k', 'sable', 'storm-trooper'
   ];
 
-  const dbSlugs = dbArtists?.map(a => a.slug) || [];
   const allSlugs = [...new Set([...mockSlugs, ...dbSlugs])];
 
   return allSlugs.map(slug => ({ params: { slug } }));

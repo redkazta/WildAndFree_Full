@@ -3,10 +3,16 @@ import Layout from '../layouts/Layout.astro';
 import { supabase } from '../lib/supabase';
 
 // Fetch artists from Supabase
-const { data: dbArtists, error } = await supabase
-  .from('artists')
-  .select('*')
-  .order('nombre');
+let dbArtists = null;
+try {
+  const { data, error } = await supabase
+    .from('artists')
+    .select('*')
+    .order('nombre');
+  if (!error) dbArtists = data;
+} catch (e) {
+  console.warn('Could not fetch artists from Supabase during build.');
+}
 
 // Fallback to static artists if DB is empty or error
 const artists = (dbArtists && dbArtists.length > 0) ? dbArtists : [
