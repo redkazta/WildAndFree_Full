@@ -11,20 +11,60 @@ const { data: dbArtists, error } = await supabase
 // Fallback to static artists if DB is empty or error
 const artists = (dbArtists && dbArtists.length > 0) ? dbArtists : [
   {
-    id: '1',
     nombre: 'Lil Kiro',
     slug: 'lil-kiro',
-    imagenes: { profile: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=800&fit=crop&crop=face' },
+    imagenes: { profile: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80' },
     stats: { seguidores: '2.1M', oyentes: '1.2M' },
-    bio: 'Rapero urbano'
+    bio: 'El pionero del trap en el desierto.'
   },
   {
-    id: '2',
     nombre: 'Neon Ghost',
     slug: 'neon-ghost',
-    imagenes: { profile: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=800&fit=crop&crop=face' },
+    imagenes: { profile: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80' },
     stats: { seguidores: '1.8M', oyentes: '900K' },
-    bio: 'Drill artist'
+    bio: 'Misterio y drill futurista.'
+  },
+  {
+    nombre: 'Shadow V',
+    slug: 'shadow-v',
+    imagenes: { profile: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=800&q=80' },
+    stats: { seguidores: '1.5M', oyentes: '750K' },
+    bio: 'Lírica consciente sobre ritmos lo-fi.'
+  },
+  {
+    nombre: 'Crystal Wave',
+    slug: 'crystal-wave',
+    imagenes: { profile: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80' },
+    stats: { seguidores: '890K', oyentes: '1.1M' },
+    bio: 'Fusión de synthwave con reggaetón.'
+  },
+  {
+    nombre: 'Midnight Rider',
+    slug: 'midnight-rider',
+    imagenes: { profile: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&q=80' },
+    stats: { seguidores: '2.7M', oyentes: '2.4M' },
+    bio: 'Flow vieja escuela con agresividad.'
+  },
+  {
+    nombre: 'Nova K',
+    slug: 'nova-k',
+    imagenes: { profile: 'https://images.unsplash.com/photo-1520975958221-7f61d4d6df4b?w=800&q=80' },
+    stats: { seguidores: '2.4M', oyentes: '1.8M' },
+    bio: 'Reina del drill melódico.'
+  },
+  {
+    nombre: 'Sable',
+    slug: 'sable',
+    imagenes: { profile: 'https://images.unsplash.com/photo-1520975693413-35e0000c0e4e?w=800&q=80' },
+    stats: { seguidores: '1.2M', oyentes: '3.5M' },
+    bio: 'Arquitecto de sonidos oscuros.'
+  },
+  {
+    nombre: 'Storm Trapper',
+    slug: 'storm-trapper',
+    imagenes: { profile: 'https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=800&q=80' },
+    stats: { seguidores: '950K', oyentes: '600K' },
+    bio: 'Energía pura de Gómez Palacio.'
   }
 ];
 
