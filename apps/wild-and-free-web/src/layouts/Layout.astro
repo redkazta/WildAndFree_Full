@@ -418,11 +418,16 @@ const isActive = (href: string) => {
 
 		<script type="module">
 			import { supabase } from '../lib/supabase';
+			import { getRole, requireRole } from '../lib/role.js';
 
 			// --- Auth & Session Logic ---
 			const updateAuthUI = async () => {
 				const authContainer = document.querySelector('.auth-actions-container');
 				const { data: { session } } = await supabase.auth.getSession();
+				const { role } = await getRole();
+				window.__wildRole = role;
+				window.requireRole = requireRole;
+				document.documentElement.setAttribute('data-role', role);
 				
 				if (session) {
 					const { data: profile } = await supabase
