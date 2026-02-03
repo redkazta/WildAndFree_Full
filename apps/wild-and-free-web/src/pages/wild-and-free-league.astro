@@ -153,11 +153,12 @@ const initialParticipants = [
   .bracket {
     width: 100%;
     max-width: 1400px;
-    display: flex;
+    display: grid;
     position: relative;
     align-items: flex-start;
     justify-content: center;
-    gap: 24px;
+    grid-template-columns: 1fr 420px 1fr;
+    column-gap: 24px;
   }
 
   .bracket-lines {
@@ -174,6 +175,20 @@ const initialParticipants = [
     display: flex;
     align-items: flex-start;
     gap: 24px;
+  }
+
+  .side-left {
+    grid-column: 1;
+    justify-self: end;
+  }
+
+  .col-final {
+    grid-column: 2;
+  }
+
+  .side-right {
+    grid-column: 3;
+    justify-self: start;
   }
 
   .col {
@@ -206,7 +221,6 @@ const initialParticipants = [
   .col-final {
     position: relative;
     width: 420px;
-    flex: 0 0 420px;
   }
 
   .final-title {
@@ -719,9 +733,11 @@ const initialParticipants = [
         };
 
         const xJoin = Math.round(winnerRect.left - parentRect.left + winnerRect.width / 2);
-        const yWinnerBottom = Math.round(winnerRect.bottom - parentRect.top);
-        const yLabelBottom = labelRect ? Math.round(labelRect.bottom - parentRect.top) : Math.round((start1.y + start2.y) / 2);
-        const yJoin = Math.min(yLabelBottom + 8, Math.min(Math.round(start1.y), Math.round(start2.y)) - 10);
+        const yWinnerTop = Math.round(winnerRect.top - parentRect.top);
+        const yLabelBottom = labelRect
+          ? Math.round(labelRect.bottom - parentRect.top)
+          : Math.round(Math.min(start1.y, start2.y) - 24);
+        const yJoin = Math.round(yLabelBottom + 14);
 
         const routeToJoin = (start: { x: number; y: number }) => {
           const x = Math.round(start.x);
@@ -732,7 +748,7 @@ const initialParticipants = [
 
         routeToJoin(start1);
         routeToJoin(start2);
-        drawPath(svg, `M ${xJoin} ${yJoin} L ${xJoin} ${yWinnerBottom}`);
+        drawPath(svg, `M ${xJoin} ${yJoin} L ${xJoin} ${yWinnerTop}`);
         continue;
       }
 
