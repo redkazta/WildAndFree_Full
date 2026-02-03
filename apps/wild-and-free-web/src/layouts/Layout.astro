@@ -193,17 +193,16 @@ const { config } = Astro.props;
 	<body class="bg-black text-white selection:bg-orange-500/30 selection:text-orange-200 overflow-x-hidden" style={`--primary: ${config.primary_color}; --secondary: ${config.secondary_color};`}>
 		<header class="fixed top-0 left-0 right-0 z-[1000] bg-black/90 backdrop-blur-2xl border-b border-white/10 shadow-2xl">
 			<div class="max-w-[1440px] mx-auto px-6 h-20 flex items-center justify-between">
-				<div class="flex items-center gap-8">
-					<button id="sidebar-trigger" class="p-2 text-white hover:text-orange-500 transition-all transform active:scale-90" aria-label="Abrir menú">
-						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+				<div class="flex items-center gap-2 md:gap-8">
+					<button id="sidebar-trigger" class="p-2 -ml-2 text-white hover:text-orange-500 transition-all transform active:scale-90" aria-label="Abrir menú">
+						<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
 					</button>
 
 					<a href="/" class="flex flex-col items-start group">
-						<div class="flex items-baseline gap-1">
-							<span class="text-3xl font-black tracking-tighter text-orange-500 italic leading-none group-hover:scale-105 transition-transform origin-left">WILD</span>
-							<span class="text-3xl font-black tracking-tighter text-white italic leading-none group-hover:scale-105 transition-transform origin-left">GVNG</span>
+						<div class="flex items-baseline gap-0.5">
+							<span class="text-xl md:text-3xl font-black tracking-tighter text-orange-500 italic leading-none group-hover:scale-105 transition-transform origin-left">WILD</span>
+							<span class="text-xl md:text-3xl font-black tracking-tighter text-white italic leading-none group-hover:scale-105 transition-transform origin-left">GVNG</span>
 						</div>
-						<div class="h-1 w-full bg-gradient-to-r from-orange-500 to-transparent rounded-full mt-1 scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
 					</a>
 				</div>
 				
@@ -331,9 +330,9 @@ const { config } = Astro.props;
 						</div>
 
 						<div class="relative group/pop">
-							<a href="/registro" class="group relative px-8 py-3.5 bg-white text-black text-[12px] font-black uppercase tracking-[0.15em] rounded-2xl hover:bg-orange-500 transition-all duration-500 transform hover:-translate-y-1 shadow-2xl shadow-white/5">
+							<a href="/registro" class="group relative px-5 md:px-8 py-3 bg-white text-black text-[10px] md:text-[12px] font-black uppercase tracking-[0.15em] rounded-xl md:rounded-2xl hover:bg-orange-500 transition-all duration-500 transform hover:-translate-y-1 shadow-2xl shadow-white/5">
 								<span class="relative z-10">Unirse</span>
-								<div class="absolute inset-0 rounded-2xl bg-gradient-to-r from-orange-500 to-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-0"></div>
+								<div class="absolute inset-0 rounded-xl md:rounded-2xl bg-gradient-to-r from-orange-500 to-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-0"></div>
 							</a>
 							<div class="popover w-72">
 								<div class="popover-header"><span class="popover-title text-center block w-full">Sé parte de la Crew</span></div>
@@ -360,61 +359,66 @@ const { config } = Astro.props;
 		</main>
 		
 		<script>
-			import { supabase } from '../lib/supabase';
-
-			// Menu Toggle Logic
-			const menuToggle = document.getElementById('sidebar-trigger');
-			const sidebarClose = document.getElementById('sidebar-close');
-			const sidebarOverlay = document.getElementById('sidebar-overlay');
-			const body = document.body;
-			const sidebar = document.getElementById('sidebar');
-
-			// Re-bind sidebar triggers because Astro might re-render or script execution timing
-			const initSidebar = () => {
+			// --- Sidebar Core Logic (Independent) ---
+			const setupSidebar = () => {
+				const body = document.body;
 				const trigger = document.getElementById('sidebar-trigger');
 				const closeBtn = document.getElementById('sidebar-close');
 				const overlay = document.getElementById('sidebar-overlay');
+				const sidebar = document.getElementById('sidebar');
 
 				if (trigger) {
-					trigger.onclick = (e) => {
+					trigger.addEventListener('click', (e) => {
+						e.preventDefault();
 						e.stopPropagation();
 						body.classList.toggle('sidebar-open');
-					};
+					});
 				}
 
 				if (closeBtn) {
-					closeBtn.onclick = (e) => {
+					closeBtn.addEventListener('click', (e) => {
+						e.preventDefault();
 						e.stopPropagation();
 						body.classList.remove('sidebar-open');
-					};
+					});
 				}
 
 				if (overlay) {
-					overlay.onclick = () => {
+					overlay.addEventListener('click', () => {
 						body.classList.remove('sidebar-open');
-					};
+					});
 				}
+
+				// Click outside to close
+				document.addEventListener('click', (e) => {
+					if (body.classList.contains('sidebar-open')) {
+						if (!sidebar?.contains(e.target as Node) && !trigger?.contains(e.target as Node)) {
+							body.classList.remove('sidebar-open');
+						}
+					}
+				});
 			};
 
-			initSidebar();
-			// Re-init on navigation if needed for SPAs (though Astro is MPA, good to have)
-			document.addEventListener('astro:after-swap', initSidebar);
+			// Initialize
+			setupSidebar();
+			document.addEventListener('astro:after-swap', setupSidebar);
+		</script>
 
-			// Auth & Session Logic
-			const authContainer = document.querySelector('.auth-actions-container');
-			
+		<script>
+			import { supabase } from '../lib/supabase';
+
+			// --- Auth & Session Logic ---
 			const updateAuthUI = async () => {
+				const authContainer = document.querySelector('.auth-actions-container');
 				const { data: { session } } = await supabase.auth.getSession();
 				
 				if (session) {
-					// User is logged in
 					const { data: profile } = await supabase
 						.from('profiles')
 						.select('*')
 						.eq('id', session.user.id)
 						.single();
 
-					// Show Auth Content in Popovers
 					document.querySelectorAll('.unauth-popover-msg').forEach(el => el.classList.add('hidden'));
 					document.querySelectorAll('.auth-popover-content').forEach(el => el.classList.remove('hidden'));
 
@@ -443,7 +447,6 @@ const { config } = Astro.props;
 						});
 					}
 
-					// Update other UI elements with real data
 					if (profile?.ubicacion) {
 						const locationTitle = document.querySelector('#location-popover .popover-title');
 						const sidebarLocBtn = document.querySelector('.location-btn');
@@ -453,92 +456,51 @@ const { config } = Astro.props;
 				}
 			};
 
-			updateAuthUI();
+			// --- Popover Logic ---
+			const initPopovers = () => {
+				const triggers = document.querySelectorAll('.popover-trigger');
+				const popovers = document.querySelectorAll('.popover');
 
-			// Popover Logic
-			const triggers = document.querySelectorAll('.popover-trigger');
-			const popovers = document.querySelectorAll('.popover');
+				triggers.forEach(trigger => {
+					trigger.addEventListener('click', (e) => {
+						e.stopPropagation();
+						const targetId = trigger.getAttribute('data-target');
+						const targetPopover = document.getElementById(targetId!);
+						const isActive = targetPopover?.classList.contains('active');
+						popovers.forEach(p => p.classList.remove('active'));
+						if (!isActive) targetPopover?.classList.add('active');
+					});
+				});
 
-			triggers.forEach(trigger => {
-				trigger.addEventListener('click', (e) => {
-					e.stopPropagation();
-					const targetId = trigger.getAttribute('data-target');
-					const targetPopover = document.getElementById(targetId);
-					
-					const isActive = targetPopover?.classList.contains('active');
-					
-					// Close all popovers
-					popovers.forEach(p => p.classList.remove('active'));
-					
-					if (!isActive) {
-						targetPopover?.classList.add('active');
+				document.addEventListener('click', (e) => {
+					if (document.body.classList.contains('sidebar-open')) {
+						const sidebar = document.getElementById('sidebar');
+						const trigger = document.getElementById('sidebar-trigger');
+						if (!sidebar?.contains(e.target as Node) && !trigger?.contains(e.target as Node)) {
+							document.body.classList.remove('sidebar-open');
+						}
+					}
+
+					const isTrigger = (e.target as HTMLElement).closest('.popover-trigger');
+					const isPopover = (e.target as HTMLElement).closest('.popover');
+					if (!isTrigger && !isPopover) {
+						popovers.forEach(p => p.classList.remove('active'));
 					}
 				});
-			});
-
-			// Close everything when clicking outside
-			document.addEventListener('click', (e) => {
-				// Sidebar: Close if open and clicking outside sidebar OR clicking on main content
-				if (body.classList.contains('sidebar-open')) {
-					const isClickInsideSidebar = sidebar?.contains(e.target as Node);
-					const isClickOnToggle = menuToggle?.contains(e.target as Node);
-					
-					if (!isClickInsideSidebar && !isClickOnToggle) {
-						closeSidebar();
-					}
-				}
-
-				// Popovers
-				const isTrigger = (e.target as HTMLElement).closest('.popover-trigger');
-				const isPopover = (e.target as HTMLElement).closest('.popover');
-				if (!isTrigger && !isPopover) {
-					popovers.forEach(p => p.classList.remove('active'));
-				}
-			});
-
-			// Close on ESC key
-			document.addEventListener('keydown', (e) => {
-				if (e.key === 'Escape') {
-					closeSidebar();
-					popovers.forEach(p => p.classList.remove('active'));
-				}
-			});
-
-			// User Data Logic (Mock for Supabase integration - keeping this for wishlist/cart for now)
-			const userData = {
-				location: 'Torreón Coahuila',
-				wishlistCount: 3,
-				cartCount: 2
 			};
 
-			// Update UI with user data
-			const updateUserDataUI = () => {
-				const wishlistBadge = document.querySelector('[data-target="wishlist-popover"] span');
-				const cartBadge = document.querySelector('[data-target="cart-popover"] span');
-				const locationText = document.querySelector('[data-target="location-popover"] .popover-title');
-				const sidebarLocation = document.querySelector('.location-btn');
-
-				if (wishlistBadge) wishlistBadge.textContent = userData.wishlistCount.toString();
-				if (cartBadge) cartBadge.textContent = userData.cartCount.toString();
-				if (locationText && !locationText.textContent?.includes('Torreón')) locationText.textContent = `Ubicación: ${userData.location}`;
-				if (sidebarLocation && !sidebarLocation.textContent?.includes('Torreón')) sidebarLocation.textContent = `Ubicación: ${userData.location}`;
+			// Initialize everything
+			const init = () => {
+				initPopovers();
+				updateAuthUI();
 			};
 
-			updateUserDataUI();
-
-			// Location Selection
-			const locationButtons = document.querySelectorAll('#location-popover button');
-			locationButtons.forEach(btn => {
-				btn.addEventListener('click', () => {
-					userData.location = btn.textContent?.trim() || 'Torreón Coahuila';
-					updateUserDataUI();
-					popovers.forEach(p => p.classList.remove('active'));
-				});
-			});
+			init();
+			document.addEventListener('astro:after-swap', init);
 
 			// Header background on scroll
-			const header = document.querySelector('header');
 			window.addEventListener('scroll', () => {
+				const header = document.querySelector('header');
 				if (window.scrollY > 50) {
 					header?.classList.add('bg-black/95', 'py-2');
 					header?.classList.remove('bg-black/90', 'py-0');
