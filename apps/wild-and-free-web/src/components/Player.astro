@@ -1,0 +1,136 @@
+---
+---
+<div id="global-player" class="fixed bottom-0 left-0 right-0 z-[100] transform translate-y-full transition-transform duration-500">
+  <div class="max-w-[1400px] mx-auto px-4 pb-4">
+    <div class="bg-black/80 backdrop-blur-2xl border border-white/10 rounded-3xl p-4 flex items-center gap-6 shadow-2xl shadow-orange-500/10">
+      <!-- Track Info -->
+      <div class="flex items-center gap-4 min-w-[200px]">
+        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex-shrink-0 overflow-hidden shadow-lg">
+          <img id="player-img" src="" alt="Cover" class="w-full h-full object-cover hidden">
+          <div id="player-placeholder" class="w-full h-full flex items-center justify-center text-white font-black text-xs uppercase">WG</div>
+        </div>
+        <div class="overflow-hidden">
+          <h4 id="player-title" class="text-sm font-black text-white uppercase truncate tracking-tight">Selecciona música</h4>
+          <p id="player-artist" class="text-[10px] text-orange-500 font-bold uppercase tracking-widest truncate">Wild Gvng Radio</p>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="flex-1 flex flex-col items-center gap-2">
+        <div class="flex items-center gap-8">
+          <button class="text-white/40 hover:text-white transition-colors">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18V6h2v12H6zm3.5-6L19 6v12l-9.5-6z"/></svg>
+          </button>
+          <button id="player-play-btn" class="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center hover:bg-orange-500 hover:text-white transition-all transform active:scale-90">
+            <svg id="play-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <svg id="pause-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="hidden"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+          </button>
+          <button class="text-white/40 hover:text-white transition-colors">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+          </button>
+        </div>
+        <div class="w-full max-w-md flex items-center gap-3">
+          <span class="text-[9px] font-bold text-white/40">0:00</span>
+          <div class="flex-1 h-1 bg-white/10 rounded-full overflow-hidden group cursor-pointer">
+            <div id="player-progress" class="h-full bg-orange-500 w-0 group-hover:bg-white transition-all"></div>
+          </div>
+          <span class="text-[9px] font-bold text-white/40">3:45</span>
+        </div>
+      </div>
+
+      <!-- Volume & Extras -->
+      <div class="hidden md:flex items-center gap-6 min-w-[200px] justify-end">
+        <div class="flex items-center gap-3">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="text-white/40"><path d="M11 5L6 9H2v6h4l5 4V5zM19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+          <div class="w-24 h-1 bg-white/10 rounded-full overflow-hidden cursor-pointer group">
+            <div class="h-full bg-white w-2/3 group-hover:bg-orange-500 transition-all"></div>
+          </div>
+        </div>
+        <button id="player-close" class="text-white/20 hover:text-red-500 transition-colors">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  class GlobalPlayer {
+    private el = document.getElementById('global-player');
+    private titleEl = document.getElementById('player-title');
+    private artistEl = document.getElementById('player-artist');
+    private imgEl = document.getElementById('player-img') as HTMLImageElement;
+    private placeholderEl = document.getElementById('player-placeholder');
+    private playBtn = document.getElementById('player-play-btn');
+    private playIcon = document.getElementById('play-icon');
+    private pauseIcon = document.getElementById('pause-icon');
+    private closeBtn = document.getElementById('player-close');
+    private isPlaying = false;
+
+    constructor() {
+      this.init();
+    }
+
+    private init() {
+      this.playBtn?.addEventListener('click', () => this.togglePlay());
+      this.closeBtn?.addEventListener('click', () => this.hide());
+      
+      // Listen for global play events
+      window.addEventListener('wild-play', (e: any) => {
+        this.play(e.detail);
+      });
+    }
+
+    play(track: { title: string, artist: string, image?: string }) {
+      if (this.titleEl) this.titleEl.textContent = track.title;
+      if (this.artistEl) this.artistEl.textContent = track.artist;
+      
+      if (track.image && this.imgEl) {
+        this.imgEl.src = track.image;
+        this.imgEl.classList.remove('hidden');
+        this.placeholderEl?.classList.add('hidden');
+      } else {
+        this.imgEl?.classList.add('hidden');
+        this.placeholderEl?.classList.remove('hidden');
+      }
+
+      this.show();
+      this.setPlaying(true);
+    }
+
+    private togglePlay() {
+      this.setPlaying(!this.isPlaying);
+    }
+
+    private setPlaying(playing: boolean) {
+      this.isPlaying = playing;
+      if (playing) {
+        this.playIcon?.classList.add('hidden');
+        this.pauseIcon?.classList.remove('hidden');
+      } else {
+        this.playIcon?.classList.remove('hidden');
+        this.pauseIcon?.classList.add('hidden');
+      }
+    }
+
+    private show() {
+      this.el?.classList.remove('translate-y-full');
+    }
+
+    private hide() {
+      this.el?.classList.add('translate-y-full');
+      this.setPlaying(false);
+    }
+  }
+
+  // Initialize player
+  if (!window.globalPlayer) {
+    window.globalPlayer = new GlobalPlayer();
+  }
+</script>
+
+<style>
+  #global-player {
+    filter: drop-shadow(0 -10px 25px rgba(0,0,0,0.5));
+  }
+</style>

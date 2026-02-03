@@ -156,23 +156,34 @@ const socialLinks = artist.redes || {};
       
       <div class="absolute inset-0 flex items-end">
         <div class="max-w-[1400px] mx-auto px-6 pb-20 w-full">
-          <div class="space-y-4">
-            <p class="text-orange-500 font-black uppercase tracking-[0.3em] text-sm animate-fade-in">Artista Verificado</p>
-            <h1 class="text-6xl md:text-9xl font-black text-white uppercase tracking-tighter leading-none animate-slide-up">
-              {artist.nombre}
-            </h1>
-            <div class="flex items-center gap-8 pt-4 animate-fade-in delay-200">
-              <div class="flex flex-col">
-                <span class="text-2xl font-black text-white">{stats.seguidores}</span>
-                <span class="text-[10px] font-bold text-white/40 uppercase tracking-widest">Seguidores</span>
+          <div class="flex flex-col md:flex-row items-center md:items-end gap-10">
+            <!-- Artist Profile Image -->
+            <div class="w-48 h-48 md:w-64 md:h-64 rounded-[40px] overflow-hidden border-4 border-black shadow-2xl relative z-10 bg-[#111] animate-slide-up">
+              <img 
+                src={images.profile || 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80'} 
+                alt={artist.nombre}
+                class="w-full h-full object-cover"
+              />
+            </div>
+
+            <div class="space-y-4 flex-1 text-center md:text-left">
+              <p class="text-orange-500 font-black uppercase tracking-[0.3em] text-sm animate-fade-in">Artista Verificado</p>
+              <h1 class="text-5xl md:text-8xl font-black text-white uppercase tracking-tighter leading-none animate-slide-up">
+                {artist.nombre}
+              </h1>
+              <div class="flex items-center justify-center md:justify-start gap-8 pt-4 animate-fade-in delay-200">
+                <div class="flex flex-col">
+                  <span class="text-2xl font-black text-white">{stats.seguidores}</span>
+                  <span class="text-[10px] font-bold text-white/40 uppercase tracking-widest">Seguidores</span>
+                </div>
+                <div class="flex flex-col border-l border-white/10 pl-8">
+                  <span class="text-2xl font-black text-white">{stats.oyentes}</span>
+                  <span class="text-[10px] font-bold text-white/40 uppercase tracking-widest">Oyentes Mensuales</span>
+                </div>
+                <button id="follow-btn" class="ml-4 md:ml-12 px-10 py-4 bg-orange-500 text-black text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-white transition-all transform hover:-translate-y-1 shadow-2xl shadow-orange-500/20 active:scale-95">
+                  Seguir
+                </button>
               </div>
-              <div class="flex flex-col border-l border-white/10 pl-8">
-                <span class="text-2xl font-black text-white">{stats.oyentes}</span>
-                <span class="text-[10px] font-bold text-white/40 uppercase tracking-widest">Oyentes Mensuales</span>
-              </div>
-              <button class="ml-auto px-10 py-4 bg-orange-500 text-black text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-white transition-all transform hover:-translate-y-1 shadow-2xl shadow-orange-500/20">
-                Seguir
-              </button>
             </div>
           </div>
         </div>
@@ -202,6 +213,20 @@ const socialLinks = artist.redes || {};
               {Object.keys(socialLinks).length === 0 && (
                 <p class="text-white/40 text-xs font-bold uppercase tracking-widest">No hay redes vinculadas</p>
               )}
+            </div>
+            
+            <div class="pt-6 border-t border-white/5">
+              <button 
+                id="radio-btn"
+                data-artist={artist.nombre}
+                data-image={images.profile}
+                class="w-full py-5 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center gap-4 text-[10px] font-black uppercase tracking-[0.3em] text-white hover:bg-orange-500 hover:text-black hover:border-orange-500 transition-all group"
+              >
+                <div class="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center text-black group-hover:bg-white transition-colors">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                </div>
+                Radio del Artista
+              </button>
             </div>
           </div>
         </div>
@@ -287,3 +312,36 @@ const socialLinks = artist.redes || {};
     animation-delay: 0.2s;
   }
 </style>
+
+<script>
+  import { supabase } from '../../lib/supabase';
+
+  // --- Follow Button Logic ---
+  const followBtn = document.getElementById('follow-btn');
+  followBtn?.addEventListener('click', async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (session) {
+      alert('¡Estás autenticado! Ahora sigues a este artista.');
+    } else {
+      alert('Debes iniciar sesión para seguir a artistas.');
+      window.location.href = '/login';
+    }
+  });
+
+  // --- Radio Button Logic ---
+  const radioBtn = document.getElementById('radio-btn');
+  radioBtn?.addEventListener('click', () => {
+    const artist = radioBtn.getAttribute('data-artist');
+    const image = radioBtn.getAttribute('data-image');
+    
+    // Dispatch global event for the player
+    window.dispatchEvent(new CustomEvent('wild-play', {
+      detail: {
+        title: `Radio: ${artist}`,
+        artist: artist,
+        image: image
+      }
+    }));
+  });
+</script>

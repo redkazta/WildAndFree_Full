@@ -1,5 +1,6 @@
 ---
 import SidebarLeft from '../components/SidebarLeft.astro';
+import Player from '../components/Player.astro';
 
 export type Props = {
   config: {
@@ -353,6 +354,7 @@ const { config } = Astro.props;
 		
 		<div id="sidebar-overlay"></div>
 		<SidebarLeft />
+		<Player />
 		
 		<main class="pt-20">
 			<slot />
