@@ -1,61 +1,55 @@
 ---
-// Sidebar component - follows the main Layout logic
+const currentPath = Astro.url.pathname;
+
+const navItems = [
+  { href: '/artistas', label: 'Artistas' },
+  { href: '/musica', label: 'Música' },
+  { href: '/eventos', label: 'Eventos' },
+  { href: '/tienda', label: 'Tienda' },
+  { href: '/wild-and-free-league', label: 'WILD AND FREE' },
+  { href: '/wild-writings', label: 'WILD WRITINGS' }
+];
 ---
 
-<aside class="fixed top-0 left-[-240px] w-60 h-screen bg-black/95 backdrop-blur-xl border-r border-white/10 z-[2000] transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] flex flex-col shadow-[20px_0_50px_rgba(0,0,0,0.8)]" id="sidebar">
-  <div class="p-6 flex flex-col h-full relative">
+<aside class="fixed top-0 left-[-280px] w-72 h-screen bg-black border-r-2 border-white z-[2000] transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] flex flex-col shadow-[20px_0_50px_rgba(0,0,0,1)]" id="sidebar">
+  <div class="p-8 flex flex-col h-full relative">
     <!-- Header Sidebar -->
     <div class="flex items-center justify-between mb-12">
       <div class="py-2">
-        <span class="text-xl font-black tracking-tighter italic"><span class="text-orange-500">WILD</span> <span class="text-white">GVNG</span></span>
+        <span class="text-2xl font-black tracking-tighter italic"><span class="text-orange-500">WILD</span> <span class="text-white">GVNG</span></span>
       </div>
-      <button id="sidebar-close" class="p-2 text-white/40 hover:text-orange-500 transition-all duration-300 group" aria-label="Cerrar menú">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="group-hover:rotate-90 transition-transform duration-300"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      <button id="sidebar-close" class="p-2 text-white hover:text-orange-500 transition-all duration-300 group" aria-label="Cerrar menú">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="group-hover:rotate-90 transition-transform duration-300"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
       </button>
     </div>
 
-    <div class="space-y-10">
+    <div class="space-y-12">
       <!-- Nav Section -->
       <div class="space-y-6">
-        <h4 class="text-[11px] font-black uppercase tracking-[0.3em] text-orange-500/80">Explorar</h4>
-        <nav class="flex flex-col gap-2">
-          <a href="/artistas" class="group flex items-center gap-4 py-3 text-sm font-black uppercase tracking-widest text-white hover:text-orange-500 transition-all">
-            <span class="w-1.5 h-1.5 rounded-full bg-white/20 group-hover:bg-orange-500 transition-colors"></span>
-            Artistas
-          </a>
-          <a href="/wild-and-free-league" class="group flex items-center gap-4 py-3 text-sm font-black uppercase tracking-widest text-orange-500 hover:text-white transition-all">
-            <span class="w-1.5 h-1.5 rounded-full bg-orange-500/20 group-hover:bg-white transition-colors"></span>
-            WILD AND FREE
-          </a>
-          <a href="/wild-writings" class="group flex items-center gap-4 py-3 text-sm font-black uppercase tracking-widest text-white hover:text-orange-500 transition-all">
-            <span class="w-1.5 h-1.5 rounded-full bg-white/20 group-hover:bg-orange-500 transition-colors"></span>
-            WILD WRITINGS
-          </a>
-          <a href="/musica" class="group flex items-center gap-4 py-3 text-sm font-black uppercase tracking-widest text-white hover:text-orange-500 transition-all">
-            <span class="w-1.5 h-1.5 rounded-full bg-white/20 group-hover:bg-orange-500 transition-colors"></span>
-            Música
-          </a>
-          <a href="/eventos" class="group flex items-center gap-4 py-3 text-sm font-black uppercase tracking-widest text-white hover:text-orange-500 transition-all">
-            <span class="w-1.5 h-1.5 rounded-full bg-white/20 group-hover:bg-orange-500 transition-colors"></span>
-            Eventos
-          </a>
-          <a href="/tienda" class="group flex items-center gap-4 py-3 text-sm font-black uppercase tracking-widest text-white hover:text-orange-500 transition-all">
-            <span class="w-1.5 h-1.5 rounded-full bg-white/20 group-hover:bg-orange-500 transition-colors"></span>
-            Tienda
-          </a>
+        <h4 class="text-[12px] font-black uppercase tracking-[0.4em] text-orange-500 border-l-4 border-orange-500 pl-4">Explorar</h4>
+        <nav class="flex flex-col gap-1">
+          {navItems.map(item => (
+            <a 
+              href={item.href} 
+              class={`group flex items-center gap-4 py-4 px-4 text-xs font-black uppercase tracking-widest rounded-xl transition-all ${currentPath === item.href ? 'text-orange-500 bg-white/10' : 'text-white hover:text-orange-500 hover:bg-white/10'}`}
+            >
+              <span class={`w-2 h-2 rounded-full transition-colors ${currentPath === item.href ? 'bg-orange-500' : 'bg-white group-hover:bg-orange-500'}`}></span>
+              {item.label}
+            </a>
+          ))}
         </nav>
       </div>
 
       <!-- Account Section -->
       <div class="space-y-6">
-        <h4 class="text-[11px] font-black uppercase tracking-[0.3em] text-orange-500/80">Cuenta</h4>
-        <nav class="flex flex-col gap-2">
-          <a href="/login" class="group flex items-center gap-4 py-3 text-sm font-black uppercase tracking-widest text-white hover:text-orange-500 transition-all">
-            <span class="w-1.5 h-1.5 rounded-full bg-white/20 group-hover:bg-orange-500 transition-colors"></span>
+        <h4 class="text-[12px] font-black uppercase tracking-[0.4em] text-white border-l-4 border-white pl-4">Cuenta</h4>
+        <nav class="flex flex-col gap-1">
+          <a href="/login" class="group flex items-center gap-4 py-4 px-4 text-xs font-black uppercase tracking-widest text-white hover:text-orange-500 hover:bg-white/10 rounded-xl transition-all">
+            <span class="w-2 h-2 rounded-full bg-white group-hover:bg-orange-500 transition-colors"></span>
             Entrar
           </a>
-          <a href="/perfil" class="group flex items-center gap-4 py-3 text-sm font-black uppercase tracking-widest text-white hover:text-orange-500 transition-all">
-            <span class="w-1.5 h-1.5 rounded-full bg-white/20 group-hover:bg-orange-500 transition-colors"></span>
+          <a href="/perfil" class="group flex items-center gap-4 py-4 px-4 text-xs font-black uppercase tracking-widest text-white hover:text-orange-500 hover:bg-white/10 rounded-xl transition-all">
+            <span class="w-2 h-2 rounded-full bg-white group-hover:bg-orange-500 transition-colors"></span>
             Mi Perfil
           </a>
         </nav>
@@ -63,14 +57,14 @@
     </div>
 
     <!-- Footer Sidebar -->
-    <div class="mt-auto pt-8 border-t border-white/10 space-y-6">
+    <div class="mt-auto pt-8 border-t-2 border-white space-y-6">
       <div class="flex items-center gap-4">
-        <button class="location-btn w-full py-4 px-6 bg-white/5 border border-white/10 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] text-white hover:bg-white/10 transition-all">
+        <button class="location-btn w-full py-5 px-6 bg-black border-2 border-white text-[11px] font-black uppercase tracking-[0.2em] text-white hover:bg-orange-500 hover:text-black transition-all">
           Ubicación: Torreón Coahuila
         </button>
       </div>
       <div class="text-center">
-        <div class="text-[10px] font-black tracking-[0.3em] text-orange-500">WILD GVNG © 2026</div>
+        <div class="text-[11px] font-black tracking-[0.4em] text-orange-500">WILD GVNG © 2026</div>
       </div>
     </div>
   </div>

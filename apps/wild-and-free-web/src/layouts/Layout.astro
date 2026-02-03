@@ -11,6 +11,16 @@ export type Props = {
 };
 
 const { config } = Astro.props;
+const currentPath = Astro.url.pathname;
+
+const navItems = [
+  { href: '/artistas', label: 'Artistas' },
+  { href: '/musica', label: 'Música' },
+  { href: '/eventos', label: 'Eventos' },
+  { href: '/tienda', label: 'Tienda' },
+  { href: '/wild-and-free-league', label: 'WILD AND FREE' },
+  { href: '/wild-writings', label: 'WILD WRITINGS' }
+];
 ---
 
 <!doctype html>
@@ -44,17 +54,17 @@ const { config } = Astro.props;
 
 			/* Custom Scrollbar */
 			::-webkit-scrollbar {
-				width: 8px;
+				width: 10px;
 			}
 			::-webkit-scrollbar-track {
 				background: #000;
 			}
 			::-webkit-scrollbar-thumb {
-				background: #333;
-				border-radius: 10px;
+				background: #ffffff;
+				border-radius: 0;
 			}
 			::-webkit-scrollbar-thumb:hover {
-				background: #444;
+				background: #c98300;
 			}
 
 			.sidebar-open #sidebar {
@@ -80,8 +90,8 @@ const { config } = Astro.props;
 			#sidebar-overlay {
 				position: fixed;
 				inset: 0;
-				background: rgba(0, 0, 0, 0.4);
-				backdrop-filter: blur(2px);
+				background: rgba(0, 0, 0, 0.6);
+				backdrop-filter: blur(4px);
 				z-index: 1500;
 				opacity: 0;
 				visibility: hidden;
@@ -103,11 +113,10 @@ const { config } = Astro.props;
 				top: 100%;
 				left: 50%;
 				width: 350px;
-				background: rgba(10, 10, 10, 0.98);
-				backdrop-filter: blur(10px);
-				border: 1px solid rgba(255, 255, 255, 0.1);
-				border-radius: 24px;
-				box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+				background: #000;
+				border: 2px solid #ffffff;
+				border-radius: 0;
+				box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 1);
 				opacity: 0;
 				visibility: hidden;
 				transform: translateX(-50%) translateY(15px) scale(0.95);
@@ -135,7 +144,7 @@ const { config } = Astro.props;
 
 			.popover-header {
 				padding: 20px 24px;
-				border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+				border-bottom: 2px solid #ffffff;
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
@@ -160,22 +169,21 @@ const { config } = Astro.props;
 				width: 4px;
 			}
 			.popover-content::-webkit-scrollbar-thumb {
-				background: rgba(255, 255, 255, 0.1);
-				border-radius: 10px;
+				background: #ffffff;
 			}
 
 			.text-contrast {
-				color: rgba(255, 255, 255, 0.95);
+				color: #ffffff;
 			}
 			
 			.text-muted {
-				color: rgba(255, 255, 255, 0.65);
+				color: #ffffff;
 			}
 
 			/* Mobile Adaptations */
 			@media (max-width: 768px) {
 				.popover {
-					width: 90vw;
+					width: 95vw;
 					left: 50%;
 					transform: translateX(-50%) translateY(10px) scale(0.98);
 				}
@@ -191,12 +199,12 @@ const { config } = Astro.props;
 			}
 		</style>
 	</head>
-	<body class="bg-black text-white selection:bg-orange-500/30 selection:text-orange-200 overflow-x-hidden" style={`--primary: ${config.primary_color}; --secondary: ${config.secondary_color};`}>
-		<header class="fixed top-0 left-0 right-0 z-[1000] bg-black/95 backdrop-blur-3xl border-b border-white/10 shadow-2xl transition-all duration-500">
+	<body class="bg-black text-white selection:bg-orange-500/50 selection:text-white overflow-x-hidden" style={`--primary: ${config.primary_color}; --secondary: ${config.secondary_color};`}>
+		<header class="fixed top-0 left-0 right-0 z-[1000] bg-black border-b-2 border-white shadow-2xl transition-all duration-500">
 			<div class="w-full mx-auto px-4 md:px-8 h-20 flex items-center justify-between gap-2">
 				<div class="flex items-center gap-2 md:gap-4 flex-shrink-0">
 					<button id="sidebar-trigger" class="p-2 text-white hover:text-orange-500 transition-all transform active:scale-90" aria-label="Abrir menú">
-						<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
 					</button>
 
 					<a href="/" class="flex flex-col items-start group min-w-max">
@@ -208,29 +216,143 @@ const { config } = Astro.props;
 				</div>
 				
 				<nav class="hidden lg:flex items-center gap-0.5 xl:gap-1 flex-1 justify-center overflow-x-auto no-scrollbar">
-					<a href="/artistas" class="px-3 xl:px-4 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-[0.2em] text-white/60 hover:text-orange-500 hover:bg-white/5 rounded-full transition-all duration-300 whitespace-nowrap">
-						Artistas
-					</a>
-					<a href="/musica" class="px-3 xl:px-4 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-[0.2em] text-white/60 hover:text-orange-500 hover:bg-white/5 rounded-full transition-all duration-300 whitespace-nowrap">
-						Música
-					</a>
-					<a href="/eventos" class="px-3 xl:px-4 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-[0.2em] text-white/60 hover:text-orange-500 hover:bg-white/5 rounded-full transition-all duration-300 whitespace-nowrap">
-						Eventos
-					</a>
-					<a href="/tienda" class="px-3 xl:px-4 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-[0.2em] text-white/60 hover:text-orange-500 hover:bg-white/5 rounded-full transition-all duration-300 whitespace-nowrap">
-						Tienda
-					</a>
-					<a href="/wild-and-free-league" class="px-3 xl:px-4 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-[0.2em] text-orange-500 hover:text-white hover:bg-orange-500/10 rounded-full transition-all duration-300 whitespace-nowrap">
-						WILD AND FREE
-					</a>
-					<a href="/wild-writings" class="px-3 xl:px-4 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-[0.2em] text-white/60 hover:text-orange-500 hover:bg-white/5 rounded-full transition-all duration-300 whitespace-nowrap">
-						WILD WRITINGS
-					</a>
+					{navItems.map(item => (
+						<a 
+							href={item.href} 
+							class={`px-3 xl:px-4 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-[0.2em] rounded-full transition-all duration-300 whitespace-nowrap ${currentPath === item.href ? 'text-orange-500 bg-white/10' : 'text-white hover:text-orange-500 hover:bg-white/10'}`}
+						>
+							{item.label}
+						</a>
+					))}
 				</nav>
 				
 				<div class="flex items-center gap-2 xl:gap-4 flex-shrink-0">
 					<!-- Header Action Icons -->
-					<div class="hidden sm:flex items-center gap-0.5 xl:gap-1 border-r border-white/10 pr-2 xl:pr-4">
+					<div class="hidden sm:flex items-center gap-0.5 xl:gap-1 border-r-2 border-white pr-2 xl:pr-4">
+						<div class="relative group/pop">
+							<button class="popover-trigger p-2.5 text-white hover:text-orange-500 hover:bg-white/10 rounded-lg transition-all" data-target="location-popover">
+								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+							</button>
+							<div id="location-popover" class="popover">
+								<div class="popover-header">
+									<span class="popover-title">Ubicación: Torreón Coahuila</span>
+								</div>
+								<div class="popover-content">
+									<div class="space-y-4">
+										<p class="text-sm text-white font-bold">Selecciona tu zona para ver eventos cercanos.</p>
+										<div class="grid grid-cols-2 gap-2">
+											<button class="px-4 py-2 bg-black border-2 border-white text-white text-xs font-black uppercase hover:bg-orange-500 hover:text-black transition-all">Torreón</button>
+											<button class="px-4 py-2 bg-black border-2 border-white text-white text-xs font-black uppercase hover:bg-orange-500 hover:text-black transition-all">Gómez Palacio</button>
+											<button class="px-4 py-2 bg-black border-2 border-white text-white text-xs font-black uppercase hover:bg-orange-500 hover:text-black transition-all">Lerdo</button>
+											<button class="px-4 py-2 bg-black border-2 border-white text-white text-xs font-black uppercase hover:bg-orange-500 hover:text-black transition-all">Monterrey</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="relative group/pop">
+							<button class="popover-trigger p-2.5 text-white hover:text-orange-500 hover:bg-white/10 rounded-lg transition-all relative" data-target="wishlist-popover">
+								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+								<span class="absolute top-1.5 right-1.5 w-4 h-4 bg-orange-500 text-black text-[10px] font-black rounded-full flex items-center justify-center shadow-lg shadow-orange-500/40">3</span>
+							</button>
+									<div id="wishlist-popover" class="popover">
+										<div class="popover-header">
+											<span class="popover-title">Favoritos</span>
+										</div>
+										<div class="popover-content">
+											<div class="unauth-popover-msg space-y-4 text-center py-4">
+												<p class="text-[10px] text-white uppercase font-black">Inicia sesión para ver tus favoritos</p>
+												<a href="/login" class="block w-full py-3 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-orange-500 transition-all">Entrar</a>
+											</div>
+											<div class="auth-popover-content hidden space-y-4">
+												<div class="flex items-center gap-4 group/item">
+													<div class="w-12 h-12 border-2 border-white overflow-hidden">
+														<img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=100&q=80" class="w-full h-full object-cover" />
+													</div>
+													<div class="flex-1">
+														<h4 class="text-xs font-black uppercase text-white">Hoodie Wild</h4>
+														<p class="text-[10px] text-orange-500 font-bold">$45.00</p>
+													</div>
+												</div>
+												<a href="/perfil" class="block w-full py-3 bg-white text-black text-center text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-orange-500 transition-all">Ver Todos</a>
+											</div>
+										</div>
+									</div>
+						</div>
+
+						<div class="relative group/pop">
+							<button class="popover-trigger p-2.5 text-white hover:text-orange-500 hover:bg-white/10 rounded-lg transition-all relative" data-target="cart-popover">
+								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+								<span class="absolute top-1.5 right-1.5 w-4 h-4 bg-orange-500 text-black text-[10px] font-black rounded-full flex items-center justify-center shadow-lg shadow-orange-500/40">2</span>
+							</button>
+							<div id="cart-popover" class="popover">
+								<div class="popover-header">
+									<span class="popover-title">Tu Carrito</span>
+								</div>
+								<div class="popover-content">
+									<div class="unauth-popover-msg space-y-4 text-center py-4">
+										<p class="text-[10px] text-white uppercase font-black">Inicia sesión para ver tu carrito</p>
+										<a href="/login" class="block w-full py-3 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-orange-500 transition-all">Entrar</a>
+									</div>
+									<div class="auth-popover-content hidden space-y-6">
+										<div class="flex items-center gap-4">
+											<div class="w-16 h-16 border-2 border-white overflow-hidden">
+												<img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=150&q=80" class="w-full h-full object-cover" />
+											</div>
+											<div class="flex-1">
+												<h4 class="text-xs font-black uppercase text-white">Camiseta Oficial</h4>
+												<p class="text-[10px] text-white font-bold">Talla: L</p>
+												<p class="text-xs font-black mt-1 text-orange-500">$35.00</p>
+											</div>
+										</div>
+										<div class="border-t-2 border-white pt-4 space-y-4">
+											<div class="flex justify-between items-center">
+												<span class="text-[10px] font-bold text-white uppercase">Subtotal</span>
+												<span class="text-sm font-black text-white">$120.00</span>
+											</div>
+											<button class="w-full py-4 bg-orange-500 text-black text-[10px] font-black uppercase tracking-[0.2em] rounded-xl hover:bg-white transition-all shadow-xl shadow-orange-500/20">Finalizar Compra</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="flex items-center gap-4 auth-actions-container">
+						<div class="relative group/pop">
+							<a href="/login" class="hidden sm:block text-[12px] font-black uppercase tracking-[0.15em] text-white hover:text-orange-500 transition-all py-4">Entrar</a>
+							<div class="popover w-64">
+								<div class="popover-header"><span class="popover-title text-center block w-full">Tu Cuenta</span></div>
+								<div class="popover-content space-y-4">
+									<p class="text-[10px] text-white uppercase font-black text-center">Accede a contenido exclusivo</p>
+									<a href="/login" class="block w-full py-3 bg-white text-black text-center text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-orange-500 transition-all">Iniciar Sesión</a>
+									<a href="/perfil" class="block text-center text-[10px] text-white hover:text-orange-500 font-black uppercase tracking-widest">Mi Perfil</a>
+								</div>
+							</div>
+						</div>
+
+						<div class="relative group/pop">
+							<a href="/registro" class="group relative px-5 md:px-8 py-3 bg-white text-black text-[10px] md:text-[12px] font-black uppercase tracking-[0.15em] rounded-xl md:rounded-2xl hover:bg-orange-500 transition-all duration-500 transform hover:-translate-y-1 shadow-2xl">
+								<span class="relative z-10">Unirse</span>
+								<div class="absolute inset-0 rounded-xl md:rounded-2xl bg-gradient-to-r from-orange-500 to-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-0"></div>
+							</a>
+							<div class="popover w-72">
+								<div class="popover-header"><span class="popover-title text-center block w-full">Sé parte de la Crew</span></div>
+								<div class="popover-content space-y-4">
+									<ul class="space-y-2">
+										<li class="flex items-center justify-center gap-2 text-[10px] text-white font-black uppercase tracking-widest"><span class="text-orange-500">✓</span> Acceso anticipado</li>
+										<li class="flex items-center justify-center gap-2 text-[10px] text-white font-black uppercase tracking-widest"><span class="text-orange-500">✓</span> Merch exclusiva</li>
+										<li class="flex items-center justify-center gap-2 text-[10px] text-white font-black uppercase tracking-widest"><span class="text-orange-500">✓</span> Eventos VIP</li>
+									</ul>
+									<a href="/registro" class="block w-full py-3 bg-orange-500 text-white text-center text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-white hover:text-black transition-all">Registrarse Ahora</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
 						<div class="relative group/pop">
 							<button class="popover-trigger p-2.5 text-white hover:text-orange-500 hover:bg-white/5 rounded-lg transition-all" data-target="location-popover">
 								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
