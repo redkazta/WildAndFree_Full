@@ -116,6 +116,9 @@ const initialParticipants = [
               <div class="final-vs">VS</div>
               <div class="bracket-slot final" data-slot="final-p2"></div>
             </div>
+          <svg class="final-connector" viewBox="0 0 420 70" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M103 0 V30 M317 0 V30 M103 30 H317 M210 30 V70" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="square" />
+          </svg>
             <div class="winner-row">
               <div class="bracket-slot winner" data-slot="winner"></div>
             </div>
@@ -250,6 +253,7 @@ const initialParticipants = [
     align-items: center;
     justify-content: center;
     gap: 12px;
+    width: 420px;
   }
 
   .final-vs {
@@ -258,12 +262,22 @@ const initialParticipants = [
     color: #c98300;
     letter-spacing: 0.2em;
     font-style: italic;
+    width: 40px;
+    text-align: center;
+  }
+
+  .final-connector {
+    width: 420px;
+    height: 70px;
+    display: block;
+    margin: 6px auto 0;
   }
 
   .winner-row {
     margin-top: 22px;
     display: flex;
     justify-content: center;
+    width: 420px;
   }
 
   .champion-text {
@@ -302,6 +316,10 @@ const initialParticipants = [
     border-color: #ffffff;
   }
 
+  .bracket-slot.locked {
+    border-color: #c98300;
+  }
+
   .bracket-slot.final {
     width: 150px;
     height: 60px;
@@ -325,6 +343,11 @@ const initialParticipants = [
     filter: grayscale(100%);
   }
 
+  .bracket-slot.locked .slot-bg-img {
+    opacity: 1;
+    filter: grayscale(0%) contrast(1.35) brightness(0.55);
+  }
+
   .slot-overlay {
     position: relative;
     z-index: 10;
@@ -334,6 +357,10 @@ const initialParticipants = [
     align-items: center;
     justify-content: center;
     background: rgba(0,0,0,0.2);
+  }
+
+  .bracket-slot.locked .slot-overlay {
+    background: rgba(0,0,0,0.55);
   }
 
   .slot-aka-box {
@@ -479,6 +506,7 @@ const initialParticipants = [
       <button class="remove-btn ${locked ? 'hidden' : ''}" data-slot="${slotId}">×</button>
     `;
     slot.classList.add('filled');
+    slot.classList.toggle('locked', locked);
     
     slot.querySelector('.remove-btn')?.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -506,31 +534,13 @@ const initialParticipants = [
       if (!data) {
         slotEl.innerHTML = '';
         slotEl.classList.remove('filled');
+        slotEl.classList.remove('locked');
         return;
       }
       renderSlot(slotEl, data);
     });
     syncPoolUsedUI();
   }
-
-  // --- Double click to lock & show AKA ---
-  document.addEventListener('dblclick', (e) => {
-    const slot = (e.target as HTMLElement).closest('.bracket-slot') as HTMLElement | null;
-    if (!slot) return;
-    const slotId = slot.getAttribute('data-slot');
-    if (!slotId) return;
-    const current = bracketState?.[slotId];
-    if (!current) return;
-    if (current.locked) return;
-    bracketState[slotId] = { ...current, locked: true };
-    renderSlot(slot, bracketState[slotId]);
-    syncPoolUsedUI();
-    channel.send({
-      type: 'broadcast',
-      event: 'state-update',
-      payload: { state: bracketState },
-    });
-  });
 
   // --- Context menu: advance to next round ---
   const getNextSlotId = (slotId: string) => {
@@ -570,6 +580,7 @@ const initialParticipants = [
   menu.innerHTML = `
     <div class="bg-black border border-white shadow-[0_10px_30px_rgba(0,0,0,1)]">
       <button data-action="advance" class="block w-full text-left px-4 py-3 text-xs font-black uppercase tracking-widest text-white hover:bg-white hover:text-black">Avanzarlo a siguiente ronda</button>
+      <button data-action="lock" class="block w-full text-left px-4 py-3 text-xs font-black uppercase tracking-widest text-white hover:bg-orange-500 hover:text-black border-t border-white">Bloquear</button>
     </div>
   `;
   document.body.appendChild(menu);
@@ -597,21 +608,38 @@ const initialParticipants = [
     const action = btn.getAttribute('data-action');
     const fromSlot = (menu as HTMLElement).dataset.slot;
     hideMenu();
-    if (!fromSlot || action !== 'advance') return;
-    const next = getNextSlotId(fromSlot);
-    if (!next) return;
+    if (!fromSlot) return;
     const data = bracketState?.[fromSlot];
     if (!data) return;
-    if (bracketState?.[next]?.locked) return;
-    bracketState[next] = { ...data, locked: false };
-    const nextEl = document.querySelector(`[data-slot="${next}"]`);
-    if (nextEl) renderSlot(nextEl, bracketState[next]);
-    syncPoolUsedUI();
-    channel.send({
-      type: 'broadcast',
-      event: 'state-update',
-      payload: { state: bracketState },
-    });
+
+    if (action === 'lock') {
+      if (data.locked) return;
+      bracketState[fromSlot] = { ...data, locked: true };
+      const el = document.querySelector(`[data-slot="${fromSlot}"]`);
+      if (el) renderSlot(el, bracketState[fromSlot]);
+      syncPoolUsedUI();
+      channel.send({
+        type: 'broadcast',
+        event: 'state-update',
+        payload: { state: bracketState },
+      });
+      return;
+    }
+
+    if (action === 'advance') {
+      const next = getNextSlotId(fromSlot);
+      if (!next) return;
+      if (bracketState?.[next]?.locked) return;
+      bracketState[next] = { ...data, locked: false };
+      const nextEl = document.querySelector(`[data-slot="${next}"]`);
+      if (nextEl) renderSlot(nextEl, bracketState[next]);
+      syncPoolUsedUI();
+      channel.send({
+        type: 'broadcast',
+        event: 'state-update',
+        payload: { state: bracketState },
+      });
+    }
   });
 
   // Initial sync
