@@ -404,6 +404,30 @@ const initialParticipants = [
   .bracket-slot:hover .remove-btn {
     opacity: 1;
   }
+
+  .slot-menu-btn {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    z-index: 30;
+    width: 16px;
+    height: 16px;
+    background: #000;
+    border: 1px solid #ffffff;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 900;
+    line-height: 1;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .bracket-slot.filled:hover .slot-menu-btn {
+    opacity: 1;
+  }
 </style>
 
 <script>
@@ -503,6 +527,7 @@ const initialParticipants = [
           <span class="slot-name">${data.name}</span>
         </div>
       </div>
+      <button class="slot-menu-btn" data-slot="${slotId}" aria-label="Opciones">⋮</button>
       <button class="remove-btn ${locked ? 'hidden' : ''}" data-slot="${slotId}">×</button>
     `;
     slot.classList.add('filled');
@@ -589,6 +614,20 @@ const initialParticipants = [
   document.addEventListener('click', hideMenu);
   document.addEventListener('scroll', hideMenu, true);
 
+  const showMenuAt = (x: number, y: number, slotId: string) => {
+    const menuEl = menu as HTMLElement;
+    const menuWidth = 260;
+    const menuHeight = 96;
+    const padding = 8;
+    const clampedX = Math.min(Math.max(x, padding), window.innerWidth - menuWidth - padding);
+    const clampedY = Math.min(Math.max(y, padding), window.innerHeight - menuHeight - padding);
+    menuEl.style.left = `${clampedX}px`;
+    menuEl.style.top = `${clampedY}px`;
+    menuEl.style.width = `${menuWidth}px`;
+    menuEl.dataset.slot = slotId;
+    menu.classList.remove('hidden');
+  };
+
   document.addEventListener('contextmenu', (e) => {
     const slot = (e.target as HTMLElement).closest('.bracket-slot') as HTMLElement | null;
     if (!slot) return;
@@ -596,10 +635,19 @@ const initialParticipants = [
     if (!slotId) return;
     if (!bracketState?.[slotId]) return;
     e.preventDefault();
-    (menu as HTMLElement).style.left = `${e.clientX}px`;
-    (menu as HTMLElement).style.top = `${e.clientY}px`;
-    (menu as HTMLElement).dataset.slot = slotId;
-    menu.classList.remove('hidden');
+    showMenuAt(e.clientX, e.clientY, slotId);
+  });
+
+  document.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest('.slot-menu-btn') as HTMLElement | null;
+    if (!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const slotId = btn.getAttribute('data-slot');
+    if (!slotId) return;
+    if (!bracketState?.[slotId]) return;
+    const rect = btn.getBoundingClientRect();
+    showMenuAt(rect.left, rect.bottom + 6, slotId);
   });
 
   menu.addEventListener('click', (e) => {
