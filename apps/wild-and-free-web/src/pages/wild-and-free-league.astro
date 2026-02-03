@@ -103,6 +103,7 @@ const initialParticipants = [
             <div class="final-title">
               <span class="text-orange-500">WILD</span> <span class="text-white">GVNG</span>
             </div>
+            <p class="champion-text">CAMPEÓN WILD AND FREE FECHA #1</p>
             <div class="final-row">
               <div class="bracket-slot final" data-side="left" data-round="4" data-slot="final-p1"></div>
               <div class="final-vs">VS</div>
@@ -111,7 +112,6 @@ const initialParticipants = [
             <div class="winner-row">
               <div class="bracket-slot winner" data-side="center" data-round="5" data-slot="winner"></div>
             </div>
-            <p class="champion-text">CAMPEÓN WILD AND FREE FECHA #1</p>
           </div>
 
           <div class="side side-right">
@@ -223,7 +223,7 @@ const initialParticipants = [
   }
 
   .final-row {
-    padding-top: 222px;
+    padding-top: 250px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -242,14 +242,18 @@ const initialParticipants = [
   }
 
   .winner-row {
-    margin-top: 22px;
+    margin-top: 34px;
     display: flex;
     justify-content: center;
     width: 420px;
   }
 
   .champion-text {
-    margin-top: 10px;
+    position: absolute;
+    top: 44px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 420px;
     text-align: center;
     font-size: 10px;
     font-weight: 900;
@@ -328,7 +332,7 @@ const initialParticipants = [
   }
 
   .bracket-slot.locked .slot-overlay {
-    background: rgba(0,0,0,0.55);
+    background: rgba(0,0,0,0.75);
   }
 
   .slot-aka-box {
@@ -341,6 +345,12 @@ const initialParticipants = [
     justify-content: center;
   }
 
+  .bracket-slot.locked .slot-aka-box {
+    background: rgba(0,0,0,0.9);
+    border-width: 2px;
+    padding: 4px 12px;
+  }
+
   .slot-name {
     font-size: 9px;
     font-weight: 900;
@@ -348,6 +358,11 @@ const initialParticipants = [
     letter-spacing: 0.1em;
     color: #fff;
     white-space: nowrap;
+  }
+
+  .bracket-slot.locked .slot-name {
+    font-size: 10px;
+    letter-spacing: 0.15em;
   }
 
   .remove-btn {
