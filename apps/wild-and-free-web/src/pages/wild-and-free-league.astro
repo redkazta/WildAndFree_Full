@@ -167,7 +167,7 @@ const initialParticipants = [
     height: 100%;
     pointer-events: none;
     overflow: visible;
-    z-index: 5;
+    z-index: 10;
   }
 
   .side {
@@ -220,6 +220,7 @@ const initialParticipants = [
     font-style: italic;
     text-transform: uppercase;
     white-space: nowrap;
+    z-index: 30;
   }
 
   .final-row {
@@ -243,17 +244,18 @@ const initialParticipants = [
 
   .winner-row {
     position: absolute;
-    top: 120px;
+    top: 96px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     justify-content: center;
     width: 420px;
+    z-index: 20;
   }
 
   .champion-text {
     position: absolute;
-    top: 210px;
+    top: 190px;
     left: 50%;
     transform: translateX(-50%);
     width: 420px;
@@ -264,6 +266,7 @@ const initialParticipants = [
     text-transform: uppercase;
     letter-spacing: 0.4em;
     white-space: nowrap;
+    z-index: 30;
   }
 
   .bracket-slot {
@@ -697,39 +700,38 @@ const initialParticipants = [
       if (!fromA || !fromB || !to) continue;
 
       if (c.to === 'winner') {
-        const start1 = getTopCenterPoint(fromA);
-        const start2 = getTopCenterPoint(fromB);
+        const base1 = getTopCenterPoint(fromA);
+        const base2 = getTopCenterPoint(fromB);
         const winnerRect = to.getBoundingClientRect();
         const parentRect = (document.querySelector('.bracket') as HTMLElement).getBoundingClientRect();
-        const label = document.querySelector('.champion-text') as HTMLElement | null;
-        const labelRect = label?.getBoundingClientRect();
 
-        const yWinnerTop = Math.round(winnerRect.top - parentRect.top);
-        const xWinnerLeft = Math.round(winnerRect.left - parentRect.left + 14);
-        const xWinnerRight = Math.round(winnerRect.right - parentRect.left - 14);
-
-        const textLeft = labelRect ? Math.round(labelRect.left - parentRect.left - 14) : 0;
-        const textRight = labelRect ? Math.round(labelRect.right - parentRect.left + 14) : 0;
-        const textBottom = labelRect ? Math.round(labelRect.bottom - parentRect.top + 10) : Math.round((start1.y + start2.y) / 2);
-
-        const route = (start: { x: number; y: number }, xTarget: number) => {
-          let x = Math.round(start.x);
-          const yStart = Math.round(start.y);
-          if (labelRect && x > textLeft && x < textRight) {
-            x = x < (textLeft + textRight) / 2 ? textLeft - 16 : textRight + 16;
-          }
-          const yAboveText = labelRect ? Math.min(textBottom, yStart - 10) : yStart - 10;
-          const yNearWinner = yWinnerTop + 12;
-
-          drawPath(svg, `M ${Math.round(start.x)} ${yStart} L ${x} ${yStart}`);
-          drawPath(svg, `M ${x} ${yStart} L ${x} ${yAboveText}`);
-          drawPath(svg, `M ${x} ${yAboveText} L ${xTarget} ${yAboveText}`);
-          drawPath(svg, `M ${xTarget} ${yAboveText} L ${xTarget} ${yNearWinner}`);
-          drawPath(svg, `M ${xTarget} ${yNearWinner} L ${xTarget} ${yWinnerTop}`);
+        const start1 = {
+          x: base1.x,
+          y: base1.y + base1.rect.height * 0.18,
+        };
+        const start2 = {
+          x: base2.x,
+          y: base2.y + base2.rect.height * 0.18,
         };
 
-        route(start1, xWinnerLeft);
-        route(start2, xWinnerRight);
+        const xWinnerLeft = Math.round(winnerRect.left - parentRect.left);
+        const xWinnerRight = Math.round(winnerRect.right - parentRect.left);
+        const yWinnerMid = Math.round(winnerRect.top - parentRect.top + winnerRect.height / 2);
+
+        const drawSideIntoWinner = (start: { x: number; y: number }, xTarget: number) => {
+          const xStart = Math.round(start.x);
+          const yStart = Math.round(start.y);
+          const xEnd = Math.round(xTarget);
+          const yEnd = Math.round(yWinnerMid);
+          const yMid = Math.round((yStart + yEnd) / 2);
+
+          drawPath(svg, `M ${xStart} ${yStart} L ${xStart} ${yMid}`);
+          drawPath(svg, `M ${xStart} ${yMid} L ${xEnd} ${yMid}`);
+          drawPath(svg, `M ${xEnd} ${yMid} L ${xEnd} ${yEnd}`);
+        };
+
+        drawSideIntoWinner(start1, xWinnerLeft);
+        drawSideIntoWinner(start2, xWinnerRight);
         continue;
       }
 
