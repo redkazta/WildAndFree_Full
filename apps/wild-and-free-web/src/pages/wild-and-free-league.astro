@@ -685,6 +685,25 @@ const initialParticipants = [
       const to = getSlotEl(c.to);
       if (!fromA || !fromB || !to) continue;
 
+      if (c.to === 'winner') {
+        const a = getPoint(fromA, 'right');
+        const b = getPoint(fromB, 'left');
+        const winnerRect = to.getBoundingClientRect();
+        const parentRect = (document.querySelector('.bracket') as HTMLElement).getBoundingClientRect();
+
+        const xJoin = Math.round(winnerRect.left - parentRect.left + winnerRect.width / 2);
+        const yA = Math.round(a.y);
+        const yB = Math.round(b.y);
+        const yJoin = Math.round((yA + yB) / 2);
+        const yWinnerTop = Math.round(winnerRect.top - parentRect.top);
+
+        drawPath(svg, `M ${Math.round(a.x)} ${yA} L ${xJoin} ${yA}`);
+        drawPath(svg, `M ${Math.round(b.x)} ${yB} L ${xJoin} ${yB}`);
+        drawPath(svg, `M ${xJoin} ${yA} L ${xJoin} ${yB}`);
+        drawPath(svg, `M ${xJoin} ${yJoin} L ${xJoin} ${yWinnerTop}`);
+        continue;
+      }
+
       const sideA = (fromA.getAttribute('data-side') || 'left') as 'left' | 'right';
       const dir = sideA === 'left' ? 1 : -1;
       const startA = getPoint(fromA, sideA === 'left' ? 'right' : 'left');
