@@ -7,24 +7,24 @@ const config = {
   secondary_color: "#8A0303"
 };
 
-// 16 Initial participants (Mock)
+// 16 Initial participants (Mock) with guaranteed high-quality Unsplash images
 const initialParticipants = [
-  { id: 'p1', name: 'Lil Kiro', image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=100&h=100&fit=crop' },
-  { id: 'p2', name: 'Neon Ghost', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop' },
-  { id: 'p3', name: 'Shadow V', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop' },
-  { id: 'p4', name: 'Nova K', image: 'https://images.unsplash.com/photo-1520975958221-7f61d4d6df4b?w=100&h=100&fit=crop' },
-  { id: 'p5', name: 'Sable', image: 'https://images.unsplash.com/photo-1520975693413-35e0000c0e4e?w=100&h=100&fit=crop' },
-  { id: 'p6', name: 'Storm Trooper', image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop' },
-  { id: 'p7', name: 'Midnight Rider', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop' },
-  { id: 'p8', name: 'Crystal Wave', image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop' },
-  { id: 'p9', name: 'Drill King', image: 'https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=100&h=100&fit=crop' },
-  { id: 'p10', name: 'Flow Master', image: 'https://images.unsplash.com/photo-1504194104404-4cd3c27ac351?w=100&h=100&fit=crop' },
-  { id: 'p11', name: 'Rhyme Slayer', image: 'https://images.unsplash.com/photo-1501196354995-cbb51c65aeb1?w=100&h=100&fit=crop' },
-  { id: 'p12', name: 'Beat Beast', image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop' },
-  { id: 'p13', name: 'Word Smith', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop' },
-  { id: 'p14', name: 'Urban Soul', image: 'https://images.unsplash.com/photo-1520975958221-7f61d4d6df4b?w=100&h=100&fit=crop' },
-  { id: 'p15', name: 'Ghetto Star', image: 'https://images.unsplash.com/photo-1520975693413-35e0000c0e4e?w=100&h=100&fit=crop' },
-  { id: 'p16', name: 'Street Legend', image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=100&h=100&fit=crop' },
+  { id: 'p1', name: 'Lil Kiro', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&q=80' },
+  { id: 'p2', name: 'Neon Ghost', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&q=80' },
+  { id: 'p3', name: 'Shadow V', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&q=80' },
+  { id: 'p4', name: 'Nova K', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop&q=80' },
+  { id: 'p5', name: 'Sable', image: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&h=400&fit=crop&q=80' },
+  { id: 'p6', name: 'Storm Trooper', image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop&q=80' },
+  { id: 'p7', name: 'Midnight Rider', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&q=80' },
+  { id: 'p8', name: 'Crystal Wave', image: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&h=400&fit=crop&q=80' },
+  { id: 'p9', name: 'Drill King', image: 'https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=400&h=400&fit=crop&q=80' },
+  { id: 'p10', name: 'Flow Master', image: 'https://images.unsplash.com/photo-153957172636a-229cc673f43b?w=400&h=400&fit=crop&q=80' },
+  { id: 'p11', name: 'Rhyme Slayer', image: 'https://images.unsplash.com/photo-1501196354995-cbb51c65aeb1?w=400&h=400&fit=crop&q=80' },
+  { id: 'p12', name: 'Beat Beast', image: 'https://images.unsplash.com/photo-1506794777584-38d915739b1f?w=400&h=400&fit=crop&q=80' },
+  { id: 'p13', name: 'Word Smith', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&q=80' },
+  { id: 'p14', name: 'Urban Soul', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop&q=80' },
+  { id: 'p15', name: 'Ghetto Star', image: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&h=400&fit=crop&q=80' },
+  { id: 'p16', name: 'Street Legend', image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&q=80' },
 ];
 ---
 
@@ -47,20 +47,20 @@ const initialParticipants = [
       </div>
 
       <!-- Participants Pool -->
-      <div class="bg-white/[0.02] border border-white/5 rounded-[2rem] p-8 space-y-6">
-        <h3 class="text-sm font-black text-orange-500 uppercase tracking-widest text-center">Participantes Disponibles</h3>
-        <div id="participants-pool" class="flex flex-wrap justify-center gap-4">
+      <div class="bg-white/[0.02] border border-white/5 rounded-[2rem] p-10 space-y-8">
+        <h3 class="text-sm font-black text-orange-500 uppercase tracking-[0.4em] text-center">Participantes Disponibles</h3>
+        <div id="participants-pool" class="flex flex-wrap justify-center gap-6">
           {initialParticipants.map(p => (
             <div 
               draggable="true" 
               id={p.id}
               data-name={p.name}
               data-image={p.image}
-              class="participant-item group relative w-16 h-16 md:w-20 md:h-20 rounded-2xl overflow-hidden cursor-grab active:cursor-grabbing border-2 border-white/10 hover:border-orange-500 transition-all shadow-xl"
+              class="participant-item group relative w-20 h-20 md:w-24 md:h-24 rounded-2xl overflow-hidden cursor-grab active:cursor-grabbing border-2 border-white/10 hover:border-orange-500 transition-all shadow-2xl"
             >
-              <img src={p.image} alt={p.name} class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" />
-              <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <span class="text-[8px] font-black text-white text-center px-1 uppercase">{p.name}</span>
+              <img src={p.image} alt={p.name} class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-500" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-2 px-1">
+                <span class="text-[9px] font-black text-white text-center uppercase tracking-tight leading-tight">{p.name}</span>
               </div>
             </div>
           ))}
@@ -107,10 +107,9 @@ const initialParticipants = [
           <div class="text-center space-y-4">
             <div class="w-32 h-32 rounded-full bg-gradient-to-br from-orange-500 to-red-600 p-1 shadow-2xl shadow-orange-500/20">
               <div class="w-full h-full rounded-full bg-black flex items-center justify-center overflow-hidden">
-                <img src="/favicon.svg" class="w-16 h-16 opacity-20" alt="Trophy" />
+                <span class="text-2xl font-black tracking-tighter italic"><span class="text-orange-500">WILD</span> <span class="text-white">GVNG</span></span>
               </div>
             </div>
-            <h2 class="text-4xl font-black text-white uppercase tracking-tighter italic">Gran Final</h2>
           </div>
           <div class="flex gap-8 items-center">
             <div class="bracket-slot final" data-slot="final-p1"></div>
@@ -118,7 +117,7 @@ const initialParticipants = [
             <div class="bracket-slot final" data-slot="final-p2"></div>
           </div>
           <div class="bracket-slot winner scale-125" data-slot="winner"></div>
-          <p class="text-[10px] font-black text-orange-500 uppercase tracking-[0.4em]">Campeón Wild Gvng</p>
+          <p class="text-[10px] font-black text-orange-500 uppercase tracking-[0.4em]">CAMPEÓN WILD AND FREE FECHA #1</p>
         </div>
 
         <!-- RIGHT SIDE -->
@@ -159,68 +158,117 @@ const initialParticipants = [
 
 <style>
   .bracket-slot {
-    width: 140px;
-    height: 50px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 12px;
+    width: 180px;
+    height: 70px;
+    background: #080808;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
     position: relative;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     align-items: center;
-    padding: 0 12px;
     overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4), inset 0 0 10px rgba(255,255,255,0.02);
   }
 
   .bracket-slot.drag-over {
-    background: rgba(201, 131, 0, 0.1);
+    background: rgba(201, 131, 0, 0.25);
     border-color: #C98300;
-    transform: scale(1.05);
+    transform: scale(1.08) translateY(-2px);
+    box-shadow: 0 10px 30px rgba(201, 131, 0, 0.3);
+    z-index: 50;
   }
 
   .bracket-slot.filled {
-    background: rgba(255, 255, 255, 0.07);
-    border-color: rgba(255, 255, 255, 0.15);
+    background: #000;
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.6);
   }
 
   .bracket-slot.final {
-    width: 180px;
-    height: 70px;
-    background: rgba(201, 131, 0, 0.05);
-    border-color: rgba(201, 131, 0, 0.2);
+    width: 220px;
+    height: 90px;
+    border-width: 3px;
+    border-color: rgba(201, 131, 0, 0.4);
+    background: #0a0a0a;
   }
 
   .bracket-slot.winner {
-    width: 200px;
-    height: 80px;
-    background: linear-gradient(to right, rgba(201, 131, 0, 0.2), rgba(138, 3, 3, 0.2));
-    border-color: #C98300;
-    box-shadow: 0 0 30px rgba(201, 131, 0, 0.2);
+    width: 280px;
+    height: 120px;
+    background: linear-gradient(135deg, #111, #000);
+    border: 4px solid #C98300;
+    box-shadow: 0 0 50px rgba(201, 131, 0, 0.4), inset 0 0 20px rgba(201, 131, 0, 0.1);
   }
 
-  .slot-content {
-    display: flex;
-    items-center: center;
-    gap: 10px;
+  .slot-bg-img {
+    position: absolute;
+    inset: 0;
     width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.5;
+    filter: grayscale(100%) contrast(1.2);
+    transition: all 0.6s ease;
   }
 
-  .slot-img {
-    width: 30px;
-    height: 30px;
-    border-radius: 8px;
-    object-cover: cover;
+  .bracket-slot:hover .slot-bg-img {
+    opacity: 0.8;
+    filter: grayscale(0%) contrast(1.1);
+    transform: scale(1.15);
+  }
+
+  .slot-overlay {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 15px;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.8) 100%);
   }
 
   .slot-name {
-    font-size: 10px;
+    font-size: 13px;
     font-weight: 900;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.15em;
     color: white;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    text-shadow: 0 2px 8px rgba(0,0,0,1);
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  .remove-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 30;
+    width: 22px;
+    height: 22px;
+    background: rgba(255,0,0,0.8);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 900;
+    color: white;
+    opacity: 0;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+  }
+
+  .bracket-slot:hover .remove-btn {
+    opacity: 1;
+    transform: scale(1);
+  }
+  
+  .remove-btn:hover {
+    background: #ff0000;
+    transform: scale(1.1) !important;
   }
 </style>
 
@@ -275,10 +323,13 @@ const initialParticipants = [
       const id = e.dataTransfer.getData('participantId');
       const name = e.dataTransfer.getData('name');
       const image = e.dataTransfer.getData('image');
-      const slotId = slot.getAttribute('data-target') || slot.getAttribute('data-slot');
+      const slotId = slot.getAttribute('data-slot');
 
-      if (slotId) {
+      if (slotId && id) {
         bracketState[slotId] = { id, name, image };
+        
+        // Update locally immediately
+        renderSlot(slot, { id, name, image });
         
         // Broadcast change
         channel.send({
@@ -290,32 +341,39 @@ const initialParticipants = [
     });
   });
 
+  function renderSlot(slot: Element, data: any) {
+    const slotId = slot.getAttribute('data-slot');
+    slot.innerHTML = `
+      <img src="${data.image}" class="slot-bg-img" />
+      <div class="slot-overlay">
+        <span class="slot-name">${data.name}</span>
+      </div>
+      <button class="remove-btn" data-slot="${slotId}">×</button>
+    `;
+    slot.classList.add('filled');
+    
+    // Handle removal
+    slot.querySelector('.remove-btn')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (slotId) {
+        delete bracketState[slotId];
+        channel.send({
+          type: 'broadcast',
+          event: 'state-update',
+          payload: { state: bracketState },
+        });
+        slot.innerHTML = '';
+        slot.classList.remove('filled');
+      }
+    });
+  }
+
   function updateBracketUI(state: Record<string, any>) {
     bracketState = state;
     Object.entries(state).forEach(([slotId, data]: [string, any]) => {
       const slot = document.querySelector(`[data-slot="${slotId}"]`);
       if (slot) {
-        slot.innerHTML = `
-          <div class="slot-content animate-fade-in">
-            <img src="${data.image}" class="slot-img" />
-            <span class="slot-name">${data.name}</span>
-            <button class="ml-auto text-white/20 hover:text-red-500 remove-btn" data-slot="${slotId}">×</button>
-          </div>
-        `;
-        slot.classList.add('filled');
-        
-        // Handle removal
-        slot.querySelector('.remove-btn')?.addEventListener('click', (e) => {
-          e.stopPropagation();
-          delete bracketState[slotId];
-          channel.send({
-            type: 'broadcast',
-            event: 'state-update',
-            payload: { state: bracketState },
-          });
-          slot.innerHTML = '';
-          slot.classList.remove('filled');
-        });
+        renderSlot(slot, data);
       }
     });
   }

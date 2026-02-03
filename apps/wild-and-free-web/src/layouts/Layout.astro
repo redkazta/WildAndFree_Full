@@ -192,45 +192,45 @@ const { config } = Astro.props;
 		</style>
 	</head>
 	<body class="bg-black text-white selection:bg-orange-500/30 selection:text-orange-200 overflow-x-hidden" style={`--primary: ${config.primary_color}; --secondary: ${config.secondary_color};`}>
-		<header class="fixed top-0 left-0 right-0 z-[1000] bg-black/90 backdrop-blur-2xl border-b border-white/10 shadow-2xl">
-			<div class="max-w-[1440px] mx-auto px-6 h-20 flex items-center justify-between">
-				<div class="flex items-center gap-2 md:gap-8">
-					<button id="sidebar-trigger" class="p-2 -ml-2 text-white hover:text-orange-500 transition-all transform active:scale-90" aria-label="Abrir menú">
+		<header class="fixed top-0 left-0 right-0 z-[1000] bg-black/95 backdrop-blur-3xl border-b border-white/10 shadow-2xl transition-all duration-500">
+			<div class="w-full mx-auto px-4 md:px-8 h-20 flex items-center justify-between gap-2">
+				<div class="flex items-center gap-2 md:gap-4 flex-shrink-0">
+					<button id="sidebar-trigger" class="p-2 text-white hover:text-orange-500 transition-all transform active:scale-90" aria-label="Abrir menú">
 						<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
 					</button>
 
-					<a href="/" class="flex flex-col items-start group">
+					<a href="/" class="flex flex-col items-start group min-w-max">
 						<div class="flex items-baseline gap-0.5">
-							<span class="text-xl md:text-3xl font-black tracking-tighter text-orange-500 italic leading-none group-hover:scale-105 transition-transform origin-left">WILD</span>
-							<span class="text-xl md:text-3xl font-black tracking-tighter text-white italic leading-none group-hover:scale-105 transition-transform origin-left">GVNG</span>
+							<span class="text-xl md:text-2xl font-black tracking-tighter text-orange-500 italic leading-none group-hover:scale-105 transition-transform origin-left">WILD</span>
+							<span class="text-xl md:text-2xl font-black tracking-tighter text-white italic leading-none group-hover:scale-105 transition-transform origin-left">GVNG</span>
 						</div>
 					</a>
 				</div>
 				
-				<nav class="hidden lg:flex items-center gap-2">
-					<a href="/artistas" class="px-6 py-2.5 text-[12px] font-extrabold uppercase tracking-[0.15em] text-white hover:text-orange-500 hover:bg-white/5 rounded-full transition-all duration-300">
+				<nav class="hidden lg:flex items-center gap-0.5 xl:gap-1 flex-1 justify-center overflow-x-auto no-scrollbar">
+					<a href="/artistas" class="px-3 xl:px-4 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-[0.2em] text-white/60 hover:text-orange-500 hover:bg-white/5 rounded-full transition-all duration-300 whitespace-nowrap">
 						Artistas
 					</a>
-					<a href="/wild-and-free-league" class="px-6 py-2.5 text-[12px] font-extrabold uppercase tracking-[0.15em] text-orange-500 hover:text-white hover:bg-orange-500/10 rounded-full transition-all duration-300">
-						WILD AND FREE
-					</a>
-					<a href="/wild-writings" class="px-6 py-2.5 text-[12px] font-extrabold uppercase tracking-[0.15em] text-white hover:text-orange-500 hover:bg-white/5 rounded-full transition-all duration-300">
-						WILD WRITINGS
-					</a>
-					<a href="/musica" class="px-6 py-2.5 text-[12px] font-extrabold uppercase tracking-[0.15em] text-white hover:text-orange-500 hover:bg-white/5 rounded-full transition-all duration-300">
+					<a href="/musica" class="px-3 xl:px-4 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-[0.2em] text-white/60 hover:text-orange-500 hover:bg-white/5 rounded-full transition-all duration-300 whitespace-nowrap">
 						Música
 					</a>
-					<a href="/eventos" class="px-6 py-2.5 text-[12px] font-extrabold uppercase tracking-[0.15em] text-white hover:text-orange-500 hover:bg-white/5 rounded-full transition-all duration-300">
+					<a href="/eventos" class="px-3 xl:px-4 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-[0.2em] text-white/60 hover:text-orange-500 hover:bg-white/5 rounded-full transition-all duration-300 whitespace-nowrap">
 						Eventos
 					</a>
-					<a href="/tienda" class="px-6 py-2.5 text-[12px] font-extrabold uppercase tracking-[0.15em] text-white hover:text-orange-500 hover:bg-white/5 rounded-full transition-all duration-300">
+					<a href="/tienda" class="px-3 xl:px-4 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-[0.2em] text-white/60 hover:text-orange-500 hover:bg-white/5 rounded-full transition-all duration-300 whitespace-nowrap">
 						Tienda
+					</a>
+					<a href="/wild-and-free-league" class="px-3 xl:px-4 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-[0.2em] text-orange-500 hover:text-white hover:bg-orange-500/10 rounded-full transition-all duration-300 whitespace-nowrap">
+						WILD AND FREE
+					</a>
+					<a href="/wild-writings" class="px-3 xl:px-4 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-[0.2em] text-white/60 hover:text-orange-500 hover:bg-white/5 rounded-full transition-all duration-300 whitespace-nowrap">
+						WILD WRITINGS
 					</a>
 				</nav>
 				
-				<div class="flex items-center gap-2 md:gap-6">
+				<div class="flex items-center gap-2 xl:gap-4 flex-shrink-0">
 					<!-- Header Action Icons -->
-					<div class="hidden sm:flex items-center gap-1 border-r border-white/10 pr-4 mr-2">
+					<div class="hidden sm:flex items-center gap-0.5 xl:gap-1 border-r border-white/10 pr-2 xl:pr-4">
 						<div class="relative group/pop">
 							<button class="popover-trigger p-2.5 text-white hover:text-orange-500 hover:bg-white/5 rounded-lg transition-all" data-target="location-popover">
 								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
