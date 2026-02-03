@@ -221,6 +221,7 @@ const initialParticipants = [
     text-transform: uppercase;
     white-space: nowrap;
     z-index: 30;
+    text-shadow: 0 0 18px rgba(255, 176, 32, 0.25);
   }
 
   .final-row {
@@ -262,11 +263,12 @@ const initialParticipants = [
     text-align: center;
     font-size: 10px;
     font-weight: 900;
-    color: #c98300;
+    color: #ffb020;
     text-transform: uppercase;
     letter-spacing: 0.4em;
     white-space: nowrap;
     z-index: 30;
+    text-shadow: 0 0 14px rgba(255, 176, 32, 0.55);
   }
 
   .bracket-slot {
@@ -704,6 +706,8 @@ const initialParticipants = [
         const base2 = getTopCenterPoint(fromB);
         const winnerRect = to.getBoundingClientRect();
         const parentRect = (document.querySelector('.bracket') as HTMLElement).getBoundingClientRect();
+        const label = document.querySelector('.champion-text') as HTMLElement | null;
+        const labelRect = label?.getBoundingClientRect();
 
         const start1 = {
           x: base1.x,
@@ -714,24 +718,21 @@ const initialParticipants = [
           y: base2.y + base2.rect.height * 0.18,
         };
 
-        const xWinnerLeft = Math.round(winnerRect.left - parentRect.left);
-        const xWinnerRight = Math.round(winnerRect.right - parentRect.left);
-        const yWinnerMid = Math.round(winnerRect.top - parentRect.top + winnerRect.height / 2);
+        const xJoin = Math.round(winnerRect.left - parentRect.left + winnerRect.width / 2);
+        const yWinnerBottom = Math.round(winnerRect.bottom - parentRect.top);
+        const yLabelBottom = labelRect ? Math.round(labelRect.bottom - parentRect.top) : Math.round((start1.y + start2.y) / 2);
+        const yJoin = Math.min(yLabelBottom + 8, Math.min(Math.round(start1.y), Math.round(start2.y)) - 10);
 
-        const drawSideIntoWinner = (start: { x: number; y: number }, xTarget: number) => {
-          const xStart = Math.round(start.x);
-          const yStart = Math.round(start.y);
-          const xEnd = Math.round(xTarget);
-          const yEnd = Math.round(yWinnerMid);
-          const yMid = Math.round((yStart + yEnd) / 2);
-
-          drawPath(svg, `M ${xStart} ${yStart} L ${xStart} ${yMid}`);
-          drawPath(svg, `M ${xStart} ${yMid} L ${xEnd} ${yMid}`);
-          drawPath(svg, `M ${xEnd} ${yMid} L ${xEnd} ${yEnd}`);
+        const routeToJoin = (start: { x: number; y: number }) => {
+          const x = Math.round(start.x);
+          const y = Math.round(start.y);
+          drawPath(svg, `M ${x} ${y} L ${x} ${yJoin}`);
+          drawPath(svg, `M ${x} ${yJoin} L ${xJoin} ${yJoin}`);
         };
 
-        drawSideIntoWinner(start1, xWinnerLeft);
-        drawSideIntoWinner(start2, xWinnerRight);
+        routeToJoin(start1);
+        routeToJoin(start2);
+        drawPath(svg, `M ${xJoin} ${yJoin} L ${xJoin} ${yWinnerBottom}`);
         continue;
       }
 
