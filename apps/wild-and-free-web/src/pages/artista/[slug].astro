@@ -1,0 +1,172 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { supabase } from '../../lib/supabase';
+
+const { slug } = Astro.params;
+
+// Fetch artist data
+const { data: artist, error } = await supabase
+  .from('artists')
+  .select('*, events(*)')
+  .eq('slug', slug)
+  .single();
+
+if (error || !artist) {
+  return Astro.redirect('/404');
+}
+
+const config = {
+  name: `Wild Gvng - ${artist.nombre}`,
+  primary_color: "#C98300",
+  secondary_color: "#8A0303"
+};
+
+const stats = artist.stats || { seguidores: "0", oyentes: "0" };
+const images = artist.imagenes || {};
+const socialLinks = artist.redes || {};
+---
+
+<Layout config={config}>
+  <main class="min-h-screen bg-black pt-20">
+    <!-- Hero Section -->
+    <div class="relative h-[60vh] md:h-[70vh] w-full overflow-hidden">
+      <img 
+        src={images.banner || 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=1600&q=80'} 
+        alt={artist.nombre}
+        class="w-full h-full object-cover opacity-60"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+      
+      <div class="absolute inset-0 flex items-end">
+        <div class="max-w-[1400px] mx-auto px-6 pb-20 w-full">
+          <div class="space-y-4">
+            <p class="text-orange-500 font-black uppercase tracking-[0.3em] text-sm animate-fade-in">Artista Verificado</p>
+            <h1 class="text-6xl md:text-9xl font-black text-white uppercase tracking-tighter leading-none animate-slide-up">
+              {artist.nombre}
+            </h1>
+            <div class="flex items-center gap-8 pt-4 animate-fade-in delay-200">
+              <div class="flex flex-col">
+                <span class="text-2xl font-black text-white">{stats.seguidores}</span>
+                <span class="text-[10px] font-bold text-white/40 uppercase tracking-widest">Seguidores</span>
+              </div>
+              <div class="flex flex-col border-l border-white/10 pl-8">
+                <span class="text-2xl font-black text-white">{stats.oyentes}</span>
+                <span class="text-[10px] font-bold text-white/40 uppercase tracking-widest">Oyentes Mensuales</span>
+              </div>
+              <button class="ml-auto px-10 py-4 bg-orange-500 text-black text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-white transition-all transform hover:-translate-y-1 shadow-2xl shadow-orange-500/20">
+                Seguir
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Grid -->
+    <div class="max-w-[1400px] mx-auto px-6 py-20">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-16">
+        <!-- Bio & Social -->
+        <div class="lg:col-span-1 space-y-12">
+          <div class="space-y-6">
+            <h3 class="text-xl font-black text-white uppercase tracking-widest border-l-4 border-orange-500 pl-4">Biografía</h3>
+            <p class="text-white/70 leading-relaxed text-sm font-medium">
+              {artist.bio || "Este artista aún no ha añadido su biografía. El movimiento Wild Gvng sigue creciendo."}
+            </p>
+          </div>
+
+          <div class="space-y-6">
+            <h3 class="text-xl font-black text-white uppercase tracking-widest border-l-4 border-orange-500 pl-4">Redes Sociales</h3>
+            <div class="flex flex-wrap gap-4">
+              {Object.entries(socialLinks).map(([platform, url]) => (
+                <a href={url} target="_blank" class="px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest text-white hover:bg-orange-500 hover:text-black transition-all">
+                  {platform}
+                </a>
+              ))}
+              {Object.keys(socialLinks).length === 0 && (
+                <p class="text-white/40 text-xs font-bold uppercase tracking-widest">No hay redes vinculadas</p>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <!-- Music & Events -->
+        <div class="lg:col-span-2 space-y-20">
+          <!-- Music Placeholder -->
+          <div class="space-y-8">
+            <div class="flex items-center justify-between">
+              <h3 class="text-2xl font-black text-white uppercase tracking-tighter">Últimos Lanzamientos</h3>
+              <a href="#" class="text-[10px] font-black text-orange-500 uppercase tracking-widest hover:text-white transition-colors">Ver Todo</a>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {[1, 2, 3, 4].map((i) => (
+                <div class="group flex items-center gap-6 p-4 bg-white/5 border border-white/5 rounded-2xl hover:bg-white/10 transition-all cursor-pointer">
+                  <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-xl font-black text-white">
+                    {i}
+                  </div>
+                  <div class="flex-1">
+                    <h4 class="text-sm font-black text-white uppercase tracking-wide">Track Urbano #{i}</h4>
+                    <p class="text-[10px] text-white/40 font-bold uppercase tracking-widest">Single • 2026</p>
+                  </div>
+                  <button class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white group-hover:bg-orange-500 group-hover:text-black transition-all">
+                    ▶
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Events -->
+          <div class="space-y-8">
+            <div class="flex items-center justify-between">
+              <h3 class="text-2xl font-black text-white uppercase tracking-tighter">Próximos Eventos</h3>
+              <a href="/eventos" class="text-[10px] font-black text-orange-500 uppercase tracking-widest hover:text-white transition-colors">Ver Cartelera</a>
+            </div>
+            <div class="space-y-4">
+              {artist.events && artist.events.length > 0 ? (
+                artist.events.map((event) => (
+                  <div class="flex flex-col md:flex-row md:items-center gap-6 p-8 bg-white/5 border border-white/5 rounded-3xl hover:border-orange-500/30 transition-all">
+                    <div class="flex flex-col items-center justify-center px-6 py-4 bg-orange-500 rounded-2xl text-black min-w-[100px]">
+                      <span class="text-2xl font-black leading-none">{new Date(event.fecha).getDate()}</span>
+                      <span class="text-[10px] font-black uppercase tracking-widest">{new Date(event.fecha).toLocaleString('es-MX', { month: 'short' })}</span>
+                    </div>
+                    <div class="flex-1 space-y-2">
+                      <h4 class="text-xl font-black text-white uppercase tracking-tight">{event.titulo}</h4>
+                      <p class="text-sm text-white/60 font-medium">{event.lugar.nombre} • {event.lugar.ciudad}</p>
+                    </div>
+                    <a href={`/eventos/${event.id}`} class="px-8 py-4 border border-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest text-white hover:bg-white hover:text-black transition-all text-center">
+                      Tickets
+                    </a>
+                  </div>
+                ))
+              ) : (
+                <div class="p-12 border-2 border-dashed border-white/5 rounded-3xl text-center">
+                  <p class="text-white/40 text-xs font-bold uppercase tracking-[0.2em]">No hay eventos programados por ahora</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  @keyframes slideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .animate-slide-up {
+    animation: slideUp 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+  }
+  .animate-fade-in {
+    animation: fadeIn 1s ease forwards;
+  }
+  .delay-200 {
+    animation-delay: 0.2s;
+  }
+</style>

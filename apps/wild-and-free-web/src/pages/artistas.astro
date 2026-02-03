@@ -1,69 +1,30 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { supabase } from '../lib/supabase';
 
-const artists = [
+// Fetch artists from Supabase
+const { data: dbArtists, error } = await supabase
+  .from('artists')
+  .select('*')
+  .order('nombre');
+
+// Fallback to static artists if DB is empty or error
+const artists = (dbArtists && dbArtists.length > 0) ? dbArtists : [
   {
     id: '1',
-    name: 'Lil Kiro',
-    image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=800&fit=crop&crop=face',
-    genre: 'Trap',
-    followers: '2.1M',
-    tracks: 24,
-    role: 'Rapero'
+    nombre: 'Lil Kiro',
+    slug: 'lil-kiro',
+    imagenes: { profile: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=800&fit=crop&crop=face' },
+    stats: { seguidores: '2.1M', oyentes: '1.2M' },
+    bio: 'Rapero urbano'
   },
   {
     id: '2',
-    name: 'Neon Ghost',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=800&fit=crop&crop=face',
-    genre: 'Drill',
-    followers: '1.8M',
-    tracks: 18,
-    role: 'Rapero'
-  },
-  {
-    id: '4',
-    name: 'Shadow V',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=800&h=800&fit=crop&crop=face',
-    genre: 'Hip Hop',
-    followers: '1.5M',
-    tracks: 15,
-    role: 'Hip Hop'
-  },
-  {
-    id: '5',
-    name: 'Crystal Wave',
-    image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&h=800&fit=crop&crop=face',
-    genre: 'Electronic',
-    followers: '890K',
-    tracks: 12,
-    role: 'Productor'
-  },
-  {
-    id: '6',
-    name: 'Midnight Rider',
-    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&h=800&fit=crop&crop=face',
-    genre: 'Trap',
-    followers: '2.7M',
-    tracks: 28,
-    role: 'DJ'
-  },
-  {
-    id: 'a1',
-    name: 'Nova K',
-    role: 'Rapero',
-    image: 'https://images.unsplash.com/photo-1520975958221-7f61d4d6df4b?auto=format&fit=crop&w=800&q=80',
-    genre: 'Rapero',
-    followers: '2.4M',
-    tracks: 32
-  },
-  {
-    id: 'a2',
-    name: 'Sable',
-    role: 'Productor',
-    image: 'https://images.unsplash.com/photo-1520975693413-35e0000c0e4e?auto=format&fit=crop&w=800&q=80',
-    genre: 'Productor',
-    followers: '1.2M',
-    tracks: 45
+    nombre: 'Neon Ghost',
+    slug: 'neon-ghost',
+    imagenes: { profile: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=800&fit=crop&crop=face' },
+    stats: { seguidores: '1.8M', oyentes: '900K' },
+    bio: 'Drill artist'
   }
 ];
 
@@ -86,20 +47,20 @@ const config = {
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         {artists.map((artist) => (
-          <a href={`/artista/${artist.id}`} class="group relative aspect-[3/4] overflow-hidden rounded-3xl bg-[#111] border border-white/5 hover:border-orange-500/50 transition-all duration-500 shadow-2xl">
+          <a href={`/artista/${artist.slug}`} class="group relative aspect-[3/4] overflow-hidden rounded-3xl bg-[#111] border border-white/5 hover:border-orange-500/50 transition-all duration-500 shadow-2xl">
             <img 
-              src={artist.image} 
-              alt={artist.name} 
+              src={artist.imagenes?.profile || 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80'} 
+              alt={artist.nombre} 
               loading="lazy" 
               class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110"
             />
             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-40 transition-opacity duration-500"></div>
             <div class="absolute inset-x-0 bottom-0 p-8 space-y-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-              <p class="text-[10px] font-black uppercase tracking-[0.2em] text-orange-500">Artista // {artist.role}</p>
-              <h3 class="text-3xl font-black uppercase tracking-tighter text-white drop-shadow-md">{artist.name}</h3>
+              <p class="text-[10px] font-black uppercase tracking-[0.2em] text-orange-500">Artista Verificado</p>
+              <h3 class="text-3xl font-black uppercase tracking-tighter text-white drop-shadow-md">{artist.nombre}</h3>
               <div class="flex items-center gap-4 pt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
-                <span class="text-[10px] font-black text-white/60 uppercase tracking-widest">{artist.followers} seguidores</span>
-                <span class="text-[10px] font-black text-white/60 uppercase tracking-widest">{artist.tracks} canciones</span>
+                <span class="text-[10px] font-black text-white/60 uppercase tracking-widest">{artist.stats?.seguidores || '0'} seguidores</span>
+                <span class="text-[10px] font-black text-white/60 uppercase tracking-widest">{artist.stats?.oyentes || '0'} oyentes</span>
               </div>
             </div>
           </a>
