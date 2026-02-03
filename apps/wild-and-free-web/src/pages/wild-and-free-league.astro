@@ -1,0 +1,322 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const config = {
+  name: "Wild Gvng - Wild and Free League",
+  primary_color: "#C98300",
+  secondary_color: "#8A0303"
+};
+
+// 16 Initial participants (Mock)
+const initialParticipants = [
+  { id: 'p1', name: 'Lil Kiro', image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=100&h=100&fit=crop' },
+  { id: 'p2', name: 'Neon Ghost', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop' },
+  { id: 'p3', name: 'Shadow V', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop' },
+  { id: 'p4', name: 'Nova K', image: 'https://images.unsplash.com/photo-1520975958221-7f61d4d6df4b?w=100&h=100&fit=crop' },
+  { id: 'p5', name: 'Sable', image: 'https://images.unsplash.com/photo-1520975693413-35e0000c0e4e?w=100&h=100&fit=crop' },
+  { id: 'p6', name: 'Storm Trooper', image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop' },
+  { id: 'p7', name: 'Midnight Rider', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop' },
+  { id: 'p8', name: 'Crystal Wave', image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop' },
+  { id: 'p9', name: 'Drill King', image: 'https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=100&h=100&fit=crop' },
+  { id: 'p10', name: 'Flow Master', image: 'https://images.unsplash.com/photo-1504194104404-4cd3c27ac351?w=100&h=100&fit=crop' },
+  { id: 'p11', name: 'Rhyme Slayer', image: 'https://images.unsplash.com/photo-1501196354995-cbb51c65aeb1?w=100&h=100&fit=crop' },
+  { id: 'p12', name: 'Beat Beast', image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop' },
+  { id: 'p13', name: 'Word Smith', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop' },
+  { id: 'p14', name: 'Urban Soul', image: 'https://images.unsplash.com/photo-1520975958221-7f61d4d6df4b?w=100&h=100&fit=crop' },
+  { id: 'p15', name: 'Ghetto Star', image: 'https://images.unsplash.com/photo-1520975693413-35e0000c0e4e?w=100&h=100&fit=crop' },
+  { id: 'p16', name: 'Street Legend', image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=100&h=100&fit=crop' },
+];
+---
+
+<Layout config={config}>
+  <main class="min-h-screen bg-black pt-32 pb-40 px-4 overflow-x-auto">
+    <div class="max-w-[1600px] mx-auto space-y-12">
+      <div class="space-y-4 text-center">
+        <h1 class="text-6xl md:text-8xl font-black tracking-tighter text-white uppercase leading-none">
+          WILD <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-600">AND FREE</span>
+        </h1>
+        <p class="text-xl text-white font-bold uppercase tracking-[0.3em]">Liga de Freestyle • Fase de Eliminación</p>
+      </div>
+
+      <!-- Realtime Status -->
+      <div class="flex justify-center">
+        <div id="realtime-status" class="flex items-center gap-3 px-6 py-2 bg-white/5 border border-white/10 rounded-full">
+          <span class="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
+          <span class="text-[10px] font-black text-white/60 uppercase tracking-widest">Sincronización en Tiempo Real Activa</span>
+        </div>
+      </div>
+
+      <!-- Participants Pool -->
+      <div class="bg-white/[0.02] border border-white/5 rounded-[2rem] p-8 space-y-6">
+        <h3 class="text-sm font-black text-orange-500 uppercase tracking-widest text-center">Participantes Disponibles</h3>
+        <div id="participants-pool" class="flex flex-wrap justify-center gap-4">
+          {initialParticipants.map(p => (
+            <div 
+              draggable="true" 
+              id={p.id}
+              data-name={p.name}
+              data-image={p.image}
+              class="participant-item group relative w-16 h-16 md:w-20 md:h-20 rounded-2xl overflow-hidden cursor-grab active:cursor-grabbing border-2 border-white/10 hover:border-orange-500 transition-all shadow-xl"
+            >
+              <img src={p.image} alt={p.name} class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" />
+              <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <span class="text-[8px] font-black text-white text-center px-1 uppercase">{p.name}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Tournament Bracket -->
+      <div class="tournament-container py-20 flex justify-between items-center gap-4 min-w-[1200px]">
+        
+        <!-- LEFT SIDE -->
+        <div class="flex gap-12 items-center">
+          <!-- Round of 16 (Left) -->
+          <div class="space-y-8">
+            {[1, 2, 3, 4].map(i => (
+              <div class="bracket-match space-y-2">
+                <div class="bracket-slot left" data-slot={`l1-m${i}-p1`}></div>
+                <div class="bracket-slot left" data-slot={`l1-m${i}-p2`}></div>
+              </div>
+            ))}
+          </div>
+          <!-- Quarter Finals (Left) -->
+          <div class="space-y-24">
+            {[1, 2].map(i => (
+              <div class="bracket-match space-y-2 relative">
+                <div class="bracket-slot left" data-slot={`l2-m${i}-p1`}></div>
+                <div class="bracket-slot left" data-slot={`l2-m${i}-p2`}></div>
+                <!-- Connector -->
+                <div class="absolute -left-12 top-1/2 w-12 h-px bg-white/10"></div>
+              </div>
+            ))}
+          </div>
+          <!-- Semis (Left) -->
+          <div class="space-y-48">
+            <div class="bracket-match space-y-2 relative">
+              <div class="bracket-slot left" data-slot={`l3-m1-p1`}></div>
+              <div class="bracket-slot left" data-slot={`l3-m1-p2`}></div>
+              <div class="absolute -left-12 top-1/2 w-12 h-px bg-white/10"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CENTER (FINAL) -->
+        <div class="flex flex-col items-center gap-12">
+          <div class="text-center space-y-4">
+            <div class="w-32 h-32 rounded-full bg-gradient-to-br from-orange-500 to-red-600 p-1 shadow-2xl shadow-orange-500/20">
+              <div class="w-full h-full rounded-full bg-black flex items-center justify-center overflow-hidden">
+                <img src="/favicon.svg" class="w-16 h-16 opacity-20" alt="Trophy" />
+              </div>
+            </div>
+            <h2 class="text-4xl font-black text-white uppercase tracking-tighter italic">Gran Final</h2>
+          </div>
+          <div class="flex gap-8 items-center">
+            <div class="bracket-slot final" data-slot="final-p1"></div>
+            <span class="text-4xl font-black text-orange-500 italic">VS</span>
+            <div class="bracket-slot final" data-slot="final-p2"></div>
+          </div>
+          <div class="bracket-slot winner scale-125" data-slot="winner"></div>
+          <p class="text-[10px] font-black text-orange-500 uppercase tracking-[0.4em]">Campeón Wild Gvng</p>
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="flex gap-12 items-center flex-row-reverse">
+          <!-- Round of 16 (Right) -->
+          <div class="space-y-8">
+            {[1, 2, 3, 4].map(i => (
+              <div class="bracket-match space-y-2">
+                <div class="bracket-slot right" data-slot={`r1-m${i}-p1`}></div>
+                <div class="bracket-slot right" data-slot={`r1-m${i}-p2`}></div>
+              </div>
+            ))}
+          </div>
+          <!-- Quarter Finals (Right) -->
+          <div class="space-y-24">
+            {[1, 2].map(i => (
+              <div class="bracket-match space-y-2 relative">
+                <div class="bracket-slot right" data-slot={`r2-m${i}-p1`}></div>
+                <div class="bracket-slot right" data-slot={`r2-m${i}-p2`}></div>
+                <div class="absolute -right-12 top-1/2 w-12 h-px bg-white/10"></div>
+              </div>
+            ))}
+          </div>
+          <!-- Semis (Right) -->
+          <div class="space-y-48">
+            <div class="bracket-match space-y-2 relative">
+              <div class="bracket-slot right" data-slot={`r3-m1-p1`}></div>
+              <div class="bracket-slot right" data-slot={`r3-m1-p2`}></div>
+              <div class="absolute -right-12 top-1/2 w-12 h-px bg-white/10"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .bracket-slot {
+    width: 140px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    position: relative;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    overflow: hidden;
+  }
+
+  .bracket-slot.drag-over {
+    background: rgba(201, 131, 0, 0.1);
+    border-color: #C98300;
+    transform: scale(1.05);
+  }
+
+  .bracket-slot.filled {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+
+  .bracket-slot.final {
+    width: 180px;
+    height: 70px;
+    background: rgba(201, 131, 0, 0.05);
+    border-color: rgba(201, 131, 0, 0.2);
+  }
+
+  .bracket-slot.winner {
+    width: 200px;
+    height: 80px;
+    background: linear-gradient(to right, rgba(201, 131, 0, 0.2), rgba(138, 3, 3, 0.2));
+    border-color: #C98300;
+    box-shadow: 0 0 30px rgba(201, 131, 0, 0.2);
+  }
+
+  .slot-content {
+    display: flex;
+    items-center: center;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .slot-img {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    object-cover: cover;
+  }
+
+  .slot-name {
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>
+
+<script>
+  import { supabase } from '../lib/supabase';
+
+  // --- Drag and Drop Logic ---
+  const slots = document.querySelectorAll('.bracket-slot');
+  const participants = document.querySelectorAll('.participant-item');
+  let bracketState: Record<string, any> = {};
+
+  // Realtime Channel
+  const channel = supabase.channel('wild-league', {
+    config: {
+      broadcast: { self: true },
+    },
+  });
+
+  channel
+    .on('broadcast', { event: 'state-update' }, (payload) => {
+      console.log('Received state update:', payload);
+      updateBracketUI(payload.payload.state);
+    })
+    .subscribe((status) => {
+      if (status === 'SUBSCRIBED') {
+        console.log('Subscribed to bracket updates!');
+      }
+    });
+
+  participants.forEach(p => {
+    p.addEventListener('dragstart', (e: any) => {
+      e.dataTransfer.setData('participantId', p.id);
+      e.dataTransfer.setData('name', p.getAttribute('data-name'));
+      e.dataTransfer.setData('image', p.getAttribute('data-image'));
+    });
+  });
+
+  slots.forEach(slot => {
+    slot.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      slot.classList.add('drag-over');
+    });
+
+    slot.addEventListener('dragleave', () => {
+      slot.classList.remove('drag-over');
+    });
+
+    slot.addEventListener('drop', (e: any) => {
+      e.preventDefault();
+      slot.classList.remove('drag-over');
+      
+      const id = e.dataTransfer.getData('participantId');
+      const name = e.dataTransfer.getData('name');
+      const image = e.dataTransfer.getData('image');
+      const slotId = slot.getAttribute('data-target') || slot.getAttribute('data-slot');
+
+      if (slotId) {
+        bracketState[slotId] = { id, name, image };
+        
+        // Broadcast change
+        channel.send({
+          type: 'broadcast',
+          event: 'state-update',
+          payload: { state: bracketState },
+        });
+      }
+    });
+  });
+
+  function updateBracketUI(state: Record<string, any>) {
+    bracketState = state;
+    Object.entries(state).forEach(([slotId, data]: [string, any]) => {
+      const slot = document.querySelector(`[data-slot="${slotId}"]`);
+      if (slot) {
+        slot.innerHTML = `
+          <div class="slot-content animate-fade-in">
+            <img src="${data.image}" class="slot-img" />
+            <span class="slot-name">${data.name}</span>
+            <button class="ml-auto text-white/20 hover:text-red-500 remove-btn" data-slot="${slotId}">×</button>
+          </div>
+        `;
+        slot.classList.add('filled');
+        
+        // Handle removal
+        slot.querySelector('.remove-btn')?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          delete bracketState[slotId];
+          channel.send({
+            type: 'broadcast',
+            event: 'state-update',
+            payload: { state: bracketState },
+          });
+          slot.innerHTML = '';
+          slot.classList.remove('filled');
+        });
+      }
+    });
+  }
+</script>
