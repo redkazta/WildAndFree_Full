@@ -56,41 +56,40 @@
 
 <script>
   class GlobalPlayer {
-    private el = document.getElementById('global-player');
-    private titleEl = document.getElementById('player-title');
-    private artistEl = document.getElementById('player-artist');
-    private imgEl = document.getElementById('player-img') as HTMLImageElement;
-    private placeholderEl = document.getElementById('player-placeholder');
-    private playBtn = document.getElementById('player-play-btn');
-    private playIcon = document.getElementById('play-icon');
-    private pauseIcon = document.getElementById('pause-icon');
-    private closeBtn = document.getElementById('player-close');
-    private isPlaying = false;
-
     constructor() {
+      this.el = document.getElementById('global-player');
+      this.titleEl = document.getElementById('player-title');
+      this.artistEl = document.getElementById('player-artist');
+      this.imgEl = document.getElementById('player-img');
+      this.placeholderEl = document.getElementById('player-placeholder');
+      this.playBtn = document.getElementById('player-play-btn');
+      this.playIcon = document.getElementById('play-icon');
+      this.pauseIcon = document.getElementById('pause-icon');
+      this.closeBtn = document.getElementById('player-close');
+      this.isPlaying = false;
       this.init();
     }
 
-    private init() {
+    init() {
       this.playBtn?.addEventListener('click', () => this.togglePlay());
       this.closeBtn?.addEventListener('click', () => this.hide());
-      
-      // Listen for global play events
-      window.addEventListener('wild-play', (e: any) => {
-        this.play(e.detail);
+
+      window.addEventListener('wild-play', (e) => {
+        const detail = e?.detail || {};
+        this.play(detail);
       });
     }
 
-    play(track: { title: string, artist: string, image?: string }) {
-      if (this.titleEl) this.titleEl.textContent = track.title;
-      if (this.artistEl) this.artistEl.textContent = track.artist;
-      
-      if (track.image && this.imgEl) {
+    play(track) {
+      if (this.titleEl) this.titleEl.textContent = track.title || 'Reproduciendo';
+      if (this.artistEl) this.artistEl.textContent = track.artist || 'Wild Gvng';
+
+      if (track.image && this.imgEl instanceof HTMLImageElement) {
         this.imgEl.src = track.image;
         this.imgEl.classList.remove('hidden');
         this.placeholderEl?.classList.add('hidden');
       } else {
-        this.imgEl?.classList.add('hidden');
+        if (this.imgEl instanceof HTMLImageElement) this.imgEl.classList.add('hidden');
         this.placeholderEl?.classList.remove('hidden');
       }
 
@@ -98,13 +97,13 @@
       this.setPlaying(true);
     }
 
-    private togglePlay() {
+    togglePlay() {
       this.setPlaying(!this.isPlaying);
     }
 
-    private setPlaying(playing: boolean) {
-      this.isPlaying = playing;
-      if (playing) {
+    setPlaying(playing) {
+      this.isPlaying = Boolean(playing);
+      if (this.isPlaying) {
         this.playIcon?.classList.add('hidden');
         this.pauseIcon?.classList.remove('hidden');
       } else {
@@ -113,20 +112,17 @@
       }
     }
 
-    private show() {
+    show() {
       this.el?.classList.remove('translate-y-full');
     }
 
-    private hide() {
+    hide() {
       this.el?.classList.add('translate-y-full');
       this.setPlaying(false);
     }
   }
 
-  // Initialize player
-  if (!window.globalPlayer) {
-    window.globalPlayer = new GlobalPlayer();
-  }
+  if (!window.globalPlayer) window.globalPlayer = new GlobalPlayer();
 </script>
 
 <style>

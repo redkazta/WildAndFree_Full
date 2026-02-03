@@ -12,7 +12,7 @@ import Layout from '../../layouts/Layout.astro';
 </Layout>
 
 <script type="module">
-  import { supabase } from '../../lib/supabaseClient'
+  import { supabase } from '../../lib/supabase'
 
   try {
     await supabase.auth.exchangeCodeForSession(window.location.href)
@@ -20,4 +20,3 @@ import Layout from '../../layouts/Layout.astro';
     window.location.replace('/')
   }
 </script>
-

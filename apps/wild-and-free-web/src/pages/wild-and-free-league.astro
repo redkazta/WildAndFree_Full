@@ -435,13 +435,13 @@ const initialParticipants = [
   }
 </style>
 
-<script>
+<script type="module">
   import { supabase } from '../lib/supabase';
 
   // --- Drag and Drop Logic ---
   const slots = document.querySelectorAll('.bracket-slot');
   const participants = document.querySelectorAll('.participant-item');
-  let bracketState: Record<string, any> = {};
+  let bracketState = {};
 
   // Realtime Channel
   const channel = supabase.channel('wild-league', {
@@ -457,8 +457,8 @@ const initialParticipants = [
     .subscribe();
 
   const usedParticipantIds = () => {
-    const used = new Set<string>();
-    Object.values(bracketState || {}).forEach((v: any) => {
+    const used = new Set();
+    Object.values(bracketState || {}).forEach((v) => {
       if (v?.locked && v?.id) used.add(v.id);
     });
     return used;
@@ -481,16 +481,17 @@ const initialParticipants = [
     });
   };
 
-  participants.forEach(p => {
-    p.addEventListener('dragstart', (e: any) => {
+  participants.forEach((p) => {
+    p.addEventListener('dragstart', (e) => {
       if (p.classList.contains('is-used')) return;
+      if (!e.dataTransfer) return;
       e.dataTransfer.setData('participantId', p.id);
-      e.dataTransfer.setData('name', p.getAttribute('data-name'));
-      e.dataTransfer.setData('image', p.getAttribute('data-image'));
+      e.dataTransfer.setData('name', p.getAttribute('data-name') || '');
+      e.dataTransfer.setData('image', p.getAttribute('data-image') || '');
     });
   });
 
-  slots.forEach(slot => {
+  slots.forEach((slot) => {
     slot.addEventListener('dragover', (e) => {
       e.preventDefault();
       slot.classList.add('drag-over');
@@ -500,10 +501,11 @@ const initialParticipants = [
       slot.classList.remove('drag-over');
     });
 
-    slot.addEventListener('drop', (e: any) => {
+    slot.addEventListener('drop', (e) => {
       e.preventDefault();
       slot.classList.remove('drag-over');
       
+      if (!e.dataTransfer) return;
       const id = e.dataTransfer.getData('participantId');
       const name = e.dataTransfer.getData('name');
       const image = e.dataTransfer.getData('image');
@@ -516,11 +518,11 @@ const initialParticipants = [
         if (sourceSlotId && sourceSlotId !== slotId) {
           delete bracketState[sourceSlotId];
           const sourceEl = document.querySelector(`[data-slot="${sourceSlotId}"]`);
-          if (sourceEl) {
+          if (sourceEl instanceof HTMLElement) {
             sourceEl.innerHTML = '';
             sourceEl.classList.remove('filled');
             sourceEl.classList.remove('locked');
-            (sourceEl as HTMLElement).setAttribute('draggable', 'false');
+            sourceEl.setAttribute('draggable', 'false');
           }
         }
         bracketState[slotId] = { id, name, image, locked: false };
@@ -534,7 +536,7 @@ const initialParticipants = [
     });
   });
 
-  function renderSlot(slot: Element, data: any) {
+  function renderSlot(slot, data) {
     const slotId = slot.getAttribute('data-slot');
     const locked = Boolean(bracketState?.[slotId || '']?.locked);
     const draggable = Boolean(data?.id) && !locked;
@@ -550,7 +552,7 @@ const initialParticipants = [
     `;
     slot.classList.add('filled');
     slot.classList.toggle('locked', locked);
-    (slot as HTMLElement).setAttribute('draggable', draggable ? 'true' : 'false');
+    if (slot instanceof HTMLElement) slot.setAttribute('draggable', draggable ? 'true' : 'false');
     
     slot.querySelector('.remove-btn')?.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -568,11 +570,12 @@ const initialParticipants = [
       }
     });
 
-    (slot as HTMLElement).addEventListener('dragstart', (e: any) => {
+    slot.addEventListener('dragstart', (e) => {
       if (!slotId) return;
       const current = bracketState?.[slotId];
       if (!current) return;
       if (current.locked) return;
+      if (!e.dataTransfer) return;
       e.dataTransfer.setData('participantId', current.id);
       e.dataTransfer.setData('name', current.name);
       e.dataTransfer.setData('image', current.image);
@@ -581,7 +584,7 @@ const initialParticipants = [
     });
   }
 
-  function updateBracketUI(state: Record<string, any>) {
+  function updateBracketUI(state) {
     bracketState = state;
     document.querySelectorAll('.bracket-slot').forEach((slotEl) => {
       const slotId = slotEl.getAttribute('data-slot');
@@ -591,7 +594,7 @@ const initialParticipants = [
         slotEl.innerHTML = '';
         slotEl.classList.remove('filled');
         slotEl.classList.remove('locked');
-        (slotEl as HTMLElement).setAttribute('draggable', 'false');
+        if (slotEl instanceof HTMLElement) slotEl.setAttribute('draggable', 'false');
         return;
       }
       renderSlot(slotEl, data);
@@ -601,7 +604,7 @@ const initialParticipants = [
   }
 
   // --- Context menu: advance to next round ---
-  const getNextSlotId = (slotId: string) => {
+  const getNextSlotId = (slotId) => {
     if (slotId.startsWith('l1-m')) {
       const m = parseInt(slotId.split('-')[1].slice(1), 10);
       if (m === 1) return 'l2-m1-p1';
@@ -665,25 +668,25 @@ const initialParticipants = [
     { from: ['final-p1', 'final-p2'], to: 'winner' },
   ];
 
-  const getSlotEl = (slotId: string) => document.querySelector(`.bracket-slot[data-slot="${slotId}"]`) as HTMLElement | null;
+  const getSlotEl = (slotId) => document.querySelector(`.bracket-slot[data-slot="${slotId}"]`);
 
-  const getPoint = (el: HTMLElement, side: 'left' | 'right') => {
+  const getPoint = (el, side) => {
     const rect = el.getBoundingClientRect();
-    const parent = (document.querySelector('.bracket') as HTMLElement).getBoundingClientRect();
+    const parent = document.querySelector('.bracket').getBoundingClientRect();
     const x = side === 'left' ? rect.left - parent.left : rect.right - parent.left;
     const y = rect.top - parent.top + rect.height / 2;
     return { x, y, rect, parent };
   };
 
-  const getTopCenterPoint = (el: HTMLElement) => {
+  const getTopCenterPoint = (el) => {
     const rect = el.getBoundingClientRect();
-    const parent = (document.querySelector('.bracket') as HTMLElement).getBoundingClientRect();
+    const parent = document.querySelector('.bracket').getBoundingClientRect();
     const x = rect.left - parent.left + rect.width / 2;
     const y = rect.top - parent.top;
     return { x, y, rect, parent };
   };
 
-  const drawPath = (svg: SVGSVGElement, d: string) => {
+  const drawPath = (svg, d) => {
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     path.setAttribute('d', d);
     path.setAttribute('stroke', '#ffffff');
@@ -694,8 +697,8 @@ const initialParticipants = [
   };
 
   const drawBracketLines = () => {
-    const bracket = document.querySelector('.bracket') as HTMLElement | null;
-    const svg = document.getElementById('bracket-lines') as SVGSVGElement | null;
+    const bracket = document.querySelector('.bracket');
+    const svg = document.getElementById('bracket-lines');
     if (!bracket || !svg) return;
 
     const rect = bracket.getBoundingClientRect();
@@ -719,8 +722,8 @@ const initialParticipants = [
         const base1 = getTopCenterPoint(fromA);
         const base2 = getTopCenterPoint(fromB);
         const winnerRect = to.getBoundingClientRect();
-        const parentRect = (document.querySelector('.bracket') as HTMLElement).getBoundingClientRect();
-        const label = document.querySelector('.champion-text') as HTMLElement | null;
+        const parentRect = document.querySelector('.bracket').getBoundingClientRect();
+        const label = document.querySelector('.champion-text');
         const labelRect = label?.getBoundingClientRect();
 
         const start1 = {
@@ -739,7 +742,7 @@ const initialParticipants = [
           : Math.round(Math.min(start1.y, start2.y) - 24);
         const yJoin = Math.round(yLabelBottom + 14);
 
-        const routeToJoin = (start: { x: number; y: number }) => {
+        const routeToJoin = (start) => {
           const x = Math.round(start.x);
           const y = Math.round(start.y);
           drawPath(svg, `M ${x} ${y} L ${x} ${yJoin}`);
@@ -777,8 +780,8 @@ const initialParticipants = [
 
   window.addEventListener('resize', () => requestAnimationFrame(drawBracketLines));
 
-  const showMenuAt = (x: number, y: number, slotId: string) => {
-    const menuEl = menu as HTMLElement;
+  const showMenuAt = (x, y, slotId) => {
+    const menuEl = menu;
     const menuWidth = 260;
     const menuHeight = 96;
     const padding = 8;
@@ -790,8 +793,8 @@ const initialParticipants = [
     menuEl.dataset.slot = slotId;
 
     const locked = Boolean(bracketState?.[slotId]?.locked);
-    const lockBtn = menuEl.querySelector('button[data-action="lock"]') as HTMLButtonElement | null;
-    const advanceBtn = menuEl.querySelector('button[data-action="advance"]') as HTMLButtonElement | null;
+    const lockBtn = menuEl.querySelector('button[data-action="lock"]');
+    const advanceBtn = menuEl.querySelector('button[data-action="advance"]');
     [lockBtn, advanceBtn].forEach((b) => {
       if (!b) return;
       b.classList.remove('opacity-50', 'pointer-events-none');
@@ -804,7 +807,7 @@ const initialParticipants = [
   };
 
   document.addEventListener('contextmenu', (e) => {
-    const slot = (e.target as HTMLElement).closest('.bracket-slot') as HTMLElement | null;
+    const slot = e.target?.closest?.('.bracket-slot');
     if (!slot) return;
     const slotId = slot.getAttribute('data-slot');
     if (!slotId) return;
@@ -814,7 +817,7 @@ const initialParticipants = [
   });
 
   document.addEventListener('click', (e) => {
-    const btn = (e.target as HTMLElement).closest('.slot-menu-btn') as HTMLElement | null;
+    const btn = e.target?.closest?.('.slot-menu-btn');
     if (!btn) return;
     e.preventDefault();
     e.stopPropagation();
@@ -826,10 +829,10 @@ const initialParticipants = [
   });
 
   menu.addEventListener('click', (e) => {
-    const btn = (e.target as HTMLElement).closest('button');
+    const btn = e.target?.closest?.('button');
     if (!btn) return;
     const action = btn.getAttribute('data-action');
-    const fromSlot = (menu as HTMLElement).dataset.slot;
+    const fromSlot = menu.dataset.slot;
     hideMenu();
     if (!fromSlot) return;
     const data = bracketState?.[fromSlot];

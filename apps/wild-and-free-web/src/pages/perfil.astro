@@ -633,7 +633,7 @@ import Layout from '../layouts/Layout.astro';
   }
 </style>
 
-<script>
+<script type="module">
   import { supabase } from '../lib/supabase';
 
   document.addEventListener('DOMContentLoaded', async () => {
@@ -669,14 +669,14 @@ import Layout from '../layouts/Layout.astro';
     const nameEl = document.getElementById('profile-name');
     const usernameEl = document.getElementById('profile-username');
     const bioEl = document.getElementById('profile-bio');
-    const avatarImg = document.getElementById('profile-avatar-img') as HTMLImageElement;
+    const avatarImg = document.getElementById('profile-avatar-img');
     const avatarPlaceholder = document.getElementById('avatar-placeholder');
 
     if (nameEl) nameEl.textContent = profile.nombre || 'Usuario Wild';
     if (usernameEl) usernameEl.textContent = `@${profile.nombre?.toLowerCase().replace(/\s/g, '_') || 'usuario'}`;
     if (bioEl) bioEl.textContent = profile.bio || 'Miembro de Wild Gvng • Amante del hip-hop urbano';
     
-    if (profile.avatar_url && avatarImg) {
+    if (profile.avatar_url && avatarImg instanceof HTMLImageElement) {
       avatarImg.src = profile.avatar_url;
       avatarImg.classList.remove('hidden');
       avatarPlaceholder?.classList.add('hidden');
@@ -691,13 +691,13 @@ import Layout from '../layouts/Layout.astro';
     const tabs = document.querySelectorAll('.tab');
     const tabContents = document.querySelectorAll('.tab-content');
 
-    tabs.forEach(tab => {
+    tabs.forEach((tab) => {
       tab.addEventListener('click', () => {
-        const targetTab = (tab as HTMLElement).dataset.tab;
+        const targetTab = tab instanceof HTMLElement ? tab.dataset.tab : null;
         tabs.forEach(t => t.classList.remove('active'));
         tabContents.forEach(content => content.classList.remove('active'));
         tab.classList.add('active');
-        const targetContent = document.getElementById(targetTab!);
+        const targetContent = targetTab ? document.getElementById(targetTab) : null;
         if (targetContent) targetContent.classList.add('active');
       });
     });

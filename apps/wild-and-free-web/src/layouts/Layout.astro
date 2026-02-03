@@ -403,7 +403,8 @@ const isActive = (href: string) => {
 				// Click outside to close
 				document.addEventListener('click', (e) => {
 					if (body.classList.contains('sidebar-open')) {
-						if (!sidebar?.contains(e.target as Node) && !trigger?.contains(e.target as Node)) {
+						const target = e.target;
+						if (target instanceof Node && !sidebar?.contains(target) && !trigger?.contains(target)) {
 							body.classList.remove('sidebar-open');
 						}
 					}
@@ -415,7 +416,7 @@ const isActive = (href: string) => {
 			document.addEventListener('astro:after-swap', setupSidebar);
 		</script>
 
-		<script>
+		<script type="module">
 			import { supabase } from '../lib/supabase';
 
 			// --- Auth & Session Logic ---
@@ -487,13 +488,15 @@ const isActive = (href: string) => {
 					if (document.body.classList.contains('sidebar-open')) {
 						const sidebar = document.getElementById('sidebar');
 						const trigger = document.getElementById('sidebar-trigger');
-						if (!sidebar?.contains(e.target as Node) && !trigger?.contains(e.target as Node)) {
+						const target = e.target;
+						if (target instanceof Node && !sidebar?.contains(target) && !trigger?.contains(target)) {
 							document.body.classList.remove('sidebar-open');
 						}
 					}
 
-					const isTrigger = (e.target as HTMLElement).closest('.popover-trigger');
-					const isPopover = (e.target as HTMLElement).closest('.popover');
+					const el = e.target instanceof Element ? e.target : null;
+					const isTrigger = el?.closest('.popover-trigger');
+					const isPopover = el?.closest('.popover');
 					if (!isTrigger && !isPopover) {
 						popovers.forEach(p => p.classList.remove('active'));
 					}

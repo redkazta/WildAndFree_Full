@@ -53,32 +53,37 @@ const { products = [] } = Astro.props;
 
 <script>
   // Handle Quantity Controls
-  document.querySelectorAll('.qty-plus').forEach(btn => {
+  document.querySelectorAll('.qty-plus').forEach((btn) => {
     btn.addEventListener('click', (e) => {
-      const parent = (e.target as HTMLElement).parentElement;
+      const target = e.target instanceof HTMLElement ? e.target : null;
+      const parent = target?.parentElement;
       const valueEl = parent?.querySelector('.qty-value');
-      if (valueEl) valueEl.textContent = (parseInt(valueEl.textContent!) + 1).toString();
+      if (valueEl) {
+        const current = parseInt(valueEl.textContent || '1', 10);
+        valueEl.textContent = String(current + 1);
+      }
     });
   });
 
-  document.querySelectorAll('.qty-minus').forEach(btn => {
+  document.querySelectorAll('.qty-minus').forEach((btn) => {
     btn.addEventListener('click', (e) => {
-      const parent = (e.target as HTMLElement).parentElement;
+      const target = e.target instanceof HTMLElement ? e.target : null;
+      const parent = target?.parentElement;
       const valueEl = parent?.querySelector('.qty-value');
       if (valueEl) {
-        const current = parseInt(valueEl.textContent!);
-        if (current > 1) valueEl.textContent = (current - 1).toString();
+        const current = parseInt(valueEl.textContent || '1', 10);
+        if (current > 1) valueEl.textContent = String(current - 1);
       }
     });
   });
 
   // Handle Add to Cart Visual Sync
-  document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+  document.querySelectorAll('.add-to-cart-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
       const cartBadge = document.querySelector('[data-target="cart-popover"] span');
       if (cartBadge) {
-        const current = parseInt(cartBadge.textContent!);
-        cartBadge.textContent = (current + 1).toString();
+        const current = parseInt(cartBadge.textContent || '0', 10);
+        cartBadge.textContent = String(current + 1);
         
         // Show visual feedback on button
         const originalText = btn.textContent;
@@ -93,12 +98,12 @@ const { products = [] } = Astro.props;
   });
 
   // Handle Wishlist Visual Sync
-  document.querySelectorAll('.wishlist-btn').forEach(btn => {
+  document.querySelectorAll('.wishlist-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
       const wishlistBadge = document.querySelector('[data-target="wishlist-popover"] span');
       if (wishlistBadge) {
-        const current = parseInt(wishlistBadge.textContent!);
-        wishlistBadge.textContent = (current + 1).toString();
+        const current = parseInt(wishlistBadge.textContent || '0', 10);
+        wishlistBadge.textContent = String(current + 1);
         btn.classList.toggle('text-red-500');
         btn.classList.toggle('fill-red-500');
       }
