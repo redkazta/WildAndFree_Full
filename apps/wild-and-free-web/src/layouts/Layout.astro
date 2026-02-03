@@ -21,6 +21,13 @@ const navItems = [
   { href: '/wild-and-free-league', label: 'WILD AND FREE' },
   { href: '/wild-writings', label: 'WILD WRITINGS' }
 ];
+
+const isActive = (href: string) => {
+  if (currentPath === href) return true;
+  if (href === '/artistas' && currentPath.startsWith('/artista/')) return true;
+  if (href === '/eventos' && currentPath.startsWith('/evento/')) return true;
+  return false;
+};
 ---
 
 <!doctype html>
@@ -219,7 +226,7 @@ const navItems = [
 					{navItems.map(item => (
 						<a 
 							href={item.href} 
-							class={`px-3 xl:px-4 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-[0.2em] rounded-full transition-all duration-300 whitespace-nowrap ${currentPath === item.href ? 'text-orange-500 bg-white/10' : 'text-white hover:text-orange-500 hover:bg-white/10'}`}
+							class={`px-3 xl:px-4 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-[0.2em] rounded-full transition-all duration-300 whitespace-nowrap ${isActive(item.href) ? 'text-orange-500 bg-white/10' : 'text-white hover:text-orange-500 hover:bg-white/10'}`}
 						>
 							{item.label}
 						</a>
@@ -363,7 +370,7 @@ const navItems = [
 								</div>
 								<div class="popover-content">
 									<div class="space-y-4">
-										<p class="text-sm text-white/60">Selecciona tu zona para ver eventos cercanos.</p>
+										<p class="text-sm text-white font-bold">Selecciona tu zona para ver eventos cercanos.</p>
 										<div class="grid grid-cols-2 gap-2">
 											<button class="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-xs font-bold hover:bg-orange-500 hover:text-black transition-all">Torreón</button>
 											<button class="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-xs font-bold hover:bg-orange-500 hover:text-black transition-all">Gómez Palacio</button>
@@ -386,7 +393,7 @@ const navItems = [
 										</div>
 										<div class="popover-content">
 											<div class="unauth-popover-msg space-y-4 text-center py-4">
-												<p class="text-[10px] text-white/40 uppercase font-black">Inicia sesión para ver tus favoritos</p>
+												<p class="text-[10px] text-white uppercase font-black">Inicia sesión para ver tus favoritos</p>
 												<a href="/login" class="block w-full py-3 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-orange-500 transition-all">Entrar</a>
 											</div>
 											<div class="auth-popover-content hidden space-y-4">
@@ -417,7 +424,7 @@ const navItems = [
 								</div>
 								<div class="popover-content">
 									<div class="unauth-popover-msg space-y-4 text-center py-4">
-										<p class="text-[10px] text-white/40 uppercase font-black">Inicia sesión para ver tu carrito</p>
+										<p class="text-[10px] text-white uppercase font-black">Inicia sesión para ver tu carrito</p>
 										<a href="/login" class="block w-full py-3 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-orange-500 transition-all">Entrar</a>
 									</div>
 									<div class="auth-popover-content hidden space-y-6">
@@ -428,13 +435,13 @@ const navItems = [
 											</div>
 											<div class="flex-1">
 												<h4 class="text-xs font-black uppercase">Camiseta Oficial</h4>
-												<p class="text-[10px] text-white/40">Talla: L</p>
+												<p class="text-[10px] text-white font-bold">Talla: L</p>
 												<p class="text-xs font-black mt-1">$35.00</p>
 											</div>
 										</div>
 										<div class="border-t border-white/5 pt-4 space-y-4">
 											<div class="flex justify-between items-center">
-												<span class="text-[10px] font-bold text-white/40 uppercase">Subtotal</span>
+												<span class="text-[10px] font-bold text-white uppercase">Subtotal</span>
 												<span class="text-sm font-black">$120.00</span>
 											</div>
 											<button class="w-full py-4 bg-orange-500 text-black text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-white transition-all shadow-xl shadow-orange-500/20">Finalizar Compra</button>
@@ -447,13 +454,13 @@ const navItems = [
 
 					<div class="flex items-center gap-4 auth-actions-container">
 						<div class="relative group/pop">
-							<a href="/login" class="hidden sm:block text-[12px] font-extrabold uppercase tracking-[0.15em] text-white/60 hover:text-white transition-all py-4">Entrar</a>
+							<a href="/login" class="hidden sm:block text-[12px] font-black uppercase tracking-[0.15em] text-white hover:text-orange-500 transition-all py-4">Entrar</a>
 							<div class="popover w-64">
 								<div class="popover-header"><span class="popover-title text-center block w-full">Tu Cuenta</span></div>
 								<div class="popover-content space-y-4">
-									<p class="text-[10px] text-white/40 uppercase font-black text-center">Accede a contenido exclusivo</p>
+									<p class="text-[10px] text-white uppercase font-black text-center">Accede a contenido exclusivo</p>
 									<a href="/login" class="block w-full py-3 bg-white text-black text-center text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-orange-500 hover:text-white transition-all">Iniciar Sesión</a>
-									<a href="/perfil" class="block text-center text-[10px] text-white/60 hover:text-orange-500 font-black uppercase tracking-widest">Mi Perfil</a>
+									<a href="/perfil" class="block text-center text-[10px] text-white hover:text-orange-500 font-black uppercase tracking-widest">Mi Perfil</a>
 								</div>
 							</div>
 						</div>
@@ -559,7 +566,7 @@ const navItems = [
 									<div class="w-8 h-8 rounded-full bg-gradient-to-r from-orange-500 to-red-600 flex items-center justify-center text-[10px] font-black uppercase text-white">
 										${profile?.nombre?.substring(0, 2) || 'WG'}
 									</div>
-									<span class="hidden md:block text-[10px] font-black uppercase tracking-widest text-white/60">${profile?.nombre?.split(' ')[0] || 'Usuario'}</span>
+									<span class="hidden md:block text-[10px] font-black uppercase tracking-widest text-white">${profile?.nombre?.split(' ')[0] || 'Usuario'}</span>
 								</a>
 								<div class="popover w-64">
 									<div class="popover-header"><span class="popover-title text-center block w-full">Mi Cuenta</span></div>

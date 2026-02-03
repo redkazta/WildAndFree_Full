@@ -20,7 +20,7 @@ const initialParticipants = [
   { id: 'p9', name: 'Drill King', image: 'https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=400&h=400&fit=crop&q=80' },
   { id: 'p10', name: 'Flow Master', image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=400&h=400&fit=crop&q=80' },
   { id: 'p11', name: 'Rhyme Slayer', image: 'https://images.unsplash.com/photo-1493225255756-d9584f8606e9?w=400&h=400&fit=crop&q=80' },
-  { id: 'p12', name: 'Beat Beast', image: 'https://images.unsplash.com/photo-1520127873598-120e2db099ae?w=400&h=400&fit=crop&q=80' },
+  { id: 'p12', name: 'Beat Beast', image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&h=400&q=80' },
   { id: 'p13', name: 'Word Smith', image: 'https://images.unsplash.com/photo-1521119989659-a83eee488004?w=400&h=400&fit=crop&q=80' },
   { id: 'p14', name: 'Urban Soul', image: 'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=400&h=400&fit=crop&q=80' },
   { id: 'p15', name: 'Ghetto Star', image: 'https://images.unsplash.com/photo-1463453091185-61582044d556?w=400&h=400&fit=crop&q=80' },
@@ -29,7 +29,7 @@ const initialParticipants = [
 ---
 
 <Layout config={config}>
-  <main class="min-h-screen bg-black pt-32 pb-40 px-4 overflow-x-auto">
+  <main class="min-h-screen bg-black pt-32 pb-40 px-4 overflow-x-hidden">
     <div class="max-w-[1600px] mx-auto space-y-12">
       <div class="space-y-4 text-center">
         <h1 class="text-6xl md:text-8xl font-black tracking-tighter text-white uppercase leading-none">
@@ -40,9 +40,9 @@ const initialParticipants = [
 
       <!-- Realtime Status -->
       <div class="flex justify-center">
-        <div id="realtime-status" class="flex items-center gap-3 px-6 py-2 bg-white/5 border border-white/10 rounded-full">
+        <div id="realtime-status" class="flex items-center gap-3 px-6 py-2 bg-black border-2 border-white rounded-full">
           <span class="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
-          <span class="text-[10px] font-black text-white/60 uppercase tracking-widest">Sincronización en Tiempo Real Activa</span>
+          <span class="text-[10px] font-black text-white uppercase tracking-widest">Sincronización en Tiempo Real Activa</span>
         </div>
       </div>
 
@@ -56,9 +56,12 @@ const initialParticipants = [
               id={p.id}
               data-name={p.name}
               data-image={p.image}
-              class="participant-item group relative aspect-square rounded-xl overflow-hidden cursor-grab active:cursor-grabbing border-2 border-white/10 hover:border-orange-500 transition-all shadow-xl"
+              class="participant-item group relative aspect-square rounded-xl overflow-hidden cursor-grab active:cursor-grabbing border-2 border-white hover:border-orange-500 transition-all shadow-xl"
             >
               <img src={p.image} alt={p.name} class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-500" />
+              <div class="participant-used hidden absolute inset-0 bg-black/70 flex items-center justify-center">
+                <div class="w-10 h-10 border-2 border-white flex items-center justify-center text-white font-black text-xl leading-none">×</div>
+              </div>
               <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-1">
                 <span class="text-[7px] font-black text-white text-center uppercase tracking-tight">{p.name}</span>
               </div>
@@ -68,100 +71,212 @@ const initialParticipants = [
       </div>
 
       <!-- Tournament Bracket -->
-      <div class="tournament-container py-10 flex justify-center items-center gap-2 max-w-full overflow-hidden scale-90 origin-top">
-        
-        <!-- LEFT SIDE -->
-        <div class="flex gap-4 items-center">
-          <!-- Round of 16 (Left) -->
-          <div class="space-y-4">
-            {[1, 2, 3, 4].map(i => (
-              <div class="bracket-match space-y-2 relative">
-                <div class="bracket-slot left" data-slot={`l1-m${i}-p1`}></div>
-                <div class="bracket-slot left" data-slot={`l1-m${i}-p2`}></div>
-                <!-- Connector to next round -->
-                <div class="absolute -right-4 top-1/2 w-4 h-px bg-white"></div>
+      <div class="tournament-wrap py-10">
+        <div class="bracket">
+          <div class="side side-left">
+            <div class="col col-r1">
+              {[1, 2, 3, 4].map(i => (
+                <div class="match match-r1 match-left">
+                  <div class="bracket-slot" data-slot={`l1-m${i}-p1`}></div>
+                  <div class="bracket-slot" data-slot={`l1-m${i}-p2`}></div>
+                  <svg class="connector connector-right" viewBox="0 0 24 106" preserveAspectRatio="none" aria-hidden="true">
+                    <path d="M0 25 H12 M0 81 H12 M12 25 V81 M12 53 H24" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="square" />
+                  </svg>
+                </div>
+              ))}
+            </div>
+            <div class="col col-r2">
+              {[1, 2].map(i => (
+                <div class="match match-r2 match-left">
+                  <div class="bracket-slot" data-slot={`l2-m${i}-p1`}></div>
+                  <div class="bracket-slot" data-slot={`l2-m${i}-p2`}></div>
+                  <svg class="connector connector-right" viewBox="0 0 24 106" preserveAspectRatio="none" aria-hidden="true">
+                    <path d="M0 25 H12 M0 81 H12 M12 25 V81 M12 53 H24" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="square" />
+                  </svg>
+                </div>
+              ))}
+            </div>
+            <div class="col col-r3">
+              <div class="match match-r3 match-left">
+                <div class="bracket-slot" data-slot="l3-m1-p1"></div>
+                <div class="bracket-slot" data-slot="l3-m1-p2"></div>
+                <svg class="connector connector-right" viewBox="0 0 24 106" preserveAspectRatio="none" aria-hidden="true">
+                  <path d="M0 25 H12 M0 81 H12 M12 25 V81 M12 53 H24" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="square" />
+                </svg>
               </div>
-            ))}
-          </div>
-          <!-- Quarter Finals (Left) -->
-          <div class="space-y-16">
-            {[1, 2].map(i => (
-              <div class="bracket-match space-y-2 relative">
-                <div class="bracket-slot left" data-slot={`l2-m${i}-p1`}></div>
-                <div class="bracket-slot left" data-slot={`l2-m${i}-p2`}></div>
-                <!-- Connector to next round -->
-                <div class="absolute -right-4 top-1/2 w-4 h-px bg-white"></div>
-              </div>
-            ))}
-          </div>
-          <!-- Semis (Left) -->
-          <div class="space-y-32">
-            <div class="bracket-match space-y-2 relative">
-              <div class="bracket-slot left" data-slot={`l3-m1-p1`}></div>
-              <div class="bracket-slot left" data-slot={`l3-m1-p2`}></div>
-              <!-- Connector to final -->
-              <div class="absolute -right-4 top-1/2 w-4 h-px bg-white"></div>
             </div>
           </div>
-        </div>
 
-        <!-- CENTER (FINAL) -->
-        <div class="flex flex-col items-center gap-6 px-4">
-          <div class="text-center py-4">
-            <h2 class="text-4xl font-black italic tracking-tighter">
+          <div class="col col-final">
+            <div class="final-title">
               <span class="text-orange-500">WILD</span> <span class="text-white">GVNG</span>
-            </h2>
+            </div>
+            <div class="final-row">
+              <div class="bracket-slot final" data-slot="final-p1"></div>
+              <div class="final-vs">VS</div>
+              <div class="bracket-slot final" data-slot="final-p2"></div>
+            </div>
+            <div class="winner-row">
+              <div class="bracket-slot winner" data-slot="winner"></div>
+            </div>
+            <p class="champion-text">CAMPEÓN WILD AND FREE FECHA #1</p>
           </div>
-          <div class="flex gap-4 items-center">
-            <div class="bracket-slot final" data-slot="final-p1"></div>
-            <span class="text-2xl font-black text-orange-500 italic">VS</span>
-            <div class="bracket-slot final" data-slot="final-p2"></div>
-          </div>
-          <div class="bracket-slot winner" data-slot="winner"></div>
-          <p class="text-[9px] font-black text-orange-500 uppercase tracking-[0.4em]">CAMPEÓN WILD AND FREE FECHA #1</p>
-        </div>
 
-        <!-- RIGHT SIDE -->
-        <div class="flex gap-4 items-center flex-row-reverse">
-          <!-- Round of 16 (Right) -->
-          <div class="space-y-4">
-            {[1, 2, 3, 4].map(i => (
-              <div class="bracket-match space-y-2 relative">
-                <div class="bracket-slot right" data-slot={`r1-m${i}-p1`}></div>
-                <div class="bracket-slot right" data-slot={`r1-m${i}-p2`}></div>
-                <!-- Connector to next round -->
-                <div class="absolute -left-4 top-1/2 w-4 h-px bg-white"></div>
+          <div class="side side-right">
+            <div class="col col-r3">
+              <div class="match match-r3 match-right">
+                <div class="bracket-slot" data-slot="r3-m1-p1"></div>
+                <div class="bracket-slot" data-slot="r3-m1-p2"></div>
+                <svg class="connector connector-left" viewBox="0 0 24 106" preserveAspectRatio="none" aria-hidden="true">
+                  <path d="M24 25 H12 M24 81 H12 M12 25 V81 M12 53 H0" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="square" />
+                </svg>
               </div>
-            ))}
-          </div>
-          <!-- Quarter Finals (Right) -->
-          <div class="space-y-16">
-            {[1, 2].map(i => (
-              <div class="bracket-match space-y-2 relative">
-                <div class="bracket-slot right" data-slot={`r2-m${i}-p1`}></div>
-                <div class="bracket-slot right" data-slot={`r2-m${i}-p2`}></div>
-                <!-- Connector to next round -->
-                <div class="absolute -left-4 top-1/2 w-4 h-px bg-white"></div>
-              </div>
-            ))}
-          </div>
-          <!-- Semis (Right) -->
-          <div class="space-y-32">
-            <div class="bracket-match space-y-2 relative">
-              <div class="bracket-slot right" data-slot={`r3-m1-p1`}></div>
-              <div class="bracket-slot right" data-slot={`r3-m1-p2`}></div>
-              <!-- Connector to final -->
-              <div class="absolute -left-4 top-1/2 w-4 h-px bg-white"></div>
+            </div>
+            <div class="col col-r2">
+              {[1, 2].map(i => (
+                <div class="match match-r2 match-right">
+                  <div class="bracket-slot" data-slot={`r2-m${i}-p1`}></div>
+                  <div class="bracket-slot" data-slot={`r2-m${i}-p2`}></div>
+                  <svg class="connector connector-left" viewBox="0 0 24 106" preserveAspectRatio="none" aria-hidden="true">
+                    <path d="M24 25 H12 M24 81 H12 M12 25 V81 M12 53 H0" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="square" />
+                  </svg>
+                </div>
+              ))}
+            </div>
+            <div class="col col-r1">
+              {[1, 2, 3, 4].map(i => (
+                <div class="match match-r1 match-right">
+                  <div class="bracket-slot" data-slot={`r1-m${i}-p1`}></div>
+                  <div class="bracket-slot" data-slot={`r1-m${i}-p2`}></div>
+                  <svg class="connector connector-left" viewBox="0 0 24 106" preserveAspectRatio="none" aria-hidden="true">
+                    <path d="M24 25 H12 M24 81 H12 M12 25 V81 M12 53 H0" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="square" />
+                  </svg>
+                </div>
+              ))}
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </main>
 </Layout>
 
 <style>
+  .tournament-wrap {
+    display: flex;
+    justify-content: center;
+  }
+
+  .bracket {
+    width: 100%;
+    max-width: 1400px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 24px;
+  }
+
+  .side {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+  }
+
+  .col {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .col-r1 {
+    gap: 24px;
+  }
+
+  .col-r2 {
+    padding-top: 66px;
+    gap: 156px;
+  }
+
+  .col-r3 {
+    padding-top: 198px;
+    gap: 0;
+  }
+
+  .match {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .connector {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 24px;
+    pointer-events: none;
+  }
+
+  .connector-right {
+    right: -24px;
+  }
+
+  .connector-left {
+    left: -24px;
+  }
+
+  .col-final {
+    position: relative;
+    width: 420px;
+    flex: 0 0 420px;
+  }
+
+  .final-title {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    font-style: italic;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .final-row {
+    padding-top: 222px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .final-vs {
+    font-size: 18px;
+    font-weight: 900;
+    color: #c98300;
+    letter-spacing: 0.2em;
+    font-style: italic;
+  }
+
+  .winner-row {
+    margin-top: 22px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .champion-text {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 900;
+    color: #c98300;
+    text-transform: uppercase;
+    letter-spacing: 0.4em;
+    white-space: nowrap;
+  }
+
   .bracket-slot {
     width: 130px;
     height: 50px;
@@ -205,7 +320,7 @@ const initialParticipants = [
     inset: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     opacity: 0.8;
     filter: grayscale(100%);
   }
@@ -238,22 +353,6 @@ const initialParticipants = [
     letter-spacing: 0.1em;
     color: #fff;
     white-space: nowrap;
-  }
-
-  /* Vertical Connectors */
-  .bracket-match::after {
-    content: '';
-    position: absolute;
-    right: -2px;
-    top: 25%;
-    height: 50%;
-    width: 1px;
-    background: #ffffff;
-  }
-  
-  .flex-row-reverse .bracket-match::after {
-    left: -2px;
-    right: auto;
   }
 
   .remove-btn {
@@ -301,8 +400,34 @@ const initialParticipants = [
     })
     .subscribe();
 
+  const usedParticipantIds = () => {
+    const used = new Set<string>();
+    Object.values(bracketState || {}).forEach((v: any) => {
+      if (v?.locked && v?.id) used.add(v.id);
+    });
+    return used;
+  };
+
+  const syncPoolUsedUI = () => {
+    const used = usedParticipantIds();
+    participants.forEach((p) => {
+      const isUsed = used.has(p.id);
+      const overlay = p.querySelector('.participant-used');
+      if (isUsed) {
+        p.classList.add('is-used');
+        p.setAttribute('draggable', 'false');
+        overlay?.classList.remove('hidden');
+      } else {
+        p.classList.remove('is-used');
+        p.setAttribute('draggable', 'true');
+        overlay?.classList.add('hidden');
+      }
+    });
+  };
+
   participants.forEach(p => {
     p.addEventListener('dragstart', (e: any) => {
+      if (p.classList.contains('is-used')) return;
       e.dataTransfer.setData('participantId', p.id);
       e.dataTransfer.setData('name', p.getAttribute('data-name'));
       e.dataTransfer.setData('image', p.getAttribute('data-image'));
@@ -329,7 +454,8 @@ const initialParticipants = [
       const slotId = slot.getAttribute('data-slot');
 
       if (slotId && id) {
-        bracketState[slotId] = { id, name, image };
+        if (bracketState?.[slotId]?.locked) return;
+        bracketState[slotId] = { id, name, image, locked: false };
         renderSlot(slot, { id, name, image });
         channel.send({
           type: 'broadcast',
@@ -342,20 +468,22 @@ const initialParticipants = [
 
   function renderSlot(slot: Element, data: any) {
     const slotId = slot.getAttribute('data-slot');
+    const locked = Boolean(bracketState?.[slotId || '']?.locked);
     slot.innerHTML = `
       <img src="${data.image}" class="slot-bg-img" />
       <div class="slot-overlay">
-        <div class="slot-aka-box">
+        <div class="slot-aka-box ${locked ? '' : 'hidden'}">
           <span class="slot-name">${data.name}</span>
         </div>
       </div>
-      <button class="remove-btn" data-slot="${slotId}">×</button>
+      <button class="remove-btn ${locked ? 'hidden' : ''}" data-slot="${slotId}">×</button>
     `;
     slot.classList.add('filled');
     
     slot.querySelector('.remove-btn')?.addEventListener('click', (e) => {
       e.stopPropagation();
       if (slotId) {
+        if (bracketState?.[slotId]?.locked) return;
         delete bracketState[slotId];
         channel.send({
           type: 'broadcast',
@@ -364,17 +492,128 @@ const initialParticipants = [
         });
         slot.innerHTML = '';
         slot.classList.remove('filled');
+        syncPoolUsedUI();
       }
     });
   }
 
   function updateBracketUI(state: Record<string, any>) {
     bracketState = state;
-    Object.entries(state).forEach(([slotId, data]: [string, any]) => {
-      const slot = document.querySelector(`[data-slot="${slotId}"]`);
-      if (slot) {
-        renderSlot(slot, data);
+    document.querySelectorAll('.bracket-slot').forEach((slotEl) => {
+      const slotId = slotEl.getAttribute('data-slot');
+      if (!slotId) return;
+      const data = bracketState?.[slotId];
+      if (!data) {
+        slotEl.innerHTML = '';
+        slotEl.classList.remove('filled');
+        return;
       }
+      renderSlot(slotEl, data);
     });
+    syncPoolUsedUI();
   }
+
+  // --- Double click to lock & show AKA ---
+  document.addEventListener('dblclick', (e) => {
+    const slot = (e.target as HTMLElement).closest('.bracket-slot') as HTMLElement | null;
+    if (!slot) return;
+    const slotId = slot.getAttribute('data-slot');
+    if (!slotId) return;
+    const current = bracketState?.[slotId];
+    if (!current) return;
+    if (current.locked) return;
+    bracketState[slotId] = { ...current, locked: true };
+    renderSlot(slot, bracketState[slotId]);
+    syncPoolUsedUI();
+    channel.send({
+      type: 'broadcast',
+      event: 'state-update',
+      payload: { state: bracketState },
+    });
+  });
+
+  // --- Context menu: advance to next round ---
+  const getNextSlotId = (slotId: string) => {
+    if (slotId.startsWith('l1-m')) {
+      const m = parseInt(slotId.split('-')[1].slice(1), 10);
+      if (m === 1) return 'l2-m1-p1';
+      if (m === 2) return 'l2-m1-p2';
+      if (m === 3) return 'l2-m2-p1';
+      if (m === 4) return 'l2-m2-p2';
+    }
+    if (slotId.startsWith('l2-m')) {
+      const m = parseInt(slotId.split('-')[1].slice(1), 10);
+      if (m === 1) return 'l3-m1-p1';
+      if (m === 2) return 'l3-m1-p2';
+    }
+    if (slotId.startsWith('l3-m')) return 'final-p1';
+    if (slotId.startsWith('r1-m')) {
+      const m = parseInt(slotId.split('-')[1].slice(1), 10);
+      if (m === 1) return 'r2-m1-p1';
+      if (m === 2) return 'r2-m1-p2';
+      if (m === 3) return 'r2-m2-p1';
+      if (m === 4) return 'r2-m2-p2';
+    }
+    if (slotId.startsWith('r2-m')) {
+      const m = parseInt(slotId.split('-')[1].slice(1), 10);
+      if (m === 1) return 'r3-m1-p1';
+      if (m === 2) return 'r3-m1-p2';
+    }
+    if (slotId.startsWith('r3-m')) return 'final-p2';
+    if (slotId === 'final-p1' || slotId === 'final-p2') return 'winner';
+    return null;
+  };
+
+  const menu = document.createElement('div');
+  menu.id = 'bracket-context-menu';
+  menu.className = 'fixed z-[20000] hidden';
+  menu.innerHTML = `
+    <div class="bg-black border border-white shadow-[0_10px_30px_rgba(0,0,0,1)]">
+      <button data-action="advance" class="block w-full text-left px-4 py-3 text-xs font-black uppercase tracking-widest text-white hover:bg-white hover:text-black">Avanzarlo a siguiente ronda</button>
+    </div>
+  `;
+  document.body.appendChild(menu);
+
+  const hideMenu = () => menu.classList.add('hidden');
+  document.addEventListener('click', hideMenu);
+  document.addEventListener('scroll', hideMenu, true);
+
+  document.addEventListener('contextmenu', (e) => {
+    const slot = (e.target as HTMLElement).closest('.bracket-slot') as HTMLElement | null;
+    if (!slot) return;
+    const slotId = slot.getAttribute('data-slot');
+    if (!slotId) return;
+    if (!bracketState?.[slotId]) return;
+    e.preventDefault();
+    (menu as HTMLElement).style.left = `${e.clientX}px`;
+    (menu as HTMLElement).style.top = `${e.clientY}px`;
+    (menu as HTMLElement).dataset.slot = slotId;
+    menu.classList.remove('hidden');
+  });
+
+  menu.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest('button');
+    if (!btn) return;
+    const action = btn.getAttribute('data-action');
+    const fromSlot = (menu as HTMLElement).dataset.slot;
+    hideMenu();
+    if (!fromSlot || action !== 'advance') return;
+    const next = getNextSlotId(fromSlot);
+    if (!next) return;
+    const data = bracketState?.[fromSlot];
+    if (!data) return;
+    if (bracketState?.[next]?.locked) return;
+    bracketState[next] = { ...data, locked: false };
+    const nextEl = document.querySelector(`[data-slot="${next}"]`);
+    if (nextEl) renderSlot(nextEl, bracketState[next]);
+    syncPoolUsedUI();
+    channel.send({
+      type: 'broadcast',
+      event: 'state-update',
+      payload: { state: bracketState },
+    });
+  });
+
+  // Initial sync
+  syncPoolUsedUI();
 </script>
