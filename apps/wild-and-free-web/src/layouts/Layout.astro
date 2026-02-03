@@ -252,28 +252,30 @@ const { config } = Astro.props;
 								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
 								<span class="absolute top-1.5 right-1.5 w-4 h-4 bg-orange-500 text-black text-[10px] font-black rounded-full flex items-center justify-center shadow-lg shadow-orange-500/40">3</span>
 							</button>
-							<div id="wishlist-popover" class="popover">
-								<div class="popover-header">
-									<span class="popover-title">Favoritos (3)</span>
-								</div>
-								<div class="popover-content">
-									<div class="space-y-4">
-										<div class="flex items-center gap-4 group/item">
-											<div class="w-12 h-12 rounded-lg bg-white/5 overflow-hidden">
-												<img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=100&q=80" class="w-full h-full object-cover" />
-											</div>
-											<div class="flex-1">
-												<h4 class="text-xs font-black uppercase">Hoodie Wild</h4>
-												<p class="text-[10px] text-orange-500 font-bold">$45.00</p>
-											</div>
-											<button class="text-white/20 hover:text-red-500 transition-colors">
-												<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-											</button>
+									<div id="wishlist-popover" class="popover">
+										<div class="popover-header">
+											<span class="popover-title">Favoritos</span>
 										</div>
-										<button class="w-full py-3 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-orange-500 transition-all">Ver Favoritos</button>
+										<div class="popover-content">
+											<div class="unauth-popover-msg space-y-4 text-center py-4">
+												<p class="text-[10px] text-white/40 uppercase font-black">Inicia sesión para ver tus favoritos</p>
+												<a href="/login" class="block w-full py-3 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-orange-500 transition-all">Entrar</a>
+											</div>
+											<div class="auth-popover-content hidden space-y-4">
+												<!-- Items will be injected here -->
+												<div class="flex items-center gap-4 group/item">
+													<div class="w-12 h-12 rounded-lg bg-white/5 overflow-hidden">
+														<img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=100&q=80" class="w-full h-full object-cover" />
+													</div>
+													<div class="flex-1">
+														<h4 class="text-xs font-black uppercase">Hoodie Wild</h4>
+														<p class="text-[10px] text-orange-500 font-bold">$45.00</p>
+													</div>
+												</div>
+												<a href="/perfil" class="block w-full py-3 bg-white text-black text-center text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-orange-500 transition-all">Ver Todos</a>
+											</div>
+										</div>
 									</div>
-								</div>
-							</div>
 						</div>
 
 						<div class="relative group/pop">
@@ -286,7 +288,12 @@ const { config } = Astro.props;
 									<span class="popover-title">Tu Carrito</span>
 								</div>
 								<div class="popover-content">
-									<div class="space-y-6">
+									<div class="unauth-popover-msg space-y-4 text-center py-4">
+										<p class="text-[10px] text-white/40 uppercase font-black">Inicia sesión para ver tu carrito</p>
+										<a href="/login" class="block w-full py-3 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-orange-500 transition-all">Entrar</a>
+									</div>
+									<div class="auth-popover-content hidden space-y-6">
+										<!-- Cart items will be injected here -->
 										<div class="flex items-center gap-4">
 											<div class="w-16 h-16 rounded-xl bg-white/5 overflow-hidden">
 												<img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=150&q=80" class="w-full h-full object-cover" />
@@ -362,33 +369,36 @@ const { config } = Astro.props;
 			const body = document.body;
 			const sidebar = document.getElementById('sidebar');
 
-			const toggleSidebar = () => {
-				body.classList.toggle('sidebar-open');
+			// Re-bind sidebar triggers because Astro might re-render or script execution timing
+			const initSidebar = () => {
+				const trigger = document.getElementById('sidebar-trigger');
+				const closeBtn = document.getElementById('sidebar-close');
+				const overlay = document.getElementById('sidebar-overlay');
+
+				if (trigger) {
+					trigger.onclick = (e) => {
+						e.stopPropagation();
+						body.classList.toggle('sidebar-open');
+					};
+				}
+
+				if (closeBtn) {
+					closeBtn.onclick = (e) => {
+						e.stopPropagation();
+						body.classList.remove('sidebar-open');
+					};
+				}
+
+				if (overlay) {
+					overlay.onclick = () => {
+						body.classList.remove('sidebar-open');
+					};
+				}
 			};
 
-			const closeSidebar = () => {
-				body.classList.remove('sidebar-open');
-			};
-
-			if (menuToggle) {
-				menuToggle.addEventListener('click', (e) => {
-					e.stopPropagation();
-					toggleSidebar();
-				});
-			}
-
-			if (sidebarClose) {
-				sidebarClose.addEventListener('click', (e) => {
-					e.stopPropagation();
-					closeSidebar();
-				});
-			}
-
-			if (sidebarOverlay) {
-				sidebarOverlay.addEventListener('click', () => {
-					closeSidebar();
-				});
-			}
+			initSidebar();
+			// Re-init on navigation if needed for SPAs (though Astro is MPA, good to have)
+			document.addEventListener('astro:after-swap', initSidebar);
 
 			// Auth & Session Logic
 			const authContainer = document.querySelector('.auth-actions-container');
@@ -403,6 +413,10 @@ const { config } = Astro.props;
 						.select('*')
 						.eq('id', session.user.id)
 						.single();
+
+					// Show Auth Content in Popovers
+					document.querySelectorAll('.unauth-popover-msg').forEach(el => el.classList.add('hidden'));
+					document.querySelectorAll('.auth-popover-content').forEach(el => el.classList.remove('hidden'));
 
 					if (authContainer) {
 						authContainer.innerHTML = `

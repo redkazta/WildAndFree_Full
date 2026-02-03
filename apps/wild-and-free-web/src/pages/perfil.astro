@@ -8,185 +8,157 @@ import Layout from '../layouts/Layout.astro';
   secondary_color: "#8A0303"
 }}>
   <div class="profile-container opacity-0 transition-opacity duration-500" id="profile-main">
-    <div class="profile-header-section">
-      <div class="profile-avatar-large">
-        <div id="avatar-placeholder" class="w-full h-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-4xl font-black text-white uppercase">
-          WG
-        </div>
-        <img id="profile-avatar-img" src="" alt="Avatar" class="hidden">
-        <button class="avatar-edit">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
-          </svg>
-        </button>
+    <!-- Unauthenticated State -->
+    <div id="unauth-state" class="hidden flex flex-col items-center justify-center min-h-[60vh] text-center space-y-8">
+      <div class="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mb-4">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-500"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       </div>
-      <div class="profile-info-main">
-        <h1 id="profile-name">Cargando...</h1>
-        <p class="username" id="profile-username">@usuario</p>
-        <p class="bio" id="profile-bio">Cargando biografía...</p>
-        <div class="profile-stats">
-          <div class="stat">
-            <span class="stat-number" id="stat-following">0</span>
-            <span class="stat-label">Siguiendo</span>
-          </div>
-          <div class="stat">
-            <span class="stat-number" id="stat-followers">0</span>
-            <span class="stat-label">Seguidores</span>
-          </div>
-          <div class="stat">
-            <span class="stat-number" id="stat-favorites">0</span>
-            <span class="stat-label">Favoritos</span>
-          </div>
-        </div>
+      <div class="space-y-2">
+        <h2 class="text-3xl font-black text-white uppercase tracking-tighter">Acceso Restringido</h2>
+        <p class="text-white/40 text-sm font-bold uppercase tracking-widest">Debes iniciar sesión para ver tu perfil</p>
       </div>
-      <button class="edit-profile-btn">Editar Perfil</button>
+      <div class="flex flex-col sm:flex-row gap-4 pt-4">
+        <a href="/login" class="px-12 py-4 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-orange-500 hover:text-white transition-all">Iniciar Sesión</a>
+        <a href="/registro" class="px-12 py-4 bg-white/5 border border-white/10 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-white/10 transition-all">Crear Cuenta</a>
+      </div>
     </div>
 
-    <div class="profile-content">
-      <div class="profile-tabs">
-        <button class="tab active" data-tab="overview">Resumen</button>
-        <button class="tab" data-tab="music">Música</button>
-        <button class="tab" data-tab="playlists">Playlists</button>
-        <button class="tab" data-tab="following">Siguiendo</button>
-      </div>
-
-      <div class="tab-content active" id="overview">
-        <div class="content-grid">
-          <div class="content-section">
-            <h3>Artistas Favoritos</h3>
-            <div class="artist-grid">
-              <div class="artist-card">
-                <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=80&h=80&fit=crop" alt="Artista">
-                <span>Artista 1</span>
-              </div>
-              <div class="artist-card">
-                <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=80&h=80&fit=crop" alt="Artista">
-                <span>Artista 2</span>
-              </div>
-              <div class="artist-card">
-                <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=80&h=80&fit=crop" alt="Artista">
-                <span>Artista 3</span>
-              </div>
+    <!-- Authenticated Content -->
+    <div id="auth-content" class="hidden">
+      <div class="profile-header-section">
+        <div class="profile-avatar-large">
+          <div id="avatar-placeholder" class="w-full h-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-4xl font-black text-white uppercase">
+            WG
+          </div>
+          <img id="profile-avatar-img" src="" alt="Avatar" class="hidden">
+          <button class="avatar-edit">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+            </svg>
+          </button>
+        </div>
+        <div class="profile-info-main">
+          <h1 id="profile-name">Cargando...</h1>
+          <p class="username" id="profile-username">@usuario</p>
+          <p class="bio" id="profile-bio">Cargando biografía...</p>
+          <div class="profile-stats">
+            <div class="stat">
+              <span class="stat-number" id="stat-following">0</span>
+              <span class="stat-label">Siguiendo</span>
+            </div>
+            <div class="stat">
+              <span class="stat-number" id="stat-followers">0</span>
+              <span class="stat-label">Seguidores</span>
+            </div>
+            <div class="stat">
+              <span class="stat-number" id="stat-favorites">0</span>
+              <span class="stat-label">Favoritos</span>
             </div>
           </div>
+        </div>
+        <button class="edit-profile-btn">Editar Perfil</button>
+      </div>
 
-          <div class="content-section">
-            <h3>Actividad Reciente</h3>
-            <div class="activity-list">
-              <div class="activity-item">
-                <div class="activity-icon">🎵</div>
-                <div class="activity-info">
-                  <p>Escuchaste <strong>Track Urbano</strong></p>
-                  <span>hace 2 horas</span>
+      <div class="profile-content">
+        <div class="profile-tabs">
+          <button class="tab active" data-tab="overview">Resumen</button>
+          <button class="tab" data-tab="music">Música</button>
+          <button class="tab" data-tab="playlists">Playlists</button>
+          <button class="tab" data-tab="following">Siguiendo</button>
+        </div>
+
+        <div class="tab-content active" id="overview">
+          <div class="content-grid">
+            <div class="content-section">
+              <h3>Artistas Favoritos</h3>
+              <div class="artist-grid">
+                <div class="artist-card">
+                  <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=80&h=80&fit=crop" alt="Artista">
+                  <span>Artista 1</span>
+                </div>
+                <div class="artist-card">
+                  <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=80&h=80&fit=crop" alt="Artista">
+                  <span>Artista 2</span>
+                </div>
+                <div class="artist-card">
+                  <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=80&h=80&fit=crop" alt="Artista">
+                  <span>Artista 3</span>
                 </div>
               </div>
-              <div class="activity-item">
-                <div class="activity-icon">❤️</div>
-                <div class="activity-info">
-                  <p>Agregaste <strong>Album Nueva Era</strong> a favoritos</p>
-                  <span>hace 1 día</span>
+            </div>
+
+            <div class="content-section">
+              <h3>Actividad Reciente</h3>
+              <div class="activity-list">
+                <div class="activity-item">
+                  <div class="activity-icon">🎵</div>
+                  <div class="activity-info">
+                    <p>Escuchaste <strong>Track Urbano</strong></p>
+                    <span>hace 2 horas</span>
+                  </div>
                 </div>
-              </div>
-              <div class="activity-item">
-                <div class="activity-icon">🎫</div>
-                <div class="activity-info">
-                  <p>Compraste entrada para <strong>Show Wild Gvng</strong></p>
-                  <span>hace 3 días</span>
+                <div class="activity-item">
+                  <div class="activity-icon">❤️</div>
+                  <div class="activity-info">
+                    <p>Agregaste <strong>Album Nueva Era</strong> a favoritos</p>
+                    <span>hace 1 día</span>
+                  </div>
+                </div>
+                <div class="activity-item">
+                  <div class="activity-icon">🎫</div>
+                  <div class="activity-info">
+                    <p>Compraste entrada para <strong>Show Wild Gvng</strong></p>
+                    <span>hace 3 días</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="tab-content" id="music">
-        <div class="music-section">
-          <h3>Canciones Más Escuchadas</h3>
-          <div class="track-list">
-            <div class="track-item">
-              <div class="track-number">1</div>
-              <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=50&h=50&fit=crop" alt="Album" class="track-image">
-              <div class="track-info">
-                <h4>Urban Flow</h4>
-                <p>Artista Principal</p>
+        <div class="tab-content" id="music">
+          <div class="music-section">
+            <h3>Canciones Más Escuchadas</h3>
+            <div class="track-list">
+              <div class="track-item">
+                <div class="track-number">1</div>
+                <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=50&h=50&fit=crop" alt="Album" class="track-image">
+                <div class="track-info">
+                  <h4>Urban Flow</h4>
+                  <p>Artista Principal</p>
+                </div>
+                <span class="track-plays">234 reproducciones</span>
               </div>
-              <span class="track-plays">234 reproducciones</span>
-            </div>
-            <div class="track-item">
-              <div class="track-number">2</div>
-              <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=50&h=50&fit=crop" alt="Album" class="track-image">
-              <div class="track-info">
-                <h4>Street Vibes</h4>
-                <p>Artista Secundario</p>
-              </div>
-              <span class="track-plays">189 reproducciones</span>
-            </div>
-            <div class="track-item">
-              <div class="track-number">3</div>
-              <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=50&h=50&fit=crop" alt="Album" class="track-image">
-              <div class="track-info">
-                <h4>Night City</h4>
-                <p>Artista Urbano</p>
-              </div>
-              <span class="track-plays">156 reproducciones</span>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="tab-content" id="playlists">
-        <div class="playlists-section">
-          <h3>Mis Playlists</h3>
-          <div class="playlist-grid">
-            <div class="playlist-card">
-              <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=120&h=120&fit=crop" alt="Playlist" class="playlist-cover">
-              <h4>Urban Essentials</h4>
-              <p>45 tracks • 2.3K seguidores</p>
-              <button class="play-btn">▶</button>
-            </div>
-            <div class="playlist-card">
-              <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=120&h=120&fit=crop" alt="Playlist" class="playlist-cover">
-              <h4>Night Vibes</h4>
-              <p>32 tracks • 1.8K seguidores</p>
-              <button class="play-btn">▶</button>
-            </div>
-            <div class="playlist-card">
-              <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=120&h=120&fit=crop" alt="Playlist" class="playlist-cover">
-              <h4>Workout Mix</h4>
-              <p>28 tracks • 987 seguidores</p>
-              <button class="play-btn">▶</button>
+        <div class="tab-content" id="playlists">
+          <div class="playlists-section">
+            <h3>Mis Playlists</h3>
+            <div class="playlist-grid">
+              <div class="playlist-card">
+                <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=120&h=120&fit=crop" alt="Playlist" class="playlist-cover">
+                <h4>Urban Essentials</h4>
+                <p>45 tracks • 2.3K seguidores</p>
+                <button class="play-btn">▶</button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="tab-content" id="following">
-        <div class="following-section">
-          <h3>Siguiendo</h3>
-          <div class="following-grid">
-            <div class="following-card">
-              <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=60&h=60&fit=crop" alt="Artista" class="following-avatar">
-              <div class="following-info">
-                <h4>Artista Principal</h4>
-                <p>2.1M seguidores</p>
+        <div class="tab-content" id="following">
+          <div class="following-section">
+            <h3>Siguiendo</h3>
+            <div class="following-grid">
+              <div class="following-card">
+                <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=60&h=60&fit=crop" alt="Artista" class="following-avatar">
+                <div class="following-info">
+                  <h4>Artista Principal</h4>
+                  <p>2.1M seguidores</p>
+                </div>
+                <button class="following-btn following">Siguiendo</button>
               </div>
-              <button class="following-btn following">Siguiendo</button>
-            </div>
-            <div class="following-card">
-              <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=60&h=60&fit=crop" alt="Artista" class="following-avatar">
-              <div class="following-info">
-                <h4>Artista Secundario</h4>
-                <p>856K seguidores</p>
-              </div>
-              <button class="following-btn following">Siguiendo</button>
-            </div>
-            <div class="following-card">
-              <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=60&h=60&fit=crop" alt="Artista" class="following-avatar">
-              <div class="following-info">
-                <h4>Artista Urbano</h4>
-                <p>432K seguidores</p>
-              </div>
-              <button class="following-btn">Seguir</button>
             </div>
           </div>
         </div>
@@ -588,27 +560,75 @@ import Layout from '../layouts/Layout.astro';
   }
 
   @media (max-width: 768px) {
+    .profile-container {
+      padding: 60px 12px 40px;
+    }
+
     .profile-header-section {
       flex-direction: column;
       text-align: center;
-      gap: 24px;
+      gap: 20px;
+      padding: 30px 20px;
+      margin-bottom: 30px;
+    }
+
+    .profile-avatar-large {
+      width: 100px;
+      height: 100px;
+    }
+
+    .profile-info-main h1 {
+      font-size: 24px;
+    }
+
+    .profile-stats {
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .stat-number {
+      font-size: 18px;
     }
 
     .edit-profile-btn {
       margin-left: 0;
+      width: 100%;
     }
 
     .profile-tabs {
       overflow-x: auto;
       gap: 16px;
+      padding-bottom: 4px;
+      margin-bottom: 24px;
+      scrollbar-width: none;
+    }
+    
+    .profile-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab {
+      font-size: 14px;
+      white-space: nowrap;
     }
 
     .content-grid {
       grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    
+    .content-section {
+      padding: 16px;
     }
 
     .artist-grid {
       justify-content: center;
+      gap: 12px;
+    }
+    
+    .artist-card img {
+      width: 60px;
+      height: 60px;
     }
   }
 </style>
@@ -618,12 +638,15 @@ import Layout from '../layouts/Layout.astro';
 
   document.addEventListener('DOMContentLoaded', async () => {
     const profileMain = document.getElementById('profile-main');
+    const unauthSection = document.getElementById('unauth-state');
+    const authContent = document.getElementById('auth-content');
     
     // 1. Check Session
     const { data: { session } } = await supabase.auth.getSession();
     
     if (!session) {
-      window.location.href = '/login';
+      unauthSection?.classList.remove('hidden');
+      profileMain?.classList.remove('opacity-0');
       return;
     }
 
@@ -636,10 +659,13 @@ import Layout from '../layouts/Layout.astro';
 
     if (error) {
       console.error('Error fetching profile:', error);
+      unauthSection?.classList.remove('hidden');
+      profileMain?.classList.remove('opacity-0');
       return;
     }
 
     // 3. Update UI
+    authContent?.classList.remove('hidden');
     const nameEl = document.getElementById('profile-name');
     const usernameEl = document.getElementById('profile-username');
     const bioEl = document.getElementById('profile-bio');
