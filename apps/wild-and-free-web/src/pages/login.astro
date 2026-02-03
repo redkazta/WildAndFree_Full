@@ -28,9 +28,18 @@ import Layout from '../layouts/Layout.astro';
           <input type="email" id="email" name="email" placeholder="tu@email.com" class="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-white font-bold focus:border-orange-500 focus:bg-white/10 transition-all outline-none" required />
         </div>
         
-        <div class="space-y-2">
-          <label for="password" class="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 ml-1">Contraseña</label>
-          <input type="password" id="password" name="password" placeholder="••••••••" class="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-white font-bold focus:border-orange-500 focus:bg-white/10 transition-all outline-none" required />
+        <div class="form-group">
+          <div class="flex items-center justify-between mb-2">
+            <label for="password" class="block text-[10px] font-black uppercase tracking-widest text-white/60">Contraseña</label>
+            <a href="/recuperar-password" class="text-[10px] text-orange-500 hover:text-white font-bold uppercase tracking-widest transition-colors">¿Olvidaste tu contraseña?</a>
+          </div>
+          <input 
+            type="password" 
+            id="password" 
+            placeholder="••••••••"
+            required
+            class="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-white text-sm focus:border-orange-500 transition-all outline-none"
+          >
         </div>
         
         <div class="flex items-center justify-between px-1">
@@ -41,7 +50,6 @@ import Layout from '../layouts/Layout.astro';
             </div>
             <span class="text-[10px] font-black uppercase tracking-widest text-white/40 group-hover/check:text-white transition-colors">Recordarme</span>
           </label>
-          <a href="#" class="text-[10px] font-black uppercase tracking-widest text-orange-500 hover:text-white transition-colors">¿Olvidaste tu contraseña?</a>
         </div>
         
         <button type="submit" class="w-full py-5 bg-white text-black text-xs font-black uppercase tracking-[0.3em] rounded-2xl hover:bg-orange-500 hover:text-white transition-all transform hover:-translate-y-1 shadow-2xl shadow-white/5 hover:shadow-orange-500/20">

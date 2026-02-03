@@ -1,0 +1,124 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout config={{
+  name: "Wild Gvng - Términos y Condiciones",
+  primary_color: "#C98300",
+  secondary_color: "#8A0303"
+}}>
+  <div class="terms-container">
+    <div class="content-wrapper">
+      <div class="header-section">
+        <h1 class="text-4xl md:text-6xl font-black tracking-tighter text-white uppercase mb-4">TÉRMINOS Y CONDICIONES</h1>
+        <p class="text-orange-500 font-black uppercase tracking-[0.3em] text-xs">Última actualización: 2 de febrero de 2026</p>
+      </div>
+
+      <div class="terms-content space-y-12">
+        <section class="space-y-4">
+          <h2 class="text-2xl font-black text-white uppercase tracking-wider border-l-4 border-orange-500 pl-4">1. Aceptación de los Términos</h2>
+          <p class="text-white/70 leading-relaxed">
+            Al acceder y utilizar la plataforma de WILD GVNG, aceptas estar sujeto a estos términos y condiciones. Si no estás de acuerdo con alguna parte de estos términos, no podrás acceder al servicio.
+          </p>
+        </section>
+
+        <section class="space-y-4">
+          <h2 class="text-2xl font-black text-white uppercase tracking-wider border-l-4 border-orange-500 pl-4">2. Uso de la Plataforma</h2>
+          <p class="text-white/70 leading-relaxed">
+            Nuestra plataforma está diseñada para la promoción de la cultura urbana, música y eventos. Los usuarios se comprometen a utilizar el sitio de manera respetuosa y legal. Queda estrictamente prohibido:
+          </p>
+          <ul class="list-disc list-inside text-white/70 space-y-2 ml-4">
+            <li>Publicar contenido ofensivo, discriminatorio o ilegal.</li>
+            <li>Intentar vulnerar la seguridad de la plataforma.</li>
+            <li>Uso no autorizado de la propiedad intelectual de los artistas.</li>
+          </ul>
+        </section>
+
+        <section class="space-y-4">
+          <h2 class="text-2xl font-black text-white uppercase tracking-wider border-l-4 border-orange-500 pl-4">3. Registro y Cuentas</h2>
+          <p class="text-white/70 leading-relaxed">
+            Para acceder a ciertas funciones, deberás crear una cuenta. Eres responsable de mantener la confidencialidad de tu contraseña y de todas las actividades que ocurran bajo tu cuenta.
+          </p>
+        </section>
+
+        <section class="space-y-4">
+          <h2 class="text-2xl font-black text-white uppercase tracking-wider border-l-4 border-orange-500 pl-4">4. Propiedad Intelectual</h2>
+          <p class="text-white/70 leading-relaxed">
+            Todo el contenido presente en esta plataforma, incluyendo música, logos, diseños y textos, es propiedad de WILD GVNG o de sus respectivos artistas y está protegido por las leyes de propiedad intelectual.
+          </p>
+        </section>
+
+        <section class="space-y-4">
+          <h2 class="text-2xl font-black text-white uppercase tracking-wider border-l-4 border-orange-500 pl-4">5. Compras y Eventos</h2>
+          <p class="text-white/70 leading-relaxed">
+            Las compras realizadas a través de la tienda oficial o la adquisición de tickets para eventos están sujetas a disponibilidad. No se realizan devoluciones a menos que el evento sea cancelado por la organización.
+          </p>
+        </section>
+
+        <section class="space-y-4">
+          <h2 class="text-2xl font-black text-white uppercase tracking-wider border-l-4 border-orange-500 pl-4">6. Limitación de Responsabilidad</h2>
+          <p class="text-white/70 leading-relaxed">
+            WILD GVNG no se hace responsable de daños directos, indirectos o accidentales derivados del uso de nuestra plataforma o de la asistencia a los eventos promocionados.
+          </p>
+        </section>
+      </div>
+
+      <div class="footer-cta pt-20 text-center">
+        <a href="/" class="inline-block px-12 py-5 bg-white text-black text-xs font-black uppercase tracking-[0.3em] rounded-2xl hover:bg-orange-500 hover:text-white transition-all">Volver al Inicio</a>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .terms-container {
+    min-height: 100vh;
+    padding: 120px 20px 80px;
+    background: #000;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .terms-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 20% 30%, rgba(201, 131, 0, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(138, 3, 3, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .content-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .header-section {
+    margin-bottom: 60px;
+    text-align: center;
+  }
+
+  .terms-content {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 32px;
+    padding: 60px;
+    backdrop-filter: blur(20px);
+  }
+
+  @media (max-width: 768px) {
+    .terms-content {
+      padding: 30px;
+    }
+    
+    .header-section h1 {
+      font-size: 2.5rem;
+    }
+  }
+</style>
