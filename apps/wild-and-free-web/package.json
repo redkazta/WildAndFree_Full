@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "redeploy:vercel": "node ./scripts/vercel-redeploy.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },
