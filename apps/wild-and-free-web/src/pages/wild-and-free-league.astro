@@ -77,8 +77,8 @@ const initialParticipants = [
             <div class="col col-r1">
               {[1, 2, 3, 4].map(i => (
                 <div class="match match-r1 match-left">
-                  <div class="bracket-slot" data-slot={`l1-m${i}-p1`}></div>
-                  <div class="bracket-slot" data-slot={`l1-m${i}-p2`}></div>
+                  <div class="bracket-slot" data-side="left" data-round="1" data-slot={`l1-m${i}-p1`}></div>
+                  <div class="bracket-slot" data-side="left" data-round="1" data-slot={`l1-m${i}-p2`}></div>
                   <svg class="connector connector-right" viewBox="0 0 24 106" preserveAspectRatio="none" aria-hidden="true">
                     <path d="M0 25 H12 M0 81 H12 M12 25 V81 M12 53 H24" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="square" />
                   </svg>
@@ -88,8 +88,8 @@ const initialParticipants = [
             <div class="col col-r2">
               {[1, 2].map(i => (
                 <div class="match match-r2 match-left">
-                  <div class="bracket-slot" data-slot={`l2-m${i}-p1`}></div>
-                  <div class="bracket-slot" data-slot={`l2-m${i}-p2`}></div>
+                  <div class="bracket-slot" data-side="left" data-round="2" data-slot={`l2-m${i}-p1`}></div>
+                  <div class="bracket-slot" data-side="left" data-round="2" data-slot={`l2-m${i}-p2`}></div>
                   <svg class="connector connector-right" viewBox="0 0 24 106" preserveAspectRatio="none" aria-hidden="true">
                     <path d="M0 25 H12 M0 81 H12 M12 25 V81 M12 53 H24" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="square" />
                   </svg>
@@ -98,8 +98,8 @@ const initialParticipants = [
             </div>
             <div class="col col-r3">
               <div class="match match-r3 match-left">
-                <div class="bracket-slot" data-slot="l3-m1-p1"></div>
-                <div class="bracket-slot" data-slot="l3-m1-p2"></div>
+                <div class="bracket-slot" data-side="left" data-round="3" data-slot="l3-m1-p1"></div>
+                <div class="bracket-slot" data-side="left" data-round="3" data-slot="l3-m1-p2"></div>
                 <svg class="connector connector-right" viewBox="0 0 24 106" preserveAspectRatio="none" aria-hidden="true">
                   <path d="M0 25 H12 M0 81 H12 M12 25 V81 M12 53 H24" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="square" />
                 </svg>
@@ -112,15 +112,15 @@ const initialParticipants = [
               <span class="text-orange-500">WILD</span> <span class="text-white">GVNG</span>
             </div>
             <div class="final-row">
-              <div class="bracket-slot final" data-slot="final-p1"></div>
+              <div class="bracket-slot final" data-side="left" data-round="4" data-slot="final-p1"></div>
               <div class="final-vs">VS</div>
-              <div class="bracket-slot final" data-slot="final-p2"></div>
+              <div class="bracket-slot final" data-side="right" data-round="4" data-slot="final-p2"></div>
             </div>
           <svg class="final-connector" viewBox="0 0 420 70" preserveAspectRatio="none" aria-hidden="true">
             <path d="M103 0 V30 M317 0 V30 M103 30 H317 M210 30 V70" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="square" />
           </svg>
             <div class="winner-row">
-              <div class="bracket-slot winner" data-slot="winner"></div>
+              <div class="bracket-slot winner" data-side="center" data-round="5" data-slot="winner"></div>
             </div>
             <p class="champion-text">CAMPEÓN WILD AND FREE FECHA #1</p>
           </div>
@@ -128,8 +128,8 @@ const initialParticipants = [
           <div class="side side-right">
             <div class="col col-r3">
               <div class="match match-r3 match-right">
-                <div class="bracket-slot" data-slot="r3-m1-p1"></div>
-                <div class="bracket-slot" data-slot="r3-m1-p2"></div>
+                <div class="bracket-slot" data-side="right" data-round="3" data-slot="r3-m1-p1"></div>
+                <div class="bracket-slot" data-side="right" data-round="3" data-slot="r3-m1-p2"></div>
                 <svg class="connector connector-left" viewBox="0 0 24 106" preserveAspectRatio="none" aria-hidden="true">
                   <path d="M24 25 H12 M24 81 H12 M12 25 V81 M12 53 H0" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="square" />
                 </svg>
@@ -138,8 +138,8 @@ const initialParticipants = [
             <div class="col col-r2">
               {[1, 2].map(i => (
                 <div class="match match-r2 match-right">
-                  <div class="bracket-slot" data-slot={`r2-m${i}-p1`}></div>
-                  <div class="bracket-slot" data-slot={`r2-m${i}-p2`}></div>
+                  <div class="bracket-slot" data-side="right" data-round="2" data-slot={`r2-m${i}-p1`}></div>
+                  <div class="bracket-slot" data-side="right" data-round="2" data-slot={`r2-m${i}-p2`}></div>
                   <svg class="connector connector-left" viewBox="0 0 24 106" preserveAspectRatio="none" aria-hidden="true">
                     <path d="M24 25 H12 M24 81 H12 M12 25 V81 M12 53 H0" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="square" />
                   </svg>
@@ -149,8 +149,8 @@ const initialParticipants = [
             <div class="col col-r1">
               {[1, 2, 3, 4].map(i => (
                 <div class="match match-r1 match-right">
-                  <div class="bracket-slot" data-slot={`r1-m${i}-p1`}></div>
-                  <div class="bracket-slot" data-slot={`r1-m${i}-p2`}></div>
+                  <div class="bracket-slot" data-side="right" data-round="1" data-slot={`r1-m${i}-p1`}></div>
+                  <div class="bracket-slot" data-side="right" data-round="1" data-slot={`r1-m${i}-p2`}></div>
                   <svg class="connector connector-left" viewBox="0 0 24 106" preserveAspectRatio="none" aria-hidden="true">
                     <path d="M24 25 H12 M24 81 H12 M12 25 V81 M12 53 H0" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="square" />
                   </svg>
@@ -303,6 +303,32 @@ const initialParticipants = [
     align-items: center;
     overflow: hidden;
     box-shadow: 0 4px 10px rgba(0,0,0,0.8);
+  }
+
+  .bracket-slot[data-round="2"][data-side="left"]::before,
+  .bracket-slot[data-round="3"][data-side="left"]::before,
+  .bracket-slot[data-round="4"][data-side="left"]::before {
+    content: '';
+    position: absolute;
+    left: -24px;
+    top: 50%;
+    width: 24px;
+    height: 2px;
+    background: #ffffff;
+    transform: translateY(-50%);
+  }
+
+  .bracket-slot[data-round="2"][data-side="right"]::before,
+  .bracket-slot[data-round="3"][data-side="right"]::before,
+  .bracket-slot[data-round="4"][data-side="right"]::before {
+    content: '';
+    position: absolute;
+    right: -24px;
+    top: 50%;
+    width: 24px;
+    height: 2px;
+    background: #ffffff;
+    transform: translateY(-50%);
   }
 
   .bracket-slot.drag-over {
@@ -625,6 +651,18 @@ const initialParticipants = [
     menuEl.style.top = `${clampedY}px`;
     menuEl.style.width = `${menuWidth}px`;
     menuEl.dataset.slot = slotId;
+
+    const locked = Boolean(bracketState?.[slotId]?.locked);
+    const lockBtn = menuEl.querySelector('button[data-action="lock"]') as HTMLButtonElement | null;
+    const advanceBtn = menuEl.querySelector('button[data-action="advance"]') as HTMLButtonElement | null;
+    [lockBtn, advanceBtn].forEach((b) => {
+      if (!b) return;
+      b.classList.remove('opacity-50', 'pointer-events-none');
+    });
+    if (locked) {
+      lockBtn?.classList.add('opacity-50', 'pointer-events-none');
+      advanceBtn?.classList.add('opacity-50', 'pointer-events-none');
+    }
     menu.classList.remove('hidden');
   };
 
@@ -675,6 +713,7 @@ const initialParticipants = [
     }
 
     if (action === 'advance') {
+      if (data.locked) return;
       const next = getNextSlotId(fromSlot);
       if (!next) return;
       if (bracketState?.[next]?.locked) return;
