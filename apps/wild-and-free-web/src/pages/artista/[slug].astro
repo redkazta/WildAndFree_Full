@@ -2,6 +2,20 @@
 import Layout from '../../layouts/Layout.astro';
 import { supabase } from '../../lib/supabase';
 
+export async function getStaticPaths() {
+  const { data: dbArtists } = await supabase.from('artists').select('slug');
+  
+  const mockSlugs = [
+    'lil-kiro', 'neon-ghost', 'shadow-v', 'crystal-wave', 
+    'midnight-rider', 'nova-k', 'sable', 'storm-trooper'
+  ];
+
+  const dbSlugs = dbArtists?.map(a => a.slug) || [];
+  const allSlugs = [...new Set([...mockSlugs, ...dbSlugs])];
+
+  return allSlugs.map(slug => ({ params: { slug } }));
+}
+
 const { slug } = Astro.params;
 
 // Fetch artist data from Supabase
