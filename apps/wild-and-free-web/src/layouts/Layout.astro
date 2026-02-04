@@ -416,7 +416,7 @@ const isActive = (href: string) => {
 			document.addEventListener('astro:after-swap', setupSidebar);
 		</script>
 
-		<script type="module">
+		<script>
 			import { supabase } from '../lib/supabase';
 			import { getRole, requireRole } from '../lib/role.js';
 			import { ensureProfile } from '../lib/profile.js';
@@ -487,7 +487,8 @@ const isActive = (href: string) => {
 					trigger.addEventListener('click', (e) => {
 						e.stopPropagation();
 						const targetId = trigger.getAttribute('data-target');
-						const targetPopover = document.getElementById(targetId!);
+						if (!targetId) return;
+						const targetPopover = document.getElementById(targetId);
 						const isActive = targetPopover?.classList.contains('active');
 						popovers.forEach(p => p.classList.remove('active'));
 						if (!isActive) targetPopover?.classList.add('active');
