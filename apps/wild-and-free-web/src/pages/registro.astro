@@ -184,6 +184,10 @@ import Layout from '../layouts/Layout.astro';
 
   const form = document.querySelector('.register-form')
   const googleBtn = document.querySelector('.social-btn')
+  const getInputValue = (id) => {
+    const el = document.getElementById(id)
+    return el instanceof HTMLInputElement ? el.value : ''
+  }
 
   if (googleBtn) {
     googleBtn.addEventListener('click', async () => {
@@ -199,27 +203,32 @@ import Layout from '../layouts/Layout.astro';
     form.addEventListener('submit', async (e) => {
       e.preventDefault()
       const submitBtn = form.querySelector('button[type="submit"]')
-      const originalText = submitBtn.textContent
+      const originalText = submitBtn?.textContent || 'Crear Cuenta'
 
-      const fullName = document.getElementById('fullName')?.value?.trim()
-      const username = document.getElementById('username')?.value?.trim()
-      const email = document.getElementById('email')?.value?.trim()
-      const phone = document.getElementById('phone')?.value?.trim()
-      const password = document.getElementById('password')?.value
-      const confirmPassword = document.getElementById('confirmPassword')?.value
-      const location = document.getElementById('location')?.value
-      const birthdate = document.getElementById('birthdate')?.value
+      const fullName = getInputValue('fullName').trim()
+      const username = getInputValue('username').trim()
+      const email = getInputValue('email').trim()
+      const phone = getInputValue('phone').trim()
+      const password = getInputValue('password')
+      const confirmPassword = getInputValue('confirmPassword')
+      const location = getInputValue('location')
+      const birthdate = getInputValue('birthdate')
 
-      if (!email || !password || !fullName) return
+      if (!email || !password || !fullName) {
+        alert('Completa nombre, correo y contraseña.')
+        return
+      }
       
       if (password !== confirmPassword) {
         alert('Las contraseñas no coinciden.')
         return
       }
 
-      submitBtn.disabled = true
-      submitBtn.textContent = 'Creando cuenta...'
-      submitBtn.style.opacity = '0.5'
+      if (submitBtn) {
+        submitBtn.disabled = true
+        submitBtn.textContent = 'Creando cuenta...'
+        submitBtn.style.opacity = '0.5'
+      }
 
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -239,9 +248,11 @@ import Layout from '../layouts/Layout.astro';
 
       if (error) {
         alert(error.message)
-        submitBtn.disabled = false
-        submitBtn.textContent = originalText
-        submitBtn.style.opacity = '1'
+        if (submitBtn) {
+          submitBtn.disabled = false
+          submitBtn.textContent = originalText
+          submitBtn.style.opacity = '1'
+        }
         return
       }
 

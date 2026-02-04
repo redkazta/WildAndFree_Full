@@ -95,6 +95,10 @@ import Layout from '../layouts/Layout.astro';
 
   const form = document.querySelector('.login-form')
   const googleBtn = document.querySelector('.social-btn')
+  const getInputValue = (id) => {
+    const el = document.getElementById(id)
+    return el instanceof HTMLInputElement ? el.value : ''
+  }
 
   if (googleBtn) {
     googleBtn.addEventListener('click', async () => {
@@ -110,24 +114,31 @@ import Layout from '../layouts/Layout.astro';
     form.addEventListener('submit', async (e) => {
       e.preventDefault()
       const submitBtn = form.querySelector('button[type="submit"]')
-      const originalText = submitBtn.textContent
+      const originalText = submitBtn?.textContent || 'Iniciar Sesión'
       
-      const email = document.getElementById('email')?.value?.trim()
-      const password = document.getElementById('password')?.value
+      const email = getInputValue('email').trim()
+      const password = getInputValue('password')
       
-      if (!email || !password) return
+      if (!email || !password) {
+        alert('Completa correo y contraseña.')
+        return
+      }
 
-      submitBtn.disabled = true
-      submitBtn.textContent = 'Iniciando sesión...'
-      submitBtn.style.opacity = '0.5'
+      if (submitBtn) {
+        submitBtn.disabled = true
+        submitBtn.textContent = 'Iniciando sesión...'
+        submitBtn.style.opacity = '0.5'
+      }
 
       const { error } = await supabase.auth.signInWithPassword({ email, password })
       
       if (error) {
         alert(error.message)
-        submitBtn.disabled = false
-        submitBtn.textContent = originalText
-        submitBtn.style.opacity = '1'
+        if (submitBtn) {
+          submitBtn.disabled = false
+          submitBtn.textContent = originalText
+          submitBtn.style.opacity = '1'
+        }
         return
       }
 
