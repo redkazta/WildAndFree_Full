@@ -19,6 +19,43 @@ const pickHighestRole = (roles) => {
   return normalized[0] || null
 }
 
+const getRoleFromRpc = async () => {
+  const candidates = ['get_my_role', 'getMyRole', 'current_role']
+  for (const fn of candidates) {
+    try {
+      const { data, error } = await supabase.rpc(fn)
+      if (error) continue
+      if (typeof data === 'string') {
+        const r = normalizeRole(data)
+        if (r) return r
+      }
+      const objRole = data?.role || data?.name
+      const r = normalizeRole(objRole)
+      if (r) return r
+    } catch {
+      continue
+    }
+  }
+
+  const listCandidates = ['get_my_roles', 'getMyRoles', 'current_roles']
+  for (const fn of listCandidates) {
+    try {
+      const { data, error } = await supabase.rpc(fn)
+      if (error) continue
+      if (Array.isArray(data)) {
+        const picked = pickHighestRole(
+          data.map((v) => (typeof v === 'string' ? v : v?.name || v?.role || v?.slug || v?.code))
+        )
+        if (picked) return picked
+      }
+    } catch {
+      continue
+    }
+  }
+
+  return null
+}
+
 const getRoleFromUserRoles = async (userId) => {
   const attempts = [
     () => supabase.from('user_roles').select('roles(name)').eq('user_id', userId),
@@ -63,6 +100,9 @@ export const getRole = async () => {
 
   const userId = session?.user?.id
   const metaRole = normalizeRole(session?.user?.user_metadata?.role)
+
+  const rpcRole = await getRoleFromRpc()
+  if (rpcRole) return { role: rpcRole, session, error: null }
 
   const joinRole = userId ? await getRoleFromUserRoles(userId) : null
   if (joinRole) return { role: joinRole, session, error: null }
