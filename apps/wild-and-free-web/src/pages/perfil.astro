@@ -32,7 +32,7 @@ import Layout from '../layouts/Layout.astro';
           </div>
           <img id="profile-avatar-img" src="" alt="Avatar" class="hidden">
           <div id="role-crown" class="role-crown hidden" aria-hidden="true">
-            <svg width="70" height="70" viewBox="0 0 24 24" fill="none" class="role-crown__icon">
+            <svg width="96" height="96" viewBox="0 0 24 24" fill="none" class="role-crown__icon">
               <path d="M3 7l4.5 4L12 4l4.5 7L21 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" fill="currentColor"/>
               <path d="M6 18h12" stroke="currentColor" stroke-width="1.2" opacity="0.35"/>
             </svg>
@@ -248,11 +248,32 @@ import Layout from '../layouts/Layout.astro';
     text-transform: uppercase;
     letter-spacing: 0.18em;
     box-shadow: 0 16px 30px rgba(0,0,0,0.35);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .role-tag::before {
+    content: '';
+    position: absolute;
+    inset: -30% -50%;
+    background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.22) 45%, transparent 60%);
+    transform: translateX(-60%) rotate(10deg);
+    animation: roleShine 3.2s ease-in-out infinite;
+    opacity: 0.8;
+    pointer-events: none;
+  }
+
+  @keyframes roleShine {
+    0% { transform: translateX(-70%) rotate(10deg); opacity: 0.0; }
+    15% { opacity: 0.8; }
+    50% { transform: translateX(70%) rotate(10deg); opacity: 0.7; }
+    85% { opacity: 0.0; }
+    100% { transform: translateX(70%) rotate(10deg); opacity: 0.0; }
   }
 
   .role-tag.role-admin {
     padding: 12px 18px;
-    font-size: 12px;
+    font-size: 14px;
     background: linear-gradient(135deg, rgba(255, 0, 0, 0.20) 0%, rgba(201, 131, 0, 0.18) 55%, rgba(255, 255, 255, 0.06) 100%);
     border-color: rgba(255, 120, 120, 0.28);
     color: rgba(255, 220, 190, 0.98);
@@ -280,12 +301,12 @@ import Layout from '../layouts/Layout.astro';
 
   .role-crown {
     position: absolute;
-    top: -56px;
-    left: 50%;
-    transform: translateX(-50%) rotate(-10deg);
-    width: 132px;
-    height: 132px;
-    border-radius: 44px;
+    top: -82px;
+    left: 72%;
+    transform: translateX(-50%) rotate(-18deg);
+    width: 180px;
+    height: 180px;
+    border-radius: 64px;
     background: radial-gradient(circle at 30% 30%, rgba(255, 230, 160, 0.9) 0%, rgba(201, 131, 0, 0.9) 45%, rgba(138, 3, 3, 0.65) 100%);
     color: rgba(20, 10, 0, 0.85);
     display: flex;
@@ -720,7 +741,7 @@ import Layout from '../layouts/Layout.astro';
   import { supabase } from '../lib/supabase';
   import { getRole } from '../lib/role.js';
 
-  document.addEventListener('DOMContentLoaded', async () => {
+  const initProfile = async () => {
     const profileMain = document.getElementById('profile-main');
     const unauthSection = document.getElementById('unauth-state');
     const authContent = document.getElementById('auth-content');
@@ -763,7 +784,8 @@ import Layout from '../layouts/Layout.astro';
     if (bioEl) bioEl.textContent = profile.bio || 'Miembro de Wild Gvng • Amante del hip-hop urbano';
 
     const { role: resolvedRole } = await getRole();
-    const role = (resolvedRole || profile.role || session.user?.user_metadata?.role || 'fan').toString().toLowerCase();
+    const roleRaw = (resolvedRole || profile.role || session.user?.user_metadata?.role || 'fan');
+    const role = String(roleRaw).trim().toLowerCase();
     if (roleTagEl) {
       roleTagEl.textContent = String(role).toUpperCase();
       roleTagEl.classList.remove('role-admin', 'role-artist', 'role-fan', 'role-guest');
@@ -841,5 +863,10 @@ import Layout from '../layouts/Layout.astro';
         }
       });
     });
-  });
+  };
+
+  const run = () => initProfile().catch(() => {})
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run)
+  else run()
+  document.addEventListener('astro:after-swap', run)
 </script>
