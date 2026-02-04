@@ -13,11 +13,11 @@ export const getRole = async () => {
   const metaRole = session?.user?.user_metadata?.role
   const { data: profileData } = await supabase
     .from('profiles')
-    .select('role')
+    .select('*')
     .eq('id', session.user.id)
     .single()
 
-  const profileRole = profileData?.role
+  const profileRole = profileData?.role || profileData?.rol
   return { role: profileRole || metaRole || 'fan', session, error: null }
 }
 

@@ -31,7 +31,7 @@ import Layout from '../layouts/Layout.astro';
             WG
           </div>
           <img id="profile-avatar-img" src="" alt="Avatar" class="hidden">
-          <div id="role-crown" class="role-crown hidden" aria-hidden="true">
+          <div id="role-crown" class="role-crown" aria-hidden="true">
             <svg width="96" height="96" viewBox="0 0 24 24" fill="none" class="role-crown__icon">
               <path d="M3 7l4.5 4L12 4l4.5 7L21 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" fill="currentColor"/>
               <path d="M6 18h12" stroke="currentColor" stroke-width="1.2" opacity="0.35"/>
@@ -301,21 +301,25 @@ import Layout from '../layouts/Layout.astro';
 
   .role-crown {
     position: absolute;
-    top: -82px;
-    left: 72%;
-    transform: translateX(-50%) rotate(-18deg);
-    width: 180px;
-    height: 180px;
-    border-radius: 64px;
+    top: -54px;
+    left: 70%;
+    transform: translateX(-50%) rotate(-16deg);
+    width: 124px;
+    height: 124px;
+    border-radius: 44px;
     background: radial-gradient(circle at 30% 30%, rgba(255, 230, 160, 0.9) 0%, rgba(201, 131, 0, 0.9) 45%, rgba(138, 3, 3, 0.65) 100%);
     color: rgba(20, 10, 0, 0.85);
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     box-shadow: 0 22px 60px rgba(201, 131, 0, 0.18), 0 18px 40px rgba(0,0,0,0.55);
     border: 1px solid rgba(255, 255, 255, 0.16);
     pointer-events: none;
     z-index: 5;
+  }
+
+  .role-crown.is-visible {
+    display: flex;
   }
 
   .role-crown__icon {
@@ -791,10 +795,7 @@ import Layout from '../layouts/Layout.astro';
       roleTagEl.classList.remove('role-admin', 'role-artist', 'role-fan', 'role-guest');
       roleTagEl.classList.add(`role-${role}`);
     }
-    if (crownEl) {
-      if (role === 'admin') crownEl.classList.remove('hidden');
-      else crownEl.classList.add('hidden');
-    }
+    crownEl?.classList.toggle('is-visible', role === 'admin');
     
     if (profile.avatar_url && avatarImg instanceof HTMLImageElement) {
       avatarImg.src = profile.avatar_url;
