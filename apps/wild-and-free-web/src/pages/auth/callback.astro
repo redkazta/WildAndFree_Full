@@ -13,9 +13,11 @@ import Layout from '../../layouts/Layout.astro';
 
 <script type="module">
   import { supabase } from '../../lib/supabase'
+  import { ensureProfile } from '../../lib/profile.js'
 
   try {
-    await supabase.auth.exchangeCodeForSession(window.location.href)
+    const { data } = await supabase.auth.exchangeCodeForSession(window.location.href)
+    if (data?.session) await ensureProfile(data.session)
   } finally {
     window.location.replace('/')
   }

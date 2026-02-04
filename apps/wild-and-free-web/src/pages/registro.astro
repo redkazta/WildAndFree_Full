@@ -180,6 +180,7 @@ import Layout from '../layouts/Layout.astro';
 
 <script type="module">
   import { supabase } from '../lib/supabase'
+  import { ensureProfile } from '../lib/profile.js'
 
   const form = document.querySelector('.register-form')
   const googleBtn = document.querySelector('.social-btn')
@@ -220,7 +221,7 @@ import Layout from '../layouts/Layout.astro';
       submitBtn.textContent = 'Creando cuenta...'
       submitBtn.style.opacity = '0.5'
 
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -243,6 +244,8 @@ import Layout from '../layouts/Layout.astro';
         submitBtn.style.opacity = '1'
         return
       }
+
+      if (data?.session) await ensureProfile(data.session)
 
       alert('¡Registro exitoso! Por favor revisa tu correo para confirmar tu cuenta.')
       window.location.href = '/login'

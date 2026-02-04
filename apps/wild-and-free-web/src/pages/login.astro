@@ -91,6 +91,7 @@ import Layout from '../layouts/Layout.astro';
 
 <script type="module">
   import { supabase } from '../lib/supabase'
+  import { ensureProfile } from '../lib/profile.js'
 
   const form = document.querySelector('.login-form')
   const googleBtn = document.querySelector('.social-btn')
@@ -129,6 +130,9 @@ import Layout from '../layouts/Layout.astro';
         submitBtn.style.opacity = '1'
         return
       }
+
+      const { data } = await supabase.auth.getSession()
+      if (data?.session) await ensureProfile(data.session)
       
       window.location.href = '/'
     })
