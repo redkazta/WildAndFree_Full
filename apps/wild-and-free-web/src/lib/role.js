@@ -11,8 +11,6 @@ export const getRole = async () => {
   if (error || !session) return { role: 'guest', session, error }
 
   const metaRole = session?.user?.user_metadata?.role
-  if (metaRole) return { role: metaRole, session, error: null }
-
   const { data: profileData } = await supabase
     .from('profiles')
     .select('role')
@@ -20,7 +18,7 @@ export const getRole = async () => {
     .single()
 
   const profileRole = profileData?.role
-  return { role: profileRole || 'fan', session, error: null }
+  return { role: profileRole || metaRole || 'fan', session, error: null }
 }
 
 export const requireRole = async (roles, options = {}) => {

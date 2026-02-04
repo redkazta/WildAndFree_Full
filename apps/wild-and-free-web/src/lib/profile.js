@@ -6,16 +6,14 @@ export const ensureProfile = async (session) => {
   if (!userId) return { ok: false, error: new Error('No session user') }
 
   const meta = user.user_metadata || {}
-  const payload = {
-    id: userId,
-    nombre: meta.nombre || meta.full_name || null,
-    username: meta.username || null,
-    phone: meta.phone || null,
-    ubicacion: meta.ubicacion || null,
-    birthdate: meta.birthdate || null,
-    role: meta.role || null,
-    updated_at: new Date().toISOString(),
-  }
+  const payload = { id: userId, updated_at: new Date().toISOString() }
+  const nombre = meta.nombre || meta.full_name
+  if (nombre) payload.nombre = nombre
+  if (meta.username) payload.username = meta.username
+  if (meta.phone) payload.phone = meta.phone
+  if (meta.ubicacion) payload.ubicacion = meta.ubicacion
+  if (meta.birthdate) payload.birthdate = meta.birthdate
+  if (meta.role) payload.role = meta.role
 
   const { error } = await supabase.from('profiles').upsert(payload, { onConflict: 'id' })
   if (error) return { ok: false, error }
