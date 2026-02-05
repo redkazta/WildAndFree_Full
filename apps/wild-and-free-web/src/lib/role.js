@@ -57,41 +57,41 @@ const getRoleFromRpc = async () => {
 }
 
 const getRoleFromUserRoles = async (userId) => {
-  const attempts = [
-    () => supabase.from('user_roles').select('roles(name)').eq('user_id', userId),
-    () => supabase.from('user_roles').select('role:roles(name)').eq('user_id', userId),
-    () => supabase.from('user_roles').select('roles:role_id(name)').eq('user_id', userId),
-    () => supabase.from('user_roles').select('roles(*)').eq('user_id', userId),
-  ]
+  try {
+    const { data: userRoleRows, error: userRolesError } = await supabase
+      .from('user_roles')
+      .select('role_id')
+      .eq('user_id', userId)
 
-  for (const run of attempts) {
-    try {
-      const { data, error } = await run()
-      if (error || !Array.isArray(data) || data.length === 0) continue
-
-      const found = []
-      for (const row of data) {
-        const direct = row?.role || row?.rol || row?.name
-        if (direct) found.push(direct)
-
-        const nestedCandidates = [row?.roles, row?.role]
-        for (const nested of nestedCandidates) {
-          if (Array.isArray(nested)) {
-            nested.forEach((r) => found.push(r?.name || r?.role || r?.slug || r?.code))
-          } else if (nested && typeof nested === 'object') {
-            found.push(nested?.name || nested?.role || nested?.slug || nested?.code)
-          }
-        }
-      }
-
-      const picked = pickHighestRole(found)
-      if (picked) return picked
-    } catch {
-      continue
+    if (userRolesError || !Array.isArray(userRoleRows) || userRoleRows.length === 0) {
+      return null
     }
-  }
 
-  return null
+    const roleIds = Array.from(
+      new Set(
+        userRoleRows
+          .map((row) => row?.role_id)
+          .filter((value) => Boolean(value))
+      )
+    )
+
+    if (roleIds.length === 0) return null
+
+    const { data: rolesRows, error: rolesError } = await supabase
+      .from('roles')
+      .select('name')
+      .in('id', roleIds)
+
+    if (rolesError || !Array.isArray(rolesRows) || rolesRows.length === 0) {
+      return null
+    }
+
+    const names = rolesRows.map((row) => row?.name).filter(Boolean)
+    const picked = pickHighestRole(names)
+    return picked
+  } catch {
+    return null
+  }
 }
 
 export const getRole = async () => {
