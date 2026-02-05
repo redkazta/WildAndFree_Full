@@ -44,6 +44,13 @@ import Layout from '../layouts/Layout.astro';
           </button>
         </div>
         <div class="profile-info-main">
+          <div id="birthday-banner" class="hidden birthday-banner">
+            <div class="birthday-content">
+              <span class="birthday-icon">🎂</span>
+              <span class="birthday-text">¡Feliz Cumpleaños!</span>
+              <span class="birthday-icon">🎉</span>
+            </div>
+          </div>
           <h1 id="profile-name">Cargando...</h1>
           <p class="username" id="profile-username">@usuario</p>
           <div class="role-tags" id="profile-role-tags">
@@ -297,6 +304,43 @@ import Layout from '../layouts/Layout.astro';
     background: rgba(255, 255, 255, 0.04);
     border-color: rgba(255, 255, 255, 0.06);
     color: rgba(255, 255, 255, 0.6);
+  }
+
+  .birthday-banner {
+    margin-bottom: 20px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 100, 100, 0.2) 100%);
+    border: 1px solid rgba(255, 215, 0, 0.4);
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    animation: bounce 2s infinite;
+    backdrop-filter: blur(5px);
+  }
+
+  .birthday-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .birthday-text {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 700;
+    color: #FFD700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  }
+
+  .birthday-icon {
+    font-size: 20px;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
   }
 
   .role-crown {
@@ -796,6 +840,23 @@ import Layout from '../layouts/Layout.astro';
       roleTagEl.classList.add(`role-${role}`);
     }
     crownEl?.classList.toggle('is-visible', role === 'admin');
+    
+    // Check Birthday
+    if (profile.birthdate) {
+      try {
+        const today = new Date();
+        const [bYearStr, bMonthStr, bDayStr] = String(profile.birthdate).split('-');
+        const bMonth = parseInt(bMonthStr);
+        const bDay = parseInt(bDayStr);
+        
+        if (today.getMonth() + 1 === bMonth && today.getDate() === bDay) {
+           const banner = document.getElementById('birthday-banner');
+           if (banner) banner.classList.remove('hidden');
+        }
+      } catch (e) {
+        console.error('Error checking birthday:', e);
+      }
+    }
     
     if (profile.avatar_url && avatarImg instanceof HTMLImageElement) {
       avatarImg.src = profile.avatar_url;
