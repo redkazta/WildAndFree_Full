@@ -12,7 +12,14 @@ export const ensureProfile = async (session) => {
   if (meta.username) payload.username = meta.username
   if (meta.phone) payload.phone = meta.phone
   if (meta.ubicacion) payload.ubicacion = meta.ubicacion
-  if (meta.birthdate) payload.birthdate = meta.birthdate
+  if (meta.birthdate) {
+    // Validar formato YYYY-MM-DD
+    if (/^\d{4}-\d{2}-\d{2}$/.test(meta.birthdate)) {
+      payload.birthdate = meta.birthdate;
+    } else {
+      console.warn('Invalid birthdate format in metadata:', meta.birthdate);
+    }
+  }
   if (meta.role) payload.role = meta.role
 
   const { error } = await supabase.from('profiles').upsert(payload, { onConflict: 'id' })
