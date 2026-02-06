@@ -110,7 +110,8 @@ import Layout from '../layouts/Layout.astro';
 
   try {
     const { role } = await getRole()
-    if (role === 'admin') show(ok)
+    const normalized = String(role || '').trim().toLowerCase()
+    if (normalized === 'admin' || normalized === 'superadmin') show(ok)
     else show(denied)
   } catch {
     show(denied)

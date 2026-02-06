@@ -262,20 +262,22 @@ import Layout from '../layouts/Layout.astro';
   .role-tag::before {
     content: '';
     position: absolute;
-    inset: -30% -50%;
-    background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.22) 45%, transparent 60%);
-    transform: translateX(-60%) rotate(10deg);
+    top: -30%;
+    bottom: -30%;
+    width: 60%;
+    left: -80%;
+    background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.22) 50%, transparent 70%);
     animation: roleShine 3.2s ease-in-out infinite;
-    opacity: 0.8;
+    opacity: 0.9;
     pointer-events: none;
   }
 
   @keyframes roleShine {
-    0% { transform: translateX(-70%) rotate(10deg); opacity: 0.0; }
-    15% { opacity: 0.8; }
-    50% { transform: translateX(70%) rotate(10deg); opacity: 0.7; }
+    0% { transform: translateX(0) rotate(10deg); opacity: 0.0; }
+    15% { opacity: 0.9; }
+    50% { transform: translateX(260%) rotate(10deg); opacity: 0.7; }
     85% { opacity: 0.0; }
-    100% { transform: translateX(70%) rotate(10deg); opacity: 0.0; }
+    100% { transform: translateX(260%) rotate(10deg); opacity: 0.0; }
   }
 
   .role-tag.role-admin {
