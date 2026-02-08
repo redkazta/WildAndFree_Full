@@ -57,6 +57,16 @@ import Layout from '../layouts/Layout.astro';
             <span class="role-tag" id="profile-role-tag">ROL</span>
           </div>
           <p class="bio" id="profile-bio">Cargando biografía...</p>
+          <div class="profile-details mb-6 flex flex-wrap gap-4 text-xs font-bold uppercase tracking-widest text-white/60">
+            <div id="profile-location-container" class="hidden flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
+              <span class="text-orange-500">📍</span>
+              <span id="profile-location">Ubicación</span>
+            </div>
+            <div id="profile-birthdate-container" class="hidden flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
+              <span class="text-orange-500">📅</span>
+              <span id="profile-birthdate">Cumpleaños</span>
+            </div>
+          </div>
           <div class="profile-stats">
             <div class="stat">
               <span class="stat-number" id="stat-following">0</span>
@@ -832,6 +842,26 @@ import Layout from '../layouts/Layout.astro';
     if (nameEl) nameEl.textContent = profile.nombre || 'Usuario Wild';
     if (usernameEl) usernameEl.textContent = `@${profile.nombre?.toLowerCase().replace(/\s/g, '_') || 'usuario'}`;
     if (bioEl) bioEl.textContent = profile.bio || 'Miembro de Wild Gvng • Amante del hip-hop urbano';
+
+    // Update Location and Birthdate
+    const locationContainer = document.getElementById('profile-location-container');
+    const locationEl = document.getElementById('profile-location');
+    const birthdateContainer = document.getElementById('profile-birthdate-container');
+    const birthdateEl = document.getElementById('profile-birthdate');
+
+    if (profile.ubicacion) {
+      if (locationEl) locationEl.textContent = profile.ubicacion;
+      locationContainer?.classList.remove('hidden');
+    }
+
+    if (profile.birthdate) {
+      if (birthdateEl) {
+        const date = new Date(profile.birthdate + 'T00:00:00');
+        const options = { day: 'numeric', month: 'long' };
+        birthdateEl.textContent = date.toLocaleDateString('es-ES', options);
+      }
+      birthdateContainer?.classList.remove('hidden');
+    }
 
     const { role: resolvedRole } = await getRole();
     const roleRaw = (resolvedRole || profile.role || session.user?.user_metadata?.role || 'fan');
