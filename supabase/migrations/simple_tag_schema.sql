@@ -26,38 +26,12 @@ CREATE TABLE IF NOT EXISTS public.user_has_tags (
 ALTER TABLE public.profiles 
 ADD COLUMN IF NOT EXISTS user_tags INTEGER[] DEFAULT '{}';
 
--- 4. Tabla de roles invisibles (solo para permisos backend)
-CREATE TABLE IF NOT EXISTS public.roles (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(100) NOT NULL UNIQUE,
-  permissions JSONB DEFAULT '{}',
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- Asegurar que columna permissions exista
-ALTER TABLE public.roles ADD COLUMN IF NOT EXISTS permissions JSONB DEFAULT '{}';
-
--- 5. Tabla de roles de usuario
-CREATE TABLE IF NOT EXISTS public.user_has_roles (
-  user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
-  role_id INTEGER REFERENCES public.roles(id) ON DELETE CASCADE,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  PRIMARY KEY (user_id, role_id)
-);
-
--- 6. Tag FAN por defecto
+-- 4. Tag FAN por defecto
 INSERT INTO public.tags (name, color, animation) VALUES
   ('FAN', '#6366F1', 'member-shine')
 ON CONFLICT (name) DO NOTHING;
 
--- 7. Roles básicos
-INSERT INTO public.roles (name, permissions) VALUES
-  ('admin', '{"can_manage_tags": true, "can_assign_tags": true, "can_delete_tags": true}'),
-  ('moderator', '{"can_manage_tags": true, "can_assign_tags": true, "can_delete_tags": false}'),
-  ('fan', '{"can_manage_tags": false, "can_assign_tags": false, "can_delete_tags": false}')
-ON CONFLICT (name) DO NOTHING;
-
--- 8. Trigger para mantener user_tags actualizado
+-- 5. Trigger para mantener user_tags actualizado
 CREATE OR REPLACE FUNCTION update_user_tags()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -76,19 +50,17 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- 9. Crear triggers
+-- 6. Crear triggers
 DROP TRIGGER IF EXISTS update_user_tags_trigger ON public.user_has_tags;
 CREATE TRIGGER update_user_tags_trigger
   AFTER INSERT OR DELETE ON public.user_has_tags
   FOR EACH ROW
   EXECUTE FUNCTION update_user_tags();
 
--- 10. SEGURIDAD (Row Level Security)
+-- 7. SEGURIDAD (Row Level Security)
 -- Habilitar RLS para forzar acceso solo vía Service Role (Backend)
 ALTER TABLE public.tags ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.user_has_tags ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.roles ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.user_has_roles ENABLE ROW LEVEL SECURITY;
 
 -- No crear políticas para 'anon' o 'authenticated' asegura que SOLO el backend (service_role) pueda acceder.
 -- Esto cumple con "nada debe de estar expuesto en el front".
