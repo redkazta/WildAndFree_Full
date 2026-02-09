@@ -1188,7 +1188,7 @@ import Layout from '../layouts/Layout.astro';
 <script>
   import { supabase } from '../lib/supabase';
   import { getRole } from '../lib/role.js';
-  import { getUserTags } from '../lib/tags-gateway.js';
+  // import { getUserTags } from '../lib/tags-gateway.js'; // Bypass Gateway
 
   const initProfile = async () => {
     const profileMain = document.getElementById('profile-main');
@@ -1239,7 +1239,7 @@ import Layout from '../layouts/Layout.astro';
     const birthdayBanner = document.getElementById('birthday-banner');
 
     // Función robusta para ocultar el banner
-    const hideBirthdayBanner = (banner) => {
+    const hideBirthdayBanner = (banner: HTMLElement | null) => {
       if (!banner) return;
       banner.classList.remove('is-active');
       banner.classList.add('hidden');
@@ -1277,6 +1277,7 @@ import Layout from '../layouts/Layout.astro';
 
         if (birthdateEl) {
           const options = { day: 'numeric', month: 'long' };
+          // @ts-ignore
           birthdateEl.textContent = birthDateObj.toLocaleDateString('es-ES', options);
         }
         birthdateContainer?.classList.remove('hidden');
@@ -1290,7 +1291,7 @@ import Layout from '../layouts/Layout.astro';
           const isBirthday = (todayMonth === bMonth && todayDay === bDay);
           
           // Función robusta para mostrar el banner
-          const showBirthdayBanner = (banner) => {
+          const showBirthdayBanner = (banner: HTMLElement | null) => {
             if (!banner) return;
             banner.classList.add('is-active');
             banner.classList.remove('hidden');
@@ -1351,16 +1352,23 @@ import Layout from '../layouts/Layout.astro';
     // Los roles ahora son invisibles (solo para permisos internos)
     // Los tags son visibles y personalizables
     
-    // Función para mostrar tags del usuario (simplificada - la lógica está en el backend)
-    const displayUserTags = (tags) => {
+    // Función para mostrar tags del usuario
+    interface TagDisplay {
+      name: string;
+      cssClass?: string;
+      color?: string;
+      animation?: string;
+      isRole?: boolean;
+      id?: number;
+    }
+
+    const displayUserTags = (tags: TagDisplay[]) => {
       const roleTagsContainer = document.getElementById('profile-role-tags');
       if (!roleTagsContainer) return;
 
-      // Limpiar tags existentes
       roleTagsContainer.innerHTML = '';
 
       if (!tags || tags.length === 0) {
-        // Si no hay tags, mostrar un tag de fan por defecto
         const defaultTag = document.createElement('span');
         defaultTag.className = 'role-tag role-fan';
         defaultTag.textContent = 'FAN';
@@ -1369,16 +1377,35 @@ import Layout from '../layouts/Layout.astro';
         return;
       }
 
-      // Mostrar todos los tags del usuario (ya procesados por el backend)
       tags.forEach(tag => {
         const tagElement = document.createElement('span');
-        tagElement.className = `role-tag ${tag.cssClass}`;
+        // Usar clase CSS si existe, sino solo base
+        tagElement.className = `role-tag ${tag.cssClass || ''}`;
         tagElement.textContent = tag.name;
         tagElement.style.display = 'inline-block';
         tagElement.style.marginRight = '8px';
         tagElement.style.marginBottom = '4px';
         
-        // Aplicar animación si existe
+        // Aplicar color dinámico si viene de la DB y no es una clase predefinida estándar
+        if (tag.color && (!tag.cssClass || !tag.cssClass.includes('role-'))) {
+            tagElement.style.background = `linear-gradient(135deg, ${tag.color}40 0%, ${tag.color}30 100%)`;
+            tagElement.style.borderColor = `${tag.color}60`;
+            tagElement.style.color = '#fff';
+            tagElement.style.boxShadow = `0 10px 20px ${tag.color}20`;
+        }
+        
+        // Si no tiene color ni clase específica (es un rol desconocido), darle un estilo default
+        // @ts-ignore
+        const computedStyle = window.getComputedStyle(tagElement);
+        // Hack simple: si el background es transparente o rgba(0,0,0,0), asignarle estilo default
+        // Mejor: verificar si la clase existe en las hojas de estilo es difícil en runtime
+        // Simplemente aplicamos un fallback visual si no es 'role-fan' y no tiene color
+        if (!tag.color && (!tag.cssClass || tag.cssClass === 'role-tag')) {
+             tagElement.style.background = 'rgba(255, 255, 255, 0.15)';
+             tagElement.style.borderColor = 'rgba(255, 255, 255, 0.4)';
+             tagElement.style.color = '#eee';
+        }
+
         if (tag.animation && tag.animation !== 'none') {
           tagElement.style.animation = tag.animation + ' 2s infinite';
           tagElement.style.animationFillMode = 'both';
@@ -1388,55 +1415,123 @@ import Layout from '../layouts/Layout.astro';
       });
     };
 
-    // Mostrar tags del usuario usando el nuevo servicio de gateway (Core Engine Source of Truth)
+    // Mostrar tags del usuario usando conexión directa a Supabase (Más rápido y robusto)
     try {
-      console.log('Fetching tags for user:', session.user.id);
+      console.log('Fetching tags and roles for user:', session.user.id);
       
-      // 1. Obtener Tags de DB
-      const userTagsResponse = await getUserTags(session.user.id);
-      let tags = userTagsResponse?.tags || [];
-      
-      console.log('Tags from DB:', tags);
+      // 1. Obtener Tags de DB directamente
+      const tagsPromise = supabase
+        .from('user_has_tags')
+        .select(`
+            tag_id,
+            tags (
+                name,
+                color,
+                animation
+            )
+        `)
+        .eq('user_id', session.user.id);
 
-      // 2. Obtener Rol del Usuario (Permissions) y convertirlo a Tag Visual
-      const { role: resolvedRole } = await getRole();
-      const roleRaw = (resolvedRole || profile.role || session.user?.user_metadata?.role || 'fan');
-      
-      // Si el rol no es 'fan' (o incluso si lo es, si queremos mostrarlo explícitamente), lo agregamos.
-      // El usuario pidió ver "ambas", así que agregamos el rol como un tag visual.
-      if (roleRaw) {
-        const roleTag = {
-            name: roleRaw.toUpperCase(),
-            cssClass: `role-${roleRaw.toLowerCase()}`, // e.g. role-owner, role-vip
-            animation: 'none',
-            isRole: true // Flag interno
-        };
-        
-        // Evitar duplicados si el tag ya existe en la DB con el mismo nombre
-        const exists = tags.some(t => t.name.toUpperCase() === roleTag.name);
-        if (!exists) {
-            tags.unshift(roleTag); // Poner el rol al principio
-        }
+      // 2. Obtener Roles de DB (Manual Join para seguridad)
+      const fetchRoles = async () => {
+          const { data: userRoles, error: urError } = await supabase
+              .from('user_roles')
+              .select('role_id')
+              .eq('user_id', session.user.id);
+          
+          if (urError || !userRoles || userRoles.length === 0) return [];
+          
+          // @ts-ignore
+          const roleIds = userRoles.map(r => r.role_id);
+          const { data: roles, error: rError } = await supabase
+              .from('roles')
+              .select('id, name') // Asumimos id, name existen
+              .in('id', roleIds);
+              
+          if (rError) return [];
+          return roles;
+      };
+
+      const [tagsResult, rolesData] = await Promise.all([tagsPromise, fetchRoles()]);
+
+      let allTags: TagDisplay[] = [];
+
+      // Procesar Roles
+      if (rolesData && rolesData.length > 0) {
+          // @ts-ignore
+          rolesData.forEach(r => {
+              if (!r) return;
+              
+              // Intentar mapear nombres conocidos a clases CSS existentes
+              const normalizedName = r.name.toLowerCase().trim();
+              let cssClass = `role-${normalizedName.replace(/\s+/g, '-')}`;
+              
+              allTags.push({
+                  name: r.name.toUpperCase(), // Mostrar nombre real de DB en mayúsculas
+                  cssClass: cssClass,
+                  isRole: true,
+                  id: r.id
+              });
+          });
       }
 
-      console.log('Final tags to display:', tags);
-      
-      if (tags.length > 0) {
-        displayUserTags(tags);
-      } else {
-        displayUserTags([]); // Esto activará el default 'FAN' si no hay nada
+      // Procesar Tags
+      if (!tagsResult.error && tagsResult.data) {
+          // @ts-ignore
+          tagsResult.data.forEach(item => {
+              const t = item.tags;
+              if (!t) return;
+              
+              const normalizedName = t.name.toLowerCase().replace(/\s+/g, '-');
+              
+              allTags.push({
+                  name: t.name,
+                  cssClass: `role-${normalizedName}`,
+                  color: t.color,
+                  animation: t.animation,
+                  isRole: false
+              });
+          });
       }
+
+      // Si no hay roles ni tags en DB, usar el rol del perfil/metadata como fallback
+      if (allTags.length === 0) {
+           const { role: resolvedRole } = await getRole();
+           const roleRaw = (resolvedRole || profile.role || session.user?.user_metadata?.role || 'fan');
+           allTags.push({
+               name: roleRaw.toUpperCase(),
+               cssClass: `role-${roleRaw.toLowerCase()}`,
+               isRole: true
+           });
+      }
+      
+      // Eliminar duplicados visuales (por nombre)
+      const uniqueTags: TagDisplay[] = [];
+      const seenNames = new Set();
+      
+      // Prioridad: Roles primero, luego tags
+      allTags.sort((a, b) => (a.isRole === b.isRole) ? 0 : (a.isRole ? -1 : 1));
+
+      allTags.forEach(tag => {
+          if (!seenNames.has(tag.name)) {
+              seenNames.add(tag.name);
+              uniqueTags.push(tag);
+          }
+      });
+
+      console.log('Final tags to display:', uniqueTags);
+      displayUserTags(uniqueTags);
+
     } catch (error) {
-      console.error('Error loading user tags from Gateway:', error);
-      // Fallback visual en caso de error
-      displayUserTags([]);
+      console.error('Error loading user tags/roles:', error);
+      // Fallback visual mínimo
+      displayUserTags([{ name: 'FAN', cssClass: 'role-fan' }]);
     }
     
     // Los roles ahora son invisibles (solo para permisos internos)
     // Mantener la corona solo para referencia interna, pero no mostrar roles
-    // const { role: resolvedRole } = await getRole(); <-- MOVIDO ARRIBA
-    const { role: resolvedRoleCheck } = await getRole(); // Re-fetch or reuse logic if needed, but we already have roleRaw
-    // const roleRaw = ... <-- YA CALCULADO ARRIBA
+    const { role: resolvedRoleCheck } = await getRole(); 
+    const roleRaw = (resolvedRoleCheck || profile.role || session.user?.user_metadata?.role || 'fan');
     
     const roleId = parseInt(roleRaw) || 0;
     
