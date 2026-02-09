@@ -54,7 +54,12 @@ import Layout from '../layouts/Layout.astro';
           <h1 id="profile-name">Cargando...</h1>
           <p class="username" id="profile-username">@usuario</p>
           <div class="role-tags" id="profile-role-tags">
-            <span class="role-tag" id="profile-role-tag">ROL</span>
+            <!-- Los tags se cargarán dinámicamente aquí -->
+          </div>
+          <div class="mt-2 mb-4">
+            <a href="/gestionar-tags" class="text-orange-500 hover:text-orange-400 text-xs font-bold uppercase tracking-wider transition-colors">
+              Gestionar Tags
+            </a>
           </div>
           <p class="bio" id="profile-bio">Cargando biografía...</p>
           <div class="profile-details mb-6 flex flex-wrap gap-4 text-xs font-bold uppercase tracking-widest text-white/60">
@@ -290,19 +295,65 @@ import Layout from '../layouts/Layout.astro';
     100% { transform: translateX(260%) rotate(10deg); opacity: 0.0; }
   }
 
-  .role-tag.role-admin {
-    padding: 12px 18px;
-    font-size: 14px;
-    background: linear-gradient(135deg, rgba(255, 0, 0, 0.20) 0%, rgba(201, 131, 0, 0.18) 55%, rgba(255, 255, 255, 0.06) 100%);
-    border-color: rgba(255, 120, 120, 0.28);
-    color: rgba(255, 220, 190, 0.98);
-    box-shadow: 0 20px 50px rgba(255, 0, 0, 0.12);
+  /* Estilos de Roles por ID */
+  .role-tag.role-owner {
+    padding: 14px 20px;
+    font-size: 15px;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.25) 0%, rgba(255, 140, 0, 0.2) 55%, rgba(255, 255, 255, 0.08) 100%);
+    border-color: rgba(255, 215, 0, 0.35);
+    color: rgba(255, 250, 200, 0.98);
+    box-shadow: 0 25px 60px rgba(255, 215, 0, 0.2);
+    font-weight: 700;
+  }
+
+  .role-tag.role-origins {
+    background: linear-gradient(135deg, rgba(138, 43, 226, 0.25) 0%, rgba(75, 0, 130, 0.2) 100%);
+    border-color: rgba(138, 43, 226, 0.35);
+    color: rgba(240, 230, 255, 0.98);
+    box-shadow: 0 20px 55px rgba(138, 43, 226, 0.15);
+  }
+
+  .role-tag.role-member {
+    background: linear-gradient(135deg, rgba(0, 191, 255, 0.25) 0%, rgba(30, 144, 255, 0.2) 100%);
+    border-color: rgba(0, 191, 255, 0.3);
+    color: rgba(230, 245, 255, 0.98);
+    box-shadow: 0 17px 45px rgba(0, 191, 255, 0.12);
   }
 
   .role-tag.role-artist {
-    background: linear-gradient(135deg, rgba(201, 131, 0, 0.22) 0%, rgba(138, 3, 3, 0.16) 100%);
-    border-color: rgba(201, 131, 0, 0.34);
-    color: rgba(255, 230, 180, 0.98);
+    background: linear-gradient(135deg, rgba(255, 20, 147, 0.25) 0%, rgba(219, 112, 147, 0.2) 100%);
+    border-color: rgba(255, 20, 147, 0.35);
+    color: rgba(255, 230, 245, 0.98);
+    box-shadow: 0 18px 48px rgba(255, 20, 147, 0.15);
+  }
+
+  .role-tag.role-media {
+    background: linear-gradient(135deg, rgba(255, 69, 0, 0.25) 0%, rgba(255, 140, 0, 0.2) 100%);
+    border-color: rgba(255, 69, 0, 0.35);
+    color: rgba(255, 240, 230, 0.98);
+    box-shadow: 0 19px 50px rgba(255, 69, 0, 0.15);
+  }
+
+  .role-tag.role-developer {
+    background: linear-gradient(135deg, rgba(0, 255, 0, 0.2) 0%, rgba(50, 205, 50, 0.18) 100%);
+    border-color: rgba(0, 255, 0, 0.3);
+    color: rgba(230, 255, 230, 0.98);
+    box-shadow: 0 16px 42px rgba(0, 255, 0, 0.1);
+    font-family: 'Courier New', monospace;
+  }
+
+  .role-tag.role-designer {
+    background: linear-gradient(135deg, rgba(255, 105, 180, 0.25) 0%, rgba(138, 43, 226, 0.2) 100%);
+    border-color: rgba(255, 105, 180, 0.35);
+    color: rgba(255, 240, 250, 0.98);
+    box-shadow: 0 21px 52px rgba(255, 105, 180, 0.15);
+  }
+
+  .role-tag.role-editor {
+    background: linear-gradient(135deg, rgba(255, 140, 0, 0.25) 0%, rgba(255, 0, 0, 0.2) 100%);
+    border-color: rgba(255, 140, 0, 0.35);
+    color: rgba(255, 245, 230, 0.98);
+    box-shadow: 0 17px 45px rgba(255, 140, 0, 0.15);
   }
 
   .role-tag.role-fan {
@@ -310,12 +361,6 @@ import Layout from '../layouts/Layout.astro';
     border-color: rgba(0, 220, 255, 0.22);
     color: rgba(230, 245, 255, 0.98);
     box-shadow: 0 22px 60px rgba(0, 220, 255, 0.12);
-  }
-
-  .role-tag.role-guest {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.06);
-    color: rgba(255, 255, 255, 0.6);
   }
 
   /* Birthday Banner Specificity Fix */
@@ -385,6 +430,158 @@ import Layout from '../layouts/Layout.astro';
 
   .role-crown__icon {
     filter: drop-shadow(0 10px 16px rgba(0,0,0,0.35));
+  }
+
+  /* Animaciones de Roles por ID */
+  
+  /* Owners (1-11) - Animación dorada perrotota */
+  @keyframes golden-pulse {
+    0% { 
+      transform: scale(1);
+      box-shadow: 0 20px 50px rgba(255, 215, 0, 0.3), 0 0 20px rgba(255, 215, 0, 0.2);
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.25) 0%, rgba(255, 140, 0, 0.2) 55%, rgba(255, 255, 255, 0.08) 100%);
+    }
+    25% { 
+      transform: scale(1.05);
+      box-shadow: 0 25px 60px rgba(255, 215, 0, 0.4), 0 0 30px rgba(255, 215, 0, 0.3);
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.35) 0%, rgba(255, 140, 0, 0.3) 55%, rgba(255, 255, 255, 0.12) 100%);
+    }
+    50% { 
+      transform: scale(1.1);
+      box-shadow: 0 30px 70px rgba(255, 215, 0, 0.5), 0 0 40px rgba(255, 215, 0, 0.4);
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.45) 0%, rgba(255, 140, 0, 0.4) 55%, rgba(255, 255, 255, 0.16) 100%);
+    }
+    75% { 
+      transform: scale(1.05);
+      box-shadow: 0 25px 60px rgba(255, 215, 0, 0.4), 0 0 30px rgba(255, 215, 0, 0.3);
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.35) 0%, rgba(255, 140, 0, 0.3) 55%, rgba(255, 255, 255, 0.12) 100%);
+    }
+    100% { 
+      transform: scale(1);
+      box-shadow: 0 20px 50px rgba(255, 215, 0, 0.3), 0 0 20px rgba(255, 215, 0, 0.2);
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.25) 0%, rgba(255, 140, 0, 0.2) 55%, rgba(255, 255, 255, 0.08) 100%);
+    }
+  }
+  
+  /* Origins (12-13) - Animación de brillo ancestral */
+  @keyframes origins-glow {
+    0%, 100% { 
+      box-shadow: 0 15px 40px rgba(138, 43, 226, 0.25), 0 0 15px rgba(138, 43, 226, 0.15);
+      background: linear-gradient(135deg, rgba(138, 43, 226, 0.22) 0%, rgba(75, 0, 130, 0.18) 100%);
+    }
+    50% { 
+      box-shadow: 0 20px 55px rgba(138, 43, 226, 0.35), 0 0 25px rgba(138, 43, 226, 0.25);
+      background: linear-gradient(135deg, rgba(138, 43, 226, 0.32) 0%, rgba(75, 0, 130, 0.28) 100%);
+    }
+  }
+  
+  /* Members (14) - Animación de brillo de membresía */
+  @keyframes member-shine {
+    0%, 100% { 
+      box-shadow: 0 12px 35px rgba(0, 191, 255, 0.25), 0 0 12px rgba(0, 191, 255, 0.15);
+      background: linear-gradient(135deg, rgba(0, 191, 255, 0.22) 0%, rgba(30, 144, 255, 0.18) 100%);
+    }
+    50% { 
+      box-shadow: 0 17px 45px rgba(0, 191, 255, 0.35), 0 0 20px rgba(0, 191, 255, 0.25);
+      background: linear-gradient(135deg, rgba(0, 191, 255, 0.32) 0%, rgba(30, 144, 255, 0.28) 100%);
+    }
+  }
+  
+  /* Artists (15) - Animación de chispas creativas */
+  @keyframes artist-sparkle {
+    0%, 100% { 
+      box-shadow: 0 15px 40px rgba(255, 20, 147, 0.25), 0 0 15px rgba(255, 20, 147, 0.15);
+      background: linear-gradient(135deg, rgba(255, 20, 147, 0.22) 0%, rgba(219, 112, 147, 0.18) 100%);
+    }
+    25% { 
+      box-shadow: 0 18px 48px rgba(255, 105, 180, 0.35), 0 0 22px rgba(255, 105, 180, 0.25);
+      background: linear-gradient(135deg, rgba(255, 105, 180, 0.32) 0%, rgba(219, 112, 147, 0.28) 100%);
+    }
+    75% { 
+      box-shadow: 0 22px 52px rgba(255, 69, 0, 0.30), 0 0 18px rgba(255, 69, 0, 0.20);
+      background: linear-gradient(135deg, rgba(255, 69, 0, 0.28) 0%, rgba(255, 20, 147, 0.24) 100%);
+    }
+  }
+  
+  /* Media (16) - Animación de pulso dinámico */
+  @keyframes media-pulse {
+    0%, 100% { 
+      box-shadow: 0 14px 38px rgba(255, 69, 0, 0.25), 0 0 14px rgba(255, 69, 0, 0.15);
+      background: linear-gradient(135deg, rgba(255, 69, 0, 0.22) 0%, rgba(255, 140, 0, 0.18) 100%);
+    }
+    50% { 
+      box-shadow: 0 19px 50px rgba(255, 69, 0, 0.35), 0 0 24px rgba(255, 69, 0, 0.25);
+      background: linear-gradient(135deg, rgba(255, 69, 0, 0.32) 0%, rgba(255, 140, 0, 0.28) 100%);
+    }
+  }
+  
+  /* Developers (17) - Animación de código matrix */
+  @keyframes developer-code {
+    0% { 
+      box-shadow: 0 13px 36px rgba(0, 255, 0, 0.20), 0 0 12px rgba(0, 255, 0, 0.10);
+      background: linear-gradient(135deg, rgba(0, 255, 0, 0.18) 0%, rgba(50, 205, 50, 0.15) 100%);
+      transform: translateY(0px);
+    }
+    25% { 
+      box-shadow: 0 16px 42px rgba(0, 255, 0, 0.25), 0 0 16px rgba(0, 255, 0, 0.15);
+      background: linear-gradient(135deg, rgba(0, 255, 0, 0.23) 0%, rgba(50, 205, 50, 0.20) 100%);
+      transform: translateY(-2px);
+    }
+    50% { 
+      box-shadow: 0 19px 48px rgba(0, 255, 0, 0.30), 0 0 20px rgba(0, 255, 0, 0.20);
+      background: linear-gradient(135deg, rgba(0, 255, 0, 0.28) 0%, rgba(50, 205, 50, 0.25) 100%);
+      transform: translateY(0px);
+    }
+    75% { 
+      box-shadow: 0 22px 54px rgba(0, 255, 0, 0.35), 0 0 24px rgba(0, 255, 0, 0.25);
+      background: linear-gradient(135deg, rgba(0, 255, 0, 0.33) 0%, rgba(50, 205, 50, 0.30) 100%);
+      transform: translateY(2px);
+    }
+    100% { 
+      box-shadow: 0 13px 36px rgba(0, 255, 0, 0.20), 0 0 12px rgba(0, 255, 0, 0.10);
+      background: linear-gradient(135deg, rgba(0, 255, 0, 0.18) 0%, rgba(50, 205, 50, 0.15) 100%);
+      transform: translateY(0px);
+    }
+  }
+  
+  /* Designers (18) - Animación de flujo creativo */
+  @keyframes designer-flow {
+    0%, 100% { 
+      box-shadow: 0 15px 40px rgba(255, 105, 180, 0.25), 0 0 15px rgba(255, 105, 180, 0.15);
+      background: linear-gradient(135deg, rgba(255, 105, 180, 0.22) 0%, rgba(255, 20, 147, 0.18) 100%);
+      transform: rotate(0deg) scale(1);
+    }
+    25% { 
+      box-shadow: 0 18px 46px rgba(138, 43, 226, 0.30), 0 0 18px rgba(138, 43, 226, 0.20);
+      background: linear-gradient(135deg, rgba(138, 43, 226, 0.25) 0%, rgba(255, 105, 180, 0.22) 100%);
+      transform: rotate(1deg) scale(1.02);
+    }
+    50% { 
+      box-shadow: 0 21px 52px rgba(0, 191, 255, 0.35), 0 0 21px rgba(0, 191, 255, 0.25);
+      background: linear-gradient(135deg, rgba(0, 191, 255, 0.28) 0%, rgba(138, 43, 226, 0.25) 100%);
+      transform: rotate(-1deg) scale(1.04);
+    }
+    75% { 
+      box-shadow: 0 24px 58px rgba(255, 215, 0, 0.30), 0 0 24px rgba(255, 215, 0, 0.20);
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.25) 0%, rgba(0, 191, 255, 0.22) 100%);
+      transform: rotate(0.5deg) scale(1.02);
+    }
+  }
+  
+  /* Editors (19) - Animación de creatividad editorial */
+  @keyframes editor-creative {
+    0%, 100% { 
+      box-shadow: 0 14px 38px rgba(255, 140, 0, 0.25), 0 0 14px rgba(255, 140, 0, 0.15);
+      background: linear-gradient(135deg, rgba(255, 140, 0, 0.22) 0%, rgba(255, 69, 0, 0.18) 100%);
+    }
+    33% { 
+      box-shadow: 0 17px 45px rgba(255, 0, 0, 0.30), 0 0 17px rgba(255, 0, 0, 0.20);
+      background: linear-gradient(135deg, rgba(255, 0, 0, 0.25) 0%, rgba(255, 140, 0, 0.22) 100%);
+    }
+    66% { 
+      box-shadow: 0 20px 52px rgba(128, 0, 128, 0.35), 0 0 20px rgba(128, 0, 128, 0.25);
+      background: linear-gradient(135deg, rgba(128, 0, 128, 0.28) 0%, rgba(255, 0, 0, 0.25) 100%);
+    }
   }
 
   .avatar-edit {
@@ -800,11 +997,203 @@ import Layout from '../layouts/Layout.astro';
       height: 60px;
     }
   }
+
+  /* Animaciones para Tags */
+  @keyframes golden-pulse {
+    0% { 
+      transform: scale(1); 
+      box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7);
+      filter: brightness(1);
+    }
+    50% { 
+      transform: scale(1.05); 
+      box-shadow: 0 0 20px 10px rgba(255, 215, 0, 0.3);
+      filter: brightness(1.2);
+    }
+    100% { 
+      transform: scale(1); 
+      box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+      filter: brightness(1);
+    }
+  }
+
+  @keyframes origins-glow {
+    0% { 
+      box-shadow: 0 0 5px rgba(255, 107, 53, 0.5);
+      filter: brightness(1);
+    }
+    50% { 
+      box-shadow: 0 0 15px rgba(255, 107, 53, 0.8);
+      filter: brightness(1.1);
+    }
+    100% { 
+      box-shadow: 0 0 5px rgba(255, 107, 53, 0.5);
+      filter: brightness(1);
+    }
+  }
+
+  @keyframes member-shine {
+    0% { 
+      filter: brightness(1) saturate(1);
+    }
+    50% { 
+      filter: brightness(1.2) saturate(1.3);
+    }
+    100% { 
+      filter: brightness(1) saturate(1);
+    }
+  }
+
+  @keyframes artist-sparkle {
+    0% { 
+      filter: brightness(1) hue-rotate(0deg);
+    }
+    25% { 
+      filter: brightness(1.3) hue-rotate(90deg);
+    }
+    50% { 
+      filter: brightness(1.1) hue-rotate(180deg);
+    }
+    75% { 
+      filter: brightness(1.3) hue-rotate(270deg);
+    }
+    100% { 
+      filter: brightness(1) hue-rotate(360deg);
+    }
+  }
+
+  @keyframes media-pulse {
+    0% { 
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% { 
+      transform: scale(1.02);
+      opacity: 0.9;
+    }
+    100% { 
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes developer-code {
+    0% { 
+      text-shadow: 0 0 2px rgba(0, 255, 0, 0.5);
+    }
+    50% { 
+      text-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
+    }
+    100% { 
+      text-shadow: 0 0 2px rgba(0, 255, 0, 0.5);
+    }
+  }
+
+  @keyframes designer-flow {
+    0% { 
+      transform: translateY(0px) rotate(0deg);
+    }
+    25% { 
+      transform: translateY(-2px) rotate(1deg);
+    }
+    50% { 
+      transform: translateY(0px) rotate(0deg);
+    }
+    75% { 
+      transform: translateY(2px) rotate(-1deg);
+    }
+    100% { 
+      transform: translateY(0px) rotate(0deg);
+    }
+  }
+
+  @keyframes editor-creative {
+    0% { 
+      filter: contrast(1) brightness(1);
+    }
+    50% { 
+      filter: contrast(1.2) brightness(1.1);
+    }
+    100% { 
+      filter: contrast(1) brightness(1);
+    }
+  }
+
+  /* Estilos base para tags */
+  .role-tag {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 2px solid;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    margin: 2px;
+  }
+
+  .role-tag.role-owner {
+    background: linear-gradient(45deg, #ffd700, #ffed4e);
+    border-color: #ffd700;
+    color: #000;
+    font-weight: 900;
+  }
+
+  .role-tag.role-origins {
+    background: linear-gradient(45deg, #ff6b35, #f7931e);
+    border-color: #ff6b35;
+    color: #fff;
+  }
+
+  .role-tag.role-member {
+    background: linear-gradient(45deg, #4ecdc4, #44a08d);
+    border-color: #4ecdc4;
+    color: #fff;
+  }
+
+  .role-tag.role-artist {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    border-color: #667eea;
+    color: #fff;
+  }
+
+  .role-tag.role-media {
+    background: linear-gradient(45deg, #f093fb, #f5576c);
+    border-color: #f093fb;
+    color: #fff;
+  }
+
+  .role-tag.role-developer {
+    background: linear-gradient(45deg, #4facfe, #00f2fe);
+    border-color: #4facfe;
+    color: #fff;
+  }
+
+  .role-tag.role-designer {
+    background: linear-gradient(45deg, #43e97b, #38f9d7);
+    border-color: #43e97b;
+    color: #fff;
+  }
+
+  .role-tag.role-editor {
+    background: linear-gradient(45deg, #fa709a, #fee140);
+    border-color: #fa709a;
+    color: #fff;
+  }
+
+  .role-tag.role-fan {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.8);
+  }
 </style>
 
 <script>
   import { supabase } from '../lib/supabase';
   import { getRole } from '../lib/role.js';
+  import { getUserTags } from '../lib/tags-gateway.js';
 
   const initProfile = async () => {
     const profileMain = document.getElementById('profile-main');
@@ -820,7 +1209,7 @@ import Layout from '../layouts/Layout.astro';
       return;
     }
 
-    // 2. Fetch Profile Data
+    // 2. Fetch Profile Data (Datos básicos, los tags vienen por Gateway)
     const { data: profile, error } = await supabase
       .from('profiles')
       .select('*')
@@ -839,7 +1228,6 @@ import Layout from '../layouts/Layout.astro';
     const nameEl = document.getElementById('profile-name');
     const usernameEl = document.getElementById('profile-username');
     const bioEl = document.getElementById('profile-bio');
-    const roleTagEl = document.getElementById('profile-role-tag');
     const crownEl = document.getElementById('role-crown');
     const avatarImg = document.getElementById('profile-avatar-img');
     const avatarPlaceholder = document.getElementById('avatar-placeholder');
@@ -964,15 +1352,72 @@ import Layout from '../layouts/Layout.astro';
       console.log('Observer iniciado para el banner');
     }
 
+    // Sistema de Tags - Mostrar tags visibles del usuario
+    // Los roles ahora son invisibles (solo para permisos internos)
+    // Los tags son visibles y personalizables
+    
+    // Función para mostrar tags del usuario (simplificada - la lógica está en el backend)
+    const displayUserTags = (tags) => {
+      const roleTagsContainer = document.getElementById('profile-role-tags');
+      if (!roleTagsContainer) return;
+
+      // Limpiar tags existentes
+      roleTagsContainer.innerHTML = '';
+
+      if (!tags || tags.length === 0) {
+        // Si no hay tags, mostrar un tag de fan por defecto
+        const defaultTag = document.createElement('span');
+        defaultTag.className = 'role-tag role-fan';
+        defaultTag.textContent = 'FAN';
+        defaultTag.style.display = 'inline-block';
+        roleTagsContainer.appendChild(defaultTag);
+        return;
+      }
+
+      // Mostrar todos los tags del usuario (ya procesados por el backend)
+      tags.forEach(tag => {
+        const tagElement = document.createElement('span');
+        tagElement.className = `role-tag ${tag.cssClass}`;
+        tagElement.textContent = tag.name;
+        tagElement.style.display = 'inline-block';
+        tagElement.style.marginRight = '8px';
+        tagElement.style.marginBottom = '4px';
+        
+        // Aplicar animación si existe
+        if (tag.animation && tag.animation !== 'none') {
+          tagElement.style.animation = tag.animation + ' 2s infinite';
+          tagElement.style.animationFillMode = 'both';
+        }
+
+        roleTagsContainer.appendChild(tagElement);
+      });
+    };
+
+    // Mostrar tags del usuario usando el nuevo servicio de gateway (Core Engine Source of Truth)
+    try {
+      console.log('Fetching tags for user:', session.user.id);
+      const userTagsResponse = await getUserTags(session.user.id);
+      console.log('Tags received:', userTagsResponse);
+      
+      if (userTagsResponse && userTagsResponse.tags) {
+        displayUserTags(userTagsResponse.tags);
+      } else {
+        displayUserTags([]);
+      }
+    } catch (error) {
+      console.error('Error loading user tags from Gateway:', error);
+      // Fallback visual en caso de error
+      displayUserTags([]);
+    }
+    
+    // Los roles ahora son invisibles (solo para permisos internos)
+    // Mantener la corona solo para referencia interna, pero no mostrar roles
     const { role: resolvedRole } = await getRole();
     const roleRaw = (resolvedRole || profile.role || session.user?.user_metadata?.role || 'fan');
-    const role = String(roleRaw).trim().toLowerCase();
-    if (roleTagEl) {
-      roleTagEl.textContent = String(role).toUpperCase();
-      roleTagEl.classList.remove('role-admin', 'role-artist', 'role-fan', 'role-guest');
-      roleTagEl.classList.add(`role-${role}`);
-    }
-    crownEl?.classList.toggle('is-visible', role === 'admin');
+    const roleId = parseInt(roleRaw) || 0;
+    
+    // La corona se muestra solo para owners (1-11) como referencia interna
+    crownEl?.classList.toggle('is-visible', roleId >= 1 && roleId <= 11);
     
     if (profile.avatar_url && avatarImg instanceof HTMLImageElement) {
       avatarImg.src = profile.avatar_url;

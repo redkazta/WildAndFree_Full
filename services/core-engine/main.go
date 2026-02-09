@@ -26,6 +26,9 @@ type Artist struct {
 func main() {
 	mux := http.NewServeMux()
 
+	// Setup tag handlers
+	setupTagHandlers(mux)
+
 	mux.HandleFunc("GET /api/v1/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 

@@ -4,6 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "node mock-server.js"
-  }
+  },
+  "description": "",
+  "main": "mock-server.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
-

@@ -1,0 +1,173 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { supabase } from '../lib/supabase';
+
+// Verificar autenticación
+const { data: { session } } = await supabase.auth.getSession();
+
+if (!session) {
+  return Astro.redirect('/login');
+}
+
+// Obtener tags del usuario
+const { data: userTags } = await supabase
+  .from('user_has_tags')
+  .select(`
+    tag_id,
+    tags (
+      id,
+      name,
+      color,
+      animation
+    )
+  `)
+  .eq('user_id', session.user.id);
+
+// Obtener todos los tags disponibles
+const { data: allTags } = await supabase
+  .from('tags')
+  .select('*')
+  .order('name', { ascending: true });
+
+// Tags asignados al usuario
+const assignedTagIds = userTags?.map(ut => ut.tag_id) || [];
+---
+
+<Layout title="Gestionar Tags - Wild And Free">
+  <div class="min-h-screen bg-black text-white">
+    <div class="container mx-auto px-4 py-8">
+      <div class="max-w-4xl mx-auto">
+        <div class="mb-8">
+          <h1 class="text-3xl font-bold mb-2">GESTIONAR TAGS</h1>
+          <p class="text-white/60">Personaliza tu perfil con tags que reflejen tu identidad en la comunidad</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8">
+          <!-- Tags Asignados -->
+          <div class="bg-white/5 rounded-lg p-6 border border-white/10">
+            <h2 class="text-xl font-bold mb-4">TUS TAGS ACTUALES</h2>
+            <div id="assigned-tags" class="flex flex-wrap gap-2 mb-6">
+              {userTags?.map(tag => (
+                <span 
+                  class="role-tag text-sm"
+                  style={`background-color: ${tag.tags.color}20; border-color: ${tag.tags.color}; color: ${tag.tags.color};`}
+                >
+                  {tag.tags.name}
+                  <button 
+                    class="ml-2 text-red-400 hover:text-red-300"
+                    onclick={`removeTag(${tag.tags.id})`}
+                  >
+                    ×
+                  </button>
+                </span>
+              ))}
+              {(!userTags || userTags.length === 0) && (
+                <p class="text-white/60 text-sm">No tienes tags asignados</p>
+              )}
+            </div>
+          </div>
+
+          <!-- Tags Disponibles -->
+          <div class="bg-white/5 rounded-lg p-6 border border-white/10">
+            <h2 class="text-xl font-bold mb-4">TAGS DISPONIBLES</h2>
+            <div id="available-tags" class="flex flex-wrap gap-2">
+              {allTags?.map(tag => {
+                const isAssigned = assignedTagIds.includes(tag.id);
+                return (
+                  <button
+                    class={`role-tag text-sm transition-all hover:scale-105 ${
+                      isAssigned ? 'opacity-50 cursor-not-allowed' : 'hover:bg-white/10'
+                    }`}
+                    style={`background-color: ${tag.color}20; border-color: ${tag.color}; color: ${tag.color};`}
+                    onclick={isAssigned ? '' : `addTag(${tag.id})`}
+                    disabled={isAssigned}
+                  >
+                    {tag.name}
+                    {isAssigned && <span class="ml-1">✓</span>}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 text-center">
+          <a href="/perfil" class="inline-block bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-bold transition-colors">
+            VOLVER AL PERFIL
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    import { supabase } from '../lib/supabase';
+    import { assignTagToUser, removeTagFromUser } from '../lib/tags';
+
+    async function loadTags() {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) return;
+
+        // Recargar la página para ver cambios
+        window.location.reload();
+      } catch (error) {
+        console.error('Error loading tags:', error);
+        alert('Error al cargar tags');
+      }
+    }
+
+    window.addTag = async function(tagId) {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) return;
+
+        const result = await assignTagToUser(session.user.id, tagId);
+        
+        if (result.success) {
+          await loadTags();
+        } else {
+          alert('Error al agregar tag');
+        }
+      } catch (error) {
+        console.error('Error adding tag:', error);
+        alert('Error al agregar tag');
+      }
+    };
+
+    window.removeTag = async function(tagId) {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) return;
+
+        if (confirm('¿Quieres remover este tag?')) {
+          const result = await removeTagFromUser(session.user.id, tagId);
+          
+          if (result.success) {
+            await loadTags();
+          } else {
+            alert('Error al remover tag');
+          }
+        }
+      } catch (error) {
+        console.error('Error removing tag:', error);
+        alert('Error al remover tag');
+      }
+    };
+  </script>
+
+  <style>
+    .role-tag {
+      display: inline-block;
+      padding: 8px 16px;
+      border: 2px solid;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+  </style>
+</Layout>

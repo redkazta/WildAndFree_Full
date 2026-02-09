@@ -9,9 +9,10 @@ import { InitService } from './init/init.service';
 import { TenantController } from './tenant/tenant.controller';
 import { TenantResolverMiddleware } from './tenant/tenant.middleware';
 import { TenantService } from './tenant/tenant.service';
+import { TagsModule } from './tags/tags.module';
 
 @Module({
-  imports: [HttpModule],
+  imports: [HttpModule, TagsModule],
   controllers: [AppController, HealthController, TenantController, InitController],
   providers: [
     AppService,
