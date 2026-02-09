@@ -13,7 +13,7 @@ export const ensureProfile = async (session) => {
   if (meta.phone) payload.phone = meta.phone
   if (meta.ubicacion) payload.ubicacion = meta.ubicacion
   if (meta.birthdate) {
-    // Validar formato YYYY-MM-DD
+    // Validar formato (YYYY-MM-DD estándar)
     if (/^\d{4}-\d{2}-\d{2}$/.test(meta.birthdate)) {
       payload.birthdate = meta.birthdate;
     } else {

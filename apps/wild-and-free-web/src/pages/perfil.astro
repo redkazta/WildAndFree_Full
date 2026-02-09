@@ -318,17 +318,22 @@ import Layout from '../layouts/Layout.astro';
     color: rgba(255, 255, 255, 0.6);
   }
 
-  .birthday-banner {
+  /* Birthday Banner Specificity Fix */
+  #birthday-banner {
     margin-bottom: 20px;
     padding: 12px 24px;
     background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 100, 100, 0.2) 100%);
     border: 1px solid rgba(255, 215, 0, 0.4);
     border-radius: 12px;
-    display: inline-flex;
+    display: none !important; /* Forzamos oculto por defecto usando ID */
     align-items: center;
     justify-content: center;
     animation: bounce 2s infinite;
     backdrop-filter: blur(5px);
+  }
+
+  #birthday-banner.is-active {
+    display: inline-flex !important; /* Forzamos visible solo con esta clase usando ID */
   }
 
   .birthday-content {
@@ -848,19 +853,115 @@ import Layout from '../layouts/Layout.astro';
     const locationEl = document.getElementById('profile-location');
     const birthdateContainer = document.getElementById('profile-birthdate-container');
     const birthdateEl = document.getElementById('profile-birthdate');
+    const birthdayBanner = document.getElementById('birthday-banner');
+
+    // Función robusta para ocultar el banner
+    const hideBirthdayBanner = (banner) => {
+      if (!banner) return;
+      banner.classList.remove('is-active');
+      banner.classList.add('hidden');
+      banner.style.setProperty('display', 'none', 'important');
+      banner.style.visibility = 'hidden';
+      banner.style.opacity = '0';
+      console.log('Banner ocultado con función robusta');
+    };
+
+    if (locationContainer) locationContainer.classList.add('hidden');
+    if (birthdateContainer) birthdateContainer.classList.add('hidden');
+    if (birthdayBanner) {
+      hideBirthdayBanner(birthdayBanner);
+    }
 
     if (profile.ubicacion) {
       if (locationEl) locationEl.textContent = profile.ubicacion;
       locationContainer?.classList.remove('hidden');
     }
 
-    if (profile.birthdate) {
-      if (birthdateEl) {
-        const date = new Date(profile.birthdate + 'T00:00:00');
-        const options = { day: 'numeric', month: 'long' };
-        birthdateEl.textContent = date.toLocaleDateString('es-ES', options);
+    // Use strictly the birthdate from the profiles table (database)
+    const userBirthdate = profile.birthdate;
+    if (userBirthdate) {
+      // 1. Update persistent visible component
+      // NOTE: Standard Postgres DATE format is YYYY-MM-DD
+      const parts = String(userBirthdate).split('-').map(n => parseInt(n, 10));
+      
+      if (parts.length === 3 && !isNaN(parts[0])) {
+        const bYear = parts[0];
+        const bMonth = parts[1]; // 2nd part is Month (Standard)
+        const bDay = parts[2];   // 3rd part is Day (Standard)
+
+        // Month is 0-indexed in JS Date
+        const birthDateObj = new Date(bYear, bMonth - 1, bDay);
+
+        if (birthdateEl) {
+          const options = { day: 'numeric', month: 'long' };
+          birthdateEl.textContent = birthDateObj.toLocaleDateString('es-ES', options);
+        }
+        birthdateContainer?.classList.remove('hidden');
+
+        // 2. Unified Birthday Banner Logic
+        try {
+          const today = new Date();
+          const todayMonth = today.getMonth() + 1;
+          const todayDay = today.getDate();
+          
+          const isBirthday = (todayMonth === bMonth && todayDay === bDay);
+          
+          // Función robusta para mostrar el banner
+          const showBirthdayBanner = (banner) => {
+            if (!banner) return;
+            banner.classList.add('is-active');
+            banner.classList.remove('hidden');
+            banner.style.setProperty('display', 'inline-flex', 'important');
+            banner.style.visibility = 'visible';
+            banner.style.opacity = '1';
+            console.log('Banner mostrado con función robusta');
+          };
+          
+          if (birthdayBanner) {
+            if (isBirthday) {
+              showBirthdayBanner(birthdayBanner);
+              console.log('¡CUMPLEAÑOS DETECTADO! Activando banner...', { today: `${todayDay}/${todayMonth}`, birth: `${bDay}/${bMonth}` });
+            } else {
+              hideBirthdayBanner(birthdayBanner);
+              console.log('No es tu cumpleaños. Banner oculto.', { today: `${todayDay}/${todayMonth}`, birth: `${bDay}/${bMonth}` });
+            }
+          }
+          
+          console.log('Debug Birthdate Final:', {
+            db_value: userBirthdate,
+            parsed_month: bMonth,
+            parsed_day: bDay,
+            today_month: todayMonth,
+            today_day: todayDay,
+            match: isBirthday,
+            element_display: birthdayBanner?.style.display
+          });
+        } catch (e) {
+          console.error('Error in unified birthday check:', e);
+        }
       }
-      birthdateContainer?.classList.remove('hidden');
+    }
+
+    // Añadir observer para detectar cambios externos en el banner
+    if (birthdayBanner) {
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+            const isHidden = birthdayBanner.classList.contains('hidden');
+            const hasActive = birthdayBanner.classList.contains('is-active');
+            console.log('Observer: Banner class changed - hidden:', isHidden, 'active:', hasActive);
+            
+            // Si el banner se volvió visible sin ser el cumpleaños, forzar oculto
+            if (!isHidden && !hasActive) {
+              console.log('Observer: Forzando oculto - banner visible sin ser activo');
+              hideBirthdayBanner(birthdayBanner);
+            }
+          }
+        });
+      });
+      
+      observer.observe(birthdayBanner, { attributes: true, attributeFilter: ['class'] });
+      console.log('Observer iniciado para el banner');
     }
 
     const { role: resolvedRole } = await getRole();
@@ -872,45 +973,6 @@ import Layout from '../layouts/Layout.astro';
       roleTagEl.classList.add(`role-${role}`);
     }
     crownEl?.classList.toggle('is-visible', role === 'admin');
-    
-    // Asegurar que el banner de cumpleaños esté oculto por defecto
-    const birthdayBanner = document.getElementById('birthday-banner');
-    if (birthdayBanner) birthdayBanner.classList.add('hidden');
-    
-    // Check Birthday
-    if (profile.birthdate) {
-      try {
-        const today = new Date();
-        const birthDateStr = String(profile.birthdate);
-        
-        // Validar formato YYYY-MM-DD
-        if (!/^\d{4}-\d{2}-\d{2}$/.test(birthDateStr)) {
-          console.warn('Invalid birthdate format:', birthDateStr);
-          return;
-        }
-        
-        const [bYearStr, bMonthStr, bDayStr] = birthDateStr.split('-');
-        const bMonth = parseInt(bMonthStr, 10);
-        const bDay = parseInt(bDayStr, 10);
-        
-        const todayMonth = today.getMonth() + 1;
-        const todayDay = today.getDate();
-        
-        console.log('Birthdate check:', {
-          birthdate: birthDateStr,
-          today: `${todayMonth}-${todayDay}`,
-          birth: `${bMonth}-${bDay}`,
-          isBirthday: todayMonth === bMonth && todayDay === bDay
-        });
-        
-        if (todayMonth === bMonth && todayDay === bDay) {
-           const banner = document.getElementById('birthday-banner');
-           if (banner) banner.classList.remove('hidden');
-        }
-      } catch (e) {
-        console.error('Error checking birthday:', e);
-      }
-    }
     
     if (profile.avatar_url && avatarImg instanceof HTMLImageElement) {
       avatarImg.src = profile.avatar_url;
@@ -981,8 +1043,37 @@ import Layout from '../layouts/Layout.astro';
     });
   };
 
-  const run = () => initProfile().catch(() => {})
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run)
-  else run()
-  document.addEventListener('astro:after-swap', run)
+  const run = () => {
+    console.log('Iniciando initProfile...');
+    initProfile().catch((error) => {
+      console.error('Error en initProfile:', error);
+    });
+  };
+  
+  // Ejecutar inmediatamente si el DOM está listo
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
+  
+  // También ejecutar después de cambios de página en Astro
+  document.addEventListener('astro:after-swap', run);
+  
+  // Timeout adicional para asegurar que todo esté cargado
+  setTimeout(() => {
+    console.log('Ejecutando timeout adicional...');
+    const birthdayBanner = document.getElementById('birthday-banner');
+    if (birthdayBanner) {
+      const isHidden = birthdayBanner.classList.contains('hidden');
+      const hasActive = birthdayBanner.classList.contains('is-active');
+      console.log('Timeout check - hidden:', isHidden, 'active:', hasActive);
+      
+      if (!isHidden && !hasActive) {
+        console.log('Forzando oculto desde timeout');
+        birthdayBanner.classList.add('hidden');
+        birthdayBanner.style.setProperty('display', 'none', 'important');
+      }
+    }
+  }, 1000);
 </script>
