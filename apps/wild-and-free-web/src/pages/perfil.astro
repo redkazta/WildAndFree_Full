@@ -56,11 +56,6 @@ import Layout from '../layouts/Layout.astro';
           <div class="role-tags" id="profile-role-tags">
             <!-- Los tags se cargarán dinámicamente aquí -->
           </div>
-          <div class="mt-2 mb-4">
-            <a href="/gestionar-tags" class="text-orange-500 hover:text-orange-400 text-xs font-bold uppercase tracking-wider transition-colors">
-              Gestionar Tags
-            </a>
-          </div>
           <p class="bio" id="profile-bio">Cargando biografía...</p>
           <div class="profile-details mb-6 flex flex-wrap gap-4 text-xs font-bold uppercase tracking-widest text-white/60">
             <div id="profile-location-container" class="hidden flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
@@ -1396,13 +1391,40 @@ import Layout from '../layouts/Layout.astro';
     // Mostrar tags del usuario usando el nuevo servicio de gateway (Core Engine Source of Truth)
     try {
       console.log('Fetching tags for user:', session.user.id);
-      const userTagsResponse = await getUserTags(session.user.id);
-      console.log('Tags received:', userTagsResponse);
       
-      if (userTagsResponse && userTagsResponse.tags) {
-        displayUserTags(userTagsResponse.tags);
+      // 1. Obtener Tags de DB
+      const userTagsResponse = await getUserTags(session.user.id);
+      let tags = userTagsResponse?.tags || [];
+      
+      console.log('Tags from DB:', tags);
+
+      // 2. Obtener Rol del Usuario (Permissions) y convertirlo a Tag Visual
+      const { role: resolvedRole } = await getRole();
+      const roleRaw = (resolvedRole || profile.role || session.user?.user_metadata?.role || 'fan');
+      
+      // Si el rol no es 'fan' (o incluso si lo es, si queremos mostrarlo explícitamente), lo agregamos.
+      // El usuario pidió ver "ambas", así que agregamos el rol como un tag visual.
+      if (roleRaw) {
+        const roleTag = {
+            name: roleRaw.toUpperCase(),
+            cssClass: `role-${roleRaw.toLowerCase()}`, // e.g. role-owner, role-vip
+            animation: 'none',
+            isRole: true // Flag interno
+        };
+        
+        // Evitar duplicados si el tag ya existe en la DB con el mismo nombre
+        const exists = tags.some(t => t.name.toUpperCase() === roleTag.name);
+        if (!exists) {
+            tags.unshift(roleTag); // Poner el rol al principio
+        }
+      }
+
+      console.log('Final tags to display:', tags);
+      
+      if (tags.length > 0) {
+        displayUserTags(tags);
       } else {
-        displayUserTags([]);
+        displayUserTags([]); // Esto activará el default 'FAN' si no hay nada
       }
     } catch (error) {
       console.error('Error loading user tags from Gateway:', error);
@@ -1412,8 +1434,10 @@ import Layout from '../layouts/Layout.astro';
     
     // Los roles ahora son invisibles (solo para permisos internos)
     // Mantener la corona solo para referencia interna, pero no mostrar roles
-    const { role: resolvedRole } = await getRole();
-    const roleRaw = (resolvedRole || profile.role || session.user?.user_metadata?.role || 'fan');
+    // const { role: resolvedRole } = await getRole(); <-- MOVIDO ARRIBA
+    const { role: resolvedRoleCheck } = await getRole(); // Re-fetch or reuse logic if needed, but we already have roleRaw
+    // const roleRaw = ... <-- YA CALCULADO ARRIBA
+    
     const roleId = parseInt(roleRaw) || 0;
     
     // La corona se muestra solo para owners (1-11) como referencia interna
