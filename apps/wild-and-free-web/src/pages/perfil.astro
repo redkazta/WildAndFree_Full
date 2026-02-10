@@ -1114,19 +1114,62 @@ import Layout from '../layouts/Layout.astro';
     }
   }
 
+  /* Chidotota Animation (Wild Pulse) */
+  @keyframes wild-pulse {
+    0% { 
+      box-shadow: 0 0 0 0 rgba(201, 131, 0, 0.4); 
+      transform: scale(1);
+      filter: brightness(1);
+    }
+    50% { 
+      box-shadow: 0 0 20px 5px rgba(201, 131, 0, 0.2); 
+      transform: scale(1.05);
+      filter: brightness(1.2);
+    }
+    100% { 
+      box-shadow: 0 0 0 0 rgba(201, 131, 0, 0); 
+      transform: scale(1);
+      filter: brightness(1);
+    }
+  }
+
   /* Estilos base para tags */
   .role-tag {
-    display: inline-block;
-    padding: 6px 12px;
-    border-radius: 16px;
-    font-size: 11px;
-    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border: 2px solid;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
-    margin: 2px;
+    letter-spacing: 0.1em;
+    border: 1px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(12px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .role-tag::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.1), transparent);
+    transform: translateX(-100%);
+    transition: 0.5s;
+  }
+
+  .role-tag:hover::after {
+    transform: translateX(100%);
   }
 
   .role-tag.role-owner {
@@ -1382,34 +1425,34 @@ import Layout from '../layouts/Layout.astro';
         // Usar clase CSS si existe, sino solo base
         tagElement.className = `role-tag ${tag.cssClass || ''}`;
         tagElement.textContent = tag.name;
-        tagElement.style.display = 'inline-block';
-        tagElement.style.marginRight = '8px';
-        tagElement.style.marginBottom = '4px';
         
-        // Aplicar color dinámico si viene de la DB y no es una clase predefinida estándar
-        if (tag.color && (!tag.cssClass || !tag.cssClass.includes('role-'))) {
-            tagElement.style.background = `linear-gradient(135deg, ${tag.color}40 0%, ${tag.color}30 100%)`;
-            tagElement.style.borderColor = `${tag.color}60`;
+        // Aplicar color dinámico (Prioridad sobre clases CSS predefinidas)
+        if (tag.color) {
+            // Estilo "Premium/Street" dinámico
+            tagElement.style.background = `linear-gradient(135deg, ${tag.color}20 0%, ${tag.color}40 100%)`;
+            tagElement.style.borderColor = tag.color;
             tagElement.style.color = '#fff';
-            tagElement.style.boxShadow = `0 10px 20px ${tag.color}20`;
-        }
-        
-        // Si no tiene color ni clase específica (es un rol desconocido), darle un estilo default
-        // @ts-ignore
-        const computedStyle = window.getComputedStyle(tagElement);
-        // Hack simple: si el background es transparente o rgba(0,0,0,0), asignarle estilo default
-        // Mejor: verificar si la clase existe en las hojas de estilo es difícil en runtime
-        // Simplemente aplicamos un fallback visual si no es 'role-fan' y no tiene color
-        if (!tag.color && (!tag.cssClass || tag.cssClass === 'role-tag')) {
-             tagElement.style.background = 'rgba(255, 255, 255, 0.15)';
-             tagElement.style.borderColor = 'rgba(255, 255, 255, 0.4)';
-             tagElement.style.color = '#eee';
+            tagElement.style.boxShadow = `0 8px 20px -6px ${tag.color}`;
+            tagElement.style.textShadow = `0 0 10px ${tag.color}`;
+        } else if (!tag.cssClass || tag.cssClass === 'role-tag') {
+            // Fallback elegante para roles/tags sin color ni clase conocida
+            tagElement.style.background = 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)';
+            tagElement.style.borderColor = 'rgba(255,255,255,0.2)';
+            tagElement.style.color = 'rgba(255,255,255,0.9)';
         }
 
+        // Animación "Chidotota"
         if (tag.animation && tag.animation !== 'none') {
-          tagElement.style.animation = tag.animation + ' 2s infinite';
-          tagElement.style.animationFillMode = 'both';
+          // Si tiene animación específica de DB
+          tagElement.style.animation = `${tag.animation} 3s infinite cubic-bezier(0.4, 0, 0.2, 1)`;
+        } else {
+          // Animación por defecto para todos los tags/roles (Wild Pulse suave)
+          // Esto cumple "que se vea asi tenga cualquier texto"
+          tagElement.style.animation = 'wild-pulse 4s infinite ease-in-out';
         }
+        
+        // Asegurar que la animación se aplique
+        tagElement.style.animationFillMode = 'both';
 
         roleTagsContainer.appendChild(tagElement);
       });
