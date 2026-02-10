@@ -1499,19 +1499,37 @@ import Layout from '../layouts/Layout.astro';
 
       let allTags: TagDisplay[] = [];
 
+      // Definir roles conocidos que ya tienen estilos CSS
+      const KNOWN_ROLES = ['owner', 'origins', 'member', 'artist', 'media', 'developer', 'designer', 'editor', 'fan'];
+      
+      // Paleta de colores neon para roles desconocidos (Fallback "Chidotote")
+      const NEON_COLORS = ['#FF00FF', '#00FFFF', '#FFD700', '#FF4500', '#00FF00', '#FF1493', '#9400D3'];
+
       // Procesar Roles
       if (rolesData && rolesData.length > 0) {
           // @ts-ignore
-          rolesData.forEach(r => {
+          rolesData.forEach((r, index) => {
               if (!r) return;
               
               // Intentar mapear nombres conocidos a clases CSS existentes
-              const normalizedName = r.name.toLowerCase().trim();
-              let cssClass = `role-${normalizedName.replace(/\s+/g, '-')}`;
+              const normalizedName = r.name.toLowerCase().trim().replace(/\s+/g, '-');
+              let cssClass = `role-${normalizedName}`;
+              let dynamicColor = undefined;
+
+              // Si el rol NO es conocido, asignarle un color neon aleatorio para que se vea "chidotota"
+              // Esto asegura que "tenga cualquier texto" se vea bien
+              if (!KNOWN_ROLES.includes(normalizedName)) {
+                  // Usar el ID o índice para seleccionar un color consistente
+                  const colorIndex = (r.id || index) % NEON_COLORS.length;
+                  dynamicColor = NEON_COLORS[colorIndex];
+                  // Mantenemos la clase base para estructura
+                  cssClass = 'role-tag'; 
+              }
               
               allTags.push({
                   name: r.name.toUpperCase(), // Mostrar nombre real de DB en mayúsculas
                   cssClass: cssClass,
+                  color: dynamicColor, // Si es desconocido, tendrá color
                   isRole: true,
                   id: r.id
               });
