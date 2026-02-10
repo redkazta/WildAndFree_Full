@@ -55,7 +55,7 @@ const assignedTagIds = userTags?.map(ut => ut.tag_id) || [];
               {userTags?.map((tag: any) => (
                 <span 
                   class="role-tag text-sm"
-                  style={`background-color: ${tag.tags.color}20; border-color: ${tag.tags.color}; color: ${tag.tags.color};`}
+                  style={`background: linear-gradient(135deg, ${tag.tags.color}40 0%, ${tag.tags.color}10 100%); border-color: ${tag.tags.color}; box-shadow: 0 0 10px -2px ${tag.tags.color};`}
                 >
                   {tag.tags.name}
                   <button 
@@ -84,7 +84,7 @@ const assignedTagIds = userTags?.map(ut => ut.tag_id) || [];
                     class={`role-tag text-sm transition-all hover:scale-105 ${
                       isAssigned ? 'opacity-50 cursor-not-allowed' : 'hover:bg-white/10'
                     }`}
-                    style={`background-color: ${tag.color}20; border-color: ${tag.color}; color: ${tag.color};`}
+                    style={`background: linear-gradient(135deg, ${tag.color}40 0%, ${tag.color}10 100%); border-color: ${tag.color}; box-shadow: 0 0 10px -2px ${tag.color};`}
                     onclick={isAssigned ? '' : `addTag(${tag.id})`}
                     disabled={isAssigned}
                   >
@@ -170,16 +170,29 @@ const assignedTagIds = userTags?.map(ut => ut.tag_id) || [];
 
   <style>
     .role-tag {
-      display: inline-block;
-      padding: 8px 16px;
-      border: 2px solid;
-      border-radius: 20px;
-      font-weight: 600;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      backdrop-filter: blur(10px);
-      transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 16px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 9999px;
+        font-family: system-ui, -apple-system, sans-serif;
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        outline: none !important;
+        color: #fff !important;
+        text-shadow: 0 0 5px rgba(0,0,0,0.5);
+    }
+
+    .role-tag:hover {
+        transform: scale(1.05);
+        filter: brightness(1.2);
     }
   </style>
 </Layout>

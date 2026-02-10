@@ -1133,27 +1133,50 @@ import Layout from '../layouts/Layout.astro';
     }
   }
 
-  /* Estilos base para tags */
+  /* Estilos base para tags - PREMIUM CHIDOTOTA */
   .role-tag {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 8px 16px;
-    border-radius: 999px;
-    font-size: 12px;
+    padding: 8px 20px;
+    border-radius: 9999px;
+    font-size: 11px;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.15em;
     border: 1px solid rgba(255,255,255,0.2);
-    backdrop-filter: blur(12px);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    margin: 4px;
-    background: rgba(255, 255, 255, 0.05);
-    color: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    backdrop-filter: blur(16px);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    margin: 6px;
+    background: rgba(255, 255, 255, 0.03);
+    color: #fff !important; /* SIEMPRE BLANCO */
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    text-shadow: 0 0 10px rgba(0,0,0,0.5);
     position: relative;
     overflow: hidden;
+    outline: none !important; /* NO BLUE SELECTION */
+    cursor: default;
+    user-select: none;
+  }
+
+  /* Animación Chidotota: Wild Pulse Neon */
+  @keyframes wild-pulse {
+      0% { 
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.1), inset 0 0 0 rgba(255,255,255,0); 
+        transform: scale(1);
+        filter: brightness(1);
+      }
+      50% { 
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.3), inset 0 0 10px rgba(255,255,255,0.1); 
+        transform: scale(1.05);
+        filter: brightness(1.3);
+        border-color: rgba(255, 255, 255, 0.9);
+      }
+      100% { 
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.1), inset 0 0 0 rgba(255,255,255,0); 
+        transform: scale(1);
+        filter: brightness(1);
+      }
   }
 
   .role-tag::after {
@@ -1163,68 +1186,68 @@ import Layout from '../layouts/Layout.astro';
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.1), transparent);
-    transform: translateX(-100%);
-    transition: 0.5s;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.4), transparent);
+    transform: translateX(-100%) skewX(-15deg);
+    transition: 0.6s;
   }
 
   .role-tag:hover::after {
-    transform: translateX(100%);
+    transform: translateX(100%) skewX(-15deg);
   }
 
+  /* Roles específicos con gradientes más potentes */
   .role-tag.role-owner {
-    background: linear-gradient(45deg, #ffd700, #ffed4e);
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 237, 78, 0.1));
     border-color: #ffd700;
-    color: #000;
-    font-weight: 900;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
   }
 
   .role-tag.role-origins {
-    background: linear-gradient(45deg, #ff6b35, #f7931e);
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.2), rgba(247, 147, 30, 0.1));
     border-color: #ff6b35;
-    color: #fff;
+    box-shadow: 0 0 15px rgba(255, 107, 53, 0.3);
   }
 
   .role-tag.role-member {
-    background: linear-gradient(45deg, #4ecdc4, #44a08d);
+    background: linear-gradient(135deg, rgba(78, 205, 196, 0.2), rgba(68, 160, 141, 0.1));
     border-color: #4ecdc4;
-    color: #fff;
+    box-shadow: 0 0 15px rgba(78, 205, 196, 0.3);
   }
 
   .role-tag.role-artist {
-    background: linear-gradient(45deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.1));
     border-color: #667eea;
-    color: #fff;
+    box-shadow: 0 0 15px rgba(102, 126, 234, 0.3);
   }
 
   .role-tag.role-media {
-    background: linear-gradient(45deg, #f093fb, #f5576c);
+    background: linear-gradient(135deg, rgba(240, 147, 251, 0.2), rgba(245, 87, 108, 0.1));
     border-color: #f093fb;
-    color: #fff;
+    box-shadow: 0 0 15px rgba(240, 147, 251, 0.3);
   }
 
   .role-tag.role-developer {
-    background: linear-gradient(45deg, #4facfe, #00f2fe);
+    background: linear-gradient(135deg, rgba(79, 172, 254, 0.2), rgba(0, 242, 254, 0.1));
     border-color: #4facfe;
-    color: #fff;
+    box-shadow: 0 0 15px rgba(79, 172, 254, 0.3);
   }
 
   .role-tag.role-designer {
-    background: linear-gradient(45deg, #43e97b, #38f9d7);
+    background: linear-gradient(135deg, rgba(67, 233, 123, 0.2), rgba(56, 249, 215, 0.1));
     border-color: #43e97b;
-    color: #fff;
+    box-shadow: 0 0 15px rgba(67, 233, 123, 0.3);
   }
 
   .role-tag.role-editor {
-    background: linear-gradient(45deg, #fa709a, #fee140);
+    background: linear-gradient(135deg, rgba(250, 112, 154, 0.2), rgba(254, 225, 64, 0.1));
     border-color: #fa709a;
-    color: #fff;
+    box-shadow: 0 0 15px rgba(250, 112, 154, 0.3);
   }
 
   .role-tag.role-fan {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.3);
-    color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.7) !important;
   }
 </style>
 
@@ -1428,17 +1451,31 @@ import Layout from '../layouts/Layout.astro';
         
         // Aplicar color dinámico (Prioridad sobre clases CSS predefinidas)
         if (tag.color) {
-            // Estilo "Premium/Street" dinámico
-            tagElement.style.background = `linear-gradient(135deg, ${tag.color}20 0%, ${tag.color}40 100%)`;
+            // Estilo "Premium/Street" dinámico - CHIDOTOTE
+            tagElement.style.background = `linear-gradient(135deg, ${tag.color}40 0%, ${tag.color}10 100%)`; // Fondo más sutil
             tagElement.style.borderColor = tag.color;
-            tagElement.style.color = '#fff';
-            tagElement.style.boxShadow = `0 8px 20px -6px ${tag.color}`;
-            tagElement.style.textShadow = `0 0 10px ${tag.color}`;
+            tagElement.style.color = '#fff'; // SIEMPRE BLANCO
+            tagElement.style.boxShadow = `0 0 15px -2px ${tag.color}, inset 0 0 10px -5px ${tag.color}`; // Neon Glow interno y externo
+            tagElement.style.textShadow = `0 0 5px ${tag.color}`; // Glow en texto
         } else if (!tag.cssClass || tag.cssClass === 'role-tag') {
             // Fallback elegante para roles/tags sin color ni clase conocida
             tagElement.style.background = 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)';
-            tagElement.style.borderColor = 'rgba(255,255,255,0.2)';
-            tagElement.style.color = 'rgba(255,255,255,0.9)';
+            tagElement.style.borderColor = 'rgba(255,255,255,0.5)';
+            tagElement.style.color = '#fff';
+        }
+
+        // Lógica de Tamaño de Fuente (Jerarquía)
+        const normalizedName = tag.name.toLowerCase();
+        // @ts-ignore
+        if (typeof HIGH_RANK_ROLES !== 'undefined' && HIGH_RANK_ROLES.some(r => normalizedName.includes(r))) {
+             tagElement.style.fontSize = '14px'; // Más grande
+             tagElement.style.padding = '10px 20px'; // Más padding
+             tagElement.style.borderWidth = '2px'; // Borde más grueso
+             tagElement.style.letterSpacing = '0.2em';
+             tagElement.style.fontWeight = '900';
+        } else {
+             tagElement.style.fontSize = '11px';
+             tagElement.style.fontWeight = '700';
         }
 
         // Animación "Chidotota"
@@ -1446,13 +1483,14 @@ import Layout from '../layouts/Layout.astro';
           // Si tiene animación específica de DB
           tagElement.style.animation = `${tag.animation} 3s infinite cubic-bezier(0.4, 0, 0.2, 1)`;
         } else {
-          // Animación por defecto para todos los tags/roles (Wild Pulse suave)
-          // Esto cumple "que se vea asi tenga cualquier texto"
-          tagElement.style.animation = 'wild-pulse 4s infinite ease-in-out';
+          // Animación por defecto "Chidotota" (Wild Pulse mejorado)
+          tagElement.style.animation = 'wild-pulse 3s infinite ease-in-out';
         }
         
-        // Asegurar que la animación se aplique
+        // Asegurar que la animación se aplique y no haya outlines feos
         tagElement.style.animationFillMode = 'both';
+        tagElement.style.outline = 'none'; // Quitar borde azul de selección
+
 
         roleTagsContainer.appendChild(tagElement);
       });
@@ -1502,6 +1540,9 @@ import Layout from '../layouts/Layout.astro';
       // Definir roles conocidos que ya tienen estilos CSS
       const KNOWN_ROLES = ['owner', 'origins', 'member', 'artist', 'media', 'developer', 'designer', 'editor', 'fan'];
       
+      // Roles de alto rango (Staff/Admin) para tipografía más grande
+      const HIGH_RANK_ROLES = ['owner', 'origins', 'admin', 'staff', 'mod', 'developer'];
+
       // Paleta de colores neon para roles desconocidos (Fallback "Chidotote")
       const NEON_COLORS = ['#FF00FF', '#00FFFF', '#FFD700', '#FF4500', '#00FF00', '#FF1493', '#9400D3'];
 
