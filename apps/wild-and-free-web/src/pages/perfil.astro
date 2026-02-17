@@ -1374,13 +1374,18 @@ import Layout from '../layouts/Layout.astro';
       if (!elements || elements.length === 0) return;
       gsap.killTweensOf(elements);
       elements.forEach((el) => {
-        const glow = getComputedStyle(el).getPropertyValue('--tag-glow').trim() || '#ffffff';
-        const softGlow = getComputedStyle(el).getPropertyValue('--tag-glow-soft').trim() || 'rgba(255,255,255,0.45)';
+        const isStaff = el.dataset.staff === 'true';
+        const glow = isStaff ? '#f5c542' : (getComputedStyle(el).getPropertyValue('--tag-glow').trim() || '#ffffff');
+        const softGlow = isStaff ? 'rgba(245,197,66,0.55)' : (getComputedStyle(el).getPropertyValue('--tag-glow-soft').trim() || 'rgba(255,255,255,0.45)');
+        if (isStaff) {
+          el.style.setProperty('--tag-glow', glow);
+          el.style.setProperty('--tag-glow-soft', softGlow);
+        }
 
         gsap.to(el, {
-          scale: gsap.utils.random(1.03, 1.09),
+          scale: gsap.utils.random(isStaff ? 1.06 : 1.03, isStaff ? 1.12 : 1.09),
           rotate: gsap.utils.random(-1.2, 1.2),
-          duration: 2.1 + Math.random() * 1.3,
+          duration: (isStaff ? 1.7 : 2.1) + Math.random() * 1.3,
           yoyo: true,
           repeat: -1,
           ease: 'sine.inOut',
@@ -1388,9 +1393,9 @@ import Layout from '../layouts/Layout.astro';
         });
 
         gsap.to(el, {
-          y: gsap.utils.random(-4, 4),
-          x: gsap.utils.random(-2, 2),
-          duration: 3.0 + Math.random() * 1.8,
+          y: gsap.utils.random(isStaff ? -6 : -4, isStaff ? 6 : 4),
+          x: gsap.utils.random(isStaff ? -3 : -2, isStaff ? 3 : 2),
+          duration: (isStaff ? 2.4 : 3.0) + Math.random() * 1.8,
           yoyo: true,
           repeat: -1,
           ease: 'sine.inOut',
@@ -1398,9 +1403,11 @@ import Layout from '../layouts/Layout.astro';
         });
 
         gsap.to(el, {
-          boxShadow: `0 0 34px -8px ${glow}, 0 0 90px -36px ${glow}, 0 0 140px -80px ${softGlow}`,
-          filter: 'brightness(1.35) saturate(1.35)',
-          duration: 2.4 + Math.random() * 1.8,
+          boxShadow: isStaff
+            ? `0 0 40px -10px ${glow}, 0 0 110px -40px ${glow}, 0 0 180px -90px ${softGlow}`
+            : `0 0 34px -8px ${glow}, 0 0 90px -36px ${glow}, 0 0 140px -80px ${softGlow}`,
+          filter: isStaff ? 'brightness(1.45) saturate(1.45)' : 'brightness(1.35) saturate(1.35)',
+          duration: (isStaff ? 1.9 : 2.4) + Math.random() * 1.8,
           yoyo: true,
           repeat: -1,
           ease: 'sine.inOut',
@@ -1408,8 +1415,8 @@ import Layout from '../layouts/Layout.astro';
         });
 
         gsap.to(el, {
-          backgroundPosition: `${gsap.utils.random(0, 120)}% 50%`,
-          duration: 4.6 + Math.random() * 2.4,
+          backgroundPosition: `${gsap.utils.random(0, 140)}% 50%`,
+          duration: (isStaff ? 3.2 : 4.6) + Math.random() * 2.4,
           yoyo: true,
           repeat: -1,
           ease: 'sine.inOut',
@@ -1417,8 +1424,10 @@ import Layout from '../layouts/Layout.astro';
         });
 
         gsap.to(el, {
-          textShadow: `0 0 10px ${glow}, 0 0 18px ${softGlow}`,
-          duration: 2.8 + Math.random() * 1.6,
+          textShadow: isStaff
+            ? `0 0 14px ${glow}, 0 0 26px ${softGlow}`
+            : `0 0 10px ${glow}, 0 0 18px ${softGlow}`,
+          duration: (isStaff ? 2.0 : 2.8) + Math.random() * 1.6,
           yoyo: true,
           repeat: -1,
           ease: 'sine.inOut',
@@ -1480,29 +1489,26 @@ import Layout from '../layouts/Layout.astro';
         tagElement.style.setProperty('--tag-glow-soft', tag.color || 'rgba(255,255,255,0.5)');
 
         const normalizedName = tag.name.toLowerCase();
+        const isStaff = typeof HIGH_RANK_ROLES !== 'undefined' && HIGH_RANK_ROLES.some(r => normalizedName.includes(r));
         // @ts-ignore
-        if (typeof HIGH_RANK_ROLES !== 'undefined' && HIGH_RANK_ROLES.some(r => normalizedName.includes(r))) {
+        if (isStaff) {
              tagElement.style.fontSize = '42px';
              tagElement.style.padding = '30px 60px';
              tagElement.style.borderWidth = '6px';
              tagElement.style.letterSpacing = '0.2em';
              tagElement.style.fontWeight = '900';
+             tagElement.style.background = 'linear-gradient(135deg, rgba(245,197,66,0.28), rgba(255,218,120,0.08))';
+             tagElement.style.borderColor = '#f5c542';
+             tagElement.style.textShadow = '0 0 14px rgba(245,197,66,0.6)';
+             tagElement.style.boxShadow = '0 0 24px -6px rgba(245,197,66,0.6), 0 0 60px -22px rgba(245,197,66,0.6)';
+             tagElement.style.setProperty('--tag-glow', '#f5c542');
+             tagElement.style.setProperty('--tag-glow-soft', 'rgba(245,197,66,0.55)');
         } else {
              tagElement.style.fontSize = '33px';
              tagElement.style.fontWeight = '700';
         }
-        const baseDelay = Math.random() * 1.4;
-        const floatDelay = Math.random() * 2.2;
-        const shiftDelay = Math.random() * 3.0;
-
-        if (tag.animation && tag.animation !== 'none') {
-          tagElement.style.animation = `${tag.animation} 2.4s infinite cubic-bezier(0.4, 0, 0.2, 1), tag-float 4.6s infinite ease-in-out, neon-shift 6.2s infinite linear, neon-flicker 4.2s infinite steps(2, end)`;
-        } else {
-          tagElement.style.animation = 'wild-pulse 2.2s infinite ease-in-out, tag-float 4.6s infinite ease-in-out, neon-shift 6.2s infinite linear, neon-flicker 4.2s infinite steps(2, end)';
-        }
-        const flickerDelay = Math.random() * 1.6;
-        tagElement.style.animationDelay = `${baseDelay}s, ${floatDelay}s, ${shiftDelay}s, ${flickerDelay}s`;
-        tagElement.style.animationFillMode = 'both';
+        tagElement.dataset.staff = isStaff ? 'true' : 'false';
+        tagElement.style.animation = 'none';
         tagElement.style.outline = 'none';
 
 
