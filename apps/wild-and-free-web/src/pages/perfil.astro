@@ -1368,8 +1368,20 @@ import Layout from '../layouts/Layout.astro';
 
     const HIGH_RANK_ROLES = ['owner', 'origins', 'admin', 'staff', 'mod', 'developer'];
 
-    const applyNeonMotion = (elements: HTMLElement[]) => {
-      const gsap = (window as any).gsap;
+    const ensureGsap = () => {
+      const existing = (window as any).gsap;
+      if (existing) return Promise.resolve(existing);
+      return new Promise((resolve) => {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js';
+        script.onload = () => resolve((window as any).gsap);
+        script.onerror = () => resolve(undefined);
+        document.head.appendChild(script);
+      });
+    };
+
+    const applyNeonMotion = async (elements: HTMLElement[]) => {
+      const gsap = await ensureGsap();
       if (!gsap) return;
       if (!elements || elements.length === 0) return;
       gsap.killTweensOf(elements);
@@ -1516,7 +1528,7 @@ import Layout from '../layouts/Layout.astro';
         tagElements.push(tagElement);
       });
 
-      applyNeonMotion(tagElements);
+      void applyNeonMotion(tagElements);
     };
 
     try {
