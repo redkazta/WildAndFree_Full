@@ -1379,7 +1379,10 @@ import Layout from '../layouts/Layout.astro';
       id?: number;
     }
 
-    const HIGH_RANK_ROLES = ['owner', 'origins', 'admin', 'staff', 'mod', 'developer'];
+    const GOLD_ROLE_IDS = new Set([1, 2, 3]);
+    const RED_ROLE_IDS = new Set([4]);
+    const PURPLE_ROLE_IDS = new Set([5, 6]);
+    const GREEN_ROLE_IDS = new Set([0, 7, 8, 9, 10, 11]);
 
     const ensureGsap = () => {
       const existing = (window as any).gsap;
@@ -1399,18 +1402,15 @@ import Layout from '../layouts/Layout.astro';
       if (!elements || elements.length === 0) return;
       gsap.killTweensOf(elements);
       elements.forEach((el) => {
-        const isStaff = el.dataset.staff === 'true';
-        const glow = isStaff ? '#f5c542' : (getComputedStyle(el).getPropertyValue('--tag-glow').trim() || '#ffffff');
-        const softGlow = isStaff ? 'rgba(245,197,66,0.55)' : (getComputedStyle(el).getPropertyValue('--tag-glow-soft').trim() || 'rgba(255,255,255,0.45)');
-        if (isStaff) {
-          el.style.setProperty('--tag-glow', glow);
-          el.style.setProperty('--tag-glow-soft', softGlow);
-        }
+        const anim = (el.dataset.anim || '').toLowerCase();
+        if (anim === 'none') return;
+        const glow = getComputedStyle(el).getPropertyValue('--tag-glow').trim() || '#ffffff';
+        const softGlow = getComputedStyle(el).getPropertyValue('--tag-glow-soft').trim() || 'rgba(255,255,255,0.45)';
 
         gsap.to(el, {
-          scale: gsap.utils.random(isStaff ? 1.06 : 1.03, isStaff ? 1.12 : 1.09),
+          scale: gsap.utils.random(1.03, 1.09),
           rotate: gsap.utils.random(-1.2, 1.2),
-          duration: (isStaff ? 1.7 : 2.1) + Math.random() * 1.3,
+          duration: 2.1 + Math.random() * 1.3,
           yoyo: true,
           repeat: -1,
           ease: 'sine.inOut',
@@ -1418,9 +1418,9 @@ import Layout from '../layouts/Layout.astro';
         });
 
         gsap.to(el, {
-          y: gsap.utils.random(isStaff ? -6 : -4, isStaff ? 6 : 4),
-          x: gsap.utils.random(isStaff ? -3 : -2, isStaff ? 3 : 2),
-          duration: (isStaff ? 2.4 : 3.0) + Math.random() * 1.8,
+          y: gsap.utils.random(-4, 4),
+          x: gsap.utils.random(-2, 2),
+          duration: 3.0 + Math.random() * 1.8,
           yoyo: true,
           repeat: -1,
           ease: 'sine.inOut',
@@ -1428,11 +1428,9 @@ import Layout from '../layouts/Layout.astro';
         });
 
         gsap.to(el, {
-          boxShadow: isStaff
-            ? `0 0 40px -10px ${glow}, 0 0 110px -40px ${glow}, 0 0 180px -90px ${softGlow}`
-            : `0 0 34px -8px ${glow}, 0 0 90px -36px ${glow}, 0 0 140px -80px ${softGlow}`,
-          filter: isStaff ? 'brightness(1.45) saturate(1.45)' : 'brightness(1.35) saturate(1.35)',
-          duration: (isStaff ? 1.9 : 2.4) + Math.random() * 1.8,
+          boxShadow: `0 0 34px -8px ${glow}, 0 0 90px -36px ${glow}, 0 0 140px -80px ${softGlow}`,
+          filter: 'brightness(1.35) saturate(1.35)',
+          duration: 2.4 + Math.random() * 1.8,
           yoyo: true,
           repeat: -1,
           ease: 'sine.inOut',
@@ -1441,7 +1439,7 @@ import Layout from '../layouts/Layout.astro';
 
         gsap.to(el, {
           backgroundPosition: `${gsap.utils.random(0, 140)}% 50%`,
-          duration: (isStaff ? 3.2 : 4.6) + Math.random() * 2.4,
+          duration: 4.6 + Math.random() * 2.4,
           yoyo: true,
           repeat: -1,
           ease: 'sine.inOut',
@@ -1449,27 +1447,23 @@ import Layout from '../layouts/Layout.astro';
         });
 
         gsap.to(el, {
-          textShadow: isStaff
-            ? `0 0 14px ${glow}, 0 0 26px ${softGlow}`
-            : `0 0 10px ${glow}, 0 0 18px ${softGlow}`,
-          duration: (isStaff ? 2.0 : 2.8) + Math.random() * 1.6,
+          textShadow: `0 0 10px ${glow}, 0 0 18px ${softGlow}`,
+          duration: 2.8 + Math.random() * 1.6,
           yoyo: true,
           repeat: -1,
           ease: 'sine.inOut',
           delay: Math.random() * 0.9
         });
 
-        if (isStaff) {
+        if (anim === 'member-shine') {
           gsap.to(el, {
-            '--tag-bg-1': 'rgba(255,208,90,0.52)',
-            '--tag-bg-2': 'rgba(255,240,200,0.16)',
-            '--tag-text': '#fff7d9',
-            '--tag-shine': 'rgba(255,222,140,0.8)',
-            duration: 2.2 + Math.random() * 1.4,
+            '--tag-shine': 'rgba(255,255,255,0.95)',
+            '--tag-bg-1': 'rgba(255,255,255,0.2)',
+            duration: 1.4 + Math.random() * 0.8,
             yoyo: true,
             repeat: -1,
             ease: 'sine.inOut',
-            delay: Math.random() * 1.1
+            delay: Math.random() * 0.6
           });
         }
       });
@@ -1508,14 +1502,17 @@ import Layout from '../layouts/Layout.astro';
         tagElement.className = `role-tag ${tag.cssClass || ''}`;
         tagElement.textContent = tag.name;
         
-        if (tag.color) {
-            tagElement.style.setProperty('--tag-bg-1', `${tag.color}66`);
-            tagElement.style.setProperty('--tag-bg-2', `${tag.color}18`);
-            tagElement.style.setProperty('--tag-border', tag.color);
+        const rawColor = tag.color ? String(tag.color).trim() : '';
+        const normalizedColor = rawColor && !rawColor.startsWith('#') && /^[0-9a-fA-F]{6}$/.test(rawColor) ? `#${rawColor}` : rawColor;
+
+        if (normalizedColor) {
+            tagElement.style.setProperty('--tag-bg-1', `${normalizedColor}66`);
+            tagElement.style.setProperty('--tag-bg-2', `${normalizedColor}18`);
+            tagElement.style.setProperty('--tag-border', normalizedColor);
             tagElement.style.setProperty('--tag-text', '#fff');
-            tagElement.style.setProperty('--tag-shine', `${tag.color}66`);
-            tagElement.style.boxShadow = `0 0 22px -6px ${tag.color}, 0 0 50px -20px ${tag.color}`;
-            tagElement.style.textShadow = `0 0 8px ${tag.color}`;
+            tagElement.style.setProperty('--tag-shine', `${normalizedColor}66`);
+            tagElement.style.boxShadow = `0 0 22px -6px ${normalizedColor}, 0 0 50px -20px ${normalizedColor}`;
+            tagElement.style.textShadow = `0 0 8px ${normalizedColor}`;
             tagElement.style.backgroundSize = '220% 220%';
             tagElement.style.backgroundPosition = '0% 50%';
         } else if (!tag.cssClass || tag.cssClass === 'role-tag') {
@@ -1527,26 +1524,87 @@ import Layout from '../layouts/Layout.astro';
             tagElement.style.backgroundPosition = '0% 50%';
         }
 
-        tagElement.style.setProperty('--tag-glow', tag.color || '#ffffff');
-        tagElement.style.setProperty('--tag-glow-soft', tag.color || 'rgba(255,255,255,0.5)');
+        tagElement.style.setProperty('--tag-glow', normalizedColor || '#ffffff');
+        tagElement.style.setProperty('--tag-glow-soft', normalizedColor || 'rgba(255,255,255,0.5)');
 
-        const normalizedName = tag.name.toLowerCase();
-        const isStaff = typeof HIGH_RANK_ROLES !== 'undefined' && HIGH_RANK_ROLES.some(r => normalizedName.includes(r));
-        // @ts-ignore
-        if (isStaff) {
-             tagElement.style.fontSize = '42px';
-             tagElement.style.padding = '30px 60px';
-             tagElement.style.borderWidth = '6px';
-             tagElement.style.letterSpacing = '0.2em';
-             tagElement.style.fontWeight = '900';
-             tagElement.style.setProperty('--tag-glow', '#f5c542');
-             tagElement.style.setProperty('--tag-glow-soft', 'rgba(245,197,66,0.55)');
-             tagElement.classList.add('is-staff');
-        } else {
-             tagElement.style.fontSize = '33px';
-             tagElement.style.fontWeight = '700';
+        if (tag.isRole) {
+          const roleId = tag.id ?? 0;
+          if (GOLD_ROLE_IDS.has(roleId)) {
+            tagElement.style.fontSize = '42px';
+            tagElement.style.padding = '30px 60px';
+            tagElement.style.borderWidth = '6px';
+            tagElement.style.letterSpacing = '0.2em';
+            tagElement.style.fontWeight = '900';
+            tagElement.style.setProperty('--tag-bg-1', 'rgba(245,197,66,0.38)');
+            tagElement.style.setProperty('--tag-bg-2', 'rgba(255,235,170,0.12)');
+            tagElement.style.setProperty('--tag-border', '#f5c542');
+            tagElement.style.setProperty('--tag-text', '#fff4cc');
+            tagElement.style.setProperty('--tag-shine', 'rgba(255,219,130,0.7)');
+            tagElement.style.setProperty('--tag-glow', '#f5c542');
+            tagElement.style.setProperty('--tag-glow-soft', 'rgba(245,197,66,0.55)');
+          } else if (RED_ROLE_IDS.has(roleId)) {
+            tagElement.style.fontSize = '38px';
+            tagElement.style.padding = '28px 56px';
+            tagElement.style.borderWidth = '5px';
+            tagElement.style.letterSpacing = '0.18em';
+            tagElement.style.fontWeight = '900';
+            tagElement.style.setProperty('--tag-bg-1', 'rgba(255,78,78,0.34)');
+            tagElement.style.setProperty('--tag-bg-2', 'rgba(255,170,170,0.12)');
+            tagElement.style.setProperty('--tag-border', '#ff4e4e');
+            tagElement.style.setProperty('--tag-text', '#ffe7e7');
+            tagElement.style.setProperty('--tag-shine', 'rgba(255,140,140,0.75)');
+            tagElement.style.setProperty('--tag-glow', '#ff4e4e');
+            tagElement.style.setProperty('--tag-glow-soft', 'rgba(255,78,78,0.55)');
+          } else if (PURPLE_ROLE_IDS.has(roleId)) {
+            tagElement.style.fontSize = '38px';
+            tagElement.style.padding = '28px 56px';
+            tagElement.style.borderWidth = '5px';
+            tagElement.style.letterSpacing = '0.18em';
+            tagElement.style.fontWeight = '900';
+            tagElement.style.setProperty('--tag-bg-1', 'rgba(155,89,255,0.35)');
+            tagElement.style.setProperty('--tag-bg-2', 'rgba(200,160,255,0.12)');
+            tagElement.style.setProperty('--tag-border', '#9b59ff');
+            tagElement.style.setProperty('--tag-text', '#f3e7ff');
+            tagElement.style.setProperty('--tag-shine', 'rgba(187,140,255,0.7)');
+            tagElement.style.setProperty('--tag-glow', '#9b59ff');
+            tagElement.style.setProperty('--tag-glow-soft', 'rgba(155,89,255,0.55)');
+          } else if (GREEN_ROLE_IDS.has(roleId)) {
+            tagElement.style.fontSize = '34px';
+            tagElement.style.padding = '26px 52px';
+            tagElement.style.borderWidth = '4px';
+            tagElement.style.letterSpacing = '0.16em';
+            tagElement.style.fontWeight = '800';
+            tagElement.style.setProperty('--tag-bg-1', 'rgba(64,200,120,0.32)');
+            tagElement.style.setProperty('--tag-bg-2', 'rgba(140,255,200,0.12)');
+            tagElement.style.setProperty('--tag-border', '#40c878');
+            tagElement.style.setProperty('--tag-text', '#e8fff2');
+            tagElement.style.setProperty('--tag-shine', 'rgba(120,255,190,0.7)');
+            tagElement.style.setProperty('--tag-glow', '#40c878');
+            tagElement.style.setProperty('--tag-glow-soft', 'rgba(64,200,120,0.55)');
+          }
+        } else if (tag.name.toLowerCase().includes('fan')) {
+          tagElement.style.setProperty('--tag-bg-1', 'rgba(64,200,120,0.32)');
+          tagElement.style.setProperty('--tag-bg-2', 'rgba(140,255,200,0.12)');
+          tagElement.style.setProperty('--tag-border', '#40c878');
+          tagElement.style.setProperty('--tag-text', '#e8fff2');
+          tagElement.style.setProperty('--tag-shine', 'rgba(120,255,190,0.7)');
+          tagElement.style.setProperty('--tag-glow', '#40c878');
+          tagElement.style.setProperty('--tag-glow-soft', 'rgba(64,200,120,0.55)');
+        } else if (tag.name.toLowerCase().includes('origins')) {
+          tagElement.style.setProperty('--tag-bg-1', 'rgba(245,197,66,0.38)');
+          tagElement.style.setProperty('--tag-bg-2', 'rgba(255,235,170,0.12)');
+          tagElement.style.setProperty('--tag-border', '#f5c542');
+          tagElement.style.setProperty('--tag-text', '#fff4cc');
+          tagElement.style.setProperty('--tag-shine', 'rgba(255,219,130,0.7)');
+          tagElement.style.setProperty('--tag-glow', '#f5c542');
+          tagElement.style.setProperty('--tag-glow-soft', 'rgba(245,197,66,0.55)');
         }
-        tagElement.dataset.staff = isStaff ? 'true' : 'false';
+        if (!tag.isRole) {
+          tagElement.style.fontSize = '33px';
+          tagElement.style.fontWeight = '700';
+        }
+        const normalizedAnimation = (tag.animation || '').toLowerCase().trim();
+        tagElement.dataset.anim = normalizedAnimation || (tag.isRole ? 'role-pulse' : 'member-shine');
         tagElement.style.animation = 'none';
         tagElement.style.outline = 'none';
 
@@ -1569,10 +1627,13 @@ import Layout from '../layouts/Layout.astro';
       const allTags: TagDisplay[] = [];
 
       if (roleRaw) {
+        const parsedRoleId = parseInt(String(roleRaw), 10);
+        const roleId = Number.isFinite(parsedRoleId) ? parsedRoleId : 0;
         allTags.push({
           name: roleRaw.toUpperCase(),
           cssClass: `role-${normalizedRole}`,
-          isRole: true
+          isRole: true,
+          id: roleId
         });
       }
 
