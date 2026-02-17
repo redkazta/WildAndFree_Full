@@ -92,6 +92,7 @@ import Layout from '../../layouts/Layout.astro';
 
 <script>
   import { getAllTags, createTag, deleteTag, getUsersWithTags, assignTagToUser } from '../../lib/tags-admin-gateway.js';
+  import { supabase } from '../../lib/supabase.js';
 
   interface Tag {
     id: number;
@@ -115,15 +116,7 @@ import Layout from '../../layouts/Layout.astro';
   async function loadInitialData() {
     try {
       // Verificar autenticación primero
-      const { data: { session } } = await (async () => {
-        const { createClient } = await import('@supabase/supabase-js');
-        // @ts-ignore
-        const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
-        // @ts-ignore
-        const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
-        const supabase = createClient(supabaseUrl, supabaseAnonKey);
-        return supabase.auth.getSession();
-      })();
+      const { data: { session } } = await supabase.auth.getSession();
 
       if (!session) {
         window.location.href = '/login';
@@ -131,15 +124,11 @@ import Layout from '../../layouts/Layout.astro';
       }
 
       // Verificar rol de admin
-      const { data: profile } = await (async () => {
-        const { createClient } = await import('@supabase/supabase-js');
-        // @ts-ignore
-        const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
-        // @ts-ignore
-        const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
-        const supabase = createClient(supabaseUrl, supabaseAnonKey);
-        return supabase.from('profiles').select('role').eq('id', session.user.id).single();
-      })();
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', session.user.id)
+        .single();
 
       const roleId = parseInt(profile?.role || '0');
       if (roleId < 1 || roleId > 11) {

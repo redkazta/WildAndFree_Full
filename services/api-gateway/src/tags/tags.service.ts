@@ -9,7 +9,7 @@ export class TagsService {
   async getUserTags(userId: string) {
     try {
       const response = await firstValueFrom(
-        this.httpService.get(`/api/v1/users/${userId}/tags`)
+        this.httpService.get(`/api/v1/users/${userId}/tags`),
       );
       return response.data;
     } catch (error) {
@@ -21,7 +21,7 @@ export class TagsService {
   async getAllTags() {
     try {
       const response = await firstValueFrom(
-        this.httpService.get('/api/v1/tags')
+        this.httpService.get('/api/v1/tags'),
       );
       return response.data;
     } catch (error) {
@@ -33,9 +33,13 @@ export class TagsService {
   async assignTagToUser(userId: string, tagId: number) {
     try {
       const response = await firstValueFrom(
-        this.httpService.post(`/api/v1/users/${userId}/tags/${tagId}`, {}, {
-          headers: { 'X-User-Id': userId }
-        })
+        this.httpService.post(
+          `/api/v1/users/${userId}/tags/${tagId}`,
+          {},
+          {
+            headers: { 'X-User-Id': userId },
+          },
+        ),
       );
       return response.data;
     } catch (error) {
@@ -48,8 +52,8 @@ export class TagsService {
     try {
       const response = await firstValueFrom(
         this.httpService.delete(`/api/v1/users/${userId}/tags/${tagId}`, {
-          headers: { 'X-User-Id': userId }
-        })
+          headers: { 'X-User-Id': userId },
+        }),
       );
       return response.data;
     } catch (error) {
@@ -58,12 +62,15 @@ export class TagsService {
     }
   }
 
-  async createTag(createTagDto: { name: string; color: string; animation: string }, userId: string) {
+  async createTag(
+    createTagDto: { name: string; color: string; animation: string },
+    userId: string,
+  ) {
     try {
       const response = await firstValueFrom(
         this.httpService.post('/api/v1/tags', createTagDto, {
-          headers: { 'X-User-Id': userId }
-        })
+          headers: { 'X-User-Id': userId },
+        }),
       );
       return response.data;
     } catch (error) {
@@ -76,8 +83,8 @@ export class TagsService {
     try {
       const response = await firstValueFrom(
         this.httpService.delete(`/api/v1/tags/${tagId}`, {
-          headers: { 'X-User-Id': userId }
-        })
+          headers: { 'X-User-Id': userId },
+        }),
       );
       return response.data;
     } catch (error) {
@@ -90,8 +97,8 @@ export class TagsService {
     try {
       const response = await firstValueFrom(
         this.httpService.get('/api/v1/admin/users-with-tags', {
-          headers: { 'X-User-Id': userId }
-        })
+          headers: { 'X-User-Id': userId },
+        }),
       );
       return response.data;
     } catch (error) {

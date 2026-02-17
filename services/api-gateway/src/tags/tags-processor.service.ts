@@ -25,50 +25,52 @@ export class TagsService {
   async getUserTags(userId: string) {
     try {
       const response = await firstValueFrom(
-        this.httpService.get(`/users/${userId}/tags`)
+        this.httpService.get(`/users/${userId}/tags`),
       );
-      
+
       // Procesar los tags para agregar clases CSS y lógica de negocio
       const tags = response.data.tags || [];
       const processedTags = tags.map((tag: Tag) => this.processTag(tag));
-      
+
       // Si no hay tags, devolver un tag de fan por defecto
       if (processedTags.length === 0) {
         return {
-          tags: [{
-            id: 0,
-            name: 'FAN',
-            color: '#666666',
-            animation: 'none',
-            cssClass: 'role-fan',
-            isOwner: false
-          }]
+          tags: [
+            {
+              id: 0,
+              name: 'FAN',
+              color: '#666666',
+              animation: 'none',
+              cssClass: 'role-fan',
+              isOwner: false,
+            },
+          ],
         };
       }
-      
+
       return { tags: processedTags };
     } catch (error) {
       console.error('Error fetching user tags:', error);
       // Devolver tag de fan por defecto en caso de error
       return {
-        tags: [{
-          id: 0,
-          name: 'FAN',
-          color: '#666666',
-          animation: 'none',
-          cssClass: 'role-fan',
-          isOwner: false
-        }]
+        tags: [
+          {
+            id: 0,
+            name: 'FAN',
+            color: '#666666',
+            animation: 'none',
+            cssClass: 'role-fan',
+            isOwner: false,
+          },
+        ],
       };
     }
   }
 
   async getAllTags() {
     try {
-      const response = await firstValueFrom(
-        this.httpService.get('/tags')
-      );
-      
+      const response = await firstValueFrom(this.httpService.get('/tags'));
+
       // Procesar todos los tags disponibles
       const tags = response.data || [];
       return { tags: tags.map((tag: any) => this.processTag(tag)) };
@@ -81,7 +83,7 @@ export class TagsService {
   async assignTagToUser(userId: string, tagId: number) {
     try {
       const response = await firstValueFrom(
-        this.httpService.post(`/users/${userId}/tags/${tagId}`)
+        this.httpService.post(`/users/${userId}/tags/${tagId}`),
       );
       return response.data;
     } catch (error) {
@@ -93,7 +95,7 @@ export class TagsService {
   async removeTagFromUser(userId: string, tagId: number) {
     try {
       const response = await firstValueFrom(
-        this.httpService.delete(`/users/${userId}/tags/${tagId}`)
+        this.httpService.delete(`/users/${userId}/tags/${tagId}`),
       );
       return response.data;
     } catch (error) {
@@ -102,10 +104,14 @@ export class TagsService {
     }
   }
 
-  async createTag(createTagDto: { name: string; color: string; animation: string }) {
+  async createTag(createTagDto: {
+    name: string;
+    color: string;
+    animation: string;
+  }) {
     try {
       const response = await firstValueFrom(
-        this.httpService.post('/tags', createTagDto)
+        this.httpService.post('/tags', createTagDto),
       );
       return response.data;
     } catch (error) {
@@ -117,7 +123,7 @@ export class TagsService {
   async deleteTag(tagId: number) {
     try {
       const response = await firstValueFrom(
-        this.httpService.delete(`/tags/${tagId}`)
+        this.httpService.delete(`/tags/${tagId}`),
       );
       return response.data;
     } catch (error) {
@@ -143,8 +149,14 @@ export class TagsService {
     let isOwner = false;
 
     // Determinar la clase CSS basada en el nombre del tag
-    if (tagName.includes('ceo') || tagName.includes('founder') || tagName.includes('owner') || 
-        tagName.includes('director') || tagName.includes('executive') || tagName.includes('president')) {
+    if (
+      tagName.includes('ceo') ||
+      tagName.includes('founder') ||
+      tagName.includes('owner') ||
+      tagName.includes('director') ||
+      tagName.includes('executive') ||
+      tagName.includes('president')
+    ) {
       cssClass = 'role-owner';
       isOwner = true;
     } else if (tagName.includes('origins')) {
@@ -161,7 +173,11 @@ export class TagsService {
       cssClass = 'role-designer';
     } else if (tagName.includes('editor')) {
       cssClass = 'role-editor';
-    } else if (tagName.includes('vip') || tagName.includes('premium') || tagName.includes('elite')) {
+    } else if (
+      tagName.includes('vip') ||
+      tagName.includes('premium') ||
+      tagName.includes('elite')
+    ) {
       cssClass = 'role-vip';
     }
 
@@ -171,7 +187,7 @@ export class TagsService {
       color: tag.color,
       animation: tag.animation,
       cssClass,
-      isOwner
+      isOwner,
     };
   }
 }

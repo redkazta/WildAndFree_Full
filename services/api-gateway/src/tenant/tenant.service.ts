@@ -17,4 +17,3 @@ export class TenantService {
     return response.data;
   }
 }
-

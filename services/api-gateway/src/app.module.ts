@@ -1,4 +1,8 @@
-import { Module, type MiddlewareConsumer, type NestModule } from '@nestjs/common';
+import {
+  Module,
+  type MiddlewareConsumer,
+  type NestModule,
+} from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -13,7 +17,12 @@ import { TagsModule } from './tags/tags.module';
 
 @Module({
   imports: [HttpModule, TagsModule],
-  controllers: [AppController, HealthController, TenantController, InitController],
+  controllers: [
+    AppController,
+    HealthController,
+    TenantController,
+    InitController,
+  ],
   providers: [
     AppService,
     HealthService,

@@ -18,7 +18,8 @@ function resolveTenantId(req: Request): string {
   if (isIpv4 || hostname === '::1') return 'wild-and-free';
 
   const parts = hostname.split('.');
-  if (parts.length >= 2 && parts[0] && parts[0] !== 'localhost') return parts[0];
+  if (parts.length >= 2 && parts[0] && parts[0] !== 'localhost')
+    return parts[0];
   if (hostname !== 'localhost') return hostname;
 
   return 'wild-and-free';

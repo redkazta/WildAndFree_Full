@@ -15,4 +15,3 @@ export class HealthService {
     return response.data;
   }
 }
-

@@ -15,4 +15,3 @@ export class InitService {
     return response.data;
   }
 }
-

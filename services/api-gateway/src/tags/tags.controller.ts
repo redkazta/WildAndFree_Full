@@ -1,11 +1,17 @@
-import { Controller, Get, Post, Delete, Headers, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Delete,
+  Headers,
+  Body,
+  Param,
+} from '@nestjs/common';
 import { TagsService } from './tags.service';
 
 @Controller('tags')
 export class TagsController {
-  constructor(
-    private readonly tagsService: TagsService
-  ) {}
+  constructor(private readonly tagsService: TagsService) {}
 
   @Get('my-tags')
   async getMyTags(@Headers('x-user-id') userId: string) {
@@ -21,7 +27,10 @@ export class TagsController {
   }
 
   @Post('assign')
-  async assignTag(@Headers('x-user-id') actorId: string, @Body() assignDto: { userId?: string; tagId: number }) {
+  async assignTag(
+    @Headers('x-user-id') actorId: string,
+    @Body() assignDto: { userId?: string; tagId: number },
+  ) {
     if (!actorId) {
       throw new Error('User ID required');
     }
@@ -30,7 +39,11 @@ export class TagsController {
   }
 
   @Delete('remove/:tagId')
-  async removeTag(@Headers('x-user-id') actorId: string, @Param('tagId') tagId: string, @Body() body: { userId?: string }) {
+  async removeTag(
+    @Headers('x-user-id') actorId: string,
+    @Param('tagId') tagId: string,
+    @Body() body: { userId?: string },
+  ) {
     if (!actorId) {
       throw new Error('User ID required');
     }
@@ -40,7 +53,10 @@ export class TagsController {
 
   // Admin endpoints
   @Post('create')
-  async createTag(@Headers('x-user-id') userId: string, @Body() createTagDto: { name: string; color: string; animation: string }) {
+  async createTag(
+    @Headers('x-user-id') userId: string,
+    @Body() createTagDto: { name: string; color: string; animation: string },
+  ) {
     if (!userId) {
       throw new Error('User ID required for admin operations');
     }
@@ -48,7 +64,10 @@ export class TagsController {
   }
 
   @Delete('delete/:tagId')
-  async deleteTag(@Headers('x-user-id') userId: string, @Param('tagId') tagId: string) {
+  async deleteTag(
+    @Headers('x-user-id') userId: string,
+    @Param('tagId') tagId: string,
+  ) {
     if (!userId) {
       throw new Error('User ID required for admin operations');
     }

@@ -11,7 +11,7 @@ import { TagsService } from './tags.service';
       headers: {
         'Content-Type': 'application/json',
       },
-    })
+    }),
   ],
   controllers: [TagsController],
   providers: [TagsService],

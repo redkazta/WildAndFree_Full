@@ -244,119 +244,6 @@ import Layout from '../layouts/Layout.astro';
     object-fit: cover;
   }
 
-  .role-tags {
-    margin-top: 10px;
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  .role-tag {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 14px;
-    border-radius: 999px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.10);
-    color: rgba(255, 255, 255, 0.92);
-    font-size: 11px;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.18em;
-    box-shadow: 0 16px 30px rgba(0,0,0,0.35);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .role-tag::before {
-    content: '';
-    position: absolute;
-    top: -30%;
-    bottom: -30%;
-    width: 60%;
-    left: -80%;
-    background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.22) 50%, transparent 70%);
-    animation: roleShine 3.2s ease-in-out infinite;
-    opacity: 0.9;
-    pointer-events: none;
-  }
-
-  @keyframes roleShine {
-    0% { transform: translateX(0) rotate(10deg); opacity: 0.0; }
-    15% { opacity: 0.9; }
-    50% { transform: translateX(260%) rotate(10deg); opacity: 0.7; }
-    85% { opacity: 0.0; }
-    100% { transform: translateX(260%) rotate(10deg); opacity: 0.0; }
-  }
-
-  /* Estilos de Roles por ID */
-  .role-tag.role-owner {
-    padding: 14px 20px;
-    font-size: 15px;
-    background: linear-gradient(135deg, rgba(255, 215, 0, 0.25) 0%, rgba(255, 140, 0, 0.2) 55%, rgba(255, 255, 255, 0.08) 100%);
-    border-color: rgba(255, 215, 0, 0.35);
-    color: rgba(255, 250, 200, 0.98);
-    box-shadow: 0 25px 60px rgba(255, 215, 0, 0.2);
-    font-weight: 700;
-  }
-
-  .role-tag.role-origins {
-    background: linear-gradient(135deg, rgba(138, 43, 226, 0.25) 0%, rgba(75, 0, 130, 0.2) 100%);
-    border-color: rgba(138, 43, 226, 0.35);
-    color: rgba(240, 230, 255, 0.98);
-    box-shadow: 0 20px 55px rgba(138, 43, 226, 0.15);
-  }
-
-  .role-tag.role-member {
-    background: linear-gradient(135deg, rgba(0, 191, 255, 0.25) 0%, rgba(30, 144, 255, 0.2) 100%);
-    border-color: rgba(0, 191, 255, 0.3);
-    color: rgba(230, 245, 255, 0.98);
-    box-shadow: 0 17px 45px rgba(0, 191, 255, 0.12);
-  }
-
-  .role-tag.role-artist {
-    background: linear-gradient(135deg, rgba(255, 20, 147, 0.25) 0%, rgba(219, 112, 147, 0.2) 100%);
-    border-color: rgba(255, 20, 147, 0.35);
-    color: rgba(255, 230, 245, 0.98);
-    box-shadow: 0 18px 48px rgba(255, 20, 147, 0.15);
-  }
-
-  .role-tag.role-media {
-    background: linear-gradient(135deg, rgba(255, 69, 0, 0.25) 0%, rgba(255, 140, 0, 0.2) 100%);
-    border-color: rgba(255, 69, 0, 0.35);
-    color: rgba(255, 240, 230, 0.98);
-    box-shadow: 0 19px 50px rgba(255, 69, 0, 0.15);
-  }
-
-  .role-tag.role-developer {
-    background: linear-gradient(135deg, rgba(0, 255, 0, 0.2) 0%, rgba(50, 205, 50, 0.18) 100%);
-    border-color: rgba(0, 255, 0, 0.3);
-    color: rgba(230, 255, 230, 0.98);
-    box-shadow: 0 16px 42px rgba(0, 255, 0, 0.1);
-    font-family: 'Courier New', monospace;
-  }
-
-  .role-tag.role-designer {
-    background: linear-gradient(135deg, rgba(255, 105, 180, 0.25) 0%, rgba(138, 43, 226, 0.2) 100%);
-    border-color: rgba(255, 105, 180, 0.35);
-    color: rgba(255, 240, 250, 0.98);
-    box-shadow: 0 21px 52px rgba(255, 105, 180, 0.15);
-  }
-
-  .role-tag.role-editor {
-    background: linear-gradient(135deg, rgba(255, 140, 0, 0.25) 0%, rgba(255, 0, 0, 0.2) 100%);
-    border-color: rgba(255, 140, 0, 0.35);
-    color: rgba(255, 245, 230, 0.98);
-    box-shadow: 0 17px 45px rgba(255, 140, 0, 0.15);
-  }
-
-  .role-tag.role-fan {
-    background: linear-gradient(135deg, rgba(0, 220, 255, 0.22) 0%, rgba(140, 60, 255, 0.18) 55%, rgba(255, 255, 255, 0.06) 100%);
-    border-color: rgba(0, 220, 255, 0.22);
-    color: rgba(230, 245, 255, 0.98);
-    box-shadow: 0 22px 60px rgba(0, 220, 255, 0.12);
-  }
 
   /* Birthday Banner Specificity Fix */
   #birthday-banner {
@@ -1114,27 +1001,26 @@ import Layout from '../layouts/Layout.astro';
     }
   }
 
-  /* Chidotota Animation (Wild Pulse) */
-  @keyframes wild-pulse {
-    0% { 
-      box-shadow: 0 0 0 0 rgba(201, 131, 0, 0.4); 
-      transform: scale(1);
-      filter: brightness(1);
-    }
-    50% { 
-      box-shadow: 0 0 20px 5px rgba(201, 131, 0, 0.2); 
-      transform: scale(1.05);
-      filter: brightness(1.2);
-    }
-    100% { 
-      box-shadow: 0 0 0 0 rgba(201, 131, 0, 0); 
-      transform: scale(1);
-      filter: brightness(1);
-    }
+  /* Estilos base para tags - PREMIUM CHIDOTOTA */
+  .role-tags {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
   }
 
-  /* Estilos base para tags - PREMIUM CHIDOTOTA */
+  .role-tag-separator {
+    width: 2px;
+    height: 20px;
+    background: linear-gradient(180deg, transparent, rgba(255,255,255,0.6), transparent);
+    opacity: 0.7;
+    margin: 0 2px;
+  }
+
   .role-tag {
+    --tag-glow: rgba(255, 255, 255, 0.9);
+    --tag-glow-soft: rgba(255, 255, 255, 0.35);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -1148,15 +1034,19 @@ import Layout from '../layouts/Layout.astro';
     backdrop-filter: blur(16px);
     transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     margin: 6px;
-    background: rgba(255, 255, 255, 0.03);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+    background-size: 200% 200%;
+    background-position: 0% 50%;
     color: #fff !important; /* SIEMPRE BLANCO */
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 35px rgba(0, 0, 0, 0.25), 0 0 24px -6px var(--tag-glow), 0 0 60px -24px var(--tag-glow);
     text-shadow: 0 0 10px rgba(0,0,0,0.5);
     position: relative;
     overflow: hidden;
     outline: none !important; /* NO BLUE SELECTION */
     cursor: default;
     user-select: none;
+    filter: saturate(1.15);
+    will-change: transform, filter, box-shadow;
   }
 
   /* Animación Chidotota: Wild Pulse Neon */
@@ -1179,6 +1069,29 @@ import Layout from '../layouts/Layout.astro';
       }
   }
 
+  @keyframes tag-float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-2px); }
+      100% { transform: translateY(0); }
+  }
+
+  @keyframes neon-shift {
+      0% { background-position: 0% 50%; filter: brightness(1); }
+      50% { background-position: 100% 50%; filter: brightness(1.2); }
+      100% { background-position: 0% 50%; filter: brightness(1); }
+  }
+
+  .role-tag::before {
+    content: '';
+    position: absolute;
+    inset: -35%;
+    background: radial-gradient(circle, var(--tag-glow-soft) 0%, transparent 60%);
+    opacity: 0.45;
+    filter: blur(10px);
+    animation: halo-pulse 2.8s infinite ease-in-out;
+    pointer-events: none;
+  }
+
   .role-tag::after {
     content: '';
     position: absolute;
@@ -1188,11 +1101,34 @@ import Layout from '../layouts/Layout.astro';
     bottom: 0;
     background: linear-gradient(120deg, transparent, rgba(255,255,255,0.4), transparent);
     transform: translateX(-100%) skewX(-15deg);
-    transition: 0.6s;
+    animation: tag-shine 3.2s ease-in-out infinite;
   }
 
   .role-tag:hover::after {
-    transform: translateX(100%) skewX(-15deg);
+    animation-duration: 2.2s;
+  }
+
+  @keyframes tag-shine {
+    0% { transform: translateX(-120%) skewX(-15deg); opacity: 0; }
+    20% { opacity: 0.9; }
+    60% { transform: translateX(120%) skewX(-15deg); opacity: 0.8; }
+    100% { transform: translateX(120%) skewX(-15deg); opacity: 0; }
+  }
+
+  @keyframes halo-pulse {
+    0% { opacity: 0.35; transform: scale(0.96); }
+    50% { opacity: 0.9; transform: scale(1.06); }
+    100% { opacity: 0.35; transform: scale(0.96); }
+  }
+
+  @keyframes neon-flicker {
+    0%, 100% { opacity: 1; }
+    42% { opacity: 0.92; }
+    43% { opacity: 0.75; }
+    44% { opacity: 0.98; }
+    68% { opacity: 0.9; }
+    69% { opacity: 0.78; }
+    70% { opacity: 1; }
   }
 
   /* Roles específicos con gradientes más potentes */
@@ -1247,14 +1183,16 @@ import Layout from '../layouts/Layout.astro';
   .role-tag.role-fan {
     background: rgba(255, 255, 255, 0.05);
     border-color: rgba(255, 255, 255, 0.2);
-    color: rgba(255, 255, 255, 0.7) !important;
+    color: #fff !important;
   }
-</style>
+  </style>
+
+<script is:inline src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 
 <script>
-  import { supabase } from '../lib/supabase';
+  import { supabase } from '../lib/supabase.js';
   import { getRole } from '../lib/role.js';
-  // import { getUserTags } from '../lib/tags-gateway.js'; // Bypass Gateway
+  import { getUserTags } from '../lib/tags-gateway.js';
 
   const initProfile = async () => {
     const profileMain = document.getElementById('profile-main');
@@ -1428,6 +1366,67 @@ import Layout from '../layouts/Layout.astro';
       id?: number;
     }
 
+    const HIGH_RANK_ROLES = ['owner', 'origins', 'admin', 'staff', 'mod', 'developer'];
+
+    const applyNeonMotion = (elements: HTMLElement[]) => {
+      const gsap = (window as any).gsap;
+      if (!gsap) return;
+      if (!elements || elements.length === 0) return;
+      gsap.killTweensOf(elements);
+      elements.forEach((el) => {
+        const glow = getComputedStyle(el).getPropertyValue('--tag-glow').trim() || '#ffffff';
+        const softGlow = getComputedStyle(el).getPropertyValue('--tag-glow-soft').trim() || 'rgba(255,255,255,0.45)';
+
+        gsap.to(el, {
+          scale: gsap.utils.random(1.03, 1.09),
+          rotate: gsap.utils.random(-1.2, 1.2),
+          duration: 2.1 + Math.random() * 1.3,
+          yoyo: true,
+          repeat: -1,
+          ease: 'sine.inOut',
+          delay: Math.random() * 0.6
+        });
+
+        gsap.to(el, {
+          y: gsap.utils.random(-4, 4),
+          x: gsap.utils.random(-2, 2),
+          duration: 3.0 + Math.random() * 1.8,
+          yoyo: true,
+          repeat: -1,
+          ease: 'sine.inOut',
+          delay: Math.random() * 0.8
+        });
+
+        gsap.to(el, {
+          boxShadow: `0 0 34px -8px ${glow}, 0 0 90px -36px ${glow}, 0 0 140px -80px ${softGlow}`,
+          filter: 'brightness(1.35) saturate(1.35)',
+          duration: 2.4 + Math.random() * 1.8,
+          yoyo: true,
+          repeat: -1,
+          ease: 'sine.inOut',
+          delay: Math.random() * 1.2
+        });
+
+        gsap.to(el, {
+          backgroundPosition: `${gsap.utils.random(0, 120)}% 50%`,
+          duration: 4.6 + Math.random() * 2.4,
+          yoyo: true,
+          repeat: -1,
+          ease: 'sine.inOut',
+          delay: Math.random() * 1.1
+        });
+
+        gsap.to(el, {
+          textShadow: `0 0 10px ${glow}, 0 0 18px ${softGlow}`,
+          duration: 2.8 + Math.random() * 1.6,
+          yoyo: true,
+          repeat: -1,
+          ease: 'sine.inOut',
+          delay: Math.random() * 0.9
+        });
+      });
+    };
+
     const displayUserTags = (tags: TagDisplay[]) => {
       const roleTagsContainer = document.getElementById('profile-role-tags');
       if (!roleTagsContainer) return;
@@ -1443,34 +1442,49 @@ import Layout from '../layouts/Layout.astro';
         return;
       }
 
+      const hasRoles = tags.some(tag => tag.isRole);
+      const hasTags = tags.some(tag => !tag.isRole);
+      let separatorAdded = false;
+
+      const tagElements: HTMLElement[] = [];
+
       tags.forEach(tag => {
+        if (hasRoles && hasTags && !tag.isRole && !separatorAdded) {
+          const separator = document.createElement('span');
+          separator.className = 'role-tag-separator';
+          roleTagsContainer.appendChild(separator);
+          separatorAdded = true;
+        }
         const tagElement = document.createElement('span');
         // Usar clase CSS si existe, sino solo base
         tagElement.className = `role-tag ${tag.cssClass || ''}`;
         tagElement.textContent = tag.name;
         
-        // Aplicar color dinámico (Prioridad sobre clases CSS predefinidas)
         if (tag.color) {
-            // Estilo "Premium/Street" dinámico - CHIDOTOTE
-            tagElement.style.background = `linear-gradient(135deg, ${tag.color}40 0%, ${tag.color}10 100%)`; // Fondo más sutil
+            tagElement.style.background = `linear-gradient(135deg, ${tag.color}66 0%, ${tag.color}18 55%, rgba(0,0,0,0) 100%)`;
             tagElement.style.borderColor = tag.color;
-            tagElement.style.color = '#fff'; // SIEMPRE BLANCO
-            tagElement.style.boxShadow = `0 0 15px -2px ${tag.color}, inset 0 0 10px -5px ${tag.color}`; // Neon Glow interno y externo
-            tagElement.style.textShadow = `0 0 5px ${tag.color}`; // Glow en texto
+            tagElement.style.color = '#fff';
+            tagElement.style.boxShadow = `0 0 22px -6px ${tag.color}, 0 0 50px -20px ${tag.color}`;
+            tagElement.style.textShadow = `0 0 8px ${tag.color}`;
+            tagElement.style.backgroundSize = '220% 220%';
+            tagElement.style.backgroundPosition = '0% 50%';
         } else if (!tag.cssClass || tag.cssClass === 'role-tag') {
-            // Fallback elegante para roles/tags sin color ni clase conocida
             tagElement.style.background = 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)';
             tagElement.style.borderColor = 'rgba(255,255,255,0.5)';
             tagElement.style.color = '#fff';
+            tagElement.style.backgroundSize = '200% 200%';
+            tagElement.style.backgroundPosition = '0% 50%';
         }
 
-        // Lógica de Tamaño de Fuente (Jerarquía)
+        tagElement.style.setProperty('--tag-glow', tag.color || '#ffffff');
+        tagElement.style.setProperty('--tag-glow-soft', tag.color || 'rgba(255,255,255,0.5)');
+
         const normalizedName = tag.name.toLowerCase();
         // @ts-ignore
         if (typeof HIGH_RANK_ROLES !== 'undefined' && HIGH_RANK_ROLES.some(r => normalizedName.includes(r))) {
-             tagElement.style.fontSize = '14px'; // Más grande
-             tagElement.style.padding = '10px 20px'; // Más padding
-             tagElement.style.borderWidth = '2px'; // Borde más grueso
+             tagElement.style.fontSize = '14px';
+             tagElement.style.padding = '10px 20px';
+             tagElement.style.borderWidth = '2px';
              tagElement.style.letterSpacing = '0.2em';
              tagElement.style.fontWeight = '900';
         } else {
@@ -1478,155 +1492,82 @@ import Layout from '../layouts/Layout.astro';
              tagElement.style.fontWeight = '700';
         }
 
-        // Animación "Chidotota"
+        const baseDelay = Math.random() * 1.4;
+        const floatDelay = Math.random() * 2.2;
+        const shiftDelay = Math.random() * 3.0;
+
         if (tag.animation && tag.animation !== 'none') {
-          // Si tiene animación específica de DB
-          tagElement.style.animation = `${tag.animation} 3s infinite cubic-bezier(0.4, 0, 0.2, 1)`;
+          tagElement.style.animation = `${tag.animation} 2.4s infinite cubic-bezier(0.4, 0, 0.2, 1), tag-float 4.6s infinite ease-in-out, neon-shift 6.2s infinite linear, neon-flicker 4.2s infinite steps(2, end)`;
         } else {
-          // Animación por defecto "Chidotota" (Wild Pulse mejorado)
-          tagElement.style.animation = 'wild-pulse 3s infinite ease-in-out';
+          tagElement.style.animation = 'wild-pulse 2.2s infinite ease-in-out, tag-float 4.6s infinite ease-in-out, neon-shift 6.2s infinite linear, neon-flicker 4.2s infinite steps(2, end)';
         }
-        
-        // Asegurar que la animación se aplique y no haya outlines feos
+        const flickerDelay = Math.random() * 1.6;
+        tagElement.style.animationDelay = `${baseDelay}s, ${floatDelay}s, ${shiftDelay}s, ${flickerDelay}s`;
         tagElement.style.animationFillMode = 'both';
-        tagElement.style.outline = 'none'; // Quitar borde azul de selección
+        tagElement.style.outline = 'none';
 
 
         roleTagsContainer.appendChild(tagElement);
+        tagElements.push(tagElement);
       });
+
+      applyNeonMotion(tagElements);
     };
 
-    // Mostrar tags del usuario usando conexión directa a Supabase (Más rápido y robusto)
     try {
-      console.log('Fetching tags and roles for user:', session.user.id);
-      
-      // 1. Obtener Tags de DB directamente
-      const tagsPromise = supabase
-        .from('user_has_tags')
-        .select(`
-            tag_id,
-            tags (
-                name,
-                color,
-                animation
-            )
-        `)
-        .eq('user_id', session.user.id);
+      const { role: resolvedRole } = await getRole();
+      const roleRaw = (resolvedRole || profile.role || session.user?.user_metadata?.role || 'fan');
+      const normalizedRole = roleRaw.toLowerCase().trim().replace(/\s+/g, '-');
 
-      // 2. Obtener Roles de DB (Manual Join para seguridad)
-      const fetchRoles = async () => {
-          const { data: userRoles, error: urError } = await supabase
-              .from('user_roles')
-              .select('role_id')
-              .eq('user_id', session.user.id);
-          
-          if (urError || !userRoles || userRoles.length === 0) return [];
-          
-          // @ts-ignore
-          const roleIds = userRoles.map(r => r.role_id);
-          const { data: roles, error: rError } = await supabase
-              .from('roles')
-              .select('id, name') // Asumimos id, name existen
-              .in('id', roleIds);
-              
-          if (rError) return [];
-          return roles;
-      };
+      const gatewayData = await getUserTags(session.user.id) as any;
+      const gatewayTags = Array.isArray(gatewayData?.tags) ? gatewayData.tags : [];
 
-      const [tagsResult, rolesData] = await Promise.all([tagsPromise, fetchRoles()]);
+      const allTags: TagDisplay[] = [];
 
-      let allTags: TagDisplay[] = [];
-
-      // Definir roles conocidos que ya tienen estilos CSS
-      const KNOWN_ROLES = ['owner', 'origins', 'member', 'artist', 'media', 'developer', 'designer', 'editor', 'fan'];
-      
-      // Roles de alto rango (Staff/Admin) para tipografía más grande
-      const HIGH_RANK_ROLES = ['owner', 'origins', 'admin', 'staff', 'mod', 'developer'];
-
-      // Paleta de colores neon para roles desconocidos (Fallback "Chidotote")
-      const NEON_COLORS = ['#FF00FF', '#00FFFF', '#FFD700', '#FF4500', '#00FF00', '#FF1493', '#9400D3'];
-
-      // Procesar Roles
-      if (rolesData && rolesData.length > 0) {
-          // @ts-ignore
-          rolesData.forEach((r, index) => {
-              if (!r) return;
-              
-              // Intentar mapear nombres conocidos a clases CSS existentes
-              const normalizedName = r.name.toLowerCase().trim().replace(/\s+/g, '-');
-              let cssClass = `role-${normalizedName}`;
-              let dynamicColor = undefined;
-
-              // Si el rol NO es conocido, asignarle un color neon aleatorio para que se vea "chidotota"
-              // Esto asegura que "tenga cualquier texto" se vea bien
-              if (!KNOWN_ROLES.includes(normalizedName)) {
-                  // Usar el ID o índice para seleccionar un color consistente
-                  const colorIndex = (r.id || index) % NEON_COLORS.length;
-                  dynamicColor = NEON_COLORS[colorIndex];
-                  // Mantenemos la clase base para estructura
-                  cssClass = 'role-tag'; 
-              }
-              
-              allTags.push({
-                  name: r.name.toUpperCase(), // Mostrar nombre real de DB en mayúsculas
-                  cssClass: cssClass,
-                  color: dynamicColor, // Si es desconocido, tendrá color
-                  isRole: true,
-                  id: r.id
-              });
-          });
+      if (roleRaw) {
+        allTags.push({
+          name: roleRaw.toUpperCase(),
+          cssClass: `role-${normalizedRole}`,
+          isRole: true
+        });
       }
 
-      // Procesar Tags
-      if (!tagsResult.error && tagsResult.data) {
-          // @ts-ignore
-          tagsResult.data.forEach(item => {
-              const t = item.tags;
-              if (!t) return;
-              
-              const normalizedName = t.name.toLowerCase().replace(/\s+/g, '-');
-              
-              allTags.push({
-                  name: t.name,
-                  cssClass: `role-${normalizedName}`,
-                  color: t.color,
-                  animation: t.animation,
-                  isRole: false
-              });
-          });
-      }
+      gatewayTags.forEach((tag: any) => {
+        const rawName = (tag.tag_name || tag.name || '').trim();
+        if (!rawName) return;
+        const normalizedName = rawName.toLowerCase().replace(/\s+/g, '-');
+        const cssClass = tag.cssClass || `role-${normalizedName}`;
 
-      // Si no hay roles ni tags en DB, usar el rol del perfil/metadata como fallback
+        allTags.push({
+          name: rawName.toUpperCase(),
+          cssClass,
+          color: tag.color,
+          animation: tag.animation,
+          isRole: false,
+          id: tag.id || tag.tag_id
+        });
+      });
+
       if (allTags.length === 0) {
-           const { role: resolvedRole } = await getRole();
-           const roleRaw = (resolvedRole || profile.role || session.user?.user_metadata?.role || 'fan');
-           allTags.push({
-               name: roleRaw.toUpperCase(),
-               cssClass: `role-${roleRaw.toLowerCase()}`,
-               isRole: true
-           });
+        allTags.push({ name: 'FAN', cssClass: 'role-fan', isRole: true });
       }
-      
-      // Eliminar duplicados visuales (por nombre)
+
       const uniqueTags: TagDisplay[] = [];
-      const seenNames = new Set();
-      
-      // Prioridad: Roles primero, luego tags
+      const seenKeys = new Set();
+
       allTags.sort((a, b) => (a.isRole === b.isRole) ? 0 : (a.isRole ? -1 : 1));
 
       allTags.forEach(tag => {
-          if (!seenNames.has(tag.name)) {
-              seenNames.add(tag.name);
-              uniqueTags.push(tag);
-          }
+        const key = `${tag.name}-${tag.isRole ? 'role' : 'tag'}`;
+        if (!seenKeys.has(key)) {
+          seenKeys.add(key);
+          uniqueTags.push(tag);
+        }
       });
 
-      console.log('Final tags to display:', uniqueTags);
       displayUserTags(uniqueTags);
-
     } catch (error) {
       console.error('Error loading user tags/roles:', error);
-      // Fallback visual mínimo
       displayUserTags([{ name: 'FAN', cssClass: 'role-fan' }]);
     }
     

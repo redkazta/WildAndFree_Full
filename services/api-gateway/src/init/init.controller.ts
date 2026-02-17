@@ -8,9 +8,11 @@ export class InitController {
   constructor(private readonly initService: InitService) {}
 
   @Get('init')
-  async getInit(): Promise<{ tenant: typeof CURRENT_TENANT; artists: Artist[] }> {
+  async getInit(): Promise<{
+    tenant: typeof CURRENT_TENANT;
+    artists: Artist[];
+  }> {
     const artists = await this.initService.getArtists();
     return { tenant: CURRENT_TENANT, artists };
   }
 }
-

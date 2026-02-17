@@ -10,12 +10,11 @@ export class TenantController {
   constructor(private readonly tenantService: TenantService) {}
 
   @Get('config')
-  async getConfig(@Req() req: TenantAwareRequest): Promise<
-    TenantInitResponse & { tenant_id: string }
-  > {
+  async getConfig(
+    @Req() req: TenantAwareRequest,
+  ): Promise<TenantInitResponse & { tenant_id: string }> {
     const tenantId = req.tenantId ?? 'wild-and-free';
     const payload = await this.tenantService.initTenant(tenantId);
     return { tenant_id: tenantId, ...payload };
   }
 }
-
