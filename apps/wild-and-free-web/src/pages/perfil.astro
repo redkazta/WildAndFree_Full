@@ -1011,11 +1011,11 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .role-tag-separator {
-    width: 2px;
-    height: 20px;
+    width: 4px;
+    height: 80px;
     background: linear-gradient(180deg, transparent, rgba(255,255,255,0.6), transparent);
     opacity: 0.7;
-    margin: 0 2px;
+    margin: 0 6px;
   }
 
   .role-tag {
@@ -1024,12 +1024,12 @@ import Layout from '../layouts/Layout.astro';
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 8px 20px;
+    padding: 24px 48px;
     border-radius: 9999px;
-    font-size: 11px;
-    font-weight: 800;
+    font-size: 110px;
+    font-weight: 900;
     text-transform: uppercase;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.08em;
     border: 1px solid rgba(255,255,255,0.2);
     backdrop-filter: blur(16px);
     transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -1047,88 +1047,6 @@ import Layout from '../layouts/Layout.astro';
     user-select: none;
     filter: saturate(1.15);
     will-change: transform, filter, box-shadow;
-  }
-
-  /* Animación Chidotota: Wild Pulse Neon */
-  @keyframes wild-pulse {
-      0% { 
-        box-shadow: 0 0 5px rgba(255, 255, 255, 0.1), inset 0 0 0 rgba(255,255,255,0); 
-        transform: scale(1);
-        filter: brightness(1);
-      }
-      50% { 
-        box-shadow: 0 0 20px rgba(255, 255, 255, 0.3), inset 0 0 10px rgba(255,255,255,0.1); 
-        transform: scale(1.05);
-        filter: brightness(1.3);
-        border-color: rgba(255, 255, 255, 0.9);
-      }
-      100% { 
-        box-shadow: 0 0 5px rgba(255, 255, 255, 0.1), inset 0 0 0 rgba(255,255,255,0); 
-        transform: scale(1);
-        filter: brightness(1);
-      }
-  }
-
-  @keyframes tag-float {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-2px); }
-      100% { transform: translateY(0); }
-  }
-
-  @keyframes neon-shift {
-      0% { background-position: 0% 50%; filter: brightness(1); }
-      50% { background-position: 100% 50%; filter: brightness(1.2); }
-      100% { background-position: 0% 50%; filter: brightness(1); }
-  }
-
-  .role-tag::before {
-    content: '';
-    position: absolute;
-    inset: -35%;
-    background: radial-gradient(circle, var(--tag-glow-soft) 0%, transparent 60%);
-    opacity: 0.45;
-    filter: blur(10px);
-    animation: halo-pulse 2.8s infinite ease-in-out;
-    pointer-events: none;
-  }
-
-  .role-tag::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.4), transparent);
-    transform: translateX(-100%) skewX(-15deg);
-    animation: tag-shine 3.2s ease-in-out infinite;
-  }
-
-  .role-tag:hover::after {
-    animation-duration: 2.2s;
-  }
-
-  @keyframes tag-shine {
-    0% { transform: translateX(-120%) skewX(-15deg); opacity: 0; }
-    20% { opacity: 0.9; }
-    60% { transform: translateX(120%) skewX(-15deg); opacity: 0.8; }
-    100% { transform: translateX(120%) skewX(-15deg); opacity: 0; }
-  }
-
-  @keyframes halo-pulse {
-    0% { opacity: 0.35; transform: scale(0.96); }
-    50% { opacity: 0.9; transform: scale(1.06); }
-    100% { opacity: 0.35; transform: scale(0.96); }
-  }
-
-  @keyframes neon-flicker {
-    0%, 100% { opacity: 1; }
-    42% { opacity: 0.92; }
-    43% { opacity: 0.75; }
-    44% { opacity: 0.98; }
-    68% { opacity: 0.9; }
-    69% { opacity: 0.78; }
-    70% { opacity: 1; }
   }
 
   /* Roles específicos con gradientes más potentes */
@@ -1482,28 +1400,16 @@ import Layout from '../layouts/Layout.astro';
         const normalizedName = tag.name.toLowerCase();
         // @ts-ignore
         if (typeof HIGH_RANK_ROLES !== 'undefined' && HIGH_RANK_ROLES.some(r => normalizedName.includes(r))) {
-             tagElement.style.fontSize = '14px';
-             tagElement.style.padding = '10px 20px';
-             tagElement.style.borderWidth = '2px';
-             tagElement.style.letterSpacing = '0.2em';
+             tagElement.style.fontSize = '140px';
+             tagElement.style.padding = '28px 56px';
+             tagElement.style.borderWidth = '3px';
+             tagElement.style.letterSpacing = '0.1em';
              tagElement.style.fontWeight = '900';
         } else {
-             tagElement.style.fontSize = '11px';
-             tagElement.style.fontWeight = '700';
+             tagElement.style.fontSize = '110px';
+             tagElement.style.fontWeight = '900';
         }
-
-        const baseDelay = Math.random() * 1.4;
-        const floatDelay = Math.random() * 2.2;
-        const shiftDelay = Math.random() * 3.0;
-
-        if (tag.animation && tag.animation !== 'none') {
-          tagElement.style.animation = `${tag.animation} 2.4s infinite cubic-bezier(0.4, 0, 0.2, 1), tag-float 4.6s infinite ease-in-out, neon-shift 6.2s infinite linear, neon-flicker 4.2s infinite steps(2, end)`;
-        } else {
-          tagElement.style.animation = 'wild-pulse 2.2s infinite ease-in-out, tag-float 4.6s infinite ease-in-out, neon-shift 6.2s infinite linear, neon-flicker 4.2s infinite steps(2, end)';
-        }
-        const flickerDelay = Math.random() * 1.6;
-        tagElement.style.animationDelay = `${baseDelay}s, ${floatDelay}s, ${shiftDelay}s, ${flickerDelay}s`;
-        tagElement.style.animationFillMode = 'both';
+        tagElement.style.animation = 'none';
         tagElement.style.outline = 'none';
 
 
