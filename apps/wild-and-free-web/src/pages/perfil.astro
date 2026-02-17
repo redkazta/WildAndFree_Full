@@ -1021,6 +1021,11 @@ import Layout from '../layouts/Layout.astro';
   .role-tag {
     --tag-glow: rgba(255, 255, 255, 0.9);
     --tag-glow-soft: rgba(255, 255, 255, 0.35);
+    --tag-bg-1: rgba(255, 255, 255, 0.08);
+    --tag-bg-2: rgba(255, 255, 255, 0.02);
+    --tag-border: rgba(255,255,255,0.2);
+    --tag-text: #fff;
+    --tag-shine: rgba(255,255,255,0.4);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -1030,14 +1035,14 @@ import Layout from '../layouts/Layout.astro';
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.15em;
-    border: 1px solid rgba(255,255,255,0.2);
+    border: 1px solid var(--tag-border);
     backdrop-filter: blur(16px);
     transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     margin: 6px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+    background: linear-gradient(135deg, var(--tag-bg-1), var(--tag-bg-2));
     background-size: 200% 200%;
     background-position: 0% 50%;
-    color: #fff !important; /* SIEMPRE BLANCO */
+    color: var(--tag-text);
     box-shadow: 0 6px 35px rgba(0, 0, 0, 0.25), 0 0 24px -6px var(--tag-glow), 0 0 60px -24px var(--tag-glow);
     text-shadow: 0 0 10px rgba(0,0,0,0.5);
     position: relative;
@@ -1047,6 +1052,14 @@ import Layout from '../layouts/Layout.astro';
     user-select: none;
     filter: saturate(1.15);
     will-change: transform, filter, box-shadow;
+  }
+
+  .role-tag.is-staff {
+    --tag-bg-1: rgba(245,197,66,0.36);
+    --tag-bg-2: rgba(255,235,170,0.08);
+    --tag-border: #f5c542;
+    --tag-text: #fff4cc;
+    --tag-shine: rgba(255,219,130,0.65);
   }
 
   /* Animación Chidotota: Wild Pulse Neon */
@@ -1099,7 +1112,7 @@ import Layout from '../layouts/Layout.astro';
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.4), transparent);
+    background: linear-gradient(120deg, transparent, var(--tag-shine), transparent);
     transform: translateX(-100%) skewX(-15deg);
     animation: tag-shine 3.2s ease-in-out infinite;
   }
@@ -1445,6 +1458,20 @@ import Layout from '../layouts/Layout.astro';
           ease: 'sine.inOut',
           delay: Math.random() * 0.9
         });
+
+        if (isStaff) {
+          gsap.to(el, {
+            '--tag-bg-1': 'rgba(255,208,90,0.52)',
+            '--tag-bg-2': 'rgba(255,240,200,0.16)',
+            '--tag-text': '#fff7d9',
+            '--tag-shine': 'rgba(255,222,140,0.8)',
+            duration: 2.2 + Math.random() * 1.4,
+            yoyo: true,
+            repeat: -1,
+            ease: 'sine.inOut',
+            delay: Math.random() * 1.1
+          });
+        }
       });
     };
 
@@ -1482,17 +1509,20 @@ import Layout from '../layouts/Layout.astro';
         tagElement.textContent = tag.name;
         
         if (tag.color) {
-            tagElement.style.background = `linear-gradient(135deg, ${tag.color}66 0%, ${tag.color}18 55%, rgba(0,0,0,0) 100%)`;
-            tagElement.style.borderColor = tag.color;
-            tagElement.style.color = '#fff';
+            tagElement.style.setProperty('--tag-bg-1', `${tag.color}66`);
+            tagElement.style.setProperty('--tag-bg-2', `${tag.color}18`);
+            tagElement.style.setProperty('--tag-border', tag.color);
+            tagElement.style.setProperty('--tag-text', '#fff');
+            tagElement.style.setProperty('--tag-shine', `${tag.color}66`);
             tagElement.style.boxShadow = `0 0 22px -6px ${tag.color}, 0 0 50px -20px ${tag.color}`;
             tagElement.style.textShadow = `0 0 8px ${tag.color}`;
             tagElement.style.backgroundSize = '220% 220%';
             tagElement.style.backgroundPosition = '0% 50%';
         } else if (!tag.cssClass || tag.cssClass === 'role-tag') {
-            tagElement.style.background = 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)';
-            tagElement.style.borderColor = 'rgba(255,255,255,0.5)';
-            tagElement.style.color = '#fff';
+            tagElement.style.setProperty('--tag-bg-1', 'rgba(255,255,255,0.1)');
+            tagElement.style.setProperty('--tag-bg-2', 'rgba(255,255,255,0.05)');
+            tagElement.style.setProperty('--tag-border', 'rgba(255,255,255,0.5)');
+            tagElement.style.setProperty('--tag-text', '#fff');
             tagElement.style.backgroundSize = '200% 200%';
             tagElement.style.backgroundPosition = '0% 50%';
         }
@@ -1509,12 +1539,9 @@ import Layout from '../layouts/Layout.astro';
              tagElement.style.borderWidth = '6px';
              tagElement.style.letterSpacing = '0.2em';
              tagElement.style.fontWeight = '900';
-             tagElement.style.background = 'linear-gradient(135deg, rgba(245,197,66,0.28), rgba(255,218,120,0.08))';
-             tagElement.style.borderColor = '#f5c542';
-             tagElement.style.textShadow = '0 0 14px rgba(245,197,66,0.6)';
-             tagElement.style.boxShadow = '0 0 24px -6px rgba(245,197,66,0.6), 0 0 60px -22px rgba(245,197,66,0.6)';
              tagElement.style.setProperty('--tag-glow', '#f5c542');
              tagElement.style.setProperty('--tag-glow-soft', 'rgba(245,197,66,0.55)');
+             tagElement.classList.add('is-staff');
         } else {
              tagElement.style.fontSize = '33px';
              tagElement.style.fontWeight = '700';
