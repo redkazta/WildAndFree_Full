@@ -1649,7 +1649,11 @@ import Layout from '../layouts/Layout.astro';
       const normalizedRole = roleRaw.toLowerCase().trim().replace(/\s+/g, '-');
 
       const gatewayData = await getUserTags(session.user.id) as any;
-      const gatewayTags = Array.isArray(gatewayData?.tags) ? gatewayData.tags : [];
+      const gatewayTags = Array.isArray(gatewayData?.tags)
+        ? gatewayData.tags
+        : Array.isArray(gatewayData?.data?.tags)
+          ? gatewayData.data.tags
+          : [];
 
       const allTags: TagDisplay[] = [];
 
@@ -1685,12 +1689,14 @@ import Layout from '../layouts/Layout.astro';
       }
 
       const uniqueTags: TagDisplay[] = [];
-      const seenKeys = new Set();
+      const seenKeys = new Set<string>();
 
       allTags.sort((a, b) => (a.isRole === b.isRole) ? 0 : (a.isRole ? -1 : 1));
 
       allTags.forEach(tag => {
-        const stableKey = tag.id ?? tag.name;
+        const stableKey = tag.id != null
+          ? String(tag.id)
+          : `${tag.name}-${tag.color || ''}-${tag.animation || ''}`;
         const key = `${tag.isRole ? 'role' : 'tag'}-${stableKey}`;
         if (!seenKeys.has(key)) {
           seenKeys.add(key);
