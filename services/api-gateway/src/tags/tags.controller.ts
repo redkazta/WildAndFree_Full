@@ -8,13 +8,23 @@ import {
   Param,
 } from '@nestjs/common';
 import { TagsService } from './tags.service';
+import type {
+  CreateTagRequest,
+  StatusResponse,
+  Tag,
+  TagsListResponse,
+  UserTagsResponse,
+  UsersWithTagsResponse,
+} from 'shared-types';
 
 @Controller('tags')
 export class TagsController {
   constructor(private readonly tagsService: TagsService) {}
 
   @Get('my-tags')
-  async getMyTags(@Headers('x-user-id') userId: string) {
+  async getMyTags(
+    @Headers('x-user-id') userId: string,
+  ): Promise<UserTagsResponse> {
     if (!userId) {
       throw new Error('User ID required');
     }
@@ -22,7 +32,7 @@ export class TagsController {
   }
 
   @Get('all')
-  async getAllTags() {
+  async getAllTags(): Promise<TagsListResponse> {
     return this.tagsService.getAllTags();
   }
 
@@ -30,7 +40,7 @@ export class TagsController {
   async assignTag(
     @Headers('x-user-id') actorId: string,
     @Body() assignDto: { userId?: string; tagId: number },
-  ) {
+  ): Promise<StatusResponse> {
     if (!actorId) {
       throw new Error('User ID required');
     }
@@ -43,7 +53,7 @@ export class TagsController {
     @Headers('x-user-id') actorId: string,
     @Param('tagId') tagId: string,
     @Body() body: { userId?: string },
-  ) {
+  ): Promise<StatusResponse> {
     if (!actorId) {
       throw new Error('User ID required');
     }
@@ -55,8 +65,8 @@ export class TagsController {
   @Post('create')
   async createTag(
     @Headers('x-user-id') userId: string,
-    @Body() createTagDto: { name: string; color: string; animation: string },
-  ) {
+    @Body() createTagDto: CreateTagRequest,
+  ): Promise<Tag> {
     if (!userId) {
       throw new Error('User ID required for admin operations');
     }
@@ -67,7 +77,7 @@ export class TagsController {
   async deleteTag(
     @Headers('x-user-id') userId: string,
     @Param('tagId') tagId: string,
-  ) {
+  ): Promise<StatusResponse> {
     if (!userId) {
       throw new Error('User ID required for admin operations');
     }
@@ -75,7 +85,9 @@ export class TagsController {
   }
 
   @Get('users-with-tags')
-  async getUsersWithTags(@Headers('x-user-id') userId: string) {
+  async getUsersWithTags(
+    @Headers('x-user-id') userId: string,
+  ): Promise<UsersWithTagsResponse> {
     if (!userId) {
       throw new Error('User ID required for admin operations');
     }

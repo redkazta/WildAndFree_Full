@@ -31,3 +31,46 @@ export interface TenantInitResponse {
   config: TenantConfig;
   data: TenantInitData;
 }
+
+export interface Tag {
+  id: number;
+  name: string;
+  color: string;
+  animation: string;
+}
+
+export interface UserTag {
+  tag_id: number;
+  tag_name: string;
+  color: string;
+  animation: string;
+}
+
+export interface UserTagsResponse {
+  tags: UserTag[];
+}
+
+export interface TagsListResponse {
+  tags: Tag[];
+}
+
+export interface StatusResponse {
+  status: string;
+}
+
+export interface CreateTagRequest {
+  name: string;
+  color: string;
+  animation: string;
+}
+
+export interface UserWithTags {
+  id: string;
+  username: string;
+  role: string;
+  tags: UserTag[];
+}
+
+export interface UsersWithTagsResponse {
+  users: UserWithTags[];
+}

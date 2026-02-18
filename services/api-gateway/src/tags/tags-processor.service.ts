@@ -1,13 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
-
-interface Tag {
-  tag_id: number;
-  tag_name: string;
-  color: string;
-  animation: string;
-}
+import type {
+  CreateTagRequest,
+  StatusResponse,
+  Tag,
+  TagsListResponse,
+  UserTag,
+  UserTagsResponse,
+  UsersWithTagsResponse,
+} from 'shared-types';
 
 interface ProcessedTag {
   id: number;
@@ -18,19 +20,25 @@ interface ProcessedTag {
   isOwner: boolean;
 }
 
+interface ProcessedTagsResponse {
+  tags: ProcessedTag[];
+}
+
+type RawTag = Tag | UserTag;
+
 @Injectable()
 export class TagsService {
   constructor(private readonly httpService: HttpService) {}
 
-  async getUserTags(userId: string) {
+  async getUserTags(userId: string): Promise<ProcessedTagsResponse> {
     try {
       const response = await firstValueFrom(
-        this.httpService.get(`/users/${userId}/tags`),
+        this.httpService.get<UserTagsResponse>(`/users/${userId}/tags`),
       );
 
       // Procesar los tags para agregar clases CSS y lógica de negocio
       const tags = response.data.tags || [];
-      const processedTags = tags.map((tag: Tag) => this.processTag(tag));
+      const processedTags = tags.map((tag) => this.processTag(tag));
 
       // Si no hay tags, devolver un tag de fan por defecto
       if (processedTags.length === 0) {
@@ -67,23 +75,28 @@ export class TagsService {
     }
   }
 
-  async getAllTags() {
+  async getAllTags(): Promise<ProcessedTagsResponse> {
     try {
-      const response = await firstValueFrom(this.httpService.get('/tags'));
+      const response = await firstValueFrom(
+        this.httpService.get<TagsListResponse>('/tags'),
+      );
 
       // Procesar todos los tags disponibles
-      const tags = response.data || [];
-      return { tags: tags.map((tag: any) => this.processTag(tag)) };
+      const tags = response.data.tags || [];
+      return { tags: tags.map((tag) => this.processTag(tag)) };
     } catch (error) {
       console.error('Error fetching all tags:', error);
       throw error;
     }
   }
 
-  async assignTagToUser(userId: string, tagId: number) {
+  async assignTagToUser(
+    userId: string,
+    tagId: number,
+  ): Promise<StatusResponse> {
     try {
       const response = await firstValueFrom(
-        this.httpService.post(`/users/${userId}/tags/${tagId}`),
+        this.httpService.post<StatusResponse>(`/users/${userId}/tags/${tagId}`),
       );
       return response.data;
     } catch (error) {
@@ -92,10 +105,15 @@ export class TagsService {
     }
   }
 
-  async removeTagFromUser(userId: string, tagId: number) {
+  async removeTagFromUser(
+    userId: string,
+    tagId: number,
+  ): Promise<StatusResponse> {
     try {
       const response = await firstValueFrom(
-        this.httpService.delete(`/users/${userId}/tags/${tagId}`),
+        this.httpService.delete<StatusResponse>(
+          `/users/${userId}/tags/${tagId}`,
+        ),
       );
       return response.data;
     } catch (error) {
@@ -104,14 +122,10 @@ export class TagsService {
     }
   }
 
-  async createTag(createTagDto: {
-    name: string;
-    color: string;
-    animation: string;
-  }) {
+  async createTag(createTagDto: CreateTagRequest): Promise<Tag> {
     try {
       const response = await firstValueFrom(
-        this.httpService.post('/tags', createTagDto),
+        this.httpService.post<Tag>('/tags', createTagDto),
       );
       return response.data;
     } catch (error) {
@@ -120,10 +134,10 @@ export class TagsService {
     }
   }
 
-  async deleteTag(tagId: number) {
+  async deleteTag(tagId: number): Promise<StatusResponse> {
     try {
       const response = await firstValueFrom(
-        this.httpService.delete(`/tags/${tagId}`),
+        this.httpService.delete<StatusResponse>(`/tags/${tagId}`),
       );
       return response.data;
     } catch (error) {
@@ -132,10 +146,8 @@ export class TagsService {
     }
   }
 
-  async getUsersWithTags() {
+  getUsersWithTags(): UsersWithTagsResponse {
     try {
-      // Este endpoint necesitaría ser implementado en el core-engine
-      // Por ahora, devolver una lista vacía
       return { users: [] };
     } catch (error) {
       console.error('Error fetching users with tags:', error);
@@ -143,8 +155,9 @@ export class TagsService {
     }
   }
 
-  private processTag(tag: Tag): ProcessedTag {
-    const tagName = tag.tag_name.toLowerCase();
+  private processTag(tag: RawTag): ProcessedTag {
+    const tagName =
+      'tag_name' in tag ? tag.tag_name.toLowerCase() : tag.name.toLowerCase();
     let cssClass = 'role-fan';
     let isOwner = false;
 
@@ -182,8 +195,9 @@ export class TagsService {
     }
 
     return {
-      id: tag.tag_id,
-      name: tag.tag_name.toUpperCase(),
+      id: 'tag_id' in tag ? tag.tag_id : tag.id,
+      name:
+        'tag_name' in tag ? tag.tag_name.toUpperCase() : tag.name.toUpperCase(),
       color: tag.color,
       animation: tag.animation,
       cssClass,

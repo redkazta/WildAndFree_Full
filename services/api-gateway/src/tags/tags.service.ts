@@ -1,15 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
+import type {
+  CreateTagRequest,
+  StatusResponse,
+  Tag,
+  TagsListResponse,
+  UserTagsResponse,
+  UsersWithTagsResponse,
+} from 'shared-types';
 
 @Injectable()
 export class TagsService {
   constructor(private readonly httpService: HttpService) {}
 
-  async getUserTags(userId: string) {
+  async getUserTags(userId: string): Promise<UserTagsResponse> {
     try {
       const response = await firstValueFrom(
-        this.httpService.get(`/api/v1/users/${userId}/tags`),
+        this.httpService.get<UserTagsResponse>(`/api/v1/users/${userId}/tags`),
       );
       return response.data;
     } catch (error) {
@@ -18,10 +26,10 @@ export class TagsService {
     }
   }
 
-  async getAllTags() {
+  async getAllTags(): Promise<TagsListResponse> {
     try {
       const response = await firstValueFrom(
-        this.httpService.get('/api/v1/tags'),
+        this.httpService.get<TagsListResponse>('/api/v1/tags'),
       );
       return response.data;
     } catch (error) {
@@ -30,10 +38,13 @@ export class TagsService {
     }
   }
 
-  async assignTagToUser(userId: string, tagId: number) {
+  async assignTagToUser(
+    userId: string,
+    tagId: number,
+  ): Promise<StatusResponse> {
     try {
       const response = await firstValueFrom(
-        this.httpService.post(
+        this.httpService.post<StatusResponse>(
           `/api/v1/users/${userId}/tags/${tagId}`,
           {},
           {
@@ -48,12 +59,18 @@ export class TagsService {
     }
   }
 
-  async removeTagFromUser(userId: string, tagId: number) {
+  async removeTagFromUser(
+    userId: string,
+    tagId: number,
+  ): Promise<StatusResponse> {
     try {
       const response = await firstValueFrom(
-        this.httpService.delete(`/api/v1/users/${userId}/tags/${tagId}`, {
-          headers: { 'X-User-Id': userId },
-        }),
+        this.httpService.delete<StatusResponse>(
+          `/api/v1/users/${userId}/tags/${tagId}`,
+          {
+            headers: { 'X-User-Id': userId },
+          },
+        ),
       );
       return response.data;
     } catch (error) {
@@ -63,12 +80,12 @@ export class TagsService {
   }
 
   async createTag(
-    createTagDto: { name: string; color: string; animation: string },
+    createTagDto: CreateTagRequest,
     userId: string,
-  ) {
+  ): Promise<Tag> {
     try {
       const response = await firstValueFrom(
-        this.httpService.post('/api/v1/tags', createTagDto, {
+        this.httpService.post<Tag>('/api/v1/tags', createTagDto, {
           headers: { 'X-User-Id': userId },
         }),
       );
@@ -79,10 +96,10 @@ export class TagsService {
     }
   }
 
-  async deleteTag(tagId: number, userId: string) {
+  async deleteTag(tagId: number, userId: string): Promise<StatusResponse> {
     try {
       const response = await firstValueFrom(
-        this.httpService.delete(`/api/v1/tags/${tagId}`, {
+        this.httpService.delete<StatusResponse>(`/api/v1/tags/${tagId}`, {
           headers: { 'X-User-Id': userId },
         }),
       );
@@ -93,12 +110,15 @@ export class TagsService {
     }
   }
 
-  async getUsersWithTags(userId: string) {
+  async getUsersWithTags(userId: string): Promise<UsersWithTagsResponse> {
     try {
       const response = await firstValueFrom(
-        this.httpService.get('/api/v1/admin/users-with-tags', {
-          headers: { 'X-User-Id': userId },
-        }),
+        this.httpService.get<UsersWithTagsResponse>(
+          '/api/v1/admin/users-with-tags',
+          {
+            headers: { 'X-User-Id': userId },
+          },
+        ),
       );
       return response.data;
     } catch (error) {
