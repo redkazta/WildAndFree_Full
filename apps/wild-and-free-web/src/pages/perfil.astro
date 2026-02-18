@@ -505,7 +505,7 @@ import Layout from '../layouts/Layout.astro';
 
   .bio {
     margin: 0 0 20px 0;
-    color: rgba(255, 255, 255, 0.7);
+    color: #fff;
     font-size: 16px;
     font-family: 'Noto Sans JP', sans-serif;
   }
@@ -529,7 +529,7 @@ import Layout from '../layouts/Layout.astro';
 
   .stat-label {
     font-size: 14px;
-    color: rgba(255, 255, 255, 0.6);
+    color: #fff;
     font-family: 'Noto Sans JP', sans-serif;
   }
 
@@ -574,7 +574,7 @@ import Layout from '../layouts/Layout.astro';
     padding: 16px 0;
     background: none;
     border: none;
-    color: rgba(255, 255, 255, 0.6);
+    color: #fff;
     font-size: 16px;
     font-family: 'Noto Sans JP', sans-serif;
     cursor: pointer;
@@ -692,7 +692,7 @@ import Layout from '../layouts/Layout.astro';
 
   .activity-info span {
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.6);
+    color: #fff;
     font-family: 'Noto Sans JP', sans-serif;
   }
 
@@ -734,7 +734,7 @@ import Layout from '../layouts/Layout.astro';
   .track-number {
     width: 24px;
     text-align: center;
-    color: rgba(255, 255, 255, 0.6);
+    color: #fff;
     font-family: 'Noto Sans JP', sans-serif;
   }
 
@@ -755,14 +755,14 @@ import Layout from '../layouts/Layout.astro';
   .track-info p, .playlist-info p, .following-info p {
     margin: 0;
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.6);
+    color: #fff;
     font-family: 'Noto Sans JP', sans-serif;
   }
 
   .track-plays {
     margin-left: auto;
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.6);
+    color: #fff;
     font-family: 'Noto Sans JP', sans-serif;
   }
 
@@ -1074,9 +1074,9 @@ import Layout from '../layouts/Layout.astro';
 
   .role-tag-lottie {
     position: absolute;
-    inset: -18%;
+    inset: 6%;
     z-index: 1;
-    opacity: 0.45;
+    opacity: 0.38;
     mix-blend-mode: screen;
     filter: drop-shadow(0 0 16px var(--tag-glow)) drop-shadow(0 0 26px var(--tag-glow-soft));
     border-radius: 9999px;
@@ -1397,6 +1397,11 @@ import Layout from '../layouts/Layout.astro';
       return { r: Number(match[1]), g: Number(match[2]), b: Number(match[3]) };
     };
 
+    const resolveBorder = (value: string, alpha = 0.85) => {
+      const rgb = resolveRgb(value);
+      return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
+    };
+
     const buildTagGlowLottie = (color: string, intensity: number) => {
       const rgb = resolveRgb(color);
       const fillColor = [rgb.r / 255, rgb.g / 255, rgb.b / 255, 1];
@@ -1512,7 +1517,7 @@ import Layout from '../layouts/Layout.astro';
         loop: true,
         autoplay: true,
         animationData,
-        rendererSettings: { preserveAspectRatio: 'xMidYMid slice' }
+        rendererSettings: { preserveAspectRatio: 'xMidYMid meet' }
       });
     };
 
@@ -1561,7 +1566,7 @@ import Layout from '../layouts/Layout.astro';
         if (normalizedColor) {
             tagElement.style.setProperty('--tag-bg-1', `${normalizedColor}22`);
             tagElement.style.setProperty('--tag-bg-2', `${normalizedColor}08`);
-            tagElement.style.setProperty('--tag-border', 'transparent');
+            tagElement.style.setProperty('--tag-border', resolveBorder(normalizedColor, 0.7));
             tagElement.style.setProperty('--tag-text', '#fff');
             tagElement.style.setProperty('--tag-shine', `${normalizedColor}33`);
             tagElement.style.backgroundSize = '220% 220%';
@@ -1587,7 +1592,7 @@ import Layout from '../layouts/Layout.astro';
             tagElement.style.fontWeight = '900';
             tagElement.style.setProperty('--tag-bg-1', 'rgba(245,197,66,0.14)');
             tagElement.style.setProperty('--tag-bg-2', 'rgba(255,235,170,0.04)');
-            tagElement.style.setProperty('--tag-border', 'transparent');
+            tagElement.style.setProperty('--tag-border', 'rgba(245,197,66,0.85)');
             tagElement.style.setProperty('--tag-text', '#fff');
             tagElement.style.setProperty('--tag-shine', 'rgba(255,219,130,0.4)');
             tagElement.style.setProperty('--tag-glow', '#f5c542');
@@ -1599,7 +1604,7 @@ import Layout from '../layouts/Layout.astro';
             tagElement.style.fontWeight = '900';
             tagElement.style.setProperty('--tag-bg-1', 'rgba(255,78,78,0.14)');
             tagElement.style.setProperty('--tag-bg-2', 'rgba(255,170,170,0.04)');
-            tagElement.style.setProperty('--tag-border', 'transparent');
+            tagElement.style.setProperty('--tag-border', 'rgba(255,78,78,0.85)');
             tagElement.style.setProperty('--tag-text', '#fff');
             tagElement.style.setProperty('--tag-shine', 'rgba(255,140,140,0.4)');
             tagElement.style.setProperty('--tag-glow', '#ff4e4e');
@@ -1611,7 +1616,7 @@ import Layout from '../layouts/Layout.astro';
             tagElement.style.fontWeight = '900';
             tagElement.style.setProperty('--tag-bg-1', 'rgba(155,89,255,0.14)');
             tagElement.style.setProperty('--tag-bg-2', 'rgba(200,160,255,0.04)');
-            tagElement.style.setProperty('--tag-border', 'transparent');
+            tagElement.style.setProperty('--tag-border', 'rgba(155,89,255,0.85)');
             tagElement.style.setProperty('--tag-text', '#fff');
             tagElement.style.setProperty('--tag-shine', 'rgba(187,140,255,0.4)');
             tagElement.style.setProperty('--tag-glow', '#9b59ff');
@@ -1623,7 +1628,7 @@ import Layout from '../layouts/Layout.astro';
             tagElement.style.fontWeight = '800';
             tagElement.style.setProperty('--tag-bg-1', 'rgba(64,200,120,0.12)');
             tagElement.style.setProperty('--tag-bg-2', 'rgba(140,255,200,0.04)');
-            tagElement.style.setProperty('--tag-border', 'transparent');
+            tagElement.style.setProperty('--tag-border', 'rgba(64,200,120,0.85)');
             tagElement.style.setProperty('--tag-text', '#fff');
             tagElement.style.setProperty('--tag-shine', 'rgba(120,255,190,0.4)');
             tagElement.style.setProperty('--tag-glow', '#40c878');
@@ -1632,7 +1637,7 @@ import Layout from '../layouts/Layout.astro';
         } else if (tag.name.toLowerCase().includes('fan')) {
           tagElement.style.setProperty('--tag-bg-1', 'rgba(64,200,120,0.12)');
           tagElement.style.setProperty('--tag-bg-2', 'rgba(140,255,200,0.04)');
-          tagElement.style.setProperty('--tag-border', 'transparent');
+          tagElement.style.setProperty('--tag-border', 'rgba(64,200,120,0.85)');
           tagElement.style.setProperty('--tag-text', '#fff');
           tagElement.style.setProperty('--tag-shine', 'rgba(120,255,190,0.4)');
           tagElement.style.setProperty('--tag-glow', '#40c878');
@@ -1640,7 +1645,7 @@ import Layout from '../layouts/Layout.astro';
         } else if (tag.name.toLowerCase().includes('origins')) {
           tagElement.style.setProperty('--tag-bg-1', 'rgba(245,197,66,0.14)');
           tagElement.style.setProperty('--tag-bg-2', 'rgba(255,235,170,0.04)');
-          tagElement.style.setProperty('--tag-border', 'transparent');
+          tagElement.style.setProperty('--tag-border', 'rgba(245,197,66,0.85)');
           tagElement.style.setProperty('--tag-text', '#fff');
           tagElement.style.setProperty('--tag-shine', 'rgba(255,219,130,0.4)');
           tagElement.style.setProperty('--tag-glow', '#f5c542');
