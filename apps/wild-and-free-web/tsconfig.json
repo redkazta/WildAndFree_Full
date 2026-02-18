@@ -1,10 +1,6 @@
 {
-  "extends": "./node_modules/astro/tsconfigs/strict.json",
+  "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "jsx": "preserve",
-    "jsxImportSource": "astro",
     "types": ["astro/client"]
   },
   "include": [".astro/types.d.ts", "**/*"],
