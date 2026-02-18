@@ -1035,7 +1035,7 @@ import Layout from '../layouts/Layout.astro';
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    border: 0;
+    border: 2px solid var(--tag-border);
     backdrop-filter: blur(12px);
     transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     margin: 6px;
@@ -1043,7 +1043,7 @@ import Layout from '../layouts/Layout.astro';
     background-size: 160% 160%;
     background-position: 0% 50%;
     color: var(--tag-text);
-    box-shadow: none;
+    box-shadow: 0 0 18px -14px var(--tag-glow), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
     text-shadow: none;
     position: relative;
     overflow: hidden;
@@ -1056,17 +1056,29 @@ import Layout from '../layouts/Layout.astro';
 
   .role-tag-label {
     position: relative;
-    z-index: 2;
+    z-index: 4;
     color: inherit;
+  }
+
+  .role-tag::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    border: 2px solid var(--tag-border);
+    box-shadow: 0 0 14px -6px var(--tag-glow);
+    opacity: 0.9;
+    z-index: 3;
+    pointer-events: none;
   }
 
   .role-tag-lottie {
     position: absolute;
-    inset: -35%;
+    inset: -18%;
     z-index: 1;
-    opacity: 0.35;
+    opacity: 0.45;
     mix-blend-mode: screen;
-    filter: drop-shadow(0 0 18px var(--tag-glow)) drop-shadow(0 0 30px var(--tag-glow-soft));
+    filter: drop-shadow(0 0 16px var(--tag-glow)) drop-shadow(0 0 26px var(--tag-glow-soft));
     border-radius: 9999px;
     -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 55%, rgba(0,0,0,0) 75%);
     mask-image: radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 55%, rgba(0,0,0,0) 75%);
@@ -1185,7 +1197,7 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .role-tag {
-    border: 0 !important;
+    border-color: var(--tag-border) !important;
     box-shadow: 0 0 18px -12px var(--tag-glow) !important;
   }
   </style>
