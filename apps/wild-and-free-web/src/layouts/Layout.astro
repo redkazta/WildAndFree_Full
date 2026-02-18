@@ -57,6 +57,22 @@ const isActive = (href: string) => {
 				-webkit-font-smoothing: antialiased;
 				-moz-osx-font-smoothing: grayscale;
 				font-family: 'Outfit', sans-serif;
+				color: #fff;
+			}
+
+			body, body * {
+				color: #fff !important;
+			}
+
+			::placeholder {
+				color: #fff !important;
+				opacity: 0.85;
+			}
+
+			[class~="bg-white"],
+			[class*="bg-white/"] {
+				background-color: #000 !important;
+				border-color: #fff !important;
 			}
 
 			/* Custom Scrollbar */

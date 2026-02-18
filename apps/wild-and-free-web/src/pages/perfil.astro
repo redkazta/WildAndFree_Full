@@ -1019,38 +1019,38 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .role-tag {
-    --tag-glow: rgba(255, 255, 255, 0.9);
-    --tag-glow-soft: rgba(255, 255, 255, 0.35);
-    --tag-bg-1: rgba(255, 255, 255, 0.08);
-    --tag-bg-2: rgba(255, 255, 255, 0.02);
-    --tag-border: rgba(255,255,255,0.2);
+    --tag-glow: rgba(255, 255, 255, 0.65);
+    --tag-glow-soft: rgba(255, 255, 255, 0.2);
+    --tag-bg-1: rgba(255, 255, 255, 0.06);
+    --tag-bg-2: rgba(255, 255, 255, 0.01);
+    --tag-border: rgba(255,255,255,0);
     --tag-text: #fff;
-    --tag-shine: rgba(255,255,255,0.4);
+    --tag-shine: rgba(255,255,255,0.3);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 24px 60px;
+    padding: 18px 44px;
     border-radius: 9999px;
-    font-size: 33px;
+    font-size: 28px;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.15em;
-    border: 1px solid var(--tag-border);
-    backdrop-filter: blur(16px);
+    letter-spacing: 0.12em;
+    border: 0;
+    backdrop-filter: blur(12px);
     transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     margin: 6px;
     background: linear-gradient(135deg, var(--tag-bg-1), var(--tag-bg-2));
-    background-size: 200% 200%;
+    background-size: 160% 160%;
     background-position: 0% 50%;
     color: var(--tag-text);
-    box-shadow: 0 6px 35px rgba(0, 0, 0, 0.25), 0 0 24px -6px var(--tag-glow), 0 0 60px -24px var(--tag-glow);
-    text-shadow: 0 0 10px rgba(0,0,0,0.5);
+    box-shadow: none;
+    text-shadow: none;
     position: relative;
     overflow: hidden;
     outline: none !important; /* NO BLUE SELECTION */
     cursor: default;
     user-select: none;
-    filter: saturate(1.15);
+    filter: none;
     will-change: transform, filter, box-shadow;
   }
 
@@ -1097,11 +1097,12 @@ import Layout from '../layouts/Layout.astro';
   .role-tag::before {
     content: '';
     position: absolute;
-    inset: -35%;
-    background: radial-gradient(circle, var(--tag-glow-soft) 0%, transparent 60%);
-    opacity: 0.45;
-    filter: blur(10px);
-    animation: halo-pulse 2.8s infinite ease-in-out;
+    inset: -60%;
+    background: radial-gradient(circle, var(--tag-glow-soft) 0%, transparent 70%);
+    opacity: 0.2;
+    filter: blur(18px);
+    animation: halo-pulse 4s infinite ease-in-out;
+    border-radius: inherit;
     pointer-events: none;
   }
 
@@ -1112,9 +1113,11 @@ import Layout from '../layouts/Layout.astro';
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(120deg, transparent, var(--tag-shine), transparent);
-    transform: translateX(-100%) skewX(-15deg);
-    animation: tag-shine 3.2s ease-in-out infinite;
+    background: radial-gradient(circle at 30% 50%, var(--tag-shine), transparent 60%);
+    transform: translateX(-15%);
+    animation: tag-shine 6s ease-in-out infinite;
+    opacity: 0.25;
+    border-radius: inherit;
   }
 
   .role-tag:hover::after {
@@ -1122,16 +1125,15 @@ import Layout from '../layouts/Layout.astro';
   }
 
   @keyframes tag-shine {
-    0% { transform: translateX(-120%) skewX(-15deg); opacity: 0; }
-    20% { opacity: 0.9; }
-    60% { transform: translateX(120%) skewX(-15deg); opacity: 0.8; }
-    100% { transform: translateX(120%) skewX(-15deg); opacity: 0; }
+    0% { transform: translateX(-15%); opacity: 0.08; }
+    50% { transform: translateX(10%); opacity: 0.28; }
+    100% { transform: translateX(-15%); opacity: 0.08; }
   }
 
   @keyframes halo-pulse {
-    0% { opacity: 0.35; transform: scale(0.96); }
-    50% { opacity: 0.9; transform: scale(1.06); }
-    100% { opacity: 0.35; transform: scale(0.96); }
+    0% { opacity: 0.18; transform: scale(0.98); }
+    50% { opacity: 0.35; transform: scale(1.02); }
+    100% { opacity: 0.18; transform: scale(0.98); }
   }
 
   @keyframes neon-flicker {
@@ -1197,6 +1199,11 @@ import Layout from '../layouts/Layout.astro';
     background: rgba(255, 255, 255, 0.05);
     border-color: rgba(255, 255, 255, 0.2);
     color: #fff !important;
+  }
+
+  .role-tag {
+    border: 0 !important;
+    box-shadow: 0 0 18px -12px var(--tag-glow) !important;
   }
   </style>
 
@@ -1408,19 +1415,9 @@ import Layout from '../layouts/Layout.astro';
         const softGlow = getComputedStyle(el).getPropertyValue('--tag-glow-soft').trim() || 'rgba(255,255,255,0.45)';
 
         gsap.to(el, {
-          scale: gsap.utils.random(1.03, 1.09),
-          rotate: gsap.utils.random(-1.2, 1.2),
-          duration: 2.1 + Math.random() * 1.3,
-          yoyo: true,
-          repeat: -1,
-          ease: 'sine.inOut',
-          delay: Math.random() * 0.6
-        });
-
-        gsap.to(el, {
-          y: gsap.utils.random(-4, 4),
-          x: gsap.utils.random(-2, 2),
-          duration: 3.0 + Math.random() * 1.8,
+          scale: gsap.utils.random(1.01, 1.04),
+          y: gsap.utils.random(-1, 1),
+          duration: 2.8 + Math.random() * 1.8,
           yoyo: true,
           repeat: -1,
           ease: 'sine.inOut',
@@ -1428,42 +1425,24 @@ import Layout from '../layouts/Layout.astro';
         });
 
         gsap.to(el, {
-          boxShadow: `0 0 34px -8px ${glow}, 0 0 90px -36px ${glow}, 0 0 140px -80px ${softGlow}`,
-          filter: 'brightness(1.35) saturate(1.35)',
-          duration: 2.4 + Math.random() * 1.8,
-          yoyo: true,
-          repeat: -1,
-          ease: 'sine.inOut',
-          delay: Math.random() * 1.2
-        });
-
-        gsap.to(el, {
-          backgroundPosition: `${gsap.utils.random(0, 140)}% 50%`,
-          duration: 4.6 + Math.random() * 2.4,
+          textShadow: `0 0 6px ${glow}, 0 0 12px ${softGlow}`,
+          duration: 3.2 + Math.random() * 1.8,
           yoyo: true,
           repeat: -1,
           ease: 'sine.inOut',
           delay: Math.random() * 1.1
         });
 
-        gsap.to(el, {
-          textShadow: `0 0 10px ${glow}, 0 0 18px ${softGlow}`,
-          duration: 2.8 + Math.random() * 1.6,
-          yoyo: true,
-          repeat: -1,
-          ease: 'sine.inOut',
-          delay: Math.random() * 0.9
-        });
-
         if (anim === 'member-shine') {
           gsap.to(el, {
-            '--tag-shine': 'rgba(255,255,255,0.95)',
-            '--tag-bg-1': 'rgba(255,255,255,0.2)',
-            duration: 1.4 + Math.random() * 0.8,
+            '--tag-shine': 'rgba(255,255,255,0.55)',
+            '--tag-bg-1': 'rgba(255,255,255,0.1)',
+            '--tag-bg-2': 'rgba(255,255,255,0.02)',
+            duration: 2.4 + Math.random() * 1.2,
             yoyo: true,
             repeat: -1,
             ease: 'sine.inOut',
-            delay: Math.random() * 0.6
+            delay: Math.random() * 0.8
           });
         }
       });
@@ -1506,13 +1485,11 @@ import Layout from '../layouts/Layout.astro';
         const normalizedColor = rawColor && !rawColor.startsWith('#') && /^[0-9a-fA-F]{6}$/.test(rawColor) ? `#${rawColor}` : rawColor;
 
         if (normalizedColor) {
-            tagElement.style.setProperty('--tag-bg-1', `${normalizedColor}66`);
-            tagElement.style.setProperty('--tag-bg-2', `${normalizedColor}18`);
-            tagElement.style.setProperty('--tag-border', normalizedColor);
+            tagElement.style.setProperty('--tag-bg-1', `${normalizedColor}22`);
+            tagElement.style.setProperty('--tag-bg-2', `${normalizedColor}08`);
+            tagElement.style.setProperty('--tag-border', 'transparent');
             tagElement.style.setProperty('--tag-text', '#fff');
-            tagElement.style.setProperty('--tag-shine', `${normalizedColor}66`);
-            tagElement.style.boxShadow = `0 0 22px -6px ${normalizedColor}, 0 0 50px -20px ${normalizedColor}`;
-            tagElement.style.textShadow = `0 0 8px ${normalizedColor}`;
+            tagElement.style.setProperty('--tag-shine', `${normalizedColor}33`);
             tagElement.style.backgroundSize = '220% 220%';
             tagElement.style.backgroundPosition = '0% 50%';
         } else if (!tag.cssClass || tag.cssClass === 'role-tag') {
@@ -1530,74 +1507,70 @@ import Layout from '../layouts/Layout.astro';
         if (tag.isRole) {
           const roleId = tag.id ?? 0;
           if (GOLD_ROLE_IDS.has(roleId)) {
-            tagElement.style.fontSize = '42px';
-            tagElement.style.padding = '30px 60px';
-            tagElement.style.borderWidth = '6px';
+            tagElement.style.fontSize = '36px';
+            tagElement.style.padding = '24px 52px';
             tagElement.style.letterSpacing = '0.2em';
             tagElement.style.fontWeight = '900';
-            tagElement.style.setProperty('--tag-bg-1', 'rgba(245,197,66,0.38)');
-            tagElement.style.setProperty('--tag-bg-2', 'rgba(255,235,170,0.12)');
-            tagElement.style.setProperty('--tag-border', '#f5c542');
-            tagElement.style.setProperty('--tag-text', '#fff4cc');
-            tagElement.style.setProperty('--tag-shine', 'rgba(255,219,130,0.7)');
+            tagElement.style.setProperty('--tag-bg-1', 'rgba(245,197,66,0.14)');
+            tagElement.style.setProperty('--tag-bg-2', 'rgba(255,235,170,0.04)');
+            tagElement.style.setProperty('--tag-border', 'transparent');
+            tagElement.style.setProperty('--tag-text', '#fff');
+            tagElement.style.setProperty('--tag-shine', 'rgba(255,219,130,0.4)');
             tagElement.style.setProperty('--tag-glow', '#f5c542');
-            tagElement.style.setProperty('--tag-glow-soft', 'rgba(245,197,66,0.55)');
+            tagElement.style.setProperty('--tag-glow-soft', 'rgba(245,197,66,0.25)');
           } else if (RED_ROLE_IDS.has(roleId)) {
-            tagElement.style.fontSize = '38px';
-            tagElement.style.padding = '28px 56px';
-            tagElement.style.borderWidth = '5px';
-            tagElement.style.letterSpacing = '0.18em';
-            tagElement.style.fontWeight = '900';
-            tagElement.style.setProperty('--tag-bg-1', 'rgba(255,78,78,0.34)');
-            tagElement.style.setProperty('--tag-bg-2', 'rgba(255,170,170,0.12)');
-            tagElement.style.setProperty('--tag-border', '#ff4e4e');
-            tagElement.style.setProperty('--tag-text', '#ffe7e7');
-            tagElement.style.setProperty('--tag-shine', 'rgba(255,140,140,0.75)');
-            tagElement.style.setProperty('--tag-glow', '#ff4e4e');
-            tagElement.style.setProperty('--tag-glow-soft', 'rgba(255,78,78,0.55)');
-          } else if (PURPLE_ROLE_IDS.has(roleId)) {
-            tagElement.style.fontSize = '38px';
-            tagElement.style.padding = '28px 56px';
-            tagElement.style.borderWidth = '5px';
-            tagElement.style.letterSpacing = '0.18em';
-            tagElement.style.fontWeight = '900';
-            tagElement.style.setProperty('--tag-bg-1', 'rgba(155,89,255,0.35)');
-            tagElement.style.setProperty('--tag-bg-2', 'rgba(200,160,255,0.12)');
-            tagElement.style.setProperty('--tag-border', '#9b59ff');
-            tagElement.style.setProperty('--tag-text', '#f3e7ff');
-            tagElement.style.setProperty('--tag-shine', 'rgba(187,140,255,0.7)');
-            tagElement.style.setProperty('--tag-glow', '#9b59ff');
-            tagElement.style.setProperty('--tag-glow-soft', 'rgba(155,89,255,0.55)');
-          } else if (GREEN_ROLE_IDS.has(roleId)) {
             tagElement.style.fontSize = '34px';
-            tagElement.style.padding = '26px 52px';
-            tagElement.style.borderWidth = '4px';
+            tagElement.style.padding = '22px 50px';
+            tagElement.style.letterSpacing = '0.18em';
+            tagElement.style.fontWeight = '900';
+            tagElement.style.setProperty('--tag-bg-1', 'rgba(255,78,78,0.14)');
+            tagElement.style.setProperty('--tag-bg-2', 'rgba(255,170,170,0.04)');
+            tagElement.style.setProperty('--tag-border', 'transparent');
+            tagElement.style.setProperty('--tag-text', '#fff');
+            tagElement.style.setProperty('--tag-shine', 'rgba(255,140,140,0.4)');
+            tagElement.style.setProperty('--tag-glow', '#ff4e4e');
+            tagElement.style.setProperty('--tag-glow-soft', 'rgba(255,78,78,0.25)');
+          } else if (PURPLE_ROLE_IDS.has(roleId)) {
+            tagElement.style.fontSize = '34px';
+            tagElement.style.padding = '22px 50px';
+            tagElement.style.letterSpacing = '0.18em';
+            tagElement.style.fontWeight = '900';
+            tagElement.style.setProperty('--tag-bg-1', 'rgba(155,89,255,0.14)');
+            tagElement.style.setProperty('--tag-bg-2', 'rgba(200,160,255,0.04)');
+            tagElement.style.setProperty('--tag-border', 'transparent');
+            tagElement.style.setProperty('--tag-text', '#fff');
+            tagElement.style.setProperty('--tag-shine', 'rgba(187,140,255,0.4)');
+            tagElement.style.setProperty('--tag-glow', '#9b59ff');
+            tagElement.style.setProperty('--tag-glow-soft', 'rgba(155,89,255,0.25)');
+          } else if (GREEN_ROLE_IDS.has(roleId)) {
+            tagElement.style.fontSize = '32px';
+            tagElement.style.padding = '20px 46px';
             tagElement.style.letterSpacing = '0.16em';
             tagElement.style.fontWeight = '800';
-            tagElement.style.setProperty('--tag-bg-1', 'rgba(64,200,120,0.32)');
-            tagElement.style.setProperty('--tag-bg-2', 'rgba(140,255,200,0.12)');
-            tagElement.style.setProperty('--tag-border', '#40c878');
-            tagElement.style.setProperty('--tag-text', '#e8fff2');
-            tagElement.style.setProperty('--tag-shine', 'rgba(120,255,190,0.7)');
+            tagElement.style.setProperty('--tag-bg-1', 'rgba(64,200,120,0.12)');
+            tagElement.style.setProperty('--tag-bg-2', 'rgba(140,255,200,0.04)');
+            tagElement.style.setProperty('--tag-border', 'transparent');
+            tagElement.style.setProperty('--tag-text', '#fff');
+            tagElement.style.setProperty('--tag-shine', 'rgba(120,255,190,0.4)');
             tagElement.style.setProperty('--tag-glow', '#40c878');
-            tagElement.style.setProperty('--tag-glow-soft', 'rgba(64,200,120,0.55)');
+            tagElement.style.setProperty('--tag-glow-soft', 'rgba(64,200,120,0.25)');
           }
         } else if (tag.name.toLowerCase().includes('fan')) {
-          tagElement.style.setProperty('--tag-bg-1', 'rgba(64,200,120,0.32)');
-          tagElement.style.setProperty('--tag-bg-2', 'rgba(140,255,200,0.12)');
-          tagElement.style.setProperty('--tag-border', '#40c878');
-          tagElement.style.setProperty('--tag-text', '#e8fff2');
-          tagElement.style.setProperty('--tag-shine', 'rgba(120,255,190,0.7)');
+          tagElement.style.setProperty('--tag-bg-1', 'rgba(64,200,120,0.12)');
+          tagElement.style.setProperty('--tag-bg-2', 'rgba(140,255,200,0.04)');
+          tagElement.style.setProperty('--tag-border', 'transparent');
+          tagElement.style.setProperty('--tag-text', '#fff');
+          tagElement.style.setProperty('--tag-shine', 'rgba(120,255,190,0.4)');
           tagElement.style.setProperty('--tag-glow', '#40c878');
-          tagElement.style.setProperty('--tag-glow-soft', 'rgba(64,200,120,0.55)');
+          tagElement.style.setProperty('--tag-glow-soft', 'rgba(64,200,120,0.25)');
         } else if (tag.name.toLowerCase().includes('origins')) {
-          tagElement.style.setProperty('--tag-bg-1', 'rgba(245,197,66,0.38)');
-          tagElement.style.setProperty('--tag-bg-2', 'rgba(255,235,170,0.12)');
-          tagElement.style.setProperty('--tag-border', '#f5c542');
-          tagElement.style.setProperty('--tag-text', '#fff4cc');
-          tagElement.style.setProperty('--tag-shine', 'rgba(255,219,130,0.7)');
+          tagElement.style.setProperty('--tag-bg-1', 'rgba(245,197,66,0.14)');
+          tagElement.style.setProperty('--tag-bg-2', 'rgba(255,235,170,0.04)');
+          tagElement.style.setProperty('--tag-border', 'transparent');
+          tagElement.style.setProperty('--tag-text', '#fff');
+          tagElement.style.setProperty('--tag-shine', 'rgba(255,219,130,0.4)');
           tagElement.style.setProperty('--tag-glow', '#f5c542');
-          tagElement.style.setProperty('--tag-glow-soft', 'rgba(245,197,66,0.55)');
+          tagElement.style.setProperty('--tag-glow-soft', 'rgba(245,197,66,0.25)');
         }
         if (!tag.isRole) {
           tagElement.style.fontSize = '33px';
