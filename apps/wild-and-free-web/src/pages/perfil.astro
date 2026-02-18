@@ -1688,23 +1688,9 @@ import Layout from '../layouts/Layout.astro';
         allTags.push({ name: 'FAN', cssClass: 'role-fan', isRole: true });
       }
 
-      const uniqueTags: TagDisplay[] = [];
-      const seenKeys = new Set<string>();
-
       allTags.sort((a, b) => (a.isRole === b.isRole) ? 0 : (a.isRole ? -1 : 1));
 
-      allTags.forEach(tag => {
-        const stableKey = tag.id != null
-          ? String(tag.id)
-          : `${tag.name}-${tag.color || ''}-${tag.animation || ''}`;
-        const key = `${tag.isRole ? 'role' : 'tag'}-${stableKey}`;
-        if (!seenKeys.has(key)) {
-          seenKeys.add(key);
-          uniqueTags.push(tag);
-        }
-      });
-
-      displayUserTags(uniqueTags);
+      displayUserTags(allTags);
     } catch (error) {
       console.error('Error loading user tags/roles:', error);
       displayUserTags([{ name: 'FAN', cssClass: 'role-fan' }]);
