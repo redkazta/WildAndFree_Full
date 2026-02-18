@@ -51,8 +51,10 @@ import Layout from '../layouts/Layout.astro';
               <span class="birthday-icon">🎉</span>
             </div>
           </div>
-          <h1 id="profile-name">Cargando...</h1>
-          <p class="username" id="profile-username">@usuario</p>
+          <div class="profile-name-row">
+            <h1 id="profile-name">Cargando...</h1>
+            <p class="username" id="profile-username">@usuario</p>
+          </div>
           <div class="role-tags" id="profile-role-tags">
             <!-- Los tags se cargarán dinámicamente aquí -->
           </div>
@@ -82,7 +84,6 @@ import Layout from '../layouts/Layout.astro';
             </div>
           </div>
         </div>
-        <button class="edit-profile-btn">Editar Perfil</button>
       </div>
 
       <div class="profile-content">
@@ -487,8 +488,16 @@ import Layout from '../layouts/Layout.astro';
     transform: scale(1.1);
   }
 
+  .profile-name-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: baseline;
+    margin-bottom: 8px;
+  }
+
   .profile-info-main h1 {
-    margin: 0 0 8px 0;
+    margin: 0;
     font-size: 32px;
     color: #fff;
     font-family: 'Noto Sans JP', sans-serif;
@@ -496,7 +505,7 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .username {
-    margin: 0 0 8px 0;
+    margin: 0;
     color: var(--primary-color);
     font-size: 18px;
     font-weight: 500;
@@ -531,28 +540,6 @@ import Layout from '../layouts/Layout.astro';
     font-size: 14px;
     color: #fff;
     font-family: 'Noto Sans JP', sans-serif;
-  }
-
-  .edit-profile-btn {
-    margin-left: auto;
-    padding: 12px 24px;
-    background: var(--primary-color);
-    border: none;
-    border-radius: 8px;
-    color: #000;
-    font-size: 14px;
-    font-weight: 600;
-    font-family: 'Noto Sans JP', sans-serif;
-    letter-spacing: 0.05em;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-  }
-
-  .edit-profile-btn:hover {
-    background: #e69500;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(201, 131, 0, 0.3);
   }
 
   .profile-content {
@@ -838,11 +825,6 @@ import Layout from '../layouts/Layout.astro';
       font-size: 18px;
     }
 
-    .edit-profile-btn {
-      margin-left: 0;
-      width: 100%;
-    }
-
     .profile-tabs {
       overflow-x: auto;
       gap: 16px;
@@ -1005,17 +987,10 @@ import Layout from '../layouts/Layout.astro';
   .role-tags {
     margin-top: 10px;
     display: flex;
-    flex-direction: column;
-    gap: 16px;
-    align-items: stretch;
-  }
-
-  .role-tags-group {
-    display: flex;
     flex-wrap: wrap;
     gap: 12px;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
   }
 
   .role-tag-separator {
@@ -1537,29 +1512,20 @@ import Layout from '../layouts/Layout.astro';
       roleTagsContainer.innerHTML = '';
 
       if (!tags || tags.length === 0) {
-        const defaultGroup = document.createElement('div');
-        defaultGroup.className = 'role-tags-group role-tags-roles';
         const defaultTag = document.createElement('span');
         defaultTag.className = 'role-tag role-fan';
         const defaultLabel = document.createElement('span');
         defaultLabel.className = 'role-tag-label';
         defaultLabel.textContent = 'FAN';
         defaultTag.appendChild(defaultLabel);
-        defaultGroup.appendChild(defaultTag);
-        roleTagsContainer.appendChild(defaultGroup);
+        roleTagsContainer.appendChild(defaultTag);
         attachLottieGlow(defaultTag);
         return;
       }
 
-      const rolesGroup = document.createElement('div');
-      rolesGroup.className = 'role-tags-group role-tags-roles';
-      const tagsGroup = document.createElement('div');
-      tagsGroup.className = 'role-tags-group role-tags-tags';
-      let hasRoles = false;
-      let hasTags = false;
       const tagElements: HTMLElement[] = [];
 
-      const appendTag = (tag: TagDisplay, target: HTMLElement) => {
+      const appendTag = (tag: TagDisplay) => {
         const tagElement = document.createElement('span');
         // Usar clase CSS si existe, sino solo base
         tagElement.className = `role-tag ${tag.cssClass || ''}`;
@@ -1668,22 +1634,11 @@ import Layout from '../layouts/Layout.astro';
         tagElement.style.outline = 'none';
         tagElement.appendChild(tagLabel);
 
-        target.appendChild(tagElement);
+        roleTagsContainer.appendChild(tagElement);
         tagElements.push(tagElement);
       };
 
-      tags.forEach(tag => {
-        if (tag.isRole) {
-          hasRoles = true;
-          appendTag(tag, rolesGroup);
-          return;
-        }
-        hasTags = true;
-        appendTag(tag, tagsGroup);
-      });
-
-      if (hasRoles) roleTagsContainer.appendChild(rolesGroup);
-      if (hasTags) roleTagsContainer.appendChild(tagsGroup);
+      tags.forEach(tag => appendTag(tag));
 
       tagElements.forEach((tagEl) => attachLottieGlow(tagEl));
     };
@@ -1735,7 +1690,8 @@ import Layout from '../layouts/Layout.astro';
       allTags.sort((a, b) => (a.isRole === b.isRole) ? 0 : (a.isRole ? -1 : 1));
 
       allTags.forEach(tag => {
-        const key = `${tag.name}-${tag.isRole ? 'role' : 'tag'}`;
+        const stableKey = tag.id ?? tag.name;
+        const key = `${tag.isRole ? 'role' : 'tag'}-${stableKey}`;
         if (!seenKeys.has(key)) {
           seenKeys.add(key);
           uniqueTags.push(tag);
@@ -1783,14 +1739,6 @@ import Layout from '../layouts/Layout.astro';
         if (targetContent) targetContent.classList.add('active');
       });
     });
-
-    // Edit profile button
-    const editBtn = document.querySelector('.edit-profile-btn');
-    if (editBtn) {
-      editBtn.addEventListener('click', () => {
-        alert('Función de edición de perfil - Próximamente');
-      });
-    }
 
     // Avatar edit button
     const avatarEdit = document.querySelector('.avatar-edit');
