@@ -17,7 +17,7 @@ export class TagsService {
   async getUserTags(userId: string): Promise<UserTagsResponse> {
     try {
       const response = await firstValueFrom(
-        this.httpService.get<UserTagsResponse>(`/api/v1/users/${userId}/tags`),
+        this.httpService.get<UserTagsResponse>(`/users/${userId}/tags`),
       );
       return response.data;
     } catch (error) {
@@ -29,7 +29,7 @@ export class TagsService {
   async getAllTags(): Promise<TagsListResponse> {
     try {
       const response = await firstValueFrom(
-        this.httpService.get<TagsListResponse>('/api/v1/tags'),
+        this.httpService.get<TagsListResponse>('/tags'),
       );
       return response.data;
     } catch (error) {
@@ -45,7 +45,7 @@ export class TagsService {
     try {
       const response = await firstValueFrom(
         this.httpService.post<StatusResponse>(
-          `/api/v1/users/${userId}/tags/${tagId}`,
+          `/users/${userId}/tags/${tagId}`,
           {},
           {
             headers: { 'X-User-Id': userId },
@@ -66,7 +66,7 @@ export class TagsService {
     try {
       const response = await firstValueFrom(
         this.httpService.delete<StatusResponse>(
-          `/api/v1/users/${userId}/tags/${tagId}`,
+          `/users/${userId}/tags/${tagId}`,
           {
             headers: { 'X-User-Id': userId },
           },
@@ -85,7 +85,7 @@ export class TagsService {
   ): Promise<Tag> {
     try {
       const response = await firstValueFrom(
-        this.httpService.post<Tag>('/api/v1/tags', createTagDto, {
+        this.httpService.post<Tag>('/tags', createTagDto, {
           headers: { 'X-User-Id': userId },
         }),
       );
@@ -99,7 +99,7 @@ export class TagsService {
   async deleteTag(tagId: number, userId: string): Promise<StatusResponse> {
     try {
       const response = await firstValueFrom(
-        this.httpService.delete<StatusResponse>(`/api/v1/tags/${tagId}`, {
+        this.httpService.delete<StatusResponse>(`/tags/${tagId}`, {
           headers: { 'X-User-Id': userId },
         }),
       );
@@ -113,12 +113,9 @@ export class TagsService {
   async getUsersWithTags(userId: string): Promise<UsersWithTagsResponse> {
     try {
       const response = await firstValueFrom(
-        this.httpService.get<UsersWithTagsResponse>(
-          '/api/v1/admin/users-with-tags',
-          {
-            headers: { 'X-User-Id': userId },
-          },
-        ),
+        this.httpService.get<UsersWithTagsResponse>('/admin/users-with-tags', {
+          headers: { 'X-User-Id': userId },
+        }),
       );
       return response.data;
     } catch (error) {

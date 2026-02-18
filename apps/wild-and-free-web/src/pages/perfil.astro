@@ -1005,9 +1005,17 @@ import Layout from '../layouts/Layout.astro';
   .role-tags {
     margin-top: 10px;
     display: flex;
-    gap: 10px;
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  .role-tags-group {
+    display: flex;
     flex-wrap: wrap;
+    gap: 12px;
     align-items: center;
+    justify-content: center;
   }
 
   .role-tag-separator {
@@ -1029,16 +1037,16 @@ import Layout from '../layouts/Layout.astro';
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 18px 44px;
+    padding: clamp(12px, 2.2vw, 18px) clamp(28px, 4vw, 44px);
     border-radius: 9999px;
-    font-size: 28px;
+    font-size: clamp(16px, 2.4vw, 28px);
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
+    letter-spacing: clamp(0.08em, 0.8vw, 0.12em);
     border: 2px solid var(--tag-border);
     backdrop-filter: blur(12px);
     transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    margin: 6px;
+    margin: 0;
     background: linear-gradient(135deg, var(--tag-bg-1), var(--tag-bg-2));
     background-size: 160% 160%;
     background-position: 0% 50%;
@@ -1052,6 +1060,7 @@ import Layout from '../layouts/Layout.astro';
     user-select: none;
     filter: none;
     will-change: transform, filter, box-shadow;
+    text-align: center;
   }
 
   .role-tag-label {
@@ -1528,31 +1537,29 @@ import Layout from '../layouts/Layout.astro';
       roleTagsContainer.innerHTML = '';
 
       if (!tags || tags.length === 0) {
+        const defaultGroup = document.createElement('div');
+        defaultGroup.className = 'role-tags-group role-tags-roles';
         const defaultTag = document.createElement('span');
         defaultTag.className = 'role-tag role-fan';
         const defaultLabel = document.createElement('span');
         defaultLabel.className = 'role-tag-label';
         defaultLabel.textContent = 'FAN';
         defaultTag.appendChild(defaultLabel);
-        defaultTag.style.display = 'inline-block';
-        roleTagsContainer.appendChild(defaultTag);
+        defaultGroup.appendChild(defaultTag);
+        roleTagsContainer.appendChild(defaultGroup);
         attachLottieGlow(defaultTag);
         return;
       }
 
-      const hasRoles = tags.some(tag => tag.isRole);
-      const hasTags = tags.some(tag => !tag.isRole);
-      let separatorAdded = false;
-
+      const rolesGroup = document.createElement('div');
+      rolesGroup.className = 'role-tags-group role-tags-roles';
+      const tagsGroup = document.createElement('div');
+      tagsGroup.className = 'role-tags-group role-tags-tags';
+      let hasRoles = false;
+      let hasTags = false;
       const tagElements: HTMLElement[] = [];
 
-      tags.forEach(tag => {
-        if (hasRoles && hasTags && !tag.isRole && !separatorAdded) {
-          const separator = document.createElement('span');
-          separator.className = 'role-tag-separator';
-          roleTagsContainer.appendChild(separator);
-          separatorAdded = true;
-        }
+      const appendTag = (tag: TagDisplay, target: HTMLElement) => {
         const tagElement = document.createElement('span');
         // Usar clase CSS si existe, sino solo base
         tagElement.className = `role-tag ${tag.cssClass || ''}`;
@@ -1661,9 +1668,22 @@ import Layout from '../layouts/Layout.astro';
         tagElement.style.outline = 'none';
         tagElement.appendChild(tagLabel);
 
-        roleTagsContainer.appendChild(tagElement);
+        target.appendChild(tagElement);
         tagElements.push(tagElement);
+      };
+
+      tags.forEach(tag => {
+        if (tag.isRole) {
+          hasRoles = true;
+          appendTag(tag, rolesGroup);
+          return;
+        }
+        hasTags = true;
+        appendTag(tag, tagsGroup);
       });
+
+      if (hasRoles) roleTagsContainer.appendChild(rolesGroup);
+      if (hasTags) roleTagsContainer.appendChild(tagsGroup);
 
       tagElements.forEach((tagEl) => attachLottieGlow(tagEl));
     };
