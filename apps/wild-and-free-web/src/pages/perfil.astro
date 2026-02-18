@@ -987,10 +987,13 @@ import Layout from '../layouts/Layout.astro';
   .role-tags {
     margin-top: 10px;
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 12px;
     align-items: center;
     justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
   }
 
   .role-tag-separator {
@@ -1648,7 +1651,8 @@ import Layout from '../layouts/Layout.astro';
       const roleRaw = (resolvedRole || profile.role || session.user?.user_metadata?.role || 'fan');
       const normalizedRole = roleRaw.toLowerCase().trim().replace(/\s+/g, '-');
 
-      const gatewayData = await getUserTags(session.user.id) as any;
+      const resolvedUserId = profile?.id || session.user.id;
+      const gatewayData = await getUserTags(resolvedUserId) as any;
       const gatewayTags = Array.isArray(gatewayData?.tags)
         ? gatewayData.tags
         : Array.isArray(gatewayData?.data?.tags)
