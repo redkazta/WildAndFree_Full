@@ -3,3 +3,5 @@ declare module 'astro/jsx-runtime' {
   export * from '../node_modules/astro/dist/jsx-runtime/index.js';
   export import JSX = astroHTML.JSX;
 }
+
+declare module 'lottie-web';

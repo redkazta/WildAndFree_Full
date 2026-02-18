@@ -60,6 +60,10 @@ const isActive = (href: string) => {
 				color: #fff;
 			}
 
+			body *:not(.allow-color):not(.allow-color *) {
+				color: #fff !important;
+			}
+
 			::placeholder {
 				color: #fff !important;
 				opacity: 0.85;
@@ -240,8 +244,8 @@ const isActive = (href: string) => {
 
 					<a href="/" class="flex flex-col items-start group min-w-max">
 						<div class="flex items-baseline gap-0.5">
-							<span class="text-xl md:text-2xl font-black tracking-tighter text-orange-500 italic leading-none group-hover:scale-105 transition-transform origin-left">WILD</span>
-							<span class="text-xl md:text-2xl font-black tracking-tighter text-white italic leading-none group-hover:scale-105 transition-transform origin-left">GVNG</span>
+							<span class="allow-color text-xl md:text-2xl font-black tracking-tighter text-white italic leading-none group-hover:scale-105 transition-transform origin-left">WILD</span>
+							<span class="allow-color text-xl md:text-2xl font-black tracking-tighter text-orange-500 italic leading-none group-hover:scale-105 transition-transform origin-left">GVNG</span>
 						</div>
 					</a>
 				</div>

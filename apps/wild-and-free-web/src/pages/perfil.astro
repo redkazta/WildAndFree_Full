@@ -1067,7 +1067,15 @@ import Layout from '../layouts/Layout.astro';
     opacity: 0.35;
     mix-blend-mode: screen;
     filter: drop-shadow(0 0 18px var(--tag-glow)) drop-shadow(0 0 30px var(--tag-glow-soft));
+    border-radius: 9999px;
+    -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 55%, rgba(0,0,0,0) 75%);
+    mask-image: radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 55%, rgba(0,0,0,0) 75%);
     pointer-events: none;
+  }
+
+  .role-tag-lottie svg {
+    width: 100%;
+    height: 100%;
   }
 
   .role-tag.is-staff {
@@ -1182,9 +1190,8 @@ import Layout from '../layouts/Layout.astro';
   }
   </style>
 
-<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
-
 <script>
+  import lottie from 'lottie-web';
   import { supabase } from '../lib/supabase.js';
   import { getRole } from '../lib/role.js';
   import { getUserTags } from '../lib/tags-gateway.js';
@@ -1366,73 +1373,133 @@ import Layout from '../layouts/Layout.astro';
     const PURPLE_ROLE_IDS = new Set([5, 6]);
     const GREEN_ROLE_IDS = new Set([0, 7, 8, 9, 10, 11]);
 
-    const TAG_GLOW_LOTTIE = {
-      v: '5.7.4',
-      fr: 30,
-      ip: 0,
-      op: 90,
-      w: 200,
-      h: 200,
-      nm: 'tag-glow',
-      ddd: 0,
-      assets: [],
-      layers: [
-        {
-          ddd: 0,
-          ind: 1,
-          ty: 4,
-          nm: 'Glow',
-          sr: 1,
-          ks: {
-            o: {
-              a: 1,
-              k: [
-                { t: 0, s: [20], e: [55] },
-                { t: 45, s: [55], e: [20] },
-                { t: 90, s: [20] }
-              ]
+    const resolveRgb = (value: string) => {
+      const temp = document.createElement('span');
+      temp.style.color = value;
+      temp.style.display = 'none';
+      document.body.appendChild(temp);
+      const computed = getComputedStyle(temp).color || 'rgb(255, 255, 255)';
+      document.body.removeChild(temp);
+      const match = computed.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+      if (!match) return { r: 255, g: 255, b: 255 };
+      return { r: Number(match[1]), g: Number(match[2]), b: Number(match[3]) };
+    };
+
+    const buildTagGlowLottie = (color: string, intensity: number) => {
+      const rgb = resolveRgb(color);
+      const fillColor = [rgb.r / 255, rgb.g / 255, rgb.b / 255, 1];
+      const softHigh = Math.min(100, Math.max(0, 35 + intensity * 45));
+      const softLow = Math.max(0, softHigh - 18);
+      const coreHigh = Math.min(100, Math.max(0, 30 + intensity * 55));
+      const coreLow = Math.max(0, coreHigh - 14);
+
+      return {
+        v: '5.7.4',
+        fr: 30,
+        ip: 0,
+        op: 120,
+        w: 200,
+        h: 200,
+        nm: 'tag-glow',
+        ddd: 0,
+        assets: [],
+        layers: [
+          {
+            ddd: 0,
+            ind: 1,
+            ty: 4,
+            nm: 'Soft',
+            sr: 1,
+            ks: {
+              o: {
+                a: 1,
+                k: [
+                  { t: 0, s: [softLow], e: [softHigh] },
+                  { t: 60, s: [softHigh], e: [softLow] },
+                  { t: 120, s: [softLow] }
+                ]
+              },
+              r: { a: 0, k: 0 },
+              p: { a: 0, k: [100, 100, 0] },
+              a: { a: 0, k: [0, 0, 0] },
+              s: {
+                a: 1,
+                k: [
+                  { t: 0, s: [120, 120, 100], e: [150, 150, 100] },
+                  { t: 60, s: [150, 150, 100], e: [120, 120, 100] },
+                  { t: 120, s: [120, 120, 100] }
+                ]
+              }
             },
-            r: { a: 0, k: 0 },
-            p: { a: 0, k: [100, 100, 0] },
-            a: { a: 0, k: [0, 0, 0] },
-            s: {
-              a: 1,
-              k: [
-                { t: 0, s: [90, 90, 100], e: [110, 110, 100] },
-                { t: 45, s: [110, 110, 100], e: [90, 90, 100] },
-                { t: 90, s: [90, 90, 100] }
-              ]
-            }
+            shapes: [
+              { ty: 'el', p: { a: 0, k: [0, 0] }, s: { a: 0, k: [170, 170] }, nm: 'Ellipse' },
+              { ty: 'fl', c: { a: 0, k: fillColor }, o: { a: 0, k: 100 }, r: 1, nm: 'Fill' },
+              { ty: 'tr', p: { a: 0, k: [0, 0] }, a: { a: 0, k: [0, 0] }, s: { a: 0, k: [100, 100] }, r: { a: 0, k: 0 }, o: { a: 0, k: 100 }, nm: 'Transform' }
+            ],
+            ip: 0,
+            op: 120,
+            st: 0,
+            bm: 0
           },
-          shapes: [
-            { ty: 'el', p: { a: 0, k: [0, 0] }, s: { a: 0, k: [150, 150] }, nm: 'Ellipse' },
-            { ty: 'fl', c: { a: 0, k: [1, 1, 1, 1] }, o: { a: 0, k: 100 }, r: 1, nm: 'Fill' },
-            { ty: 'tr', p: { a: 0, k: [0, 0] }, a: { a: 0, k: [0, 0] }, s: { a: 0, k: [100, 100] }, r: { a: 0, k: 0 }, o: { a: 0, k: 100 }, nm: 'Transform' }
-          ],
-          ip: 0,
-          op: 90,
-          st: 0,
-          bm: 0
-        }
-      ]
+          {
+            ddd: 0,
+            ind: 2,
+            ty: 4,
+            nm: 'Core',
+            sr: 1,
+            ks: {
+              o: {
+                a: 1,
+                k: [
+                  { t: 0, s: [coreLow], e: [coreHigh] },
+                  { t: 60, s: [coreHigh], e: [coreLow] },
+                  { t: 120, s: [coreLow] }
+                ]
+              },
+              r: { a: 0, k: 0 },
+              p: { a: 0, k: [100, 100, 0] },
+              a: { a: 0, k: [0, 0, 0] },
+              s: {
+                a: 1,
+                k: [
+                  { t: 0, s: [70, 70, 100], e: [95, 95, 100] },
+                  { t: 60, s: [95, 95, 100], e: [70, 70, 100] },
+                  { t: 120, s: [70, 70, 100] }
+                ]
+              }
+            },
+            shapes: [
+              { ty: 'el', p: { a: 0, k: [0, 0] }, s: { a: 0, k: [120, 120] }, nm: 'Ellipse' },
+              { ty: 'fl', c: { a: 0, k: fillColor }, o: { a: 0, k: 100 }, r: 1, nm: 'Fill' },
+              { ty: 'tr', p: { a: 0, k: [0, 0] }, a: { a: 0, k: [0, 0] }, s: { a: 0, k: [100, 100] }, r: { a: 0, k: 0 }, o: { a: 0, k: 100 }, nm: 'Transform' }
+            ],
+            ip: 0,
+            op: 120,
+            st: 0,
+            bm: 0
+          }
+        ]
+      };
     };
 
     const attachLottieGlow = (tagElement: HTMLElement) => {
-      const lottie = (window as any).lottie;
-      if (!lottie) return;
       const anim = (tagElement.dataset.anim || '').toLowerCase();
       if (anim === 'none') return;
       const existing = tagElement.querySelector('.role-tag-lottie');
       if (existing) return;
+      const glowColor = getComputedStyle(tagElement).getPropertyValue('--tag-glow').trim() || '#ffffff';
+      const intensity = anim === 'role-pulse' ? 0.9 : anim === 'member-shine' ? 0.65 : 0.75;
+      const animationData = buildTagGlowLottie(glowColor, intensity);
       const lottieWrapper = document.createElement('span');
       lottieWrapper.className = 'role-tag-lottie';
+      lottieWrapper.style.opacity = anim === 'role-pulse' ? '0.5' : anim === 'member-shine' ? '0.35' : '0.42';
       tagElement.prepend(lottieWrapper);
       lottie.loadAnimation({
         container: lottieWrapper,
         renderer: 'svg',
         loop: true,
         autoplay: true,
-        animationData: TAG_GLOW_LOTTIE,
+        animationData,
         rendererSettings: { preserveAspectRatio: 'xMidYMid slice' }
       });
     };
