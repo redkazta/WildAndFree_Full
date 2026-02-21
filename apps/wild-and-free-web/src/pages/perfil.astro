@@ -24,950 +24,195 @@ import Layout from '../layouts/Layout.astro';
     </div>
 
     <!-- Authenticated Content -->
-    <div id="auth-content" class="hidden">
-      <div class="profile-header-section">
-        <div class="profile-avatar-large">
-          <div id="avatar-placeholder" class="w-full h-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-4xl font-black text-white uppercase">
-            WG
-          </div>
-          <img id="profile-avatar-img" src="" alt="Avatar" class="hidden">
-          <div id="role-crown" class="role-crown" aria-hidden="true">
-            <svg width="96" height="96" viewBox="0 0 24 24" fill="none" class="role-crown__icon">
-              <path d="M3 7l4.5 4L12 4l4.5 7L21 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" fill="currentColor"/>
-              <path d="M6 18h12" stroke="currentColor" stroke-width="1.2" opacity="0.35"/>
-            </svg>
-          </div>
-          <button class="avatar-edit">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
-            </svg>
-          </button>
-        </div>
-        <div class="profile-info-main">
-          <div id="birthday-banner" class="hidden birthday-banner">
-            <div class="birthday-content">
-              <span class="birthday-icon">🎂</span>
-              <span class="birthday-text">¡Feliz Cumpleaños!</span>
-              <span class="birthday-icon">🎉</span>
-            </div>
-          </div>
-          <div class="profile-name-row">
-            <h1 id="profile-name">Cargando...</h1>
-            <p class="username" id="profile-username">@usuario</p>
-            <div class="role-tags" id="profile-role-tags">
-              <!-- Los tags se cargarán dinámicamente aquí -->
-            </div>
-          </div>
-          <p class="bio" id="profile-bio">Cargando biografía...</p>
-          <div class="profile-details mb-6 flex flex-wrap gap-4 text-xs font-bold uppercase tracking-widest text-white/60">
-            <div id="profile-location-container" class="hidden flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
-              <span class="text-orange-500">📍</span>
-              <span id="profile-location">Ubicación</span>
-            </div>
-            <div id="profile-birthdate-container" class="hidden flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
-              <span class="text-orange-500">📅</span>
-              <span id="profile-birthdate">Cumpleaños</span>
-            </div>
-          </div>
-          <div class="profile-stats">
-            <div class="stat">
-              <span class="stat-number" id="stat-following">0</span>
-              <span class="stat-label">Siguiendo</span>
-            </div>
-            <div class="stat">
-              <span class="stat-number" id="stat-followers">0</span>
-              <span class="stat-label">Seguidores</span>
-            </div>
-            <div class="stat">
-              <span class="stat-number" id="stat-favorites">0</span>
-              <span class="stat-label">Favoritos</span>
-            </div>
-          </div>
-        </div>
+    <div id="auth-content" class="hidden w-full max-w-[1200px] mx-auto">
+      
+      <!-- New Clean Vertical Layout -->
+      <div class="flex flex-col md:flex-row gap-12 items-start pt-12 mb-20">
         
-        <!-- Level / Crew Section -->
-        <div class="profile-crew-level">
-          <div class="crew-badge">
-            <span class="crew-level">NIVEL 1</span>
-            <span class="crew-title">ROOKIE</span>
+        <!-- Left: Identity Column (Sticky) -->
+        <div class="w-full md:w-1/3 flex flex-col items-center md:items-start md:sticky md:top-24">
+          <div class="relative group mb-8">
+            <div class="w-48 h-48 md:w-64 md:h-64 bg-black border-4 border-white shadow-[8px_8px_0px_#FF5500] overflow-hidden">
+              <div id="avatar-placeholder" class="w-full h-full flex items-center justify-center text-6xl font-black text-white bg-[#111]">
+                WG
+              </div>
+              <img id="profile-avatar-img" src="" alt="Avatar" class="w-full h-full object-cover hidden">
+            </div>
+            <button class="avatar-edit absolute -bottom-4 -right-4 w-12 h-12 bg-[#FF5500] text-black border-2 border-black flex items-center justify-center hover:scale-110 transition-transform shadow-[4px_4px_0px_#000]">
+              <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/></svg>
+            </button>
           </div>
-          <div class="crew-progress-container">
-            <div class="crew-progress-bar" style="width: 35%"></div>
-          </div>
-          <p class="crew-next">Próximo: Street Legend</p>
-        </div>
-      </div>
 
-      <div class="profile-content">
-        <div class="profile-tabs">
-          <button class="tab active" data-tab="overview">Resumen</button>
-          <button class="tab" data-tab="music">Música</button>
-          <button class="tab" data-tab="playlists">Playlists</button>
-          <button class="tab" data-tab="following">Siguiendo</button>
+          <h1 id="profile-name" class="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter leading-none mb-2 text-center md:text-left">
+            Cargando...
+          </h1>
+          <p id="profile-username" class="text-[#FF5500] font-mono text-lg font-bold mb-6 tracking-wide">
+            @usuario
+          </p>
+
+          <div class="flex flex-wrap justify-center md:justify-start gap-3 mb-8" id="profile-role-tags">
+            <!-- Tags loaded dynamically -->
+          </div>
+
+          <div class="w-full border-t border-white/20 pt-6 mt-2">
+             <div class="flex justify-between items-center mb-2">
+                <span class="text-xs font-bold text-[#666] uppercase tracking-widest">Nivel Actual</span>
+                <span class="text-xl font-black text-[#FF5500] uppercase">Rookie</span>
+             </div>
+             <div class="h-3 w-full bg-[#111] border border-[#333]">
+                <div class="h-full bg-[#FF5500] w-[35%] shadow-[0_0_10px_rgba(255,85,0,0.5)]"></div>
+             </div>
+             <div class="flex justify-between items-center mt-2 text-[10px] font-mono text-[#666]">
+                <span>XP: 350 / 1000</span>
+                <span>NEXT: STREET LEGEND</span>
+             </div>
+          </div>
+        </div>
+
+        <!-- Right: Content Column -->
+        <div class="w-full md:w-2/3">
+          
+          <!-- Bio & Stats Row -->
+          <div class="bg-[#111] border border-white/10 p-8 mb-12 shadow-[12px_12px_0px_rgba(0,0,0,0.5)]">
+            <p id="profile-bio" class="text-xl text-white/90 font-medium leading-relaxed mb-8 border-l-4 border-[#FF5500] pl-6">
+              Cargando biografía...
+            </p>
+            
+            <div class="grid grid-cols-3 gap-8 border-t border-white/10 pt-8">
+              <div class="text-center">
+                <span id="stat-following" class="block text-4xl font-black text-white mb-1">0</span>
+                <span class="text-xs font-bold text-[#666] uppercase tracking-widest">Siguiendo</span>
+              </div>
+              <div class="text-center border-l border-white/10">
+                <span id="stat-followers" class="block text-4xl font-black text-white mb-1">0</span>
+                <span class="text-xs font-bold text-[#666] uppercase tracking-widest">Seguidores</span>
+              </div>
+              <div class="text-center border-l border-white/10">
+                <span id="stat-favorites" class="block text-4xl font-black text-white mb-1">0</span>
+                <span class="text-xs font-bold text-[#666] uppercase tracking-widest">Favoritos</span>
+              </div>
+            </div>
+
+            <div class="flex gap-6 mt-8 pt-6 border-t border-white/10 text-xs font-bold text-[#888] uppercase tracking-widest">
+              <span id="profile-location" class="hidden flex items-center gap-2"><span class="text-[#FF5500]">📍</span> Ubicación</span>
+              <span id="profile-birthdate" class="hidden flex items-center gap-2"><span class="text-[#FF5500]">📅</span> Cumpleaños</span>
+            </div>
+          </div>
+
+          <!-- Tabs Navigation -->
+          <div class="profile-content">
+        <div class="profile-tabs flex gap-8 border-b-2 border-[#222] mb-8 pb-0 overflow-x-auto">
+          <button class="tab active px-6 py-4 text-sm font-black uppercase tracking-widest text-[#666] hover:text-white transition-colors relative" data-tab="overview">Resumen</button>
+          <button class="tab px-6 py-4 text-sm font-black uppercase tracking-widest text-[#666] hover:text-white transition-colors relative" data-tab="music">Música</button>
+          <button class="tab px-6 py-4 text-sm font-black uppercase tracking-widest text-[#666] hover:text-white transition-colors relative" data-tab="playlists">Playlists</button>
+          <button class="tab px-6 py-4 text-sm font-black uppercase tracking-widest text-[#666] hover:text-white transition-colors relative" data-tab="following">Siguiendo</button>
         </div>
 
         <div class="tab-content active" id="overview">
-          <div class="content-grid">
-            <div class="content-section">
-              <h3>Artistas Favoritos</h3>
-              <div class="artist-grid">
-                <div class="artist-card">
-                  <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=80&h=80&fit=crop" alt="Artista">
-                  <span>Artista 1</span>
+          <div class="grid grid-cols-1 gap-8">
+            <div class="content-section bg-[#111] border border-white/10 p-6 shadow-[8px_8px_0px_rgba(0,0,0,0.5)]">
+              <h3 class="text-xl font-black text-white uppercase border-l-4 border-[#FF5500] pl-4 mb-6">Artistas Favoritos</h3>
+              <div class="flex gap-4 flex-wrap">
+                <div class="text-center cursor-pointer hover:-translate-y-1 transition-transform">
+                  <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=80&h=80&fit=crop" alt="Artista" class="w-20 h-20 rounded-full object-cover border-2 border-[#333] mb-2 mx-auto">
+                  <span class="block text-xs font-bold text-white uppercase">Artista 1</span>
                 </div>
-                <div class="artist-card">
-                  <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=80&h=80&fit=crop" alt="Artista">
-                  <span>Artista 2</span>
-                </div>
-                <div class="artist-card">
-                  <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=80&h=80&fit=crop" alt="Artista">
-                  <span>Artista 3</span>
-                </div>
+                <!-- ... more artists ... -->
               </div>
             </div>
 
-            <div class="content-section">
-              <h3>Actividad Reciente</h3>
-              <div class="activity-list">
-                <div class="activity-item">
-                  <div class="activity-icon">🎵</div>
-                  <div class="activity-info">
-                    <p>Escuchaste <strong>Track Urbano</strong></p>
-                    <span>hace 2 horas</span>
+            <div class="content-section bg-[#111] border border-white/10 p-6 shadow-[8px_8px_0px_rgba(0,0,0,0.5)]">
+              <h3 class="text-xl font-black text-white uppercase border-l-4 border-[#FF5500] pl-4 mb-6">Actividad Reciente</h3>
+              <div class="flex flex-col gap-4">
+                <div class="flex items-center gap-4 p-4 bg-black/40 border border-white/5">
+                  <div class="text-2xl">🎵</div>
+                  <div>
+                    <p class="text-sm font-bold text-white mb-1">Escuchaste <strong class="text-[#FF5500]">Track Urbano</strong></p>
+                    <span class="text-[10px] text-[#666] uppercase tracking-wider">hace 2 horas</span>
                   </div>
                 </div>
-                <div class="activity-item">
-                  <div class="activity-icon">❤️</div>
-                  <div class="activity-info">
-                    <p>Agregaste <strong>Album Nueva Era</strong> a favoritos</p>
-                    <span>hace 1 día</span>
-                  </div>
-                </div>
-                <div class="activity-item">
-                  <div class="activity-icon">🎫</div>
-                  <div class="activity-info">
-                    <p>Compraste entrada para <strong>Show Wild Gvng</strong></p>
-                    <span>hace 3 días</span>
-                  </div>
-                </div>
+                <!-- ... more activity ... -->
               </div>
             </div>
           </div>
         </div>
 
-        <div class="tab-content" id="music">
-          <div class="music-section">
-            <h3>Canciones Más Escuchadas</h3>
-            <div class="track-list">
-              <div class="track-item">
-                <div class="track-number">1</div>
-                <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=50&h=50&fit=crop" alt="Album" class="track-image">
-                <div class="track-info">
-                  <h4>Urban Flow</h4>
-                  <p>Artista Principal</p>
-                </div>
-                <span class="track-plays">234 reproducciones</span>
-              </div>
-            </div>
-          </div>
+        <div class="tab-content hidden" id="music">
+           <div class="bg-[#111] border border-white/10 p-6 shadow-[8px_8px_0px_rgba(0,0,0,0.5)]">
+             <h3 class="text-xl font-black text-white uppercase border-l-4 border-[#FF5500] pl-4 mb-6">Canciones Más Escuchadas</h3>
+             <!-- ... -->
+           </div>
+        </div>
+        
+        <div class="tab-content hidden" id="playlists">
+           <div class="bg-[#111] border border-white/10 p-6 shadow-[8px_8px_0px_rgba(0,0,0,0.5)]">
+             <h3 class="text-xl font-black text-white uppercase border-l-4 border-[#FF5500] pl-4 mb-6">Mis Playlists</h3>
+             <!-- ... -->
+           </div>
         </div>
 
-        <div class="tab-content" id="playlists">
-          <div class="playlists-section">
-            <h3>Mis Playlists</h3>
-            <div class="playlist-grid">
-              <div class="playlist-card">
-                <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=120&h=120&fit=crop" alt="Playlist" class="playlist-cover">
-                <h4>Urban Essentials</h4>
-                <p>45 tracks • 2.3K seguidores</p>
-                <button class="play-btn">▶</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="tab-content" id="following">
-          <div class="following-section">
-            <h3>Siguiendo</h3>
-            <div class="following-grid">
-              <div class="following-card">
-                <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=60&h=60&fit=crop" alt="Artista" class="following-avatar">
-                <div class="following-info">
-                  <h4>Artista Principal</h4>
-                  <p>2.1M seguidores</p>
-                </div>
-                <button class="following-btn following">Siguiendo</button>
-              </div>
-            </div>
-          </div>
+        <div class="tab-content hidden" id="following">
+           <div class="bg-[#111] border border-white/10 p-6 shadow-[8px_8px_0px_rgba(0,0,0,0.5)]">
+             <h3 class="text-xl font-black text-white uppercase border-l-4 border-[#FF5500] pl-4 mb-6">Siguiendo</h3>
+             <!-- ... -->
+           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 </Layout>
 
 <style>
+  :root {
+    --p-orange: #FF5500;
+  }
+
   .profile-container {
     min-height: 100vh;
-    padding: 80px 20px 40px;
-    background: linear-gradient(135deg, #000 0%, #111 50%, #000 100%);
-    position: relative;
-  }
-
-  .profile-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-      radial-gradient(circle at 20% 80%, rgba(201, 131, 0, 0.05) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(138, 3, 3, 0.05) 0%, transparent 50%);
-    pointer-events: none;
-  }
-
-  .profile-header-section {
-    max-width: 1600px;
-    margin: 0 auto 24px;
-    display: flex;
-    align-items: center;
-    gap: 32px;
-    padding: 24px;
-    background: rgba(17, 17, 17, 0.8);
-    border: 1px solid rgba(201, 131, 0, 0.3);
-    border-radius: 16px;
-    backdrop-filter: blur(10px);
-    position: relative;
-    z-index: 1;
-    justify-content: space-between;
-  }
-
-  .profile-info-main {
-    flex: 1;
-  }
-
-  .profile-crew-level {
-    width: 240px;
-    background: rgba(255, 255, 255, 0.03);
-    padding: 16px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    text-align: center;
-  }
-
-  .crew-badge {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 8px;
-  }
-
-  .crew-level {
-    font-size: 10px;
-    font-weight: 700;
-    color: var(--primary-color);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-  }
-
-  .crew-title {
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: 20px;
-    font-weight: 900;
-    color: #fff;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-  }
-
-  .crew-progress-container {
-    width: 100%;
-    height: 6px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 3px;
-    margin-bottom: 6px;
-    overflow: hidden;
-  }
-
-  .crew-progress-bar {
-    height: 100%;
-    background: var(--primary-color);
-    border-radius: 3px;
-    box-shadow: 0 0 8px var(--primary-color);
-  }
-
-  .crew-next {
-    font-size: 10px;
-    color: rgba(255, 255, 255, 0.5);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin: 0;
-  }
-
-  .profile-avatar-large {
-    position: relative;
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 3px solid var(--primary-color);
-    box-shadow: 0 0 20px rgba(201, 131, 0, 0.2);
-    animation: avatar-pulse 4s infinite ease-in-out;
-  }
-
-  @keyframes avatar-pulse {
-    0%, 100% { box-shadow: 0 0 20px rgba(201, 131, 0, 0.2); border-color: var(--primary-color); }
-    50% { box-shadow: 0 0 30px rgba(201, 131, 0, 0.4); border-color: #ffaa00; }
-  }
-
-  .profile-info-main h1 {
-    margin: 0;
-    font-size: 28px;
-    line-height: 1;
-    color: #fff;
-    font-family: 'Noto Sans JP', sans-serif;
-    letter-spacing: 0.02em;
-    font-weight: 800;
-    animation: text-shine 3s linear infinite;
-    background: linear-gradient(90deg, #fff, #ddd, #fff);
-    background-size: 200%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  @keyframes text-shine {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 200% 50%; }
-  }
-
-
-  .profile-avatar-large img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  /* Birthday Banner Specificity Fix */
-  #birthday-banner {
-    margin-bottom: 20px;
-    padding: 12px 24px;
-    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 100, 100, 0.2) 100%);
-    border: 1px solid rgba(255, 215, 0, 0.4);
-    border-radius: 12px;
-    display: none !important; /* Forzamos oculto por defecto usando ID */
-    align-items: center;
-    justify-content: center;
-    animation: bounce 2s infinite;
-    backdrop-filter: blur(5px);
-  }
-
-  #birthday-banner.is-active {
-    display: inline-flex !important; /* Forzamos visible solo con esta clase usando ID */
-  }
-
-  .birthday-content {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .birthday-text {
-    font-family: 'Noto Sans JP', sans-serif;
-    font-weight: 700;
-    color: #FFD700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-  }
-
-  .birthday-icon {
-    font-size: 20px;
-  }
-
-  @keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
-  }
-
-  .role-crown {
-    position: absolute;
-    top: -46px;
-    left: 68%;
-    transform: translateX(-50%) rotate(-14deg);
-    width: 108px;
-    height: 108px;
-    border-radius: 40px;
-    background: radial-gradient(circle at 30% 30%, rgba(255, 230, 160, 0.9) 0%, rgba(201, 131, 0, 0.9) 45%, rgba(138, 3, 3, 0.65) 100%);
-    color: rgba(20, 10, 0, 0.85);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 22px 60px rgba(201, 131, 0, 0.18), 0 18px 40px rgba(0,0,0,0.55);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    pointer-events: none;
-    z-index: 5;
-  }
-
-  .role-crown.is-visible {
-    display: flex;
-  }
-
-  .role-crown__icon {
-    filter: drop-shadow(0 10px 16px rgba(0,0,0,0.35));
-  }
-
-  /* Animaciones de Roles por ID */
-  
-  /* Owners (1-11) - Animación dorada perrotota */
-  @keyframes golden-pulse {
-    0% { 
-      transform: scale(1);
-      box-shadow: 0 20px 50px rgba(255, 215, 0, 0.3), 0 0 20px rgba(255, 215, 0, 0.2);
-      background: linear-gradient(135deg, rgba(255, 215, 0, 0.25) 0%, rgba(255, 140, 0, 0.2) 55%, rgba(255, 255, 255, 0.08) 100%);
-    }
-    25% { 
-      transform: scale(1.05);
-      box-shadow: 0 25px 60px rgba(255, 215, 0, 0.4), 0 0 30px rgba(255, 215, 0, 0.3);
-      background: linear-gradient(135deg, rgba(255, 215, 0, 0.35) 0%, rgba(255, 140, 0, 0.3) 55%, rgba(255, 255, 255, 0.12) 100%);
-    }
-    50% { 
-      transform: scale(1.1);
-      box-shadow: 0 30px 70px rgba(255, 215, 0, 0.5), 0 0 40px rgba(255, 215, 0, 0.4);
-      background: linear-gradient(135deg, rgba(255, 215, 0, 0.45) 0%, rgba(255, 140, 0, 0.4) 55%, rgba(255, 255, 255, 0.16) 100%);
-    }
-    75% { 
-      transform: scale(1.05);
-      box-shadow: 0 25px 60px rgba(255, 215, 0, 0.4), 0 0 30px rgba(255, 215, 0, 0.3);
-      background: linear-gradient(135deg, rgba(255, 215, 0, 0.35) 0%, rgba(255, 140, 0, 0.3) 55%, rgba(255, 255, 255, 0.12) 100%);
-    }
-    100% { 
-      transform: scale(1);
-      box-shadow: 0 20px 50px rgba(255, 215, 0, 0.3), 0 0 20px rgba(255, 215, 0, 0.2);
-      background: linear-gradient(135deg, rgba(255, 215, 0, 0.25) 0%, rgba(255, 140, 0, 0.2) 55%, rgba(255, 255, 255, 0.08) 100%);
-    }
-  }
-  
-  /* Origins (12-13) - Animación de brillo ancestral */
-  @keyframes origins-glow {
-    0%, 100% { 
-      box-shadow: 0 15px 40px rgba(138, 43, 226, 0.25), 0 0 15px rgba(138, 43, 226, 0.15);
-      background: linear-gradient(135deg, rgba(138, 43, 226, 0.22) 0%, rgba(75, 0, 130, 0.18) 100%);
-    }
-    50% { 
-      box-shadow: 0 20px 55px rgba(138, 43, 226, 0.35), 0 0 25px rgba(138, 43, 226, 0.25);
-      background: linear-gradient(135deg, rgba(138, 43, 226, 0.32) 0%, rgba(75, 0, 130, 0.28) 100%);
-    }
-  }
-  
-  /* Members (14) - Animación de brillo de membresía */
-  @keyframes member-shine {
-    0%, 100% { 
-      box-shadow: 0 12px 35px rgba(0, 191, 255, 0.25), 0 0 12px rgba(0, 191, 255, 0.15);
-      background: linear-gradient(135deg, rgba(0, 191, 255, 0.22) 0%, rgba(30, 144, 255, 0.18) 100%);
-    }
-    50% { 
-      box-shadow: 0 17px 45px rgba(0, 191, 255, 0.35), 0 0 20px rgba(0, 191, 255, 0.25);
-      background: linear-gradient(135deg, rgba(0, 191, 255, 0.32) 0%, rgba(30, 144, 255, 0.28) 100%);
-    }
-  }
-  
-  /* Artists (15) - Animación de chispas creativas */
-  @keyframes artist-sparkle {
-    0%, 100% { 
-      box-shadow: 0 15px 40px rgba(255, 20, 147, 0.25), 0 0 15px rgba(255, 20, 147, 0.15);
-      background: linear-gradient(135deg, rgba(255, 20, 147, 0.22) 0%, rgba(219, 112, 147, 0.18) 100%);
-    }
-    25% { 
-      box-shadow: 0 18px 48px rgba(255, 105, 180, 0.35), 0 0 22px rgba(255, 105, 180, 0.25);
-      background: linear-gradient(135deg, rgba(255, 105, 180, 0.32) 0%, rgba(219, 112, 147, 0.28) 100%);
-    }
-    75% { 
-      box-shadow: 0 22px 52px rgba(255, 69, 0, 0.30), 0 0 18px rgba(255, 69, 0, 0.20);
-      background: linear-gradient(135deg, rgba(255, 69, 0, 0.28) 0%, rgba(255, 20, 147, 0.24) 100%);
-    }
-  }
-  
-  /* Media (16) - Animación de pulso dinámico */
-  @keyframes media-pulse {
-    0%, 100% { 
-      box-shadow: 0 14px 38px rgba(255, 69, 0, 0.25), 0 0 14px rgba(255, 69, 0, 0.15);
-      background: linear-gradient(135deg, rgba(255, 69, 0, 0.22) 0%, rgba(255, 140, 0, 0.18) 100%);
-    }
-    50% { 
-      box-shadow: 0 19px 50px rgba(255, 69, 0, 0.35), 0 0 24px rgba(255, 69, 0, 0.25);
-      background: linear-gradient(135deg, rgba(255, 69, 0, 0.32) 0%, rgba(255, 140, 0, 0.28) 100%);
-    }
-  }
-  
-  /* Developers (17) - Animación de código matrix */
-  @keyframes developer-code {
-    0% { 
-      box-shadow: 0 13px 36px rgba(0, 255, 0, 0.20), 0 0 12px rgba(0, 255, 0, 0.10);
-      background: linear-gradient(135deg, rgba(0, 255, 0, 0.18) 0%, rgba(50, 205, 50, 0.15) 100%);
-      transform: translateY(0px);
-    }
-    25% { 
-      box-shadow: 0 16px 42px rgba(0, 255, 0, 0.25), 0 0 16px rgba(0, 255, 0, 0.15);
-      background: linear-gradient(135deg, rgba(0, 255, 0, 0.23) 0%, rgba(50, 205, 50, 0.20) 100%);
-      transform: translateY(-2px);
-    }
-    50% { 
-      box-shadow: 0 19px 48px rgba(0, 255, 0, 0.30), 0 0 20px rgba(0, 255, 0, 0.20);
-      background: linear-gradient(135deg, rgba(0, 255, 0, 0.28) 0%, rgba(50, 205, 50, 0.25) 100%);
-      transform: translateY(0px);
-    }
-    75% { 
-      box-shadow: 0 22px 54px rgba(0, 255, 0, 0.35), 0 0 24px rgba(0, 255, 0, 0.25);
-      background: linear-gradient(135deg, rgba(0, 255, 0, 0.33) 0%, rgba(50, 205, 50, 0.30) 100%);
-      transform: translateY(2px);
-    }
-    100% { 
-      box-shadow: 0 13px 36px rgba(0, 255, 0, 0.20), 0 0 12px rgba(0, 255, 0, 0.10);
-      background: linear-gradient(135deg, rgba(0, 255, 0, 0.18) 0%, rgba(50, 205, 50, 0.15) 100%);
-      transform: translateY(0px);
-    }
-  }
-  
-  /* Designers (18) - Animación de flujo creativo */
-  @keyframes designer-flow {
-    0%, 100% { 
-      box-shadow: 0 15px 40px rgba(255, 105, 180, 0.25), 0 0 15px rgba(255, 105, 180, 0.15);
-      background: linear-gradient(135deg, rgba(255, 105, 180, 0.22) 0%, rgba(255, 20, 147, 0.18) 100%);
-      transform: rotate(0deg) scale(1);
-    }
-    25% { 
-      box-shadow: 0 18px 46px rgba(138, 43, 226, 0.30), 0 0 18px rgba(138, 43, 226, 0.20);
-      background: linear-gradient(135deg, rgba(138, 43, 226, 0.25) 0%, rgba(255, 105, 180, 0.22) 100%);
-      transform: rotate(1deg) scale(1.02);
-    }
-    50% { 
-      box-shadow: 0 21px 52px rgba(0, 191, 255, 0.35), 0 0 21px rgba(0, 191, 255, 0.25);
-      background: linear-gradient(135deg, rgba(0, 191, 255, 0.28) 0%, rgba(138, 43, 226, 0.25) 100%);
-      transform: rotate(-1deg) scale(1.04);
-    }
-    75% { 
-      box-shadow: 0 24px 58px rgba(255, 215, 0, 0.30), 0 0 24px rgba(255, 215, 0, 0.20);
-      background: linear-gradient(135deg, rgba(255, 215, 0, 0.25) 0%, rgba(0, 191, 255, 0.22) 100%);
-      transform: rotate(0.5deg) scale(1.02);
-    }
-  }
-  
-  /* Editors (19) - Animación de creatividad editorial */
-  @keyframes editor-creative {
-    0%, 100% { 
-      box-shadow: 0 14px 38px rgba(255, 140, 0, 0.25), 0 0 14px rgba(255, 140, 0, 0.15);
-      background: linear-gradient(135deg, rgba(255, 140, 0, 0.22) 0%, rgba(255, 69, 0, 0.18) 100%);
-    }
-    33% { 
-      box-shadow: 0 17px 45px rgba(255, 0, 0, 0.30), 0 0 17px rgba(255, 0, 0, 0.20);
-      background: linear-gradient(135deg, rgba(255, 0, 0, 0.25) 0%, rgba(255, 140, 0, 0.22) 100%);
-    }
-    66% { 
-      box-shadow: 0 20px 52px rgba(128, 0, 128, 0.35), 0 0 20px rgba(128, 0, 128, 0.25);
-      background: linear-gradient(135deg, rgba(128, 0, 128, 0.28) 0%, rgba(255, 0, 0, 0.25) 100%);
-    }
-  }
-
-  .avatar-edit {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    background: var(--primary-color);
-    border: none;
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .avatar-edit:hover {
-    background: #e69500;
-    transform: scale(1.1);
-  }
-
-  .profile-name-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    align-items: center;
-    margin-bottom: 4px;
-  }
-
-  /* Removed old profile-info-main h1 block as it is now above with animations */
-
-  .username {
-    margin: 0;
-    color: var(--primary-color);
-    font-size: 18px;
-    font-weight: 600;
-    font-family: 'Noto Sans JP', sans-serif;
-    line-height: 1;
-    padding-top: 2px;
-  }
-
-  /* Estilos base para tags - PREMIUM CHIDOTOTA */
-  .role-tags {
-    margin-top: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    align-items: center;
-    justify-content: flex-start;
-  }
-  
-  .bio {
-    margin: 0 0 12px 0;
-    color: #fff;
-    font-size: 14px;
+    padding: 20px;
+    background-color: #050505;
+    background-image: radial-gradient(#111 1px, transparent 1px);
+    background-size: 20px 20px;
     font-family: 'Noto Sans JP', sans-serif;
   }
 
-  .profile-stats {
-    display: flex;
-    gap: 24px;
-  }
-
-  .stat {
-    text-align: center;
-  }
-
-  .stat-number {
-    display: block;
-    font-size: 24px;
-    font-weight: 700;
-    color: #fff;
-    font-family: 'Noto Sans JP', sans-serif;
-  }
-
-  .stat-label {
-    font-size: 14px;
-    color: #fff;
-    font-family: 'Noto Sans JP', sans-serif;
-  }
-
-  .profile-content {
-    max-width: 1600px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 1;
-  }
-
-  .profile-tabs {
-    display: flex;
-    gap: 32px;
-    margin-bottom: 24px;
-    border-bottom: 1px solid rgba(201, 131, 0, 0.2);
-    padding-bottom: 0;
-  }
-
-  .tab {
-    padding: 16px 0;
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 16px;
-    font-family: 'Noto Sans JP', sans-serif;
-    cursor: pointer;
-    transition: all 0.2s;
-    position: relative;
-    letter-spacing: 0.02em;
-  }
-
-  .tab:hover {
-    color: #fff;
-  }
-
+  /* Reset and Base Styles */
   .tab.active {
-    color: var(--primary-color);
+    color: white;
   }
-
+  
   .tab.active::after {
     content: '';
     position: absolute;
-    bottom: -1px;
+    bottom: 0;
     left: 0;
-    right: 0;
-    height: 2px;
-    background: var(--primary-color);
+    width: 100%;
+    height: 4px;
+    background-color: var(--p-orange);
+  }
+  
+  /* Animation Utilities */
+  @keyframes avatar-pulse {
+    0%, 100% { box-shadow: 0 0 0 0px rgba(255, 85, 0, 0.4); border-color: white; }
+    50% { box-shadow: 0 0 0 10px rgba(255, 85, 0, 0); border-color: #eee; }
+  }
+  
+  /* Custom Scrollbar for tabs */
+  .profile-tabs::-webkit-scrollbar {
+    height: 4px;
+  }
+  
+  .profile-tabs::-webkit-scrollbar-track {
+    background: #111;
+  }
+  
+  .profile-tabs::-webkit-scrollbar-thumb {
+    background: #333;
   }
 
-  .tab-content {
-    display: none;
-  }
-
-  .tab-content.active {
-    display: block;
-  }
-
-  .content-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 40px;
-  }
-
-  .content-section {
-    background: rgba(17, 17, 17, 0.8);
-    border: 1px solid rgba(201, 131, 0, 0.2);
-    border-radius: 12px;
-    padding: 24px;
-  }
-
-  .content-section h3 {
-    margin: 0 0 20px 0;
-    font-size: 20px;
-    color: #fff;
-    font-family: 'Noto Sans JP', sans-serif;
-    letter-spacing: 0.02em;
-  }
-
-  .artist-grid {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-
-  .artist-card {
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .artist-card:hover {
-    transform: translateY(-4px);
-  }
-
-  .artist-card img {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 8px;
-    border: 2px solid rgba(201, 131, 0, 0.3);
-  }
-
-  .artist-card span {
-    display: block;
-    font-size: 14px;
-    color: #fff;
-    font-family: 'Noto Sans JP', sans-serif;
-  }
-
-  .activity-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .activity-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
-  }
-
-  .activity-icon {
-    font-size: 20px;
-    width: 40px;
-    text-align: center;
-  }
-
-  .activity-info p {
-    margin: 0 0 4px 0;
-    color: #fff;
-    font-size: 14px;
-    font-family: 'Noto Sans JP', sans-serif;
-  }
-
-  .activity-info span {
-    font-size: 12px;
-    color: #fff;
-    font-family: 'Noto Sans JP', sans-serif;
-  }
-
-  .music-section, .playlists-section, .following-section {
-    background: rgba(17, 17, 17, 0.8);
-    border: 1px solid rgba(201, 131, 0, 0.2);
-    border-radius: 12px;
-    padding: 24px;
-  }
-
-  .music-section h3, .playlists-section h3, .following-section h3 {
-    margin: 0 0 20px 0;
-    font-size: 20px;
-    color: #fff;
-    font-family: 'Noto Sans JP', sans-serif;
-    letter-spacing: 0.02em;
-  }
-
-  .track-list, .playlist-grid, .following-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .track-item, .playlist-card, .following-card {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 12px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
-    transition: all 0.2s;
-  }
-
-  .track-item:hover, .playlist-card:hover, .following-card:hover {
-    background: rgba(201, 131, 0, 0.1);
-  }
-
-  .track-number {
-    width: 24px;
-    text-align: center;
-    color: #fff;
-    font-family: 'Noto Sans JP', sans-serif;
-  }
-
-  .track-image, .playlist-cover, .following-avatar {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    border-radius: 4px;
-  }
-
-  .track-info h4, .playlist-info h4, .following-info h4 {
-    margin: 0 0 4px 0;
-    font-size: 14px;
-    color: #fff;
-    font-family: 'Noto Sans JP', sans-serif;
-  }
-
-  .track-info p, .playlist-info p, .following-info p {
-    margin: 0;
-    font-size: 12px;
-    color: #fff;
-    font-family: 'Noto Sans JP', sans-serif;
-  }
-
-  .track-plays {
-    margin-left: auto;
-    font-size: 12px;
-    color: #fff;
-    font-family: 'Noto Sans JP', sans-serif;
-  }
-
-  .play-btn {
-    margin-left: auto;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: var(--primary-color);
-    border: none;
-    color: #000;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .play-btn:hover {
-    background: #e69500;
-    transform: scale(1.1);
-  }
-
-  .following-btn {
-    margin-left: auto;
-    padding: 8px 16px;
-    background: none;
-    border: 1px solid rgba(201, 131, 0, 0.3);
-    border-radius: 6px;
-    color: #fff;
-    font-size: 12px;
-    font-family: 'Noto Sans JP', sans-serif;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .following-btn.following {
-    background: rgba(201, 131, 0, 0.1);
-    border-color: var(--primary-color);
-    color: var(--primary-color);
-  }
-
-  .following-btn:hover {
-    background: rgba(201, 131, 0, 0.2);
-  }
-
-  @media (max-width: 768px) {
-    .profile-container {
-      padding: 60px 12px 40px;
-    }
-
-    .profile-header-section {
-      flex-direction: column;
-      text-align: center;
-      gap: 20px;
-      padding: 30px 20px;
-      margin-bottom: 30px;
-    }
-
-    .profile-avatar-large {
-      width: 100px;
-      height: 100px;
-    }
-
-    .profile-info-main h1 {
-      font-size: 24px;
-    }
-
-    .profile-stats {
-      justify-content: center;
-      gap: 16px;
-    }
-
-    .stat-number {
-      font-size: 18px;
-    }
-
-    .profile-tabs {
-      overflow-x: auto;
-      gap: 16px;
-      padding-bottom: 4px;
-      margin-bottom: 24px;
-      scrollbar-width: none;
-    }
-    
-    .profile-tabs::-webkit-scrollbar {
-      display: none;
-    }
-
-    .tab {
-      font-size: 14px;
-      white-space: nowrap;
-    }
-
-    .content-grid {
-      grid-template-columns: 1fr;
-      gap: 20px;
-    }
-    
-    .content-section {
-      padding: 16px;
-    }
-
-    .artist-grid {
-      justify-content: center;
-      gap: 12px;
-    }
-    
-    .artist-card img {
-      width: 60px;
-      height: 60px;
-    }
-  }
+  /* Utility Classes Overrides if needed */
+  /* Grid Layout */
 
   /* Animaciones para Tags */
   @keyframes golden-pulse {
@@ -1325,7 +570,7 @@ import Layout from '../layouts/Layout.astro';
     const nameEl = document.getElementById('profile-name');
     const usernameEl = document.getElementById('profile-username');
     const bioEl = document.getElementById('profile-bio');
-    const crownEl = document.getElementById('role-crown');
+    // const crownEl = document.getElementById('role-crown'); // Removed
     const avatarImg = document.getElementById('profile-avatar-img');
     const avatarPlaceholder = document.getElementById('avatar-placeholder');
 
@@ -1334,127 +579,36 @@ import Layout from '../layouts/Layout.astro';
     if (bioEl) bioEl.textContent = profile.bio || 'Miembro de Wild Gvng • Amante del hip-hop urbano';
 
     // Update Location and Birthdate
-    const locationContainer = document.getElementById('profile-location-container');
     const locationEl = document.getElementById('profile-location');
-    const birthdateContainer = document.getElementById('profile-birthdate-container');
     const birthdateEl = document.getElementById('profile-birthdate');
-    const birthdayBanner = document.getElementById('birthday-banner');
-
-    // Función robusta para ocultar el banner
-    const hideBirthdayBanner = (banner: HTMLElement | null) => {
-      if (!banner) return;
-      banner.classList.remove('is-active');
-      banner.classList.add('hidden');
-      banner.style.setProperty('display', 'none', 'important');
-      banner.style.visibility = 'hidden';
-      banner.style.opacity = '0';
-      console.log('Banner ocultado con función robusta');
-    };
-
-    if (locationContainer) locationContainer.classList.add('hidden');
-    if (birthdateContainer) birthdateContainer.classList.add('hidden');
-    if (birthdayBanner) {
-      hideBirthdayBanner(birthdayBanner);
-    }
+    // const birthdayBanner = document.getElementById('birthday-banner'); // Removed
 
     if (profile.ubicacion) {
-      if (locationEl) locationEl.textContent = profile.ubicacion;
-      locationContainer?.classList.remove('hidden');
+      if (locationEl) {
+        locationEl.textContent = `📍 ${profile.ubicacion}`;
+        locationEl.classList.remove('hidden');
+      }
     }
 
-    // Use strictly the birthdate from the profiles table (database)
     const userBirthdate = profile.birthdate;
     if (userBirthdate) {
-      // 1. Update persistent visible component
-      // NOTE: Standard Postgres DATE format is YYYY-MM-DD
       const parts = String(userBirthdate).split('-').map(n => parseInt(n, 10));
-      
       if (parts.length === 3 && !isNaN(parts[0])) {
         const bYear = parts[0];
-        const bMonth = parts[1]; // 2nd part is Month (Standard)
-        const bDay = parts[2];   // 3rd part is Day (Standard)
-
-        // Month is 0-indexed in JS Date
+        const bMonth = parts[1]; 
+        const bDay = parts[2];
         const birthDateObj = new Date(bYear, bMonth - 1, bDay);
 
         if (birthdateEl) {
           const options = { day: 'numeric', month: 'long' };
           // @ts-ignore
-          birthdateEl.textContent = birthDateObj.toLocaleDateString('es-ES', options);
-        }
-        birthdateContainer?.classList.remove('hidden');
-
-        // 2. Unified Birthday Banner Logic
-        try {
-          const today = new Date();
-          const todayMonth = today.getMonth() + 1;
-          const todayDay = today.getDate();
-          
-          const isBirthday = (todayMonth === bMonth && todayDay === bDay);
-          
-          // Función robusta para mostrar el banner
-          const showBirthdayBanner = (banner: HTMLElement | null) => {
-            if (!banner) return;
-            banner.classList.add('is-active');
-            banner.classList.remove('hidden');
-            banner.style.setProperty('display', 'inline-flex', 'important');
-            banner.style.visibility = 'visible';
-            banner.style.opacity = '1';
-            console.log('Banner mostrado con función robusta');
-          };
-          
-          if (birthdayBanner) {
-            if (isBirthday) {
-              showBirthdayBanner(birthdayBanner);
-              console.log('¡CUMPLEAÑOS DETECTADO! Activando banner...', { today: `${todayDay}/${todayMonth}`, birth: `${bDay}/${bMonth}` });
-            } else {
-              hideBirthdayBanner(birthdayBanner);
-              console.log('No es tu cumpleaños. Banner oculto.', { today: `${todayDay}/${todayMonth}`, birth: `${bDay}/${bMonth}` });
-            }
-          }
-          
-          console.log('Debug Birthdate Final:', {
-            db_value: userBirthdate,
-            parsed_month: bMonth,
-            parsed_day: bDay,
-            today_month: todayMonth,
-            today_day: todayDay,
-            match: isBirthday,
-            element_display: birthdayBanner?.style.display
-          });
-        } catch (e) {
-          console.error('Error in unified birthday check:', e);
+          birthdateEl.textContent = `📅 ${birthDateObj.toLocaleDateString('es-ES', options)}`;
+          birthdateEl.classList.remove('hidden');
         }
       }
     }
 
-    // Añadir observer para detectar cambios externos en el banner
-    if (birthdayBanner) {
-      const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-          if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-            const isHidden = birthdayBanner.classList.contains('hidden');
-            const hasActive = birthdayBanner.classList.contains('is-active');
-            console.log('Observer: Banner class changed - hidden:', isHidden, 'active:', hasActive);
-            
-            // Si el banner se volvió visible sin ser el cumpleaños, forzar oculto
-            if (!isHidden && !hasActive) {
-              console.log('Observer: Forzando oculto - banner visible sin ser activo');
-              hideBirthdayBanner(birthdayBanner);
-            }
-          }
-        });
-      });
-      
-      observer.observe(birthdayBanner, { attributes: true, attributeFilter: ['class'] });
-      console.log('Observer iniciado para el banner');
-    }
-
-    // Sistema de Tags - Mostrar tags visibles del usuario
-    // Los roles ahora son invisibles (solo para permisos internos)
-    // Los tags son visibles y personalizables
-    
-    // Función para mostrar tags del usuario
+    // Tags Logic - Force High Contrast Palette
     interface TagDisplay {
       name: string;
       cssClass?: string;
@@ -1464,147 +618,6 @@ import Layout from '../layouts/Layout.astro';
       id?: number;
     }
 
-    const GOLD_ROLE_IDS = new Set([1, 2, 3]);
-    const RED_ROLE_IDS = new Set([4]);
-    const PURPLE_ROLE_IDS = new Set([5, 6]);
-    const GREEN_ROLE_IDS = new Set([0, 7, 8, 9, 10, 11]);
-
-    const resolveRgb = (value: string) => {
-      const temp = document.createElement('span');
-      temp.style.color = value;
-      temp.style.display = 'none';
-      document.body.appendChild(temp);
-      const computed = getComputedStyle(temp).color || 'rgb(255, 255, 255)';
-      document.body.removeChild(temp);
-      const match = computed.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
-      if (!match) return { r: 255, g: 255, b: 255 };
-      return { r: Number(match[1]), g: Number(match[2]), b: Number(match[3]) };
-    };
-
-    const resolveBorder = (value: string, alpha = 0.85) => {
-      const rgb = resolveRgb(value);
-      return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
-    };
-
-    const buildTagGlowLottie = (color: string, intensity: number) => {
-      const rgb = resolveRgb(color);
-      const fillColor = [rgb.r / 255, rgb.g / 255, rgb.b / 255, 1];
-      const softHigh = Math.min(100, Math.max(0, 35 + intensity * 45));
-      const softLow = Math.max(0, softHigh - 18);
-      const coreHigh = Math.min(100, Math.max(0, 30 + intensity * 55));
-      const coreLow = Math.max(0, coreHigh - 14);
-
-      return {
-        v: '5.7.4',
-        fr: 30,
-        ip: 0,
-        op: 120,
-        w: 200,
-        h: 200,
-        nm: 'tag-glow',
-        ddd: 0,
-        assets: [],
-        layers: [
-          {
-            ddd: 0,
-            ind: 1,
-            ty: 4,
-            nm: 'Soft',
-            sr: 1,
-            ks: {
-              o: {
-                a: 1,
-                k: [
-                  { t: 0, s: [softLow], e: [softHigh] },
-                  { t: 60, s: [softHigh], e: [softLow] },
-                  { t: 120, s: [softLow] }
-                ]
-              },
-              r: { a: 0, k: 0 },
-              p: { a: 0, k: [100, 100, 0] },
-              a: { a: 0, k: [0, 0, 0] },
-              s: {
-                a: 1,
-                k: [
-                  { t: 0, s: [120, 120, 100], e: [150, 150, 100] },
-                  { t: 60, s: [150, 150, 100], e: [120, 120, 100] },
-                  { t: 120, s: [120, 120, 100] }
-                ]
-              }
-            },
-            shapes: [
-              { ty: 'el', p: { a: 0, k: [0, 0] }, s: { a: 0, k: [170, 170] }, nm: 'Ellipse' },
-              { ty: 'fl', c: { a: 0, k: fillColor }, o: { a: 0, k: 100 }, r: 1, nm: 'Fill' },
-              { ty: 'tr', p: { a: 0, k: [0, 0] }, a: { a: 0, k: [0, 0] }, s: { a: 0, k: [100, 100] }, r: { a: 0, k: 0 }, o: { a: 0, k: 100 }, nm: 'Transform' }
-            ],
-            ip: 0,
-            op: 120,
-            st: 0,
-            bm: 0
-          },
-          {
-            ddd: 0,
-            ind: 2,
-            ty: 4,
-            nm: 'Core',
-            sr: 1,
-            ks: {
-              o: {
-                a: 1,
-                k: [
-                  { t: 0, s: [coreLow], e: [coreHigh] },
-                  { t: 60, s: [coreHigh], e: [coreLow] },
-                  { t: 120, s: [coreLow] }
-                ]
-              },
-              r: { a: 0, k: 0 },
-              p: { a: 0, k: [100, 100, 0] },
-              a: { a: 0, k: [0, 0, 0] },
-              s: {
-                a: 1,
-                k: [
-                  { t: 0, s: [70, 70, 100], e: [95, 95, 100] },
-                  { t: 60, s: [95, 95, 100], e: [70, 70, 100] },
-                  { t: 120, s: [70, 70, 100] }
-                ]
-              }
-            },
-            shapes: [
-              { ty: 'el', p: { a: 0, k: [0, 0] }, s: { a: 0, k: [120, 120] }, nm: 'Ellipse' },
-              { ty: 'fl', c: { a: 0, k: fillColor }, o: { a: 0, k: 100 }, r: 1, nm: 'Fill' },
-              { ty: 'tr', p: { a: 0, k: [0, 0] }, a: { a: 0, k: [0, 0] }, s: { a: 0, k: [100, 100] }, r: { a: 0, k: 0 }, o: { a: 0, k: 100 }, nm: 'Transform' }
-            ],
-            ip: 0,
-            op: 120,
-            st: 0,
-            bm: 0
-          }
-        ]
-      };
-    };
-
-    const attachLottieGlow = (tagElement: HTMLElement) => {
-      const anim = (tagElement.dataset.anim || '').toLowerCase();
-      if (anim === 'none') return;
-      const existing = tagElement.querySelector('.role-tag-lottie');
-      if (existing) return;
-      const glowColor = getComputedStyle(tagElement).getPropertyValue('--tag-glow').trim() || '#ffffff';
-      const intensity = anim === 'role-pulse' ? 0.9 : anim === 'member-shine' ? 0.65 : 0.75;
-      const animationData = buildTagGlowLottie(glowColor, intensity);
-      const lottieWrapper = document.createElement('span');
-      lottieWrapper.className = 'role-tag-lottie';
-      lottieWrapper.style.opacity = anim === 'role-pulse' ? '0.5' : anim === 'member-shine' ? '0.35' : '0.42';
-      tagElement.prepend(lottieWrapper);
-      lottie.loadAnimation({
-        container: lottieWrapper,
-        renderer: 'svg',
-        loop: true,
-        autoplay: true,
-        animationData,
-        rendererSettings: { preserveAspectRatio: 'xMidYMid meet' }
-      });
-    };
-
     const displayUserTags = (tags: TagDisplay[]) => {
       const roleTagsContainer = document.getElementById('profile-role-tags');
       if (!roleTagsContainer) return;
@@ -1612,151 +625,40 @@ import Layout from '../layouts/Layout.astro';
       roleTagsContainer.innerHTML = '';
 
       if (!tags || tags.length === 0) {
-        const defaultTag = document.createElement('span');
-        defaultTag.className = 'role-tag role-fan';
-        const defaultLabel = document.createElement('span');
-        defaultLabel.className = 'role-tag-label';
-        defaultLabel.textContent = 'FAN';
-        defaultTag.appendChild(defaultLabel);
-        roleTagsContainer.appendChild(defaultTag);
-        attachLottieGlow(defaultTag);
-        return;
+        tags = [{ name: 'FAN', cssClass: 'role-fan', isRole: true }];
       }
 
-      const tagElements: HTMLElement[] = [];
-
-      const appendTag = (tag: TagDisplay) => {
+      tags.forEach(tag => {
         const tagElement = document.createElement('span');
-        // Usar clase CSS si existe, sino solo base
-        tagElement.className = `role-tag ${tag.cssClass || ''}`;
+        tagElement.className = 'role-tag';
+        
         const tagLabel = document.createElement('span');
         tagLabel.className = 'role-tag-label';
         tagLabel.textContent = tag.name;
-        
-        const rawColor = tag.color ? String(tag.color).trim() : '';
-        const normalizedColor = rawColor && !rawColor.startsWith('#') && /^[0-9a-fA-F]{6}$/.test(rawColor) ? `#${rawColor}` : rawColor;
-
-        if (normalizedColor) {
-            tagElement.style.setProperty('--tag-bg-1', `${normalizedColor}22`);
-            tagElement.style.setProperty('--tag-bg-2', `${normalizedColor}08`);
-            tagElement.style.setProperty('--tag-border', resolveBorder(normalizedColor, 0.7));
-            tagElement.style.setProperty('--tag-text', '#fff');
-            tagElement.style.setProperty('--tag-shine', `${normalizedColor}33`);
-            tagElement.style.backgroundSize = '220% 220%';
-            tagElement.style.backgroundPosition = '0% 50%';
-        } else if (!tag.cssClass || tag.cssClass === 'role-tag') {
-            tagElement.style.setProperty('--tag-bg-1', 'rgba(255,255,255,0.1)');
-            tagElement.style.setProperty('--tag-bg-2', 'rgba(255,255,255,0.05)');
-            tagElement.style.setProperty('--tag-border', 'rgba(255,255,255,0.5)');
-            tagElement.style.setProperty('--tag-text', '#fff');
-            tagElement.style.backgroundSize = '200% 200%';
-            tagElement.style.backgroundPosition = '0% 50%';
-        }
-
-        tagElement.style.setProperty('--tag-glow', normalizedColor || '#ffffff');
-        tagElement.style.setProperty('--tag-glow-soft', normalizedColor || 'rgba(255,255,255,0.5)');
-
-        if (tag.isRole) {
-          const roleId = tag.id ?? 0;
-          if (GOLD_ROLE_IDS.has(roleId)) {
-            tagElement.style.fontSize = '14px';
-            tagElement.style.padding = '8px 16px';
-            tagElement.style.letterSpacing = '0.1em';
-            tagElement.style.fontWeight = '900';
-            tagElement.style.setProperty('--tag-bg-1', 'rgba(245,197,66,0.14)');
-            tagElement.style.setProperty('--tag-bg-2', 'rgba(255,235,170,0.04)');
-            tagElement.style.setProperty('--tag-border', 'rgba(245,197,66,0.85)');
-            tagElement.style.setProperty('--tag-text', '#fff');
-            tagElement.style.setProperty('--tag-shine', 'rgba(255,219,130,0.4)');
-            tagElement.style.setProperty('--tag-glow', '#f5c542');
-            tagElement.style.setProperty('--tag-glow-soft', 'rgba(245,197,66,0.25)');
-          } else if (RED_ROLE_IDS.has(roleId)) {
-            tagElement.style.fontSize = '14px';
-            tagElement.style.padding = '8px 16px';
-            tagElement.style.letterSpacing = '0.1em';
-            tagElement.style.fontWeight = '900';
-            tagElement.style.setProperty('--tag-bg-1', 'rgba(255,78,78,0.14)');
-            tagElement.style.setProperty('--tag-bg-2', 'rgba(255,170,170,0.04)');
-            tagElement.style.setProperty('--tag-border', 'rgba(255,78,78,0.85)');
-            tagElement.style.setProperty('--tag-text', '#fff');
-            tagElement.style.setProperty('--tag-shine', 'rgba(255,140,140,0.4)');
-            tagElement.style.setProperty('--tag-glow', '#ff4e4e');
-            tagElement.style.setProperty('--tag-glow-soft', 'rgba(255,78,78,0.25)');
-          } else if (PURPLE_ROLE_IDS.has(roleId)) {
-            tagElement.style.fontSize = '14px';
-            tagElement.style.padding = '8px 16px';
-            tagElement.style.letterSpacing = '0.1em';
-            tagElement.style.fontWeight = '900';
-            tagElement.style.setProperty('--tag-bg-1', 'rgba(155,89,255,0.14)');
-            tagElement.style.setProperty('--tag-bg-2', 'rgba(200,160,255,0.04)');
-            tagElement.style.setProperty('--tag-border', 'rgba(155,89,255,0.85)');
-            tagElement.style.setProperty('--tag-text', '#fff');
-            tagElement.style.setProperty('--tag-shine', 'rgba(187,140,255,0.4)');
-            tagElement.style.setProperty('--tag-glow', '#9b59ff');
-            tagElement.style.setProperty('--tag-glow-soft', 'rgba(155,89,255,0.25)');
-          } else if (GREEN_ROLE_IDS.has(roleId)) {
-            tagElement.style.fontSize = '14px';
-            tagElement.style.padding = '8px 16px';
-            tagElement.style.letterSpacing = '0.1em';
-            tagElement.style.fontWeight = '800';
-            tagElement.style.setProperty('--tag-bg-1', 'rgba(64,200,120,0.12)');
-            tagElement.style.setProperty('--tag-bg-2', 'rgba(140,255,200,0.04)');
-            tagElement.style.setProperty('--tag-border', 'rgba(64,200,120,0.85)');
-            tagElement.style.setProperty('--tag-text', '#fff');
-            tagElement.style.setProperty('--tag-shine', 'rgba(120,255,190,0.4)');
-            tagElement.style.setProperty('--tag-glow', '#40c878');
-            tagElement.style.setProperty('--tag-glow-soft', 'rgba(64,200,120,0.25)');
-          }
-        } else if (tag.name.toLowerCase().includes('fan')) {
-          tagElement.style.fontSize = '14px';
-          tagElement.style.padding = '8px 16px';
-          tagElement.style.letterSpacing = '0.1em';
-          tagElement.style.fontWeight = '800';
-          tagElement.style.setProperty('--tag-bg-1', 'rgba(64,200,120,0.12)');
-          tagElement.style.setProperty('--tag-bg-2', 'rgba(140,255,200,0.04)');
-          tagElement.style.setProperty('--tag-border', 'rgba(64,200,120,0.85)');
-          tagElement.style.setProperty('--tag-text', '#fff');
-          tagElement.style.setProperty('--tag-shine', 'rgba(120,255,190,0.4)');
-          tagElement.style.setProperty('--tag-glow', '#40c878');
-          tagElement.style.setProperty('--tag-glow-soft', 'rgba(64,200,120,0.25)');
-        } else if (tag.name.toLowerCase().includes('origins')) {
-          tagElement.style.fontSize = '14px';
-          tagElement.style.padding = '8px 16px';
-          tagElement.style.letterSpacing = '0.1em';
-          tagElement.style.fontWeight = '800';
-          tagElement.style.setProperty('--tag-bg-1', 'rgba(245,197,66,0.14)');
-          tagElement.style.setProperty('--tag-bg-2', 'rgba(255,235,170,0.04)');
-          tagElement.style.setProperty('--tag-border', 'rgba(245,197,66,0.85)');
-          tagElement.style.setProperty('--tag-text', '#fff');
-          tagElement.style.setProperty('--tag-shine', 'rgba(255,219,130,0.4)');
-          tagElement.style.setProperty('--tag-glow', '#f5c542');
-          tagElement.style.setProperty('--tag-glow-soft', 'rgba(245,197,66,0.25)');
-        }
-        if (!tag.isRole) {
-          tagElement.style.fontSize = '14px';
-          tagElement.style.padding = '8px 16px';
-          tagElement.style.letterSpacing = '0.1em';
-          tagElement.style.fontWeight = '800';
-        }
-        const normalizedAnimation = (tag.animation || '').toLowerCase().trim();
-        tagElement.dataset.anim = normalizedAnimation || (tag.isRole ? 'role-pulse' : 'member-shine');
-        // tagElement.style.animation = 'none'; // Removed to allow CSS animations
-        tagElement.style.outline = 'none';
-        
-        // Apply CSS animation if available
-        if (normalizedAnimation === 'pulse' || tag.isRole) {
-             tagElement.style.animation = 'wild-pulse 2s infinite ease-in-out';
-        }
-        
         tagElement.appendChild(tagLabel);
 
+        // High Contrast Styling Override
+        tagElement.style.border = '1px solid var(--p-white)';
+        tagElement.style.fontWeight = '800';
+        tagElement.style.letterSpacing = '1px';
+        tagElement.style.padding = '6px 16px';
+        tagElement.style.fontSize = '12px';
+        
+        if (tag.isRole) {
+           // Roles get special orange treatment
+           tagElement.style.background = 'var(--p-white)';
+           tagElement.style.color = 'var(--p-black)';
+           tagElement.style.boxShadow = '4px 4px 0px var(--p-orange)';
+           tagElement.style.border = '1px solid var(--p-white)';
+        } else {
+           // Normal tags get black treatment
+           tagElement.style.background = 'var(--p-black)';
+           tagElement.style.color = 'var(--p-white)';
+           tagElement.style.border = '1px solid var(--p-orange)';
+        }
+
         roleTagsContainer.appendChild(tagElement);
-        tagElements.push(tagElement);
-      };
-
-      tags.forEach(tag => appendTag(tag));
-
-      tagElements.forEach((tagEl) => attachLottieGlow(tagEl));
+      });
     };
 
     try {
@@ -1818,10 +720,10 @@ import Layout from '../layouts/Layout.astro';
     const { role: resolvedRoleCheck } = await getRole(); 
     const roleRaw = (resolvedRoleCheck || profile.role || session.user?.user_metadata?.role || 'fan');
     
-    const roleId = parseInt(roleRaw) || 0;
+    // const roleId = parseInt(roleRaw) || 0;
     
     // La corona se muestra solo para owners (1-11) como referencia interna
-    crownEl?.classList.toggle('is-visible', roleId >= 1 && roleId <= 11);
+    // crownEl?.classList.toggle('is-visible', roleId >= 1 && roleId <= 11); // Removed crownEl usage
     
     if (profile.avatar_url && avatarImg instanceof HTMLImageElement) {
       avatarImg.src = profile.avatar_url;
