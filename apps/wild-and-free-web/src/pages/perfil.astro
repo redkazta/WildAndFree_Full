@@ -1615,6 +1615,10 @@ import Layout from '../layouts/Layout.astro';
             tagElement.style.setProperty('--tag-glow-soft', 'rgba(64,200,120,0.25)');
           }
         } else if (tag.name.toLowerCase().includes('fan')) {
+          tagElement.style.fontSize = '14px';
+          tagElement.style.padding = '8px 16px';
+          tagElement.style.letterSpacing = '0.1em';
+          tagElement.style.fontWeight = '800';
           tagElement.style.setProperty('--tag-bg-1', 'rgba(64,200,120,0.12)');
           tagElement.style.setProperty('--tag-bg-2', 'rgba(140,255,200,0.04)');
           tagElement.style.setProperty('--tag-border', 'rgba(64,200,120,0.85)');
@@ -1623,6 +1627,10 @@ import Layout from '../layouts/Layout.astro';
           tagElement.style.setProperty('--tag-glow', '#40c878');
           tagElement.style.setProperty('--tag-glow-soft', 'rgba(64,200,120,0.25)');
         } else if (tag.name.toLowerCase().includes('origins')) {
+          tagElement.style.fontSize = '14px';
+          tagElement.style.padding = '8px 16px';
+          tagElement.style.letterSpacing = '0.1em';
+          tagElement.style.fontWeight = '800';
           tagElement.style.setProperty('--tag-bg-1', 'rgba(245,197,66,0.14)');
           tagElement.style.setProperty('--tag-bg-2', 'rgba(255,235,170,0.04)');
           tagElement.style.setProperty('--tag-border', 'rgba(245,197,66,0.85)');
@@ -1632,9 +1640,10 @@ import Layout from '../layouts/Layout.astro';
           tagElement.style.setProperty('--tag-glow-soft', 'rgba(245,197,66,0.25)');
         }
         if (!tag.isRole) {
-          tagElement.style.fontSize = '12px';
-          tagElement.style.fontWeight = '700';
-          tagElement.style.padding = '6px 14px';
+          tagElement.style.fontSize = '14px';
+          tagElement.style.padding = '8px 16px';
+          tagElement.style.letterSpacing = '0.1em';
+          tagElement.style.fontWeight = '800';
         }
         const normalizedAnimation = (tag.animation || '').toLowerCase().trim();
         tagElement.dataset.anim = normalizedAnimation || (tag.isRole ? 'role-pulse' : 'member-shine');
