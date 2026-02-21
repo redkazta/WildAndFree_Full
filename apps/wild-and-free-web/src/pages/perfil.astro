@@ -84,6 +84,18 @@ import Layout from '../layouts/Layout.astro';
             </div>
           </div>
         </div>
+        
+        <!-- Level / Crew Section -->
+        <div class="profile-crew-level">
+          <div class="crew-badge">
+            <span class="crew-level">NIVEL 1</span>
+            <span class="crew-title">ROOKIE</span>
+          </div>
+          <div class="crew-progress-container">
+            <div class="crew-progress-bar" style="width: 35%"></div>
+          </div>
+          <p class="crew-next">Próximo: Street Legend</p>
+        </div>
       </div>
 
       <div class="profile-content">
@@ -228,6 +240,69 @@ import Layout from '../layouts/Layout.astro';
     backdrop-filter: blur(10px);
     position: relative;
     z-index: 1;
+    justify-content: space-between;
+  }
+
+  .profile-info-main {
+    flex: 1;
+  }
+
+  .profile-crew-level {
+    width: 240px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: center;
+  }
+
+  .crew-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .crew-level {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--primary-color);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .crew-title {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 20px;
+    font-weight: 900;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  }
+
+  .crew-progress-container {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    margin-bottom: 6px;
+    overflow: hidden;
+  }
+
+  .crew-progress-bar {
+    height: 100%;
+    background: var(--primary-color);
+    border-radius: 3px;
+    box-shadow: 0 0 8px var(--primary-color);
+  }
+
+  .crew-next {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0;
   }
 
   .profile-avatar-large {
@@ -237,15 +312,41 @@ import Layout from '../layouts/Layout.astro';
     border-radius: 50%;
     overflow: hidden;
     border: 3px solid var(--primary-color);
+    box-shadow: 0 0 20px rgba(201, 131, 0, 0.2);
+    animation: avatar-pulse 4s infinite ease-in-out;
   }
+
+  @keyframes avatar-pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(201, 131, 0, 0.2); border-color: var(--primary-color); }
+    50% { box-shadow: 0 0 30px rgba(201, 131, 0, 0.4); border-color: #ffaa00; }
+  }
+
+  .profile-info-main h1 {
+    margin: 0;
+    font-size: 28px;
+    line-height: 1;
+    color: #fff;
+    font-family: 'Noto Sans JP', sans-serif;
+    letter-spacing: 0.02em;
+    font-weight: 800;
+    animation: text-shine 3s linear infinite;
+    background: linear-gradient(90deg, #fff, #ddd, #fff);
+    background-size: 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  @keyframes text-shine {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+
 
   .profile-avatar-large img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
-
-
   /* Birthday Banner Specificity Fix */
   #birthday-banner {
     margin-bottom: 20px;
@@ -496,15 +597,7 @@ import Layout from '../layouts/Layout.astro';
     margin-bottom: 4px;
   }
 
-  .profile-info-main h1 {
-    margin: 0;
-    font-size: 28px;
-    line-height: 1;
-    color: #fff;
-    font-family: 'Noto Sans JP', sans-serif;
-    letter-spacing: 0.02em;
-    font-weight: 800;
-  }
+  /* Removed old profile-info-main h1 block as it is now above with animations */
 
   .username {
     margin: 0;
