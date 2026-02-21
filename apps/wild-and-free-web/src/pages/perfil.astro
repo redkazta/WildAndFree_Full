@@ -54,9 +54,9 @@ import Layout from '../layouts/Layout.astro';
           <div class="profile-name-row">
             <h1 id="profile-name">Cargando...</h1>
             <p class="username" id="profile-username">@usuario</p>
-          </div>
-          <div class="role-tags" id="profile-role-tags">
-            <!-- Los tags se cargarán dinámicamente aquí -->
+            <div class="role-tags" id="profile-role-tags">
+              <!-- Los tags se cargarán dinámicamente aquí -->
+            </div>
           </div>
           <p class="bio" id="profile-bio">Cargando biografía...</p>
           <div class="profile-details mb-6 flex flex-wrap gap-4 text-xs font-bold uppercase tracking-widest text-white/60">
@@ -491,27 +491,41 @@ import Layout from '../layouts/Layout.astro';
   .profile-name-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    align-items: baseline;
-    margin-bottom: 8px;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 12px;
   }
 
   .profile-info-main h1 {
     margin: 0;
     font-size: 32px;
+    line-height: 1;
     color: #fff;
     font-family: 'Noto Sans JP', sans-serif;
     letter-spacing: 0.02em;
+    font-weight: 800;
   }
 
   .username {
     margin: 0;
     color: var(--primary-color);
-    font-size: 18px;
-    font-weight: 500;
+    font-size: 20px;
+    font-weight: 600;
     font-family: 'Noto Sans JP', sans-serif;
+    line-height: 1;
+    padding-top: 4px;
   }
 
+  /* Estilos base para tags - PREMIUM CHIDOTOTA */
+  .role-tags {
+    margin-top: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  
   .bio {
     margin: 0 0 20px 0;
     color: #fff;
@@ -984,17 +998,7 @@ import Layout from '../layouts/Layout.astro';
   }
 
   /* Estilos base para tags - PREMIUM CHIDOTOTA */
-  .role-tags {
-    margin-top: 10px;
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 12px;
-    align-items: center;
-    justify-content: flex-start;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-  }
+  /* Reemplazado arriba en profile-name-row */
 
   .role-tag-separator {
     width: 6px;
@@ -1015,13 +1019,13 @@ import Layout from '../layouts/Layout.astro';
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: clamp(12px, 2.2vw, 18px) clamp(28px, 4vw, 44px);
-    border-radius: 9999px;
-    font-size: clamp(16px, 2.4vw, 28px);
+    padding: clamp(6px, 1.2vw, 8px) clamp(16px, 2.5vw, 24px);
+    border-radius: 6px;
+    font-size: clamp(12px, 1.4vw, 14px);
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: clamp(0.08em, 0.8vw, 0.12em);
-    border: 2px solid var(--tag-border);
+    letter-spacing: 0.1em;
+    border: 1px solid var(--tag-border);
     backdrop-filter: blur(12px);
     transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     margin: 0;
@@ -1051,9 +1055,9 @@ import Layout from '../layouts/Layout.astro';
     content: '';
     position: absolute;
     inset: 0;
-    border-radius: 9999px;
-    border: 2px solid var(--tag-border);
-    box-shadow: 0 0 14px -6px var(--tag-glow);
+    border-radius: 6px;
+    border: 1px solid var(--tag-border);
+    box-shadow: 0 0 10px -4px var(--tag-glow);
     opacity: 0.9;
     z-index: 3;
     pointer-events: none;
@@ -1066,7 +1070,7 @@ import Layout from '../layouts/Layout.astro';
     opacity: 0.38;
     mix-blend-mode: screen;
     filter: drop-shadow(0 0 16px var(--tag-glow)) drop-shadow(0 0 26px var(--tag-glow-soft));
-    border-radius: 9999px;
+    border-radius: 6px;
     -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 55%, rgba(0,0,0,0) 75%);
     mask-image: radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 55%, rgba(0,0,0,0) 75%);
     pointer-events: none;
@@ -1562,9 +1566,9 @@ import Layout from '../layouts/Layout.astro';
         if (tag.isRole) {
           const roleId = tag.id ?? 0;
           if (GOLD_ROLE_IDS.has(roleId)) {
-            tagElement.style.fontSize = '36px';
-            tagElement.style.padding = '24px 52px';
-            tagElement.style.letterSpacing = '0.2em';
+            tagElement.style.fontSize = '14px';
+            tagElement.style.padding = '8px 16px';
+            tagElement.style.letterSpacing = '0.1em';
             tagElement.style.fontWeight = '900';
             tagElement.style.setProperty('--tag-bg-1', 'rgba(245,197,66,0.14)');
             tagElement.style.setProperty('--tag-bg-2', 'rgba(255,235,170,0.04)');
@@ -1574,9 +1578,9 @@ import Layout from '../layouts/Layout.astro';
             tagElement.style.setProperty('--tag-glow', '#f5c542');
             tagElement.style.setProperty('--tag-glow-soft', 'rgba(245,197,66,0.25)');
           } else if (RED_ROLE_IDS.has(roleId)) {
-            tagElement.style.fontSize = '34px';
-            tagElement.style.padding = '22px 50px';
-            tagElement.style.letterSpacing = '0.18em';
+            tagElement.style.fontSize = '14px';
+            tagElement.style.padding = '8px 16px';
+            tagElement.style.letterSpacing = '0.1em';
             tagElement.style.fontWeight = '900';
             tagElement.style.setProperty('--tag-bg-1', 'rgba(255,78,78,0.14)');
             tagElement.style.setProperty('--tag-bg-2', 'rgba(255,170,170,0.04)');
@@ -1586,9 +1590,9 @@ import Layout from '../layouts/Layout.astro';
             tagElement.style.setProperty('--tag-glow', '#ff4e4e');
             tagElement.style.setProperty('--tag-glow-soft', 'rgba(255,78,78,0.25)');
           } else if (PURPLE_ROLE_IDS.has(roleId)) {
-            tagElement.style.fontSize = '34px';
-            tagElement.style.padding = '22px 50px';
-            tagElement.style.letterSpacing = '0.18em';
+            tagElement.style.fontSize = '14px';
+            tagElement.style.padding = '8px 16px';
+            tagElement.style.letterSpacing = '0.1em';
             tagElement.style.fontWeight = '900';
             tagElement.style.setProperty('--tag-bg-1', 'rgba(155,89,255,0.14)');
             tagElement.style.setProperty('--tag-bg-2', 'rgba(200,160,255,0.04)');
@@ -1598,9 +1602,9 @@ import Layout from '../layouts/Layout.astro';
             tagElement.style.setProperty('--tag-glow', '#9b59ff');
             tagElement.style.setProperty('--tag-glow-soft', 'rgba(155,89,255,0.25)');
           } else if (GREEN_ROLE_IDS.has(roleId)) {
-            tagElement.style.fontSize = '32px';
-            tagElement.style.padding = '20px 46px';
-            tagElement.style.letterSpacing = '0.16em';
+            tagElement.style.fontSize = '14px';
+            tagElement.style.padding = '8px 16px';
+            tagElement.style.letterSpacing = '0.1em';
             tagElement.style.fontWeight = '800';
             tagElement.style.setProperty('--tag-bg-1', 'rgba(64,200,120,0.12)');
             tagElement.style.setProperty('--tag-bg-2', 'rgba(140,255,200,0.04)');
@@ -1628,8 +1632,9 @@ import Layout from '../layouts/Layout.astro';
           tagElement.style.setProperty('--tag-glow-soft', 'rgba(245,197,66,0.25)');
         }
         if (!tag.isRole) {
-          tagElement.style.fontSize = '33px';
+          tagElement.style.fontSize = '12px';
           tagElement.style.fontWeight = '700';
+          tagElement.style.padding = '6px 14px';
         }
         const normalizedAnimation = (tag.animation || '').toLowerCase().trim();
         tagElement.dataset.anim = normalizedAnimation || (tag.isRole ? 'role-pulse' : 'member-shine');
