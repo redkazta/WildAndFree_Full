@@ -216,12 +216,12 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .profile-header-section {
-    max-width: 1200px;
-    margin: 0 auto 40px;
+    max-width: 1600px;
+    margin: 0 auto 24px;
     display: flex;
     align-items: center;
-    gap: 40px;
-    padding: 40px;
+    gap: 32px;
+    padding: 24px;
     background: rgba(17, 17, 17, 0.8);
     border: 1px solid rgba(201, 131, 0, 0.3);
     border-radius: 16px;
@@ -491,14 +491,14 @@ import Layout from '../layouts/Layout.astro';
   .profile-name-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 12px;
     align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 4px;
   }
 
   .profile-info-main h1 {
     margin: 0;
-    font-size: 32px;
+    font-size: 28px;
     line-height: 1;
     color: #fff;
     font-family: 'Noto Sans JP', sans-serif;
@@ -509,11 +509,11 @@ import Layout from '../layouts/Layout.astro';
   .username {
     margin: 0;
     color: var(--primary-color);
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
     font-family: 'Noto Sans JP', sans-serif;
     line-height: 1;
-    padding-top: 4px;
+    padding-top: 2px;
   }
 
   /* Estilos base para tags - PREMIUM CHIDOTOTA */
@@ -521,15 +521,15 @@ import Layout from '../layouts/Layout.astro';
     margin-top: 0;
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
     align-items: center;
     justify-content: flex-start;
   }
   
   .bio {
-    margin: 0 0 20px 0;
+    margin: 0 0 12px 0;
     color: #fff;
-    font-size: 16px;
+    font-size: 14px;
     font-family: 'Noto Sans JP', sans-serif;
   }
 
@@ -557,7 +557,7 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .profile-content {
-    max-width: 1200px;
+    max-width: 1600px;
     margin: 0 auto;
     position: relative;
     z-index: 1;
@@ -566,7 +566,7 @@ import Layout from '../layouts/Layout.astro';
   .profile-tabs {
     display: flex;
     gap: 32px;
-    margin-bottom: 40px;
+    margin-bottom: 24px;
     border-bottom: 1px solid rgba(201, 131, 0, 0.2);
     padding-bottom: 0;
   }
@@ -1638,8 +1638,14 @@ import Layout from '../layouts/Layout.astro';
         }
         const normalizedAnimation = (tag.animation || '').toLowerCase().trim();
         tagElement.dataset.anim = normalizedAnimation || (tag.isRole ? 'role-pulse' : 'member-shine');
-        tagElement.style.animation = 'none';
+        // tagElement.style.animation = 'none'; // Removed to allow CSS animations
         tagElement.style.outline = 'none';
+        
+        // Apply CSS animation if available
+        if (normalizedAnimation === 'pulse' || tag.isRole) {
+             tagElement.style.animation = 'wild-pulse 2s infinite ease-in-out';
+        }
+        
         tagElement.appendChild(tagLabel);
 
         roleTagsContainer.appendChild(tagElement);
