@@ -74,39 +74,69 @@ const artists = (dbArtists && dbArtists.length > 0) ? dbArtists : [
   }
 ];
 
+import tenantConfig from '../../../../packages/shared-types/tenant-config.json';
+
+const tenant = tenantConfig['wild-and-free'];
 const config = {
   name: "Wild Gvng - Artistas",
-  primary_color: "#C98300",
-  secondary_color: "#8A0303"
+  primary_color: tenant.primary_color,
+  secondary_color: tenant.secondary_color
 };
 ---
 
 <Layout config={config}>
-  <main class="min-h-screen bg-black pt-32 pb-20 px-6">
-    <div class="max-w-[1400px] mx-auto space-y-20">
-      <div class="space-y-4 text-center lg:text-left">
-        <h1 class="text-6xl md:text-8xl font-black tracking-tighter text-white uppercase leading-none">
-          NUESTROS <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-600">ARTISTAS</span>
+  <main class="min-h-screen bg-[#050505] pt-32 pb-20 px-6 relative overflow-hidden">
+    <!-- Background Noise Pattern -->
+    <div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 20px 20px;"></div>
+
+    <div class="max-w-[1400px] mx-auto space-y-16 relative z-10">
+      
+      <!-- Header Brutalista -->
+      <div class="flex flex-col md:flex-row items-end gap-6 border-b-4 border-white pb-8">
+        <h1 class="text-7xl md:text-9xl font-black tracking-tighter text-white uppercase leading-none" style="text-shadow: 4px 4px 0px var(--street-accent);">
+          ROSTER
         </h1>
-        <p class="text-xl text-white font-bold uppercase tracking-[0.3em]">El movimiento que redefine la cultura</p>
+        <div class="flex flex-col mb-2">
+           <span class="text-xl font-bold text-white bg-[var(--street-accent)] px-2 inline-block w-fit text-black">WILD GVNG</span>
+           <span class="text-sm font-mono text-[#888] tracking-widest mt-1">EST. 2024 • WORLDWIDE</span>
+        </div>
       </div>
 
+      <!-- Grid de Artistas -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-        {artists.map((artist) => (
-          <a href={`/artista/${artist.slug}`} class="group relative aspect-[3/4] overflow-hidden rounded-3xl bg-[#111] border border-white/5 hover:border-orange-500/50 transition-all duration-500 shadow-2xl">
-            <img 
-              src={artist.imagenes?.profile || 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80'} 
-              alt={artist.nombre} 
-              loading="lazy" 
-              class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110"
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-40 transition-opacity duration-500"></div>
-            <div class="absolute inset-x-0 bottom-0 p-8 space-y-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-              <p class="text-[10px] font-black uppercase tracking-[0.2em] text-orange-500">Artista Verificado</p>
-              <h3 class="text-3xl font-black uppercase tracking-tighter text-white drop-shadow-md">{artist.nombre}</h3>
-              <div class="flex items-center gap-4 pt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
-                <span class="text-[10px] font-black text-white/60 uppercase tracking-widest">{artist.stats?.seguidores || '0'} seguidores</span>
-                <span class="text-[10px] font-black text-white/60 uppercase tracking-widest">{artist.stats?.oyentes || '0'} oyentes</span>
+        {artists.map((artist: any) => (
+          <a href={`/artista/${artist.slug}`} class="group relative block bg-[#111] border-2 border-white hover:border-[var(--street-accent)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[8px_8px_0px_var(--street-accent)]">
+            
+            <!-- Imagen -->
+            <div class="aspect-[3/4] overflow-hidden relative border-b-2 border-white group-hover:border-[var(--street-accent)] transition-colors">
+              <img 
+                src={artist.imagenes?.profile || 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80'} 
+                alt={artist.nombre} 
+                loading="lazy" 
+                class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+              />
+              <!-- Overlay Text on Image -->
+              <div class="absolute top-4 left-4 bg-black/80 backdrop-blur-sm border border-white/20 px-3 py-1">
+                 <span class="text-[10px] font-mono text-[var(--street-accent)] uppercase tracking-widest">VERIFICADO</span>
+              </div>
+            </div>
+
+            <!-- Info Card -->
+            <div class="p-6 relative bg-[#111]">
+              <h3 class="text-3xl font-black uppercase tracking-tighter text-white mb-2 leading-none group-hover:text-[var(--street-accent)] transition-colors">
+                {artist.nombre}
+              </h3>
+              
+              <div class="w-full h-px bg-white/20 my-4 group-hover:bg-[var(--street-accent)]/50 transition-colors"></div>
+              
+              <div class="flex justify-between items-end">
+                 <div class="flex flex-col">
+                    <span class="text-[10px] font-bold text-[#666] uppercase tracking-widest mb-1">Oyentes</span>
+                    <span class="text-lg font-black text-white font-mono">{artist.stats?.oyentes || '0'}</span>
+                 </div>
+                 <div class="w-8 h-8 bg-white text-black flex items-center justify-center group-hover:bg-[var(--street-accent)] transition-colors">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                 </div>
               </div>
             </div>
           </a>
@@ -115,3 +145,9 @@ const config = {
     </div>
   </main>
 </Layout>
+
+<style define:vars={{ streetAccent: tenant.primary_color }}>
+  :root {
+    --street-accent: var(--streetAccent);
+  }
+</style>

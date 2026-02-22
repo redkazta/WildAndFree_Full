@@ -2,7 +2,7 @@
   "wild-and-free": {
     "id": "wild-and-free",
     "name": "Wild and Free",
-    "primary_color": "#00FF41",
+    "primary_color": "#FF5500",
     "secondary_color": "#0a0a0a",
     "modules": {
       "wallet": true,

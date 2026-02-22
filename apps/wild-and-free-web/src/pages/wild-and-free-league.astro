@@ -441,7 +441,7 @@ const initialParticipants = [
   // --- Drag and Drop Logic ---
   const slots = document.querySelectorAll('.bracket-slot');
   const participants = document.querySelectorAll('.participant-item');
-  let bracketState = {};
+  let bracketState: any = {};
 
   // Realtime Channel
   const channel = supabase.channel('wild-league', {
@@ -451,14 +451,14 @@ const initialParticipants = [
   });
 
   channel
-    .on('broadcast', { event: 'state-update' }, (payload) => {
+    .on('broadcast', { event: 'state-update' }, (payload: any) => {
       updateBracketUI(payload.payload.state);
     })
     .subscribe();
 
   const usedParticipantIds = () => {
     const used = new Set();
-    Object.values(bracketState || {}).forEach((v) => {
+    Object.values(bracketState || {}).forEach((v: any) => {
       if (v?.locked && v?.id) used.add(v.id);
     });
     return used;
@@ -482,7 +482,7 @@ const initialParticipants = [
   };
 
   participants.forEach((p) => {
-    p.addEventListener('dragstart', (e) => {
+    p.addEventListener('dragstart', (e: any) => {
       if (p.classList.contains('is-used')) return;
       if (!e.dataTransfer) return;
       e.dataTransfer.setData('participantId', p.id);
@@ -492,7 +492,7 @@ const initialParticipants = [
   });
 
   slots.forEach((slot) => {
-    slot.addEventListener('dragover', (e) => {
+    slot.addEventListener('dragover', (e: any) => {
       e.preventDefault();
       slot.classList.add('drag-over');
     });
@@ -501,7 +501,7 @@ const initialParticipants = [
       slot.classList.remove('drag-over');
     });
 
-    slot.addEventListener('drop', (e) => {
+    slot.addEventListener('drop', (e: any) => {
       e.preventDefault();
       slot.classList.remove('drag-over');
       
@@ -536,7 +536,7 @@ const initialParticipants = [
     });
   });
 
-  function renderSlot(slot, data) {
+  function renderSlot(slot: any, data: any) {
     const slotId = slot.getAttribute('data-slot');
     const locked = Boolean(bracketState?.[slotId || '']?.locked);
     const draggable = Boolean(data?.id) && !locked;
@@ -554,7 +554,7 @@ const initialParticipants = [
     slot.classList.toggle('locked', locked);
     if (slot instanceof HTMLElement) slot.setAttribute('draggable', draggable ? 'true' : 'false');
     
-    slot.querySelector('.remove-btn')?.addEventListener('click', (e) => {
+    slot.querySelector('.remove-btn')?.addEventListener('click', (e: any) => {
       e.stopPropagation();
       if (slotId) {
         if (bracketState?.[slotId]?.locked) return;
@@ -570,7 +570,7 @@ const initialParticipants = [
       }
     });
 
-    slot.addEventListener('dragstart', (e) => {
+    slot.addEventListener('dragstart', (e: any) => {
       if (!slotId) return;
       const current = bracketState?.[slotId];
       if (!current) return;
@@ -584,7 +584,7 @@ const initialParticipants = [
     });
   }
 
-  function updateBracketUI(state) {
+  function updateBracketUI(state: any) {
     bracketState = state;
     document.querySelectorAll('.bracket-slot').forEach((slotEl) => {
       const slotId = slotEl.getAttribute('data-slot');
@@ -604,7 +604,7 @@ const initialParticipants = [
   }
 
   // --- Context menu: advance to next round ---
-  const getNextSlotId = (slotId) => {
+  const getNextSlotId = (slotId: string) => {
     if (slotId.startsWith('l1-m')) {
       const m = parseInt(slotId.split('-')[1].slice(1), 10);
       if (m === 1) return 'l2-m1-p1';
@@ -668,25 +668,27 @@ const initialParticipants = [
     { from: ['final-p1', 'final-p2'], to: 'winner' },
   ];
 
-  const getSlotEl = (slotId) => document.querySelector(`.bracket-slot[data-slot="${slotId}"]`);
+  const getSlotEl = (slotId: any) => document.querySelector(`.bracket-slot[data-slot="${slotId}"]`);
 
-  const getPoint = (el, side) => {
+  const getPoint = (el: any, side: any) => {
     const rect = el.getBoundingClientRect();
-    const parent = document.querySelector('.bracket').getBoundingClientRect();
+    const parent = document.querySelector('.bracket')?.getBoundingClientRect();
+    if (!parent) return { x: 0, y: 0, rect, parent: { left: 0, top: 0 } };
     const x = side === 'left' ? rect.left - parent.left : rect.right - parent.left;
     const y = rect.top - parent.top + rect.height / 2;
     return { x, y, rect, parent };
   };
 
-  const getTopCenterPoint = (el) => {
+  const getTopCenterPoint = (el: any) => {
     const rect = el.getBoundingClientRect();
-    const parent = document.querySelector('.bracket').getBoundingClientRect();
+    const parent = document.querySelector('.bracket')?.getBoundingClientRect();
+    if (!parent) return { x: 0, y: 0, rect, parent: { left: 0, top: 0 } };
     const x = rect.left - parent.left + rect.width / 2;
     const y = rect.top - parent.top;
     return { x, y, rect, parent };
   };
 
-  const drawPath = (svg, d) => {
+  const drawPath = (svg: any, d: any) => {
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     path.setAttribute('d', d);
     path.setAttribute('stroke', '#ffffff');
@@ -722,7 +724,9 @@ const initialParticipants = [
         const base1 = getTopCenterPoint(fromA);
         const base2 = getTopCenterPoint(fromB);
         const winnerRect = to.getBoundingClientRect();
-        const parentRect = document.querySelector('.bracket').getBoundingClientRect();
+        const parentRect = document.querySelector('.bracket')?.getBoundingClientRect();
+        if (!parentRect) continue;
+        
         const label = document.querySelector('.champion-text');
         const labelRect = label?.getBoundingClientRect();
 
@@ -742,7 +746,7 @@ const initialParticipants = [
           : Math.round(Math.min(start1.y, start2.y) - 24);
         const yJoin = Math.round(yLabelBottom + 14);
 
-        const routeToJoin = (start) => {
+        const routeToJoin = (start: any) => {
           const x = Math.round(start.x);
           const y = Math.round(start.y);
           drawPath(svg, `M ${x} ${y} L ${x} ${yJoin}`);
@@ -780,7 +784,7 @@ const initialParticipants = [
 
   window.addEventListener('resize', () => requestAnimationFrame(drawBracketLines));
 
-  const showMenuAt = (x, y, slotId) => {
+  const showMenuAt = (x: any, y: any, slotId: any) => {
     const menuEl = menu;
     const menuWidth = 260;
     const menuHeight = 96;
@@ -806,7 +810,7 @@ const initialParticipants = [
     menu.classList.remove('hidden');
   };
 
-  document.addEventListener('contextmenu', (e) => {
+  document.addEventListener('contextmenu', (e: any) => {
     const slot = e.target?.closest?.('.bracket-slot');
     if (!slot) return;
     const slotId = slot.getAttribute('data-slot');
@@ -816,7 +820,7 @@ const initialParticipants = [
     showMenuAt(e.clientX, e.clientY, slotId);
   });
 
-  document.addEventListener('click', (e) => {
+  document.addEventListener('click', (e: any) => {
     const btn = e.target?.closest?.('.slot-menu-btn');
     if (!btn) return;
     e.preventDefault();
@@ -828,7 +832,7 @@ const initialParticipants = [
     showMenuAt(rect.left, rect.bottom + 6, slotId);
   });
 
-  menu.addEventListener('click', (e) => {
+  menu.addEventListener('click', (e: any) => {
     const btn = e.target?.closest?.('button');
     if (!btn) return;
     const action = btn.getAttribute('data-action');

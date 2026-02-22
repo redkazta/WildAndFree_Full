@@ -1,48 +1,56 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import tenantConfig from '../../../../packages/shared-types/tenant-config.json';
+
+const tenant = tenantConfig['wild-and-free'];
+const config = {
+  name: "Wild Gvng - Música",
+  primary_color: tenant.primary_color,
+  secondary_color: tenant.secondary_color
+};
 
 const tracks = [
   {
     id: 1,
-    title: 'Noches de Neón',
-    artist: 'Lil Kiro',
-    album: 'Luces de Ciudad',
+    title: 'NOCHES DE NEÓN',
+    artist: 'LIL KIRO',
+    album: 'LUCES DE CIUDAD',
     duration: '3:24',
     cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop&crop=face',
     plays: '2.1M'
   },
   {
     id: 2,
-    title: 'Tokyo Drift',
-    artist: 'Neon Ghost',
-    album: 'Sesiones de Medianoche',
+    title: 'TOKYO DRIFT',
+    artist: 'NEON GHOST',
+    album: 'SESIONES DE MEDIANOCHE',
     duration: '4:12',
     cover: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face',
     plays: '1.8M'
   },
   {
     id: 4,
-    title: 'Reino de Sombras',
-    artist: 'Shadow V',
-    album: 'Materia Oscura',
+    title: 'REINO DE SOMBRAS',
+    artist: 'SHADOW V',
+    album: 'MATERIA OSCURA',
     duration: '3:58',
     cover: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop&crop=face',
     plays: '1.5M'
   },
   {
     id: 5,
-    title: 'Cristalino',
-    artist: 'Crystal Wave',
-    album: 'Ondas',
+    title: 'CRISTALINO',
+    artist: 'CRYSTAL WAVE',
+    album: 'ONDAS',
     duration: '3:33',
     cover: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=300&h=300&fit=crop&crop=face',
     plays: '890K'
   },
   {
     id: 6,
-    title: 'Paseo de Medianoche',
-    artist: 'Midnight Rider',
-    album: 'Jinete Nocturno',
+    title: 'PASEO DE MEDIANOCHE',
+    artist: 'MIDNIGHT RIDER',
+    album: 'JINETE NOCTURNO',
     duration: '4:01',
     cover: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&h=300&fit=crop&crop=face',
     plays: '2.7M'
@@ -52,742 +60,329 @@ const tracks = [
 const albums = [
   {
     id: 1,
-    title: 'Luces de Ciudad',
-    artist: 'Lil Kiro',
+    title: 'LUCES DE CIUDAD',
+    artist: 'LIL KIRO',
     cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=face',
     year: '2024',
-    tracks: 12
+    tracks: 12,
+    type: 'LP'
   },
   {
     id: 2,
-    title: 'Sesiones de Medianoche',
-    artist: 'Neon Ghost',
+    title: 'SESIONES DE MEDIANOCHE',
+    artist: 'NEON GHOST',
     cover: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
     year: '2024',
-    tracks: 15
+    tracks: 15,
+    type: 'EP'
   }
 ];
 ---
 
-<Layout config={{
-  name: "Wild Gvng - Música",
-  primary_color: "#C98300",
-  secondary_color: "#8A0303"
-}}>
-  <main class="music-page">
-    <div class="page-header">
-      <div class="container">
-        <h1 class="page-title">
-          <span class="title-line">MÚSICA</span>
-          <span class="title-line">WILD</span>
-        </h1>
-        <p class="page-subtitle">Los sonidos que definen una generación</p>
-      </div>
-    </div>
+<Layout config={config}>
+  <main class="min-h-screen bg-[#050505] pt-32 pb-20 px-6 relative overflow-hidden">
+    <!-- Background Noise Pattern -->
+    <div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 20px 20px;"></div>
 
-    <div class="container">
-      <!-- Featured Albums -->
-      <section class="featured-albums">
-        <h2 class="section-title">Álbumes Destacados</h2>
-        <div class="albums-grid">
+    <div class="max-w-[1400px] mx-auto space-y-24 relative z-10">
+      
+      <!-- Header Brutalista con Marquee -->
+      <div class="border-b-4 border-white pb-8">
+        <div class="flex flex-col md:flex-row items-end gap-6 mb-8">
+          <h1 class="text-7xl md:text-9xl font-black tracking-tighter text-white uppercase leading-none" style="text-shadow: 4px 4px 0px var(--street-accent);">
+            SONIDOS
+          </h1>
+          <div class="flex flex-col mb-2">
+             <span class="text-xl font-bold text-black bg-[var(--street-accent)] px-2 inline-block w-fit">WILD RECORDS</span>
+             <span class="text-sm font-mono text-[#888] tracking-widest mt-1">HIFI • LOFI • NOFI</span>
+          </div>
+        </div>
+        
+        <!-- Marquee -->
+        <div class="relative overflow-hidden bg-white py-2 border-y-2 border-black">
+          <div class="whitespace-nowrap animate-marquee inline-block">
+            <span class="text-black font-mono font-bold text-lg mx-4">NOW PLAYING: NOCHES DE NEÓN - LIL KIRO</span>
+            <span class="text-[var(--street-accent)] font-black mx-2">///</span>
+            <span class="text-black font-mono font-bold text-lg mx-4">NEW RELEASE: SESIONES DE MEDIANOCHE</span>
+            <span class="text-[var(--street-accent)] font-black mx-2">///</span>
+            <span class="text-black font-mono font-bold text-lg mx-4">TOP CHARTS: WILD GVNG GLOBAL</span>
+            <span class="text-[var(--street-accent)] font-black mx-2">///</span>
+             <span class="text-black font-mono font-bold text-lg mx-4">NOW PLAYING: NOCHES DE NEÓN - LIL KIRO</span>
+            <span class="text-[var(--street-accent)] font-black mx-2">///</span>
+            <span class="text-black font-mono font-bold text-lg mx-4">NEW RELEASE: SESIONES DE MEDIANOCHE</span>
+            <span class="text-[var(--street-accent)] font-black mx-2">///</span>
+            <span class="text-black font-mono font-bold text-lg mx-4">TOP CHARTS: WILD GVNG GLOBAL</span>
+            <span class="text-[var(--street-accent)] font-black mx-2">///</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Featured Albums (Vinyl Style) -->
+      <section>
+        <div class="flex items-center gap-4 mb-12">
+          <div class="w-12 h-12 bg-white text-black flex items-center justify-center font-black text-xl">01</div>
+          <h2 class="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white">Lanzamientos</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
           {albums.map((album) => (
-            <div class="album-card">
-              <div class="album-cover">
-                <img src={album.cover} alt={album.title} />
-                <div class="album-overlay">
-                  <button class="play-btn" aria-label={`Reproducir ${album.title}`}>
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M8 5v14l11-7z"/>
-                    </svg>
-                  </button>
+            <div class="group relative">
+              <!-- Vinyl Sleeve Container -->
+              <div class="relative z-10 bg-[#111] border-2 border-white aspect-square p-2 hover:translate-y-[-10px] transition-transform duration-300">
+                <img src={album.cover} alt={album.title} class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+                
+                <!-- Sticker -->
+                <div class="absolute top-6 right-6 w-24 h-24 bg-[var(--street-accent)] rounded-full flex items-center justify-center rotate-12 group-hover:rotate-0 transition-transform shadow-lg z-20">
+                  <div class="text-center">
+                    <span class="block text-black font-black text-xs">STEREO</span>
+                    <span class="block text-white font-bold text-lg leading-none">{album.year}</span>
+                  </div>
+                </div>
+
+                <!-- OBI Strip / Banner -->
+                <div class="absolute bottom-6 left-[-10px] bg-white text-black py-1 px-4 shadow-[4px_4px_0px_var(--street-accent)] z-20">
+                   <span class="font-mono font-bold text-sm tracking-widest">{album.type}</span>
+                </div>
+                
+                <!-- Play Overlay -->
+                <button 
+                  class="play-album-btn absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity z-30 cursor-pointer"
+                  data-title={album.title}
+                  data-artist={album.artist}
+                  data-cover={album.cover}
+                >
+                  <div class="w-20 h-20 bg-[var(--street-accent)] rounded-full flex items-center justify-center shadow-[4px_4px_0px_black] hover:scale-110 transition-transform">
+                     <svg width="32" height="32" viewBox="0 0 24 24" fill="black"><path d="M8 5v14l11-7z"/></svg>
+                  </div>
+                </button>
+              </div>
+
+              <!-- Vinyl Disc (Slides out on hover) -->
+              <div class="absolute top-2 right-2 w-[95%] h-[95%] bg-black rounded-full border-[10px] border-[#1a1a1a] flex items-center justify-center z-0 group-hover:translate-x-[40%] transition-transform duration-500 ease-out shadow-2xl">
+                 <div class="w-[40%] h-[40%] bg-[var(--street-accent)] rounded-full flex items-center justify-center">
+                    <div class="w-2 h-2 bg-black rounded-full"></div>
+                 </div>
+                 <!-- Grooves -->
+                 <div class="absolute inset-0 rounded-full border border-white/5 pointer-events-none"></div>
+                 <div class="absolute inset-4 rounded-full border border-white/5 pointer-events-none"></div>
+                 <div class="absolute inset-8 rounded-full border border-white/5 pointer-events-none"></div>
+              </div>
+
+              <!-- Info -->
+              <div class="mt-8 relative z-20 bg-[#050505]/80 backdrop-blur">
+                <h3 class="text-3xl font-black text-white uppercase">{album.title}</h3>
+                <p class="text-[var(--street-accent)] font-mono text-lg">{album.artist}</p>
+                <div class="flex gap-4 mt-2 text-sm text-gray-400 font-mono">
+                  <span>{album.tracks} TRACKS</span>
+                  <span>•</span>
+                  <span>HIGH FIDELITY</span>
                 </div>
               </div>
-              <div class="album-info">
-                <h3 class="album-title">{album.title}</h3>
-                <p class="album-artist">{album.artist}</p>
-                <p class="album-meta">{album.year} • {album.tracks} canciones</p>
-              </div>
             </div>
           ))}
         </div>
       </section>
 
-      <!-- Popular Tracks -->
-      <section class="popular-tracks">
-        <h2 class="section-title">Canciones Populares</h2>
-        <div class="tracks-list">
+      <!-- Popular Tracks (Cassette/List Style) -->
+      <section>
+        <div class="flex items-center gap-4 mb-12">
+          <div class="w-12 h-12 bg-white text-black flex items-center justify-center font-black text-xl">02</div>
+          <h2 class="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white">Top Tracks</h2>
+        </div>
+
+        <div class="space-y-4">
           {tracks.map((track, index) => (
-            <div class="track-item">
-              <div class="track-number">{String(index + 1).padStart(2, '0')}</div>
-              <div class="track-cover">
-                <img src={track.cover} alt={track.title} />
+            <div class="group relative flex items-center gap-6 bg-[#111] border border-white/20 p-4 hover:bg-white hover:border-[var(--street-accent)] transition-colors duration-300">
+              
+              <!-- Index Box -->
+              <div class="w-12 h-12 border border-white/20 flex items-center justify-center group-hover:border-black group-hover:bg-black transition-colors">
+                <span class="font-mono font-bold text-white group-hover:text-[var(--street-accent)]">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
               </div>
-              <div class="track-info">
-                <h4 class="track-title">{track.title}</h4>
-                <p class="track-artist">{track.artist}</p>
-                <p class="track-album">{track.album}</p>
+
+              <!-- Track Info -->
+              <div class="flex-1">
+                <h4 class="text-xl font-bold text-white uppercase group-hover:text-black">{track.title}</h4>
+                <p class="text-sm font-mono text-gray-400 group-hover:text-black/60">{track.artist} • {track.album}</p>
               </div>
-              <div class="track-stats">
-                <span class="track-plays">{track.plays}</span>
-                <span class="track-duration">{track.duration}</span>
+
+              <!-- Stats -->
+              <div class="hidden md:flex items-center gap-8 font-mono text-sm text-gray-500 group-hover:text-black/60">
+                <span class="flex items-center gap-2">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                  {track.plays}
+                </span>
+                <span class="flex items-center gap-2">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  {track.duration}
+                </span>
               </div>
-              <div class="track-actions">
-                <button class="action-btn" aria-label="Añadir a lista">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
-                  </svg>
-                </button>
-                <button class="action-btn" aria-label="Me gusta">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314Z"/>
-                  </svg>
-                </button>
-                <button class="play-track-btn" aria-label="Reproducir">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M8 5v14l11-7z"/>
-                  </svg>
-                </button>
-              </div>
+
+              <!-- Play Button -->
+              <button 
+                class="play-track-btn w-12 h-12 bg-[var(--street-accent)] text-black flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-[4px_4px_0px_black] hover:scale-110"
+                data-title={track.title}
+                data-artist={track.artist}
+                data-cover={track.cover}
+                data-duration={track.duration}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              </button>
             </div>
           ))}
         </div>
       </section>
+
     </div>
 
-    <!-- Floating Player -->
-    <div class="floating-player" id="floating-player">
-      <div class="player-content">
-        <div class="player-track">
-          <img id="player-cover" src="" alt="" />
-          <div class="player-info">
-            <h4 id="player-title">Selecciona una canción</h4>
-            <p id="player-artist">Wild Gvng</p>
-          </div>
+    <!-- Floating Player (Walkman Style) -->
+    <div id="floating-player" class="fixed bottom-8 right-8 z-50 translate-y-[150%] transition-transform duration-500">
+      <div class="bg-[#1a1a1a] border-2 border-white p-4 w-[320px] shadow-[8px_8px_0px_var(--street-accent)]">
+        <!-- Player Screen -->
+        <div class="bg-[#9ea792] border-2 border-black/20 p-3 mb-4 font-mono text-black relative overflow-hidden shadow-inner">
+           <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, #000 3px);"></div>
+           <div class="relative z-10">
+              <p class="text-xs font-bold mb-1">NOW PLAYING ▶</p>
+              <h4 id="player-title" class="text-lg font-black truncate leading-none">SELECCIONA TRACK</h4>
+              <p id="player-artist" class="text-xs truncate mt-1">WILD GVNG</p>
+              <div class="flex justify-between mt-2 text-xs font-bold">
+                 <span id="current-time">0:00</span>
+                 <span id="total-time">0:00</span>
+              </div>
+           </div>
         </div>
-        <div class="player-controls">
-          <button class="player-btn" id="prev-btn">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
-            </svg>
-          </button>
-          <button class="player-btn play-pause" id="play-pause-btn">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M8 5v14l11-7z"/>
-            </svg>
-          </button>
-          <button class="player-btn" id="next-btn">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
-            </svg>
-          </button>
+
+        <!-- Controls -->
+        <div class="flex justify-between items-center gap-2">
+           <button id="prev-btn" class="flex-1 bg-[#333] hover:bg-[#444] text-white p-2 border border-black shadow-[2px_2px_0px_black] active:translate-y-[2px] active:shadow-none transition-all">
+              <svg class="w-4 h-4 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+           </button>
+           <button id="play-pause-btn" class="flex-[2] bg-[var(--street-accent)] hover:bg-white text-black p-3 border border-black shadow-[2px_2px_0px_black] active:translate-y-[2px] active:shadow-none transition-all">
+              <svg id="play-icon" class="w-6 h-6 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <svg id="pause-icon" class="w-6 h-6 mx-auto hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+           </button>
+           <button id="next-btn" class="flex-1 bg-[#333] hover:bg-[#444] text-white p-2 border border-black shadow-[2px_2px_0px_black] active:translate-y-[2px] active:shadow-none transition-all">
+              <svg class="w-4 h-4 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+           </button>
         </div>
-        <div class="player-progress">
-          <span id="current-time">0:00</span>
-          <div class="progress-bar">
-            <div class="progress-fill" id="progress-fill"></div>
-          </div>
-          <span id="total-time">0:00</span>
+        
+        <!-- Progress Bar -->
+        <div class="mt-4 h-2 bg-[#000] border border-white/20 rounded-full overflow-hidden">
+           <div id="progress-fill" class="h-full bg-[var(--street-accent)] w-0 transition-all duration-100"></div>
         </div>
-        <button class="player-btn close-player" id="close-player">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
-          </svg>
+        
+        <button id="close-player" class="absolute -top-4 -right-4 bg-red-500 text-white w-8 h-8 flex items-center justify-center border-2 border-white shadow-lg hover:scale-110 transition-transform">
+           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 1l12 12M13 1L1 13"/></svg>
         </button>
       </div>
     </div>
+
   </main>
 </Layout>
 
-<style>
-  .music-page {
-    min-height: 100vh;
-    padding-top: 80px;
+<style define:vars={{ streetAccent: tenant.primary_color }}>
+  :root {
+    --street-accent: var(--streetAccent);
   }
-
-  .page-header {
-    background: linear-gradient(135deg, #000 0%, #111 100%);
-    padding: 120px 0 80px;
-    text-align: center;
-    border-bottom: 1px solid rgba(201, 131, 0, 0.3);
+  
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
   }
-
-  .page-title {
-    font-size: clamp(60px, 10vw, 120px);
-    font-weight: 900;
-    margin: 0 0 24px;
-    line-height: 0.8;
-    letter-spacing: 0.05em;
-    font-family: 'Noto Sans JP', sans-serif;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .title-line {
-    display: block;
-    color: transparent;
-    -webkit-text-stroke: 2px rgba(255, 255, 255, 0.9);
-  }
-
-  .page-subtitle {
-    font-size: 18px;
-    color: rgba(255, 255, 255, 0.7);
-    margin: 0;
-    font-weight: 300;
-    letter-spacing: 0.05em;
-    font-family: 'Noto Sans JP', sans-serif;
-  }
-
-  .container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 24px;
-  }
-
-  .featured-albums {
-    padding: 80px 0;
-  }
-
-  .section-title {
-    font-size: 32px;
-    font-weight: 700;
-    margin: 0 0 40px;
-    color: #fff;
-    font-family: 'Noto Sans JP', sans-serif;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
-
-  .albums-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 32px;
-  }
-
-  .album-card {
-    background: linear-gradient(135deg, #111 0%, #000 100%);
-    border-radius: 12px;
-    overflow: hidden;
-    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-    border: 1px solid rgba(201, 131, 0, 0.1);
-  }
-
-  .album-card:hover {
-    transform: translateY(-8px);
-    border-color: rgba(201, 131, 0, 0.3);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-  }
-
-  .album-cover {
-    position: relative;
-    aspect-ratio: 1;
-    overflow: hidden;
-  }
-
-  .album-cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-  }
-
-  .album-card:hover .album-cover img {
-    transform: scale(1.1);
-  }
-
-  .album-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(201, 131, 0, 0.8) 0%, rgba(138, 3, 3, 0.8) 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  .album-card:hover .album-overlay {
-    opacity: 1;
-  }
-
-  .play-btn {
-    background: rgba(255, 255, 255, 0.9);
-    border: none;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    color: #000;
-  }
-
-  .play-btn:hover {
-    transform: scale(1.1);
-    background: #fff;
-  }
-
-  .album-info {
-    padding: 24px;
-  }
-
-  .album-title {
-    font-size: 20px;
-    font-weight: 700;
-    margin: 0 0 8px;
-    color: #fff;
-    font-family: 'Noto Sans JP', sans-serif;
-  }
-
-  .album-artist {
-    color: var(--primary-color);
-    font-size: 14px;
-    margin: 0 0 4px;
-    font-weight: 500;
-  }
-
-  .album-meta {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 12px;
-    margin: 0;
-  }
-
-  .popular-tracks {
-    padding: 80px 0;
-    border-top: 1px solid rgba(201, 131, 0, 0.1);
-  }
-
-  .tracks-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .track-item {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 16px;
-    background: linear-gradient(135deg, #111 0%, #000 100%);
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(201, 131, 0, 0.1);
-  }
-
-  .track-item:hover {
-    border-color: rgba(201, 131, 0, 0.3);
-    transform: translateX(8px);
-  }
-
-  .track-number {
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.5);
-    font-weight: 600;
-    width: 30px;
-    text-align: center;
-    font-family: 'Noto Sans JP', sans-serif;
-  }
-
-  .track-cover {
-    width: 50px;
-    height: 50px;
-    border-radius: 4px;
-    overflow: hidden;
-  }
-
-  .track-cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .track-info {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .track-title {
-    font-size: 16px;
-    font-weight: 600;
-    margin: 0 0 4px;
-    color: #fff;
-    font-family: 'Noto Sans JP', sans-serif;
-  }
-
-  .track-artist {
-    color: var(--primary-color);
-    font-size: 14px;
-    margin: 0 0 2px;
-    font-weight: 500;
-  }
-
-  .track-album {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 12px;
-    margin: 0;
-  }
-
-  .track-stats {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-right: 16px;
-  }
-
-  .track-plays,
-  .track-duration {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 14px;
-    font-family: 'Noto Sans JP', sans-serif;
-  }
-
-  .track-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .action-btn {
-    background: none;
-    border: none;
-    color: rgba(255, 255, 255, 0.6);
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 4px;
-    transition: all 0.3s ease;
-  }
-
-  .action-btn:hover {
-    color: var(--primary-color);
-    background: rgba(201, 131, 0, 0.1);
-  }
-
-  .play-track-btn {
-    background: var(--primary-color);
-    border: none;
-    color: #000;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  .play-track-btn:hover {
-    transform: scale(1.1);
-    background: #fff;
-  }
-
-  /* Floating Player */
-  .floating-player {
-    position: fixed;
-    bottom: -100px;
-    left: 0;
-    right: 0;
-    background: linear-gradient(135deg, #000 0%, #111 100%);
-    border-top: 1px solid rgba(201, 131, 0, 0.3);
-    padding: 16px 24px;
-    z-index: 1000;
-    transition: bottom 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-    backdrop-filter: blur(10px);
-  }
-
-  .floating-player.active {
-    bottom: 0;
-  }
-
-  .player-content {
-    max-width: 1400px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    gap: 24px;
-  }
-
-  .player-track {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    flex: 1;
-  }
-
-  .player-track img {
-    width: 50px;
-    height: 50px;
-    border-radius: 4px;
-    object-fit: cover;
-  }
-
-  .player-info h4 {
-    margin: 0 0 4px;
-    color: #fff;
-    font-size: 14px;
-    font-family: 'Noto Sans JP', sans-serif;
-  }
-
-  .player-info p {
-    margin: 0;
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 12px;
-  }
-
-  .player-controls {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .player-btn {
-    background: none;
-    border: none;
-    color: #fff;
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 4px;
-    transition: all 0.3s ease;
-  }
-
-  .player-btn:hover {
-    color: var(--primary-color);
-    background: rgba(201, 131, 0, 0.1);
-  }
-
-  .play-pause {
-    background: var(--primary-color);
-    color: #000;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .play-pause:hover {
-    background: #fff;
-    transform: scale(1.1);
-  }
-
-  .player-progress {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex: 2;
-  }
-
-  .progress-bar {
-    flex: 1;
-    height: 4px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-
-  .progress-fill {
-    height: 100%;
-    background: var(--primary-color);
-    width: 0%;
-    transition: width 0.3s ease;
-  }
-
-  .player-progress span {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 12px;
-    font-family: 'Noto Sans JP', sans-serif;
-    min-width: 35px;
-  }
-
-  .close-player {
-    margin-left: auto;
-  }
-
-  @media (max-width: 768px) {
-    .albums-grid {
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 24px;
-    }
-
-    .track-item {
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .track-actions {
-      width: 100%;
-      justify-content: flex-end;
-    }
-
-    .player-content {
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .player-progress {
-      width: 100%;
-    }
-
-    .page-header {
-      padding: 80px 0 60px;
-    }
+  
+  .animate-marquee {
+    animation: marquee 20s linear infinite;
   }
 </style>
 
 <script>
-  // Music player functionality
-  let currentTrack = null;
+  // Player Logic
+  const player = document.getElementById('floating-player');
+  const playBtns = document.querySelectorAll('.play-track-btn, .play-album-btn');
+  const closeBtn = document.getElementById('close-player');
+  const playPauseBtn = document.getElementById('play-pause-btn');
+  const playIcon = document.getElementById('play-icon');
+  const pauseIcon = document.getElementById('pause-icon');
+  const progressFill = document.getElementById('progress-fill');
+  
+  // Elementos de texto
+  const titleEl = document.getElementById('player-title');
+  const artistEl = document.getElementById('player-artist');
+  const totalTimeEl = document.getElementById('total-time');
+  const currentTimeEl = document.getElementById('current-time');
+  
   let isPlaying = false;
-  let currentTrackIndex = 0;
-  let tracks = [];
+  let progress = 0;
+  let interval: number | undefined;
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const playButtons = document.querySelectorAll('.play-track-btn, .play-btn');
-    const floatingPlayer = document.getElementById('floating-player');
-    const playPauseBtn = document.getElementById('play-pause-btn');
-    const closePlayerBtn = document.getElementById('close-player');
-    const prevBtn = document.getElementById('prev-btn');
-    const nextBtn = document.getElementById('next-btn');
-
-    // Initialize tracks data
-    tracks = Array.from(document.querySelectorAll('.track-item')).map(item => ({
-      title: item.querySelector('.track-title').textContent,
-      artist: item.querySelector('.track-artist').textContent,
-      cover: item.querySelector('.track-cover img').src,
-      duration: item.querySelector('.track-duration').textContent
-    }));
-
-    // Play button functionality
-    playButtons.forEach((btn, index) => {
-      btn.addEventListener('click', () => {
-        const trackItem = btn.closest('.track-item') || btn.closest('.album-card');
-        if (trackItem) {
-          const trackInfo = trackItem.querySelector('.track-info') || trackItem.querySelector('.album-info');
-          const title = trackInfo.querySelector('.track-title, .album-title').textContent;
-          const artist = trackInfo.querySelector('.track-artist, .album-artist').textContent;
-          const cover = trackItem.querySelector('img').src;
-          
-          playTrack({ title, artist, cover }, index);
-        }
+  if (player && closeBtn && playPauseBtn && playIcon && pauseIcon && progressFill && titleEl && artistEl && totalTimeEl && currentTimeEl) {
+    
+    playBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        const title = btn.getAttribute('data-title') || 'Unknown Track';
+        const artist = btn.getAttribute('data-artist') || 'Unknown Artist';
+        const duration = btn.getAttribute('data-duration') || '3:00';
+        
+        // Update Player Info
+        titleEl.textContent = title;
+        artistEl.textContent = artist;
+        totalTimeEl.textContent = duration;
+        
+        // Show Player
+        player.style.transform = 'translateY(0)';
+        
+        // Auto Play
+        isPlaying = true;
+        updatePlayButton();
+        startProgress();
       });
     });
 
-    // Play/Pause functionality
-    playPauseBtn.addEventListener('click', () => {
-      if (currentTrack) {
-        togglePlayPause();
-      }
-    });
-
-    // Close player
-    closePlayerBtn.addEventListener('click', () => {
-      floatingPlayer.classList.remove('active');
-      stopTrack();
-    });
-
-    // Previous/Next buttons
-    prevBtn.addEventListener('click', () => {
-      if (currentTrackIndex > 0) {
-        playTrack(tracks[currentTrackIndex - 1], currentTrackIndex - 1);
-      }
-    });
-
-    nextBtn.addEventListener('click', () => {
-      if (currentTrackIndex < tracks.length - 1) {
-        playTrack(tracks[currentTrackIndex + 1], currentTrackIndex + 1);
-      }
-    });
-
-    function playTrack(track, index) {
-      currentTrack = track;
-      currentTrackIndex = index;
-      isPlaying = true;
-
-      // Update player UI
-      document.getElementById('player-title').textContent = track.title;
-      document.getElementById('player-artist').textContent = track.artist;
-      document.getElementById('player-cover').src = track.cover;
-      document.getElementById('total-time').textContent = track.duration;
-
-      // Show floating player
-      floatingPlayer.classList.add('active');
-
-      // Update play/pause button
-      updatePlayPauseButton();
-
-      // Simulate progress
-      simulateProgress();
-    }
-
-    function togglePlayPause() {
-      isPlaying = !isPlaying;
-      updatePlayPauseButton();
-    }
-
-    function stopTrack() {
-      currentTrack = null;
+    closeBtn.addEventListener('click', () => {
+      player.style.transform = 'translateY(150%)';
       isPlaying = false;
-      document.getElementById('progress-fill').style.width = '0%';
-      document.getElementById('current-time').textContent = '0:00';
-    }
+      updatePlayButton();
+      clearInterval(interval);
+    });
 
-    function updatePlayPauseButton() {
-      const icon = playPauseBtn.querySelector('svg path');
+    playPauseBtn.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      updatePlayButton();
+      if (isPlaying) startProgress();
+      else clearInterval(interval);
+    });
+
+    function updatePlayButton() {
+      if (!playIcon || !pauseIcon) return;
+      
       if (isPlaying) {
-        icon.setAttribute('d', 'M6 4h4v16H6V4zm8 0h4v16h-4V4z'); // Pause icon
+        playIcon.classList.add('hidden');
+        pauseIcon.classList.remove('hidden');
       } else {
-        icon.setAttribute('d', 'M8 5v14l11-7z'); // Play icon
+        playIcon.classList.remove('hidden');
+        pauseIcon.classList.add('hidden');
       }
     }
 
-    function simulateProgress() {
-      if (!currentTrack || !isPlaying) return;
-
-      const progressFill = document.getElementById('progress-fill');
-      const currentTimeEl = document.getElementById('current-time');
-      let progress = 0;
-
-      const interval = setInterval(() => {
-        if (!isPlaying || !currentTrack) {
-          clearInterval(interval);
-          return;
-        }
-
-        progress += 1;
-        progressFill.style.width = progress + '%';
+    function startProgress() {
+      clearInterval(interval);
+      interval = window.setInterval(() => {
+        if (!progressFill || !currentTimeEl) return;
         
-        // Simulate time (for demo purposes)
-        const totalSeconds = parseDuration(currentTrack.duration);
+        progress += 1;
+        if (progress > 100) progress = 0;
+        progressFill.style.width = `${progress}%`;
+        
+        // Simple time update simulation
+        const totalSeconds = 180; // 3 mins approx
         const currentSeconds = Math.floor((progress / 100) * totalSeconds);
-        currentTimeEl.textContent = formatTime(currentSeconds);
-
-        if (progress >= 100) {
-          clearInterval(interval);
-          // Auto play next track
-          if (currentTrackIndex < tracks.length - 1) {
-            playTrack(tracks[currentTrackIndex + 1], currentTrackIndex + 1);
-          } else {
-            stopTrack();
-          }
-        }
+        const mins = Math.floor(currentSeconds / 60);
+        const secs = currentSeconds % 60;
+        currentTimeEl.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
       }, 1000);
     }
-
-    function parseDuration(duration) {
-      const [minutes, seconds] = duration.split(':').map(Number);
-      return minutes * 60 + seconds;
-    }
-
-    function formatTime(seconds) {
-      const mins = Math.floor(seconds / 60);
-      const secs = seconds % 60;
-      return `${mins}:${String(secs).padStart(2, '0')}`;
-    }
-  });
+  }
 </script>
