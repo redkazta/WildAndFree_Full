@@ -9,9 +9,9 @@ const config = {
   secondary_color: tenant.secondary_color
 };
 
-const tracks = [
+// Generar más datos de prueba para mostrar "muchas rolas"
+const baseTracks = [
   {
-    id: 1,
     title: 'NOCHES DE NEÓN',
     artist: 'LIL KIRO',
     album: 'LUCES DE CIUDAD',
@@ -20,7 +20,6 @@ const tracks = [
     plays: '2.1M'
   },
   {
-    id: 2,
     title: 'TOKYO DRIFT',
     artist: 'NEON GHOST',
     album: 'SESIONES DE MEDIANOCHE',
@@ -29,7 +28,6 @@ const tracks = [
     plays: '1.8M'
   },
   {
-    id: 4,
     title: 'REINO DE SOMBRAS',
     artist: 'SHADOW V',
     album: 'MATERIA OSCURA',
@@ -38,7 +36,6 @@ const tracks = [
     plays: '1.5M'
   },
   {
-    id: 5,
     title: 'CRISTALINO',
     artist: 'CRYSTAL WAVE',
     album: 'ONDAS',
@@ -47,54 +44,80 @@ const tracks = [
     plays: '890K'
   },
   {
-    id: 6,
     title: 'PASEO DE MEDIANOCHE',
     artist: 'MIDNIGHT RIDER',
     album: 'JINETE NOCTURNO',
     duration: '4:01',
     cover: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&h=300&fit=crop&crop=face',
     plays: '2.7M'
+  },
+  {
+    title: 'FUEGO FATUO',
+    artist: 'LIL KIRO',
+    album: 'LUCES DE CIUDAD',
+    duration: '2:55',
+    cover: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&h=300&fit=crop&crop=face',
+    plays: '3.2M'
+  },
+  {
+    title: 'VAPORWAVE DREAMS',
+    artist: 'NEON GHOST',
+    album: 'SESIONES DE MEDIANOCHE',
+    duration: '3:45',
+    cover: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&h=300&fit=crop&crop=face',
+    plays: '1.1M'
+  },
+  {
+    title: 'URBAN JUNGLE',
+    artist: 'WILD SQUAD',
+    album: 'MIXTAPE VOL.1',
+    duration: '3:10',
+    cover: 'https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=300&h=300&fit=crop&crop=face',
+    plays: '950K'
+  },
+  {
+    title: 'GRAFFITI SOUL',
+    artist: 'STREET ARTIST',
+    album: 'WALLS',
+    duration: '4:20',
+    cover: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=300&h=300&fit=crop&crop=face',
+    plays: '1.4M'
+  },
+  {
+    title: 'CONCRETO Y ACERO',
+    artist: 'HEAVY HITTERS',
+    album: 'CONSTRUCCIÓN',
+    duration: '3:50',
+    cover: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=300&h=300&fit=crop&crop=face',
+    plays: '2.0M'
   }
 ];
 
-const albums = [
-  {
-    id: 1,
-    title: 'LUCES DE CIUDAD',
-    artist: 'LIL KIRO',
-    cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=face',
-    year: '2024',
-    tracks: 12,
-    type: 'LP'
-  },
-  {
-    id: 2,
-    title: 'SESIONES DE MEDIANOCHE',
-    artist: 'NEON GHOST',
-    cover: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
-    year: '2024',
-    tracks: 15,
-    type: 'EP'
-  }
+// Duplicar para tener una lista larga
+const tracks = [
+  ...baseTracks.map((t, i) => ({ ...t, id: i + 1 })),
+  ...baseTracks.map((t, i) => ({ ...t, id: i + 11, title: t.title + ' (REMIX)', duration: '4:30' })),
+  ...baseTracks.map((t, i) => ({ ...t, id: i + 21, title: t.title + ' (INSTRUMENTAL)', duration: '3:15' }))
 ];
+
 ---
 
 <Layout config={config}>
-  <div class="min-h-screen bg-[#050505] pb-20 px-6 relative overflow-hidden">
+  <div class="min-h-screen bg-[#050505] pb-32 px-4 md:px-6 relative overflow-hidden">
     <!-- Background Noise Pattern -->
     <div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 20px 20px;"></div>
 
-    <div class="max-w-[1400px] mx-auto space-y-24 relative z-10 animate-fade-in-up">
+    <div class="max-w-[1400px] mx-auto space-y-12 relative z-10 animate-fade-in-up">
       
       <!-- Header Brutalista con Marquee -->
-      <div class="border-b-4 border-white pb-8">
+      <div class="border-b-4 border-white pb-8 mt-8">
         <div class="flex flex-col md:flex-row items-end gap-6 mb-8">
           <h1 class="text-7xl md:text-9xl font-black tracking-tighter text-white uppercase leading-none hover:text-[var(--street-accent)] transition-colors duration-500" style="text-shadow: 4px 4px 0px var(--street-accent);">
             SONIDOS
           </h1>
           <div class="flex flex-col mb-2">
              <span class="text-xl font-bold text-black bg-[var(--street-accent)] px-2 inline-block w-fit">WILD RECORDS</span>
-             <span class="text-sm font-mono text-[#888] tracking-widest mt-1">HIFI • LOFI • NOFI</span>
+             <span class="text-sm font-mono text-[#888] tracking-widest mt-1">CATÁLOGO COMPLETO</span>
           </div>
         </div>
         
@@ -117,118 +140,59 @@ const albums = [
         </div>
       </div>
 
-      <!-- Featured Albums (Vinyl Style) -->
+      <!-- Lista de Tracks Compacta y Densa -->
       <section>
-        <div class="flex items-center gap-4 mb-12">
-          <div class="w-12 h-12 bg-white text-black flex items-center justify-center font-black text-xl">01</div>
-          <h2 class="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white">Lanzamientos</h2>
+        <div class="flex items-center justify-between mb-8">
+          <div class="flex items-center gap-4">
+            <div class="w-10 h-10 bg-[var(--street-accent)] text-black flex items-center justify-center font-black text-xl border border-black shadow-[4px_4px_0px_white]">ALL</div>
+            <h2 class="text-2xl md:text-4xl font-black uppercase tracking-tighter text-white">Todas las Rolas ({tracks.length})</h2>
+          </div>
+          
+          <!-- Filtros simples (visuales por ahora) -->
+          <div class="hidden md:flex gap-2">
+            <button class="px-4 py-1 bg-white text-black font-mono text-sm font-bold border border-black hover:bg-[var(--street-accent)] transition-colors">POPULAR</button>
+            <button class="px-4 py-1 bg-black text-white font-mono text-sm font-bold border border-white hover:bg-white hover:text-black transition-colors">NUEVO</button>
+          </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
-          {albums.map((album) => (
-            <div class="group relative">
-              <!-- Vinyl Sleeve Container -->
-              <div class="relative z-10 bg-[#111] border-2 border-white aspect-square p-2 hover:translate-y-[-10px] transition-transform duration-300">
-                <img src={album.cover} alt={album.title} class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {tracks.map((track, index) => (
+            <div class="group relative flex items-center gap-4 bg-[#111] border border-white/10 p-3 hover:bg-[#1a1a1a] hover:border-[var(--street-accent)] transition-all duration-300 hover:-translate-y-1">
+              
+              <!-- Cover Tiny -->
+              <div class="relative w-16 h-16 flex-shrink-0 border border-white/20 group-hover:border-[var(--street-accent)] transition-colors overflow-hidden">
+                <img src={track.cover} alt={track.title} class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
                 
-                <!-- Sticker -->
-                <div class="absolute top-6 right-6 w-24 h-24 bg-[var(--street-accent)] rounded-full flex items-center justify-center rotate-12 group-hover:rotate-0 transition-transform shadow-lg z-20">
-                  <div class="text-center">
-                    <span class="block text-black font-black text-xs">STEREO</span>
-                    <span class="block text-white font-bold text-lg leading-none">{album.year}</span>
-                  </div>
-                </div>
-
-                <!-- OBI Strip / Banner -->
-                <div class="absolute bottom-6 left-[-10px] bg-white text-black py-1 px-4 shadow-[4px_4px_0px_var(--street-accent)] z-20">
-                   <span class="font-mono font-bold text-sm tracking-widest">{album.type}</span>
-                </div>
-                
-                <!-- Play Overlay -->
+                <!-- Play Overlay on Cover -->
                 <button 
-                  class="play-album-btn absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity z-30 cursor-pointer"
-                  data-title={album.title}
-                  data-artist={album.artist}
-                  data-cover={album.cover}
+                  class="play-track-btn absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                  data-title={track.title}
+                  data-artist={track.artist}
+                  data-cover={track.cover}
+                  data-duration={track.duration}
                 >
-                  <div class="w-20 h-20 bg-[var(--street-accent)] rounded-full flex items-center justify-center shadow-[4px_4px_0px_black] hover:scale-110 transition-transform">
-                     <svg width="32" height="32" viewBox="0 0 24 24" fill="black"><path d="M8 5v14l11-7z"/></svg>
-                  </div>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
                 </button>
               </div>
 
-              <!-- Vinyl Disc (Slides out on hover) -->
-              <div class="absolute top-2 right-2 w-[95%] h-[95%] bg-black rounded-full border-[10px] border-[#1a1a1a] flex items-center justify-center z-0 group-hover:translate-x-[40%] transition-transform duration-500 ease-out shadow-2xl">
-                 <div class="w-[40%] h-[40%] bg-[var(--street-accent)] rounded-full flex items-center justify-center">
-                    <div class="w-2 h-2 bg-black rounded-full"></div>
-                 </div>
-                 <!-- Grooves -->
-                 <div class="absolute inset-0 rounded-full border border-white/5 pointer-events-none"></div>
-                 <div class="absolute inset-4 rounded-full border border-white/5 pointer-events-none"></div>
-                 <div class="absolute inset-8 rounded-full border border-white/5 pointer-events-none"></div>
-              </div>
-
               <!-- Info -->
-              <div class="mt-8 relative z-20 bg-[#050505]/80 backdrop-blur">
-                <h3 class="text-3xl font-black text-white uppercase">{album.title}</h3>
-                <p class="text-[var(--street-accent)] font-mono text-lg">{album.artist}</p>
-                <div class="flex gap-4 mt-2 text-sm text-gray-400 font-mono">
-                  <span>{album.tracks} TRACKS</span>
-                  <span>•</span>
-                  <span>HIGH FIDELITY</span>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-baseline justify-between">
+                    <h4 class="text-base font-bold text-white uppercase truncate group-hover:text-[var(--street-accent)] transition-colors pr-2">{track.title}</h4>
+                    <span class="text-xs font-mono text-gray-500 group-hover:text-white transition-colors">{track.duration}</span>
                 </div>
+                <p class="text-xs font-mono text-gray-400 truncate">{track.artist}</p>
+                <p class="text-[10px] font-mono text-gray-600 mt-1 uppercase tracking-wider">{track.album}</p>
               </div>
-            </div>
-          ))}
-        </div>
-      </section>
 
-      <!-- Popular Tracks (Cassette/List Style) -->
-      <section>
-        <div class="flex items-center gap-4 mb-12">
-          <div class="w-12 h-12 bg-white text-black flex items-center justify-center font-black text-xl">02</div>
-          <h2 class="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white">Top Tracks</h2>
-        </div>
-
-        <div class="space-y-4">
-          {tracks.map((track, index) => (
-            <div class="group relative flex items-center gap-6 bg-[#111] border border-white/20 p-4 hover:bg-white hover:border-[var(--street-accent)] transition-colors duration-300">
+              <!-- Play Count (Desktop only) -->
+              <div class="hidden xl:block text-xs font-mono text-gray-600 text-right min-w-[60px]">
+                 <div class="flex items-center justify-end gap-1">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    {track.plays}
+                 </div>
+              </div>
               
-              <!-- Index Box -->
-              <div class="w-12 h-12 border border-white/20 flex items-center justify-center group-hover:border-black group-hover:bg-black transition-colors">
-                <span class="font-mono font-bold text-white group-hover:text-[var(--street-accent)]">
-                  {String(index + 1).padStart(2, '0')}
-                </span>
-              </div>
-
-              <!-- Track Info -->
-              <div class="flex-1">
-                <h4 class="text-xl font-bold text-white uppercase group-hover:text-black">{track.title}</h4>
-                <p class="text-sm font-mono text-gray-400 group-hover:text-black/60">{track.artist} • {track.album}</p>
-              </div>
-
-              <!-- Stats -->
-              <div class="hidden md:flex items-center gap-8 font-mono text-sm text-gray-500 group-hover:text-black/60">
-                <span class="flex items-center gap-2">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                  {track.plays}
-                </span>
-                <span class="flex items-center gap-2">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                  {track.duration}
-                </span>
-              </div>
-
-              <!-- Play Button -->
-              <button 
-                class="play-track-btn w-12 h-12 bg-[var(--street-accent)] text-black flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-[4px_4px_0px_black] hover:scale-110"
-                data-title={track.title}
-                data-artist={track.artist}
-                data-cover={track.cover}
-                data-duration={track.duration}
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-              </button>
             </div>
           ))}
         </div>
@@ -272,7 +236,7 @@ const albums = [
            <div id="progress-fill" class="h-full bg-[var(--street-accent)] w-0 transition-all duration-100"></div>
         </div>
         
-        <button id="close-player" class="absolute -top-4 -right-4 bg-red-500 text-white w-8 h-8 flex items-center justify-center border-2 border-white shadow-lg hover:scale-110 transition-transform">
+        <button id="close-player" class="absolute -top-4 -right-4 bg-red-500 text-white w-8 h-8 flex items-center justify-center border-2 border-white shadow-lg hover:scale-110 transition-transform cursor-pointer">
            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 1l12 12M13 1L1 13"/></svg>
         </button>
       </div>
@@ -313,7 +277,7 @@ const albums = [
 <script>
   // Player Logic
   const player = document.getElementById('floating-player');
-  const playBtns = document.querySelectorAll('.play-track-btn, .play-album-btn');
+  const playBtns = document.querySelectorAll('.play-track-btn');
   const closeBtn = document.getElementById('close-player');
   const playPauseBtn = document.getElementById('play-pause-btn');
   const playIcon = document.getElementById('play-icon');
@@ -335,6 +299,7 @@ const albums = [
     playBtns.forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
+        e.stopPropagation(); // Stop bubbling to prevent other clicks if any
         
         const title = btn.getAttribute('data-title') || 'Unknown Track';
         const artist = btn.getAttribute('data-artist') || 'Unknown Artist';
