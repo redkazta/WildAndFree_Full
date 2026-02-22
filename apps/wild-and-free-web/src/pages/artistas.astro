@@ -105,7 +105,7 @@ const config = {
       <!-- Grid de Artistas -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         {artists.map((artist: any, i: number) => (
-          <a href={`/artista/${artist.slug}`} class="group relative block bg-[#111] border-2 border-white hover:border-[var(--street-accent)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[8px_8px_0px_var(--street-accent)] animate-stagger" style={`animation-delay: ${i * 100}ms`}>
+          <a href={`/artista/${artist.slug}`} class="group relative block bg-[#111] border-2 border-white hover:border-[var(--street-accent)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[8px_8px_0px_var(--street-accent)] animate-stagger overflow-hidden" style={`animation-delay: ${i * 100}ms`}>
             
             <!-- Imagen -->
             <div class="aspect-[3/4] overflow-hidden relative border-b-2 border-white group-hover:border-[var(--street-accent)] transition-colors">
@@ -113,29 +113,37 @@ const config = {
                 src={artist.imagenes?.profile || 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80'} 
                 alt={artist.nombre} 
                 loading="lazy" 
-                class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700 ease-out"
               />
+              
+              <!-- Glitch Overlay Effect -->
+              <div class="absolute inset-0 bg-[var(--street-accent)]/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+
               <!-- Overlay Text on Image -->
-              <div class="absolute top-4 left-4 bg-black/80 backdrop-blur-sm border border-white/20 px-3 py-1">
-                 <span class="text-[10px] font-mono text-[var(--street-accent)] uppercase tracking-widest">VERIFICADO</span>
+              <div class="absolute top-4 left-4 bg-black/80 backdrop-blur-sm border border-white/20 px-3 py-1 -skew-x-12">
+                 <span class="text-[10px] font-black text-[var(--street-accent)] uppercase tracking-widest skew-x-12 inline-block">VERIFICADO</span>
               </div>
             </div>
 
             <!-- Info Card -->
-            <div class="p-6 relative bg-[#111]">
-              <h3 class="text-3xl font-black uppercase tracking-tighter text-white mb-2 leading-none group-hover:text-[var(--street-accent)] transition-colors">
+            <div class="p-6 relative bg-[#111] group-hover:bg-[#0a0a0a] transition-colors">
+              <h3 class="text-3xl font-black uppercase tracking-tighter text-white mb-2 leading-none group-hover:text-[var(--street-accent)] transition-colors line-clamp-1">
                 {artist.nombre}
               </h3>
               
+              <p class="text-xs text-gray-400 font-medium line-clamp-2 h-8 mb-4 opacity-60 group-hover:opacity-100 transition-opacity">
+                {artist.bio}
+              </p>
+
               <div class="w-full h-px bg-white/20 my-4 group-hover:bg-[var(--street-accent)]/50 transition-colors"></div>
               
               <div class="flex justify-between items-end">
                  <div class="flex flex-col">
-                    <span class="text-[10px] font-bold text-[#666] uppercase tracking-widest mb-1">Oyentes</span>
-                    <span class="text-lg font-black text-white font-mono">{artist.stats?.oyentes || '0'}</span>
+                    <span class="text-[9px] font-black text-[#666] uppercase tracking-[0.2em] mb-1 group-hover:text-white transition-colors">Oyentes</span>
+                    <span class="text-xl font-black text-white font-mono group-hover:text-[var(--street-accent)] transition-colors">{artist.stats?.oyentes || '0'}</span>
                  </div>
-                 <div class="w-8 h-8 bg-white text-black flex items-center justify-center group-hover:bg-[var(--street-accent)] transition-colors">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                 <div class="w-10 h-10 bg-white text-black flex items-center justify-center group-hover:bg-[var(--street-accent)] transition-all transform group-hover:rotate-45">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="transform -rotate-45"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                  </div>
               </div>
             </div>
