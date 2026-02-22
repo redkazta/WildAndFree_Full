@@ -50,7 +50,7 @@ const events = [
 ---
 
 <Layout config={config}>
-  <main class="min-h-screen bg-[#050505] pt-32 pb-20 px-6 relative overflow-hidden">
+  <div class="min-h-screen bg-[#050505] pb-20 px-6 relative overflow-hidden">
     <!-- Background Noise Pattern -->
     <div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 20px 20px;"></div>
 
@@ -63,26 +63,26 @@ const events = [
             TOUR
           </h1>
           <div class="flex flex-col mb-2">
-             <span class="text-xl font-bold text-black bg-[var(--street-accent)] px-2 inline-block w-fit">LIVE SHOWS</span>
-             <span class="text-sm font-mono text-[#888] tracking-widest mt-1">WORLDWIDE • 2024-2025</span>
+             <span class="text-xl font-bold text-black bg-[var(--street-accent)] px-2 inline-block w-fit">SHOWS EN VIVO</span>
+             <span class="text-sm font-mono text-[#888] tracking-widest mt-1">MUNDIAL • 2024-2025</span>
           </div>
         </div>
       </div>
 
-      <!-- Events List (Ticket Style) -->
+      <!-- Lista de Eventos (Estilo Ticket) -->
       <div class="space-y-12">
         {events.map((event, index) => (
           <div class="group relative flex flex-col lg:flex-row bg-[#111] border-2 border-white hover:border-[var(--street-accent)] transition-all duration-300 hover:shadow-[8px_8px_0px_var(--street-accent)] hover:-translate-y-1">
             
-            <!-- Date Box (Left Stub) -->
+            <!-- Caja de Fecha (Talón Izquierdo) -->
             <div class="lg:w-48 bg-white text-black p-6 flex flex-col justify-between border-b-2 lg:border-b-0 lg:border-r-2 border-dashed border-black relative">
-               <!-- Perforation dots visual -->
+               <!-- Puntos de perforación visual -->
                <div class="absolute -right-[6px] top-0 bottom-0 w-[10px] hidden lg:flex flex-col justify-between z-10 pointer-events-none">
                   {Array.from({ length: 12 }).map(() => <div class="w-3 h-3 rounded-full bg-[#050505] -ml-[6px]"></div>)}
                </div>
 
                <div class="font-mono font-bold text-xl leading-none">
-                 NO.<span class="text-[var(--street-accent)]">{String(index + 1).padStart(3, '0')}</span>
+                 N.º<span class="text-[var(--street-accent)]">{String(index + 1).padStart(3, '0')}</span>
                </div>
                <div class="text-center my-4 lg:my-0">
                  <span class="block text-4xl font-black tracking-tighter">{event.fecha.split(' ')[0]}</span>
@@ -104,9 +104,15 @@ const events = [
                <div class="relative z-10 flex flex-col justify-between h-full space-y-6">
                   <div>
                     <div class="flex items-center gap-3 mb-2">
-                       <span class="px-2 py-0.5 border border-[var(--street-accent)] text-[var(--street-accent)] text-[10px] font-mono font-bold uppercase tracking-widest bg-black">
-                          {event.status === 'disponible' ? 'ON SALE' : event.status === 'sold_out' ? 'SOLD OUT' : 'COMING SOON'}
-                       </span>
+                       <div class="text-[10px] font-mono font-bold uppercase tracking-widest">
+                         {event.status === 'sold_out' ? (
+                           <span class="text-red-500 line-through decoration-2">AGOTADO</span>
+                         ) : event.status === 'proximo' ? (
+                           <span class="text-white/60">PRÓXIMAMENTE</span>
+                         ) : (
+                           <span class="text-[var(--street-accent)] animate-pulse border border-[var(--street-accent)] px-2 py-0.5 bg-black">DISPONIBLE</span>
+                         )}
+                       </div>
                        <span class="text-white/50 text-sm font-mono tracking-widest uppercase">{event.ciudad}</span>
                     </div>
                     <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter leading-none group-hover:text-white transition-colors">

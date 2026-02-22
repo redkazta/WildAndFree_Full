@@ -7,7 +7,7 @@ const config = {
   secondary_color: "#8A0303"
 };
 
-// 16 Initial participants (Mock) with high-quality street photography
+// 16 Participantes iniciales (Mock) con fotografía callejera de alta calidad
 const initialParticipants = [
   { id: 'p1', name: 'Lil Kiro', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&q=80' },
   { id: 'p2', name: 'Neon Ghost', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&q=80' },
@@ -29,7 +29,7 @@ const initialParticipants = [
 ---
 
 <Layout config={config}>
-  <main class="min-h-screen bg-black pt-32 pb-40 px-4 overflow-x-hidden">
+  <div class="min-h-screen bg-black pb-40 px-4 overflow-x-hidden">
     <div class="max-w-[1600px] mx-auto space-y-12">
       <div class="space-y-4 text-center">
         <h1 class="text-6xl md:text-8xl font-black tracking-tighter text-white uppercase leading-none">
@@ -38,7 +38,7 @@ const initialParticipants = [
         <p class="text-xl text-white font-bold uppercase tracking-[0.3em]">Liga de Freestyle • Fase de Eliminación</p>
       </div>
 
-      <!-- Realtime Status -->
+      <!-- Estado en Tiempo Real -->
       <div class="flex justify-center">
         <div id="realtime-status" class="flex items-center gap-3 px-6 py-2 bg-black border-2 border-white rounded-full">
           <span class="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
@@ -46,7 +46,7 @@ const initialParticipants = [
         </div>
       </div>
 
-      <!-- Participants Pool -->
+      <!-- Pool de Participantes -->
       <div class="bg-white/[0.02] border border-white/5 rounded-[2rem] p-8 space-y-6">
         <h3 class="text-xs font-black text-orange-500 uppercase tracking-[0.4em] text-center">Participantes Disponibles</h3>
         <div id="participants-pool" class="grid grid-cols-8 gap-4 max-w-4xl mx-auto">
@@ -70,7 +70,7 @@ const initialParticipants = [
         </div>
       </div>
 
-      <!-- Tournament Bracket -->
+      <!-- Llaves del Torneo -->
       <div class="tournament-wrap py-10">
         <div class="bracket">
           <svg id="bracket-lines" class="bracket-lines" aria-hidden="true"></svg>
@@ -141,7 +141,7 @@ const initialParticipants = [
         </div>
       </div>
     </div>
-  </main>
+  </div>
 </Layout>
 
 <style>
@@ -438,12 +438,12 @@ const initialParticipants = [
 <script>
   import { supabase } from '../lib/supabase';
 
-  // --- Drag and Drop Logic ---
+  // --- Lógica de Arrastrar y Soltar (Drag and Drop) ---
   const slots = document.querySelectorAll('.bracket-slot');
   const participants = document.querySelectorAll('.participant-item');
   let bracketState: any = {};
 
-  // Realtime Channel
+  // Canal de Tiempo Real
   const channel = supabase.channel('wild-league', {
     config: {
       broadcast: { self: true },
@@ -603,7 +603,7 @@ const initialParticipants = [
     requestAnimationFrame(drawBracketLines);
   }
 
-  // --- Context menu: advance to next round ---
+  // --- Menú contextual: avanzar a la siguiente ronda ---
   const getNextSlotId = (slotId: string) => {
     if (slotId.startsWith('l1-m')) {
       const m = parseInt(slotId.split('-')[1].slice(1), 10);
@@ -873,7 +873,7 @@ const initialParticipants = [
     }
   });
 
-  // Initial sync
+  // Sincronización inicial
   syncPoolUsedUI();
   requestAnimationFrame(drawBracketLines);
 </script>

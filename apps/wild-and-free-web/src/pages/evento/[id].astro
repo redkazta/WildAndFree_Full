@@ -54,9 +54,9 @@ const config = {
 ---
 
 <Layout config={config}>
-  <main class="min-h-screen bg-black pt-32 pb-20 px-6">
+  <div class="min-h-screen bg-black pb-20 px-6">
     <div class="max-w-4xl mx-auto space-y-12">
-      <!-- Event Hero -->
+      <!-- Héroe del Evento -->
       <div class="relative aspect-video rounded-[40px] overflow-hidden border border-white/10 shadow-2xl">
         <img src={event.imagen} class="w-full h-full object-cover" alt={event.titulo} />
         <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
@@ -70,7 +70,7 @@ const config = {
         </div>
       </div>
 
-      <!-- Event Details -->
+      <!-- Detalles del Evento -->
       <div class="grid md:grid-cols-3 gap-12">
         <div class="md:col-span-2 space-y-8">
           <div class="space-y-4">
@@ -81,7 +81,7 @@ const config = {
           </div>
           
           <div class="p-8 rounded-3xl bg-white/[0.02] border border-white/5 space-y-4">
-            <h3 class="text-sm font-black uppercase tracking-widest text-orange-500">Lineup</h3>
+            <h3 class="text-sm font-black uppercase tracking-widest text-orange-500">Alineación</h3>
             <div class="flex items-center gap-4">
               <div class="w-12 h-12 rounded-full bg-orange-500 flex items-center justify-center text-black font-black">W</div>
               <p class="text-xl font-black text-white uppercase">{event.artista} <span class="text-white/20 ml-2">+ Invitados Especiales</span></p>
@@ -113,5 +113,5 @@ const config = {
         </div>
       </div>
     </div>
-  </main>
+  </div>
 </Layout>

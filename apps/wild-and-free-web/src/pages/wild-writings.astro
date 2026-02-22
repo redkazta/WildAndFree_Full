@@ -14,21 +14,21 @@ const articles = [
     id: 1,
     title: "LA PLUMA ES MÁS FUERTE",
     subtitle: "ANÁLISIS DE LA ÚLTIMA BATALLA ESCRITA",
-    author: "GHOST WRITER",
+    author: "ESCRITOR FANTASMA",
     date: "21.03.2024",
     content: "En un mundo dominado por el freestyle instantáneo, las batallas escritas resurgen como el arte supremo de la complejidad lírica. La noche de ayer en el Foro Underground presenciamos...",
     image: "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=600&h=400&fit=crop",
-    type: "REVIEW"
+    type: "RESEÑA"
   },
   {
     id: 2,
-    title: "MANIFESTO: WILD STYLE",
+    title: "MANIFIESTO: ESTILO SALVAJE",
     subtitle: "FILOSOFÍA DE LA CALLE",
-    author: "UNKNOWN",
+    author: "DESCONOCIDO",
     date: "20.03.2024",
     content: "No seguimos reglas, las creamos. El estilo salvaje no es solo una estética, es una forma de vida que rechaza la conformidad y abraza el caos controlado del entorno urbano.",
     image: "https://images.unsplash.com/photo-1517976487492-5750f3195933?w=600&h=800&fit=crop",
-    type: "OPINION"
+    type: "OPINIÓN"
   },
   {
     id: 3,
@@ -37,7 +37,7 @@ const articles = [
     author: "SABLE",
     date: "19.03.2024",
     content: "Luces de neón parpadean / ritmos rotos en la acera / la ciudad respira humo / y exhala quimeras. Una colección de versos encontrados en las paredes del metro.",
-    type: "POETRY"
+    type: "POESÍA"
   },
   {
     id: 4,
@@ -47,13 +47,13 @@ const articles = [
     date: "18.03.2024",
     content: "Se acabaron los límites de tiempo. 3 rondas. Sin censura. Solo barras puras y duras. El nuevo formato busca premiar la creatividad sobre la agresividad vacía.",
     image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&h=600&fit=crop",
-    type: "NEWS"
+    type: "NOTICIAS"
   }
 ];
 ---
 
 <Layout config={config}>
-  <main class="min-h-screen bg-[#e5e5e5] pt-32 pb-20 px-4 md:px-8 relative overflow-hidden font-mono text-black">
+  <div class="min-h-screen bg-[#e5e5e5] pb-20 px-4 md:px-8 relative overflow-hidden font-mono text-black">
     
     <!-- Paper Texture Overlay -->
     <div class="fixed inset-0 pointer-events-none opacity-40 mix-blend-multiply z-0" style="background-image: url('https://www.transparenttextures.com/patterns/cardboard-flat.png');"></div>
@@ -65,13 +65,13 @@ const articles = [
         <div class="flex justify-between items-end border-b-2 border-black pb-2 mb-2">
            <span class="text-xs font-bold uppercase tracking-widest">VOL. 24</span>
            <span class="text-xs font-bold uppercase tracking-widest">EST. 2024</span>
-           <span class="text-xs font-bold uppercase tracking-widest">PRICE: FREE</span>
+           <span class="text-xs font-bold uppercase tracking-widest">PRECIO: GRATIS</span>
         </div>
         <h1 class="text-6xl md:text-9xl font-black tracking-tighter uppercase leading-none transform scale-y-110">
           THE WILD TIMES
         </h1>
         <div class="flex justify-center items-center gap-4 mt-2 border-t-2 border-black pt-2">
-           <span class="bg-black text-white px-2 py-1 text-sm font-bold uppercase">OFFICIAL FANZINE</span>
+           <span class="bg-black text-white px-2 py-1 text-sm font-bold uppercase">FANZINE OFICIAL</span>
            <span class="font-bold uppercase tracking-widest text-sm">VOZ DE LA CALLE • TINTA Y SANGRE</span>
         </div>
       </header>
@@ -170,7 +170,7 @@ const articles = [
       </div>
 
     </div>
-  </main>
+  </div>
 </Layout>
 
 <style define:vars={{ streetAccent: tenant.primary_color }}>
