@@ -4,6 +4,8 @@
     "name": "Wild and Free",
     "primary_color": "#FF5500",
     "secondary_color": "#0a0a0a",
+    "accent_color": "#00FF9D",
+    "discount_color": "#FF0055",
     "modules": {
       "wallet": true,
       "events": true

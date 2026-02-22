@@ -6,7 +6,9 @@ const tenant = tenantConfig['wild-and-free'];
 const config = {
   name: "Wild Gvng - Tienda Oficial",
   primary_color: tenant.primary_color,
-  secondary_color: tenant.secondary_color
+  secondary_color: tenant.secondary_color,
+  accent_color: tenant.accent_color || "#00FF9D",
+  discount_color: tenant.discount_color || "#FF0055"
 };
 
 const categories = [
@@ -135,73 +137,73 @@ const products = [
     </div>
 
     <div class="container mx-auto px-4 py-8 max-w-[1600px]">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 relative">
         
         <!-- Sidebar (Filtros y Navegación) -->
-        <aside class="hidden lg:block lg:col-span-3 space-y-8">
-          
-          <!-- Búsqueda -->
-          <div class="bg-[#111] p-6 rounded-lg shadow-sm border border-white/10">
-            <h3 class="font-black uppercase text-lg mb-4 text-white">Buscar</h3>
-            <div class="relative">
-              <input 
-                type="text" 
-                placeholder="Buscar productos..." 
-                class="w-full bg-[#222] border border-white/20 rounded px-4 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[var(--street-accent)] focus:ring-1 focus:ring-[var(--street-accent)] transition-all"
-              />
-              <button class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-              </button>
-            </div>
-          </div>
+        <aside class="hidden lg:block lg:col-span-3">
+            <div class="sticky top-24 space-y-8">
+              <!-- Búsqueda -->
+              <div class="bg-[#111] p-6 rounded-lg shadow-sm border border-white/10">
+                <h3 class="font-black uppercase text-lg mb-4 text-white">Buscar</h3>
+                <div class="relative">
+                  <input 
+                    type="text" 
+                    placeholder="Buscar productos..." 
+                    class="w-full bg-[#222] border border-white/20 rounded px-4 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[var(--street-accent)] focus:ring-1 focus:ring-[var(--street-accent)] transition-all"
+                  />
+                  <button class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                  </button>
+                </div>
+              </div>
 
-          <!-- Categorías -->
-          <div class="bg-[#111] p-6 rounded-lg shadow-sm border border-white/10">
-            <h3 class="font-black uppercase text-lg mb-4 text-white">Categorías</h3>
-            <ul class="space-y-3 text-sm font-medium text-gray-400">
-              {categories.map(cat => (
-                <li>
-                  <a href="#" class="hover:text-[var(--street-accent)] hover:translate-x-1 transition-all block flex items-center gap-2">
-                    <span class="w-1 h-1 bg-gray-600 rounded-full"></span>
-                    {cat.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+              <!-- Categorías -->
+              <div class="bg-[#111] p-6 rounded-lg shadow-sm border border-white/10">
+                <h3 class="font-black uppercase text-lg mb-4 text-white">Categorías</h3>
+                <ul class="space-y-3 text-sm font-medium text-gray-400">
+                  {categories.map(cat => (
+                    <li>
+                      <a href="#" class="hover:text-[var(--street-accent)] hover:translate-x-1 transition-all block flex items-center gap-2">
+                        <span class="w-1 h-1 bg-gray-600 rounded-full"></span>
+                        {cat.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-          <!-- Filtro de Precio -->
-          <div class="bg-[#111] p-6 rounded-lg shadow-sm border border-white/10">
-            <h3 class="font-black uppercase text-lg mb-4 text-white">Precio</h3>
-            <div class="space-y-2">
-              <label class="flex items-center gap-2 cursor-pointer group">
-                <input type="checkbox" class="accent-[var(--street-accent)] bg-[#222] border-white/20" />
-                <span class="text-sm text-gray-400 group-hover:text-white">Hasta $500</span>
-              </label>
-              <label class="flex items-center gap-2 cursor-pointer group">
-                <input type="checkbox" class="accent-[var(--street-accent)] bg-[#222] border-white/20" />
-                <span class="text-sm text-gray-400 group-hover:text-white">$500 - $1,000</span>
-              </label>
-              <label class="flex items-center gap-2 cursor-pointer group">
-                <input type="checkbox" class="accent-[var(--street-accent)] bg-[#222] border-white/20" />
-                <span class="text-sm text-gray-400 group-hover:text-white">$1,000 - $2,000</span>
-              </label>
-              <label class="flex items-center gap-2 cursor-pointer group">
-                <input type="checkbox" class="accent-[var(--street-accent)] bg-[#222] border-white/20" />
-                <span class="text-sm text-gray-400 group-hover:text-white">Más de $2,000</span>
-              </label>
-            </div>
-          </div>
+              <!-- Filtro de Precio -->
+              <div class="bg-[#111] p-6 rounded-lg shadow-sm border border-white/10">
+                <h3 class="font-black uppercase text-lg mb-4 text-white">Precio</h3>
+                <div class="space-y-2">
+                  <label class="flex items-center gap-2 cursor-pointer group">
+                    <input type="checkbox" class="accent-[var(--street-accent)] bg-[#222] border-white/20" />
+                    <span class="text-sm text-gray-400 group-hover:text-white">Hasta $500</span>
+                  </label>
+                  <label class="flex items-center gap-2 cursor-pointer group">
+                    <input type="checkbox" class="accent-[var(--street-accent)] bg-[#222] border-white/20" />
+                    <span class="text-sm text-gray-400 group-hover:text-white">$500 - $1,000</span>
+                  </label>
+                  <label class="flex items-center gap-2 cursor-pointer group">
+                    <input type="checkbox" class="accent-[var(--street-accent)] bg-[#222] border-white/20" />
+                    <span class="text-sm text-gray-400 group-hover:text-white">$1,000 - $2,000</span>
+                  </label>
+                  <label class="flex items-center gap-2 cursor-pointer group">
+                    <input type="checkbox" class="accent-[var(--street-accent)] bg-[#222] border-white/20" />
+                    <span class="text-sm text-gray-400 group-hover:text-white">Más de $2,000</span>
+                  </label>
+                </div>
+              </div>
 
-          <!-- Banner Lateral -->
-          <div class="bg-[#111] border border-white/10 text-white p-6 rounded-lg text-center space-y-4">
-            <p class="font-black text-2xl text-[var(--street-accent)] uppercase">WILD CLUB</p>
-            <p class="text-sm text-gray-400">Únete al club y obtén 10% de descuento en tu primera compra.</p>
-            <button class="w-full bg-[var(--street-accent)] text-black font-bold py-2 text-xs uppercase tracking-widest hover:bg-white transition-colors">
-              Suscribirse
-            </button>
+              <!-- Banner Lateral -->
+              <div class="bg-[#111] border border-white/10 text-white p-6 rounded-lg text-center space-y-4">
+                <p class="font-black text-2xl text-[var(--street-accent)] uppercase">WILD CLUB</p>
+                <p class="text-sm text-gray-400">Únete al club y obtén 10% de descuento en tu primera compra.</p>
+                <button class="w-full bg-[var(--street-accent)] text-black font-bold py-2 text-xs uppercase tracking-widest hover:bg-white transition-colors">
+                  Suscribirse
+                </button>
+              </div>
           </div>
-
         </aside>
 
         <!-- Main Content -->
@@ -245,11 +247,11 @@ const products = [
                   <div class="relative h-[280px] bg-[#222] overflow-hidden">
                     <img src={product.image} class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-500" />
                     {product.originalPrice && (
-                      <div class="absolute top-2 left-2 bg-[var(--street-accent)] text-black text-xs font-black px-3 py-1.5 uppercase rounded-sm shadow-[4px_4px_0px_black] transform -rotate-2 z-20 border-2 border-black">
+                      <div class="absolute top-2 left-2 bg-[var(--discount-color)] text-white text-xs font-black px-3 py-1.5 uppercase rounded-sm shadow-[4px_4px_0px_black] transform -rotate-2 z-20 border-2 border-black">
                         -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
                       </div>
                     )}
-                    <button class="absolute top-2 right-2 w-8 h-8 bg-black/80 rounded-full flex items-center justify-center text-white hover:bg-[var(--street-accent)] hover:text-black transition-colors opacity-0 group-hover:opacity-100 shadow-lg border border-white/20 toggle-wishlist-btn" title="Añadir a Lista de Deseos" data-product={JSON.stringify(product)}>
+                    <button class="absolute top-2 right-2 w-8 h-8 bg-black/80 rounded-full flex items-center justify-center text-white hover:bg-[var(--street-accent)] hover:text-black transition-colors opacity-0 group-hover:opacity-100 shadow-lg border border-white/20 toggle-wishlist-btn cursor-pointer" title="Añadir a Lista de Deseos" data-product={JSON.stringify(product)}>
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                     </button>
                   </div>
@@ -258,7 +260,7 @@ const products = [
                     <h3 class="font-bold text-sm text-white leading-tight line-clamp-2 h-10 group-hover:text-[var(--street-accent)] transition-colors">{product.name}</h3>
                     <div class="flex items-baseline gap-2">
                       <span class="text-lg font-black text-white">${product.price}</span>
-                      <span class="text-xs text-gray-500 line-through">${product.originalPrice}</span>
+                      <span class="text-xs text-[var(--discount-color)] line-through font-bold">${product.originalPrice}</span>
                     </div>
                     <div class="flex items-center gap-1">
                       <div class="flex text-[var(--street-accent)] text-xs">
@@ -267,7 +269,7 @@ const products = [
                       </div>
                       <span class="text-xs text-gray-400">({product.reviews})</span>
                     </div>
-                    <button class="w-full mt-2 bg-white text-black py-2 text-xs font-bold uppercase tracking-wider hover:bg-[var(--street-accent)] hover:text-black transition-colors rounded shadow-[2px_2px_0px_black] add-to-cart-btn" data-product={JSON.stringify(product)}>
+                    <button class="w-full mt-2 bg-white text-black py-2 text-xs font-bold uppercase tracking-wider hover:bg-[var(--street-accent)] hover:text-black transition-colors rounded shadow-[2px_2px_0px_black] add-to-cart-btn cursor-pointer" data-product={JSON.stringify(product)}>
                       Agregar
                     </button>
                   </div>
@@ -307,7 +309,7 @@ const products = [
                         )}
                         {!product.isBestSeller && <div></div>} <!-- Spacer -->
                         
-                        <button class="w-9 h-9 bg-black/40 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-[var(--street-accent)] hover:text-black transition-all transform hover:scale-110 border border-white/10 toggle-wishlist-btn" title="Añadir a Lista de Deseos" data-product={JSON.stringify(product)}>
+                        <button class="w-9 h-9 bg-black/40 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-[var(--street-accent)] hover:text-black transition-all transform hover:scale-110 border border-white/10 toggle-wishlist-btn cursor-pointer" title="Añadir a Lista de Deseos" data-product={JSON.stringify(product)}>
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                         </button>
                     </div>
@@ -333,7 +335,7 @@ const products = [
                           <span class="text-xs text-gray-500 font-medium mb-0.5">Precio</span>
                           <div class="flex items-baseline gap-2">
                               <span class="text-xl font-black text-white tracking-tight">${product.price}</span>
-                              {product.originalPrice && <span class="text-xs text-gray-600 line-through font-bold">${product.originalPrice}</span>}
+                              {product.originalPrice && <span class="text-xs text-[var(--discount-color)] line-through font-bold">${product.originalPrice}</span>}
                           </div>
                         </div>
                         <div class="flex items-center gap-1">
@@ -343,7 +345,7 @@ const products = [
                       </div>
                       
                       <button 
-                        class={`w-full py-3 text-[10px] font-black uppercase tracking-[0.2em] rounded-lg transition-all flex items-center justify-center gap-2 add-to-cart-btn group/btn overflow-hidden relative ${
+                        class={`w-full py-3 text-[10px] font-black uppercase tracking-[0.2em] rounded-lg transition-all flex items-center justify-center gap-2 add-to-cart-btn group/btn overflow-hidden relative cursor-pointer ${
                           product.inStock 
                           ? 'bg-white text-black hover:bg-[var(--street-accent)] hover:shadow-[0_0_20px_rgba(201,131,0,0.4)]' 
                           : 'bg-[#222] text-gray-600 cursor-not-allowed border border-white/5'
@@ -373,9 +375,10 @@ const products = [
   </div>
 </Layout>
 
-<style define:vars={{ streetAccent: tenant.primary_color }}>
+<style define:vars={{ streetAccent: tenant.primary_color, discountColor: config.discount_color }}>
   :root {
     --street-accent: var(--streetAccent);
+    --discount-color: var(--discountColor);
   }
 
   /* Ocultar barra de scroll en navegadores */
