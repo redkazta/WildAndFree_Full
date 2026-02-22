@@ -245,11 +245,11 @@ const products = [
                   <div class="relative h-[280px] bg-[#222] overflow-hidden">
                     <img src={product.image} class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-500" />
                     {product.originalPrice && (
-                      <div class="absolute top-2 left-2 bg-[var(--street-accent)] text-black text-[10px] font-black px-2 py-1 uppercase rounded shadow-[2px_2px_0px_black]">
-                        -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
+                      <div class="absolute top-2 left-2 bg-[var(--street-accent)] text-black text-xs font-black px-3 py-1.5 uppercase rounded-sm shadow-[4px_4px_0px_black] transform -rotate-2 z-20 border-2 border-black">
+                        -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
                       </div>
                     )}
-                    <button class="absolute top-2 right-2 w-8 h-8 bg-black/80 rounded-full flex items-center justify-center text-white hover:bg-[var(--street-accent)] hover:text-black transition-colors opacity-0 group-hover:opacity-100 shadow-lg border border-white/20" title="Añadir a Lista de Deseos">
+                    <button class="absolute top-2 right-2 w-8 h-8 bg-black/80 rounded-full flex items-center justify-center text-white hover:bg-[var(--street-accent)] hover:text-black transition-colors opacity-0 group-hover:opacity-100 shadow-lg border border-white/20 toggle-wishlist-btn" title="Añadir a Lista de Deseos" data-product={JSON.stringify(product)}>
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                     </button>
                   </div>
@@ -267,7 +267,7 @@ const products = [
                       </div>
                       <span class="text-xs text-gray-400">({product.reviews})</span>
                     </div>
-                    <button class="w-full mt-2 bg-white text-black py-2 text-xs font-bold uppercase tracking-wider hover:bg-[var(--street-accent)] hover:text-black transition-colors rounded shadow-[2px_2px_0px_black]">
+                    <button class="w-full mt-2 bg-white text-black py-2 text-xs font-bold uppercase tracking-wider hover:bg-[var(--street-accent)] hover:text-black transition-colors rounded shadow-[2px_2px_0px_black] add-to-cart-btn" data-product={JSON.stringify(product)}>
                       Agregar
                     </button>
                   </div>
@@ -292,52 +292,73 @@ const products = [
 
             <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
               {products.map(product => (
-                <div class="bg-[#111] rounded-lg overflow-hidden border border-white/10 hover:border-[var(--street-accent)] transition-all duration-300 group flex flex-col h-full hover:-translate-y-1 hover:shadow-[0_0_15px_rgba(0,0,0,0.5)]">
-                  <div class="relative aspect-square bg-[#222] overflow-hidden">
-                    <img src={product.image} class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-500" />
+                <div class="bg-[#111] rounded-xl overflow-hidden border border-white/5 hover:border-[var(--street-accent)] transition-all duration-300 group flex flex-col h-full hover:-translate-y-2 hover:shadow-[0_10px_40px_-10px_rgba(0,0,0,0.8)] relative">
+                  <!-- Efecto de brillo en hover -->
+                  <div class="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/0 to-white/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10"></div>
+                  
+                  <div class="relative aspect-[4/5] bg-[#222] overflow-hidden">
+                    <img src={product.image} class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700 ease-out" />
                     
-                    {product.isBestSeller && (
-                      <div class="absolute top-2 left-2 bg-[var(--street-accent)] text-black text-[10px] font-black px-2 py-1 uppercase rounded shadow-[2px_2px_0px_black]">
-                        Más Vendido
-                      </div>
-                    )}
-                    {!product.inStock && (
-                      <div class="absolute inset-0 bg-black/80 backdrop-blur-[1px] flex items-center justify-center">
-                        <span class="bg-red-600 text-white px-3 py-1 text-xs font-bold uppercase rounded border border-white/20">Agotado</span>
-                      </div>
-                    )}
+                    <div class="absolute top-0 left-0 p-3 w-full flex justify-between items-start z-20">
+                        {product.isBestSeller && (
+                          <div class="bg-[var(--street-accent)] text-black text-[9px] font-black px-2 py-1 uppercase tracking-widest rounded-sm shadow-lg">
+                            Top Seller
+                          </div>
+                        )}
+                        {!product.isBestSeller && <div></div>} <!-- Spacer -->
+                        
+                        <button class="w-9 h-9 bg-black/40 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-[var(--street-accent)] hover:text-black transition-all transform hover:scale-110 border border-white/10 toggle-wishlist-btn" title="Añadir a Lista de Deseos" data-product={JSON.stringify(product)}>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                        </button>
+                    </div>
 
-                    <button class="absolute top-2 right-2 w-8 h-8 bg-black/80 rounded-full flex items-center justify-center text-white hover:bg-[var(--street-accent)] hover:text-black transition-all opacity-0 group-hover:opacity-100 shadow-lg transform translate-y-2 group-hover:translate-y-0 border border-white/20" title="Añadir a Lista de Deseos">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                    </button>
+                    {!product.inStock && (
+                      <div class="absolute inset-0 bg-black/80 backdrop-blur-[2px] flex items-center justify-center z-20">
+                        <div class="border-2 border-red-600 text-red-600 px-4 py-2 text-sm font-black uppercase tracking-[0.2em] -rotate-12">
+                            Agotado
+                        </div>
+                      </div>
+                    )}
                   </div>
                   
-                  <div class="p-4 flex flex-col flex-grow">
-                    <p class="text-xs text-gray-400 uppercase font-bold mb-1 tracking-wider">{product.category}</p>
-                    <h3 class="font-bold text-sm text-white leading-tight line-clamp-2 mb-2 group-hover:text-[var(--street-accent)] transition-colors">{product.name}</h3>
+                  <div class="p-5 flex flex-col flex-grow relative z-20 bg-[#111]">
+                    <div class="mb-3">
+                        <p class="text-[10px] text-gray-500 uppercase font-bold tracking-[0.15em] mb-1">{product.category}</p>
+                        <h3 class="font-black text-base text-white leading-tight line-clamp-2 group-hover:text-[var(--street-accent)] transition-colors">{product.name}</h3>
+                    </div>
                     
-                    <div class="mt-auto space-y-3">
-                      <div class="flex items-center justify-between">
+                    <div class="mt-auto space-y-4">
+                      <div class="flex items-end justify-between border-t border-white/5 pt-4">
                         <div class="flex flex-col">
-                          <span class="text-lg font-black text-white">${product.price}</span>
-                          {product.originalPrice && <span class="text-xs text-gray-500 line-through">${product.originalPrice}</span>}
+                          <span class="text-xs text-gray-500 font-medium mb-0.5">Precio</span>
+                          <div class="flex items-baseline gap-2">
+                              <span class="text-xl font-black text-white tracking-tight">${product.price}</span>
+                              {product.originalPrice && <span class="text-xs text-gray-600 line-through font-bold">${product.originalPrice}</span>}
+                          </div>
                         </div>
-                        <div class="flex items-center gap-1 bg-[#222] px-2 py-1 rounded border border-white/10">
-                          <span class="text-[var(--street-accent)] text-xs">★</span>
+                        <div class="flex items-center gap-1">
+                          <span class="text-[var(--street-accent)] text-sm">★</span>
                           <span class="text-xs font-bold text-white">{product.rating}</span>
                         </div>
                       </div>
                       
                       <button 
-                        class={`w-full py-2 text-xs font-bold uppercase tracking-wider rounded transition-colors flex items-center justify-center gap-2 shadow-[2px_2px_0px_black] ${
+                        class={`w-full py-3 text-[10px] font-black uppercase tracking-[0.2em] rounded-lg transition-all flex items-center justify-center gap-2 add-to-cart-btn group/btn overflow-hidden relative ${
                           product.inStock 
-                          ? 'bg-white text-black hover:bg-[var(--street-accent)] hover:text-black' 
-                          : 'bg-[#333] text-gray-500 cursor-not-allowed'
+                          ? 'bg-white text-black hover:bg-[var(--street-accent)] hover:shadow-[0_0_20px_rgba(201,131,0,0.4)]' 
+                          : 'bg-[#222] text-gray-600 cursor-not-allowed border border-white/5'
                         }`}
                         disabled={!product.inStock}
+                        data-product={product.inStock ? JSON.stringify(product) : undefined}
                       >
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                        {product.inStock ? 'Agregar' : 'Sin Stock'}
+                        <span class="relative z-10 flex items-center gap-2">
+                            {product.inStock ? (
+                                <>
+                                    <span>Agregar</span>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="transform group-hover/btn:translate-x-1 transition-transform"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                </>
+                            ) : 'Sin Stock'}
+                        </span>
                       </button>
                     </div>
                   </div>
@@ -381,3 +402,194 @@ const products = [
     animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   }
 </style>
+
+<!-- Toast Notification -->
+<div id="toast-notification" class="fixed top-24 right-4 z-50 transform translate-x-full transition-transform duration-300 ease-out">
+  <div class="bg-black border-l-4 border-[var(--street-accent)] p-4 rounded shadow-2xl flex items-center gap-4 min-w-[300px]">
+    <div class="w-12 h-12 bg-[#222] flex-shrink-0 overflow-hidden rounded">
+      <img id="toast-image" src="" class="w-full h-full object-cover" />
+    </div>
+    <div class="flex-1">
+      <p id="toast-message" class="text-[10px] font-black uppercase text-[var(--street-accent)] tracking-widest mb-1">YA ESTÁ EN TU CARRITO</p>
+      <h4 id="toast-title" class="text-xs font-bold text-white line-clamp-1">Producto</h4>
+      <p id="toast-price" class="text-xs text-gray-400 font-bold mt-1">$0.00</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { cartStore } from '../lib/cart.js';
+
+  const showToast = (product: any, message: string) => {
+    const toast = document.getElementById('toast-notification');
+    const img = document.getElementById('toast-image');
+    const msg = document.getElementById('toast-message');
+    const title = document.getElementById('toast-title');
+    const price = document.getElementById('toast-price');
+
+    if (toast && img && msg && title && price) {
+      img.setAttribute('src', product.image);
+      msg.textContent = message;
+      title.textContent = product.name;
+      price.textContent = `$${product.price}`;
+
+      toast.classList.remove('translate-x-full');
+      setTimeout(() => {
+        toast.classList.add('translate-x-full');
+      }, 3000);
+    }
+  };
+
+  const initShop = async () => {
+    // Wait for cart store to be ready
+    if (!cartStore.initialized) {
+        await cartStore.init();
+    }
+
+    // --- 1. Initial State Render ---
+    
+    // Helper to update wishlist icon state
+    const updateWishlistIcon = (btn: Element, isActive: boolean) => {
+        const icon = btn.querySelector('svg');
+        if (icon) {
+            if (isActive) {
+                icon.style.fill = 'currentColor';
+                icon.style.color = 'var(--street-accent)';
+                icon.classList.add('drop-shadow-[0_0_8px_var(--street-accent)]');
+            } else {
+                icon.style.fill = 'none';
+                icon.style.color = 'white';
+                icon.classList.remove('drop-shadow-[0_0_8px_var(--street-accent)]');
+            }
+        }
+    };
+
+    // Helper to check Cart State for buttons
+    const updateCartButtonState = (btn: Element, isInCart: boolean) => {
+        if (isInCart) {
+            btn.innerHTML = `
+                <span class="relative z-10 flex items-center gap-2 text-[var(--street-accent)]">
+                    <span>EN TU CARRITO</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </span>
+            `;
+            btn.classList.add('border-[var(--street-accent)]', 'bg-black');
+            btn.classList.remove('bg-white', 'text-black');
+        } else {
+             // Reset to default state
+             // Note: We need original logic to check stock, but for now assuming inStock if this runs
+             btn.innerHTML = `
+                <span class="relative z-10 flex items-center gap-2">
+                    <span>AGREGAR</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="transform group-hover/btn:translate-x-1 transition-transform"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                </span>
+             `;
+             btn.classList.remove('border-[var(--street-accent)]', 'bg-black');
+             btn.classList.add('bg-white', 'text-black');
+        }
+    };
+
+    // Initialize Button States
+    const syncButtons = () => {
+        document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+            const productData = (btn as HTMLElement).dataset.product;
+            if (productData) {
+                try {
+                    const product = JSON.parse(productData);
+                    const isInCart = cartStore.isInCart(product.id);
+                    updateCartButtonState(btn, isInCart);
+                } catch(e) {}
+            }
+        });
+
+        document.querySelectorAll('.toggle-wishlist-btn').forEach(btn => {
+            const productData = (btn as HTMLElement).dataset.product;
+            if (productData) {
+                try {
+                    const product = JSON.parse(productData);
+                    const isInWishlist = cartStore.isInWishlist(product.id);
+                    updateWishlistIcon(btn, isInWishlist);
+                } catch(e) {}
+            }
+        });
+    };
+
+    syncButtons();
+
+    // Listen for global updates to keep buttons in sync
+    window.addEventListener('cart:updated', () => syncButtons());
+    window.addEventListener('wishlist:updated', () => syncButtons());
+
+    // --- 2. Event Listeners ---
+
+    // Add to Cart Buttons
+    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+      // Remove old listeners to avoid duplicates if re-running
+      const newBtn = btn.cloneNode(true);
+      btn.parentNode?.replaceChild(newBtn, btn);
+      
+      newBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const targetBtn = e.currentTarget as HTMLElement;
+        const productData = targetBtn.dataset.product;
+        
+        if (productData) {
+          try {
+            const product = JSON.parse(productData);
+            
+            // If already in cart, maybe just open cart? For now we just add more or ignore
+            // Requirement says: "YA ESTÁ EN TU CARRITO" state.
+            // If it is already in cart, the button state logic handles the text.
+            // But if user clicks again, we can add +1 or show toast "Updated".
+            
+            cartStore.addToCart(product);
+            showToast(product, "SE AGREGÓ A TU CARRITO");
+            
+          } catch (err) {
+            console.error('Error adding to cart:', err);
+          }
+        }
+      });
+    });
+
+    // Toggle Wishlist Buttons
+    document.querySelectorAll('.toggle-wishlist-btn').forEach(btn => {
+      // Remove old listeners
+      const newBtn = btn.cloneNode(true);
+      btn.parentNode?.replaceChild(newBtn, btn);
+
+      newBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const targetBtn = e.currentTarget as HTMLElement;
+        const productData = targetBtn.dataset.product;
+        
+        if (productData) {
+          try {
+            const product = JSON.parse(productData);
+            
+            // Add bounce animation
+            targetBtn.classList.add('scale-125');
+            setTimeout(() => targetBtn.classList.remove('scale-125'), 200);
+
+            const isAdded = await cartStore.toggleWishlist(product);
+             
+            if (isAdded) {
+                showToast(product, "SE AGREGÓ A TU WISHLIST");
+            } else {
+                // Removed
+            }
+
+           } catch (err) {
+             console.error('Error toggling wishlist:', err);
+           }
+         }
+       });
+     });
+  };
+
+  // Init on load and after swap
+  initShop();
+  document.addEventListener('astro:after-swap', initShop);
+</script>

@@ -167,6 +167,12 @@ const isActive = (href: string) => {
 				margin-top: 10px;
 			}
 
+			.popover.active {
+				opacity: 1;
+				visibility: visible;
+				transform: translateX(-50%) translateY(0) scale(1);
+			}
+
 			.group\/pop:hover .popover {
 				opacity: 1;
 				visibility: visible;
@@ -300,28 +306,19 @@ const isActive = (href: string) => {
 						<div class="relative group/pop">
 							<button class="popover-trigger p-2.5 text-white hover:text-orange-500 hover:bg-white/10 rounded-lg transition-all relative" data-target="wishlist-popover">
 								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-								<span class="absolute top-1.5 right-1.5 w-4 h-4 bg-orange-500 text-black text-[10px] font-black rounded-full flex items-center justify-center shadow-lg shadow-orange-500/40">3</span>
+								<span class="hidden absolute top-1.5 right-1.5 w-4 h-4 bg-orange-500 text-black text-[10px] font-black rounded-full flex items-center justify-center shadow-lg shadow-orange-500/40">0</span>
 							</button>
 									<div id="wishlist-popover" class="popover">
 										<div class="popover-header">
 											<span class="popover-title">Favoritos</span>
 										</div>
 										<div class="popover-content">
-											<div class="unauth-popover-msg space-y-4 text-center py-4">
+											<div class="unauth-popover-msg hidden space-y-4 text-center py-4">
 												<p class="text-[10px] text-white uppercase font-black">Inicia sesión para ver tus favoritos</p>
 												<a href="/login" class="block w-full py-3 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-orange-500 transition-all">Entrar</a>
 											</div>
 											<div class="auth-popover-content hidden space-y-4">
-												<div class="flex items-center gap-4 group/item">
-													<div class="w-12 h-12 border-2 border-white overflow-hidden">
-														<img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=100&q=80" class="w-full h-full object-cover" />
-													</div>
-													<div class="flex-1">
-														<h4 class="text-xs font-black uppercase text-white">Hoodie Wild</h4>
-														<p class="text-[10px] text-orange-500 font-bold">$45.00</p>
-													</div>
-												</div>
-												<a href="/perfil" class="block w-full py-3 bg-white text-black text-center text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-orange-500 transition-all">Ver Todos</a>
+												<!-- Dynamic Content -->
 											</div>
 										</div>
 									</div>
@@ -330,35 +327,19 @@ const isActive = (href: string) => {
 						<div class="relative group/pop">
 							<button class="popover-trigger p-2.5 text-white hover:text-orange-500 hover:bg-white/10 rounded-lg transition-all relative" data-target="cart-popover">
 								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-								<span class="absolute top-1.5 right-1.5 w-4 h-4 bg-orange-500 text-black text-[10px] font-black rounded-full flex items-center justify-center shadow-lg shadow-orange-500/40">2</span>
+								<span class="hidden absolute top-1.5 right-1.5 w-4 h-4 bg-orange-500 text-black text-[10px] font-black rounded-full flex items-center justify-center shadow-lg shadow-orange-500/40">0</span>
 							</button>
 							<div id="cart-popover" class="popover">
 								<div class="popover-header">
 									<span class="popover-title">Tu Carrito</span>
 								</div>
 								<div class="popover-content">
-									<div class="unauth-popover-msg space-y-4 text-center py-4">
+									<div class="unauth-popover-msg hidden space-y-4 text-center py-4">
 										<p class="text-[10px] text-white uppercase font-black">Inicia sesión para ver tu carrito</p>
 										<a href="/login" class="block w-full py-3 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-orange-500 transition-all">Entrar</a>
 									</div>
 									<div class="auth-popover-content hidden space-y-6">
-										<div class="flex items-center gap-4">
-											<div class="w-16 h-16 border-2 border-white overflow-hidden">
-												<img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=150&q=80" class="w-full h-full object-cover" />
-											</div>
-											<div class="flex-1">
-												<h4 class="text-xs font-black uppercase text-white">Camiseta Oficial</h4>
-												<p class="text-[10px] text-white font-bold">Talla: L</p>
-												<p class="text-xs font-black mt-1 text-orange-500">$35.00</p>
-											</div>
-										</div>
-										<div class="border-t-2 border-white pt-4 space-y-4">
-											<div class="flex justify-between items-center">
-												<span class="text-[10px] font-bold text-white uppercase">Subtotal</span>
-												<span class="text-sm font-black text-white">$120.00</span>
-											</div>
-											<button class="w-full py-4 bg-orange-500 text-black text-[10px] font-black uppercase tracking-[0.2em] rounded-xl hover:bg-white transition-all shadow-xl shadow-orange-500/20">Finalizar Compra</button>
-										</div>
+										<!-- Dynamic Content -->
 									</div>
 								</div>
 							</div>
@@ -459,6 +440,143 @@ const isActive = (href: string) => {
 			import { supabase } from '../lib/supabase.js';
 			import { getRole, requireRole } from '../lib/role.js';
 			import { ensureProfile } from '../lib/profile.js';
+			import { cartStore, CartEvents } from '../lib/cart.js';
+
+			// Types
+			interface CartItem {
+				id: string;
+				name: string;
+				price: number;
+				quantity: number;
+				image: string;
+			}
+
+			interface WishlistItem {
+				id: string;
+				name: string;
+				price: number;
+				image: string;
+			}
+
+			interface CartDetail {
+				cart: CartItem[];
+				wishlist: WishlistItem[];
+				count: number;
+			}
+
+			// --- Cart & Wishlist Logic ---
+			const updateCartUI = (detail: CartDetail) => {
+				const { cart, wishlist, count } = detail;
+				
+				// Update counters
+				const cartCountEl = document.querySelector('[data-target="cart-popover"] span');
+				const wishlistCountEl = document.querySelector('[data-target="wishlist-popover"] span');
+				
+				if (cartCountEl) {
+					cartCountEl.textContent = count.toString();
+					cartCountEl.classList.toggle('hidden', count === 0);
+                    // Animation
+                    cartCountEl.parentElement?.classList.add('scale-110', 'text-orange-500');
+                    setTimeout(() => cartCountEl.parentElement?.classList.remove('scale-110', 'text-orange-500'), 200);
+				}
+				if (wishlistCountEl) {
+					wishlistCountEl.textContent = wishlist.length.toString();
+					wishlistCountEl.classList.toggle('hidden', wishlist.length === 0);
+                    // Animation
+                    wishlistCountEl.parentElement?.classList.add('scale-110', 'text-orange-500');
+                    setTimeout(() => wishlistCountEl.parentElement?.classList.remove('scale-110', 'text-orange-500'), 200);
+				}
+
+				// Update Cart Popover Content
+				const cartContent = document.querySelector('#cart-popover .auth-popover-content');
+				if (cartContent) {
+					if (cart.length === 0) {
+						cartContent.innerHTML = '<p class="text-xs text-center text-gray-400 py-4">Tu carrito está vacío</p>';
+					} else {
+						const itemsHtml = cart.map(item => `
+							<div class="flex items-center gap-4">
+								<div class="w-12 h-12 border border-white/20 overflow-hidden bg-[#222]">
+									<img src="${item.image}" class="w-full h-full object-cover" />
+								</div>
+								<div class="flex-1">
+									<h4 class="text-[10px] font-black uppercase text-white line-clamp-1">${item.name}</h4>
+									<p class="text-[10px] text-gray-400 font-bold">Cant: ${item.quantity}</p>
+									<p class="text-[10px] font-black mt-0.5 text-[var(--primary)]">$${item.price * item.quantity}</p>
+								</div>
+								<button class="text-red-500 hover:text-white transition-colors remove-cart-btn" data-id="${item.id}">×</button>
+							</div>
+						`).join('');
+						
+						const total = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+						
+						cartContent.innerHTML = `
+							<div class="space-y-4 max-h-[300px] overflow-y-auto pr-2">
+								${itemsHtml}
+							</div>
+							<div class="border-t border-white/20 pt-4 space-y-4">
+								<div class="flex justify-between items-center">
+									<span class="text-[10px] font-bold text-white uppercase">Subtotal</span>
+									<span class="text-sm font-black text-white">$${total.toFixed(2)}</span>
+								</div>
+								<a href="/checkout" class="block w-full py-3 bg-[var(--primary)] text-center text-black text-[10px] font-black uppercase tracking-[0.2em] rounded-xl hover:bg-white transition-all shadow-xl">Finalizar Compra</a>
+							</div>
+						`;
+
+						// Attach remove listeners
+						cartContent.querySelectorAll('.remove-cart-btn').forEach(btn => {
+							btn.addEventListener('click', (e) => {
+								e.stopPropagation();
+								const target = e.currentTarget as HTMLElement;
+								if (target && target.dataset.id) {
+									cartStore.removeFromCart(target.dataset.id);
+								}
+							});
+						});
+					}
+				}
+
+				// Update Wishlist Popover Content
+				const wishlistContent = document.querySelector('#wishlist-popover .auth-popover-content');
+				if (wishlistContent) {
+					if (wishlist.length === 0) {
+						wishlistContent.innerHTML = '<p class="text-xs text-center text-gray-400 py-4">Tu lista está vacía</p>';
+					} else {
+						const itemsHtml = wishlist.map(item => `
+							<div class="flex items-center gap-4 group/item">
+								<div class="w-10 h-10 border border-white/20 overflow-hidden bg-[#222]">
+									<img src="${item.image}" class="w-full h-full object-cover" />
+								</div>
+								<div class="flex-1">
+									<h4 class="text-[10px] font-black uppercase text-white line-clamp-1">${item.name}</h4>
+									<p class="text-[10px] text-[var(--primary)] font-bold">$${item.price}</p>
+								</div>
+								<button class="text-[var(--primary)] hover:text-white transition-colors add-from-wishlist-btn" data-id="${item.id}">
+									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+								</button>
+							</div>
+						`).join('');
+
+						wishlistContent.innerHTML = `
+							<div class="space-y-3 max-h-[300px] overflow-y-auto pr-2">
+								${itemsHtml}
+							</div>
+							<a href="/perfil" class="block w-full py-2 bg-white/10 text-white text-center text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-white hover:text-black transition-all mt-4">Ver Todos</a>
+						`;
+
+						// Attach add listeners (wishlist -> cart)
+						wishlistContent.querySelectorAll('.add-from-wishlist-btn').forEach(btn => {
+							btn.addEventListener('click', (e) => {
+								e.stopPropagation();
+								const target = e.currentTarget as HTMLElement;
+								if (target && target.dataset.id) {
+									const item = wishlist.find(i => i.id == target.dataset.id);
+									if (item) cartStore.addToCart(item);
+								}
+							});
+						});
+					}
+				}
+			};
 
 			// --- Auth & Session Logic ---
 			const updateAuthUI = async () => {
@@ -504,16 +622,18 @@ const isActive = (href: string) => {
 
 						document.getElementById('logout-btn')?.addEventListener('click', async () => {
 							await supabase.auth.signOut();
+							// Cart store will handle cleanup via auth listener
 							window.location.reload();
 						});
 					}
 
-					if (profile?.ubicacion) {
-						const locationTitle = document.querySelector('#location-popover .popover-title');
-						const sidebarLocBtn = document.querySelector('.location-btn');
-						if (locationTitle) locationTitle.textContent = `Ubicación: ${profile.ubicacion}`;
-						if (sidebarLocBtn) sidebarLocBtn.textContent = `Ubicación: ${profile.ubicacion}`;
-					}
+					// Update popover messages for auth users (hide "sign in to view")
+					document.querySelectorAll('.unauth-popover-msg').forEach(el => el.classList.add('hidden'));
+					document.querySelectorAll('.auth-popover-content').forEach(el => el.classList.remove('hidden'));
+				} else {
+					// Guest State
+					document.querySelectorAll('.unauth-popover-msg').forEach(el => el.classList.add('hidden')); // Actually, for guest cart we WANT to show content, not "sign in" message anymore
+					document.querySelectorAll('.auth-popover-content').forEach(el => el.classList.remove('hidden')); // Show cart/wishlist even for guests
 				}
 			};
 
@@ -554,9 +674,23 @@ const isActive = (href: string) => {
 			};
 
 			// Initialize everything
-			const init = () => {
+			const init = async () => {
 				initPopovers();
-				updateAuthUI();
+				await updateAuthUI();
+				
+				// Init Cart
+				cartStore.init();
+				
+				// Listen for cart updates
+				window.addEventListener(CartEvents.UPDATED, (e: Event) => updateCartUI((e as CustomEvent).detail));
+				window.addEventListener(CartEvents.WISHLIST_UPDATED, (e: Event) => updateCartUI((e as CustomEvent).detail));
+				
+				// Initial UI render (empty or from local storage)
+				updateCartUI({ 
+					cart: cartStore.cart, 
+					wishlist: cartStore.wishlist, 
+					count: cartStore.cart.reduce((acc: number, item: CartItem) => acc + item.quantity, 0) 
+				});
 			};
 
 			init();
