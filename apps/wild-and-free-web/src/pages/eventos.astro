@@ -54,12 +54,12 @@ const events = [
     <!-- Background Noise Pattern -->
     <div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 20px 20px;"></div>
 
-    <div class="max-w-[1400px] mx-auto space-y-24 relative z-10">
+    <div class="max-w-[1400px] mx-auto space-y-24 relative z-10 animate-fade-in-up">
       
       <!-- Header Brutalista -->
       <div class="border-b-4 border-white pb-8">
         <div class="flex flex-col md:flex-row items-end gap-6 mb-8">
-          <h1 class="text-7xl md:text-9xl font-black tracking-tighter text-white uppercase leading-none" style="text-shadow: 4px 4px 0px var(--street-accent);">
+          <h1 class="text-7xl md:text-9xl font-black tracking-tighter text-white uppercase leading-none hover:text-[var(--street-accent)] transition-colors duration-500" style="text-shadow: 4px 4px 0px var(--street-accent);">
             TOUR
           </h1>
           <div class="flex flex-col mb-2">
@@ -72,7 +72,7 @@ const events = [
       <!-- Lista de Eventos (Estilo Ticket) -->
       <div class="space-y-12">
         {events.map((event, index) => (
-          <div class="group relative flex flex-col lg:flex-row bg-[#111] border-2 border-white hover:border-[var(--street-accent)] transition-all duration-300 hover:shadow-[8px_8px_0px_var(--street-accent)] hover:-translate-y-1">
+          <div class="group relative flex flex-col lg:flex-row bg-[#111] border-2 border-white hover:border-[var(--street-accent)] transition-all duration-300 hover:shadow-[8px_8px_0px_var(--street-accent)] hover:-translate-y-1 animate-stagger" style={`animation-delay: ${index * 100}ms`}>
             
             <!-- Caja de Fecha (Talón Izquierdo) -->
             <div class="lg:w-48 bg-white text-black p-6 flex flex-col justify-between border-b-2 lg:border-b-0 lg:border-r-2 border-dashed border-black relative">
@@ -169,5 +169,25 @@ const events = [
 <style define:vars={{ streetAccent: tenant.primary_color }}>
   :root {
     --street-accent: var(--streetAccent);
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  .animate-stagger {
+    opacity: 0;
+    animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   }
 </style>

@@ -89,11 +89,11 @@ const config = {
     <!-- Background Noise Pattern -->
     <div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 20px 20px;"></div>
 
-    <div class="max-w-[1400px] mx-auto space-y-16 relative z-10">
+    <div class="max-w-[1400px] mx-auto space-y-16 relative z-10 animate-fade-in-up">
       
       <!-- Header Brutalista -->
       <div class="flex flex-col md:flex-row items-end gap-6 border-b-4 border-white pb-8">
-        <h1 class="text-7xl md:text-9xl font-black tracking-tighter text-white uppercase leading-none" style="text-shadow: 4px 4px 0px var(--street-accent);">
+        <h1 class="text-7xl md:text-9xl font-black tracking-tighter text-white uppercase leading-none hover:text-[var(--street-accent)] transition-colors duration-500 cursor-default" style="text-shadow: 4px 4px 0px var(--street-accent);">
           ROSTER
         </h1>
         <div class="flex flex-col mb-2">
@@ -104,8 +104,8 @@ const config = {
 
       <!-- Grid de Artistas -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-        {artists.map((artist: any) => (
-          <a href={`/artista/${artist.slug}`} class="group relative block bg-[#111] border-2 border-white hover:border-[var(--street-accent)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[8px_8px_0px_var(--street-accent)]">
+        {artists.map((artist: any, i: number) => (
+          <a href={`/artista/${artist.slug}`} class="group relative block bg-[#111] border-2 border-white hover:border-[var(--street-accent)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[8px_8px_0px_var(--street-accent)] animate-stagger" style={`animation-delay: ${i * 100}ms`}>
             
             <!-- Imagen -->
             <div class="aspect-[3/4] overflow-hidden relative border-b-2 border-white group-hover:border-[var(--street-accent)] transition-colors">
@@ -149,5 +149,25 @@ const config = {
 <style define:vars={{ streetAccent: tenant.primary_color }}>
   :root {
     --street-accent: var(--streetAccent);
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  .animate-stagger {
+    opacity: 0;
+    animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   }
 </style>
