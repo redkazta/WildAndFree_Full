@@ -60,6 +60,8 @@ const isActive = (href: string) => {
 				color: #fff;
 			}
 
+			/* Removed aggressive text overrides to allow custom styling */
+			/* 
 			[class*="text-white/"] {
 				color: #fff !important;
 				opacity: 1 !important;
@@ -78,11 +80,12 @@ const isActive = (href: string) => {
 			.text-contrast {
 				color: #fff !important;
 				opacity: 1 !important;
-			}
+			} 
+			*/
 
 			::placeholder {
-				color: #fff !important;
-				opacity: 0.85;
+				color: #a1a1aa; /* zinc-400 */
+				opacity: 1;
 			}
 
 			/* Custom Scrollbar */
@@ -219,13 +222,15 @@ const isActive = (href: string) => {
 				background: #ffffff;
 			}
 
+			/* 
 			.text-contrast {
 				color: #ffffff;
 			}
 			
 			.text-muted {
 				color: #ffffff;
-			}
+			} 
+			*/
 
 			/* Mobile Adaptations */
 			@media (max-width: 768px) {
