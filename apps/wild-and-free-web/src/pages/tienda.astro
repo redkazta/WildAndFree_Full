@@ -127,7 +127,7 @@ const products = [
 ---
 
 <Layout config={config}>
-  <div class="min-h-screen bg-[#f3f3f3] text-black pb-20">
+  <div class="min-h-screen bg-[#050505] text-white pb-20">
     
     <!-- Top Bar Promocional -->
     <div class="bg-[var(--street-accent)] text-black text-xs font-bold text-center py-2 uppercase tracking-widest">
@@ -141,28 +141,28 @@ const products = [
         <aside class="hidden lg:block lg:col-span-3 space-y-8">
           
           <!-- Búsqueda -->
-          <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-            <h3 class="font-black uppercase text-lg mb-4">Buscar</h3>
+          <div class="bg-[#111] p-6 rounded-lg shadow-sm border border-white/10">
+            <h3 class="font-black uppercase text-lg mb-4 text-white">Buscar</h3>
             <div class="relative">
               <input 
                 type="text" 
                 placeholder="Buscar productos..." 
-                class="w-full bg-gray-100 border border-gray-300 rounded px-4 py-2 text-sm focus:outline-none focus:border-[var(--street-accent)] focus:ring-1 focus:ring-[var(--street-accent)] transition-all"
+                class="w-full bg-[#222] border border-white/20 rounded px-4 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[var(--street-accent)] focus:ring-1 focus:ring-[var(--street-accent)] transition-all"
               />
-              <button class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black">
+              <button class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
               </button>
             </div>
           </div>
 
           <!-- Categorías -->
-          <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-            <h3 class="font-black uppercase text-lg mb-4">Categorías</h3>
-            <ul class="space-y-3 text-sm font-medium text-gray-600">
+          <div class="bg-[#111] p-6 rounded-lg shadow-sm border border-white/10">
+            <h3 class="font-black uppercase text-lg mb-4 text-white">Categorías</h3>
+            <ul class="space-y-3 text-sm font-medium text-gray-400">
               {categories.map(cat => (
                 <li>
                   <a href="#" class="hover:text-[var(--street-accent)] hover:translate-x-1 transition-all block flex items-center gap-2">
-                    <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
+                    <span class="w-1 h-1 bg-gray-600 rounded-full"></span>
                     {cat.name}
                   </a>
                 </li>
@@ -171,30 +171,30 @@ const products = [
           </div>
 
           <!-- Filtro de Precio -->
-          <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-            <h3 class="font-black uppercase text-lg mb-4">Precio</h3>
+          <div class="bg-[#111] p-6 rounded-lg shadow-sm border border-white/10">
+            <h3 class="font-black uppercase text-lg mb-4 text-white">Precio</h3>
             <div class="space-y-2">
               <label class="flex items-center gap-2 cursor-pointer group">
-                <input type="checkbox" class="accent-black" />
-                <span class="text-sm text-gray-600 group-hover:text-black">Hasta $500</span>
+                <input type="checkbox" class="accent-[var(--street-accent)] bg-[#222] border-white/20" />
+                <span class="text-sm text-gray-400 group-hover:text-white">Hasta $500</span>
               </label>
               <label class="flex items-center gap-2 cursor-pointer group">
-                <input type="checkbox" class="accent-black" />
-                <span class="text-sm text-gray-600 group-hover:text-black">$500 - $1,000</span>
+                <input type="checkbox" class="accent-[var(--street-accent)] bg-[#222] border-white/20" />
+                <span class="text-sm text-gray-400 group-hover:text-white">$500 - $1,000</span>
               </label>
               <label class="flex items-center gap-2 cursor-pointer group">
-                <input type="checkbox" class="accent-black" />
-                <span class="text-sm text-gray-600 group-hover:text-black">$1,000 - $2,000</span>
+                <input type="checkbox" class="accent-[var(--street-accent)] bg-[#222] border-white/20" />
+                <span class="text-sm text-gray-400 group-hover:text-white">$1,000 - $2,000</span>
               </label>
               <label class="flex items-center gap-2 cursor-pointer group">
-                <input type="checkbox" class="accent-black" />
-                <span class="text-sm text-gray-600 group-hover:text-black">Más de $2,000</span>
+                <input type="checkbox" class="accent-[var(--street-accent)] bg-[#222] border-white/20" />
+                <span class="text-sm text-gray-400 group-hover:text-white">Más de $2,000</span>
               </label>
             </div>
           </div>
 
           <!-- Banner Lateral -->
-          <div class="bg-black text-white p-6 rounded-lg text-center space-y-4">
+          <div class="bg-[#111] border border-white/10 text-white p-6 rounded-lg text-center space-y-4">
             <p class="font-black text-2xl text-[var(--street-accent)] uppercase">WILD CLUB</p>
             <p class="text-sm text-gray-400">Únete al club y obtén 10% de descuento en tu primera compra.</p>
             <button class="w-full bg-[var(--street-accent)] text-black font-bold py-2 text-xs uppercase tracking-widest hover:bg-white transition-colors">
@@ -208,15 +208,15 @@ const products = [
         <main class="col-span-1 lg:col-span-9 space-y-8">
           
           <!-- Hero Carousel (Ofertas) -->
-          <section class="relative h-[300px] md:h-[400px] rounded-2xl overflow-hidden group">
+          <section class="relative h-[300px] md:h-[400px] rounded-2xl overflow-hidden group border border-white/10">
             <div class="absolute inset-0 flex transition-transform duration-500 ease-out" id="hero-slider">
               {carouselOffers.map(offer => (
                 <div class="min-w-full h-full relative">
-                  <img src={offer.image} class="w-full h-full object-cover" />
-                  <div class="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent flex flex-col justify-center p-8 md:p-16">
-                    <h2 class="text-4xl md:text-6xl font-black text-white uppercase leading-none mb-2">{offer.title}</h2>
+                  <img src={offer.image} class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
+                  <div class="absolute inset-0 bg-gradient-to-r from-black via-black/50 to-transparent flex flex-col justify-center p-8 md:p-16">
+                    <h2 class="text-4xl md:text-6xl font-black text-white uppercase leading-none mb-2" style="text-shadow: 2px 2px 0px black;">{offer.title}</h2>
                     <p class="text-xl md:text-2xl font-bold text-[var(--street-accent)] uppercase mb-6">{offer.subtitle}</p>
-                    <button class="w-fit bg-white text-black px-8 py-3 font-black uppercase tracking-widest hover:bg-[var(--street-accent)] transition-colors text-sm shadow-lg">
+                    <button class="w-fit bg-white text-black px-8 py-3 font-black uppercase tracking-widest hover:bg-[var(--street-accent)] transition-colors text-sm shadow-[4px_4px_0px_black]">
                       {offer.cta}
                     </button>
                   </div>
@@ -224,10 +224,10 @@ const products = [
               ))}
             </div>
             <!-- Controles simples -->
-            <button class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black transition-colors opacity-0 group-hover:opacity-100">
+            <button class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-[var(--street-accent)] hover:text-black transition-colors opacity-0 group-hover:opacity-100 border border-white/20">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
             </button>
-            <button class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black transition-colors opacity-0 group-hover:opacity-100">
+            <button class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-[var(--street-accent)] hover:text-black transition-colors opacity-0 group-hover:opacity-100 border border-white/20">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
             </button>
           </section>
@@ -235,37 +235,39 @@ const products = [
           <!-- Sección: Ofertas en Tendencia (Horizontal Scroll) -->
           <section>
             <div class="flex justify-between items-end mb-6">
-              <h2 class="text-2xl font-black uppercase tracking-tight">Ofertas en Tendencia</h2>
+              <h2 class="text-2xl font-black uppercase tracking-tight text-white">Ofertas en Tendencia</h2>
               <a href="#" class="text-sm font-bold text-[var(--street-accent)] hover:underline uppercase">Ver todo</a>
             </div>
             
             <div class="flex gap-6 overflow-x-auto pb-6 snap-x scrollbar-hide">
               {products.filter(p => p.originalPrice).map(product => (
-                <div class="min-w-[280px] snap-start bg-white rounded-lg overflow-hidden border border-gray-200 hover:shadow-xl transition-all duration-300 group">
-                  <div class="relative h-[280px] bg-gray-100 overflow-hidden">
-                    <img src={product.image} class="w-full h-full object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-500" />
-                    <div class="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-bold px-2 py-1 uppercase rounded">
-                      -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
-                    </div>
-                    <button class="absolute top-2 right-2 w-8 h-8 bg-white/80 rounded-full flex items-center justify-center hover:bg-[var(--street-accent)] hover:text-white transition-colors opacity-0 group-hover:opacity-100 shadow-sm" title="Añadir a Lista de Deseos">
+                <div class="min-w-[280px] snap-start bg-[#111] rounded-lg overflow-hidden border border-white/10 hover:border-[var(--street-accent)] transition-all duration-300 group hover:-translate-y-1">
+                  <div class="relative h-[280px] bg-[#222] overflow-hidden">
+                    <img src={product.image} class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-500" />
+                    {product.originalPrice && (
+                      <div class="absolute top-2 left-2 bg-[var(--street-accent)] text-black text-[10px] font-black px-2 py-1 uppercase rounded shadow-[2px_2px_0px_black]">
+                        -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
+                      </div>
+                    )}
+                    <button class="absolute top-2 right-2 w-8 h-8 bg-black/80 rounded-full flex items-center justify-center text-white hover:bg-[var(--street-accent)] hover:text-black transition-colors opacity-0 group-hover:opacity-100 shadow-lg border border-white/20" title="Añadir a Lista de Deseos">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                     </button>
                   </div>
                   <div class="p-4 space-y-2">
-                    <p class="text-xs text-gray-500 uppercase font-bold">{product.category}</p>
-                    <h3 class="font-bold text-sm leading-tight line-clamp-2 h-10">{product.name}</h3>
+                    <p class="text-xs text-gray-400 uppercase font-bold tracking-wider">{product.category}</p>
+                    <h3 class="font-bold text-sm text-white leading-tight line-clamp-2 h-10 group-hover:text-[var(--street-accent)] transition-colors">{product.name}</h3>
                     <div class="flex items-baseline gap-2">
-                      <span class="text-lg font-black">${product.price}</span>
-                      <span class="text-xs text-gray-400 line-through">${product.originalPrice}</span>
+                      <span class="text-lg font-black text-white">${product.price}</span>
+                      <span class="text-xs text-gray-500 line-through">${product.originalPrice}</span>
                     </div>
                     <div class="flex items-center gap-1">
-                      <div class="flex text-yellow-400 text-xs">
+                      <div class="flex text-[var(--street-accent)] text-xs">
                         {'★'.repeat(Math.floor(product.rating))}
                         {'☆'.repeat(5 - Math.floor(product.rating))}
                       </div>
                       <span class="text-xs text-gray-400">({product.reviews})</span>
                     </div>
-                    <button class="w-full mt-2 bg-black text-white py-2 text-xs font-bold uppercase tracking-wider hover:bg-[var(--street-accent)] hover:text-black transition-colors rounded">
+                    <button class="w-full mt-2 bg-white text-black py-2 text-xs font-bold uppercase tracking-wider hover:bg-[var(--street-accent)] hover:text-black transition-colors rounded shadow-[2px_2px_0px_black]">
                       Agregar
                     </button>
                   </div>
@@ -277,12 +279,12 @@ const products = [
           <!-- Sección: Todos los Productos (Grid) -->
           <section>
             <div class="flex justify-between items-end mb-6">
-              <h2 class="text-2xl font-black uppercase tracking-tight">Catálogo Completo</h2>
+              <h2 class="text-2xl font-black uppercase tracking-tight text-white">Catálogo Completo</h2>
               <div class="flex gap-2">
-                <button class="p-2 bg-white border border-gray-300 rounded hover:border-black">
+                <button class="p-2 bg-[#111] border border-white/20 rounded hover:border-[var(--street-accent)] text-white">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                 </button>
-                <button class="p-2 bg-white border border-gray-300 rounded hover:border-black text-gray-400">
+                <button class="p-2 bg-[#111] border border-white/20 rounded hover:border-[var(--street-accent)] text-gray-500 hover:text-white">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
                 </button>
               </div>
@@ -290,47 +292,47 @@ const products = [
 
             <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
               {products.map(product => (
-                <div class="bg-white rounded-lg overflow-hidden border border-gray-200 hover:shadow-xl hover:border-[var(--street-accent)] transition-all duration-300 group flex flex-col h-full">
-                  <div class="relative aspect-square bg-gray-100 overflow-hidden">
-                    <img src={product.image} class="w-full h-full object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-500" />
+                <div class="bg-[#111] rounded-lg overflow-hidden border border-white/10 hover:border-[var(--street-accent)] transition-all duration-300 group flex flex-col h-full hover:-translate-y-1 hover:shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                  <div class="relative aspect-square bg-[#222] overflow-hidden">
+                    <img src={product.image} class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-500" />
                     
                     {product.isBestSeller && (
-                      <div class="absolute top-2 left-2 bg-[var(--street-accent)] text-black text-[10px] font-black px-2 py-1 uppercase rounded shadow-sm">
+                      <div class="absolute top-2 left-2 bg-[var(--street-accent)] text-black text-[10px] font-black px-2 py-1 uppercase rounded shadow-[2px_2px_0px_black]">
                         Más Vendido
                       </div>
                     )}
                     {!product.inStock && (
-                      <div class="absolute inset-0 bg-white/60 backdrop-blur-[1px] flex items-center justify-center">
-                        <span class="bg-gray-800 text-white px-3 py-1 text-xs font-bold uppercase rounded">Agotado</span>
+                      <div class="absolute inset-0 bg-black/80 backdrop-blur-[1px] flex items-center justify-center">
+                        <span class="bg-red-600 text-white px-3 py-1 text-xs font-bold uppercase rounded border border-white/20">Agotado</span>
                       </div>
                     )}
 
-                    <button class="absolute top-2 right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center hover:bg-[var(--street-accent)] hover:text-white transition-all opacity-0 group-hover:opacity-100 shadow-md transform translate-y-2 group-hover:translate-y-0" title="Añadir a Lista de Deseos">
+                    <button class="absolute top-2 right-2 w-8 h-8 bg-black/80 rounded-full flex items-center justify-center text-white hover:bg-[var(--street-accent)] hover:text-black transition-all opacity-0 group-hover:opacity-100 shadow-lg transform translate-y-2 group-hover:translate-y-0 border border-white/20" title="Añadir a Lista de Deseos">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                     </button>
                   </div>
                   
                   <div class="p-4 flex flex-col flex-grow">
-                    <p class="text-xs text-gray-500 uppercase font-bold mb-1">{product.category}</p>
-                    <h3 class="font-bold text-sm leading-tight line-clamp-2 mb-2 group-hover:text-[var(--street-accent)] transition-colors">{product.name}</h3>
+                    <p class="text-xs text-gray-400 uppercase font-bold mb-1 tracking-wider">{product.category}</p>
+                    <h3 class="font-bold text-sm text-white leading-tight line-clamp-2 mb-2 group-hover:text-[var(--street-accent)] transition-colors">{product.name}</h3>
                     
                     <div class="mt-auto space-y-3">
                       <div class="flex items-center justify-between">
                         <div class="flex flex-col">
-                          <span class="text-lg font-black">${product.price}</span>
-                          {product.originalPrice && <span class="text-xs text-gray-400 line-through">${product.originalPrice}</span>}
+                          <span class="text-lg font-black text-white">${product.price}</span>
+                          {product.originalPrice && <span class="text-xs text-gray-500 line-through">${product.originalPrice}</span>}
                         </div>
-                        <div class="flex items-center gap-1 bg-gray-50 px-2 py-1 rounded">
-                          <span class="text-yellow-500 text-xs">★</span>
-                          <span class="text-xs font-bold">{product.rating}</span>
+                        <div class="flex items-center gap-1 bg-[#222] px-2 py-1 rounded border border-white/10">
+                          <span class="text-[var(--street-accent)] text-xs">★</span>
+                          <span class="text-xs font-bold text-white">{product.rating}</span>
                         </div>
                       </div>
                       
                       <button 
-                        class={`w-full py-2 text-xs font-bold uppercase tracking-wider rounded transition-colors flex items-center justify-center gap-2 ${
+                        class={`w-full py-2 text-xs font-bold uppercase tracking-wider rounded transition-colors flex items-center justify-center gap-2 shadow-[2px_2px_0px_black] ${
                           product.inStock 
-                          ? 'bg-black text-white hover:bg-[var(--street-accent)] hover:text-black' 
-                          : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                          ? 'bg-white text-black hover:bg-[var(--street-accent)] hover:text-black' 
+                          : 'bg-[#333] text-gray-500 cursor-not-allowed'
                         }`}
                         disabled={!product.inStock}
                       >
