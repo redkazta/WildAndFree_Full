@@ -1,6 +1,8 @@
 ---
 import SidebarLeft from '../components/SidebarLeft.astro';
 import Player from '../components/Player.astro';
+import RadioFloating from '../components/RadioFloating.astro';
+import { ClientRouter } from 'astro:transitions';
 
 export type Props = {
   config: {
@@ -42,6 +44,7 @@ const isActive = (href: string) => {
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{config.name}</title>
+		<ClientRouter />
 		
 		<style is:global>
 			@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;500;600;700;800;900&display=swap');
@@ -393,6 +396,7 @@ const isActive = (href: string) => {
 		<div id="sidebar-overlay"></div>
 		<SidebarLeft />
 		<Player />
+		<RadioFloating />
 		
 		<main class="pt-20">
 			<slot />
