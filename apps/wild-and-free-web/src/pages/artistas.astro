@@ -71,8 +71,40 @@ const artists = (dbArtists && dbArtists.length > 0) ? dbArtists : [
     imagenes: { profile: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80' },
     stats: { seguidores: '950K', oyentes: '600K' },
     bio: 'Energía pura de Gómez Palacio.'
+  },
+  // Nuevos Artistas
+  {
+    nombre: 'Viper X',
+    slug: 'viper-x',
+    imagenes: { profile: 'https://images.unsplash.com/photo-1615109398623-88346a601842?w=800&q=80' },
+    stats: { seguidores: '3.1M', oyentes: '2.8M' },
+    bio: 'El veneno lírico más potente del norte.'
+  },
+  {
+    nombre: 'Luna Negra',
+    slug: 'luna-negra',
+    imagenes: { profile: 'https://images.unsplash.com/photo-1517423568366-69755581d826?w=800&q=80' },
+    stats: { seguidores: '1.9M', oyentes: '2.2M' },
+    bio: 'Voces etéreas sobre bajos pesados.'
+  },
+  {
+    nombre: 'Rojo Fuego',
+    slug: 'rojo-fuego',
+    imagenes: { profile: 'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?w=800&q=80' },
+    stats: { seguidores: '500K', oyentes: '800K' },
+    bio: 'La nueva promesa del trap duro.'
+  },
+  {
+    nombre: 'Cyber Punk',
+    slug: 'cyber-punk',
+    imagenes: { profile: 'https://images.unsplash.com/photo-1618641986557-1ecd23095910?w=800&q=80' },
+    stats: { seguidores: '4.5M', oyentes: '5.1M' },
+    bio: 'Sonidos del futuro hoy.'
   }
 ];
+
+// Artista Destacado (Random o fijo)
+const featuredArtist = artists[8]; // Viper X
 
 import tenantConfig from '../../../../packages/shared-types/tenant-config.json';
 
@@ -111,8 +143,52 @@ const config = {
         </div>
       </div>
 
+      <!-- Sección Artista Destacado (Rising Star) -->
+      <section class="mb-24 relative overflow-hidden rounded-3xl border border-white/10 bg-[#0a0a0a]">
+         <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 mix-blend-overlay"></div>
+         <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[var(--wild-orange)]/10 to-transparent"></div>
+         
+         <div class="flex flex-col lg:flex-row">
+            <!-- Imagen Destacada -->
+            <div class="lg:w-1/2 relative min-h-[400px] lg:min-h-[600px] overflow-hidden group">
+               <img src={featuredArtist.imagenes.profile} class="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt={featuredArtist.nombre} />
+               <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent"></div>
+               
+               <div class="absolute bottom-8 left-8">
+                  <span class="bg-[var(--wild-orange)] text-black px-4 py-2 text-xs font-black uppercase tracking-widest mb-4 inline-block transform -skew-x-12">Artista del Mes</span>
+               </div>
+            </div>
+            
+            <!-- Info Destacada -->
+            <div class="lg:w-1/2 p-8 lg:p-16 flex flex-col justify-center relative z-10">
+               <h2 class="text-6xl lg:text-8xl font-black uppercase tracking-tighter text-white mb-6 leading-none">
+                  {featuredArtist.nombre}
+               </h2>
+               <p class="text-xl text-gray-300 font-medium mb-8 max-w-lg border-l-4 border-[var(--wild-orange)] pl-6">
+                  {featuredArtist.bio} "Rompiendo esquemas y definiendo el nuevo sonido del norte."
+               </p>
+               
+               <div class="grid grid-cols-2 gap-8 mb-12">
+                  <div>
+                     <span class="block text-sm font-mono text-gray-500 uppercase tracking-widest mb-1">Oyentes</span>
+                     <span class="block text-4xl font-black text-white">{featuredArtist.stats.oyentes}</span>
+                  </div>
+                  <div>
+                     <span class="block text-sm font-mono text-gray-500 uppercase tracking-widest mb-1">Seguidores</span>
+                     <span class="block text-4xl font-black text-white">{featuredArtist.stats.seguidores}</span>
+                  </div>
+               </div>
+               
+               <a href={`/artista/${featuredArtist.slug}`} class="w-fit bg-white text-black hover:bg-[var(--wild-orange)] hover:text-white px-8 py-4 text-sm font-black uppercase tracking-[0.2em] transition-all duration-300 flex items-center gap-4 group/btn">
+                  Ver Perfil Completo
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover/btn:translate-x-2 transition-transform"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+               </a>
+            </div>
+         </div>
+      </section>
+
       <!-- Grid de Artistas -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-32">
         {artists.map((artist: any, i: number) => (
           <a href={`/artista/${artist.slug}`} class="group relative block bg-[#0a0a0a] border border-white/10 hover:border-[var(--wild-orange)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(255,85,0,0.15)] animate-stagger overflow-hidden rounded-xl" style={`animation-delay: ${i * 100}ms`}>
             
@@ -164,6 +240,54 @@ const config = {
           </a>
         ))}
       </div>
+
+      <!-- Sección Historia / Manifiesto -->
+      <section class="relative py-20 border-t border-white/10">
+         <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10"></div>
+         
+         <div class="flex flex-col lg:flex-row gap-16 items-start">
+            <div class="lg:w-1/3 sticky top-32">
+               <h2 class="text-5xl lg:text-7xl font-black uppercase tracking-tighter text-white mb-8">
+                  El <span class="text-[var(--wild-orange)]">Legado</span><br/>Wild Gvng
+               </h2>
+               <div class="w-24 h-2 bg-gradient-to-r from-[var(--wild-orange)] to-transparent"></div>
+            </div>
+            
+            <div class="lg:w-2/3 space-y-12">
+               <div class="group border-l-2 border-white/20 pl-8 hover:border-[var(--wild-orange)] transition-colors duration-500">
+                  <span class="text-4xl font-black text-[var(--wild-orange)]/50 group-hover:text-[var(--wild-orange)] transition-colors mb-2 block">2024</span>
+                  <h3 class="text-2xl font-bold text-white uppercase mb-4">El Origen</h3>
+                  <p class="text-gray-400 leading-relaxed">
+                     Nacidos en las calles del norte, Wild Gvng surgió como una respuesta al silencio. Un colectivo de artistas visuales, productores y raperos decididos a crear su propia industria donde no existía ninguna. Sin reglas, sin permisos.
+                  </p>
+               </div>
+
+               <div class="group border-l-2 border-white/20 pl-8 hover:border-[var(--wild-orange)] transition-colors duration-500">
+                  <span class="text-4xl font-black text-[var(--wild-orange)]/50 group-hover:text-[var(--wild-orange)] transition-colors mb-2 block">2025</span>
+                  <h3 class="text-2xl font-bold text-white uppercase mb-4">La Expansión</h3>
+                  <p class="text-gray-400 leading-relaxed">
+                     Con el lanzamiento de "Noches de Neón", el sonido Wild cruzó fronteras. Firmamos a nuestros primeros talentos internacionales y establecimos nuestra base de operaciones digital. El movimiento dejó de ser local para volverse un fenómeno.
+                  </p>
+               </div>
+
+               <div class="group border-l-2 border-white/20 pl-8 hover:border-[var(--wild-orange)] transition-colors duration-500">
+                  <span class="text-4xl font-black text-[var(--wild-orange)]/50 group-hover:text-[var(--wild-orange)] transition-colors mb-2 block">2026</span>
+                  <h3 class="text-2xl font-bold text-white uppercase mb-4">Dominio Total</h3>
+                  <p class="text-gray-400 leading-relaxed">
+                     Hoy, Wild Gvng no es solo música. Es moda, es arte, es tecnología. Somos la plataforma definitiva para la cultura urbana independiente. Nuestra misión sigue intacta: Potenciar la voz de los que no tienen miedo a ser salvajes y libres.
+                  </p>
+               </div>
+               
+               <div class="pt-12">
+                  <blockquote class="text-2xl md:text-4xl font-black text-white italic tracking-tight border-l-8 border-[var(--wild-orange)] pl-6 py-2">
+                     "No hacemos música para encajar. Hacemos ruido para romper el molde."
+                  </blockquote>
+                  <cite class="block mt-4 text-[var(--wild-orange)] font-mono text-sm uppercase tracking-widest">— El Manifiesto</cite>
+               </div>
+            </div>
+         </div>
+      </section>
+
     </div>
   </div>
 </Layout>
