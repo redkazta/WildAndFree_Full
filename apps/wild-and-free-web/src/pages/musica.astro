@@ -9,19 +9,18 @@ const config = {
   secondary_color: tenant.secondary_color
 };
 
-// --- DATA MOCK ---
+// --- DATA MOCK (TODO EN ESPAÑOL) ---
 
 const featuredAlbum = {
   title: "CRÓNICAS DEL ASFALTO",
   artist: "LIL KIRO x NEON GHOST",
   year: "2026",
   cover: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=800&h=800&fit=crop",
-  description: "Un viaje sonoro por las calles de la metrópolis. Bajos pesados, sintetizadores oscuros y líricas que cortan como navaja.",
+  description: "Un viaje sonoro por las calles de la metrópolis.",
   tracks: [
     { title: "INTRO: LUCES", duration: "1:45" },
     { title: "VELOCIDAD LUZ", duration: "3:12" },
-    { title: "DISTRITO 9", duration: "2:58" },
-    { title: "SIN RETORNO", duration: "4:20" }
+    { title: "DISTRITO 9", duration: "2:58" }
   ]
 };
 
@@ -29,15 +28,22 @@ const topCharts = [
   { rank: "01", title: "NOCHES DE NEÓN", artist: "LIL KIRO", plays: "2.1M", trend: "up" },
   { rank: "02", title: "TOKYO DRIFT", artist: "NEON GHOST", plays: "1.8M", trend: "same" },
   { rank: "03", title: "FUEGO FATUO", artist: "LIL KIRO", plays: "1.5M", trend: "up" },
-  { rank: "04", title: "VAPORWAVE DREAMS", artist: "NEON GHOST", plays: "1.1M", trend: "down" },
-  { rank: "05", title: "URBAN JUNGLE", artist: "WILD SQUAD", plays: "950K", trend: "up" }
+  { rank: "04", title: "SUEÑOS VAPOR", artist: "NEON GHOST", plays: "1.1M", trend: "down" },
+  { rank: "05", title: "JUNGLA URBANA", artist: "WILD SQUAD", plays: "950K", trend: "up" }
 ];
 
+// Sin emojis, títulos en español
 const playlists = [
-  { title: "NIGHT DRIVE", desc: "Para quemar llanta a medianoche.", color: "from-blue-900 to-purple-900", icon: "🚗" },
-  { title: "GYM RAGE", desc: "Energía pura para romper tus PRs.", color: "from-red-900 to-orange-900", icon: "💪" },
-  { title: "CODE MODE", desc: "Focus total. Sin letras, solo beats.", color: "from-green-900 to-emerald-900", icon: "💻" },
-  { title: "CHILL & SMOKE", desc: "Vibras relajadas para el after.", color: "from-gray-800 to-gray-900", icon: "💨" }
+  { title: "CONDUCCIÓN NOCTURNA", desc: "Para quemar llanta a medianoche.", color: "from-blue-900 to-purple-900" },
+  { title: "MODO GYM", desc: "Energía pura para romper tus límites.", color: "from-red-900 to-orange-900" },
+  { title: "ZONA DE CÓDIGO", desc: "Focus total. Sin letras, solo beats.", color: "from-green-900 to-emerald-900" },
+  { title: "RELAX & HUMO", desc: "Vibras relajadas para el after.", color: "from-gray-800 to-gray-900" }
+];
+
+const news = [
+  { date: "HOY", title: "Nuevo drop de merch disponible" },
+  { date: "AYER", title: "Lil Kiro rompe récord de streams" },
+  { date: "22 FEB", title: "Gira nacional anunciada" }
 ];
 
 const allTracks = [
@@ -47,9 +53,9 @@ const allTracks = [
   { id: 4, title: 'CRISTALINO', artist: 'CRYSTAL WAVE', album: 'ONDAS', duration: '3:33', bpm: 110, key: 'G', cover: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=300&h=300&fit=crop' },
   { id: 5, title: 'PASEO DE MEDIANOCHE', artist: 'MIDNIGHT RIDER', album: 'JINETE NOCTURNO', duration: '4:01', bpm: 124, key: 'Dm', cover: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&h=300&fit=crop' },
   { id: 6, title: 'FUEGO FATUO', artist: 'LIL KIRO', album: 'LUCES DE CIUDAD', duration: '2:55', bpm: 130, key: 'Em', cover: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&h=300&fit=crop' },
-  { id: 7, title: 'VAPORWAVE DREAMS', artist: 'NEON GHOST', album: 'SESIONES DE MEDIANOCHE', duration: '3:45', bpm: 100, key: 'Bm', cover: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&h=300&fit=crop' },
-  { id: 8, title: 'URBAN JUNGLE', artist: 'WILD SQUAD', album: 'MIXTAPE VOL.1', duration: '3:10', bpm: 145, key: 'Am', cover: 'https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=300&h=300&fit=crop' },
-  { id: 9, title: 'GRAFFITI SOUL', artist: 'STREET ARTIST', album: 'WALLS', duration: '4:20', bpm: 90, key: 'C#m', cover: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=300&h=300&fit=crop' },
+  { id: 7, title: 'SUEÑOS VAPOR', artist: 'NEON GHOST', album: 'SESIONES DE MEDIANOCHE', duration: '3:45', bpm: 100, key: 'Bm', cover: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&h=300&fit=crop' },
+  { id: 8, title: 'JUNGLA URBANA', artist: 'WILD SQUAD', album: 'MIXTAPE VOL.1', duration: '3:10', bpm: 145, key: 'Am', cover: 'https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=300&h=300&fit=crop' },
+  { id: 9, title: 'ALMA DE GRAFFITI', artist: 'STREET ARTIST', album: 'MUROS', duration: '4:20', bpm: 90, key: 'C#m', cover: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=300&h=300&fit=crop' },
   { id: 10, title: 'CONCRETO Y ACERO', artist: 'HEAVY HITTERS', album: 'CONSTRUCCIÓN', duration: '3:50', bpm: 135, key: 'Fm', cover: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=300&h=300&fit=crop' }
 ];
 
@@ -60,288 +66,235 @@ const allTracks = [
     
     <!-- Top Bar -->
     <div class="bg-black border-b border-white/10 py-2 sticky top-0 z-40 backdrop-blur-md bg-black/80">
-        <div class="container mx-auto px-4 max-w-[1600px] flex justify-between items-center">
+        <div class="container mx-auto px-4 max-w-[1800px] flex justify-between items-center">
             <div class="flex items-center gap-2">
                 <div class="w-2 h-2 bg-[var(--wild-orange)] rounded-full animate-pulse"></div>
-                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-white">Wild Music OS v2.0</span>
+                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-white">Wild Music OS v3.0</span>
             </div>
             <div class="flex gap-4 text-[10px] font-mono text-gray-500">
-                <span>CALIDAD: 320KBPS</span>
-                <span>SERVIDOR: EN LÍNEA</span>
+                <span>ESTADO: CONECTADO</span>
+                <span>ZONA: GLOBAL</span>
             </div>
         </div>
     </div>
 
-    <div class="container mx-auto px-4 py-8 max-w-[1600px] space-y-16 relative z-10 animate-fade-in-up">
+    <!-- BENTO GRID LAYOUT -->
+    <div class="container mx-auto px-4 py-6 max-w-[1800px] animate-fade-in-up">
       
-      <!-- HERO COMPACTO: ÁLBUM DESTACADO -->
-      <section class="relative group">
-        <div class="absolute inset-0 bg-gradient-to-r from-[#111] to-black border border-white/10 rounded-xl transform skew-x-1"></div>
-        <!-- Texture -->
-        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 mix-blend-overlay rounded-xl"></div>
+      <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-4 auto-rows-min">
         
-        <div class="relative z-10 flex flex-col md:flex-row items-center p-6 gap-8">
-            <!-- Cover Art Compacto -->
-            <div class="relative w-48 h-48 flex-shrink-0 group-hover:scale-105 transition-transform duration-500">
-                <div class="absolute inset-0 bg-[var(--wild-orange)]/20 blur-xl rounded-full"></div>
-                <img src={featuredAlbum.cover} alt={featuredAlbum.title} class="w-full h-full object-cover rounded shadow-2xl border border-white/20 relative z-10" />
-                <!-- Vinyl Hint -->
-                <div class="absolute top-1/2 -right-4 w-40 h-40 bg-black rounded-full border-[8px] border-[#111] -translate-y-1/2 -z-0 group-hover:translate-x-4 transition-transform duration-500 flex items-center justify-center">
-                    <div class="w-12 h-12 bg-[var(--wild-orange)] rounded-full border-[4px] border-[#1a1a1a]"></div>
-                </div>
-            </div>
-
-            <!-- Info Area -->
-            <div class="flex-1 text-center md:text-left">
-                <div class="flex flex-col md:flex-row items-center gap-4 mb-2">
-                    <span class="bg-[var(--wild-orange)] text-white text-[10px] font-black uppercase px-2 py-1 tracking-wider rounded-sm">Estreno Exclusivo</span>
-                    <span class="text-[10px] font-mono text-gray-500 border border-gray-800 px-2 py-0.5">AÑO: {featuredAlbum.year}</span>
-                </div>
-                <h1 class="text-3xl md:text-5xl font-black uppercase italic tracking-tighter leading-none text-white mb-2">
-                    {featuredAlbum.title}
-                </h1>
-                <h2 class="text-xl font-bold text-gray-400 uppercase tracking-widest mb-4">{featuredAlbum.artist}</h2>
-                <p class="text-gray-500 text-sm font-medium max-w-2xl line-clamp-2 mb-6">
-                    "{featuredAlbum.description}"
-                </p>
-
-                <div class="flex flex-wrap justify-center md:justify-start gap-4">
-                    <button class="bg-white text-black px-6 py-3 text-xs font-black uppercase tracking-[0.2em] hover:bg-[var(--wild-orange)] hover:text-white transition-all shadow-[4px_4px_0px_rgba(255,255,255,0.2)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] flex items-center gap-2">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                        Escuchar
-                    </button>
-                    <button class="border border-white/20 text-white px-6 py-3 text-xs font-black uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all">
-                        + Biblioteca
-                    </button>
-                </div>
-            </div>
-
-            <!-- Tracklist Preview Mini -->
-            <div class="hidden lg:block w-64 bg-black/50 border-l border-white/10 pl-8 py-2">
-                <h3 class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-3">Vista Previa</h3>
-                <ul class="space-y-2">
-                    {featuredAlbum.tracks.slice(0, 3).map((track, i) => (
-                        <li class="flex justify-between items-center text-xs group/track cursor-default">
-                            <span class="text-white font-bold uppercase group-hover/track:text-[var(--wild-orange)] transition-colors truncate max-w-[120px]">{track.title}</span>
-                            <span class="text-gray-600 font-mono text-[10px]">{track.duration}</span>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        </div>
-      </section>
-
-      <!-- SECCIÓN 2: CHARTS & MOODS -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
-          <!-- TOP CHARTS -->
-          <div class="lg:col-span-4 space-y-4">
-              <div class="flex items-center justify-between border-b border-white/10 pb-2">
-                  <h3 class="text-xl font-black uppercase tracking-tighter text-white">Top Global</h3>
-                  <span class="text-[9px] font-mono text-[var(--wild-orange)] animate-pulse">● EN VIVO</span>
-              </div>
-              
-              <div class="space-y-1">
-                  {topCharts.map((track) => (
-                      <div class="group flex items-center gap-3 p-2 hover:bg-white/5 rounded-lg transition-colors border border-transparent hover:border-white/10 cursor-pointer">
-                          <span class="text-2xl font-black text-white/10 group-hover:text-[var(--wild-orange)] transition-colors font-mono w-8">{track.rank}</span>
-                          <div class="flex-1 min-w-0">
-                              <h4 class="text-white font-bold uppercase text-xs leading-tight truncate">{track.title}</h4>
-                              <p class="text-gray-500 text-[10px] uppercase truncate">{track.artist}</p>
-                          </div>
-                          <div class="text-right">
-                              <span class="block text-white font-mono text-[10px] font-bold">{track.plays}</span>
-                              <span class={`text-[9px] uppercase font-black ${track.trend === 'up' ? 'text-green-500' : track.trend === 'down' ? 'text-red-500' : 'text-gray-600'}`}>
-                                  {track.trend === 'up' ? '▲ SUBE' : track.trend === 'down' ? '▼ BAJA' : '-'}
-                              </span>
-                          </div>
-                      </div>
-                  ))}
-              </div>
-          </div>
-
-          <!-- MOODS / PLAYLISTS -->
-          <div class="lg:col-span-8 space-y-4">
-              <div class="flex items-center justify-between border-b border-white/10 pb-2">
-                  <h3 class="text-xl font-black uppercase tracking-tighter text-white">Vibras Selectas</h3>
-                  <button class="text-[10px] font-bold uppercase text-gray-500 hover:text-white transition-colors">Ver Todo</button>
-              </div>
-
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {playlists.map((playlist) => (
-                      <div class={`relative h-32 rounded-lg overflow-hidden group cursor-pointer border border-white/10`}>
-                          <div class={`absolute inset-0 bg-gradient-to-br ${playlist.color} opacity-80 group-hover:opacity-100 transition-opacity`}></div>
-                          <!-- Noise Texture -->
-                          <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
-                          
-                          <div class="absolute inset-0 p-4 flex flex-col justify-between z-10">
-                              <div class="flex justify-between items-start">
-                                  <span class="text-2xl">{playlist.icon}</span>
-                                  <div class="w-6 h-6 rounded-full bg-white/10 backdrop-blur flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0">
-                                      <svg width="10" height="10" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-                                  </div>
-                              </div>
-                              <div>
-                                  <h4 class="text-lg font-black uppercase text-white tracking-tight">{playlist.title}</h4>
-                                  <p class="text-white/60 text-[10px] font-medium max-w-[90%] line-clamp-1">{playlist.desc}</p>
-                              </div>
-                          </div>
-                      </div>
-                  ))}
-              </div>
-          </div>
-      </div>
-
-      <!-- SECCIÓN 3: ALL TRACKS (DATA TABLE STYLE) -->
-      <section>
-        <div class="flex items-end justify-between mb-6 border-b-2 border-white/10 pb-4">
-            <div>
-                <h2 class="text-3xl md:text-5xl font-black uppercase tracking-tighter text-white mb-1">Catálogo</h2>
-                <p class="text-gray-500 font-mono text-[10px] uppercase tracking-widest">Acceso Total /// {allTracks.length} Entradas</p>
-            </div>
+        <!-- 1. HERO ALBUM (2x2 en desktop) -->
+        <div class="md:col-span-2 md:row-span-2 relative group overflow-hidden rounded-xl border border-white/10 bg-[#0a0a0a]">
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 mix-blend-overlay"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
             
-            <div class="hidden md:flex gap-4">
-                <input type="text" placeholder="BUSCAR..." class="bg-[#111] border border-white/20 text-white px-4 py-2 text-xs font-mono w-48 focus:outline-none focus:border-[var(--wild-orange)] uppercase placeholder:text-gray-700" />
+            <img src={featuredAlbum.cover} class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 transition-opacity duration-700 grayscale group-hover:grayscale-0" />
+            
+            <div class="absolute bottom-0 left-0 p-6 z-20 w-full">
+                <span class="inline-block bg-[var(--wild-orange)] text-white text-[10px] font-black uppercase px-2 py-1 mb-2">Álbum de la Semana</span>
+                <h2 class="text-4xl font-black uppercase italic tracking-tighter leading-none mb-1">{featuredAlbum.title}</h2>
+                <h3 class="text-xl text-gray-300 font-bold uppercase mb-4">{featuredAlbum.artist}</h3>
+                
+                <div class="flex gap-3">
+                    <button class="bg-white text-black px-4 py-2 text-xs font-black uppercase hover:bg-[var(--wild-orange)] hover:text-white transition-colors flex items-center gap-2">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Escuchar
+                    </button>
+                    <button class="border border-white/30 text-white px-4 py-2 text-xs font-black uppercase hover:bg-white hover:text-black transition-colors">
+                        + Lista
+                    </button>
+                </div>
             </div>
         </div>
 
-        <!-- Table Header -->
-        <div class="grid grid-cols-12 gap-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest border-b border-white/10 pb-2 mb-2 px-2">
-            <div class="col-span-1">#</div>
-            <div class="col-span-5 md:col-span-4">Título</div>
-            <div class="col-span-2 hidden md:block">Álbum</div>
-            <div class="col-span-2 hidden md:block text-center">BPM / Nota</div>
-            <div class="col-span-2 hidden md:block text-right">Duración</div>
-            <div class="col-span-2 md:col-span-1 text-right">Play</div>
+        <!-- 2. TOP 1 HIT (1x1) -->
+        <div class="md:col-span-1 md:row-span-1 bg-[#111] border border-white/10 rounded-xl p-4 flex flex-col justify-between group hover:border-[var(--wild-orange)] transition-colors">
+            <div class="flex justify-between items-start">
+                <span class="text-[10px] font-mono text-gray-500 uppercase">#1 Global</span>
+                <span class="text-[10px] font-black text-green-500">▲ SUBIENDO</span>
+            </div>
+            <div>
+                <h3 class="text-xl font-black uppercase leading-none mb-1 text-white group-hover:text-[var(--wild-orange)] transition-colors">{topCharts[0].title}</h3>
+                <p class="text-xs text-gray-400 font-bold uppercase">{topCharts[0].artist}</p>
+            </div>
+            <div class="w-full bg-white/10 h-1 mt-2 rounded-full overflow-hidden">
+                <div class="bg-[var(--wild-orange)] h-full w-[85%]"></div>
+            </div>
         </div>
 
-        <!-- Table Rows -->
-        <div class="space-y-0.5">
-            {allTracks.map((track) => (
-                <div class="group grid grid-cols-12 gap-4 items-center p-2 hover:bg-white/5 rounded transition-all cursor-pointer border-b border-white/5 hover:border-transparent">
-                    <div class="col-span-1 text-gray-600 font-mono text-[10px] group-hover:text-[var(--wild-orange)]">{track.id.toString().padStart(2, '0')}</div>
-                    
-                    <div class="col-span-5 md:col-span-4 flex items-center gap-3">
-                        <img src={track.cover} class="w-8 h-8 rounded object-cover grayscale group-hover:grayscale-0 transition-all" />
-                        <div class="min-w-0">
-                            <h4 class="text-white font-bold uppercase text-xs truncate group-hover:text-[var(--wild-orange)] transition-colors">{track.title}</h4>
-                            <p class="text-gray-500 text-[10px] truncate">{track.artist}</p>
-                        </div>
-                    </div>
-                    
-                    <div class="col-span-2 hidden md:block text-gray-400 text-[10px] font-medium uppercase truncate">{track.album}</div>
-                    
-                    <div class="col-span-2 hidden md:block text-center">
-                        <span class="bg-white/5 border border-white/10 text-gray-400 text-[9px] font-mono px-1.5 py-0.5 rounded">{track.bpm} / {track.key}</span>
-                    </div>
-                    
-                    <div class="col-span-2 hidden md:block text-right text-gray-500 font-mono text-[10px]">{track.duration}</div>
-                    
-                    <div class="col-span-2 md:col-span-1 flex justify-end">
-                        <button 
-                            class="play-track-btn w-6 h-6 rounded-full bg-white/10 hover:bg-[var(--wild-orange)] text-white flex items-center justify-center transition-colors"
-                            data-title={track.title}
-                            data-artist={track.artist}
-                            data-cover={track.cover}
-                            data-duration={track.duration}
-                        >
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                        </button>
-                    </div>
-                </div>
-            ))}
+        <!-- 3. ESTADÍSTICAS / INFO (1x1) -->
+        <div class="md:col-span-1 md:row-span-1 bg-[var(--wild-blood)]/20 border border-[var(--wild-blood)]/50 rounded-xl p-4 flex flex-col justify-center items-center text-center relative overflow-hidden">
+             <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-30"></div>
+             <h3 class="text-3xl font-black text-white z-10">{allTracks.length}</h3>
+             <p class="text-[10px] font-mono text-[var(--wild-orange)] uppercase z-10">Pistas en Catálogo</p>
+             <div class="mt-2 text-[10px] font-mono text-gray-400 z-10">Actualizado: Hoy</div>
         </div>
-      </section>
+
+        <!-- 4. NOTICIAS BREVES (1x2) -->
+        <div class="md:col-span-1 md:row-span-2 bg-[#0a0a0a] border border-white/10 rounded-xl p-0 overflow-hidden flex flex-col">
+            <div class="p-3 border-b border-white/10 bg-white/5">
+                <h3 class="text-xs font-black uppercase tracking-widest text-white">Novedades</h3>
+            </div>
+            <div class="flex-1 p-3 space-y-3 overflow-y-auto">
+                {news.map(item => (
+                    <div class="border-l-2 border-white/20 pl-3 py-1 hover:border-[var(--wild-orange)] transition-colors cursor-pointer group">
+                        <span class="text-[9px] font-mono text-[var(--wild-orange)] block mb-0.5">{item.date}</span>
+                        <p class="text-[10px] font-bold text-gray-300 leading-tight group-hover:text-white">{item.title}</p>
+                    </div>
+                ))}
+                {/* Repetir para llenar */}
+                {news.map(item => (
+                    <div class="border-l-2 border-white/20 pl-3 py-1 hover:border-[var(--wild-orange)] transition-colors cursor-pointer group">
+                        <span class="text-[9px] font-mono text-[var(--wild-orange)] block mb-0.5">{item.date}</span>
+                        <p class="text-[10px] font-bold text-gray-300 leading-tight group-hover:text-white">{item.title}</p>
+                    </div>
+                ))}
+            </div>
+        </div>
+
+        <!-- 5. VIBRAS / PLAYLISTS (2x1) -->
+        <div class="md:col-span-2 md:row-span-1 bg-[#0a0a0a] border border-white/10 rounded-xl p-3">
+             <div class="flex justify-between items-center mb-2">
+                <h3 class="text-xs font-black uppercase tracking-widest text-white">Vibras</h3>
+                <button class="text-[9px] font-bold uppercase text-gray-500 hover:text-white">Ver todas</button>
+             </div>
+             <div class="grid grid-cols-2 gap-2 h-24">
+                 {playlists.slice(0, 2).map(pl => (
+                     <div class={`relative rounded overflow-hidden group cursor-pointer`}>
+                         <div class={`absolute inset-0 bg-gradient-to-br ${pl.color} opacity-60 group-hover:opacity-100 transition-opacity`}></div>
+                         <div class="absolute inset-0 flex items-center justify-center p-2 text-center z-10">
+                             <h4 class="text-xs font-black uppercase text-white leading-none">{pl.title}</h4>
+                         </div>
+                     </div>
+                 ))}
+             </div>
+        </div>
+
+        <!-- 6. TOP LIST COMPACT (1x2) -->
+        <div class="xl:col-span-1 md:col-span-2 md:row-span-2 bg-[#0a0a0a] border border-white/10 rounded-xl p-0 flex flex-col">
+            <div class="p-3 border-b border-white/10 flex justify-between items-center bg-white/5">
+                <h3 class="text-xs font-black uppercase tracking-widest text-white">Top 5</h3>
+                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+            </div>
+            <div class="flex-1 overflow-y-auto">
+                {topCharts.map((track, i) => (
+                    <div class="flex items-center gap-3 p-3 border-b border-white/5 hover:bg-white/5 transition-colors cursor-pointer group">
+                        <span class="text-lg font-black text-white/20 font-mono group-hover:text-[var(--wild-orange)] w-6">{track.rank}</span>
+                        <div class="min-w-0 flex-1">
+                            <h4 class="text-[10px] font-bold text-white uppercase truncate">{track.title}</h4>
+                            <p class="text-[9px] font-mono text-gray-500 truncate">{track.artist}</p>
+                        </div>
+                        <div class="text-[9px] font-mono text-gray-400">{track.plays}</div>
+                    </div>
+                ))}
+            </div>
+        </div>
+
+      </div>
+
+      <!-- SECCIÓN CATÁLOGO (ANCHO COMPLETO) -->
+      <div class="mt-4 bg-[#0a0a0a] border border-white/10 rounded-xl overflow-hidden">
+         <div class="p-4 border-b border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 bg-white/5">
+             <div class="flex items-center gap-3">
+                 <h2 class="text-lg font-black uppercase tracking-tight text-white">Catálogo Maestro</h2>
+                 <span class="bg-[var(--wild-orange)] text-black text-[9px] font-bold px-1.5 py-0.5 rounded-sm">FULL ACCESS</span>
+             </div>
+             <input type="text" placeholder="BUSCAR TRACK / ARTISTA..." class="bg-black border border-white/20 text-white px-3 py-1.5 text-[10px] font-mono w-full md:w-64 focus:outline-none focus:border-[var(--wild-orange)] uppercase" />
+         </div>
+
+         <!-- Header Tabla -->
+         <div class="grid grid-cols-12 gap-2 px-4 py-2 bg-black/50 text-[9px] font-bold text-gray-500 uppercase tracking-widest border-b border-white/5">
+             <div class="col-span-1"># ID</div>
+             <div class="col-span-5">Título / Artista</div>
+             <div class="col-span-3 hidden md:block">Álbum</div>
+             <div class="col-span-2 hidden md:block text-right">Datos</div>
+             <div class="col-span-1 text-right">Acción</div>
+         </div>
+
+         <!-- Filas -->
+         <div class="divide-y divide-white/5">
+             {allTracks.map((track) => (
+                 <div class="grid grid-cols-12 gap-2 px-4 py-2 items-center hover:bg-white/5 transition-colors group cursor-pointer text-[10px]">
+                     <div class="col-span-1 font-mono text-gray-600 group-hover:text-[var(--wild-orange)]">{track.id.toString().padStart(3, '0')}</div>
+                     
+                     <div class="col-span-5 flex items-center gap-2">
+                         <div class="w-6 h-6 bg-white/10 rounded overflow-hidden flex-shrink-0">
+                             <img src={track.cover} class="w-full h-full object-cover grayscale group-hover:grayscale-0" />
+                         </div>
+                         <div class="min-w-0">
+                             <div class="font-bold text-white uppercase truncate">{track.title}</div>
+                             <div class="text-gray-500 truncate">{track.artist}</div>
+                         </div>
+                     </div>
+                     
+                     <div class="col-span-3 hidden md:block text-gray-400 uppercase truncate">{track.album}</div>
+                     
+                     <div class="col-span-2 hidden md:block text-right font-mono text-gray-500">
+                         <span class="mr-2">{track.bpm} BPM</span>
+                         <span>{track.duration}</span>
+                     </div>
+                     
+                     <div class="col-span-1 flex justify-end">
+                         <button 
+                             class="play-track-btn w-6 h-6 bg-white/10 hover:bg-[var(--wild-orange)] text-white rounded-full flex items-center justify-center transition-colors"
+                             data-title={track.title}
+                             data-artist={track.artist}
+                             data-cover={track.cover}
+                             data-duration={track.duration}
+                         >
+                             <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                         </button>
+                     </div>
+                 </div>
+             ))}
+         </div>
+      </div>
 
     </div>
 
-    <!-- Floating Player (Updated Design) -->
+    <!-- Floating Player (Estilo Walkman Compacto) -->
     <div id="floating-player" class="fixed bottom-6 right-6 z-50 translate-y-[150%] transition-transform duration-500">
-      <div class="bg-[#0a0a0a] border border-white/20 w-[350px] shadow-[0_20px_50px_rgba(0,0,0,0.9)] rounded-sm overflow-hidden relative backdrop-blur-xl">
-        
-        <!-- LCD Display Area -->
-        <div class="bg-[#1a1a1a] p-4 border-b border-white/10 relative overflow-hidden">
-           <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20"></div>
-           <div class="flex gap-4 items-center relative z-10">
-               <div class="w-16 h-16 bg-black border border-white/10 shadow-inner overflow-hidden relative">
-                   <img id="player-cover" src="" class="w-full h-full object-cover opacity-80" />
-                   <div class="absolute inset-0 bg-[var(--wild-orange)]/20 mix-blend-overlay"></div>
-               </div>
-               <div class="flex-1 min-w-0">
-                   <div class="flex items-center gap-2 mb-1">
-                       <div class="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></div>
-                       <span class="text-[8px] font-mono text-red-500 uppercase tracking-widest">Broadcasting</span>
-                   </div>
-                   <h4 id="player-title" class="text-white font-black uppercase truncate text-lg leading-none mb-0.5">TRACK TITLE</h4>
-                   <p id="player-artist" class="text-gray-400 font-mono text-xs truncate uppercase">ARTIST NAME</p>
-               </div>
-           </div>
-           
-           <!-- Waveform Visualizer Mock -->
-           <div class="flex items-end gap-0.5 h-6 mt-3 opacity-50">
-               {Array(30).fill(0).map((_, i) => (
-                   <div class="w-1 bg-[var(--wild-orange)] animate-pulse" style={`height: ${Math.random() * 100}%; animation-delay: ${i * 0.05}s`}></div>
-               ))}
-           </div>
-        </div>
+      <div class="bg-[#111] border border-white/20 w-[300px] shadow-2xl rounded-lg overflow-hidden flex flex-col">
+          <div class="h-1 bg-gradient-to-r from-[var(--wild-orange)] to-red-600"></div>
+          
+          <div class="p-3 flex gap-3 items-center bg-[#1a1a1a]">
+              <img id="player-cover" src="" class="w-10 h-10 rounded object-cover border border-white/10" />
+              <div class="min-w-0 flex-1">
+                  <h4 id="player-title" class="text-xs font-black text-white uppercase truncate">TRACK</h4>
+                  <p id="player-artist" class="text-[9px] font-mono text-gray-400 uppercase truncate">ARTIST</p>
+              </div>
+              <button id="close-player" class="text-gray-500 hover:text-white"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+          </div>
 
-        <!-- Controls Area -->
-        <div class="bg-[#111] p-4">
-            <!-- Progress -->
-            <div class="flex items-center gap-3 text-[10px] font-mono text-gray-500 mb-4">
-                <span id="current-time">0:00</span>
-                <div class="flex-1 h-1 bg-[#333] rounded-full overflow-hidden cursor-pointer group">
-                    <div id="progress-fill" class="h-full bg-white w-0 group-hover:bg-[var(--wild-orange)] transition-colors"></div>
-                </div>
-                <span id="total-time">0:00</span>
-            </div>
-
-            <!-- Buttons -->
-            <div class="flex justify-between items-center">
-                <button class="text-gray-500 hover:text-white transition-colors"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 8l-4 4 4 4"/></svg></button>
-                
-                <div class="flex items-center gap-4">
-                    <button id="prev-btn" class="text-white hover:text-[var(--wild-orange)] transition-colors"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
-                    
-                    <button id="play-pause-btn" class="w-12 h-12 bg-white text-black hover:bg-[var(--wild-orange)] hover:text-white rounded-full flex items-center justify-center transition-all shadow-lg hover:scale-105">
-                        <svg id="play-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                        <svg id="pause-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="hidden"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                    </button>
-                    
-                    <button id="next-btn" class="text-white hover:text-[var(--wild-orange)] transition-colors"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button>
-                </div>
-                
-                <button id="close-player" class="text-gray-500 hover:text-red-500 transition-colors"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-            </div>
-        </div>
+          <div class="p-2 bg-black flex justify-center items-center gap-4">
+               <button id="prev-btn" class="text-gray-400 hover:text-white"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
+               <button id="play-pause-btn" class="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center hover:bg-[var(--wild-orange)] transition-colors">
+                    <svg id="play-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    <svg id="pause-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="hidden"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+               </button>
+               <button id="next-btn" class="text-gray-400 hover:text-white"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button>
+          </div>
+          
+          <div class="h-0.5 bg-gray-800 w-full cursor-pointer group relative">
+              <div id="progress-fill" class="h-full bg-[var(--wild-orange)] w-0 group-hover:h-1 transition-all"></div>
+          </div>
       </div>
     </div>
+
   </div>
 </Layout>
 
 <style is:global define:vars={{ streetAccent: tenant.primary_color }}>
-  .preserve-3d {
-    transform-style: preserve-3d;
-  }
-  .perspective-1000 {
-    perspective: 1000px;
-  }
-  .rotate-y-6 {
-    transform: rotateY(10deg) rotateX(5deg);
-  }
-  
   @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
+    from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
   }
-
   .animate-fade-in-up {
-    animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   }
 </style>
 
 <script>
-  // Player Logic Refined
+  // Player Logic
   const player = document.getElementById('floating-player');
   const playBtns = document.querySelectorAll('.play-track-btn');
   const closeBtn = document.getElementById('close-player');
@@ -353,7 +306,6 @@ const allTracks = [
   const titleEl = document.getElementById('player-title');
   const artistEl = document.getElementById('player-artist');
   const coverEl = document.getElementById('player-cover') as HTMLImageElement;
-  const totalTimeEl = document.getElementById('total-time');
   
   let isPlaying = false;
   let progress = 0;
@@ -366,16 +318,11 @@ const allTracks = [
         e.stopPropagation();
         const target = e.currentTarget as HTMLElement;
         
-        // Update UI
         if (titleEl) titleEl.textContent = target.dataset.title || '';
         if (artistEl) artistEl.textContent = target.dataset.artist || '';
-        if (totalTimeEl) totalTimeEl.textContent = target.dataset.duration || '0:00';
         if (coverEl) coverEl.src = target.dataset.cover || '';
         
-        // Show Player
         player.classList.remove('translate-y-[150%]');
-        
-        // Simulate Play
         isPlaying = true;
         updatePlayBtn();
         startProgress();
