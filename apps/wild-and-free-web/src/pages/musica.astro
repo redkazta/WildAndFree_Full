@@ -60,17 +60,91 @@ const allTracks = [
   { id: 10, title: 'CONCRETO Y ACERO', artist: 'HEAVY HITTERS', album: 'CONSTRUCCIÓN', duration: '3:50', bpm: 135, key: 'Fm', cover: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=300&h=300&fit=crop' }
 ];
 
+// --- NUEVA DATA MOCK FREESTYLE ---
+
+const ascensionData = {
+    standings: [
+        { rank: 1, name: "MC LÁSER", points: 2500, record: "15-2", lastBattle: "Win vs K-Road" },
+        { rank: 2, name: "D-MENTE", points: 2350, record: "14-3", lastBattle: "Win vs Ziko" },
+        { rank: 3, name: "K-ROAD", points: 2100, record: "12-5", lastBattle: "Loss vs Laser" },
+        { rank: 4, name: "ZIKO", points: 1950, record: "11-6", lastBattle: "Loss vs D-Mente" },
+    ],
+    champions: [
+        { date: "DIC 2025", winner: "MC LÁSER", event: "Final de Temporada" },
+        { date: "NOV 2025", winner: "D-MENTE", event: "Rey del Parque" },
+    ],
+    videos: [
+        { title: "FINAL: LÁSER VS D-MENTE", views: "125K", thumbnail: "https://images.unsplash.com/photo-1576158113928-4c240eaaf360?w=400&h=225&fit=crop" },
+        { title: "SEMIFINAL: K-ROAD VS ZIKO", views: "89K", thumbnail: "https://images.unsplash.com/photo-1516280440614-6697288d5d38?w=400&h=225&fit=crop" },
+    ],
+    topTracks: [
+        { title: "REY DEL PARQUE", artist: "MC LÁSER", plays: "45K" },
+        { title: "SIN PIEDAD", artist: "D-MENTE", plays: "32K" },
+        { title: "CALLEJÓN", artist: "K-ROAD", plays: "28K" },
+    ]
+};
+
+const honorAndFreeData = [
+    { 
+        name: "MC LÁSER", 
+        multiplier: "x1.5", 
+        points: 450, 
+        history: ["2026-02-15: +50pts (Ganador)", "2026-02-08: +30pts (Finalista)", "2026-02-01: +20pts (Asistencia)"], 
+        image: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=200&h=200&fit=crop",
+        bio: "Campeón indiscutible de la temporada 2025. Conocido por su flow agresivo y punchlines directos. Representando a Torreón.",
+        fullHistory: [
+            { event: "Torneo de Verano '25", result: "Campeón", points: 1000 },
+            { event: "Batalla del Desierto", result: "Semifinalista", points: 500 },
+            { event: "Liga Invernal", result: "Campeón", points: 1200 }
+        ]
+    },
+    { 
+        name: "D-MENTE", 
+        multiplier: "x1.2", 
+        points: 380, 
+        history: ["2026-02-15: +30pts (Finalista)", "2026-02-08: +50pts (Ganador)"], 
+        image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&h=200&fit=crop",
+        bio: "El estratega del verso. D-Mente destaca por sus métricas complejas y respuestas al momento. Representando a Gómez Palacio.",
+        fullHistory: [
+            { event: "Torneo de Verano '25", result: "Subcampeón", points: 800 },
+            { event: "Batalla del Desierto", result: "Campeón", points: 1000 }
+        ]
+    },
+    { 
+        name: "K-ROAD", 
+        multiplier: "x1.0", 
+        points: 310, 
+        history: ["2026-02-15: +10pts (Semis)", "2026-02-08: +10pts (Semis)"], 
+        image: "https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=200&h=200&fit=crop",
+        bio: "La nueva sangre. K-Road ha subido rápidamente en los rankings gracias a su carisma y puesta en escena.",
+        fullHistory: [
+            { event: "Rookie del Año '25", result: "Ganador", points: 500 }
+        ]
+    },
+    { 
+        name: "ZIKO", 
+        multiplier: "x1.0", 
+        points: 290, 
+        history: ["2026-02-15: +10pts (Semis)", "2026-02-01: +50pts (Ganador)"], 
+        image: "https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=200&h=200&fit=crop",
+        bio: "Veterano de mil batallas. Ziko mantiene el estilo clásico del boom bap en sus improvisaciones.",
+        fullHistory: [
+            { event: "Leyendas Urbanas", result: "Cuartos", points: 300 }
+        ]
+    },
+];
+
 ---
 
 <Layout config={config}>
   <div class="min-h-screen bg-[#050505] text-white pb-32 selection:bg-[var(--wild-orange)] selection:text-black font-sans">
     
     <!-- Top Bar -->
-    <div class="bg-black border-b border-white/10 py-2 sticky top-0 z-40 backdrop-blur-md bg-black/80">
+    <div class="bg-black border-b border-white/10 py-2 sticky top-0 z-50">
         <div class="container mx-auto px-4 max-w-[1800px] flex justify-between items-center">
             <div class="flex items-center gap-2">
                 <div class="w-2 h-2 bg-[var(--wild-orange)] rounded-full animate-pulse"></div>
-                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-white">Wild Music OS v3.1</span>
+                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-white">Wild Music OS v3.2</span>
             </div>
             <div class="flex gap-4 text-[10px] font-mono text-gray-500">
                 <span>ESTADO: CONECTADO</span>
@@ -79,108 +153,121 @@ const allTracks = [
         </div>
     </div>
 
+    <!-- FILTROS (STICKY) -->
+    <div class="sticky top-[33px] z-40 bg-black/90 backdrop-blur-md border-b border-white/10 py-4 shadow-2xl">
+        <div class="container mx-auto px-4 max-w-[1800px] flex flex-col md:flex-row gap-4 justify-between items-center overflow-x-auto no-scrollbar">
+            <!-- Filtros Tiempo -->
+            <div class="flex items-center gap-2">
+                <span class="text-[10px] font-mono text-gray-500 uppercase mr-2">Filtrar:</span>
+                <button class="px-4 py-1.5 text-[10px] font-black uppercase rounded bg-white text-black border border-white hover:bg-white transition-colors">Todo</button>
+                <button class="px-4 py-1.5 text-[10px] font-black uppercase rounded text-gray-400 border border-white/20 hover:border-white hover:text-white transition-colors">Semana</button>
+                <button class="px-4 py-1.5 text-[10px] font-black uppercase rounded text-gray-400 border border-white/20 hover:border-white hover:text-white transition-colors">Mes</button>
+                <button class="px-4 py-1.5 text-[10px] font-black uppercase rounded text-gray-400 border border-white/20 hover:border-white hover:text-white transition-colors">Año</button>
+            </div>
+
+            <!-- Filtros Región -->
+            <div class="flex items-center gap-2">
+                <span class="text-[10px] font-mono text-gray-500 uppercase mr-2">Región:</span>
+                <button class="px-4 py-1.5 text-[10px] font-black uppercase rounded bg-[var(--wild-orange)] text-black border border-[var(--wild-orange)]">Laguna</button>
+                <button class="px-4 py-1.5 text-[10px] font-black uppercase rounded text-gray-400 border border-white/20 hover:border-white hover:text-white transition-colors">Torreón</button>
+                <button class="px-4 py-1.5 text-[10px] font-black uppercase rounded text-gray-400 border border-white/20 hover:border-white hover:text-white transition-colors">Gómez</button>
+                <button class="px-4 py-1.5 text-[10px] font-black uppercase rounded text-gray-400 border border-white/20 hover:border-white hover:text-white transition-colors">Lerdo</button>
+            </div>
+        </div>
+    </div>
+
     <!-- MAIN LAYOUT -->
-    <div class="container mx-auto px-4 py-8 max-w-[1800px] animate-fade-in-up space-y-12">
+    <div class="container mx-auto px-4 py-8 max-w-[1800px] animate-fade-in-up space-y-16">
       
-      <!-- SECCIÓN SUPERIOR: HERO + ARTISTAS SEMANA -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
-          <!-- 1. ÁLBUM DE LA SEMANA (Izquierda, más estrecho) -->
-          <div class="lg:col-span-7 relative group overflow-hidden rounded-xl border border-white/10 bg-[#0a0a0a] min-h-[400px]">
-                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 mix-blend-overlay"></div>
-                <div class="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent z-10"></div>
-                
-                <img src={featuredAlbum.cover} class="absolute top-0 right-0 w-3/4 h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-700 mask-image-gradient" style="-webkit-mask-image: linear-gradient(to right, transparent, black);" />
-                
-                <div class="absolute inset-0 p-8 z-20 flex flex-col justify-center items-start">
-                    <span class="inline-block bg-[var(--wild-orange)] text-white text-[10px] font-black uppercase px-2 py-1 mb-4">Álbum de la Semana</span>
-                    <h2 class="text-5xl md:text-7xl font-black uppercase italic tracking-tighter leading-[0.8] mb-2 text-white drop-shadow-lg">{featuredAlbum.title}</h2>
-                    <h3 class="text-2xl text-gray-300 font-bold uppercase mb-6 tracking-widest">{featuredAlbum.artist}</h3>
-                    <p class="text-gray-400 max-w-md text-sm mb-8 font-medium border-l-2 border-[var(--wild-orange)] pl-4">
-                        {featuredAlbum.description}
-                    </p>
-                    
-                    <div class="flex gap-4">
-                        <button class="bg-white text-black px-6 py-3 text-xs font-black uppercase hover:bg-[var(--wild-orange)] hover:text-white transition-colors flex items-center gap-2 shadow-[4px_4px_0px_rgba(255,255,255,0.2)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Escuchar Ahora
-                        </button>
-                        <button class="border border-white/30 text-white px-6 py-3 text-xs font-black uppercase hover:bg-white hover:text-black transition-colors">
-                            + Mi Biblioteca
-                        </button>
-                    </div>
-                </div>
-          </div>
-
-          <!-- 2. ARTISTAS DE LA SEMANA (Derecha) -->
-          <div class="lg:col-span-5 bg-[#0a0a0a] border border-white/10 rounded-xl p-6 flex flex-col">
-              <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
-                  <h3 class="text-xl font-black uppercase tracking-tighter text-white">Artistas de la Semana</h3>
-                  <span class="text-[10px] font-mono text-[var(--wild-orange)] uppercase">Selección Oficial</span>
-              </div>
-              
-              <div class="flex-1 flex flex-col gap-4 justify-center">
-                  {artistsOfTheWeek.map((artist, i) => (
-                      <div class="group flex items-center gap-4 p-3 bg-white/5 hover:bg-white/10 rounded-lg transition-all cursor-pointer border border-transparent hover:border-[var(--wild-orange)]/30">
-                          <span class="text-2xl font-black text-white/20 font-mono w-8 text-center group-hover:text-[var(--wild-orange)] transition-colors">0{i+1}</span>
-                          <img src={artist.image} class="w-12 h-12 rounded-full object-cover grayscale group-hover:grayscale-0 ring-2 ring-transparent group-hover:ring-[var(--wild-orange)] transition-all" />
-                          <div class="flex-1">
-                              <h4 class="text-base font-black text-white uppercase leading-none mb-1 group-hover:text-[var(--wild-orange)] transition-colors">{artist.name}</h4>
-                              <p class="text-[10px] font-mono text-gray-500 uppercase tracking-wider">{artist.role}</p>
-                          </div>
-                          <button class="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                          </button>
-                      </div>
-                  ))}
-              </div>
-          </div>
-      </div>
-
-      <!-- SECCIÓN MEDIA: TOP 5 HORIZONTAL (Con Portadas) -->
+      <!-- 1. AGREGADOS RECIENTEMENTE (Horizontal List) - AHORA ARRIBA -->
       <section>
           <div class="flex items-center gap-4 mb-6">
-              <h3 class="text-2xl font-black uppercase tracking-tighter text-white">Top 5 Global</h3>
+              <h3 class="text-xl font-black uppercase tracking-tighter text-white">Agregados Recientemente a tu Playlist</h3>
               <div class="h-px bg-white/10 flex-1"></div>
+              <a href="#" class="text-[10px] font-black text-[var(--wild-orange)] uppercase hover:underline">Ver Historial</a>
           </div>
-          
-          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-              {topCharts.map((track, i) => (
-                  <div class="group relative bg-[#111] border border-white/10 rounded-xl overflow-hidden hover:-translate-y-2 transition-transform duration-300">
-                      <!-- Rank Badge -->
-                      <div class="absolute top-2 left-2 z-20 w-8 h-8 bg-black/80 backdrop-blur flex items-center justify-center rounded font-black text-white border border-white/20 group-hover:border-[var(--wild-orange)] group-hover:text-[var(--wild-orange)]">
-                          {track.rank}
-                      </div>
-                      
-                      <!-- Image -->
-                      <div class="aspect-square overflow-hidden relative">
-                          <img src={track.cover} class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
-                          <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
-                          
-                          <!-- Play Button Overlay -->
-                          <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                              <button class="w-12 h-12 bg-[var(--wild-orange)] text-white rounded-full flex items-center justify-center shadow-lg transform scale-90 group-hover:scale-100 transition-transform">
-                                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                              </button>
-                          </div>
-                      </div>
 
-                      <!-- Info -->
-                      <div class="p-4">
-                          <h4 class="text-sm font-black text-white uppercase truncate mb-1">{track.title}</h4>
-                          <p class="text-[10px] font-mono text-gray-500 uppercase truncate">{track.artist}</p>
-                          <div class="mt-2 flex justify-between items-center border-t border-white/10 pt-2">
-                              <span class="text-[10px] font-mono text-gray-400">{track.plays}</span>
-                              <span class={`text-[10px] font-black ${track.trend === 'up' ? 'text-green-500' : 'text-gray-600'}`}>
-                                  {track.trend === 'up' ? '▲' : '-'}
-                              </span>
-                          </div>
+          <div class="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
+              {recentlyAdded.map(artist => (
+                  <div class="flex-shrink-0 flex items-center gap-3 bg-[#111] border border-white/10 pr-6 pl-2 py-2 rounded-full hover:border-[var(--wild-orange)] transition-colors cursor-pointer group min-w-[200px]">
+                      <img src={artist.image} class="w-10 h-10 rounded-full object-cover border border-white/20 group-hover:border-[var(--wild-orange)]" />
+                      <div>
+                          <h4 class="text-xs font-black text-white uppercase leading-none mb-1">{artist.name}</h4>
+                          <span class="text-[9px] font-mono text-gray-500 uppercase block">{artist.date}</span>
                       </div>
                   </div>
               ))}
           </div>
       </section>
 
-      <!-- SECCIÓN CATÁLOGO (ANCHO COMPLETO - MITAD DE PÁGINA) -->
+      <!-- 2. SECCIÓN DESTACADOS: GRID 3 COLUMNAS -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          
+          <!-- COL 1: ÁLBUM DE LA SEMANA -->
+          <div class="relative group overflow-hidden rounded-xl border border-white/10 bg-[#0a0a0a] min-h-[400px]">
+                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 mix-blend-overlay"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-10"></div>
+                <img src={featuredAlbum.cover} class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-700" />
+                
+                <div class="absolute inset-0 p-6 z-20 flex flex-col justify-end items-start">
+                    <span class="inline-block bg-[var(--wild-orange)] text-white text-[9px] font-black uppercase px-2 py-1 mb-2">Álbum de la Semana</span>
+                    <h2 class="text-3xl font-black uppercase italic tracking-tighter leading-none mb-1 text-white drop-shadow-lg">{featuredAlbum.title}</h2>
+                    <h3 class="text-lg text-gray-300 font-bold uppercase mb-4 tracking-widest">{featuredAlbum.artist}</h3>
+                    
+                    <button class="bg-white text-black px-4 py-2 text-[10px] font-black uppercase hover:bg-[var(--wild-orange)] hover:text-white transition-colors flex items-center gap-2">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Escuchar
+                    </button>
+                </div>
+          </div>
+
+          <!-- COL 2: ARTISTA DE LA SEMANA -->
+          <div class="bg-[#0a0a0a] border border-white/10 rounded-xl p-6 flex flex-col">
+              <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+                  <h3 class="text-lg font-black uppercase tracking-tighter text-white">Artistas Semana</h3>
+                  <span class="text-[9px] font-mono text-[var(--wild-orange)] uppercase">Top 3</span>
+              </div>
+              
+              <div class="flex-1 flex flex-col gap-3 justify-center">
+                  {artistsOfTheWeek.map((artist, i) => (
+                      <div class="group flex items-center gap-4 p-3 bg-white/5 hover:bg-white/10 rounded-lg transition-all cursor-pointer border border-transparent hover:border-[var(--wild-orange)]/30">
+                          <span class="text-xl font-black text-white/20 font-mono w-6 text-center group-hover:text-[var(--wild-orange)] transition-colors">0{i+1}</span>
+                          <img src={artist.image} class="w-10 h-10 rounded-full object-cover grayscale group-hover:grayscale-0 ring-1 ring-transparent group-hover:ring-[var(--wild-orange)] transition-all" />
+                          <div class="flex-1 min-w-0">
+                              <h4 class="text-sm font-black text-white uppercase leading-none mb-1 group-hover:text-[var(--wild-orange)] transition-colors truncate">{artist.name}</h4>
+                              <p class="text-[9px] font-mono text-gray-500 uppercase tracking-wider truncate">{artist.role}</p>
+                          </div>
+                      </div>
+                  ))}
+              </div>
+          </div>
+
+          <!-- COL 3: TOP 5 LAGUNA (PEQUEÑO) -->
+          <div class="bg-[#0a0a0a] border border-white/10 rounded-xl p-6 flex flex-col">
+              <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+                  <h3 class="text-lg font-black uppercase tracking-tighter text-white">Top 5 Laguna</h3>
+                  <span class="text-[9px] font-mono text-green-500 uppercase animate-pulse">● En Vivo</span>
+              </div>
+              
+              <div class="flex-1 flex flex-col gap-2 overflow-y-auto">
+                  {topCharts.map((track, i) => (
+                      <div class="flex items-center gap-3 p-2 hover:bg-white/5 rounded transition-colors group cursor-pointer">
+                          <div class="w-6 h-6 flex items-center justify-center bg-white/10 rounded text-[10px] font-black text-white group-hover:bg-[var(--wild-orange)] group-hover:text-black transition-colors">
+                              {track.rank}
+                          </div>
+                          <div class="flex-1 min-w-0">
+                              <h4 class="text-xs font-bold text-white uppercase truncate">{track.title}</h4>
+                              <p class="text-[9px] text-gray-500 uppercase truncate">{track.artist}</p>
+                          </div>
+                          <span class={`text-[9px] font-black ${track.trend === 'up' ? 'text-green-500' : 'text-gray-600'}`}>
+                              {track.trend === 'up' ? '▲' : '-'}
+                          </span>
+                      </div>
+                  ))}
+              </div>
+          </div>
+      </div>
+
+      <!-- 3. CATÁLOGO MAESTRO (ANCHO COMPLETO) -->
       <div class="bg-[#0a0a0a] border border-white/10 rounded-xl overflow-hidden shadow-2xl">
          <div class="p-6 border-b border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 bg-gradient-to-r from-white/5 to-transparent">
              <div class="flex items-center gap-4">
@@ -257,20 +344,120 @@ const allTracks = [
          </div>
       </div>
 
-      <!-- SECCIÓN: AGREGADOS RECIENTEMENTE (Horizontal List) -->
-      <section class="pb-12">
-          <div class="flex items-center gap-4 mb-6">
-              <h3 class="text-xl font-black uppercase tracking-tighter text-white">Agregados Recientemente a tu Playlist</h3>
+      <!-- 4. ASCENSIÓN (FREESTYLE TOURNAMENT) -->
+      <section>
+          <div class="flex items-center gap-4 mb-8">
+              <h2 class="text-3xl font-black uppercase tracking-tighter text-white">Ascensión</h2>
+              <span class="bg-red-600 text-white text-[10px] font-black uppercase px-2 py-0.5 rounded animate-pulse">En Vivo</span>
               <div class="h-px bg-white/10 flex-1"></div>
           </div>
 
-          <div class="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
-              {recentlyAdded.map(artist => (
-                  <div class="flex-shrink-0 flex items-center gap-3 bg-[#111] border border-white/10 pr-6 pl-2 py-2 rounded-full hover:border-[var(--wild-orange)] transition-colors cursor-pointer group min-w-[200px]">
-                      <img src={artist.image} class="w-10 h-10 rounded-full object-cover border border-white/20 group-hover:border-[var(--wild-orange)]" />
-                      <div>
-                          <h4 class="text-xs font-black text-white uppercase leading-none mb-1">{artist.name}</h4>
-                          <span class="text-[9px] font-mono text-gray-500 uppercase block">{artist.date}</span>
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+              <!-- Clasificados -->
+              <div class="lg:col-span-4 bg-[#0a0a0a] border border-white/10 rounded-xl p-6">
+                  <h3 class="text-xl font-black uppercase mb-6 text-white">Clasificación</h3>
+                  <div class="space-y-4">
+                      {ascensionData.standings.map((mc, i) => (
+                          <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-transparent hover:border-red-600/50 transition-colors">
+                              <div class="flex items-center gap-3">
+                                  <span class="text-lg font-black text-gray-500 w-6">#{mc.rank}</span>
+                                  <div>
+                                      <h4 class="text-sm font-black text-white uppercase">{mc.name}</h4>
+                                      <p class="text-[9px] text-gray-400 uppercase">{mc.lastBattle}</p>
+                                  </div>
+                              </div>
+                              <div class="text-right">
+                                  <span class="block text-lg font-black text-[var(--wild-orange)]">{mc.points}</span>
+                                  <span class="text-[9px] text-gray-500 font-mono">PTS • {mc.record}</span>
+                              </div>
+                          </div>
+                      ))}
+                  </div>
+              </div>
+
+              <!-- Historial & Videos -->
+              <div class="lg:col-span-8 space-y-8">
+                  <!-- Videos -->
+                  <div>
+                      <h3 class="text-lg font-black uppercase mb-4 text-white">Últimas Batallas</h3>
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {ascensionData.videos.map(video => (
+                              <div class="group relative aspect-video bg-black rounded-xl overflow-hidden cursor-pointer border border-white/10">
+                                  <img src={video.thumbnail} class="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity" />
+                                  <div class="absolute inset-0 flex items-center justify-center">
+                                      <div class="w-12 h-12 rounded-full bg-red-600/80 text-white flex items-center justify-center backdrop-blur group-hover:scale-110 transition-transform">
+                                          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                                      </div>
+                                  </div>
+                                  <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
+                                      <h4 class="text-sm font-black text-white uppercase truncate">{video.title}</h4>
+                                      <p class="text-[10px] text-gray-400 font-mono uppercase">{video.views} Vistas</p>
+                                  </div>
+                              </div>
+                          ))}
+                      </div>
+                  </div>
+
+                  <!-- Rolas del Artista (Tracks Destacados) -->
+                  <div>
+                      <h3 class="text-lg font-black uppercase mb-4 text-white">Tracks Destacados</h3>
+                      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          {ascensionData.topTracks.map(track => (
+                              <div class="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/5 hover:border-[var(--wild-orange)] transition-colors group cursor-pointer">
+                                  <div class="w-8 h-8 bg-white/10 flex items-center justify-center rounded text-[var(--wild-orange)]">
+                                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 18V5l12-2v13"/></svg>
+                                  </div>
+                                  <div>
+                                      <h4 class="text-xs font-black text-white uppercase">{track.title}</h4>
+                                      <p class="text-[9px] text-gray-400 uppercase">{track.artist}</p>
+                                  </div>
+                              </div>
+                          ))}
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </section>
+
+      <!-- 5. HONOR AND FREE (TABLA DE PUNTOS) -->
+      <section>
+          <div class="flex items-center gap-4 mb-8">
+              <h2 class="text-3xl font-black uppercase tracking-tighter text-white">Honor & Free</h2>
+              <div class="h-px bg-white/10 flex-1"></div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {honorAndFreeData.map(mc => (
+                  <div class="freestyler-card bg-[#0a0a0a] border border-white/10 rounded-xl overflow-hidden group hover:border-[var(--wild-orange)] transition-colors" data-freestyler={JSON.stringify(mc)}>
+                      <div class="relative h-48 overflow-hidden cursor-pointer freestyler-trigger">
+                          <img src={mc.image} class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105" />
+                          <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                          <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                              <span class="bg-black/80 text-[var(--wild-orange)] text-[10px] font-black uppercase px-3 py-1 rounded backdrop-blur border border-[var(--wild-orange)] transform translate-y-2 group-hover:translate-y-0 transition-transform">Ver Perfil</span>
+                          </div>
+                          <div class="absolute bottom-4 left-4 z-20 pointer-events-none">
+                              <h3 class="text-2xl font-black text-white uppercase italic leading-none">{mc.name}</h3>
+                              <span class="text-[10px] font-mono text-[var(--wild-orange)] bg-black/50 px-2 py-0.5 rounded backdrop-blur">MULT: {mc.multiplier}</span>
+                          </div>
+                      </div>
+                      
+                      <div class="p-4 bg-[#111]">
+                          <div class="flex justify-between items-end mb-4">
+                              <span class="text-[10px] text-gray-500 font-black uppercase tracking-widest">Puntos Totales</span>
+                              <span class="text-3xl font-black text-white leading-none">{mc.points}</span>
+                          </div>
+                          
+                          <details class="group/details">
+                              <summary class="cursor-pointer text-[10px] font-black uppercase text-gray-400 hover:text-white flex items-center justify-between p-2 bg-black rounded select-none">
+                                  <span>Ver Historial</span>
+                                  <svg class="w-4 h-4 transition-transform group-open/details:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                              </summary>
+                              <div class="mt-2 pl-2 border-l border-white/10 space-y-1">
+                                  {mc.history.map(entry => (
+                                      <p class="text-[9px] font-mono text-gray-500 uppercase">{entry}</p>
+                                  ))}
+                              </div>
+                          </details>
                       </div>
                   </div>
               ))}
@@ -278,6 +465,48 @@ const allTracks = [
       </section>
 
     </div>
+
+    <!-- MODAL DE FREESTYLER -->
+    <dialog id="freestyler-modal" class="bg-transparent p-0 backdrop:bg-black/80 w-full max-w-2xl m-auto open:animate-fade-in-up">
+        <div class="bg-[#111] border border-white/20 rounded-xl overflow-hidden shadow-2xl">
+            <!-- Header con Imagen de fondo -->
+            <div class="relative h-48">
+                <img id="modal-image" src="" class="w-full h-full object-cover opacity-50" />
+                <div class="absolute inset-0 bg-gradient-to-t from-[#111] via-transparent to-transparent"></div>
+                <div class="absolute bottom-6 left-6">
+                    <h2 id="modal-name" class="text-5xl font-black text-white uppercase italic tracking-tighter leading-none">NAME</h2>
+                    <p id="modal-bio" class="text-sm text-gray-300 max-w-lg mt-2 font-medium"></p>
+                </div>
+                <button id="close-modal" class="absolute top-4 right-4 text-white hover:text-[var(--wild-orange)] bg-black/50 p-2 rounded-full backdrop-blur transition-colors">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            
+            <!-- Contenido -->
+            <div class="p-8">
+                <h3 class="text-xl font-black uppercase text-[var(--wild-orange)] mb-4">Historial Completo de Torneo</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="text-[10px] font-black uppercase text-gray-500 border-b border-white/10">
+                                <th class="pb-2">Evento</th>
+                                <th class="pb-2">Resultado</th>
+                                <th class="pb-2 text-right">Puntos</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modal-history-body" class="divide-y divide-white/5">
+                            <!-- JS populated -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="mt-8 flex gap-4">
+                     <button class="flex-1 bg-[var(--wild-orange)] text-black font-black uppercase py-3 text-xs rounded hover:bg-white transition-colors">Ver Perfil Completo</button>
+                     <button class="flex-1 border border-white/20 text-white font-black uppercase py-3 text-xs rounded hover:bg-white hover:text-black transition-colors">Seguir Freestyler</button>
+                </div>
+            </div>
+        </div>
+    </dialog>
 
     <!-- Floating Player (Estilo Walkman Compacto) -->
     <div id="floating-player" class="fixed bottom-6 right-6 z-50 translate-y-[150%] transition-transform duration-500">
@@ -401,5 +630,57 @@ const allTracks = [
     function stopProgress() {
         if (interval) clearInterval(interval);
     }
+  }
+
+  // Freestyler Modal Logic
+  const modal = document.getElementById('freestyler-modal') as HTMLDialogElement;
+  const closeModalBtn = document.getElementById('close-modal');
+  const triggers = document.querySelectorAll('.freestyler-trigger');
+
+  if (modal && closeModalBtn) {
+      triggers.forEach(trigger => {
+          trigger.addEventListener('click', (e) => {
+              e.stopPropagation(); // Prevent details/summary conflict if any
+              const card = trigger.closest('.freestyler-card') as HTMLElement;
+              const data = JSON.parse(card.dataset.freestyler || '{}');
+              
+              // Populate
+              const nameEl = document.getElementById('modal-name');
+              const bioEl = document.getElementById('modal-bio');
+              const imgEl = document.getElementById('modal-image') as HTMLImageElement;
+              const historyBody = document.getElementById('modal-history-body');
+              
+              if (nameEl) nameEl.textContent = data.name;
+              if (bioEl) bioEl.textContent = data.bio || 'Sin biografía disponible.';
+              if (imgEl) imgEl.src = data.image;
+              
+              if (historyBody && data.fullHistory) {
+                  historyBody.innerHTML = data.fullHistory.map((h: any) => `
+                      <tr class="text-xs hover:bg-white/5 transition-colors">
+                          <td class="py-3 font-bold text-white uppercase">${h.event}</td>
+                          <td class="py-3 text-gray-400 uppercase">${h.result}</td>
+                          <td class="py-3 text-right font-mono text-[var(--wild-orange)]">${h.points} PTS</td>
+                      </tr>
+                  `).join('');
+              } else if (historyBody) {
+                  historyBody.innerHTML = '<tr><td colspan="3" class="py-4 text-center text-gray-500 text-xs">No hay historial disponible</td></tr>';
+              }
+
+              modal.showModal();
+          });
+      });
+
+      closeModalBtn.addEventListener('click', () => {
+          modal.close();
+      });
+
+      modal.addEventListener('click', (e) => {
+          const rect = modal.getBoundingClientRect();
+          const isInDialog = (rect.top <= e.clientY && e.clientY <= rect.top + rect.height &&
+            rect.left <= e.clientX && e.clientX <= rect.left + rect.width);
+          if (!isInDialog) {
+              modal.close();
+          }
+      });
   }
 </script>
