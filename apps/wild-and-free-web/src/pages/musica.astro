@@ -244,7 +244,7 @@ const tracks = [
   </div>
 </Layout>
 
-<style define:vars={{ streetAccent: tenant.primary_color }}>
+<style is:global define:vars={{ streetAccent: tenant.primary_color }}>
   :root {
     --street-accent: var(--streetAccent);
   }
