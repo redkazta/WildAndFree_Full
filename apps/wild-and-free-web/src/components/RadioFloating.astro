@@ -1,8 +1,8 @@
 ---
 ---
-<div id="radio-floating" transition:persist class="fixed bottom-6 right-6 z-[9999] group flex flex-col items-end gap-2">
+<div id="radio-floating" transition:persist class="fixed bottom-6 left-6 z-[9999] group flex flex-col items-start gap-2">
   <!-- Expanded Content (Shows on Hover/Active) -->
-  <div class="bg-black/90 backdrop-blur-xl border border-white/10 rounded-2xl p-4 mb-2 shadow-2xl w-64 transform translate-y-4 opacity-0 invisible group-hover:translate-y-0 group-hover:opacity-100 group-hover:visible transition-all duration-300 origin-bottom-right">
+  <div class="bg-black/90 backdrop-blur-xl border border-white/10 rounded-2xl p-4 mb-2 shadow-2xl w-64 transform translate-y-4 opacity-0 invisible group-hover:translate-y-0 group-hover:opacity-100 group-hover:visible transition-all duration-300 origin-bottom-left">
     
     <div class="flex items-start gap-3 mb-3">
         <div class="w-12 h-12 bg-zinc-800 rounded-lg overflow-hidden flex-shrink-0 relative">
@@ -69,6 +69,28 @@
     // Simulate audio player
     const audio = new Audio('https://stream.zeno.fm/ez250525258uv'); // Example stream or placeholder
 
+    // Listen for Spotify Play event to pause
+    window.addEventListener('play-spotify-track', () => {
+        if (isPlaying) {
+            isPlaying = false;
+            radioPlay?.classList.remove('hidden');
+            radioPause?.classList.add('hidden');
+            radioEq?.classList.add('opacity-0');
+            audio.pause();
+        }
+    });
+
+    // Listen for internal pause request
+    window.addEventListener('pause-radio', () => {
+        if (isPlaying) {
+            isPlaying = false;
+            radioPlay?.classList.remove('hidden');
+            radioPause?.classList.add('hidden');
+            radioEq?.classList.add('opacity-0');
+            audio.pause();
+        }
+    });
+
     radioToggle?.addEventListener('click', () => {
         isPlaying = !isPlaying;
         
@@ -77,6 +99,8 @@
             radioPause?.classList.remove('hidden');
             radioEq?.classList.remove('opacity-0');
             audio.play().catch(e => console.log('Audio play failed', e));
+            // Notify others
+            window.dispatchEvent(new CustomEvent('play-radio'));
         } else {
             radioPlay?.classList.remove('hidden');
             radioPause?.classList.add('hidden');

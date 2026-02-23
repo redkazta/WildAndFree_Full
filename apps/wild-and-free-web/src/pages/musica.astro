@@ -153,25 +153,30 @@ const honorAndFreeData = [
         </div>
     </div>
 
-    <!-- FILTROS (STICKY) -->
+    <!-- SEARCH BAR (STICKY) -->
     <div class="sticky top-[33px] z-40 bg-black/90 backdrop-blur-md border-b border-white/10 py-4 shadow-2xl">
-        <div class="container mx-auto px-4 max-w-[1800px] flex flex-col md:flex-row gap-4 justify-between items-center overflow-x-auto no-scrollbar">
-            <!-- Filtros Tiempo -->
-            <div class="flex items-center gap-2">
-                <span class="text-[10px] font-mono text-gray-500 uppercase mr-2">Filtrar:</span>
-                <button class="px-4 py-1.5 text-[10px] font-black uppercase rounded bg-white text-black border border-white hover:bg-white transition-colors">Todo</button>
-                <button class="px-4 py-1.5 text-[10px] font-black uppercase rounded text-gray-400 border border-white/20 hover:border-white hover:text-white transition-colors">Semana</button>
-                <button class="px-4 py-1.5 text-[10px] font-black uppercase rounded text-gray-400 border border-white/20 hover:border-white hover:text-white transition-colors">Mes</button>
-                <button class="px-4 py-1.5 text-[10px] font-black uppercase rounded text-gray-400 border border-white/20 hover:border-white hover:text-white transition-colors">Año</button>
+        <div class="container mx-auto px-4 max-w-[1800px] flex flex-col md:flex-row gap-4 justify-between items-center">
+            <div class="relative w-full max-w-xl group">
+                <input 
+                    type="text" 
+                    id="spotify-search" 
+                    placeholder="BUSCAR ARTISTA O CANCIÓN EN SPOTIFY..." 
+                    class="w-full bg-[#111] border border-white/20 text-white text-xs font-black uppercase tracking-widest py-3 pl-10 pr-4 rounded-full focus:outline-none focus:border-[var(--wild-orange)] focus:ring-1 focus:ring-[var(--wild-orange)] transition-all placeholder:text-gray-600"
+                />
+                <svg class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[var(--wild-orange)] transition-colors" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                
+                <!-- Search Results Dropdown -->
+                <div id="search-results" class="absolute top-full left-0 right-0 mt-2 bg-[#0a0a0a] border border-white/10 rounded-xl shadow-2xl overflow-hidden hidden max-h-[60vh] overflow-y-auto z-50">
+                    <!-- Results injected here -->
+                </div>
             </div>
 
-            <!-- Filtros Región -->
-            <div class="flex items-center gap-2">
-                <span class="text-[10px] font-mono text-gray-500 uppercase mr-2">Región:</span>
-                <button class="px-4 py-1.5 text-[10px] font-black uppercase rounded bg-[var(--wild-orange)] text-black border border-[var(--wild-orange)]">Laguna</button>
-                <button class="px-4 py-1.5 text-[10px] font-black uppercase rounded text-gray-400 border border-white/20 hover:border-white hover:text-white transition-colors">Torreón</button>
-                <button class="px-4 py-1.5 text-[10px] font-black uppercase rounded text-gray-400 border border-white/20 hover:border-white hover:text-white transition-colors">Gómez</button>
-                <button class="px-4 py-1.5 text-[10px] font-black uppercase rounded text-gray-400 border border-white/20 hover:border-white hover:text-white transition-colors">Lerdo</button>
+            <!-- Filtros Rápidos -->
+            <div class="flex items-center gap-2 overflow-x-auto no-scrollbar">
+                <button class="px-4 py-1.5 text-[10px] font-black uppercase rounded bg-white text-black border border-white hover:bg-white transition-colors whitespace-nowrap">Todo</button>
+                <button class="px-4 py-1.5 text-[10px] font-black uppercase rounded text-gray-400 border border-white/20 hover:border-white hover:text-white transition-colors whitespace-nowrap">Hip Hop</button>
+                <button class="px-4 py-1.5 text-[10px] font-black uppercase rounded text-gray-400 border border-white/20 hover:border-white hover:text-white transition-colors whitespace-nowrap">Trap</button>
+                <button class="px-4 py-1.5 text-[10px] font-black uppercase rounded text-gray-400 border border-white/20 hover:border-white hover:text-white transition-colors whitespace-nowrap">Drill</button>
             </div>
         </div>
     </div>
@@ -508,35 +513,7 @@ const honorAndFreeData = [
         </div>
     </dialog>
 
-    <!-- Floating Player (Estilo Walkman Compacto) -->
-    <div id="floating-player" class="fixed bottom-6 right-6 z-50 translate-y-[150%] transition-transform duration-500">
-      <div class="bg-[#111] border border-white/20 w-[300px] shadow-2xl rounded-lg overflow-hidden flex flex-col">
-          <div class="h-1 bg-gradient-to-r from-[var(--wild-orange)] to-red-600"></div>
-          
-          <div class="p-3 flex gap-3 items-center bg-[#1a1a1a]">
-              <img id="player-cover" src="" class="w-10 h-10 rounded object-cover border border-white/10" />
-              <div class="min-w-0 flex-1">
-                  <h4 id="player-title" class="text-xs font-black text-white uppercase truncate">TRACK</h4>
-                  <p id="player-artist" class="text-[9px] font-mono text-gray-400 uppercase truncate">ARTIST</p>
-              </div>
-              <button id="close-player" class="text-gray-500 hover:text-white"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-          </div>
-
-          <div class="p-2 bg-black flex justify-center items-center gap-4">
-               <button id="prev-btn" class="text-gray-400 hover:text-white"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
-               <button id="play-pause-btn" class="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center hover:bg-[var(--wild-orange)] transition-colors">
-                    <svg id="play-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                    <svg id="pause-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="hidden"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-               </button>
-               <button id="next-btn" class="text-gray-400 hover:text-white"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button>
-          </div>
-          
-          <div class="h-0.5 bg-gray-800 w-full cursor-pointer group relative">
-              <div id="progress-fill" class="h-full bg-[var(--wild-orange)] w-0 group-hover:h-1 transition-all"></div>
-          </div>
-      </div>
-    </div>
-
+    <!-- Floating Player Removed (Replaced by Global Spotify Player) -->
   </div>
 </Layout>
 
@@ -559,77 +536,93 @@ const honorAndFreeData = [
 </style>
 
 <script>
-  // Player Logic
-  const player = document.getElementById('floating-player');
-  const playBtns = document.querySelectorAll('.play-track-btn');
-  const closeBtn = document.getElementById('close-player');
-  const playPauseBtn = document.getElementById('play-pause-btn');
-  const playIcon = document.getElementById('play-icon');
-  const pauseIcon = document.getElementById('pause-icon');
-  const progressFill = document.getElementById('progress-fill');
-  
-  const titleEl = document.getElementById('player-title');
-  const artistEl = document.getElementById('player-artist');
-  const coverEl = document.getElementById('player-cover') as HTMLImageElement;
-  
-  let isPlaying = false;
-  let progress = 0;
-  let interval: number | undefined;
+    const searchInput = document.getElementById('spotify-search') as HTMLInputElement;
+    const searchResults = document.getElementById('search-results');
+    let debounceTimer: any;
 
-  if (player && closeBtn && playPauseBtn && playIcon && pauseIcon && progressFill) {
-    
+    searchInput?.addEventListener('input', (e) => {
+        const query = (e.target as HTMLInputElement).value;
+        
+        clearTimeout(debounceTimer);
+        
+        if (query.length < 2) {
+            searchResults?.classList.add('hidden');
+            return;
+        }
+
+        debounceTimer = setTimeout(async () => {
+            try {
+                // Connect to Core Engine (Go)
+                // Use PUBLIC_CORE_API_URL or fallback to localhost
+                const API_URL = import.meta.env.PUBLIC_CORE_API_URL || 'http://localhost:8080';
+                
+                const res = await fetch(`${API_URL}/api/v1/spotify/search?q=${encodeURIComponent(query)}`);
+                const data = await res.json();
+                
+                if (data.tracks && data.tracks.items.length > 0) {
+                    renderResults(data.tracks.items);
+                } else {
+                    if (searchResults) {
+                        searchResults.innerHTML = '<div class="p-4 text-center text-gray-500 text-xs font-bold uppercase">No se encontraron resultados</div>';
+                        searchResults.classList.remove('hidden');
+                    }
+                }
+            } catch (err) {
+                console.error('Error searching:', err);
+            }
+        }, 500);
+    });
+
+    function renderResults(tracks: any[]) {
+        if (!searchResults) return;
+        
+        const html = tracks.map(track => {
+            const image = track.album.images[2]?.url || track.album.images[0]?.url;
+            const artist = track.artists.map((a: any) => a.name).join(', ');
+            return `
+            <div class="flex items-center gap-4 p-3 hover:bg-white/10 cursor-pointer border-b border-white/5 last:border-0 transition-colors group" onclick="window.playSpotifyTrack('${track.id}')">
+                <div class="w-10 h-10 rounded overflow-hidden relative">
+                    <img src="${image}" class="w-full h-full object-cover" />
+                    <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h4 class="text-xs font-black text-white uppercase truncate">${track.name}</h4>
+                    <p class="text-[10px] text-gray-400 font-bold truncate">${artist}</p>
+                </div>
+            </div>
+            `;
+        }).join('');
+        
+        searchResults.innerHTML = html;
+        searchResults.classList.remove('hidden');
+    }
+
+    (window as any).playSpotifyTrack = (id: string) => {
+        window.dispatchEvent(new CustomEvent('play-spotify-track', { detail: { id } }));
+        if (searchResults) searchResults.classList.add('hidden');
+        if (searchInput) searchInput.value = '';
+    };
+
+    document.addEventListener('click', (e) => {
+        if (searchInput && searchResults && !searchInput.contains(e.target as Node) && !searchResults.contains(e.target as Node)) {
+            searchResults.classList.add('hidden');
+        }
+    });
+
+  // Player Logic (Replaced by Global Spotify Player)
+  const playBtns = document.querySelectorAll('.play-track-btn');
+  
+  if (playBtns) {
     playBtns.forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const target = e.currentTarget as HTMLElement;
-        
-        if (titleEl) titleEl.textContent = target.dataset.title || '';
-        if (artistEl) artistEl.textContent = target.dataset.artist || '';
-        if (coverEl) coverEl.src = target.dataset.cover || '';
-        
-        player.classList.remove('translate-y-[150%]');
-        isPlaying = true;
-        updatePlayBtn();
-        startProgress();
+        // Play default track or random one since we don't have IDs for mock data
+        // Ideally we would map mock titles to Spotify IDs
+        (window as any).playSpotifyTrack('4cOdK2wGLETKBW3PvgPWqT'); 
       });
     });
-
-    closeBtn.addEventListener('click', () => {
-      player.classList.add('translate-y-[150%]');
-      isPlaying = false;
-      updatePlayBtn();
-      stopProgress();
-    });
-
-    playPauseBtn.addEventListener('click', () => {
-        isPlaying = !isPlaying;
-        updatePlayBtn();
-        if (isPlaying) startProgress();
-        else stopProgress();
-    });
-
-    function updatePlayBtn() {
-        if (isPlaying) {
-            playIcon?.classList.add('hidden');
-            pauseIcon?.classList.remove('hidden');
-        } else {
-            playIcon?.classList.remove('hidden');
-            pauseIcon?.classList.add('hidden');
-        }
-    }
-
-    function startProgress() {
-        stopProgress();
-        interval = window.setInterval(() => {
-            progress += 0.5;
-            if (progress > 100) progress = 0;
-            if (progressFill) progressFill.style.width = `${progress}%`;
-        }, 100);
-    }
-
-    function stopProgress() {
-        if (interval) clearInterval(interval);
-    }
   }
 
   // Freestyler Modal Logic
@@ -676,9 +669,14 @@ const honorAndFreeData = [
 
       modal.addEventListener('click', (e) => {
           const rect = modal.getBoundingClientRect();
-          const isInDialog = (rect.top <= e.clientY && e.clientY <= rect.top + rect.height &&
-            rect.left <= e.clientX && e.clientX <= rect.left + rect.width);
-          if (!isInDialog) {
+          // Check if click is outside
+          const isOutside = (
+              e.clientY < rect.top ||
+              e.clientY > rect.bottom ||
+              e.clientX < rect.left ||
+              e.clientX > rect.right
+          );
+          if (isOutside) {
               modal.close();
           }
       });

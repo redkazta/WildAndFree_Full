@@ -1,7 +1,8 @@
 ---
 import SidebarLeft from '../components/SidebarLeft.astro';
-import Player from '../components/Player.astro';
+// import Player from '../components/Player.astro';
 import RadioFloating from '../components/RadioFloating.astro';
+import SpotifyFloating from '../components/SpotifyFloating.astro';
 import { ClientRouter } from 'astro:transitions';
 
 export type Props = {
@@ -21,9 +22,9 @@ const navItems = [
   { href: '/radio', label: 'Radio', iconPaths: ['M4.9 19.1C1 15.2 1 8.8 4.9 4.9', 'M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5', 'M12 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6z', 'M12 12v9'] },
   { href: '/eventos', label: 'Eventos', iconPaths: ['M3 6h18', 'M3 12h18', 'M3 18h18'] },
   { href: '/tienda', label: 'Tienda', iconPaths: ['M6 9h12l-1.2 11H7.2L6 9z', 'M9 9V6a3 3 0 0 1 6 0v3'] },
-  { href: '/wild-and-free-league', label: 'WILD AND FREE', iconPaths: ['M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z', 'M19 10v2a7 7 0 0 1-14 0v-2', 'M12 19v4', 'M8 23h8'] },
+  { href: '/wild-and-free-league', label: 'WILD AND FREE', iconPaths: ['M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z M19 10v2a7 7 0 0 1-14 0v-2 M12 19v4 M8 23h8'] },
   { href: '/honor-and-free', label: 'HONOR AND FREE', iconPaths: ['M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z'] },
-  { href: '/ascension', label: 'ASCENSIÓN', iconPaths: ['M12 19l7-7 3 3-10 10-10-10 3-3z M12 5l7 7-3 3-7-7-7 7-3-3z'] },
+  { href: '/ascension', label: 'ASCENSIÓN', iconPaths: ['M22 22H2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2v-2h2V2h2v20z'] },
   { href: '/wild-writings', label: 'WILD WRITINGS', iconPaths: ['M4 20h16', 'M6 16l8-8 4 4-8 8-4 0 0-4z'] }
 ];
 
@@ -395,8 +396,8 @@ const isActive = (href: string) => {
 		
 		<div id="sidebar-overlay"></div>
 		<SidebarLeft />
-		<Player />
 		<RadioFloating />
+		<SpotifyFloating />
 		
 		<main class="pt-20">
 			<slot />

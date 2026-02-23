@@ -1,0 +1,56 @@
+---
+import { fade } from 'astro:transitions';
+---
+<div id="spotify-floating" transition:persist class="fixed bottom-6 right-6 z-[9999] group flex flex-col items-end gap-2 w-[300px] sm:w-[350px]">
+  <!-- Expanded Content (Shows on Hover/Active) -->
+  <div class="bg-black/90 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden shadow-2xl w-full h-[152px] transform translate-y-4 opacity-0 invisible group-hover:translate-y-0 group-hover:opacity-100 group-hover:visible transition-all duration-300 origin-bottom-right">
+    <iframe 
+        id="spotify-iframe"
+        style="border-radius:12px" 
+        src="https://open.spotify.com/embed/track/4cOdK2wGLETKBW3PvgPWqT?utm_source=generator&theme=0" 
+        width="100%" 
+        height="152" 
+        frameborder="0" 
+        allowfullscreen="" 
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+        loading="lazy">
+    </iframe>
+  </div>
+
+  <!-- Main Toggle Button (Mini Player Placeholder) -->
+  <button id="spotify-toggle" class="w-14 h-14 bg-[#1DB954] text-white rounded-full shadow-lg shadow-green-500/20 flex items-center justify-center hover:scale-105 active:scale-95 transition-all duration-300 relative overflow-hidden group/btn z-10">
+      <div class="absolute inset-0 bg-gradient-to-tr from-black/20 to-transparent"></div>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="relative z-10"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.46-1.02 15.66 1.44.539.3.659.96.359 1.5-.239.48-.839.66-1.44.36z"/></svg>
+  </button>
+</div>
+
+<script>
+    const spotifyIframe = document.getElementById('spotify-iframe') as HTMLIFrameElement;
+    
+    // Listen for external play events
+    window.addEventListener('play-spotify-track', (e: any) => {
+        const trackId = e.detail?.id;
+        if (trackId && spotifyIframe) {
+            spotifyIframe.src = `https://open.spotify.com/embed/track/${trackId}?utm_source=generator&theme=0`;
+            // Auto-expand on new track
+            const container = document.getElementById('spotify-floating');
+            const content = container?.querySelector('div');
+            content?.classList.remove('opacity-0', 'invisible', 'translate-y-4');
+        }
+        
+        // Pause Radio if playing
+        window.dispatchEvent(new CustomEvent('pause-radio'));
+    });
+
+    // Listen for Radio Play event to pause/hide
+    window.addEventListener('play-radio', () => {
+        // We can't programmatically pause the iframe due to cross-origin, 
+        // but we can visually dim it or maybe reload it to stop? 
+        // Actually, reloading is jarring. 
+        // The best we can do without SDK is assume the user will pause it, 
+        // OR we can replace the src with empty temporarily? No that loses state.
+        // For Embed, we can't control playback.
+        // If we use SDK we can.
+        // For now, we'll just handle the UI state.
+    });
+</script>

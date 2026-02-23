@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
+	"core-engine/internal/spotify"
 	"core-engine/internal/tenant"
 )
 
@@ -25,6 +27,17 @@ type Artist struct {
 
 func main() {
 	mux := http.NewServeMux()
+
+	// Spotify Client
+	spotifyClientID := os.Getenv("SPOTIFY_CLIENT_ID")
+	spotifyClientSecret := os.Getenv("SPOTIFY_CLIENT_SECRET")
+	var spotifyClient *spotify.Client
+	if spotifyClientID != "" && spotifyClientSecret != "" {
+		spotifyClient = spotify.NewClient(spotifyClientID, spotifyClientSecret)
+		log.Println("Spotify Client initialized")
+	} else {
+		log.Println("Spotify Client NOT initialized (missing env vars)")
+	}
 
 	// Setup tag handlers
 	setupTagHandlers(mux)
@@ -84,6 +97,32 @@ func main() {
 		}
 
 		_ = json.NewEncoder(w).Encode(payload)
+	})
+
+	mux.HandleFunc("GET /api/v1/spotify/search", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		// Enable CORS for local dev
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+
+		if spotifyClient == nil {
+			http.Error(w, "spotify client not configured", http.StatusServiceUnavailable)
+			return
+		}
+
+		query := r.URL.Query().Get("q")
+		if query == "" {
+			http.Error(w, "missing query parameter 'q'", http.StatusBadRequest)
+			return
+		}
+
+		result, err := spotifyClient.Search(query)
+		if err != nil {
+			log.Printf("Spotify Search Error: %v", err)
+			http.Error(w, "failed to search spotify", http.StatusInternalServerError)
+			return
+		}
+
+		_ = json.NewEncoder(w).Encode(result)
 	})
 
 	server := &http.Server{
