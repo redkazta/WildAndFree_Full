@@ -117,183 +117,101 @@ const config = {
 ---
 
 <Layout config={config}>
-  <div class="min-h-screen bg-[#050505] text-white pb-20 selection:bg-[var(--wild-orange)] selection:text-black">
+  <div class="min-h-screen bg-[#050505] text-white pb-32 selection:bg-[var(--wild-orange)] selection:text-black font-sans">
     
-    <!-- Top Bar Promocional con Gradiente -->
-    <div class="bg-gradient-to-r from-[var(--wild-blood)] via-[var(--wild-orange)] to-[var(--wild-blood)] text-white text-[10px] md:text-xs font-black text-center py-2 uppercase tracking-[0.2em] animate-gradient-x shadow-lg shadow-[var(--wild-crimson)]/20">
-      Wild Gvng • Elenco Oficial 2026 • Global
+    <!-- Top Bar Minimal -->
+    <div class="bg-black border-b border-white/10 py-2 sticky top-0 z-50">
+        <div class="container mx-auto px-4 max-w-[1800px] flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="w-2 h-2 bg-[var(--wild-orange)] rounded-full animate-pulse"></div>
+                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-white">Wild Music OS v3.2</span>
+            </div>
+            <div class="flex gap-4 text-[10px] font-mono text-gray-500">
+                <span>ESTADO: CONECTADO</span>
+                <span>ZONA: GLOBAL</span>
+            </div>
+        </div>
     </div>
 
-    <div class="container mx-auto px-4 py-8 max-w-[1600px]">
+    <div class="container mx-auto px-4 py-12 max-w-[1800px] animate-fade-in-up space-y-20">
       
-      <!-- Header Brutalista -->
-      <div class="mb-16 relative">
-        <div class="absolute -top-10 -left-10 w-64 h-64 bg-[var(--wild-crimson)]/20 blur-[100px] rounded-full pointer-events-none"></div>
-        <div class="flex flex-col md:flex-row items-end gap-6 border-b border-white/10 pb-8 relative z-10">
-          <h1 class="text-7xl md:text-9xl font-black tracking-tighter text-white uppercase leading-none hover:text-[var(--wild-orange)] transition-colors duration-500 cursor-default drop-shadow-[0_0_15px_rgba(255,85,0,0.3)]">
-            ARTISTAS
-          </h1>
-          <div class="flex flex-col mb-4 md:mb-6">
-             <div class="flex items-center gap-3">
-               <span class="h-[2px] w-12 bg-[var(--wild-orange)]"></span>
-               <span class="text-xl font-bold text-white uppercase tracking-widest">Wild Gvng</span>
-             </div>
-             <span class="text-sm font-mono text-[#888] tracking-[0.3em] mt-1 pl-16">EST. 2024 • REPRESENTANDO</span>
-          </div>
-        </div>
-      </div>
+      <!-- HERO MINIMALISTA -->
+      <section class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div class="space-y-8">
+              <div class="inline-flex items-center gap-3 border border-white/20 rounded-full px-4 py-1.5 bg-white/5 backdrop-blur">
+                  <span class="w-2 h-2 bg-[var(--wild-orange)] rounded-full animate-pulse"></span>
+                  <span class="text-[10px] font-black uppercase tracking-[0.2em] text-white">Artista Destacado</span>
+              </div>
+              
+              <h1 class="text-6xl md:text-8xl font-black uppercase tracking-tighter leading-[0.8] text-white">
+                  {featuredArtist.nombre}
+              </h1>
+              
+              <p class="text-xl text-gray-400 max-w-lg font-medium leading-relaxed border-l-2 border-[var(--wild-orange)] pl-6">
+                  {featuredArtist.bio}
+              </p>
 
-      <!-- Sección Artista Destacado (Rising Star) -->
-      <section class="mb-16 relative group">
-         <div class="absolute inset-0 bg-[var(--wild-orange)]/5 transform skew-y-1 rounded-3xl -z-10"></div>
-         <div class="bg-[#0a0a0a] border border-white/10 rounded-2xl overflow-hidden flex flex-col md:flex-row h-auto md:h-[350px]">
-            
-            <!-- Image Area (Compact) -->
-            <div class="md:w-1/3 relative overflow-hidden">
-               <div class="absolute inset-0 bg-[var(--wild-orange)]/20 mix-blend-color z-10"></div>
-               <img src={featuredArtist.imagenes.profile} class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" alt={featuredArtist.nombre} />
-               <div class="absolute bottom-0 left-0 bg-black/80 backdrop-blur px-4 py-2 border-t border-r border-white/20 z-20">
-                  <span class="text-[10px] font-mono text-[var(--wild-orange)] uppercase tracking-widest">DESTACADO</span>
-               </div>
-            </div>
-
-            <!-- Content Area (Organized) -->
-            <div class="md:w-2/3 p-6 md:p-8 flex flex-col justify-between relative bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]">
-               <div class="absolute top-4 right-4 flex gap-2">
-                     <div class="w-2 h-2 rounded-full bg-white/20"></div>
-                     <div class="w-2 h-2 rounded-full bg-white/20"></div>
-               </div>
-
-               <div>
-                  <div class="flex items-baseline gap-4 mb-2">
-                     <h2 class="text-4xl md:text-6xl font-black uppercase italic tracking-tighter text-white">{featuredArtist.nombre}</h2>
-                     <span class="text-xs font-mono text-gray-500 border border-gray-700 px-2 py-0.5 rounded">#{featuredArtist.slug}</span>
+              <div class="flex flex-wrap gap-8 pt-4">
+                  <div>
+                      <span class="block text-4xl font-black text-white">{featuredArtist.stats.oyentes}</span>
+                      <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Oyentes Mensuales</span>
                   </div>
-                  <p class="text-gray-400 text-sm md:text-base max-w-xl line-clamp-2 font-medium border-l-2 border-[var(--wild-orange)] pl-4">
-                     {featuredArtist.bio} "Rompiendo esquemas y definiendo el nuevo sonido del norte."
-                  </p>
-               </div>
-
-               <div class="flex items-end justify-between mt-6 border-t border-white/10 pt-6">
-                  <div class="flex gap-8">
-                     <div>
-                        <span class="block text-[10px] text-gray-500 uppercase tracking-widest mb-1">Oyentes</span>
-                        <span class="font-mono font-bold text-2xl text-white">{featuredArtist.stats.oyentes}</span>
-                     </div>
-                     <div>
-                        <span class="block text-[10px] text-gray-500 uppercase tracking-widest mb-1">Fans</span>
-                        <span class="font-mono font-bold text-2xl text-white">{featuredArtist.stats.seguidores}</span>
-                     </div>
+                  <div>
+                      <span class="block text-4xl font-black text-white">{featuredArtist.stats.seguidores}</span>
+                      <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Seguidores</span>
                   </div>
-                  
-                  <a href={`/artista/${featuredArtist.slug}`} class="group/btn flex items-center gap-2 bg-white text-black px-6 py-3 text-xs font-black uppercase tracking-[0.15em] hover:bg-[var(--wild-orange)] hover:text-white transition-colors shadow-[4px_4px_0px_rgba(255,255,255,0.2)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]">
-                     Explorar
-                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="group-hover/btn:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </div>
+
+              <div class="flex gap-4 pt-4">
+                  <a href={`/artista/${featuredArtist.slug}`} class="bg-white text-black px-8 py-4 text-xs font-black uppercase hover:bg-[var(--wild-orange)] hover:text-white transition-all flex items-center gap-2">
+                      Ver Perfil Completo
                   </a>
-               </div>
-            </div>
-         </div>
+                  <button class="border border-white/20 text-white px-8 py-4 text-xs font-black uppercase hover:bg-white hover:text-black transition-all">
+                      + Seguir
+                  </button>
+              </div>
+          </div>
+
+          <div class="relative aspect-square lg:aspect-[4/5] overflow-hidden rounded-sm group">
+              <img src={featuredArtist.imagenes.profile} class="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-50"></div>
+          </div>
       </section>
 
-      <!-- Grid de Artistas -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-32">
-        {artists.map((artist: any, i: number) => (
-          <a href={`/artista/${artist.slug}`} class="group relative block bg-[#0a0a0a] border border-white/10 hover:border-[var(--wild-orange)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(255,85,0,0.15)] animate-stagger overflow-hidden rounded-xl" style={`animation-delay: ${i * 100}ms`}>
-            
-            <!-- Imagen -->
-            <div class="aspect-[3/4] overflow-hidden relative">
-              <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent opacity-60 z-10"></div>
-              <img 
-                src={artist.imagenes?.profile || 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80'} 
-                alt={artist.nombre} 
-                loading="lazy" 
-                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700 ease-out"
-              />
-              
-              <!-- Glitch Overlay Effect -->
-              <div class="absolute inset-0 bg-[var(--wild-orange)]/10 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20"></div>
-
-              <!-- Overlay Text on Image -->
-              <div class="absolute top-4 left-4 z-30">
-                 <span class="px-3 py-1 bg-black/80 backdrop-blur-md border border-[var(--wild-orange)]/30 text-[10px] font-black text-[var(--wild-orange)] uppercase tracking-widest rounded-full">
-                    Verificado
-                 </span>
+      <!-- GRID ARTISTAS MINIMAL -->
+      <section>
+          <div class="flex items-center justify-between mb-12 border-b border-white/10 pb-6">
+              <h2 class="text-4xl font-black uppercase tracking-tighter text-white">El Crew</h2>
+              <div class="flex gap-2">
+                  <button class="w-10 h-10 border border-white/20 flex items-center justify-center hover:bg-white hover:text-black transition-colors">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                  </button>
+                  <button class="w-10 h-10 border border-white/20 flex items-center justify-center hover:bg-white hover:text-black transition-colors">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                  </button>
               </div>
-            </div>
+          </div>
 
-            <!-- Info Card -->
-            <div class="p-6 relative z-20 -mt-20">
-              <div class="bg-[#0a0a0a]/90 backdrop-blur-xl border border-white/10 p-5 rounded-xl group-hover:border-[var(--wild-orange)]/50 transition-colors">
-                <h3 class="text-2xl font-black uppercase tracking-tight text-white mb-2 leading-none group-hover:text-[var(--wild-orange)] transition-colors line-clamp-1">
-                  {artist.nombre}
-                </h3>
-                
-                <p class="text-xs text-gray-400 font-medium line-clamp-2 mb-4">
-                  {artist.bio}
-                </p>
-
-                <div class="w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent my-4 group-hover:via-[var(--wild-orange)]/50 transition-colors"></div>
-                
-                <div class="flex justify-between items-end">
-                   <div class="flex flex-col">
-                      <span class="text-[9px] font-black text-[#666] uppercase tracking-[0.2em] mb-1 group-hover:text-white transition-colors">Oyentes Mensuales</span>
-                      <span class="text-lg font-black text-white font-mono group-hover:text-[var(--wild-orange)] transition-colors">{artist.stats?.oyentes || '0'}</span>
-                   </div>
-                   <div class="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center group-hover:bg-[var(--wild-orange)] group-hover:text-white transition-all transform group-hover:rotate-45 group-hover:scale-110 shadow-lg">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="transform -rotate-45"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                   </div>
-                </div>
-              </div>
-            </div>
-          </a>
-        ))}
-      </div>
-
-      <!-- Sección Historia / Manifiesto -->
-      <section class="relative py-20 border-t border-white/10">
-         <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10"></div>
-         
-         <div class="flex flex-col lg:flex-row gap-16 items-start">
-            <div class="lg:w-1/3 sticky top-32">
-               <h2 class="text-5xl lg:text-7xl font-black uppercase tracking-tighter text-white mb-8">
-                  El <span class="text-[var(--wild-orange)]">Legado</span><br/>Wild Gvng
-               </h2>
-               <div class="w-24 h-2 bg-gradient-to-r from-[var(--wild-orange)] to-transparent"></div>
-            </div>
-            
-            <div class="lg:w-2/3 space-y-12">
-               <div class="group border-l-2 border-white/20 pl-8 hover:border-[var(--wild-orange)] transition-colors duration-500">
-                  <span class="text-4xl font-black text-[var(--wild-orange)]/50 group-hover:text-[var(--wild-orange)] transition-colors mb-2 block">2024</span>
-                  <h3 class="text-2xl font-bold text-white uppercase mb-4">El Origen</h3>
-                  <p class="text-gray-400 leading-relaxed">
-                     Nacidos en las calles del norte, Wild Gvng surgió como una respuesta al silencio. Un colectivo de artistas visuales, productores y raperos decididos a crear su propia industria donde no existía ninguna. Sin reglas, sin permisos.
-                  </p>
-               </div>
-
-               <div class="group border-l-2 border-white/20 pl-8 hover:border-[var(--wild-orange)] transition-colors duration-500">
-                  <span class="text-4xl font-black text-[var(--wild-orange)]/50 group-hover:text-[var(--wild-orange)] transition-colors mb-2 block">2025</span>
-                  <h3 class="text-2xl font-bold text-white uppercase mb-4">La Expansión</h3>
-                  <p class="text-gray-400 leading-relaxed">
-                     Con el lanzamiento de "Noches de Neón", el sonido Wild cruzó fronteras. Firmamos a nuestros primeros talentos internacionales y establecimos nuestra base de operaciones digital. El movimiento dejó de ser local para volverse un fenómeno.
-                  </p>
-               </div>
-
-               <div class="group border-l-2 border-white/20 pl-8 hover:border-[var(--wild-orange)] transition-colors duration-500">
-                  <span class="text-4xl font-black text-[var(--wild-orange)]/50 group-hover:text-[var(--wild-orange)] transition-colors mb-2 block">2026</span>
-                  <h3 class="text-2xl font-bold text-white uppercase mb-4">Dominio Total</h3>
-                  <p class="text-gray-400 leading-relaxed">
-                     Hoy, Wild Gvng no es solo música. Es moda, es arte, es tecnología. Somos la plataforma definitiva para la cultura urbana independiente. Nuestra misión sigue intacta: Potenciar la voz de los que no tienen miedo a ser salvajes y libres.
-                  </p>
-               </div>
-               
-               <div class="pt-12">
-                  <blockquote class="text-2xl md:text-4xl font-black text-white italic tracking-tight border-l-8 border-[var(--wild-orange)] pl-6 py-2">
-                     "No hacemos música para encajar. Hacemos ruido para romper el molde."
-                  </blockquote>
-                  <cite class="block mt-4 text-[var(--wild-orange)] font-mono text-sm uppercase tracking-widest">— El Manifiesto</cite>
-               </div>
-            </div>
-         </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
+              {artists.map((artist: any) => (
+                  <a href={`/artista/${artist.slug}`} class="group block space-y-4">
+                      <div class="relative aspect-[3/4] overflow-hidden bg-[#111]">
+                          <img src={artist.imagenes.profile} class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" />
+                          <div class="absolute top-4 right-4 bg-black/50 backdrop-blur px-3 py-1 rounded text-[10px] font-black uppercase text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                              Ver Perfil
+                          </div>
+                      </div>
+                      
+                      <div>
+                          <h3 class="text-2xl font-black uppercase tracking-tighter text-white group-hover:text-[var(--wild-orange)] transition-colors mb-1">{artist.nombre}</h3>
+                          <div class="flex justify-between items-center border-t border-white/10 pt-3 mt-2">
+                              <span class="text-[10px] font-mono text-gray-500 uppercase tracking-wider">{artist.stats.oyentes} Oyentes</span>
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-[var(--wild-orange)] opacity-0 group-hover:opacity-100 transition-opacity transform -rotate-45"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                          </div>
+                      </div>
+                  </a>
+              ))}
+          </div>
       </section>
 
     </div>
@@ -301,47 +219,11 @@ const config = {
 </Layout>
 
 <style is:global define:vars={{ streetAccent: tenant.primary_color }}>
-  :root {
-    --street-accent: var(--streetAccent);
-    
-    /* Wild Palette Shared */
-    --wild-orange: #FF5500;
-    --wild-light-orange: #FF8C00;
-    --wild-blood: #8A0303;
-    --wild-crimson: #DC143C;
-    --wild-dark-red: #4A0404;
-  }
-
-  @keyframes gradient-x {
-      0%, 100% {
-          background-position: 0% 50%;
-      }
-      50% {
-          background-position: 100% 50%;
-      }
-  }
-  .animate-gradient-x {
-      background-size: 200% 200%;
-      animation: gradient-x 6s ease infinite;
-  }
-
   @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
   }
-
   .animate-fade-in-up {
-    animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  }
-
-  .animate-stagger {
-    opacity: 0;
-    animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
   }
 </style>
