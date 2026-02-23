@@ -6,9 +6,12 @@ const currentPath = Astro.url.pathname;
 const navItems = [
   { href: '/artistas', label: 'Artistas' },
   { href: '/musica', label: 'Música' },
+  { href: '/radio', label: 'Radio' },
   { href: '/eventos', label: 'Eventos' },
   { href: '/tienda', label: 'Tienda' },
   { href: '/wild-and-free-league', label: 'WILD AND FREE' },
+  { href: '/honor-and-free', label: 'HONOR AND FREE' },
+  { href: '/ascension', label: 'ASCENSIÓN' },
   { href: '/wild-writings', label: 'WILD WRITINGS' }
 ];
 
@@ -16,6 +19,7 @@ const isActive = (href: string) => {
   if (currentPath === href) return true;
   if (href === '/artistas' && currentPath.startsWith('/artista/')) return true;
   if (href === '/eventos' && currentPath.startsWith('/evento/')) return true;
+  if (href === '/radio' && currentPath.startsWith('/radio')) return true;
   return false;
 };
 ---

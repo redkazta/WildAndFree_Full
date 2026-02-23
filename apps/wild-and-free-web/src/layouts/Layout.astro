@@ -275,14 +275,14 @@ const isActive = (href: string) => {
 					</a>
 				</div>
 				
-				<nav class="hidden lg:flex items-center gap-0.5 xl:gap-1 flex-1 justify-center overflow-x-auto no-scrollbar">
+				<nav class="hidden lg:flex items-center gap-0.5 xl:gap-1 flex-1 justify-center">
 					{navItems.map(item => (
 						<a 
 							href={item.href} 
-							class={`px-3 xl:px-4 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-[0.2em] rounded-full transition-all duration-300 whitespace-nowrap ${isActive(item.href) ? 'text-orange-500 bg-white/10' : 'text-white hover:text-orange-500 hover:bg-white/10'}`}
+							class={`px-2 xl:px-3 py-2 text-[9px] xl:text-[10px] font-black uppercase tracking-[0.15em] rounded-full transition-all duration-300 whitespace-nowrap ${isActive(item.href) ? 'text-orange-500 bg-white/10' : 'text-white hover:text-orange-500 hover:bg-white/10'}`}
 						>
-							<span class="flex items-center gap-2">
-								<svg class="w-4 h-4 xl:w-[18px] xl:h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+							<span class="flex items-center gap-1.5">
+								<svg class="w-3.5 h-3.5 xl:w-4 xl:h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
 									{item.iconPaths.map(path => <path d={path} />)}
 								</svg>
 								{item.label}
