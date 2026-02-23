@@ -1,0 +1,74 @@
+---
+import Layout from '../layouts/Layout.astro';
+import tenantConfig from '../../../../packages/shared-types/tenant-config.json';
+
+const tenant = tenantConfig['wild-and-free'];
+const config = {
+  name: "Wild Gvng - Radio",
+  primary_color: tenant.primary_color,
+  secondary_color: tenant.secondary_color
+};
+---
+
+<Layout config={config}>
+  <div class="min-h-screen bg-black text-white p-4 md:p-8 pt-20 md:pt-8">
+    <div class="max-w-7xl mx-auto space-y-8">
+      <!-- Header -->
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-white/10 pb-6">
+        <div>
+          <h1 class="text-4xl md:text-6xl font-black tracking-tighter uppercase mb-2">
+            RADIO
+          </h1>
+          <p class="text-xl text-gray-400 font-light">
+            Transmisión en vivo 24/7.
+          </p>
+        </div>
+        <div class="flex items-center gap-2 text-red-500 animate-pulse">
+          <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+          <span class="text-sm font-bold uppercase tracking-widest">En Vivo</span>
+        </div>
+      </div>
+
+      <!-- Content Placeholder -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Main Player Area -->
+        <div class="md:col-span-2 bg-white/5 border border-white/10 p-8 rounded-xl flex flex-col items-center justify-center min-h-[400px] relative overflow-hidden group">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
+          <img src="/images/radio-bg.jpg" alt="Radio Background" class="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:scale-105 transition-transform duration-700" />
+          
+          <div class="z-20 flex flex-col items-center text-center">
+            <div class="w-24 h-24 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/20 mb-6 cursor-pointer hover:bg-[var(--primary)] transition-colors duration-300">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h2 class="text-3xl font-bold uppercase tracking-wider mb-2">Wild & Free FM</h2>
+            <p class="text-gray-300">Selección de Hip Hop, Trap y Reggaeton</p>
+          </div>
+        </div>
+
+        <!-- Sidebar / Chat / Schedule -->
+        <div class="space-y-4">
+           <div class="bg-white/5 border border-white/10 p-6 rounded-xl h-full">
+              <h3 class="text-xl font-bold uppercase mb-4 text-[var(--primary)]">Próximos Programas</h3>
+              <ul class="space-y-4">
+                <li class="flex justify-between items-center border-b border-white/5 pb-2">
+                  <span class="text-white font-medium">Mañanero</span>
+                  <span class="text-xs text-gray-500">08:00 AM</span>
+                </li>
+                <li class="flex justify-between items-center border-b border-white/5 pb-2">
+                  <span class="text-white font-medium">Batallas Live</span>
+                  <span class="text-xs text-gray-500">04:00 PM</span>
+                </li>
+                <li class="flex justify-between items-center border-b border-white/5 pb-2">
+                  <span class="text-white font-medium">Nocturna</span>
+                  <span class="text-xs text-gray-500">10:00 PM</span>
+                </li>
+              </ul>
+           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

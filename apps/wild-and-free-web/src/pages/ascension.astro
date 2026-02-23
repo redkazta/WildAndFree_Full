@@ -1,0 +1,51 @@
+---
+import Layout from '../layouts/Layout.astro';
+import tenantConfig from '../../../../packages/shared-types/tenant-config.json';
+
+const tenant = tenantConfig['wild-and-free'];
+const config = {
+  name: "Wild Gvng - Ascensión",
+  primary_color: tenant.primary_color,
+  secondary_color: tenant.secondary_color
+};
+---
+
+<Layout config={config}>
+  <div class="min-h-screen bg-black text-white p-4 md:p-8 pt-20 md:pt-8">
+    <div class="max-w-7xl mx-auto space-y-8">
+      <!-- Header -->
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-white/10 pb-6">
+        <div>
+          <h1 class="text-4xl md:text-6xl font-black tracking-tighter uppercase mb-2">
+            ASCENSIÓN
+          </h1>
+          <p class="text-xl text-gray-400 font-light">
+            El camino hacia la cima.
+          </p>
+        </div>
+      </div>
+
+      <!-- Content Placeholder -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="bg-white/5 border border-white/10 p-8 rounded-xl flex flex-col items-center justify-center min-h-[400px]">
+          <div class="text-6xl mb-4 opacity-20">🏆</div>
+          <h2 class="text-2xl font-bold uppercase tracking-wider mb-2">Próximamente</h2>
+          <p class="text-gray-400 text-center max-w-md">
+            La liga de ascenso está en construcción. Prepárate para demostrar tu talento.
+          </p>
+        </div>
+
+        <div class="space-y-4">
+           <div class="bg-white/5 border border-white/10 p-6 rounded-xl">
+              <h3 class="text-xl font-bold uppercase mb-2 text-[var(--primary)]">Reglas de Ascenso</h3>
+              <p class="text-gray-400 text-sm">Información detallada sobre cómo subir de categoría próximamente.</p>
+           </div>
+           <div class="bg-white/5 border border-white/10 p-6 rounded-xl">
+              <h3 class="text-xl font-bold uppercase mb-2 text-[var(--primary)]">Inscripciones</h3>
+              <p class="text-gray-400 text-sm">Las fechas de inscripción serán anunciadas en nuestras redes sociales.</p>
+           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
