@@ -16,6 +16,7 @@ try {
 }
 
 // Fallback / Mock Data enriched with "Special Moves" (Tracks)
+// TOTAL: 20 ARTISTAS (5x4 Grid)
 const mockArtists = [
   {
     id: 1,
@@ -23,44 +24,54 @@ const mockArtists = [
     slug: 'lil-kiro',
     imagenes: { profile: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80' },
     stats: { seguidores: '2.1M', oyentes: '1.2M', power: 95, speed: 88, technique: 92 },
-    bio: 'El pionero del trap en el desierto.',
-    tracks: ['Desert Storm', 'Sand King', 'Mirage Flow', 'Oasis Trap']
+    bio: 'El pionero del trap en el desierto. Sus rimas queman como arena caliente.',
+    tracks: ['Tormenta de Arena', 'Rey del Desierto', 'Espejismo', 'Trampa en el Oasis'],
+    estilo: 'Trap Pesado',
+    origen: 'Sonora, MX'
   },
   {
     id: 2,
-    nombre: 'Neon Ghost',
-    slug: 'neon-ghost',
+    nombre: 'Fantasma Neón',
+    slug: 'fantasma-neon',
     imagenes: { profile: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80' },
     stats: { seguidores: '1.8M', oyentes: '900K', power: 85, speed: 98, technique: 90 },
-    bio: 'Misterio y drill futurista.',
-    tracks: ['Cyber City', 'Neon Nights', 'Digital Shadow', 'Glitch Mode']
+    bio: 'Misterio y drill futurista. Nadie ha visto su rostro real.',
+    tracks: ['Ciudad Cibernética', 'Noches de Neón', 'Sombra Digital', 'Modo Glitch'],
+    estilo: 'Cyber Drill',
+    origen: 'CDMX, MX'
   },
   {
     id: 3,
-    nombre: 'Shadow V',
-    slug: 'shadow-v',
+    nombre: 'Sombra V',
+    slug: 'sombra-v',
     imagenes: { profile: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=800&q=80' },
     stats: { seguidores: '1.5M', oyentes: '750K', power: 78, speed: 85, technique: 96 },
-    bio: 'Lírica consciente sobre ritmos lo-fi.',
-    tracks: ['Lo-Fi Dreams', 'Silent Verse', 'Deep Thoughts', 'Vinyl Scratch']
+    bio: 'Lírica consciente sobre ritmos lo-fi. La voz de la melancolía.',
+    tracks: ['Sueños Lo-Fi', 'Verso Silencioso', 'Pensamientos Profundos', 'Vinilo Rayado'],
+    estilo: 'Lo-Fi Consciente',
+    origen: 'Guadalajara, MX'
   },
   {
     id: 4,
-    nombre: 'Crystal Wave',
-    slug: 'crystal-wave',
+    nombre: 'Onda Cristal',
+    slug: 'onda-cristal',
     imagenes: { profile: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80' },
     stats: { seguidores: '890K', oyentes: '1.1M', power: 82, speed: 90, technique: 88 },
-    bio: 'Fusión de synthwave con reggaetón.',
-    tracks: ['Synth Love', 'Retro Beat', 'Wave Rider', 'Future Past']
+    bio: 'Fusión de synthwave con reggaetón. Rompiendo esquemas.',
+    tracks: ['Amor Sintético', 'Ritmo Retro', 'Jinete de Onda', 'Futuro Pasado'],
+    estilo: 'Synth-Reggaetón',
+    origen: 'Monterrey, MX'
   },
   {
     id: 5,
-    nombre: 'Midnight Rider',
-    slug: 'midnight-rider',
+    nombre: 'Jinete Nocturno',
+    slug: 'jinete-nocturno',
     imagenes: { profile: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&q=80' },
     stats: { seguidores: '2.7M', oyentes: '2.4M', power: 98, speed: 80, technique: 85 },
-    bio: 'Flow vieja escuela con agresividad.',
-    tracks: ['Night Cruise', 'Old School Rules', 'Engine Roar', 'Street Legend']
+    bio: 'Flow vieja escuela con agresividad. El rey de las calles oscuras.',
+    tracks: ['Crucero Nocturno', 'Reglas de la Vieja Escuela', 'Rugido de Motor', 'Leyenda Callejera'],
+    estilo: 'Gangsta Rap',
+    origen: 'Tijuana, MX'
   },
   {
     id: 6,
@@ -68,8 +79,10 @@ const mockArtists = [
     slug: 'nova-k',
     imagenes: { profile: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80' },
     stats: { seguidores: '2.4M', oyentes: '1.8M', power: 90, speed: 92, technique: 94 },
-    bio: 'Reina del drill melódico.',
-    tracks: ['Queen Flow', 'Drill Princess', 'Melodic Storm', 'Crown Jewel']
+    bio: 'Reina del drill melódico. Elegancia letal en cada barra.',
+    tracks: ['Flow de Reina', 'Princesa del Drill', 'Tormenta Melódica', 'Joya de la Corona'],
+    estilo: 'Melodic Drill',
+    origen: 'Puebla, MX'
   },
   {
     id: 7,
@@ -77,26 +90,32 @@ const mockArtists = [
     slug: 'sable',
     imagenes: { profile: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=800&q=80' },
     stats: { seguidores: '1.2M', oyentes: '3.5M', power: 88, speed: 95, technique: 98 },
-    bio: 'Arquitecto de sonidos oscuros.',
-    tracks: ['Dark Matter', 'Void Walker', 'Abyss Call', 'Shadow Realm']
+    bio: 'Arquitecto de sonidos oscuros. Corta el beat como katana.',
+    tracks: ['Materia Oscura', 'Caminante del Vacío', 'Llamada del Abismo', 'Reino de Sombras'],
+    estilo: 'Dark Trap',
+    origen: 'Tokio, JP / CDMX'
   },
   {
     id: 8,
-    nombre: 'Storm Trooper',
-    slug: 'storm-trooper',
+    nombre: 'Tormenta',
+    slug: 'tormenta',
     imagenes: { profile: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80' },
     stats: { seguidores: '950K', oyentes: '600K', power: 92, speed: 88, technique: 80 },
-    bio: 'Energía pura de Gómez Palacio.',
-    tracks: ['Thunder Strike', 'Lightning Speed', 'Storm Warning', 'Heavy Rain']
+    bio: 'Energía pura de Gómez Palacio. Imparable como un huracán.',
+    tracks: ['Golpe de Trueno', 'Velocidad del Rayo', 'Alerta de Tormenta', 'Lluvia Pesada'],
+    estilo: 'Hardcore Rap',
+    origen: 'Gómez Palacio, DGO'
   },
   {
     id: 9,
-    nombre: 'Viper X',
-    slug: 'viper-x',
+    nombre: 'Víbora X',
+    slug: 'vibora-x',
     imagenes: { profile: 'https://images.unsplash.com/photo-1615109398623-88346a601842?w=800&q=80' },
     stats: { seguidores: '3.1M', oyentes: '2.8M', power: 96, speed: 99, technique: 95 },
-    bio: 'El veneno lírico más potente del norte.',
-    tracks: ['Venom Bite', 'Snake Eyes', 'Poison Flow', 'Deadly Strike']
+    bio: 'El veneno lírico más potente del norte. Nadie sobrevive a su tiradera.',
+    tracks: ['Mordida de Veneno', 'Ojos de Serpiente', 'Flow Tóxico', 'Golpe Mortal'],
+    estilo: 'Fast Flow',
+    origen: 'Chihuahua, MX'
   },
   {
     id: 10,
@@ -104,8 +123,10 @@ const mockArtists = [
     slug: 'luna-negra',
     imagenes: { profile: 'https://images.unsplash.com/photo-1517423568366-69755581d826?w=800&q=80' },
     stats: { seguidores: '1.9M', oyentes: '2.2M', power: 85, speed: 90, technique: 92 },
-    bio: 'Voces etéreas sobre bajos pesados.',
-    tracks: ['Moonlight', 'Dark Sky', 'Eclipse', 'Night Whisper']
+    bio: 'Voces etéreas sobre bajos pesados. La bruja del R&B.',
+    tracks: ['Luz de Luna', 'Cielo Oscuro', 'Eclipse Total', 'Susurro Nocturno'],
+    estilo: 'Dark R&B',
+    origen: 'Veracruz, MX'
   },
   {
     id: 11,
@@ -113,71 +134,109 @@ const mockArtists = [
     slug: 'rojo-fuego',
     imagenes: { profile: 'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?w=800&q=80' },
     stats: { seguidores: '500K', oyentes: '800K', power: 94, speed: 96, technique: 85 },
-    bio: 'La nueva promesa del trap duro.',
-    tracks: ['Fire Starter', 'Red Hot', 'Burn It Down', 'Inferno']
+    bio: 'La nueva promesa del trap duro. Incendiando escenarios.',
+    tracks: ['Iniciador de Fuego', 'Al Rojo Vivo', 'Quémalo Todo', 'Infierno'],
+    estilo: 'Trap Metal',
+    origen: 'Ecatepec, MX'
   },
   {
     id: 12,
-    nombre: 'Cyber Punk',
-    slug: 'cyber-punk',
+    nombre: 'Ciber Punk',
+    slug: 'ciber-punk',
     imagenes: { profile: 'https://images.unsplash.com/photo-1618641986557-1ecd23095910?w=800&q=80' },
     stats: { seguidores: '4.5M', oyentes: '5.1M', power: 90, speed: 92, technique: 99 },
-    bio: 'Sonidos del futuro hoy.',
-    tracks: ['Future City', 'Cyber Soul', 'Tech Beat', 'Neon Rain']
+    bio: 'Sonidos del futuro hoy. Hackeando el sistema musical.',
+    tracks: ['Ciudad Futura', 'Alma Cibernética', 'Ritmo Tech', 'Lluvia Neón'],
+    estilo: 'Glitch Hop',
+    origen: 'Zapopan, MX'
   },
   {
     id: 13,
-    nombre: 'Phantom G',
-    slug: 'phantom-g',
+    nombre: 'Fantasma G',
+    slug: 'fantasma-g',
     imagenes: { profile: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=800&q=80' },
     stats: { seguidores: '1.4M', oyentes: '980K', power: 88, speed: 94, technique: 90 },
-    bio: 'El fantasma del beat, apareciendo donde menos lo esperas.',
-    tracks: ['Ghost Mode', 'Invisible Strike', 'Phantom Pain', 'Spirit World']
+    bio: 'El espectro del beat, apareciendo donde menos lo esperas.',
+    tracks: ['Modo Fantasma', 'Golpe Invisible', 'Dolor Fantasma', 'Mundo Espiritual'],
+    estilo: 'Horrorcore',
+    origen: 'Toluca, MX'
   },
   {
     id: 14,
-    nombre: 'Iron Mic',
-    slug: 'iron-mic',
+    nombre: 'Micrófono de Hierro',
+    slug: 'microfono-de-hierro',
     imagenes: { profile: 'https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=800&q=80' },
     stats: { seguidores: '3.2M', oyentes: '2.9M', power: 99, speed: 70, technique: 85 },
-    bio: 'Barras de acero y voluntad inquebrantable.',
-    tracks: ['Iron Will', 'Heavy Metal', 'Steel Bars', 'Rust & Dust']
+    bio: 'Barras de acero y voluntad inquebrantable. Peso pesado.',
+    tracks: ['Voluntad de Hierro', 'Metal Pesado', 'Barras de Acero', 'Óxido y Polvo'],
+    estilo: 'Boom Bap',
+    origen: 'Torreón, COAH'
   },
   {
     id: 15,
-    nombre: 'Velvet Rose',
-    slug: 'velvet-rose',
+    nombre: 'Rosa de Terciopelo',
+    slug: 'rosa-de-terciopelo',
     imagenes: { profile: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&q=80' },
     stats: { seguidores: '4.1M', oyentes: '5.5M', power: 80, speed: 90, technique: 98 },
     bio: 'Suavidad que mata. R&B con espinas.',
-    tracks: ['Soft Kill', 'Thorn Prick', 'Red Petals', 'Silk Road']
+    tracks: ['Muerte Suave', 'Pinchazo de Espina', 'Pétalos Rojos', 'Camino de Seda'],
+    estilo: 'Soul Trap',
+    origen: 'Mérida, MX'
   },
   {
     id: 16,
-    nombre: 'Toxic B',
-    slug: 'toxic-b',
+    nombre: 'Tóxico B',
+    slug: 'toxico-b',
     imagenes: { profile: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&q=80' },
     stats: { seguidores: '2.0M', oyentes: '1.5M', power: 92, speed: 95, technique: 88 },
-    bio: 'El veneno está en la dosis. Trap ácido.',
-    tracks: ['Acid Rain', 'Toxic Love', 'Poison Ivy', 'Hazard']
+    bio: 'El veneno está en la dosis. Trap ácido que corroe.',
+    tracks: ['Lluvia Ácida', 'Amor Tóxico', 'Hiedra Venenosa', 'Peligro'],
+    estilo: 'Acid Rap',
+    origen: 'León, MX'
   },
   {
     id: 17,
-    nombre: 'Solar Flare',
-    slug: 'solar-flare',
+    nombre: 'Llamarada Solar',
+    slug: 'llamarada-solar',
     imagenes: { profile: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80' },
     stats: { seguidores: '1.1M', oyentes: '800K', power: 95, speed: 85, technique: 90 },
-    bio: 'Brillando más fuerte que el sol de mediodía.',
-    tracks: ['Sunburn', 'Heat Wave', 'Solar Power', 'Blind Light']
+    bio: 'Brillando más fuerte que el sol de mediodía. Cega a la competencia.',
+    tracks: ['Quemadura', 'Ola de Calor', 'Poder Solar', 'Luz Cegadora'],
+    estilo: 'Reggaetón',
+    origen: 'Cancún, MX'
   },
   {
     id: 18,
-    nombre: 'Ice Cold',
-    slug: 'ice-cold',
+    nombre: 'Hielo Seco',
+    slug: 'hielo-seco',
     imagenes: { profile: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80' },
     stats: { seguidores: '1.9M', oyentes: '2.1M', power: 85, speed: 92, technique: 96 },
-    bio: 'Flow helado que congela la pista.',
-    tracks: ['Frostbite', 'Zero Degrees', 'Ice Age', 'Glacier']
+    bio: 'Flow helado que congela la pista. Sangre fría.',
+    tracks: ['Congelación', 'Cero Grados', 'Era de Hielo', 'Glaciar'],
+    estilo: 'Drill',
+    origen: 'Saltillo, MX'
+  },
+  {
+    id: 19,
+    nombre: 'La Bestia',
+    slug: 'la-bestia',
+    imagenes: { profile: 'https://images.unsplash.com/photo-1581382575275-97901c2635b7?w=800&q=80' },
+    stats: { seguidores: '5.0M', oyentes: '6.2M', power: 99, speed: 85, technique: 80 },
+    bio: 'Fuerza bruta desatada. Rompiendo bocinas desde el 2010.',
+    tracks: ['Modo Bestia', 'Rugido', 'Fuerza Bruta', 'Sin Cadenas'],
+    estilo: 'Hardcore',
+    origen: 'Culiacán, MX'
+  },
+  {
+    id: 20,
+    nombre: 'Karmma',
+    slug: 'karmma',
+    imagenes: { profile: 'https://images.unsplash.com/photo-1534030347209-7147fd9e791a?w=800&q=80' },
+    stats: { seguidores: '800K', oyentes: '1.5M', power: 88, speed: 94, technique: 97 },
+    bio: 'Lo que das, recibes. Barras que regresan para golpearte.',
+    tracks: ['Causa y Efecto', 'Justicia Divina', 'Ciclo Sin Fin', 'Destino'],
+    estilo: 'Consciente',
+    origen: 'Morelia, MX'
   }
 ];
 
@@ -187,91 +246,149 @@ const artists = (dbArtists && dbArtists.length > 0) ? dbArtists.map((a: any, i: 
     ...a,
     // Ensure missing fields have defaults
     stats: a.stats || mockArtists[i % mockArtists.length].stats,
-    tracks: mockArtists[i % mockArtists.length].tracks // Mock tracks for DB artists
+    tracks: mockArtists[i % mockArtists.length].tracks,
+    estilo: mockArtists[i % mockArtists.length].estilo,
+    origen: mockArtists[i % mockArtists.length].origen
 })) : mockArtists;
 
 const tenant = tenantConfig['wild-and-free'];
 const config = {
-  name: "Wild Gvng - Artistas (Arcade Mode)",
+  name: "Wild Gvng - Artistas (Modo Arcade)",
   primary_color: tenant.primary_color,
   secondary_color: tenant.secondary_color
 };
 ---
 
 <Layout config={config}>
-  <div class="min-h-screen bg-black text-white font-sans overflow-hidden relative selection:bg-[var(--wild-orange)] selection:text-black">
+  <div class="min-h-screen bg-[#0a0a0a] text-white font-sans overflow-hidden relative selection:bg-[var(--wild-orange)] selection:text-black">
     
+    <!-- INTRO / STORY OVERLAY -->
+    <div id="intro-overlay" class="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center p-8 transition-opacity duration-1000">
+        <div class="max-w-2xl w-full text-center space-y-8 relative">
+            <div class="text-[var(--primary)] text-xs md:text-sm font-mono tracking-[0.5em] animate-pulse">CAPÍTULO FINAL</div>
+            
+            <div class="space-y-6">
+                <h1 class="text-5xl md:text-7xl font-black italic text-white uppercase tracking-tighter arcade-title glitch-text" data-text="THE LAST STAGE">
+                    THE LAST STAGE
+                </h1>
+                
+                <p class="text-gray-400 font-mono text-xs md:text-sm leading-relaxed max-w-lg mx-auto typing-effect">
+                    El torneo ha llegado a su fin. Solo los más fuertes han sobrevivido a las rondas preliminares. Ahora, en la arena digital, los últimos contendientes se preparan para la batalla final. Elige tu equipo, define tu destino y conquista el escenario.
+                </p>
+            </div>
+
+            <button id="start-btn" class="group relative inline-flex items-center justify-center px-8 py-4 bg-transparent overflow-hidden uppercase tracking-[0.2em] text-white font-black text-sm md:text-base border border-white/20 hover:border-[var(--primary)] transition-all duration-300 mt-12">
+                <span class="absolute w-0 h-0 transition-all duration-500 ease-out bg-[var(--primary)] rounded-full group-hover:w-56 group-hover:h-56 opacity-10"></span>
+                <span class="relative animate-pulse">INSERT COIN TO START</span>
+            </button>
+            
+            <div class="absolute bottom-[-100px] left-0 w-full text-center">
+                <p class="text-[10px] text-gray-600 font-mono">CREDITS: 0/1</p>
+            </div>
+        </div>
+        
+        <!-- CRT LINES OVERLAY FOR INTRO -->
+        <div class="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-20 bg-[length:100%_4px,6px_100%] pointer-events-none opacity-20"></div>
+    </div>
+
     <!-- ARCADE BACKGROUND -->
-    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 pointer-events-none z-0"></div>
+    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-30 pointer-events-none z-0"></div>
     <div class="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black pointer-events-none z-0"></div>
     
     <!-- TOP BAR -->
-    <div class="relative z-50 bg-black/80 backdrop-blur border-b border-white/10 py-2">
+    <div class="relative z-50 bg-black/90 backdrop-blur-md border-b border-white/10 py-3">
         <div class="container mx-auto px-4 flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <div class="w-3 h-3 bg-red-600 animate-pulse rounded-sm"></div>
-                <span class="text-xs font-black uppercase tracking-[0.2em] text-white arcade-font">INSERT COIN // PLAY</span>
+            <div class="flex items-center gap-3">
+                <div class="w-3 h-3 bg-[var(--primary)] animate-pulse rounded-full shadow-[0_0_10px_var(--primary)]"></div>
+                <span class="text-xs font-black uppercase tracking-[0.2em] text-white arcade-font">INSERTAR MONEDA // JUGAR</span>
             </div>
-            <div class="text-xs font-mono text-gray-500">STAGE: ARTIST SELECTION</div>
+            <div class="text-xs font-mono text-gray-500 font-bold">FASE: SELECCIÓN DE ARTISTA</div>
         </div>
     </div>
 
     <!-- MAIN ARENA CONTAINER -->
-    <div class="relative z-10 container mx-auto px-4 py-8 h-[calc(100vh-60px)] flex flex-col gap-8">
+    <div class="relative z-10 container mx-auto px-4 py-8 h-[calc(100vh-60px)] flex flex-col gap-6">
       
       <!-- HEADER -->
-      <div class="text-center animate-fade-in-down">
-          <h1 class="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600 drop-shadow-[0_5px_5px_rgba(255,0,0,0.5)] arcade-title">
-              CHOOSE YOUR FIGHTER
+      <div class="text-center animate-fade-in-down mb-4">
+          <h1 class="text-4xl md:text-7xl font-black italic uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-[var(--primary)] to-red-600 drop-shadow-[0_5px_5px_rgba(255,0,0,0.5)] arcade-title">
+              ELIGE TU LUCHADOR
           </h1>
-          <p class="text-xs md:text-sm font-bold text-gray-400 uppercase tracking-[0.5em] mt-2">
-              DRAG & DROP TO SELECT ARTIST
+          <p class="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-[0.5em] mt-2 animate-pulse">
+              ARRASTRA Y SUELTA PARA SELECCIONAR
           </p>
       </div>
 
       <!-- GAME LAYOUT: GRID + STAGE -->
-      <div class="flex-1 flex flex-col lg:flex-row gap-8 overflow-hidden">
+      <div class="flex-1 flex flex-col lg:flex-row gap-8 overflow-hidden min-h-0">
           
           <!-- LEFT: CHARACTER SELECT GRID (Expanded width) -->
-          <div class="w-full lg:w-5/12 flex flex-col gap-4">
-              <div class="bg-black/80 border-4 border-yellow-600/50 p-3 rounded-lg backdrop-blur-sm shadow-[0_0_30px_rgba(255,215,0,0.1)]">
-                  <div class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2 max-h-[70vh] overflow-y-auto pr-2 custom-scrollbar">
+          <div class="w-full lg:w-5/12 flex flex-col h-full min-h-0">
+              <div class="bg-black/80 border-4 border-[var(--primary)] p-4 rounded-xl backdrop-blur-sm shadow-[0_0_30px_rgba(201,131,0,0.2)] flex-1 flex flex-col min-h-0">
+                  <div class="grid grid-cols-4 sm:grid-cols-5 gap-2 overflow-y-auto pr-2 custom-scrollbar content-start">
                       {artists.map((artist: any) => (
                           <div 
                               draggable="true"
                               data-id={artist.id}
-                              class="artist-token aspect-square relative group cursor-grab active:cursor-grabbing border-2 border-white/20 hover:border-yellow-400 hover:scale-110 hover:z-10 transition-all duration-150 overflow-hidden bg-zinc-800 rounded-sm shadow-lg"
+                              class="artist-token aspect-square relative group cursor-pointer active:cursor-grabbing border-2 border-white/20 hover:border-[var(--primary)] hover:scale-105 hover:z-10 transition-all duration-150 overflow-hidden bg-zinc-800 rounded-md shadow-lg"
                           >
-                              <img src={artist.imagenes.profile} class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300" />
-                              <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                              <img src={artist.imagenes.profile} class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300" loading="lazy" />
+                              <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center p-1">
+                                  <span class="text-[8px] font-black text-white uppercase text-center leading-none truncate w-full">{artist.nombre}</span>
+                              </div>
                               <!-- Selection Highlight -->
-                              <div class="absolute inset-0 border-2 border-transparent group-hover:border-yellow-400 transition-colors"></div>
+                              <div class="absolute inset-0 border-2 border-transparent group-hover:border-[var(--primary)] transition-colors"></div>
                           </div>
                       ))}
                       <!-- Random Select Slot -->
-                      <div class="aspect-square bg-zinc-900 border-2 border-white/10 flex items-center justify-center text-2xl font-black text-gray-600 cursor-pointer hover:bg-zinc-800 hover:text-white transition-colors">
+                      <!-- <div class="aspect-square bg-zinc-900 border-2 border-white/10 flex items-center justify-center text-2xl font-black text-gray-600 cursor-pointer hover:bg-zinc-800 hover:text-white transition-colors rounded-md">
                           ?
+                      </div> -->
+                  </div>
+                  
+                  <!-- TEAM SLOTS (KOF Style) -->
+                  <div id="team-slots" class="mt-4 pt-4 border-t border-white/10 grid grid-cols-3 gap-2">
+                      <div class="team-slot h-12 bg-white/5 border border-white/10 rounded flex items-center justify-center text-[10px] text-gray-600 font-black uppercase transition-colors relative overflow-hidden cursor-pointer hover:bg-white/10" data-role="leader">
+                          <span class="pointer-events-none z-10">Líder</span>
+                          <div class="slot-content absolute inset-0 w-full h-full hidden"></div>
+                      </div>
+                      <div class="team-slot h-12 bg-white/5 border border-white/10 rounded flex items-center justify-center text-[10px] text-gray-600 font-black uppercase transition-colors relative overflow-hidden cursor-pointer hover:bg-white/10" data-role="support">
+                          <span class="pointer-events-none z-10">Soporte</span>
+                          <div class="slot-content absolute inset-0 w-full h-full hidden"></div>
+                      </div>
+                      <div class="team-slot h-12 bg-white/5 border border-white/10 rounded flex items-center justify-center text-[10px] text-gray-600 font-black uppercase transition-colors relative overflow-hidden cursor-pointer hover:bg-white/10" data-role="anchor">
+                          <span class="pointer-events-none z-10">Ancla</span>
+                          <div class="slot-content absolute inset-0 w-full h-full hidden"></div>
                       </div>
                   </div>
               </div>
-              
-              <!-- INSTRUCTIONS (Desktop only) -->
-              <div class="hidden lg:block bg-gradient-to-r from-red-900/40 to-black border-l-4 border-red-600 p-4 text-[10px] font-mono text-red-200/80">
-                  <p class="mb-1"><span class="text-red-500 font-bold">>></span> SYSTEM READY...</p>
-                  <p class="mb-1"><span class="text-red-500 font-bold">>></span> SELECT YOUR FIGHTER TO BEGIN</p>
-                  <p><span class="text-red-500 font-bold">>></span> ANALYZING AUDIO SIGNATURES...</p>
-              </div>
           </div>
 
-          <!-- CENTER: BATTLE ARENA (DROP ZONE) - Smaller relative to grid -->
+          <!-- CENTER: BATTLE ARENA (DROP ZONE) -->
           <div 
               id="battle-arena"
-              class="flex-1 relative bg-black/40 border-4 border-dashed border-white/10 rounded-xl flex items-center justify-center overflow-hidden group transition-all duration-300 backdrop-blur-md"
+              class="w-full lg:w-7/12 relative bg-black/40 border-4 border-dashed border-white/10 rounded-xl flex items-center justify-center overflow-hidden group transition-all duration-300 backdrop-blur-md min-h-[400px] lg:min-h-0"
           >
-              <!-- Placeholder State -->
-              <div id="arena-placeholder" class="text-center opacity-50 group-hover:opacity-80 transition-opacity pointer-events-none">
-                  <div class="text-6xl mb-4 animate-bounce text-white/20">⇩</div>
-                  <h3 class="text-2xl font-black uppercase text-white/30 tracking-widest">DROP ZONE</h3>
+              <!-- Placeholder State (NOW LIVE VIDEO) -->
+              <div id="arena-placeholder" class="absolute inset-0 w-full h-full flex flex-col items-center justify-center bg-black transition-opacity duration-500 z-10 overflow-hidden">
+                  <!-- Video Background (Simulated Live Feed) -->
+                  <div class="absolute inset-0 opacity-40 mix-blend-screen pointer-events-none">
+                       <!-- This would be an iframe or video tag for the live stream -->
+                       <video autoplay loop muted playsinline class="w-full h-full object-cover grayscale contrast-125 brightness-75">
+                           <source src="https://videos.pexels.com/video-files/3121459/3121459-hd_1920_1080_25fps.mp4" type="video/mp4">
+                       </video>
+                  </div>
+                  
+                  <div class="relative z-10 text-center p-8 backdrop-blur-sm bg-black/30 w-full h-full flex flex-col items-center justify-center border-4 border-dashed border-white/10 rounded-xl group-hover:border-[var(--primary)]/50 transition-colors">
+                      <div class="flex items-center gap-2 mb-6 animate-pulse">
+                          <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+                          <span class="text-[10px] font-black text-red-500 uppercase tracking-widest">LIVE FEED // ARENA CAM 1</span>
+                      </div>
+                      
+                      <div class="text-6xl mb-4 animate-bounce text-white/80 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">⇩</div>
+                      <h3 class="text-3xl font-black uppercase text-white tracking-widest mb-2 glitch-text" data-text="ZONA DE BATALLA">ZONA DE BATALLA</h3>
+                      <p class="text-xs font-mono text-gray-400 uppercase tracking-wider bg-black/50 px-2 py-1">Arrastra tu luchador para iniciar análisis</p>
+                  </div>
               </div>
 
               <!-- Active Artist State (Hidden by default) -->
@@ -281,6 +398,12 @@ const config = {
               
               <!-- CRT Scanline Effect -->
               <div class="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-20 bg-[length:100%_2px,3px_100%] pointer-events-none"></div>
+              
+              <!-- Corner Decorations -->
+              <div class="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-[var(--primary)] rounded-tl-lg"></div>
+              <div class="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-[var(--primary)] rounded-tr-lg"></div>
+              <div class="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-[var(--primary)] rounded-bl-lg"></div>
+              <div class="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-[var(--primary)] rounded-br-lg"></div>
           </div>
 
       </div>
@@ -294,52 +417,172 @@ const config = {
     const placeholder = document.getElementById('arena-placeholder');
     const content = document.getElementById('arena-content');
     const tokens = document.querySelectorAll('.artist-token');
+    const teamSlots = document.querySelectorAll('.team-slot');
     
-    let draggedArtistId = null;
+    // START SCREEN LOGIC
+    const introOverlay = document.getElementById('intro-overlay');
+    const startBtn = document.getElementById('start-btn');
+    
+    // Simulate typing effect completion or just simple fade out on click
+    if (startBtn) {
+        startBtn.addEventListener('click', () => {
+            // Play sound effect if possible
+            // fade out
+            introOverlay.style.opacity = '0';
+            setTimeout(() => {
+                introOverlay.style.display = 'none';
+            }, 1000);
+        });
+    }
+
+    // Auto-select first artist on load for visual impact
+    setTimeout(() => {
+        // renderArtist(artists[0].id); // Optional: Auto-load
+    }, 500);
 
     // DRAG EVENTS
     tokens.forEach(token => {
         token.addEventListener('dragstart', (e) => {
-            draggedArtistId = token.getAttribute('data-id');
-            e.dataTransfer.setData('text/plain', draggedArtistId);
+            const id = token.getAttribute('data-id');
+            e.dataTransfer.setData('text/plain', id);
             e.dataTransfer.effectAllowed = 'copy';
-            arena.classList.add('border-yellow-500', 'bg-yellow-500/10'); // Highlight arena
+            arena.classList.add('border-[var(--primary)]', 'bg-[var(--primary)]/10'); // Highlight arena
+            
+            // Highlight team slots
+            teamSlots.forEach(s => {
+                if (!s.querySelector('.slot-content').innerHTML) {
+                     s.classList.add('border-dashed', 'border-white/50');
+                }
+            });
         });
 
         token.addEventListener('dragend', () => {
-            arena.classList.remove('border-yellow-500', 'bg-yellow-500/10');
+            arena.classList.remove('border-[var(--primary)]', 'bg-[var(--primary)]/10');
+            
+            // Remove highlight from team slots
+            teamSlots.forEach(s => s.classList.remove('border-dashed', 'border-white/50'));
         });
 
-        // Mobile Tap Support (Click instead of drag for mobile)
+        // Click support
         token.addEventListener('click', () => {
             const id = token.getAttribute('data-id');
             renderArtist(id);
+            
+            // Remove active class from all
+            tokens.forEach(t => t.classList.remove('border-[var(--primary)]', 'scale-105', 'z-20', 'grayscale-0'));
+            // Add to current
+            token.classList.add('border-[var(--primary)]', 'scale-105', 'z-20', 'grayscale-0');
+            token.classList.remove('border-white/20');
+            token.querySelector('img').classList.remove('grayscale');
         });
     });
 
-    // DROP ZONE EVENTS
+    // DROP ZONE EVENTS (MAIN ARENA)
     arena.addEventListener('dragover', (e) => {
-        e.preventDefault(); // Necessary to allow dropping
+        e.preventDefault();
         e.dataTransfer.dropEffect = 'copy';
     });
 
     arena.addEventListener('dragenter', () => {
-        arena.classList.add('scale-[1.02]', 'border-white');
+        arena.classList.add('scale-[1.01]', 'border-white');
     });
 
     arena.addEventListener('dragleave', () => {
-        arena.classList.remove('scale-[1.02]', 'border-white');
+        arena.classList.remove('scale-[1.01]', 'border-white');
     });
 
     arena.addEventListener('drop', (e) => {
         e.preventDefault();
-        arena.classList.remove('scale-[1.02]', 'border-white', 'border-yellow-500', 'bg-yellow-500/10');
+        arena.classList.remove('scale-[1.01]', 'border-white', 'border-[var(--primary)]', 'bg-[var(--primary)]/10');
         const id = e.dataTransfer.getData('text/plain');
-        renderArtist(id);
+        if (id) renderArtist(id);
     });
 
+    // TEAM SLOTS LOGIC
+    teamSlots.forEach(slot => {
+        slot.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'copy';
+        });
+
+        slot.addEventListener('dragenter', () => {
+            slot.classList.add('border-[var(--primary)]', 'bg-[var(--primary)]/20');
+        });
+
+        slot.addEventListener('dragleave', () => {
+            slot.classList.remove('border-[var(--primary)]', 'bg-[var(--primary)]/20');
+        });
+
+        slot.addEventListener('drop', (e) => {
+            e.preventDefault();
+            slot.classList.remove('border-[var(--primary)]', 'bg-[var(--primary)]/20', 'border-dashed', 'border-white/50');
+            const id = e.dataTransfer.getData('text/plain');
+            if (id) fillTeamSlot(slot, id);
+        });
+
+        // Click to clear slot if filled
+        slot.addEventListener('click', () => {
+            const contentDiv = slot.querySelector('.slot-content');
+            if (!contentDiv.classList.contains('hidden')) {
+                // Clear slot
+                contentDiv.innerHTML = '';
+                contentDiv.classList.add('hidden');
+                slot.querySelector('span').classList.remove('opacity-0');
+                slot.classList.remove('border-[var(--primary)]');
+                slot.removeAttribute('data-artist-id');
+                checkTeamStatus();
+            }
+        });
+    });
+
+    function checkTeamStatus() {
+        const filledSlots = document.querySelectorAll('.slot-content:not(.hidden)').length;
+        const statusText = document.querySelector('.arcade-font');
+        
+        if (filledSlots === 3) {
+            statusText.innerText = "EQUIPO LISTO // PRESIONA START";
+            statusText.classList.add('text-[var(--primary)]', 'animate-pulse');
+            statusText.classList.remove('text-white');
+        } else {
+            statusText.innerText = "INSERTAR MONEDA // JUGAR";
+            statusText.classList.remove('text-[var(--primary)]', 'animate-pulse');
+            statusText.classList.add('text-white');
+        }
+    }
+
+    function fillTeamSlot(slot, artistId) {
+        // Check if artist is already in another slot
+        const isAlreadySelected = Array.from(teamSlots).some(s => s.getAttribute('data-artist-id') === artistId && s !== slot);
+        if (isAlreadySelected) return;
+
+        const artist = artists.find(a => a.id == artistId);
+        if (!artist) return;
+
+        const contentDiv = slot.querySelector('.slot-content');
+        const label = slot.querySelector('span');
+        
+        // Hide label
+        label.classList.add('opacity-0');
+
+        // Show content
+        contentDiv.classList.remove('hidden');
+        contentDiv.innerHTML = `
+            <img src="${artist.imagenes.profile}" class="w-full h-full object-cover grayscale group-hover/slot:grayscale-0 transition-all duration-300" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end justify-center pb-1 pointer-events-none">
+                <span class="text-[8px] font-black text-white uppercase truncate px-1 w-full text-center leading-none drop-shadow-md">${artist.nombre}</span>
+            </div>
+            <div class="absolute top-0 right-0 p-1 pointer-events-none">
+                <div class="w-1.5 h-1.5 rounded-full bg-[var(--primary)] animate-pulse shadow-[0_0_5px_var(--primary)]"></div>
+            </div>
+        `;
+        
+        slot.classList.add('border-[var(--primary)]');
+        slot.setAttribute('data-artist-id', artistId);
+        checkTeamStatus();
+    }
+
     function renderArtist(id) {
-        const artist = artists.find(a => a.id == id); // Loose equality for string/number match
+        const artist = artists.find(a => a.id == id);
         if (!artist) return;
 
         // Hide Placeholder
@@ -349,81 +592,92 @@ const config = {
         // Construct HTML
         content.innerHTML = `
             <!-- BIG PORTRAIT (LEFT) -->
-            <div class="w-full md:w-5/12 h-1/2 md:h-full relative overflow-hidden bg-black animate-slide-in-left border-r-4 border-yellow-500/50">
-                <img src="${artist.imagenes.profile}" class="w-full h-full object-cover object-top opacity-90 contrast-125" />
+            <div class="w-full md:w-5/12 h-1/2 md:h-full relative overflow-hidden bg-black animate-slide-in-left border-r-4 border-[var(--primary)]/50 group-inner">
+                <img src="${artist.imagenes.profile}" class="w-full h-full object-cover object-top opacity-90 contrast-125 transition-transform duration-[5s] hover:scale-110" />
                 <div class="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
                 
                 <!-- Character Name Plate -->
-                <div class="absolute bottom-10 left-0 bg-gradient-to-r from-red-600 to-transparent py-2 px-8 w-full transform -skew-x-12 -translate-x-4">
-                    <h2 class="text-4xl md:text-5xl font-black text-white italic uppercase tracking-tighter leading-none drop-shadow-md transform skew-x-12" style="text-shadow: 2px 2px 0px #000;">
+                <div class="absolute bottom-8 left-0 bg-gradient-to-r from-[var(--secondary)] to-transparent py-3 px-8 w-full transform -skew-x-12 -translate-x-4 border-t border-white/20 border-b border-white/20">
+                    <h2 class="text-4xl md:text-5xl font-black text-white italic uppercase tracking-tighter leading-none drop-shadow-md transform skew-x-12 pl-4" style="text-shadow: 3px 3px 0px #000;">
                         ${artist.nombre}
                     </h2>
+                    <p class="text-[10px] font-black uppercase tracking-[0.4em] text-white/80 transform skew-x-12 pl-4 mt-1">${artist.estilo} • ${artist.origen}</p>
                 </div>
             </div>
 
-            <!-- STATS & INFO (RIGHT) - More detailed -->
+            <!-- STATS & INFO (RIGHT) -->
             <div class="w-full md:w-7/12 h-1/2 md:h-full bg-zinc-900/95 p-6 md:p-8 flex flex-col justify-between animate-slide-in-right relative overflow-hidden">
                 
                 <!-- Background Element -->
                 <div class="absolute top-0 right-0 text-[150px] font-black text-white/5 leading-none pointer-events-none select-none -translate-y-4 translate-x-4 overflow-hidden">KO</div>
 
-                <div class="space-y-4 relative z-10">
+                <div class="space-y-6 relative z-10">
                     <!-- Bio Section -->
-                    <div class="border-l-4 border-blue-500 pl-4 py-1 bg-white/5 rounded-r-lg">
-                        <h4 class="text-[10px] font-black uppercase text-blue-400 tracking-widest mb-1">Fighter Profile</h4>
-                        <p class="text-gray-300 font-medium text-sm leading-relaxed line-clamp-3">"${artist.bio}"</p>
+                    <div class="border-l-4 border-[var(--primary)] pl-4 py-2 bg-white/5 rounded-r-lg backdrop-blur-sm">
+                        <h4 class="text-[10px] font-black uppercase text-[var(--primary)] tracking-widest mb-1 flex items-center gap-2">
+                            <span class="w-2 h-2 bg-[var(--primary)] rounded-full"></span>
+                            Perfil de Luchador
+                        </h4>
+                        <p class="text-gray-300 font-medium text-sm leading-relaxed line-clamp-3 italic">"${artist.bio}"</p>
                     </div>
                     
-                    <!-- STAT BARS (Compact) -->
-                    <div class="space-y-2 pt-2">
-                        <div class="flex items-center gap-3">
-                            <span class="w-16 text-[10px] font-black text-yellow-500 uppercase">Power</span>
-                            <div class="flex-1 h-3 bg-black border border-white/20 skew-x-[-12deg]">
-                                <div class="h-full bg-gradient-to-r from-red-600 via-orange-500 to-yellow-400" style="width: ${artist.stats.power || 80}%"></div>
+                    <!-- STAT BARS (Hexagon Mock via Bars) -->
+                    <div class="space-y-3 pt-2">
+                        <!-- Power -->
+                        <div class="flex items-center gap-3 group/stat">
+                            <span class="w-16 text-[10px] font-black text-red-500 uppercase tracking-wider group-hover/stat:scale-110 transition-transform">Poder</span>
+                            <div class="flex-1 h-4 bg-black border border-white/20 skew-x-[-12deg] overflow-hidden relative">
+                                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/diagonal-stripes.png')] opacity-20"></div>
+                                <div class="h-full bg-gradient-to-r from-red-900 via-red-600 to-red-400 w-0 animate-fill-bar" style="width: ${artist.stats.power || 80}%; animation-delay: 0.1s"></div>
                             </div>
-                            <span class="text-[10px] font-mono text-white w-6 text-right">${artist.stats.power || 80}</span>
+                            <span class="text-[12px] font-black font-mono text-white w-8 text-right">${artist.stats.power || 80}</span>
                         </div>
-                        <div class="flex items-center gap-3">
-                            <span class="w-16 text-[10px] font-black text-blue-400 uppercase">Speed</span>
-                            <div class="flex-1 h-3 bg-black border border-white/20 skew-x-[-12deg]">
-                                <div class="h-full bg-gradient-to-r from-blue-800 via-blue-500 to-cyan-400" style="width: ${artist.stats.speed || 75}%"></div>
+                        <!-- Speed -->
+                        <div class="flex items-center gap-3 group/stat">
+                            <span class="w-16 text-[10px] font-black text-blue-400 uppercase tracking-wider group-hover/stat:scale-110 transition-transform">Velocidad</span>
+                            <div class="flex-1 h-4 bg-black border border-white/20 skew-x-[-12deg] overflow-hidden relative">
+                                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/diagonal-stripes.png')] opacity-20"></div>
+                                <div class="h-full bg-gradient-to-r from-blue-900 via-blue-600 to-cyan-400 w-0 animate-fill-bar" style="width: ${artist.stats.speed || 75}%; animation-delay: 0.2s"></div>
                             </div>
-                            <span class="text-[10px] font-mono text-white w-6 text-right">${artist.stats.speed || 75}</span>
+                            <span class="text-[12px] font-black font-mono text-white w-8 text-right">${artist.stats.speed || 75}</span>
                         </div>
-                        <div class="flex items-center gap-3">
-                            <span class="w-16 text-[10px] font-black text-green-500 uppercase">Tech</span>
-                            <div class="flex-1 h-3 bg-black border border-white/20 skew-x-[-12deg]">
-                                <div class="h-full bg-gradient-to-r from-green-800 via-emerald-500 to-lime-400" style="width: ${artist.stats.technique || 85}%"></div>
+                        <!-- Tech -->
+                        <div class="flex items-center gap-3 group/stat">
+                            <span class="w-16 text-[10px] font-black text-green-500 uppercase tracking-wider group-hover/stat:scale-110 transition-transform">Técnica</span>
+                            <div class="flex-1 h-4 bg-black border border-white/20 skew-x-[-12deg] overflow-hidden relative">
+                                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/diagonal-stripes.png')] opacity-20"></div>
+                                <div class="h-full bg-gradient-to-r from-green-900 via-green-600 to-lime-400 w-0 animate-fill-bar" style="width: ${artist.stats.technique || 85}%; animation-delay: 0.3s"></div>
                             </div>
-                            <span class="text-[10px] font-mono text-white w-6 text-right">${artist.stats.technique || 85}</span>
+                            <span class="text-[12px] font-black font-mono text-white w-8 text-right">${artist.stats.technique || 85}</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- SPECIAL MOVES (TRACKS) -->
-                <div class="mt-4 relative z-10 flex-1 overflow-y-auto custom-scrollbar pr-2">
-                    <h3 class="text-sm font-black text-white uppercase mb-3 border-b border-white/20 pb-1 flex justify-between items-center bg-black/20 px-2 py-1 rounded">
-                        <span class="text-red-500">Command List</span>
-                        <span class="text-[9px] text-gray-500 tracking-widest">SPECIALS</span>
+                <div class="mt-6 relative z-10 flex-1 overflow-y-auto custom-scrollbar pr-2 min-h-0">
+                    <h3 class="text-xs font-black text-white uppercase mb-3 border-b border-white/20 pb-2 flex justify-between items-center bg-white/5 px-3 py-2 rounded">
+                        <span class="text-[var(--primary)]">Lista de Comandos</span>
+                        <span class="text-[9px] text-gray-400 tracking-widest">SPECIAL MOVES</span>
                     </h3>
-                    <ul class="space-y-1">
-                        ${(artist.tracks || ['Unknown Track 1', 'Unknown Track 2']).map((track, i) => `
-                            <li class="flex items-center justify-between group cursor-pointer hover:bg-white/10 p-2 rounded transition-colors border border-transparent hover:border-yellow-500/30">
+                    <ul class="space-y-2">
+                        ${(artist.tracks || ['Pista Desconocida 1', 'Pista Desconocida 2']).map((track, i) => `
+                            <li class="flex items-center justify-between group cursor-pointer hover:bg-white/10 p-2 rounded transition-all border border-transparent hover:border-[var(--primary)]/30">
                                 <div class="flex items-center gap-3">
-                                    <span class="text-yellow-500 font-black font-mono text-xs w-24 text-right">⬇ ↘ ➡ + ${['LP', 'HP', 'LK', 'HK'][i]}</span>
-                                    <span class="text-white font-bold uppercase text-xs group-hover:text-yellow-400 transition-colors">${track}</span>
+                                    <span class="text-[var(--primary)] font-black font-mono text-[10px] w-28 text-right opacity-70 group-hover:opacity-100 transition-opacity">⬇ ↘ ➡ + ${['LP', 'HP', 'LK', 'HK'][i]}</span>
+                                    <span class="text-white font-bold uppercase text-[10px] md:text-xs group-hover:text-[var(--primary)] transition-colors tracking-wide">${track}</span>
                                 </div>
-                                <span class="opacity-0 group-hover:opacity-100 text-[9px] text-red-500 font-black animate-pulse">CRITICAL</span>
+                                <span class="opacity-0 group-hover:opacity-100 text-[8px] text-red-500 font-black animate-pulse bg-red-900/20 px-2 py-0.5 rounded border border-red-500/50">CRITICAL</span>
                             </li>
                         `).join('')}
                     </ul>
                 </div>
 
                 <!-- ACTION BUTTON -->
-                <div class="pt-4 relative z-10">
-                    <a href="/artista/${artist.slug}" class="relative overflow-hidden block w-full py-3 bg-gradient-to-r from-red-700 to-red-600 hover:from-red-600 hover:to-red-500 text-white font-black text-lg uppercase tracking-[0.2em] text-center skew-x-[-12deg] shadow-[4px_4px_0px_#000] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_#000] transition-all group">
-                        <span class="relative z-10">SELECT FIGHTER</span>
-                        <div class="absolute inset-0 bg-white/20 transform -translate-x-full group-hover:translate-x-full transition-transform duration-500 skew-x-12"></div>
+                <div class="pt-6 relative z-10 mt-auto">
+                    <a href="/artista/${artist.slug}" class="relative overflow-hidden block w-full py-4 bg-gradient-to-r from-[var(--primary)] to-yellow-600 hover:from-white hover:to-white text-black font-black text-xl uppercase tracking-[0.2em] text-center skew-x-[-12deg] shadow-[4px_4px_0px_rgba(255,255,255,0.2)] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_rgba(255,255,255,0.4)] transition-all group">
+                        <span class="relative z-10 group-hover:text-black transition-colors">SELECCIONAR</span>
+                        <div class="absolute inset-0 bg-white transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 skew-x-12"></div>
                     </a>
                 </div>
             </div>
@@ -434,7 +688,7 @@ const config = {
 <style>
   /* ARCADE FONTS & ANIMATIONS */
   .arcade-font {
-    font-family: 'Courier New', Courier, monospace; /* Fallback to mono if no arcade font loaded */
+    font-family: 'Courier New', Courier, monospace;
   }
   
   .arcade-title {
@@ -442,33 +696,39 @@ const config = {
   }
 
   .custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
+    width: 4px;
   }
   .custom-scrollbar::-webkit-scrollbar-track {
-    background: #111;
+    background: rgba(255,255,255,0.05);
   }
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #333;
-    border-radius: 3px;
+    background: var(--primary);
+    border-radius: 2px;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    background: #fff;
   }
 
   @keyframes slideInLeft {
-    from { transform: translateX(-100%); opacity: 0; }
+    from { transform: translateX(-50px); opacity: 0; }
     to { transform: translateX(0); opacity: 1; }
   }
   @keyframes slideInRight {
-    from { transform: translateX(100%); opacity: 0; }
+    from { transform: translateX(50px); opacity: 0; }
     to { transform: translateX(0); opacity: 1; }
+  }
+  @keyframes fillBar {
+    from { width: 0; }
   }
   
   .animate-slide-in-left {
-    animation: slideInLeft 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: slideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
   .animate-slide-in-right {
-    animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .animate-fill-bar {
+    animation: fillBar 1s ease-out forwards;
   }
 
   /* CRT Scanlines helper */
@@ -482,5 +742,92 @@ const config = {
     );
     background-size: 100% 4px;
   }
-</style>
 
+  /* GLITCH TEXT EFFECT */
+  .glitch-text {
+    position: relative;
+  }
+  
+  .glitch-text::before,
+  .glitch-text::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .glitch-text::before {
+    left: 2px;
+    text-shadow: -1px 0 #ff00c1;
+    clip: rect(44px, 450px, 56px, 0);
+    animation: glitch-anim 5s infinite linear alternate-reverse;
+  }
+  
+  .glitch-text::after {
+    left: -2px;
+    text-shadow: -1px 0 #00fff9;
+    clip: rect(44px, 450px, 56px, 0);
+    animation: glitch-anim2 5s infinite linear alternate-reverse;
+  }
+  
+  @keyframes glitch-anim {
+    0% { clip: rect(70px, 9999px, 71px, 0); }
+    5% { clip: rect(29px, 9999px, 83px, 0); }
+    10% { clip: rect(6px, 9999px, 67px, 0); }
+    15% { clip: rect(43px, 9999px, 16px, 0); }
+    20% { clip: rect(10px, 9999px, 92px, 0); }
+    25% { clip: rect(18px, 9999px, 3px, 0); }
+    30% { clip: rect(78px, 9999px, 7px, 0); }
+    35% { clip: rect(54px, 9999px, 47px, 0); }
+    40% { clip: rect(16px, 9999px, 35px, 0); }
+    45% { clip: rect(34px, 9999px, 14px, 0); }
+    50% { clip: rect(89px, 9999px, 55px, 0); }
+    55% { clip: rect(21px, 9999px, 76px, 0); }
+    60% { clip: rect(68px, 9999px, 1px, 0); }
+    65% { clip: rect(93px, 9999px, 87px, 0); }
+    70% { clip: rect(40px, 9999px, 20px, 0); }
+    75% { clip: rect(5px, 9999px, 59px, 0); }
+    80% { clip: rect(31px, 9999px, 95px, 0); }
+    85% { clip: rect(65px, 9999px, 27px, 0); }
+    90% { clip: rect(11px, 9999px, 51px, 0); }
+    95% { clip: rect(57px, 9999px, 80px, 0); }
+    100% { clip: rect(83px, 9999px, 4px, 0); }
+  }
+  
+  @keyframes glitch-anim2 {
+    0% { clip: rect(65px, 9999px, 100px, 0); }
+    5% { clip: rect(52px, 9999px, 74px, 0); }
+    10% { clip: rect(79px, 9999px, 85px, 0); }
+    15% { clip: rect(75px, 9999px, 5px, 0); }
+    20% { clip: rect(67px, 9999px, 61px, 0); }
+    25% { clip: rect(14px, 9999px, 79px, 0); }
+    30% { clip: rect(1px, 9999px, 66px, 0); }
+    35% { clip: rect(86px, 9999px, 30px, 0); }
+    40% { clip: rect(23px, 9999px, 98px, 0); }
+    45% { clip: rect(85px, 9999px, 72px, 0); }
+    50% { clip: rect(71px, 9999px, 75px, 0); }
+    55% { clip: rect(2px, 9999px, 48px, 0); }
+    60% { clip: rect(30px, 9999px, 16px, 0); }
+    65% { clip: rect(59px, 9999px, 50px, 0); }
+    70% { clip: rect(98px, 9999px, 4px, 0); }
+    75% { clip: rect(18px, 9999px, 55px, 0); }
+    80% { clip: rect(94px, 9999px, 11px, 0); }
+    85% { clip: rect(35px, 9999px, 77px, 0); }
+    90% { clip: rect(41px, 9999px, 36px, 0); }
+    95% { clip: rect(56px, 9999px, 81px, 0); }
+    100% { clip: rect(81px, 9999px, 25px, 0); }
+  }
+  
+  .typing-effect {
+    border-right: 2px solid white;
+    white-space: normal;
+    animation: blink-caret 0.75s step-end infinite;
+  }
+  
+  @keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: white }
+  }
+</style>
