@@ -295,27 +295,67 @@ const config = {
           <!-- BATTLE STAGE (VERTICAL LAYOUT) -->
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
               
-              <!-- LEFT: CHARACTER SELECT GRID (Scrollable) -->
-              <div class="lg:col-span-3 bg-black/80 border-2 border-white/10 p-4 rounded-xl backdrop-blur-sm h-[600px] flex flex-col overflow-hidden">
-                  <h3 class="text-[10px] font-black text-[var(--primary)] uppercase tracking-widest mb-4 border-b border-white/10 pb-2">DISPONIBLES</h3>
-                  <div class="grid grid-cols-3 gap-2 overflow-y-auto pr-2 custom-scrollbar content-start">
-                      {artists.map((artist: any) => (
-                          <div 
-                              draggable="true"
-                              data-id={artist.id}
-                              class="artist-token aspect-square relative group cursor-grab active:cursor-grabbing border border-white/10 hover:border-[var(--primary)] hover:scale-105 transition-all duration-150 overflow-hidden bg-zinc-800 rounded-md shadow-lg"
-                          >
-                              <img src={artist.imagenes.profile} class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300" loading="lazy" />
-                              <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center p-1">
-                                  <span class="text-[7px] font-black text-white uppercase text-center leading-none truncate w-full">{artist.nombre}</span>
-                              </div>
+              <!-- LEFT: SLOT MACHINE SELECTOR -->
+              <div class="lg:col-span-4 flex flex-col gap-4">
+                  <div class="bg-[#1a1a1a] border-4 border-[#333] rounded-3xl p-6 shadow-[0_0_50px_rgba(0,0,0,0.5)] relative overflow-hidden group">
+                      <!-- Slot Machine Header -->
+                      <div class="flex justify-between items-center mb-6 border-b-2 border-white/5 pb-4">
+                          <div>
+                              <h3 class="text-xs font-black text-[var(--primary)] uppercase tracking-tighter">CASINO WILD</h3>
+                              <p class="text-[8px] text-gray-500 font-bold uppercase tracking-widest">LUCKY DRAW V1</p>
                           </div>
-                      ))}
+                          <div class="flex gap-1">
+                              <div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
+                              <div class="w-2 h-2 rounded-full bg-yellow-500 animate-pulse [animation-delay:0.2s]"></div>
+                              <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse [animation-delay:0.4s]"></div>
+                          </div>
+                      </div>
+
+                      <div class="flex gap-4 items-center">
+                          <!-- The Slot Reel -->
+                          <div class="flex-1 bg-black rounded-xl border-4 border-[#222] h-48 relative overflow-hidden shadow-[inset_0_0_20px_rgba(0,0,0,1)]">
+                              <div id="slot-reel" class="absolute inset-0 flex flex-col transition-transform duration-[3s] cubic-bezier(0.1, 0, 0.1, 1)">
+                                  <!-- Reel items will be injected by JS -->
+                              </div>
+                              <!-- Glass Overlay -->
+                              <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/60 pointer-events-none z-10"></div>
+                              <div class="absolute inset-y-0 left-0 right-0 border-y border-white/10 z-20 pointer-events-none h-1/3 top-1/3 bg-white/5"></div>
+                          </div>
+
+                          <!-- The Lever -->
+                          <div class="relative h-48 w-12 flex flex-col items-center">
+                              <div class="w-2 h-full bg-gradient-to-b from-gray-400 to-gray-800 rounded-full shadow-lg"></div>
+                              <button id="slot-lever" class="absolute -top-2 w-10 h-10 bg-red-600 rounded-full border-4 border-red-800 shadow-[0_5px_0_rgb(153,27,27)] active:shadow-none active:translate-y-1 transition-all hover:scale-110 group-active:translate-y-32 duration-300">
+                                  <div class="w-full h-full rounded-full bg-gradient-to-tr from-transparent to-white/30"></div>
+                              </button>
+                          </div>
+                      </div>
+
+                      <div class="mt-6 text-center">
+                          <p class="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em]">¡JALA LA PALANCA!</p>
+                      </div>
+                  </div>
+
+                  <!-- Artist Info Panel (Appears after draw) -->
+                  <div id="artist-lucky-panel" class="bg-black/60 border-2 border-white/5 rounded-2xl p-4 backdrop-blur-sm opacity-0 translate-y-4 transition-all duration-500 h-[320px] overflow-hidden">
+                      <div class="flex gap-4 h-full">
+                          <div class="w-1/3 h-full rounded-xl overflow-hidden border-2 border-white/10">
+                              <img id="lucky-artist-img" src="" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" />
+                          </div>
+                          <div class="flex-1 flex flex-col">
+                              <h4 id="lucky-artist-name" class="text-xl font-black italic text-[var(--primary)] uppercase tracking-tighter">---</h4>
+                              <span id="lucky-artist-role" class="text-[8px] font-bold text-gray-500 uppercase tracking-widest mb-2 border-b border-white/5 pb-1">---</span>
+                              <div class="flex-1 overflow-y-auto custom-scrollbar pr-2">
+                                  <p id="lucky-artist-bio" class="text-[10px] text-gray-400 leading-relaxed italic">---</p>
+                              </div>
+                              <button id="add-to-team-btn" class="mt-4 bg-white text-black text-[10px] font-black py-2 rounded-lg uppercase tracking-widest hover:bg-[var(--primary)] transition-colors">Añadir al Equipo</button>
+                          </div>
+                      </div>
                   </div>
               </div>
 
               <!-- CENTER: VERTICAL BATTLE SLOTS -->
-              <div class="lg:col-span-6 flex flex-col items-center justify-center py-10 bg-black/40 border-x border-white/5 rounded-3xl relative">
+              <div class="lg:col-span-8 flex flex-col items-center justify-center py-10 bg-black/40 border-x border-white/5 rounded-3xl relative">
                   
                   <div class="flex items-center gap-12 md:gap-24 relative">
                       <!-- TEAM ALPHA (Left) -->
@@ -418,8 +458,90 @@ const config = {
     const placeholder = document.getElementById('arena-placeholder');
     const content = document.getElementById('arena-content');
     const tokens = document.querySelectorAll('.artist-token');
-    const teamSlots = document.querySelectorAll('.team-slot');
     
+    // Slot Machine Elements
+    const slotReel = document.getElementById('slot-reel');
+    const slotLever = document.getElementById('slot-lever');
+    const luckyPanel = document.getElementById('artist-lucky-panel');
+    const luckyImg = document.getElementById('lucky-artist-img');
+    const luckyName = document.getElementById('lucky-artist-name');
+    const luckyRole = document.getElementById('lucky-artist-role');
+    const luckyBio = document.getElementById('lucky-artist-bio');
+    const addToTeamBtn = document.getElementById('add-to-team-btn');
+
+    let selectedLuckyArtist = null;
+
+    // --- SLOT MACHINE LOGIC ---
+    function initSlotMachine() {
+        if (!slotReel) return;
+        
+        // Populate reel with some random artists initially
+        const reelHtml = [...artists, ...artists, ...artists].map(artist => `
+            <div class="h-16 w-full flex-shrink-0 border-b border-white/5 flex items-center px-4 gap-3 bg-zinc-900/50">
+                <img src="${artist.imagenes.profile}" class="w-10 h-10 rounded-md object-cover grayscale" />
+                <span class="text-[10px] font-black uppercase tracking-tighter truncate">${artist.nombre}</span>
+            </div>
+        `).join('');
+        
+        slotReel.innerHTML = reelHtml;
+    }
+
+    async function spinSlots() {
+        if (!slotReel || !slotLever) return;
+
+        // Reset panel
+        luckyPanel?.classList.add('opacity-0', 'translate-y-4');
+        
+        // Animation lever
+        slotLever.style.transition = 'transform 0.3s cubic-bezier(0.1, 0, 0.1, 1)';
+        slotLever.style.transform = 'translateY(150px)';
+        setTimeout(() => slotLever.style.transform = 'translateY(0)', 300);
+
+        // Random selection
+        const randomIndex = Math.floor(Math.random() * artists.length);
+        selectedLuckyArtist = artists[randomIndex];
+
+        // Spin calculation
+        const itemHeight = 64; // h-16 = 64px
+        const targetPos = (artists.length * 2 + randomIndex) * itemHeight;
+        
+        slotReel.style.transition = 'transform 3s cubic-bezier(0.1, 0, 0.1, 1)';
+        slotReel.style.transform = `translateY(-${targetPos}px)`;
+
+        // Show result
+        setTimeout(() => {
+            if (luckyImg && luckyName && luckyRole && luckyBio && luckyPanel) {
+                luckyImg.src = selectedLuckyArtist.imagenes.profile;
+                luckyName.textContent = selectedLuckyArtist.nombre;
+                luckyRole.textContent = selectedLuckyArtist.estilo || 'Artist';
+                luckyBio.textContent = selectedLuckyArtist.bio || 'Sin biografía disponible.';
+                
+                luckyPanel.classList.remove('opacity-0', 'translate-y-4');
+                
+                // Reset reel position for next spin without transition
+                setTimeout(() => {
+                    slotReel.style.transition = 'none';
+                    const resetPos = (randomIndex) * itemHeight;
+                    slotReel.style.transform = `translateY(-${resetPos}px)`;
+                }, 500);
+            }
+        }, 3200);
+    }
+
+    slotLever?.addEventListener('click', spinSlots);
+    
+    addToTeamBtn?.addEventListener('click', () => {
+        if (selectedLuckyArtist) {
+            // Logic to add to first empty slot
+            const emptySlot = document.querySelector('.team-slot:not([data-artist-id])');
+            if (emptySlot) {
+                fillTeamSlot(emptySlot, selectedLuckyArtist.id);
+            }
+        }
+    });
+
+    initSlotMachine();
+
     // Auto-select first artist on load for visual impact
     setTimeout(() => {
         // renderArtist(artists[0].id); // Optional: Auto-load
@@ -434,6 +556,7 @@ const config = {
             arena.classList.add('border-[var(--primary)]', 'bg-[var(--primary)]/10'); // Highlight arena
             
             // Highlight team slots
+            const teamSlots = document.querySelectorAll('.team-slot');
             teamSlots.forEach(s => {
                 if (!s.querySelector('.slot-content').innerHTML) {
                      s.classList.add('border-dashed', 'border-white/50');
@@ -445,6 +568,7 @@ const config = {
             arena.classList.remove('border-[var(--primary)]', 'bg-[var(--primary)]/10');
             
             // Remove highlight from team slots
+            const teamSlots = document.querySelectorAll('.team-slot');
             teamSlots.forEach(s => s.classList.remove('border-dashed', 'border-white/50'));
         });
 
@@ -484,41 +608,47 @@ const config = {
     });
 
     // TEAM SLOTS LOGIC
-    teamSlots.forEach(slot => {
-        slot.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            e.dataTransfer.dropEffect = 'copy';
-        });
+    function refreshSlotEvents() {
+        const teamSlots = document.querySelectorAll('.team-slot');
+        teamSlots.forEach(slot => {
+            slot.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'copy';
+            });
 
-        slot.addEventListener('dragenter', () => {
-            slot.classList.add('border-[var(--primary)]', 'bg-[var(--primary)]/20');
-        });
+            slot.addEventListener('dragenter', () => {
+                slot.classList.add('border-[var(--primary)]', 'bg-[var(--primary)]/20');
+            });
 
-        slot.addEventListener('dragleave', () => {
-            slot.classList.remove('border-[var(--primary)]', 'bg-[var(--primary)]/20');
-        });
+            slot.addEventListener('dragleave', () => {
+                slot.classList.remove('border-[var(--primary)]', 'bg-[var(--primary)]/20');
+            });
 
-        slot.addEventListener('drop', (e) => {
-            e.preventDefault();
-            slot.classList.remove('border-[var(--primary)]', 'bg-[var(--primary)]/20', 'border-dashed', 'border-white/50');
-            const id = e.dataTransfer.getData('text/plain');
-            if (id) fillTeamSlot(slot, id);
-        });
+            slot.addEventListener('drop', (e) => {
+                e.preventDefault();
+                slot.classList.remove('border-[var(--primary)]', 'bg-[var(--primary)]/20', 'border-dashed', 'border-white/50');
+                const id = e.dataTransfer.getData('text/plain');
+                if (id) fillTeamSlot(slot, id);
+            });
 
-        // Click to clear slot if filled
-        slot.addEventListener('click', () => {
-            const contentDiv = slot.querySelector('.slot-content');
-            if (!contentDiv.classList.contains('hidden')) {
-                // Clear slot
-                contentDiv.innerHTML = '';
-                contentDiv.classList.add('hidden');
-                slot.querySelector('span').classList.remove('opacity-0');
-                slot.classList.remove('border-[var(--primary)]');
-                slot.removeAttribute('data-artist-id');
-                checkTeamStatus();
-            }
+            // Click to clear slot if filled
+            slot.addEventListener('click', () => {
+                const contentDiv = slot.querySelector('.slot-content');
+                if (contentDiv && !contentDiv.classList.contains('hidden')) {
+                    // Clear slot
+                    contentDiv.innerHTML = '';
+                    contentDiv.classList.add('hidden');
+                    const label = slot.querySelector('span');
+                    if (label) label.classList.remove('opacity-0');
+                    slot.classList.remove('border-[var(--primary)]');
+                    slot.removeAttribute('data-artist-id');
+                    checkTeamStatus();
+                }
+            });
         });
-    });
+    }
+
+    refreshSlotEvents();
 
     function checkTeamStatus() {
         const filledSlots = document.querySelectorAll('.slot-content:not(.hidden)').length;
