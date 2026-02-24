@@ -273,10 +273,22 @@ const config = {
             </div>
             
             <!-- GAME MODE SELECTOR -->
-            <div class="hidden md:flex items-center gap-2 bg-white/5 rounded-lg p-1 border border-white/10">
-                <button class="px-3 py-1 rounded text-[10px] font-black uppercase tracking-wider text-white hover:bg-[var(--primary)] hover:text-black transition-colors mode-btn active" data-mode="3v3">3v3</button>
-                <button class="px-3 py-1 rounded text-[10px] font-black uppercase tracking-wider text-gray-500 hover:bg-[var(--primary)] hover:text-black transition-colors mode-btn" data-mode="2v2">2v2</button>
-                <button class="px-3 py-1 rounded text-[10px] font-black uppercase tracking-wider text-gray-500 hover:bg-[var(--primary)] hover:text-black transition-colors mode-btn" data-mode="1v1">1v1</button>
+            <div class="hidden md:flex items-center gap-3 bg-black/40 rounded-xl p-1.5 border-2 border-white/10 shadow-[0_0_20px_rgba(255,255,255,0.05)]">
+                <button class="mode-btn group relative px-6 py-2 rounded-lg overflow-hidden transition-all duration-300 active" data-mode="3v3">
+                    <div class="absolute inset-0 bg-gradient-to-r from-[var(--primary)] to-yellow-600 opacity-0 group-[.active]:opacity-100 transition-opacity"></div>
+                    <span class="relative z-10 text-sm font-black uppercase tracking-widest text-gray-400 group-[.active]:text-black group-hover:text-white transition-colors">3 VS 3</span>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-white/20 group-[.active]:bg-black/20"></div>
+                </button>
+                <button class="mode-btn group relative px-6 py-2 rounded-lg overflow-hidden transition-all duration-300" data-mode="2v2">
+                    <div class="absolute inset-0 bg-gradient-to-r from-[var(--primary)] to-yellow-600 opacity-0 group-[.active]:opacity-100 transition-opacity"></div>
+                    <span class="relative z-10 text-sm font-black uppercase tracking-widest text-gray-500 group-[.active]:text-black group-hover:text-white transition-colors">2 VS 2</span>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-white/20 group-[.active]:bg-black/20"></div>
+                </button>
+                <button class="mode-btn group relative px-6 py-2 rounded-lg overflow-hidden transition-all duration-300" data-mode="1v1">
+                    <div class="absolute inset-0 bg-gradient-to-r from-[var(--primary)] to-yellow-600 opacity-0 group-[.active]:opacity-100 transition-opacity"></div>
+                    <span class="relative z-10 text-sm font-black uppercase tracking-widest text-gray-500 group-[.active]:text-black group-hover:text-white transition-colors">1 VS 1</span>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-white/20 group-[.active]:bg-black/20"></div>
+                </button>
             </div>
 
             <div class="text-xs font-mono text-gray-500 font-bold">FASE: SELECCIÓN DE MAZO</div>
@@ -379,6 +391,25 @@ const config = {
               <div class="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-[var(--primary)] rounded-br-lg"></div>
           </div>
 
+      </div>
+
+      <!-- NEW SECTION: BATTLE LOGIC & BRACKETS -->
+      <div class="relative z-10 mt-12 mb-20 animate-fade-in-up">
+          <div class="flex items-center justify-between mb-8 border-b border-white/10 pb-4">
+              <div>
+                  <h2 class="text-3xl font-black uppercase italic tracking-tighter text-white">Próximos Enfrentamientos</h2>
+                  <p class="text-xs font-mono text-gray-500 uppercase tracking-widest mt-1">Generación aleatoria de brackets por IA</p>
+              </div>
+              <button id="regenerate-brackets" class="px-6 py-2 bg-white/5 border border-white/20 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-[var(--primary)] hover:text-black hover:border-[var(--primary)] transition-all flex items-center gap-2 group">
+                  <svg class="w-3 h-3 group-hover:rotate-180 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                  RE-CALCULAR LLAVES
+              </button>
+          </div>
+
+          <!-- BRACKETS GRID -->
+          <div id="brackets-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <!-- Brackets will be injected here -->
+          </div>
       </div>
     </div>
   </div>
@@ -574,14 +605,111 @@ const config = {
         btn.addEventListener('click', () => {
             // Reset all
             modeBtns.forEach(b => {
-                b.classList.remove('text-black', 'bg-[var(--primary)]');
-                b.classList.add('text-gray-500');
+                b.classList.remove('active');
             });
             // Activate clicked
-            btn.classList.remove('text-gray-500');
-            btn.classList.add('text-black', 'bg-[var(--primary)]');
+            btn.classList.add('active');
+            
+            // Re-generate brackets when mode changes
+            generateBrackets(btn.getAttribute('data-mode'));
         });
     });
+
+    // BRACKET GENERATION LOGIC
+    const bracketsContainer = document.getElementById('brackets-container');
+    const regenerateBtn = document.getElementById('regenerate-brackets');
+
+    function generateBrackets(mode = '3v3') {
+        if (!bracketsContainer) return;
+        
+        // Clear current brackets
+        bracketsContainer.innerHTML = '';
+        
+        // Shuffle artists
+        const shuffled = [...artists].sort(() => 0.5 - Math.random());
+        
+        // Determine number of matches (let's say 4 matches for now)
+        const numMatches = 4;
+        const participantsPerSide = mode === '3v3' ? 3 : mode === '2v2' ? 2 : 1;
+        
+        for (let i = 0; i < numMatches; i++) {
+            const teamA = shuffled.slice(i * participantsPerSide * 2, i * participantsPerSide * 2 + participantsPerSide);
+            const teamB = shuffled.slice(i * participantsPerSide * 2 + participantsPerSide, i * participantsPerSide * 2 + participantsPerSide * 2);
+            
+            if (teamA.length === participantsPerSide && teamB.length === participantsPerSide) {
+                const matchHtml = createMatchElement(teamA, teamB, i + 1, mode);
+                bracketsContainer.insertAdjacentHTML('beforeend', matchHtml);
+            }
+        }
+    }
+
+    function createMatchElement(teamA, teamB, index, mode) {
+        return `
+            <div class="match-card bg-black/60 border border-white/10 rounded-xl overflow-hidden backdrop-blur-md group hover:border-[var(--primary)]/50 transition-all duration-500 animate-fade-in" style="animation-delay: ${index * 0.1}s">
+                <!-- Match Header -->
+                <div class="bg-white/5 px-4 py-2 flex justify-between items-center border-b border-white/5">
+                    <span class="text-[10px] font-black text-[var(--primary)] tracking-tighter">ENFRENTAMIENTO #${index}</span>
+                    <div class="flex items-center gap-1">
+                        <div class="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></div>
+                        <span class="text-[8px] font-bold text-gray-400">READY</span>
+                    </div>
+                </div>
+
+                <!-- Match Content -->
+                <div class="p-4 flex flex-col gap-3 relative">
+                    <!-- VS Badge -->
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+                        <div class="w-8 h-8 bg-[var(--primary)] text-black rounded-full flex items-center justify-center font-black text-xs italic shadow-[0_0_15px_var(--primary)] border-2 border-black group-hover:scale-110 transition-transform">VS</div>
+                    </div>
+
+                    <!-- Team A -->
+                    <div class="flex items-center gap-3 bg-white/5 p-2 rounded-lg border border-white/5 group-hover:bg-white/10 transition-colors">
+                        <div class="flex -space-x-3 overflow-hidden">
+                            ${teamA.map(a => `<img src="${a.imagenes.profile}" class="inline-block h-8 w-8 rounded-full ring-2 ring-black object-cover grayscale group-hover:grayscale-0 transition-all" />`).join('')}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-[10px] font-black text-white truncate uppercase">${teamA.map(a => a.nombre.split(' ')[0]).join(' & ')}</p>
+                            <p class="text-[8px] text-gray-500 font-bold uppercase tracking-widest">TEAM ALPHA</p>
+                        </div>
+                    </div>
+
+                    <!-- Team B -->
+                    <div class="flex items-center gap-3 bg-white/5 p-2 rounded-lg border border-white/5 group-hover:bg-white/10 transition-colors">
+                        <div class="flex -space-x-3 overflow-hidden">
+                            ${teamB.map(a => `<img src="${a.imagenes.profile}" class="inline-block h-8 w-8 rounded-full ring-2 ring-black object-cover grayscale group-hover:grayscale-0 transition-all" />`).join('')}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-[10px] font-black text-white truncate uppercase text-right">${teamB.map(a => a.nombre.split(' ')[0]).join(' & ')}</p>
+                            <p class="text-[8px] text-gray-500 font-bold uppercase tracking-widest text-right">TEAM OMEGA</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Match Footer -->
+                <div class="px-4 py-2 bg-black/40 flex justify-center border-t border-white/5">
+                    <button class="text-[9px] font-black text-white/40 hover:text-[var(--primary)] transition-colors tracking-widest uppercase flex items-center gap-2 group/btn">
+                        SIMULAR BATALLA
+                        <svg class="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    if (regenerateBtn) {
+        regenerateBtn.addEventListener('click', () => {
+            const currentMode = document.querySelector('.mode-btn.active')?.getAttribute('data-mode') || '3v3';
+            generateBrackets(currentMode);
+            
+            // Add a little spin animation to the icon
+            const icon = regenerateBtn.querySelector('svg');
+            icon.classList.add('rotate-180');
+            setTimeout(() => icon.classList.remove('rotate-180'), 500);
+        });
+    }
+
+    // Initialize brackets on load
+    generateBrackets();
 
     function renderArtist(id) {
         const artist = artists.find(a => a.id == id);
