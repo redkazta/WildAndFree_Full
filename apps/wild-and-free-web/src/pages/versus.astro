@@ -258,7 +258,7 @@ const config = {
 ---
 
 <Layout config={config}>
-  <div class="min-h-screen bg-[#0a0a0a] text-white font-sans overflow-hidden relative selection:bg-[var(--wild-orange)] selection:text-black">
+  <div id="page-container" class="min-h-screen bg-[#0a0a0a] text-white font-sans overflow-hidden relative selection:bg-[var(--wild-orange)] selection:text-black">
     
     <!-- ARCADE BACKGROUND -->
     <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-30 pointer-events-none z-0"></div>
@@ -433,22 +433,6 @@ const config = {
                       </div>
                   </div>
               </div>
-
-              <!-- RIGHT: ACTIVE CHARACTER INFO (DYNAMIC) -->
-              <div id="battle-arena" class="lg:col-span-3 relative h-[600px] bg-black/80 border-2 border-white/10 rounded-xl overflow-hidden flex items-center justify-center">
-                  <!-- Arena Placeholder -->
-                  <div id="arena-placeholder" class="text-center p-6">
-                      <div class="text-4xl mb-4 text-white/20">🔍</div>
-                      <p class="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]">Selecciona o arrastra una carta para ver detalles</p>
-                  </div>
-                  <!-- Arena Content -->
-                  <div id="arena-content" class="hidden w-full h-full"></div>
-                  
-                  <!-- CRT Scanline Effect -->
-                  <div class="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-20 bg-[length:100%_2px,3px_100%] pointer-events-none opacity-30"></div>
-              </div>
-
-          </div>
       </div>
 
       <!-- NEW SECTION: BATTLE LOGIC & BRACKETS -->
@@ -479,10 +463,6 @@ const config = {
     const previewPanel = document.getElementById('preview-content');
     const emptyPreview = document.getElementById('preview-empty-state');
     
-    // Arena elements
-    const arenaPlaceholder = document.getElementById('arena-placeholder');
-    const arenaContent = document.getElementById('arena-content');
-    
     const previewImg = document.getElementById('preview-img');
     const previewName = document.getElementById('preview-name');
     const previewRole = document.getElementById('preview-role');
@@ -498,80 +478,50 @@ const config = {
         const artist = artists.find(a => a.id == id);
         if (!artist) return;
 
-        // 1. Update Preview Panel (Left)
+        // Update Preview Panel (Left)
         if (previewPanel && emptyPreview) {
             emptyPreview.classList.add('hidden');
             previewPanel.classList.remove('hidden');
 
-            if (previewImg) previewImg.src = artist.imagenes.profile;
+            if (previewImg) {
+                previewImg.classList.add('opacity-0');
+                setTimeout(() => {
+                    previewImg.src = artist.imagenes.profile;
+                    previewImg.classList.remove('opacity-0');
+                }, 150);
+            }
             if (previewName) previewName.textContent = artist.nombre;
             if (previewRole) previewRole.textContent = artist.estilo;
             
-            // Stats
-            if (statPower) statPower.textContent = artist.stats?.power || '85';
-            if (statSpeed) statSpeed.textContent = artist.stats?.speed || '80';
-            if (statTech) statTech.textContent = artist.stats?.technique || '90';
+            // Stats with mini-animation
+            if (statPower) animateStat(statPower, artist.stats?.power || 85);
+            if (statSpeed) animateStat(statSpeed, artist.stats?.speed || 80);
+            if (statTech) animateStat(statTech, artist.stats?.technique || 90);
 
             // Tracks
             if (previewTracks) {
                 previewTracks.innerHTML = (artist.tracks || []).map(track => `
-                    <span class="text-[7px] font-black bg-white/10 text-white px-2 py-1 rounded uppercase tracking-widest border border-white/5 group-hover:border-[var(--primary)]/30 transition-colors">
+                    <span class="text-[7px] font-black bg-white/5 text-white/70 px-2 py-1 rounded uppercase tracking-widest border border-white/5 hover:border-[var(--primary)]/30 transition-all cursor-default">
                         ${track}
                     </span>
                 `).join('');
             }
         }
+    }
 
-        // 2. Update Arena (Right) with Detailed Arcade UI
-        if (arenaContent && arenaPlaceholder) {
-            arenaPlaceholder.classList.add('hidden');
-            arenaContent.classList.remove('hidden');
-            
-            arenaContent.innerHTML = `
-                <div class="flex flex-col md:flex-row w-full h-full">
-                    <!-- BIG PORTRAIT -->
-                    <div class="w-full md:w-5/12 h-1/2 md:h-full relative overflow-hidden bg-black border-r-2 border-[var(--primary)]/30">
-                        <img src="${artist.imagenes.profile}" class="w-full h-full object-cover grayscale opacity-80" />
-                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-                        <div class="absolute bottom-4 left-4">
-                            <h2 class="text-2xl font-black italic text-white uppercase tracking-tighter">${artist.nombre}</h2>
-                        </div>
-                    </div>
-
-                    <!-- STATS & INFO -->
-                    <div class="w-full md:w-7/12 h-1/2 md:h-full bg-zinc-900/90 p-4 flex flex-col gap-4 overflow-y-auto custom-scrollbar">
-                        <div class="space-y-4">
-                            <div class="bg-white/5 p-3 rounded border border-white/5">
-                                <h4 class="text-[8px] font-black text-[var(--primary)] uppercase tracking-widest mb-1">Biografía</h4>
-                                <p class="text-[10px] text-gray-400 italic">"${artist.bio}"</p>
-                            </div>
-
-                            <div class="space-y-2">
-                                ${['power', 'speed', 'technique'].map(stat => `
-                                    <div class="flex flex-col gap-1">
-                                        <div class="flex justify-between text-[8px] font-black uppercase">
-                                            <span class="text-gray-500">${stat}</span>
-                                            <span class="text-white">${artist.stats?.[stat] || 80}</span>
-                                        </div>
-                                        <div class="h-1.5 bg-black rounded-full overflow-hidden border border-white/5">
-                                            <div class="h-full bg-[var(--primary)] w-0 animate-fill-bar" style="width: ${artist.stats?.[stat] || 80}%"></div>
-                                        </div>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-
-                        <div class="mt-auto">
-                             <div class="flex flex-wrap gap-1">
-                                ${(artist.tracks || []).slice(0, 3).map(track => `
-                                    <span class="text-[6px] font-black bg-white/5 border border-white/10 px-1.5 py-0.5 rounded uppercase">${track}</span>
-                                `).join('')}
-                             </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
+    function animateStat(el, value) {
+        let current = 0;
+        const duration = 500;
+        const step = value / (duration / 16);
+        const interval = setInterval(() => {
+            current += step;
+            if (current >= value) {
+                el.textContent = value;
+                clearInterval(interval);
+            } else {
+                el.textContent = Math.floor(current).toString().padStart(2, '0');
+            }
+        }, 16);
     }
 
     // DRAG EVENTS
@@ -582,20 +532,20 @@ const config = {
                 const id = token.getAttribute('data-id');
                 e.dataTransfer.setData('text/plain', id);
                 e.dataTransfer.effectAllowed = 'copy';
-                arena.classList.add('border-[var(--primary)]', 'bg-[var(--primary)]/10');
+                arena.classList.add('border-[var(--primary)]', 'bg-[var(--primary)]/5');
                 
-                const teamSlots = document.querySelectorAll('.team-slot');
-                teamSlots.forEach(s => {
-                    if (!s.querySelector('.slot-content').innerHTML) {
-                        s.classList.add('border-dashed', 'border-white/50');
+                document.querySelectorAll('.team-slot').forEach(s => {
+                    if (!s.getAttribute('data-artist-id')) {
+                        s.classList.add('border-dashed', 'border-[var(--primary)]/30', 'animate-pulse');
                     }
                 });
             });
 
             token.addEventListener('dragend', () => {
-                arena.classList.remove('border-[var(--primary)]', 'bg-[var(--primary)]/10');
-                const teamSlots = document.querySelectorAll('.team-slot');
-                teamSlots.forEach(s => s.classList.remove('border-dashed', 'border-white/50'));
+                arena.classList.remove('border-[var(--primary)]', 'bg-[var(--primary)]/5');
+                document.querySelectorAll('.team-slot').forEach(s => {
+                    s.classList.remove('border-dashed', 'border-[var(--primary)]/30', 'animate-pulse');
+                });
             });
 
             token.addEventListener('click', () => {
@@ -609,89 +559,18 @@ const config = {
 
     initDragEvents();
 
-    // DROP ZONE EVENTS (MAIN ARENA)
-    arena.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'copy';
-    });
-
-    arena.addEventListener('dragenter', () => {
-        arena.classList.add('scale-[1.01]', 'border-white');
-    });
-
-    arena.addEventListener('dragleave', () => {
-        arena.classList.remove('scale-[1.01]', 'border-white');
-    });
-
+    // ARENA DROP ZONE
+    arena.addEventListener('dragover', (e) => e.preventDefault());
     arena.addEventListener('drop', (e) => {
         e.preventDefault();
-        arena.classList.remove('scale-[1.01]', 'border-white', 'border-[var(--primary)]', 'bg-[var(--primary)]/10');
         const id = e.dataTransfer.getData('text/plain');
         if (id) renderArtist(id);
     });
 
     // TEAM SLOTS LOGIC
-    function refreshSlotEvents() {
-        const teamSlots = document.querySelectorAll('.team-slot');
-        teamSlots.forEach(slot => {
-            slot.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                e.dataTransfer.dropEffect = 'copy';
-            });
-
-            slot.addEventListener('dragenter', () => {
-                slot.classList.add('border-[var(--primary)]', 'bg-[var(--primary)]/20');
-            });
-
-            slot.addEventListener('dragleave', () => {
-                slot.classList.remove('border-[var(--primary)]', 'bg-[var(--primary)]/20');
-            });
-
-            slot.addEventListener('drop', (e) => {
-                e.preventDefault();
-                slot.classList.remove('border-[var(--primary)]', 'bg-[var(--primary)]/20', 'border-dashed', 'border-white/50');
-                const id = e.dataTransfer.getData('text/plain');
-                if (id) fillTeamSlot(slot, id);
-            });
-
-            // Click to clear slot if filled
-            slot.addEventListener('click', () => {
-                const contentDiv = slot.querySelector('.slot-content');
-                if (contentDiv && !contentDiv.classList.contains('hidden')) {
-                    // Clear slot
-                    contentDiv.innerHTML = '';
-                    contentDiv.classList.add('hidden');
-                    const label = slot.querySelector('span');
-                    if (label) label.classList.remove('opacity-0');
-                    slot.classList.remove('border-[var(--primary)]');
-                    slot.removeAttribute('data-artist-id');
-                    checkTeamStatus();
-                }
-            });
-        });
-    }
-
-    refreshSlotEvents();
-
-    function checkTeamStatus() {
-        const filledSlots = document.querySelectorAll('.slot-content:not(.hidden)').length;
-        const statusText = document.querySelector('.arcade-font');
-        
-        if (filledSlots === 3) {
-            statusText.innerText = "MAZO LISTO // PRESIONA START";
-            statusText.classList.add('text-[var(--primary)]', 'animate-pulse');
-            statusText.classList.remove('text-white');
-        } else {
-            statusText.innerText = "VERSUS MODE // CARD BATTLE";
-            statusText.classList.remove('text-[var(--primary)]', 'animate-pulse');
-            statusText.classList.add('text-white');
-        }
-    }
-
     function fillTeamSlot(slot, artistId) {
-        // Check if artist is already in any slot of either team
-        const allSlots = document.querySelectorAll('.team-slot');
-        const isAlreadySelected = Array.from(allSlots).some(s => s.getAttribute('data-artist-id') == artistId);
+        // Cross-team duplicate check
+        const isAlreadySelected = Array.from(document.querySelectorAll('.team-slot')).some(s => s.getAttribute('data-artist-id') == artistId);
         if (isAlreadySelected) return;
 
         const artist = artists.find(a => a.id == artistId);
@@ -700,37 +579,28 @@ const config = {
         const contentDiv = slot.querySelector('.slot-content');
         const label = slot.querySelector('span');
         
-        // Hide label
         label.classList.add('opacity-0');
-
-        // Show content
         contentDiv.classList.remove('hidden');
         
-        // Wild Gvng Cover Style (Logo only)
         contentDiv.innerHTML = `
-            <div class="perspective-1000 w-full h-full group/card">
-                <div class="card-inner w-full h-full relative transition-transform duration-700 transform-style-3d">
-                    
-                    <!-- FRONT: WILD GVNG COVER -->
+            <div class="perspective-1000 w-full h-full">
+                <div class="card-inner w-full h-full relative preserve-3d transition-transform duration-700">
+                    <!-- FRONT: COVER -->
                     <div class="card-front absolute inset-0 w-full h-full backface-hidden bg-black border border-white/20 flex flex-col items-center justify-center overflow-hidden">
-                        <div class="absolute inset-0 bg-black/80"></div>
-                        <div class="relative z-10 border-2 border-[var(--primary)] p-1 rounded">
-                            <div class="bg-[var(--primary)] text-black font-black text-[8px] px-1 tracking-widest uppercase">WILD</div>
-                            <div class="text-[var(--primary)] font-black text-[8px] px-1 tracking-widest uppercase text-center">GVNG</div>
+                        <div class="absolute inset-0 bg-gradient-to-br from-zinc-800 to-black"></div>
+                        <div class="relative z-10 flex flex-col items-center">
+                            <div class="text-[var(--primary)] font-black text-[10px] tracking-[0.2em] leading-none uppercase">WILD</div>
+                            <div class="text-white font-black text-[10px] tracking-[0.2em] leading-none uppercase mt-0.5">GVNG</div>
                         </div>
                     </div>
-
-                    <!-- BACK: ARTIST IMAGE -->
+                    <!-- BACK: ARTIST -->
                     <div class="card-back absolute inset-0 w-full h-full backface-hidden rotate-y-180 bg-zinc-900">
-                        <img src="${artist.imagenes.profile}" class="w-full h-full object-cover grayscale group-hover/slot:grayscale-0 transition-all duration-300" />
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end justify-center pb-1 pointer-events-none">
-                            <span class="text-[8px] font-black text-white uppercase truncate px-1 w-full text-center leading-none drop-shadow-md">${artist.nombre}</span>
-                        </div>
-                        <div class="absolute top-0 right-0 p-1 pointer-events-none">
-                            <div class="w-1.5 h-1.5 rounded-full bg-[var(--primary)] animate-pulse shadow-[0_0_5px_var(--primary)]"></div>
+                        <img src="${artist.imagenes.profile}" class="w-full h-full object-cover" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-2 text-center">
+                            <span class="text-[7px] font-black text-white uppercase tracking-tighter leading-none block truncate">${artist.nombre}</span>
                         </div>
                     </div>
-
                 </div>
             </div>
         `;
@@ -738,239 +608,160 @@ const config = {
         slot.classList.add('border-[var(--primary)]');
         slot.setAttribute('data-artist-id', artistId);
         
-        // Trigger Flip Animation after a short delay
+        // Auto-flip
         setTimeout(() => {
             const inner = contentDiv.querySelector('.card-inner');
             if (inner) inner.classList.add('rotate-y-180');
-        }, 100);
+        }, 50);
 
         checkTeamStatus();
     }
 
-    // MODE SELECTION LOGIC
+    function checkTeamStatus() {
+        const filledSlots = document.querySelectorAll('.team-slot[data-artist-id]').length;
+        const totalNeeded = document.querySelectorAll('.team-slot').length;
+        const statusText = document.querySelector('.arcade-font');
+        
+        if (filledSlots === totalNeeded && totalNeeded > 0) {
+            statusText.innerText = "MAZO COMPLETO // READY TO FIGHT";
+            statusText.classList.add('text-[var(--primary)]', 'animate-pulse');
+        } else {
+            statusText.innerText = "VERSUS MODE // CARD BATTLE";
+            statusText.classList.remove('text-[var(--primary)]', 'animate-pulse');
+        }
+    }
+
+    // MODE SELECTION
     const modeBtns = document.querySelectorAll('.mode-btn');
     modeBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            // Reset all
-            modeBtns.forEach(b => {
-                b.classList.remove('active');
-            });
-            // Activate clicked
+            modeBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            
-            // Re-generate brackets when mode changes
-            generateBrackets(btn.getAttribute('data-mode'));
-            
-            // Initialize main arena slots based on mode
-            initSlots(btn.getAttribute('data-mode'));
+            const mode = btn.getAttribute('data-mode');
+            initSlots(mode);
+            generateBrackets(mode);
         });
     });
 
-    // ARENA SLOTS INITIALIZATION
     function initSlots(mode = '3v3') {
-        const alphaContainer = document.getElementById('team-alpha-slots');
-        const omegaContainer = document.getElementById('team-omega-slots');
-        if (!alphaContainer || !omegaContainer) return;
+        const containers = {
+            alpha: document.getElementById('team-alpha-slots'),
+            omega: document.getElementById('team-omega-slots')
+        };
+        if (!containers.alpha || !containers.omega) return;
 
         const count = mode === '3v3' ? 3 : mode === '2v2' ? 2 : 1;
         
-        // Clear containers
-        alphaContainer.innerHTML = '';
-        omegaContainer.innerHTML = '';
-        
-        for (let i = 0; i < count; i++) {
-            // Alpha Slot
-            const alphaSlot = createSlotElement(i + 1, 'alpha');
-            alphaContainer.appendChild(alphaSlot);
-            setupSlotEvents(alphaSlot);
-
-            // Omega Slot
-            const omegaSlot = createSlotElement(i + 1, 'omega');
-            omegaContainer.appendChild(omegaSlot);
-            setupSlotEvents(omegaSlot);
-        }
+        ['alpha', 'omega'].forEach(team => {
+            containers[team].innerHTML = '';
+            for (let i = 0; i < count; i++) {
+                const slot = createSlotElement(i + 1, team);
+                containers[team].appendChild(slot);
+                setupSlotEvents(slot);
+            }
+        });
+        checkTeamStatus();
     }
 
     function createSlotElement(index, team) {
         const slot = document.createElement('div');
-        slot.className = 'team-slot group/slot relative w-20 h-28 md:w-24 md:h-32 border-2 border-white/10 rounded-xl flex items-center justify-center cursor-pointer transition-all hover:border-white/30 overflow-hidden bg-black/40';
+        slot.className = `team-slot group/slot relative w-20 h-28 md:w-24 md:h-32 border-2 border-white/5 rounded-xl flex items-center justify-center cursor-pointer transition-all hover:border-[var(--primary)]/30 overflow-hidden bg-white/5`;
         slot.innerHTML = `
-            <span class="text-[8px] font-black text-white/20 uppercase tracking-widest z-10 transition-opacity">${team} ${index}</span>
+            <span class="text-[8px] font-black text-white/10 uppercase tracking-widest z-10 transition-opacity">${team} ${index}</span>
             <div class="slot-content absolute inset-0 hidden"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover/slot:opacity-100 transition-opacity pointer-events-none"></div>
         `;
         return slot;
     }
 
     function setupSlotEvents(slot) {
-        slot.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            e.dataTransfer.dropEffect = 'copy';
-        });
-
-        slot.addEventListener('dragenter', () => {
-            slot.classList.add('border-[var(--primary)]', 'bg-[var(--primary)]/20');
-        });
-
-        slot.addEventListener('dragleave', () => {
-            slot.classList.remove('border-[var(--primary)]', 'bg-[var(--primary)]/20');
-        });
-
+        slot.addEventListener('dragover', (e) => e.preventDefault());
+        slot.addEventListener('dragenter', () => slot.classList.add('bg-[var(--primary)]/10', 'border-[var(--primary)]/30'));
+        slot.addEventListener('dragleave', () => slot.classList.remove('bg-[var(--primary)]/10', 'border-[var(--primary)]/30'));
         slot.addEventListener('drop', (e) => {
             e.preventDefault();
-            slot.classList.remove('border-[var(--primary)]', 'bg-[var(--primary)]/20', 'border-dashed', 'border-white/50');
+            slot.classList.remove('bg-[var(--primary)]/10', 'border-[var(--primary)]/30');
             const id = e.dataTransfer.getData('text/plain');
             if (id) fillTeamSlot(slot, id);
         });
-
         slot.addEventListener('click', () => {
-            const contentDiv = slot.querySelector('.slot-content');
-            if (!contentDiv.classList.contains('hidden')) {
-                contentDiv.innerHTML = '';
-                contentDiv.classList.add('hidden');
+            if (slot.getAttribute('data-artist-id')) {
+                slot.removeAttribute('data-artist-id');
+                slot.querySelector('.slot-content').innerHTML = '';
+                slot.querySelector('.slot-content').classList.add('hidden');
                 slot.querySelector('span').classList.remove('opacity-0');
                 slot.classList.remove('border-[var(--primary)]');
-                slot.removeAttribute('data-artist-id');
                 checkTeamStatus();
             }
         });
     }
 
-    // BRACKET GENERATION LOGIC
+    // BRACKETS
     const bracketsContainer = document.getElementById('brackets-container');
     const regenerateBtn = document.getElementById('regenerate-brackets');
 
     function generateBrackets(mode = '3v3') {
         if (!bracketsContainer) return;
-        
-        // Clear current brackets
         bracketsContainer.innerHTML = '';
-        
-        // Shuffle artists
         const shuffled = [...artists].sort(() => 0.5 - Math.random());
+        const participants = mode === '3v3' ? 3 : mode === '2v2' ? 2 : 1;
         
-        // Determine number of matches (let's say 4 matches for now)
-        const numMatches = 4;
-        const participantsPerSide = mode === '3v3' ? 3 : mode === '2v2' ? 2 : 1;
-        
-        for (let i = 0; i < numMatches; i++) {
-            const teamA = shuffled.slice(i * participantsPerSide * 2, i * participantsPerSide * 2 + participantsPerSide);
-            const teamB = shuffled.slice(i * participantsPerSide * 2 + participantsPerSide, i * participantsPerSide * 2 + participantsPerSide * 2);
-            
-            if (teamA.length === participantsPerSide && teamB.length === participantsPerSide) {
-                const matchHtml = createMatchElement(teamA, teamB, i + 1, mode);
-                bracketsContainer.insertAdjacentHTML('beforeend', matchHtml);
+        for (let i = 0; i < 4; i++) {
+            const tA = shuffled.slice(i * participants * 2, i * participants * 2 + participants);
+            const tB = shuffled.slice(i * participants * 2 + participants, i * participants * 2 + participants * 2);
+            if (tA.length === participants && tB.length === participants) {
+                bracketsContainer.insertAdjacentHTML('beforeend', createMatchHtml(tA, tB, i + 1, mode));
             }
         }
     }
 
-    function createMatchElement(teamA, teamB, index, mode) {
-        const teamAName = "TEAM ALPHA";
-        const teamBName = "TEAM OMEGA";
-
+    function createMatchHtml(teamA, teamB, index, mode) {
         return `
-            <div class="match-card bg-black/60 border border-white/10 rounded-xl overflow-hidden backdrop-blur-md group hover:border-[var(--primary)]/50 transition-all duration-500 animate-fade-in" style="animation-delay: ${index * 0.1}s">
-                <!-- Match Header -->
-                <div class="bg-white/5 px-4 py-2 flex justify-between items-center border-b border-white/5">
-                    <span class="text-[10px] font-black text-[var(--primary)] tracking-tighter">ENFRENTAMIENTO #${index}</span>
-                    <div class="flex items-center gap-1">
-                        <div class="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></div>
-                        <span class="text-[8px] font-bold text-gray-400 uppercase tracking-widest">${mode} READY</span>
-                    </div>
+            <div class="match-card bg-black/40 border border-white/5 rounded-xl overflow-hidden backdrop-blur-sm hover:border-[var(--primary)]/30 transition-all duration-500 animate-fade-in" style="animation-delay: ${index * 0.1}s">
+                <div class="bg-white/5 px-3 py-1.5 flex justify-between items-center border-b border-white/5">
+                    <span class="text-[8px] font-black text-[var(--primary)] tracking-widest uppercase">MATCH #${index}</span>
+                    <span class="text-[8px] font-bold text-gray-500 uppercase">${mode}</span>
                 </div>
-
-                <!-- Match Content -->
-                <div class="p-4 flex flex-col gap-3 relative">
-                    <!-- VS Badge -->
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-                        <div class="w-8 h-8 bg-[var(--primary)] text-black rounded-full flex items-center justify-center font-black text-xs italic shadow-[0_0_15px_var(--primary)] border-2 border-black group-hover:scale-110 transition-transform">VS</div>
-                    </div>
-
-                    <!-- Team A -->
-                    <div class="team-container flex items-center gap-3 bg-white/5 p-2 rounded-lg border border-white/5 group-hover:bg-white/10 transition-all cursor-pointer hover:border-[var(--primary)]/30" onclick="setWinner(this, '${teamAName}')">
-                        <div class="flex -space-x-3 overflow-hidden">
-                            ${teamA.map(a => `<img src="${a.imagenes.profile}" class="inline-block h-8 w-8 rounded-full ring-2 ring-black object-cover grayscale group-hover:grayscale-0 transition-all" />`).join('')}
+                <div class="p-4 flex flex-col gap-2 relative">
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-6 h-6 bg-black border border-white/10 rounded-full flex items-center justify-center text-[8px] font-black italic text-[var(--primary)]">VS</div>
+                    ${[teamA, teamB].map((team, i) => `
+                        <div class="team-container flex items-center gap-2 p-1.5 rounded-lg border border-transparent hover:border-white/10 transition-all cursor-pointer" onclick="setWinner(this)">
+                            <div class="flex -space-x-2">
+                                ${team.map(a => `<img src="${a.imagenes.profile}" class="w-6 h-6 rounded-full border border-black object-cover grayscale" />`).join('')}
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-[9px] font-black text-white truncate uppercase">${team.map(a => a.nombre.split(' ')[0]).join(' & ')}</p>
+                                <div class="flex items-center gap-1">
+                                    <div class="win-indicator w-1 h-1 rounded-full bg-[var(--primary)] opacity-0"></div>
+                                    <span class="text-[7px] font-bold text-gray-500 uppercase tracking-widest">${i === 0 ? 'ALPHA' : 'OMEGA'}</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="text-[10px] font-black text-white truncate uppercase">${teamA.map(a => a.nombre.split(' ')[0]).join(' & ')}</p>
-                            <p class="team-label text-[8px] text-gray-500 font-bold uppercase tracking-widest flex items-center gap-1">
-                                ${teamAName}
-                                <svg class="w-2 h-2 opacity-0 transition-opacity" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg>
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Team B -->
-                    <div class="team-container flex items-center gap-3 bg-white/5 p-2 rounded-lg border border-white/5 group-hover:bg-white/10 transition-all cursor-pointer hover:border-[var(--primary)]/30" onclick="setWinner(this, '${teamBName}')">
-                        <div class="flex -space-x-3 overflow-hidden">
-                            ${teamB.map(a => `<img src="${a.imagenes.profile}" class="inline-block h-8 w-8 rounded-full ring-2 ring-black object-cover grayscale group-hover:grayscale-0 transition-all" />`).join('')}
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="text-[10px] font-black text-white truncate uppercase text-right">${teamB.map(a => a.nombre.split(' ')[0]).join(' & ')}</p>
-                            <p class="team-label text-[8px] text-gray-500 font-bold uppercase tracking-widest text-right flex items-center justify-end gap-1">
-                                <svg class="w-2 h-2 opacity-0 transition-opacity" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg>
-                                ${teamBName}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Match Footer -->
-                <div class="px-4 py-2 bg-black/40 flex justify-between items-center border-t border-white/5">
-                    <button class="edit-team-btn text-[7px] font-bold text-gray-500 hover:text-white transition-colors uppercase tracking-[0.2em]" onclick="renameTeam(this)">EDITAR NOMBRES</button>
-                    <button class="text-[9px] font-black text-white/40 hover:text-[var(--primary)] transition-colors tracking-widest uppercase flex items-center gap-2 group/btn">
-                        SIMULAR
-                        <svg class="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
-                    </button>
+                    `).join('')}
                 </div>
             </div>
         `;
     }
 
-    // WINNER SELECTION
-    window.setWinner = function(el, teamName) {
-        const parent = el.closest('.p-4');
-        parent.querySelectorAll('.team-container').forEach(t => {
-            t.classList.remove('border-[var(--primary)]', 'bg-[var(--primary)]/10');
-            const label = t.querySelector('.team-label');
-            if (label) label.classList.remove('text-[var(--primary)]');
-            const svg = t.querySelector('svg');
-            if (svg) svg.classList.add('opacity-0');
+    window.setWinner = function(el) {
+        const match = el.closest('.p-4');
+        match.querySelectorAll('.team-container').forEach(t => {
+            t.classList.remove('bg-[var(--primary)]/5', 'border-[var(--primary)]/20');
+            t.querySelector('.win-indicator').classList.add('opacity-0');
         });
-        
-        el.classList.add('border-[var(--primary)]', 'bg-[var(--primary)]/10');
-        const label = el.querySelector('.team-label');
-        if (label) label.classList.add('text-[var(--primary)]');
-        const svg = el.querySelector('svg');
-        if (svg) svg.classList.remove('opacity-0');
-    }
-
-    // RENAME TEAM
-    window.renameTeam = function(btn) {
-        const card = btn.closest('.match-card');
-        const labels = card.querySelectorAll('.team-label');
-        const newNameA = prompt("Nuevo nombre para TEAM A:", labels[0].innerText.trim());
-        const newNameB = prompt("Nuevo nombre para TEAM B:", labels[1].innerText.trim());
-        
-        if (newNameA) labels[0].innerHTML = `${newNameA} <svg class="w-2 h-2 opacity-0 transition-opacity" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg>`;
-        if (newNameB) labels[1].innerHTML = `<svg class="w-2 h-2 opacity-0 transition-opacity" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg> ${newNameB}`;
+        el.classList.add('bg-[var(--primary)]/5', 'border-[var(--primary)]/20');
+        el.querySelector('.win-indicator').classList.remove('opacity-0');
     }
 
     if (regenerateBtn) {
         regenerateBtn.addEventListener('click', () => {
-            const currentMode = document.querySelector('.mode-btn.active')?.getAttribute('data-mode') || '3v3';
-            generateBrackets(currentMode);
-            
-            // Add a little spin animation to the icon
-            const icon = regenerateBtn.querySelector('svg');
-            icon.classList.add('rotate-180');
-            setTimeout(() => icon.classList.remove('rotate-180'), 500);
+            generateBrackets(document.querySelector('.mode-btn.active')?.getAttribute('data-mode') || '3v3');
         });
     }
 
-    // Initialize on load
+    // Init
     generateBrackets();
-    initSlots('3v3'); // Default 3v3 slots
+    initSlots('3v3');
+
 </script>
 
 <style>
