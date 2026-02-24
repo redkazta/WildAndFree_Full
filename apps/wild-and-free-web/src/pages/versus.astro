@@ -292,33 +292,6 @@ const config = {
       <!-- GAME LAYOUT: GRID + STAGE -->
       <div class="flex flex-col gap-8">
           
-          <!-- ARTIST PICKER GRID (Top Row) -->
-          <div class="bg-black/40 border border-white/10 rounded-3xl p-6 backdrop-blur-sm relative overflow-hidden">
-              <div class="flex items-center justify-between mb-4 px-2">
-                  <div class="flex items-center gap-2">
-                      <div class="w-1 h-4 bg-[var(--primary)]"></div>
-                      <h3 class="text-xs font-black text-white uppercase tracking-widest">Crew Disponible</h3>
-                  </div>
-                  <span class="text-[8px] font-bold text-gray-500 uppercase tracking-widest">Arrastra o haz click</span>
-              </div>
-              
-              <div class="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-3 max-h-[250px] overflow-y-auto custom-scrollbar pr-2">
-                   {artists.map((artist: any) => (
-                       <div 
-                         class="artist-token aspect-square relative group cursor-grab active:cursor-grabbing border border-white/10 hover:border-[var(--primary)] hover:scale-105 transition-all duration-150 overflow-hidden bg-zinc-800 rounded-md shadow-lg"
-                         draggable="true"
-                         data-id={artist.id}
-                         data-name={artist.nombre}
-                       >
-                           <img src={artist.imagenes.profile} class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300" loading="lazy" />
-                           <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center p-1">
-                               <span class="text-[7px] font-black text-white uppercase text-center leading-none truncate w-full">{artist.nombre}</span>
-                           </div>
-                       </div>
-                   ))}
-               </div>
-          </div>
-
           <!-- BATTLE STAGE (VERTICAL LAYOUT) -->
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
               
@@ -381,32 +354,33 @@ const config = {
                   <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 pointer-events-none"></div>
                   
                   <div class="relative z-10 w-full flex flex-col gap-12 items-center px-8">
-                      <!-- ROW 1: SLOTS -->
-                      <div class="w-full flex justify-between items-center gap-4">
-                          <!-- TEAM ALPHA (Left) -->
-                          <div class="flex-1 flex flex-col items-start gap-4">
-                              <div class="text-2xl font-black text-white/20 uppercase tracking-tighter italic border-l-4 border-[var(--primary)] pl-4">TEAM ALPHA</div>
-                              <div id="team-alpha-slots" class="grid grid-cols-2 gap-4 w-full max-w-[300px]">
+                      <!-- VERTICAL STACK FOR TEAMS AND VS -->
+                      <div class="w-full flex flex-col items-center gap-12">
+                          
+                          <!-- TEAM ALPHA (Top) -->
+                          <div class="w-full flex flex-col items-center gap-4">
+                              <div class="text-2xl font-black text-white/20 uppercase tracking-tighter italic border-b-4 border-[var(--primary)] pb-2 px-8">TEAM ALPHA</div>
+                              <div id="team-alpha-slots" class="grid grid-cols-2 gap-6 w-full max-w-[400px] justify-center">
                                   <!-- Slots will be injected here -->
                               </div>
                           </div>
 
                           <!-- VS MIDDLE -->
-                          <div class="flex flex-col items-center gap-6">
-                              <div class="w-20 h-20 bg-[var(--primary)] text-black rounded-full flex items-center justify-center font-black text-3xl italic shadow-[0_0_40px_var(--primary)] border-4 border-black relative z-20 animate-pulse">
+                          <div class="flex flex-col items-center gap-6 py-4">
+                              <div class="w-24 h-24 bg-[var(--primary)] text-black rounded-full flex items-center justify-center font-black text-4xl italic shadow-[0_0_50px_var(--primary)] border-4 border-black relative z-20 animate-pulse">
                                   VS
                               </div>
-                              <button id="fight-btn" class="group relative px-6 py-3 bg-white text-black font-black uppercase tracking-[0.2em] italic rounded-full overflow-hidden transition-all hover:scale-110 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.3)]">
-                                  <span class="relative z-10">ENFRENTARLOS</span>
+                              <button id="fight-btn" class="group relative px-10 py-4 bg-white text-black font-black uppercase tracking-[0.2em] italic rounded-full overflow-hidden transition-all hover:scale-110 active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.3)]">
+                                  <span class="relative z-10 text-lg">ENFRENTARLOS</span>
                                   <div class="absolute inset-0 bg-gradient-to-r from-red-600 via-[var(--primary)] to-orange-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                   <div class="absolute inset-0 bg-black translate-y-full group-hover:translate-y-0 transition-transform duration-300 opacity-10"></div>
                               </button>
                           </div>
 
-                          <!-- TEAM OMEGA (Right) -->
-                          <div class="flex-1 flex flex-col items-end gap-4 text-right">
-                              <div class="text-2xl font-black text-white/20 uppercase tracking-tighter italic border-r-4 border-red-600 pr-4">TEAM OMEGA</div>
-                              <div id="team-omega-slots" class="grid grid-cols-2 gap-4 w-full max-w-[300px] justify-items-end">
+                          <!-- TEAM OMEGA (Bottom) -->
+                          <div class="w-full flex flex-col items-center gap-4">
+                              <div class="text-2xl font-black text-white/20 uppercase tracking-tighter italic border-t-4 border-red-600 pt-2 px-8">TEAM OMEGA</div>
+                              <div id="team-omega-slots" class="grid grid-cols-2 gap-6 w-full max-w-[400px] justify-center">
                                   <!-- Slots will be injected here -->
                               </div>
                           </div>
@@ -441,8 +415,35 @@ const config = {
                               </div>
                           </button>
                       </div>
-                  </div>
               </div>
+          </div>
+
+          <!-- ARTIST PICKER GRID (Bottom Row) -->
+          <div class="bg-black/40 border border-white/10 rounded-3xl p-6 backdrop-blur-sm relative overflow-hidden">
+              <div class="flex items-center justify-between mb-4 px-2">
+                  <div class="flex items-center gap-2">
+                      <div class="w-1 h-4 bg-[var(--primary)]"></div>
+                      <h3 class="text-xs font-black text-white uppercase tracking-widest">Crew Disponible</h3>
+                  </div>
+                  <span class="text-[8px] font-bold text-gray-500 uppercase tracking-widest">Arrastra o haz click</span>
+              </div>
+              
+              <div class="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-3 max-h-[250px] overflow-y-auto custom-scrollbar pr-2">
+                   {artists.map((artist: any) => (
+                       <div 
+                         class="artist-token aspect-square relative group cursor-grab active:cursor-grabbing border border-white/10 hover:border-[var(--primary)] hover:scale-105 transition-all duration-150 overflow-hidden bg-zinc-800 rounded-md shadow-lg"
+                         draggable="true"
+                         data-id={artist.id}
+                         data-name={artist.nombre}
+                       >
+                           <img src={artist.imagenes.profile} class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300" loading="lazy" />
+                           <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center p-1">
+                               <span class="text-[7px] font-black text-white uppercase text-center leading-none truncate w-full">{artist.nombre}</span>
+                           </div>
+                       </div>
+                   ))}
+               </div>
+          </div>
       </div>
 
       <!-- NEW SECTION: BATTLE LOGIC & BRACKETS -->
@@ -593,7 +594,7 @@ const config = {
         // 3D Card Animation
         contentDiv.innerHTML = `
             <div class="card-container w-full h-full perspective-1000">
-                <div class="card-inner w-full h-full relative preserve-3d transition-transform duration-700">
+                <div class="card-inner w-full h-full relative preserve-3d transition-transform duration-[5000ms]">
                     <!-- FRONT: BLACK WITH WILD GVNG (2 ROWS) -->
                     <div class="card-front absolute inset-0 w-full h-full backface-hidden flex flex-col items-center justify-center p-2 bg-black border-2 border-[var(--primary)]/50 rounded-lg shadow-[0_0_15px_rgba(201,131,0,0.3)]">
                         <div class="absolute inset-0 bg-gradient-to-br from-zinc-900 to-black opacity-50"></div>
@@ -826,7 +827,7 @@ const config = {
     position: relative;
     width: 100%;
     height: 100%;
-    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 5s cubic-bezier(0.4, 0, 0.2, 1);
     transform-style: preserve-3d;
   }
 
