@@ -215,64 +215,153 @@ const config = {
 ---
 
 <Layout config={config}>
-  <div class="min-h-screen bg-black text-white font-sans selection:bg-[var(--wild-orange)] selection:text-black">
+  <div class="min-h-screen bg-[#050505] text-white font-sans overflow-hidden relative" id="page-container">
     
-    <!-- HEADER SECTION -->
-    <div class="relative py-20 px-4 overflow-hidden">
-        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')] opacity-30"></div>
-        <div class="absolute inset-0 bg-gradient-to-b from-zinc-900 to-black opacity-90"></div>
-        
-        <div class="container mx-auto relative z-10 text-center">
-            <h1 class="text-5xl md:text-8xl font-black uppercase tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-400 to-gray-800">
-                WILD ARTISTS
-            </h1>
-            <p class="text-sm md:text-lg text-gray-400 font-mono tracking-widest uppercase max-w-2xl mx-auto">
-                Descubre el talento que está redefiniendo la escena urbana.
-            </p>
-        </div>
+    <!-- BACKGROUND TEXTURE -->
+    <div class="fixed inset-0 pointer-events-none opacity-20 z-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
+    
+    <!-- DYNAMIC BACKGROUND IMAGE (Desktop) -->
+    <div id="bg-image-container" class="hidden lg:block fixed inset-0 z-0 transition-opacity duration-700 opacity-20 filter grayscale blur-sm scale-110">
+        <img id="bg-image" src={artists[0].imagenes.profile} class="w-full h-full object-cover" />
+        <div class="absolute inset-0 bg-black/60"></div>
     </div>
 
-    <!-- ARTIST GRID -->
-    <div class="container mx-auto px-4 pb-20">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {artists.map((artist: any) => (
-                <a href={`/artista/${artist.slug}`} class="group relative block aspect-[3/4] overflow-hidden rounded-xl bg-zinc-900 transition-all duration-500 hover:-translate-y-2">
-                    <!-- Image -->
-                    <img 
-                        src={artist.imagenes.profile} 
-                        alt={artist.nombre}
-                        class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110"
-                        loading="lazy"
-                    />
-                    
-                    <!-- Overlay Gradient -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity"></div>
-                    
-                    <!-- Content -->
-                    <div class="absolute inset-0 p-6 flex flex-col justify-end transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                        <div class="w-10 h-1 bg-[var(--primary)] mb-4 w-0 group-hover:w-10 transition-all duration-500"></div>
-                        
-                        <h2 class="text-3xl font-black uppercase italic leading-none mb-1 text-white group-hover:text-[var(--primary)] transition-colors">
-                            {artist.nombre}
-                        </h2>
-                        
-                        <div class="flex items-center gap-2 text-[10px] font-bold tracking-widest uppercase text-gray-400">
-                            <span>{artist.estilo}</span>
-                            <span class="w-1 h-1 rounded-full bg-gray-600"></span>
-                            <span>{artist.origen}</span>
-                        </div>
-                        
-                        <p class="mt-4 text-xs text-gray-300 line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
-                            {artist.bio}
-                        </p>
-                    </div>
-                    
-                    <!-- Border Effect -->
-                    <div class="absolute inset-0 border border-white/10 group-hover:border-[var(--primary)]/50 rounded-xl transition-colors pointer-events-none"></div>
+    <!-- MAIN CONTENT -->
+    <div class="relative z-10 container mx-auto px-4 py-20 min-h-screen flex flex-col justify-center">
+        
+        <!-- HEADER -->
+        <div class="mb-12 lg:mb-0 lg:fixed lg:top-10 lg:left-10 lg:z-20 pointer-events-none mix-blend-difference">
+            <h1 class="text-xs font-black uppercase tracking-[0.5em] text-[var(--primary)] mb-2">Wild Gvng</h1>
+            <h2 class="text-4xl lg:text-5xl font-black uppercase tracking-tighter leading-none text-white">
+                Roster<br/><span class="text-gray-500">2026</span>
+            </h2>
+        </div>
+
+        <!-- ARTIST LIST (DESKTOP HOVER MENU) -->
+        <div class="hidden lg:flex flex-col items-center justify-center space-y-2 perspective-1000">
+            {artists.map((artist: any, index: number) => (
+                <a 
+                    href={`/artista/${artist.slug}`}
+                    class="artist-item group relative text-6xl xl:text-8xl font-black uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-gray-700 to-gray-900 hover:from-white hover:to-gray-200 transition-all duration-300 hover:scale-105 hover:tracking-normal cursor-none py-2"
+                    data-image={artist.imagenes.profile}
+                    data-index={index}
+                >
+                    <span class="relative z-10 group-hover:text-[var(--primary)] transition-colors duration-200" style="-webkit-text-stroke: 1px rgba(255,255,255,0.1);">{artist.nombre}</span>
+                    <span class="absolute left-full top-1/2 -translate-y-1/2 ml-8 text-sm font-bold text-white tracking-widest opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-10 group-hover:translate-x-0 whitespace-nowrap">
+                        <span class="text-[var(--primary)] mr-2">//</span>{artist.estilo}
+                    </span>
                 </a>
             ))}
         </div>
+
+        <!-- MOBILE CARD STACK -->
+        <div class="lg:hidden flex flex-col gap-6 pb-20">
+            {artists.map((artist: any) => (
+                <a href={`/artista/${artist.slug}`} class="block relative aspect-[4/5] bg-zinc-900 rounded-2xl overflow-hidden shadow-2xl group">
+                    <img src={artist.imagenes.profile} class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80"></div>
+                    
+                    <div class="absolute bottom-0 left-0 w-full p-6">
+                        <div class="w-12 h-1 bg-[var(--primary)] mb-4"></div>
+                        <h2 class="text-4xl font-black uppercase italic leading-none mb-2 text-white">{artist.nombre}</h2>
+                        <p class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-1">{artist.estilo}</p>
+                        <p class="text-[10px] text-gray-500 font-mono">{artist.origen}</p>
+                    </div>
+
+                    <div class="absolute top-4 right-4 w-10 h-10 rounded-full border border-white/20 flex items-center justify-center bg-black/50 backdrop-blur-md group-hover:bg-[var(--primary)] group-hover:text-black group-hover:border-[var(--primary)] transition-all">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                    </div>
+                </a>
+            ))}
+        </div>
+
+    </div>
+
+    <!-- CUSTOM CURSOR FOLLOWER -->
+    <div id="cursor-follower" class="hidden lg:block fixed w-64 h-auto aspect-[3/4] pointer-events-none z-50 opacity-0 transition-opacity duration-200 transform -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-lg shadow-2xl border-2 border-[var(--primary)] mix-blend-hard-light">
+        <img id="cursor-image" src="" class="w-full h-full object-cover" />
+        <div class="absolute inset-0 bg-[var(--primary)]/20 mix-blend-overlay"></div>
     </div>
 
   </div>
 </Layout>
+
+<script>
+    // DESKTOP INTERACTION LOGIC
+    const items = document.querySelectorAll('.artist-item');
+    const bgImage = document.getElementById('bg-image');
+    const bgContainer = document.getElementById('bg-image-container');
+    const cursorFollower = document.getElementById('cursor-follower');
+    const cursorImage = document.getElementById('cursor-image');
+
+    // Background Change on Hover
+    items.forEach(item => {
+        item.addEventListener('mouseenter', (e) => {
+            const img = (e.target as HTMLElement).dataset.image;
+            if (img && bgImage && bgContainer) {
+                bgImage.setAttribute('src', img);
+                bgContainer.classList.remove('opacity-20', 'blur-sm', 'grayscale');
+                bgContainer.classList.add('opacity-40', 'scale-100'); // Clearer view
+            }
+            if (cursorFollower) {
+                cursorFollower.classList.remove('opacity-0');
+            }
+        });
+
+        item.addEventListener('mouseleave', () => {
+            if (bgContainer) {
+                bgContainer.classList.add('opacity-20', 'blur-sm', 'grayscale');
+                bgContainer.classList.remove('opacity-40', 'scale-100');
+            }
+            if (cursorFollower) {
+                cursorFollower.classList.add('opacity-0');
+            }
+        });
+
+        // Update Cursor Image
+        item.addEventListener('mousemove', (e) => {
+             const img = (e.target as HTMLElement).dataset.image;
+             if (img && cursorImage) cursorImage.setAttribute('src', img);
+        });
+    });
+
+    // Custom Cursor Movement
+    document.addEventListener('mousemove', (e) => {
+        if (cursorFollower && !cursorFollower.classList.contains('opacity-0')) {
+            // Smooth follow could be added here, for now direct
+            const x = e.clientX;
+            const y = e.clientY;
+            
+            // Offset slightly so it doesn't cover text
+            cursorFollower.style.left = `${x + 150}px`; 
+            cursorFollower.style.top = `${y}px`;
+            
+            // Add slight tilt based on movement (advanced)
+            const rotX = (y - window.innerHeight / 2) / 20;
+            const rotY = (x - window.innerWidth / 2) / 20;
+            cursorFollower.style.transform = `translate(-50%, -50%) rotateX(${-rotX}deg) rotateY(${rotY}deg)`;
+        }
+    });
+
+</script>
+
+<style>
+    .perspective-1000 {
+        perspective: 1000px;
+    }
+    
+    /* Hide scrollbar for clean look */
+    body::-webkit-scrollbar {
+        width: 8px;
+    }
+    body::-webkit-scrollbar-track {
+        background: #000;
+    }
+    body::-webkit-scrollbar-thumb {
+        background: #333;
+        border-radius: 4px;
+    }
+    body::-webkit-scrollbar-thumb:hover {
+        background: var(--primary);
+    }
+</style>
