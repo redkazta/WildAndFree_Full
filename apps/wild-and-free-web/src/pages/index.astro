@@ -350,3 +350,29 @@ const products = [
 <style>
 	/* Eliminamos los estilos antiguos para usar Tailwind puro */
 </style>
+
+<script>
+	const parallaxImages = document.querySelectorAll('.parallax-img');
+	
+	const updateParallax = () => {
+		parallaxImages.forEach(img => {
+			const rect = img.parentElement.getBoundingClientRect();
+			const windowHeight = window.innerHeight;
+			
+			// Si la imagen está visible en el viewport
+			if (rect.top < windowHeight && rect.bottom > 0) {
+				// Calculamos el progreso (0 a 1) de la imagen cruzando la pantalla
+				const progress = (windowHeight - rect.top) / (windowHeight + rect.height);
+				// Movemos la imagen entre -10% y 10% de su altura (ya que tiene h-[120%] y -top-[10%])
+				const yPos = (progress - 0.5) * 20; // Esto dará un rango de -10 a 10
+				(img as HTMLElement).style.transform = `translateY(${yPos}%)`;
+			}
+		});
+		requestAnimationFrame(updateParallax);
+	};
+
+	// Solo iniciar si hay imágenes con parallax
+	if (parallaxImages.length > 0) {
+		requestAnimationFrame(updateParallax);
+	}
+</script>
