@@ -10,289 +10,113 @@ const config = {
 };
 
 const honorAndFreeData = [
-    { 
-        id: 1,
-        name: "MC LÁSER", 
-        multiplier: "x1.5", 
-        points: 450, 
-        history: ["2026-02-15: +50pts (Ganador)", "2026-02-08: +30pts (Finalista)", "2026-02-01: +20pts (Asistencia)"], 
-        image: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=400&h=400&fit=crop",
-        bio: "Campeón indiscutible de la temporada 2025. Conocido por su flow agresivo y punchlines directos. Representando a Torreón.",
-        fullHistory: [
-            { event: "Torneo de Verano '25", result: "Campeón", points: 1000 },
-            { event: "Batalla del Desierto", result: "Semifinalista", points: 500 },
-            { event: "Liga Invernal", result: "Campeón", points: 1200 }
-        ],
-        stats: { winRate: "85%", ko: "12", streak: "3W" }
-    },
-    { 
-        id: 2,
-        name: "D-MENTE", 
-        multiplier: "x1.2", 
-        points: 380, 
-        history: ["2026-02-15: +30pts (Finalista)", "2026-02-08: +50pts (Ganador)"], 
-        image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&h=400&fit=crop",
-        bio: "El estratega del verso. D-Mente destaca por sus métricas complejas y respuestas al momento. Representando a Gómez Palacio.",
-        fullHistory: [
-            { event: "Torneo de Verano '25", result: "Subcampeón", points: 800 },
-            { event: "Batalla del Desierto", result: "Campeón", points: 1000 }
-        ],
-        stats: { winRate: "78%", ko: "8", streak: "1L" }
-    },
-    { 
-        id: 3,
-        name: "K-ROAD", 
-        multiplier: "x1.0", 
-        points: 310, 
-        history: ["2026-02-15: +10pts (Semis)", "2026-02-08: +10pts (Semis)"], 
-        image: "https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=400&h=400&fit=crop",
-        bio: "La nueva sangre. K-Road ha subido rápidamente en los rankings gracias a su carisma y puesta en escena.",
-        fullHistory: [
-            { event: "Rookie del Año '25", result: "Ganador", points: 500 }
-        ],
-        stats: { winRate: "65%", ko: "5", streak: "2L" }
-    },
-    { 
-        id: 4,
-        name: "ZIKO", 
-        multiplier: "x1.0", 
-        points: 290, 
-        history: ["2026-02-15: +10pts (Semis)", "2026-02-01: +50pts (Ganador)"], 
-        image: "https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=400&h=400&fit=crop",
-        bio: "Veterano de mil batallas. Ziko mantiene el estilo clásico del boom bap en sus improvisaciones.",
-        fullHistory: [
-            { event: "Leyendas Urbanas", result: "Cuartos", points: 300 }
-        ],
-        stats: { winRate: "60%", ko: "20", streak: "1W" }
-    },
-    // Mock data extra para llenar la tabla
-    { id: 5, name: "SHADOW", multiplier: "x1.0", points: 250, history: [], image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop", bio: "Rising star.", fullHistory: [], stats: { winRate: "55%", ko: "3", streak: "-" } },
-    { id: 6, name: "BLAZE", multiplier: "x1.0", points: 200, history: [], image: "https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=400&h=400&fit=crop", bio: "Fuego puro.", fullHistory: [], stats: { winRate: "50%", ko: "4", streak: "-" } },
-    { id: 7, name: "VENOM", multiplier: "x1.0", points: 180, history: [], image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop", bio: "Letal.", fullHistory: [], stats: { winRate: "48%", ko: "6", streak: "-" } },
-    { id: 8, name: "FROST", multiplier: "x1.0", points: 150, history: [], image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop", bio: "Frío como el hielo.", fullHistory: [], stats: { winRate: "45%", ko: "1", streak: "-" } },
+    { id: 1, name: "MC LÁSER", points: 450, wins: 15, kos: 12, image: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=200&h=200&fit=crop", origin: "Torreón" },
+    { id: 2, name: "D-MENTE", points: 380, wins: 12, kos: 8, image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&h=200&fit=crop", origin: "Gómez" },
+    { id: 3, name: "K-ROAD", points: 310, wins: 10, kos: 5, image: "https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=200&h=200&fit=crop", origin: "Lerdo" },
+    { id: 4, name: "ZIKO", points: 290, wins: 9, kos: 20, image: "https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=200&h=200&fit=crop", origin: "Matamoros" },
+    { id: 5, name: "SHADOW", points: 250, wins: 8, kos: 3, image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop", origin: "Torreón" },
+    { id: 6, name: "BLAZE", points: 200, wins: 6, kos: 4, image: "https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=200&h=200&fit=crop", origin: "San Pedro" },
+    { id: 7, name: "VENOM", points: 180, wins: 5, kos: 6, image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop", origin: "Torreón" },
+    { id: 8, name: "FROST", points: 150, wins: 4, kos: 1, image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop", origin: "Gómez" },
 ];
 ---
 
 <Layout config={config}>
   <div class="min-h-screen bg-[#050505] text-white pb-32 font-sans selection:bg-[var(--wild-orange)] selection:text-black">
     
-    <!-- Top Bar Minimal -->
-    <div class="bg-black/90 backdrop-blur border-b border-white/10 py-2 sticky top-0 z-50">
-        <div class="container mx-auto px-4 max-w-[1800px] flex justify-between items-center">
+    <!-- Top Bar -->
+    <div class="bg-black/90 backdrop-blur border-b border-white/5 py-2 sticky top-0 z-50">
+        <div class="container mx-auto px-4 max-w-3xl flex justify-between items-center">
             <div class="flex items-center gap-2">
-                <div class="w-2 h-2 bg-[var(--wild-orange)] rounded-full animate-pulse"></div>
-                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-white">Wild Music OS v3.2</span>
+                <div class="w-1.5 h-1.5 bg-[var(--wild-orange)] rounded-full animate-pulse"></div>
+                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-white">Ranking Oficial</span>
             </div>
-            <div class="flex gap-4 text-[10px] font-mono text-gray-500">
-                <span>LIGA: HONOR & FREE</span>
-                <span>STATUS: RANKING LIVE</span>
-            </div>
+            <span class="text-[10px] font-mono text-gray-600">SEASON 2026</span>
         </div>
     </div>
 
-    <div class="container mx-auto px-4 py-12 max-w-[1800px] animate-fade-in-up space-y-16">
+    <div class="container mx-auto px-4 py-12 max-w-3xl animate-fade-in-up space-y-12">
         
-        <!-- Hero Header -->
-        <div class="relative border-b border-white/10 pb-12">
-            <div class="absolute -top-20 -right-20 w-96 h-96 bg-[var(--wild-orange)]/10 blur-[120px] rounded-full pointer-events-none"></div>
-            
-            <div class="flex flex-col lg:flex-row justify-between items-end gap-8 relative z-10">
-                <div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <span class="bg-red-600 text-white text-[10px] font-black px-3 py-1 uppercase tracking-widest animate-pulse shadow-[0_0_15px_rgba(220,38,38,0.5)]">Temporada Activa</span>
-                        <span class="text-[var(--wild-orange)] text-xs font-mono uppercase tracking-widest border border-[var(--wild-orange)]/30 px-2 py-0.5 rounded">2026 Edition</span>
-                    </div>
-                    <h1 class="text-6xl md:text-9xl font-black uppercase tracking-tighter leading-[0.85] text-white mb-2">
-                        Honor <span class="text-transparent bg-clip-text bg-gradient-to-r from-[var(--wild-orange)] to-red-600">&</span> Free
-                    </h1>
-                    <p class="text-xl md:text-2xl text-gray-400 font-bold uppercase tracking-wide max-w-2xl mt-4">
-                        Donde el respeto se gana con rimas y la gloria se mide en puntos.
-                    </p>
-                </div>
-                
-                <!-- Top 3 Preview -->
-                <div class="flex gap-2">
-                    {honorAndFreeData.slice(0,3).map((mc, i) => (
-                        <div class="relative w-20 h-20 md:w-32 md:h-32 group cursor-pointer overflow-hidden rounded-lg border border-white/20 hover:border-[var(--wild-orange)] transition-colors">
-                            <img src={mc.image} class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" />
-                            <div class="absolute bottom-0 left-0 bg-black/80 px-2 py-1">
-                                <span class="text-[10px] md:text-xs font-black text-[var(--wild-orange)]">#{i+1}</span>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
+        <!-- Header Minimal -->
+        <div class="text-center space-y-2">
+            <h1 class="text-5xl md:text-7xl font-black uppercase tracking-tighter text-white">
+                Honor <span class="text-[var(--wild-orange)]">&</span> Free
+            </h1>
+            <p class="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-[0.4em]">
+                Tabla General de Posiciones
+            </p>
         </div>
 
-        <!-- Tabla Principal -->
-        <div class="grid grid-cols-1 gap-4">
-            <!-- Header Tabla (Desktop) -->
-            <div class="hidden md:grid grid-cols-12 gap-4 px-6 py-4 bg-[#111] border-b-2 border-[var(--wild-orange)] text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
-                <div class="col-span-1 text-center">Rank</div>
-                <div class="col-span-4">Freestyler</div>
-                <div class="col-span-2 text-center">Stats</div>
-                <div class="col-span-3">Última Batalla</div>
-                <div class="col-span-2 text-right">Puntos Totales</div>
-            </div>
+        <!-- Leaderboard List -->
+        <div class="space-y-1">
+            {honorAndFreeData.map((mc, i) => (
+                <div class="group relative flex items-center justify-between p-4 bg-[#0a0a0a] border-b border-white/5 hover:bg-[#111] transition-all duration-300 overflow-hidden cursor-pointer">
+                    
+                    <!-- Hover Accent -->
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-[var(--wild-orange)] transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300"></div>
 
-            <!-- Filas -->
-            <div class="space-y-3">
-                {honorAndFreeData.map((mc, i) => (
-                    <div class="freestyler-card group bg-[#0a0a0a] border border-white/5 rounded-xl p-4 md:px-6 md:py-5 hover:border-[var(--wild-orange)] hover:bg-[#111] transition-all duration-300 cursor-pointer relative overflow-hidden" data-freestyler={JSON.stringify(mc)}>
+                    <!-- Rank & Avatar -->
+                    <div class="flex items-center gap-6 relative z-10">
+                        <span class={`text-xl font-mono font-bold w-8 text-center ${i < 3 ? 'text-[var(--wild-orange)]' : 'text-gray-700'}`}>
+                            {(i + 1).toString().padStart(2, '0')}
+                        </span>
                         
-                        <!-- Hover Glow Effect -->
-                        <div class="absolute inset-0 bg-gradient-to-r from-[var(--wild-orange)]/0 via-[var(--wild-orange)]/5 to-[var(--wild-orange)]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform ease-out" style="transition-duration: 1s;"></div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center relative z-10">
-                            <!-- Rank -->
-                            <div class="col-span-1 md:col-span-1 flex justify-center">
-                                <div class={`w-10 h-10 flex items-center justify-center font-black text-xl italic ${i < 3 ? 'text-black bg-[var(--wild-orange)] shadow-[0_0_15px_var(--wild-orange)]' : 'text-gray-600 bg-white/5'} rounded transform -skew-x-12`}>
-                                    <span class="transform skew-x-12">{(i + 1)}</span>
-                                </div>
+                        <div class="flex items-center gap-4">
+                            <img src={mc.image} class="w-10 h-10 rounded-full object-cover grayscale group-hover:grayscale-0 transition-all border border-white/10 group-hover:border-[var(--wild-orange)]" />
+                            <div>
+                                <h3 class="text-lg font-black text-white uppercase tracking-tight leading-none group-hover:tracking-wide transition-all">{mc.name}</h3>
+                                <p class="text-[9px] text-gray-500 uppercase font-mono">{mc.origin} • {mc.wins}W / {mc.kos}KO</p>
                             </div>
-                            
-                            <!-- Info -->
-                            <div class="col-span-1 md:col-span-4 flex items-center gap-6">
-                                <div class="relative w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-2 border-white/10 group-hover:border-[var(--wild-orange)] transition-colors shadow-lg">
-                                    <img src={mc.image} class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
-                                </div>
-                                <div>
-                                    <h3 class="text-2xl font-black text-white uppercase italic leading-none group-hover:text-[var(--wild-orange)] transition-colors tracking-tight">{mc.name}</h3>
-                                    <div class="flex items-center gap-2 mt-1">
-                                        <span class="text-[9px] bg-white/10 px-1.5 py-0.5 rounded text-gray-400 font-mono uppercase">Lvl. {Math.floor(mc.points / 100)}</span>
-                                        <span class="text-[9px] text-[var(--wild-orange)] font-bold uppercase tracking-wider">{mc.multiplier} Boost</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Stats (Mini Grid) -->
-                            <div class="col-span-1 md:col-span-2 grid grid-cols-2 gap-2">
-                                <div class="bg-black/40 p-1.5 rounded text-center border border-white/5">
-                                    <span class="block text-[9px] text-gray-500 uppercase">Win Rate</span>
-                                    <span class="block text-xs font-bold text-white">{mc.stats?.winRate || '-'}</span>
-                                </div>
-                                <div class="bg-black/40 p-1.5 rounded text-center border border-white/5">
-                                    <span class="block text-[9px] text-gray-500 uppercase">K.O.</span>
-                                    <span class="block text-xs font-bold text-[var(--wild-orange)]">{mc.stats?.ko || '-'}</span>
-                                </div>
-                            </div>
-
-                            <!-- Activity -->
-                            <div class="col-span-1 md:col-span-3">
-                                <div class="text-[10px] text-gray-400 uppercase font-mono border-l-2 border-white/10 pl-3 group-hover:border-[var(--wild-orange)] transition-colors">
-                                    {mc.history[0] || "Esperando debut..."}
-                                </div>
-                            </div>
-
-                            <!-- Points -->
-                            <div class="col-span-1 md:col-span-2 flex flex-col items-end justify-center">
-                                <span class="text-4xl font-black text-white leading-none tracking-tighter group-hover:scale-110 transition-transform origin-right" style="text-shadow: 0 0 20px rgba(0,0,0,0.8);">{mc.points}</span>
-                                <span class="text-[9px] text-[var(--wild-orange)] uppercase tracking-[0.3em] font-bold">PTS Totales</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Mobile Expander -->
-                        <div class="mt-4 md:hidden border-t border-white/10 pt-4">
-                            <details class="group/details">
-                                <summary class="cursor-pointer text-[10px] font-black uppercase text-gray-400 hover:text-white flex items-center justify-between p-2 bg-black/50 rounded select-none">
-                                    <span>Ver Detalles</span>
-                                    <svg class="w-4 h-4 transition-transform group-open/details:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-                                </summary>
-                                <div class="mt-2 pl-2 border-l border-white/10 space-y-1">
-                                    {mc.history.map(entry => (
-                                        <p class="text-[9px] font-mono text-gray-500 uppercase">{entry}</p>
-                                    ))}
-                                </div>
-                            </details>
                         </div>
                     </div>
-                ))}
+
+                    <!-- Points -->
+                    <div class="text-right relative z-10">
+                        <span class="block text-2xl font-black text-white leading-none group-hover:text-[var(--wild-orange)] transition-colors">{mc.points}</span>
+                        <span class="text-[8px] text-gray-600 uppercase tracking-widest">PTS</span>
+                    </div>
+
+                    <!-- Background Gradient on Hover -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[var(--wild-orange)]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                </div>
+            ))}
+        </div>
+
+        <!-- Top 3 Showcase (Bottom) -->
+        <div class="pt-8 border-t border-white/5">
+            <h3 class="text-[10px] font-black text-gray-600 uppercase tracking-widest mb-6 text-center">Podio Actual</h3>
+            <div class="flex justify-center items-end gap-4">
+                <!-- 2nd Place -->
+                <div class="flex flex-col items-center gap-2 opacity-60 hover:opacity-100 transition-opacity">
+                    <img src={honorAndFreeData[1].image} class="w-16 h-16 rounded-full border-2 border-gray-400 object-cover" />
+                    <div class="text-center">
+                        <span class="block text-xs font-black text-white">{honorAndFreeData[1].name}</span>
+                        <span class="block text-[9px] font-mono text-gray-500">#2</span>
+                    </div>
+                </div>
+                <!-- 1st Place -->
+                <div class="flex flex-col items-center gap-2 -translate-y-4">
+                    <div class="relative">
+                        <img src={honorAndFreeData[0].image} class="w-24 h-24 rounded-full border-4 border-[var(--wild-orange)] object-cover shadow-[0_0_20px_rgba(201,131,0,0.3)]" />
+                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-[var(--wild-orange)] text-black text-[9px] font-black px-2 py-0.5 rounded-full uppercase">King</div>
+                    </div>
+                    <div class="text-center">
+                        <span class="block text-sm font-black text-[var(--wild-orange)]">{honorAndFreeData[0].name}</span>
+                        <span class="block text-[9px] font-mono text-gray-500">#1</span>
+                    </div>
+                </div>
+                <!-- 3rd Place -->
+                <div class="flex flex-col items-center gap-2 opacity-60 hover:opacity-100 transition-opacity">
+                    <img src={honorAndFreeData[2].image} class="w-16 h-16 rounded-full border-2 border-amber-700 object-cover" />
+                    <div class="text-center">
+                        <span class="block text-xs font-black text-white">{honorAndFreeData[2].name}</span>
+                        <span class="block text-[9px] font-mono text-gray-500">#3</span>
+                    </div>
+                </div>
             </div>
         </div>
 
     </div>
-
-    <!-- MODAL DE FREESTYLER -->
-    <dialog id="freestyler-modal" class="bg-transparent p-0 backdrop:bg-black/90 w-full max-w-5xl m-auto open:animate-fade-in-up outline-none">
-        <div class="bg-[#0a0a0a] border border-white/20 rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh]">
-            <!-- Sidebar Imagen -->
-            <div class="md:w-5/12 relative min-h-[300px] group">
-                <img id="modal-image" src="" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-black/20 to-transparent md:bg-gradient-to-r"></div>
-                
-                <div class="absolute top-6 left-6 z-20">
-                     <span class="bg-black/80 backdrop-blur text-white text-[10px] font-black px-3 py-1.5 uppercase rounded border border-white/10 tracking-widest">Ficha Técnica</span>
-                </div>
-
-                <div class="absolute bottom-0 left-0 p-8 z-10 w-full">
-                    <h2 id="modal-name" class="text-6xl font-black text-white uppercase italic tracking-tighter leading-none drop-shadow-xl mb-4">NAME</h2>
-                    
-                    <div class="grid grid-cols-3 gap-2 bg-black/60 backdrop-blur p-3 rounded-xl border border-white/10">
-                        <div class="text-center">
-                            <span class="block text-[9px] text-gray-400 uppercase tracking-widest">Win Rate</span>
-                            <span id="modal-stat-win" class="block text-lg font-black text-white">0%</span>
-                        </div>
-                        <div class="text-center border-l border-white/10">
-                            <span class="block text-[9px] text-gray-400 uppercase tracking-widest">K.O.</span>
-                            <span id="modal-stat-ko" class="block text-lg font-black text-[var(--wild-orange)]">0</span>
-                        </div>
-                        <div class="text-center border-l border-white/10">
-                            <span class="block text-[9px] text-gray-400 uppercase tracking-widest">Racha</span>
-                            <span id="modal-stat-streak" class="block text-lg font-black text-white">0</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Contenido -->
-            <div class="md:w-7/12 p-8 md:p-12 overflow-y-auto bg-[#0a0a0a] relative">
-                <button id="close-modal" class="absolute top-6 right-6 text-gray-500 hover:text-white p-2 hover:bg-white/10 rounded-full transition-colors z-20">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </button>
-
-                <div class="space-y-8">
-                    <div>
-                        <h3 class="text-xs font-black uppercase text-[var(--wild-orange)] tracking-[0.2em] mb-3 flex items-center gap-2">
-                            <span class="w-1 h-4 bg-[var(--wild-orange)]"></span>
-                            Biografía
-                        </h3>
-                        <p id="modal-bio" class="text-gray-300 text-base leading-relaxed font-medium border-l-2 border-white/5 pl-4"></p>
-                    </div>
-
-                    <div>
-                        <h3 class="text-xs font-black uppercase text-[var(--wild-orange)] tracking-[0.2em] mb-4 flex items-center gap-2">
-                            <span class="w-1 h-4 bg-[var(--wild-orange)]"></span>
-                            Historial de Torneo
-                        </h3>
-                        <div class="bg-white/5 rounded-xl overflow-hidden border border-white/5">
-                            <table class="w-full text-left">
-                                <thead class="bg-black/40">
-                                    <tr class="text-[9px] font-black uppercase text-gray-500 tracking-widest">
-                                        <th class="py-3 px-4">Evento</th>
-                                        <th class="py-3 px-4">Resultado</th>
-                                        <th class="py-3 px-4 text-right">Puntos</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="modal-history-body" class="divide-y divide-white/5 text-sm">
-                                    <!-- JS populated -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="mt-12 flex gap-4">
-                     <button class="flex-1 bg-[var(--wild-orange)] text-black font-black uppercase py-4 text-xs rounded-xl hover:bg-white transition-colors tracking-[0.2em] shadow-lg shadow-orange-900/20">
-                        Ver Perfil Completo
-                     </button>
-                     <button class="flex-1 bg-white/5 border border-white/10 text-white font-black uppercase py-4 text-xs rounded-xl hover:bg-white hover:text-black transition-all tracking-[0.2em]">
-                        Seguir MC
-                     </button>
-                </div>
-            </div>
-        </div>
-    </dialog>
-
   </div>
 </Layout>
 
@@ -304,83 +128,4 @@ const honorAndFreeData = [
   .animate-fade-in-up {
     animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
   }
-  
-  /* Scrollbar para modal content */
-  .overflow-y-auto::-webkit-scrollbar {
-      width: 4px;
-  }
-  .overflow-y-auto::-webkit-scrollbar-track {
-      background: #111;
-  }
-  .overflow-y-auto::-webkit-scrollbar-thumb {
-      background: #333;
-      border-radius: 2px;
-  }
-  .overflow-y-auto::-webkit-scrollbar-thumb:hover {
-      background: var(--wild-orange);
-  }
 </style>
-
-<script>
-   // Freestyler Modal Logic
-   const modal = document.getElementById('freestyler-modal') as HTMLDialogElement;
-   const closeModalBtn = document.getElementById('close-modal');
-   const triggers = document.querySelectorAll('.freestyler-card'); // Click en toda la tarjeta en desktop
-
-   if (modal && closeModalBtn) {
-       triggers.forEach(trigger => {
-           trigger.addEventListener('click', (e) => {
-               // Si es click en el details/summary (mobile), no abrir modal
-               if ((e.target as HTMLElement).closest('summary') || (e.target as HTMLElement).closest('details')) {
-                   return;
-               }
-
-               const data = JSON.parse((trigger as HTMLElement).dataset.freestyler || '{}');
-               
-               // Populate
-               const nameEl = document.getElementById('modal-name');
-               const bioEl = document.getElementById('modal-bio');
-               const imgEl = document.getElementById('modal-image') as HTMLImageElement;
-               const historyBody = document.getElementById('modal-history-body');
-               
-               // Stats
-               const winStat = document.getElementById('modal-stat-win');
-               const koStat = document.getElementById('modal-stat-ko');
-               const streakStat = document.getElementById('modal-stat-streak');
-               
-               if (nameEl) nameEl.textContent = data.name;
-               if (bioEl) bioEl.textContent = data.bio || 'Sin biografía disponible.';
-               if (imgEl) imgEl.src = data.image;
-
-               if (winStat) winStat.textContent = data.stats?.winRate || '-';
-               if (koStat) koStat.textContent = data.stats?.ko || '-';
-               if (streakStat) streakStat.textContent = data.stats?.streak || '-';
-               
-               if (historyBody && data.fullHistory) {
-                   historyBody.innerHTML = data.fullHistory.map((h: any) => `
-                       <tr class="hover:bg-white/5 transition-colors group/row">
-                           <td class="py-3 px-4 font-bold text-white uppercase group-hover/row:text-[var(--wild-orange)] transition-colors">${h.event}</td>
-                           <td class="py-3 px-4 text-gray-400 uppercase font-mono text-xs">${h.result}</td>
-                           <td class="py-3 px-4 text-right font-mono text-[var(--wild-orange)] font-bold">+${h.points}</td>
-                       </tr>
-                   `).join('');
-               } else if (historyBody) {
-                   historyBody.innerHTML = '<tr><td colspan="3" class="py-8 text-center text-gray-500 text-xs italic">No hay historial disponible para este MC.</td></tr>';
-               }
- 
-               modal.showModal();
-           });
-       });
- 
-       closeModalBtn.addEventListener('click', () => {
-           modal.close();
-       });
- 
-       modal.addEventListener('click', (e) => {
-           // Detectar click fuera del contenido interno.
-           if (e.target === modal) {
-               modal.close();
-           }
-       });
-   }
-</script>

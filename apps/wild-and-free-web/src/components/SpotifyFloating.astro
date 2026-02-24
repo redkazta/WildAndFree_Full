@@ -4,8 +4,8 @@ import { fade } from 'astro:transitions';
 <!-- Spotify Floating Player (Global) -->
 <!-- Uses Spotify Embed Iframe for auth/playback handling -->
 <!-- Fallback to Mock if needed (handled by iframe src) -->
-<div id="spotify-floating" transition:persist class="fixed bottom-6 right-6 z-[9999] w-[300px] sm:w-[350px]">
-  <div id="spotify-container" class="bg-black/90 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden shadow-2xl w-full h-[80px] sm:h-[152px]">
+<div id="spotify-floating" transition:persist class="fixed bottom-6 right-6 z-[9999] w-[260px] sm:w-[300px]">
+  <div id="spotify-container" class="bg-black/95 backdrop-blur-md border border-[var(--primary)]/30 rounded-xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.5)] w-full h-[80px] hover:border-[var(--primary)]/60 transition-all">
     <iframe 
         id="spotify-iframe"
         style="border-radius:12px" 

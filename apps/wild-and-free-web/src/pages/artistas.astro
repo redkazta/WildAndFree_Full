@@ -124,6 +124,60 @@ const mockArtists = [
     stats: { seguidores: '4.5M', oyentes: '5.1M', power: 90, speed: 92, technique: 99 },
     bio: 'Sonidos del futuro hoy.',
     tracks: ['Future City', 'Cyber Soul', 'Tech Beat', 'Neon Rain']
+  },
+  {
+    id: 13,
+    nombre: 'Phantom G',
+    slug: 'phantom-g',
+    imagenes: { profile: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=800&q=80' },
+    stats: { seguidores: '1.4M', oyentes: '980K', power: 88, speed: 94, technique: 90 },
+    bio: 'El fantasma del beat, apareciendo donde menos lo esperas.',
+    tracks: ['Ghost Mode', 'Invisible Strike', 'Phantom Pain', 'Spirit World']
+  },
+  {
+    id: 14,
+    nombre: 'Iron Mic',
+    slug: 'iron-mic',
+    imagenes: { profile: 'https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=800&q=80' },
+    stats: { seguidores: '3.2M', oyentes: '2.9M', power: 99, speed: 70, technique: 85 },
+    bio: 'Barras de acero y voluntad inquebrantable.',
+    tracks: ['Iron Will', 'Heavy Metal', 'Steel Bars', 'Rust & Dust']
+  },
+  {
+    id: 15,
+    nombre: 'Velvet Rose',
+    slug: 'velvet-rose',
+    imagenes: { profile: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&q=80' },
+    stats: { seguidores: '4.1M', oyentes: '5.5M', power: 80, speed: 90, technique: 98 },
+    bio: 'Suavidad que mata. R&B con espinas.',
+    tracks: ['Soft Kill', 'Thorn Prick', 'Red Petals', 'Silk Road']
+  },
+  {
+    id: 16,
+    nombre: 'Toxic B',
+    slug: 'toxic-b',
+    imagenes: { profile: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&q=80' },
+    stats: { seguidores: '2.0M', oyentes: '1.5M', power: 92, speed: 95, technique: 88 },
+    bio: 'El veneno está en la dosis. Trap ácido.',
+    tracks: ['Acid Rain', 'Toxic Love', 'Poison Ivy', 'Hazard']
+  },
+  {
+    id: 17,
+    nombre: 'Solar Flare',
+    slug: 'solar-flare',
+    imagenes: { profile: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80' },
+    stats: { seguidores: '1.1M', oyentes: '800K', power: 95, speed: 85, technique: 90 },
+    bio: 'Brillando más fuerte que el sol de mediodía.',
+    tracks: ['Sunburn', 'Heat Wave', 'Solar Power', 'Blind Light']
+  },
+  {
+    id: 18,
+    nombre: 'Ice Cold',
+    slug: 'ice-cold',
+    imagenes: { profile: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80' },
+    stats: { seguidores: '1.9M', oyentes: '2.1M', power: 85, speed: 92, technique: 96 },
+    bio: 'Flow helado que congela la pista.',
+    tracks: ['Frostbite', 'Zero Degrees', 'Ice Age', 'Glacier']
   }
 ];
 
@@ -178,37 +232,41 @@ const config = {
       <!-- GAME LAYOUT: GRID + STAGE -->
       <div class="flex-1 flex flex-col lg:flex-row gap-8 overflow-hidden">
           
-          <!-- LEFT: CHARACTER SELECT GRID -->
-          <div class="w-full lg:w-1/3 flex flex-col gap-4">
-              <div class="bg-black/50 border-4 border-white/10 p-2 rounded-lg backdrop-blur-sm shadow-[0_0_20px_rgba(0,0,0,0.8)]">
-                  <div class="grid grid-cols-4 gap-2 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+          <!-- LEFT: CHARACTER SELECT GRID (Expanded width) -->
+          <div class="w-full lg:w-5/12 flex flex-col gap-4">
+              <div class="bg-black/80 border-4 border-yellow-600/50 p-3 rounded-lg backdrop-blur-sm shadow-[0_0_30px_rgba(255,215,0,0.1)]">
+                  <div class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2 max-h-[70vh] overflow-y-auto pr-2 custom-scrollbar">
                       {artists.map((artist: any) => (
                           <div 
                               draggable="true"
                               data-id={artist.id}
-                              class="artist-token aspect-square relative group cursor-grab active:cursor-grabbing border-2 border-white/20 hover:border-yellow-400 hover:scale-105 transition-all duration-100 overflow-hidden bg-zinc-800"
+                              class="artist-token aspect-square relative group cursor-grab active:cursor-grabbing border-2 border-white/20 hover:border-yellow-400 hover:scale-110 hover:z-10 transition-all duration-150 overflow-hidden bg-zinc-800 rounded-sm shadow-lg"
                           >
-                              <img src={artist.imagenes.profile} class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" />
-                              <div class="absolute inset-0 bg-yellow-500/20 opacity-0 group-hover:opacity-100 transition-opacity mix-blend-overlay"></div>
+                              <img src={artist.imagenes.profile} class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300" />
+                              <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                               <!-- Selection Highlight -->
-                              <div class="absolute inset-0 border-2 border-transparent group-hover:border-white transition-colors"></div>
+                              <div class="absolute inset-0 border-2 border-transparent group-hover:border-yellow-400 transition-colors"></div>
                           </div>
                       ))}
+                      <!-- Random Select Slot -->
+                      <div class="aspect-square bg-zinc-900 border-2 border-white/10 flex items-center justify-center text-2xl font-black text-gray-600 cursor-pointer hover:bg-zinc-800 hover:text-white transition-colors">
+                          ?
+                      </div>
                   </div>
               </div>
               
               <!-- INSTRUCTIONS (Desktop only) -->
-              <div class="hidden lg:block bg-zinc-900/80 border border-white/10 p-4 rounded text-[10px] font-mono text-gray-400">
-                  <p>> SYSTEM READY...</p>
-                  <p>> DRAG PORTRAIT TO CENTER AREA</p>
-                  <p>> ANALYZING AUDIO SIGNATURES...</p>
+              <div class="hidden lg:block bg-gradient-to-r from-red-900/40 to-black border-l-4 border-red-600 p-4 text-[10px] font-mono text-red-200/80">
+                  <p class="mb-1"><span class="text-red-500 font-bold">>></span> SYSTEM READY...</p>
+                  <p class="mb-1"><span class="text-red-500 font-bold">>></span> SELECT YOUR FIGHTER TO BEGIN</p>
+                  <p><span class="text-red-500 font-bold">>></span> ANALYZING AUDIO SIGNATURES...</p>
               </div>
           </div>
 
-          <!-- CENTER: BATTLE ARENA (DROP ZONE) -->
+          <!-- CENTER: BATTLE ARENA (DROP ZONE) - Smaller relative to grid -->
           <div 
               id="battle-arena"
-              class="flex-1 relative bg-zinc-900/30 border-4 border-dashed border-white/10 rounded-xl flex items-center justify-center overflow-hidden group transition-all duration-300"
+              class="flex-1 relative bg-black/40 border-4 border-dashed border-white/10 rounded-xl flex items-center justify-center overflow-hidden group transition-all duration-300 backdrop-blur-md"
           >
               <!-- Placeholder State -->
               <div id="arena-placeholder" class="text-center opacity-50 group-hover:opacity-80 transition-opacity pointer-events-none">
@@ -291,78 +349,81 @@ const config = {
         // Construct HTML
         content.innerHTML = `
             <!-- BIG PORTRAIT (LEFT) -->
-            <div class="w-full md:w-1/2 h-1/2 md:h-full relative overflow-hidden bg-black animate-slide-in-left">
-                <img src="${artist.imagenes.profile}" class="w-full h-full object-cover object-top opacity-80" />
-                <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-transparent"></div>
-                <div class="absolute bottom-0 left-0 p-8">
-                    <h2 class="text-6xl md:text-7xl font-black text-white italic uppercase tracking-tighter leading-none drop-shadow-lg" style="text-shadow: 4px 4px 0px #C98300;">
+            <div class="w-full md:w-5/12 h-1/2 md:h-full relative overflow-hidden bg-black animate-slide-in-left border-r-4 border-yellow-500/50">
+                <img src="${artist.imagenes.profile}" class="w-full h-full object-cover object-top opacity-90 contrast-125" />
+                <div class="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent"></div>
+                
+                <!-- Character Name Plate -->
+                <div class="absolute bottom-10 left-0 bg-gradient-to-r from-red-600 to-transparent py-2 px-8 w-full transform -skew-x-12 -translate-x-4">
+                    <h2 class="text-4xl md:text-5xl font-black text-white italic uppercase tracking-tighter leading-none drop-shadow-md transform skew-x-12" style="text-shadow: 2px 2px 0px #000;">
                         ${artist.nombre}
                     </h2>
-                    <div class="flex gap-4 mt-4">
-                        <span class="px-2 py-1 bg-white text-black text-xs font-black uppercase tracking-widest">Lv. ${Math.floor(Math.random() * 50 + 50)}</span>
-                        <span class="px-2 py-1 bg-red-600 text-white text-xs font-black uppercase tracking-widest">FIGHTER</span>
-                    </div>
                 </div>
             </div>
 
-            <!-- STATS & INFO (RIGHT) -->
-            <div class="w-full md:w-1/2 h-1/2 md:h-full bg-zinc-900/90 p-8 flex flex-col justify-between border-l-4 border-yellow-500 animate-slide-in-right relative overflow-hidden">
+            <!-- STATS & INFO (RIGHT) - More detailed -->
+            <div class="w-full md:w-7/12 h-1/2 md:h-full bg-zinc-900/95 p-6 md:p-8 flex flex-col justify-between animate-slide-in-right relative overflow-hidden">
                 
                 <!-- Background Element -->
-                <div class="absolute top-0 right-0 text-[200px] font-black text-white/5 leading-none pointer-events-none select-none -translate-y-10 translate-x-10 overflow-hidden">VS</div>
+                <div class="absolute top-0 right-0 text-[150px] font-black text-white/5 leading-none pointer-events-none select-none -translate-y-4 translate-x-4 overflow-hidden">KO</div>
 
-                <div class="space-y-6 relative z-10">
-                    <p class="text-gray-300 font-medium italic text-lg leading-relaxed">"${artist.bio}"</p>
+                <div class="space-y-4 relative z-10">
+                    <!-- Bio Section -->
+                    <div class="border-l-4 border-blue-500 pl-4 py-1 bg-white/5 rounded-r-lg">
+                        <h4 class="text-[10px] font-black uppercase text-blue-400 tracking-widest mb-1">Fighter Profile</h4>
+                        <p class="text-gray-300 font-medium text-sm leading-relaxed line-clamp-3">"${artist.bio}"</p>
+                    </div>
                     
-                    <!-- STAT BARS -->
-                    <div class="space-y-3 pt-4">
-                        <div class="flex items-center gap-4">
-                            <span class="w-24 text-xs font-black text-yellow-500 uppercase">Power</span>
-                            <div class="flex-1 h-4 bg-black border border-white/20 skew-x-[-12deg]">
-                                <div class="h-full bg-gradient-to-r from-red-600 to-yellow-500" style="width: ${artist.stats.power || 80}%"></div>
+                    <!-- STAT BARS (Compact) -->
+                    <div class="space-y-2 pt-2">
+                        <div class="flex items-center gap-3">
+                            <span class="w-16 text-[10px] font-black text-yellow-500 uppercase">Power</span>
+                            <div class="flex-1 h-3 bg-black border border-white/20 skew-x-[-12deg]">
+                                <div class="h-full bg-gradient-to-r from-red-600 via-orange-500 to-yellow-400" style="width: ${artist.stats.power || 80}%"></div>
                             </div>
-                            <span class="text-xs font-mono text-white">${artist.stats.power || 80}</span>
+                            <span class="text-[10px] font-mono text-white w-6 text-right">${artist.stats.power || 80}</span>
                         </div>
-                        <div class="flex items-center gap-4">
-                            <span class="w-24 text-xs font-black text-blue-500 uppercase">Speed</span>
-                            <div class="flex-1 h-4 bg-black border border-white/20 skew-x-[-12deg]">
-                                <div class="h-full bg-gradient-to-r from-blue-800 to-cyan-400" style="width: ${artist.stats.speed || 75}%"></div>
+                        <div class="flex items-center gap-3">
+                            <span class="w-16 text-[10px] font-black text-blue-400 uppercase">Speed</span>
+                            <div class="flex-1 h-3 bg-black border border-white/20 skew-x-[-12deg]">
+                                <div class="h-full bg-gradient-to-r from-blue-800 via-blue-500 to-cyan-400" style="width: ${artist.stats.speed || 75}%"></div>
                             </div>
-                            <span class="text-xs font-mono text-white">${artist.stats.speed || 75}</span>
+                            <span class="text-[10px] font-mono text-white w-6 text-right">${artist.stats.speed || 75}</span>
                         </div>
-                        <div class="flex items-center gap-4">
-                            <span class="w-24 text-xs font-black text-green-500 uppercase">Technique</span>
-                            <div class="flex-1 h-4 bg-black border border-white/20 skew-x-[-12deg]">
-                                <div class="h-full bg-gradient-to-r from-green-800 to-lime-400" style="width: ${artist.stats.technique || 85}%"></div>
+                        <div class="flex items-center gap-3">
+                            <span class="w-16 text-[10px] font-black text-green-500 uppercase">Tech</span>
+                            <div class="flex-1 h-3 bg-black border border-white/20 skew-x-[-12deg]">
+                                <div class="h-full bg-gradient-to-r from-green-800 via-emerald-500 to-lime-400" style="width: ${artist.stats.technique || 85}%"></div>
                             </div>
-                            <span class="text-xs font-mono text-white">${artist.stats.technique || 85}</span>
+                            <span class="text-[10px] font-mono text-white w-6 text-right">${artist.stats.technique || 85}</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- SPECIAL MOVES (TRACKS) -->
-                <div class="mt-8 relative z-10">
-                    <h3 class="text-xl font-black text-white uppercase mb-4 border-b border-white/20 pb-2 flex justify-between items-center">
-                        <span>Special Moves</span>
-                        <span class="text-[10px] text-gray-500 tracking-widest">TOP TRACKS</span>
+                <div class="mt-4 relative z-10 flex-1 overflow-y-auto custom-scrollbar pr-2">
+                    <h3 class="text-sm font-black text-white uppercase mb-3 border-b border-white/20 pb-1 flex justify-between items-center bg-black/20 px-2 py-1 rounded">
+                        <span class="text-red-500">Command List</span>
+                        <span class="text-[9px] text-gray-500 tracking-widest">SPECIALS</span>
                     </h3>
-                    <ul class="space-y-2">
+                    <ul class="space-y-1">
                         ${(artist.tracks || ['Unknown Track 1', 'Unknown Track 2']).map((track, i) => `
-                            <li class="flex items-center justify-between group cursor-pointer hover:bg-white/5 p-2 rounded transition-colors">
+                            <li class="flex items-center justify-between group cursor-pointer hover:bg-white/10 p-2 rounded transition-colors border border-transparent hover:border-yellow-500/30">
                                 <div class="flex items-center gap-3">
-                                    <span class="text-yellow-500 font-black font-mono">⬇ ↘ ➡ + ${['A', 'B', 'C', 'D'][i]}</span>
-                                    <span class="text-white font-bold uppercase text-sm group-hover:text-yellow-400 transition-colors">${track}</span>
+                                    <span class="text-yellow-500 font-black font-mono text-xs w-24 text-right">⬇ ↘ ➡ + ${['LP', 'HP', 'LK', 'HK'][i]}</span>
+                                    <span class="text-white font-bold uppercase text-xs group-hover:text-yellow-400 transition-colors">${track}</span>
                                 </div>
-                                <span class="opacity-0 group-hover:opacity-100 text-[10px] text-yellow-500 animate-pulse">PLAY</span>
+                                <span class="opacity-0 group-hover:opacity-100 text-[9px] text-red-500 font-black animate-pulse">CRITICAL</span>
                             </li>
                         `).join('')}
                     </ul>
                 </div>
 
                 <!-- ACTION BUTTON -->
-                <div class="pt-6 relative z-10">
-                    <a href="/artista/${artist.slug}" class="block w-full py-4 bg-red-600 hover:bg-red-500 text-white font-black text-xl uppercase tracking-widest text-center skew-x-[-12deg] shadow-[4px_4px_0px_#000] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_#000] transition-all">
-                        SELECT FIGHTER
+                <div class="pt-4 relative z-10">
+                    <a href="/artista/${artist.slug}" class="relative overflow-hidden block w-full py-3 bg-gradient-to-r from-red-700 to-red-600 hover:from-red-600 hover:to-red-500 text-white font-black text-lg uppercase tracking-[0.2em] text-center skew-x-[-12deg] shadow-[4px_4px_0px_#000] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_#000] transition-all group">
+                        <span class="relative z-10">SELECT FIGHTER</span>
+                        <div class="absolute inset-0 bg-white/20 transform -translate-x-full group-hover:translate-x-full transition-transform duration-500 skew-x-12"></div>
                     </a>
                 </div>
             </div>

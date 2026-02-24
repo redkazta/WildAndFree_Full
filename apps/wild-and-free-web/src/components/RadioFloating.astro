@@ -1,43 +1,44 @@
 ---
 ---
 <!-- Radio Floating Player (Global) -->
-<div id="radio-floating" transition:persist class="fixed bottom-6 left-6 z-[9999] w-[300px] sm:w-[350px]">
-  <div id="radio-container" class="bg-black/90 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden shadow-2xl w-full flex flex-col">
+<div id="radio-floating" transition:persist class="fixed bottom-6 left-6 z-[9999] w-[260px] sm:w-[300px]">
+  <div id="radio-container" class="bg-black/95 backdrop-blur-md border border-[var(--primary)]/30 rounded-xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.5)] w-full flex flex-col group hover:border-[var(--primary)]/60 transition-all">
     
     <!-- Player Header -->
-    <div class="p-4 flex gap-4 items-center bg-[#111]">
-        <div class="w-14 h-14 bg-zinc-800 rounded-lg overflow-hidden flex-shrink-0 relative">
-            <img id="radio-cover" src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=150&q=80" class="w-full h-full object-cover" />
-            <div class="absolute inset-0 flex items-center justify-center bg-black/30">
-                <div class="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+    <div class="p-3 flex gap-3 items-center bg-gradient-to-r from-[#111] to-black">
+        <div class="w-10 h-10 bg-zinc-900 rounded-lg overflow-hidden flex-shrink-0 relative border border-white/5">
+            <img id="radio-cover" src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=150&q=80" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
+            <div class="absolute inset-0 flex items-center justify-center bg-black/20">
+                <div class="w-2 h-2 bg-[var(--primary)] rounded-full animate-pulse shadow-[0_0_10px_var(--primary)]"></div>
             </div>
         </div>
-        <div class="overflow-hidden flex-1">
-            <h4 id="radio-title" class="text-sm font-black text-white uppercase truncate">Wild & Free FM</h4>
-            <p id="radio-artist" class="text-[10px] text-gray-400 font-bold uppercase truncate">En Vivo • 24/7</p>
+        <div class="overflow-hidden flex-1 min-w-0">
+            <h4 id="radio-title" class="text-xs font-black text-white uppercase truncate tracking-wide group-hover:text-[var(--primary)] transition-colors">Wild & Free FM</h4>
+            <p id="radio-artist" class="text-[9px] text-gray-400 font-bold uppercase truncate tracking-wider">En Vivo • 24/7</p>
         </div>
-        <button id="radio-toggle" class="w-10 h-10 bg-[var(--primary)] text-white rounded-full flex items-center justify-center hover:scale-105 active:scale-95 transition-all">
-            <svg id="radio-play" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-            <svg id="radio-pause" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="hidden"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        <button id="radio-toggle" class="w-8 h-8 bg-[var(--primary)] text-black rounded-full flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-[0_0_15px_rgba(201,131,0,0.3)]">
+            <svg id="radio-play" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <svg id="radio-pause" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="hidden"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
         </button>
     </div>
 
     <!-- Controls -->
-    <div class="px-4 pb-4 flex items-center justify-between gap-2 border-t border-white/5 pt-2">
-        <button id="radio-fav-btn" class="p-2 text-gray-400 hover:text-white transition-colors" title="Agregar a Favoritos">
-            <svg id="radio-fav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    <div class="px-3 pb-2 flex items-center justify-between gap-2 border-t border-white/5 pt-2 bg-black/50">
+        <button id="radio-fav-btn" class="p-1.5 text-gray-500 hover:text-[var(--primary)] transition-colors" title="Agregar a Favoritos">
+            <svg id="radio-fav-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         </button>
         
         <!-- Visualizer -->
-        <div id="radio-eq" class="flex items-end gap-1 h-6 opacity-0 transition-opacity">
-            <div class="w-1 bg-[var(--primary)] animate-[eq_1s_ease-in-out_infinite]"></div>
-            <div class="w-1 bg-[var(--primary)] animate-[eq_1.2s_ease-in-out_infinite_0.1s]"></div>
-            <div class="w-1 bg-[var(--primary)] animate-[eq_0.8s_ease-in-out_infinite_0.2s]"></div>
-            <div class="w-1 bg-[var(--primary)] animate-[eq_1.5s_ease-in-out_infinite_0.3s]"></div>
+        <div id="radio-eq" class="flex items-end gap-0.5 h-4 opacity-0 transition-opacity">
+            <div class="w-0.5 bg-[var(--primary)] animate-[eq_1s_ease-in-out_infinite]"></div>
+            <div class="w-0.5 bg-[var(--primary)] animate-[eq_1.2s_ease-in-out_infinite_0.1s]"></div>
+            <div class="w-0.5 bg-[var(--primary)] animate-[eq_0.8s_ease-in-out_infinite_0.2s]"></div>
+            <div class="w-0.5 bg-[var(--primary)] animate-[eq_1.5s_ease-in-out_infinite_0.3s]"></div>
+            <div class="w-0.5 bg-[var(--primary)] animate-[eq_0.9s_ease-in-out_infinite_0.4s]"></div>
         </div>
 
-        <button class="p-2 text-gray-400 hover:text-white transition-colors" title="Ver Detalles">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        <button class="p-1.5 text-gray-500 hover:text-white transition-colors" title="Ver Detalles">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
         </button>
     </div>
   </div>
