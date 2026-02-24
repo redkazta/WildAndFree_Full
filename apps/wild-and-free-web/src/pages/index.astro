@@ -1,11 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
-import ArtistGrid from '../components/ArtistGrid.astro';
 import MusicGrid from '../components/MusicGrid.astro';
 import EventsList from '../components/EventsList.astro';
 import ShopGrid from '../components/ShopGrid.astro';
-import SectionHeader from '../components/SectionHeader.astro';
 import Footer from '../components/Footer.astro';
 
 import ArtistCard from '../components/ArtistCard.astro';
@@ -15,6 +13,10 @@ type Artist = {
   name: string;
   role: string;
   image_url: string;
+  stats?: {
+    seguidores: string;
+    oyentes: string;
+  };
 };
 
 type TenantConfig = {
@@ -355,21 +357,24 @@ const products = [
 	const parallaxImages = document.querySelectorAll('.parallax-img');
 	
 	const updateParallax = () => {
-		parallaxImages.forEach(img => {
-			const rect = img.parentElement.getBoundingClientRect();
-			const windowHeight = window.innerHeight;
-			
-			// Si la imagen está visible en el viewport
-			if (rect.top < windowHeight && rect.bottom > 0) {
-				// Calculamos el progreso (0 a 1) de la imagen cruzando la pantalla
-				const progress = (windowHeight - rect.top) / (windowHeight + rect.height);
-				// Movemos la imagen entre -10% y 10% de su altura (ya que tiene h-[120%] y -top-[10%])
-				const yPos = (progress - 0.5) * 20; // Esto dará un rango de -10 a 10
-				(img as HTMLElement).style.transform = `translateY(${yPos}%)`;
-			}
-		});
-		requestAnimationFrame(updateParallax);
-	};
+ 		parallaxImages.forEach(img => {
+ 			const parent = img.parentElement;
+ 			if (!parent) return;
+ 			
+ 			const rect = parent.getBoundingClientRect();
+ 			const windowHeight = window.innerHeight;
+ 			
+ 			// Si la imagen está visible en el viewport
+ 			if (rect.top < windowHeight && rect.bottom > 0) {
+ 				// Calculamos el progreso (0 a 1) de la imagen cruzando la pantalla
+ 				const progress = (windowHeight - rect.top) / (windowHeight + rect.height);
+ 				// Movemos la imagen entre -10% y 10% de su altura (ya que tiene h-[120%] y -top-[10%])
+ 				const yPos = (progress - 0.5) * 20; // Esto dará un rango de -10 a 10
+ 				(img as HTMLElement).style.transform = `translateY(${yPos}%)`;
+ 			}
+ 		});
+ 		requestAnimationFrame(updateParallax);
+ 	};
 
 	// Solo iniciar si hay imágenes con parallax
 	if (parallaxImages.length > 0) {
