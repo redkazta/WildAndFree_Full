@@ -272,31 +272,12 @@ const config = {
                 <span class="text-xs font-black uppercase tracking-[0.2em] text-white arcade-font">VERSUS MODE // CARD BATTLE</span>
             </div>
             
-            <!-- GAME MODE SELECTOR -->
-            <div class="hidden md:flex items-center gap-3 bg-black/40 rounded-xl p-1.5 border-2 border-white/10 shadow-[0_0_20px_rgba(255,255,255,0.05)]">
-                <button class="mode-btn group relative px-6 py-2 rounded-lg overflow-hidden transition-all duration-300 active" data-mode="3v3">
-                    <div class="absolute inset-0 bg-gradient-to-r from-[var(--primary)] to-yellow-600 opacity-0 group-[.active]:opacity-100 transition-opacity"></div>
-                    <span class="relative z-10 text-sm font-black uppercase tracking-widest text-gray-400 group-[.active]:text-black group-hover:text-white transition-colors">3 VS 3</span>
-                    <div class="absolute bottom-0 left-0 w-full h-1 bg-white/20 group-[.active]:bg-black/20"></div>
-                </button>
-                <button class="mode-btn group relative px-6 py-2 rounded-lg overflow-hidden transition-all duration-300" data-mode="2v2">
-                    <div class="absolute inset-0 bg-gradient-to-r from-[var(--primary)] to-yellow-600 opacity-0 group-[.active]:opacity-100 transition-opacity"></div>
-                    <span class="relative z-10 text-sm font-black uppercase tracking-widest text-gray-500 group-[.active]:text-black group-hover:text-white transition-colors">2 VS 2</span>
-                    <div class="absolute bottom-0 left-0 w-full h-1 bg-white/20 group-[.active]:bg-black/20"></div>
-                </button>
-                <button class="mode-btn group relative px-6 py-2 rounded-lg overflow-hidden transition-all duration-300" data-mode="1v1">
-                    <div class="absolute inset-0 bg-gradient-to-r from-[var(--primary)] to-yellow-600 opacity-0 group-[.active]:opacity-100 transition-opacity"></div>
-                    <span class="relative z-10 text-sm font-black uppercase tracking-widest text-gray-500 group-[.active]:text-black group-hover:text-white transition-colors">1 VS 1</span>
-                    <div class="absolute bottom-0 left-0 w-full h-1 bg-white/20 group-[.active]:bg-black/20"></div>
-                </button>
-            </div>
-
-            <div class="text-xs font-mono text-gray-500 font-bold">FASE: SELECCIÓN DE MAZO</div>
+            <div class="text-xs font-mono text-gray-500 font-bold uppercase">SISTEMA DE COMBATE V1.0</div>
         </div>
     </div>
 
     <!-- MAIN ARENA CONTAINER -->
-    <div class="relative z-10 container mx-auto px-4 py-8 h-[calc(100vh-60px)] flex flex-col gap-6">
+    <div class="relative z-10 container mx-auto px-4 py-8 h-auto flex flex-col gap-6">
       
       <!-- HEADER -->
       <div class="text-center animate-fade-in-down mb-4">
@@ -304,93 +285,109 @@ const config = {
               VERSUS: CARD BATTLE
           </h1>
           <p class="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-[0.5em] mt-2 animate-pulse">
-              CONSTRUYE TU MAZO
+              CONSTRUYE TU MAZO Y DOMINA EL ASFALTO
           </p>
       </div>
 
       <!-- GAME LAYOUT: GRID + STAGE -->
-      <div class="flex-1 flex flex-col lg:flex-row gap-8 overflow-hidden min-h-0">
+      <div class="flex flex-col gap-8">
           
-          <!-- LEFT: CHARACTER SELECT GRID (Expanded width) -->
-          <div class="w-full lg:w-5/12 flex flex-col h-full min-h-0">
-              <div class="bg-black/80 border-4 border-[var(--primary)] p-4 rounded-xl backdrop-blur-sm shadow-[0_0_30px_rgba(201,131,0,0.2)] flex-1 flex flex-col min-h-0">
-                  <div class="grid grid-cols-4 sm:grid-cols-5 gap-2 overflow-y-auto pr-2 custom-scrollbar content-start">
+          <!-- BATTLE STAGE (VERTICAL LAYOUT) -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+              
+              <!-- LEFT: CHARACTER SELECT GRID (Scrollable) -->
+              <div class="lg:col-span-3 bg-black/80 border-2 border-white/10 p-4 rounded-xl backdrop-blur-sm h-[600px] flex flex-col overflow-hidden">
+                  <h3 class="text-[10px] font-black text-[var(--primary)] uppercase tracking-widest mb-4 border-b border-white/10 pb-2">DISPONIBLES</h3>
+                  <div class="grid grid-cols-3 gap-2 overflow-y-auto pr-2 custom-scrollbar content-start">
                       {artists.map((artist: any) => (
                           <div 
                               draggable="true"
                               data-id={artist.id}
-                              class="artist-token aspect-square relative group cursor-grab active:cursor-grabbing border-2 border-white/20 hover:border-[var(--primary)] hover:scale-105 hover:z-10 transition-all duration-150 overflow-hidden bg-zinc-800 rounded-md shadow-lg"
+                              class="artist-token aspect-square relative group cursor-grab active:cursor-grabbing border border-white/10 hover:border-[var(--primary)] hover:scale-105 transition-all duration-150 overflow-hidden bg-zinc-800 rounded-md shadow-lg"
                           >
                               <img src={artist.imagenes.profile} class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300" loading="lazy" />
                               <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center p-1">
-                                  <span class="text-[8px] font-black text-white uppercase text-center leading-none truncate w-full">{artist.nombre}</span>
+                                  <span class="text-[7px] font-black text-white uppercase text-center leading-none truncate w-full">{artist.nombre}</span>
                               </div>
-                              <!-- Selection Highlight -->
-                              <div class="absolute inset-0 border-2 border-transparent group-hover:border-[var(--primary)] transition-colors"></div>
                           </div>
                       ))}
                   </div>
+              </div>
+
+              <!-- CENTER: VERTICAL BATTLE SLOTS -->
+              <div class="lg:col-span-6 flex flex-col items-center justify-center py-10 bg-black/40 border-x border-white/5 rounded-3xl relative">
                   
-                  <!-- TEAM SLOTS (Deck Style) -->
-                  <div id="team-slots" class="mt-4 pt-4 border-t border-white/10 grid grid-cols-3 gap-2">
-                      <div class="team-slot h-20 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center text-[10px] text-gray-600 font-black uppercase transition-colors relative overflow-hidden cursor-pointer hover:bg-white/10" data-role="leader">
-                          <span class="pointer-events-none z-10 text-center">CARTA<br>LÍDER</span>
-                          <div class="slot-content absolute inset-0 w-full h-full hidden"></div>
+                  <div class="flex items-center gap-12 md:gap-24 relative">
+                      <!-- TEAM ALPHA (Left) -->
+                      <div class="flex items-center gap-4">
+                          <div class="vertical-text text-xl md:text-4xl font-black text-white/10 uppercase tracking-tighter leading-none select-none team-name-label" data-team="alpha">ALPHA</div>
+                          <div id="team-alpha-slots" class="flex flex-col gap-4">
+                              <!-- Slots will be injected here -->
+                          </div>
                       </div>
-                      <div class="team-slot h-20 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center text-[10px] text-gray-600 font-black uppercase transition-colors relative overflow-hidden cursor-pointer hover:bg-white/10" data-role="support">
-                          <span class="pointer-events-none z-10 text-center">CARTA<br>SOPORTE</span>
-                          <div class="slot-content absolute inset-0 w-full h-full hidden"></div>
+
+                      <!-- VS MIDDLE -->
+                      <div class="flex flex-col items-center gap-4">
+                          <div class="w-px h-20 bg-gradient-to-b from-transparent via-[var(--primary)] to-transparent opacity-30"></div>
+                          <div class="w-16 h-16 bg-[var(--primary)] text-black rounded-full flex items-center justify-center font-black text-2xl italic shadow-[0_0_30px_var(--primary)] border-4 border-black z-10 animate-pulse">VS</div>
+                          <div class="w-px h-20 bg-gradient-to-b from-transparent via-[var(--primary)] to-transparent opacity-30"></div>
                       </div>
-                      <div class="team-slot h-20 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center text-[10px] text-gray-600 font-black uppercase transition-colors relative overflow-hidden cursor-pointer hover:bg-white/10" data-role="anchor">
-                          <span class="pointer-events-none z-10 text-center">CARTA<br>ANCLA</span>
-                          <div class="slot-content absolute inset-0 w-full h-full hidden"></div>
+
+                      <!-- TEAM OMEGA (Right) -->
+                      <div class="flex items-center gap-4">
+                          <div id="team-omega-slots" class="flex flex-col gap-4">
+                              <!-- Slots will be injected here -->
+                          </div>
+                          <div class="vertical-text text-xl md:text-4xl font-black text-white/10 uppercase tracking-tighter leading-none select-none team-name-label" data-team="omega">OMEGA</div>
+                      </div>
+                  </div>
+
+                  <!-- MODE SELECTOR (Moved Down & Bigger) -->
+                  <div class="mt-16 w-full max-w-2xl px-8">
+                      <div class="text-center mb-6">
+                          <span class="text-xs font-black text-[var(--primary)] uppercase tracking-[0.3em] animate-pulse">1.- Selecciona tu modo de juego</span>
+                      </div>
+                      <div class="grid grid-cols-3 gap-4">
+                          <button class="mode-btn group relative py-6 rounded-2xl overflow-hidden border-2 border-white/10 transition-all hover:border-[var(--primary)]/50 active" data-mode="3v3">
+                              <div class="absolute inset-0 bg-gradient-to-br from-[var(--primary)] to-yellow-600 opacity-0 group-[.active]:opacity-100 transition-opacity"></div>
+                              <div class="relative z-10 flex flex-col items-center">
+                                  <span class="text-2xl font-black italic text-white group-[.active]:text-black transition-colors">3 VS 3</span>
+                                  <span class="text-[8px] font-bold text-gray-500 group-[.active]:text-black/60 uppercase tracking-widest mt-1">TRIO BATTLE</span>
+                              </div>
+                          </button>
+                          <button class="mode-btn group relative py-6 rounded-2xl overflow-hidden border-2 border-white/10 transition-all hover:border-[var(--primary)]/50" data-mode="2v2">
+                              <div class="absolute inset-0 bg-gradient-to-br from-[var(--primary)] to-yellow-600 opacity-0 group-[.active]:opacity-100 transition-opacity"></div>
+                              <div class="relative z-10 flex flex-col items-center">
+                                  <span class="text-2xl font-black italic text-white group-[.active]:text-black transition-colors">2 VS 2</span>
+                                  <span class="text-[8px] font-bold text-gray-500 group-[.active]:text-black/60 uppercase tracking-widest mt-1">DUO BATTLE</span>
+                              </div>
+                          </button>
+                          <button class="mode-btn group relative py-6 rounded-2xl overflow-hidden border-2 border-white/10 transition-all hover:border-[var(--primary)]/50" data-mode="1v1">
+                              <div class="absolute inset-0 bg-gradient-to-br from-[var(--primary)] to-yellow-600 opacity-0 group-[.active]:opacity-100 transition-opacity"></div>
+                              <div class="relative z-10 flex flex-col items-center">
+                                  <span class="text-2xl font-black italic text-white group-[.active]:text-black transition-colors">1 VS 1</span>
+                                  <span class="text-[8px] font-bold text-gray-500 group-[.active]:text-black/60 uppercase tracking-widest mt-1">SOLO DUEL</span>
+                              </div>
+                          </button>
                       </div>
                   </div>
               </div>
-          </div>
 
-          <!-- CENTER: BATTLE ARENA (DROP ZONE) -->
-          <div 
-              id="battle-arena"
-              class="w-full lg:w-7/12 relative bg-black/40 border-4 border-dashed border-white/10 rounded-xl flex items-center justify-center overflow-hidden group transition-all duration-300 backdrop-blur-md min-h-[400px] lg:min-h-0"
-          >
-              <!-- Placeholder State (NOW LIVE VIDEO) -->
-              <div id="arena-placeholder" class="absolute inset-0 w-full h-full flex flex-col items-center justify-center bg-black transition-opacity duration-500 z-10 overflow-hidden">
-                  <!-- Video Background (Simulated Live Feed) -->
-                  <div class="absolute inset-0 opacity-40 mix-blend-screen pointer-events-none">
-                       <!-- This would be an iframe or video tag for the live stream -->
-                       <video autoplay loop muted playsinline class="w-full h-full object-cover grayscale contrast-125 brightness-75">
-                           <source src="https://videos.pexels.com/video-files/3121459/3121459-hd_1920_1080_25fps.mp4" type="video/mp4">
-                       </video>
+              <!-- RIGHT: ACTIVE CHARACTER INFO (DYNAMIC) -->
+              <div id="battle-arena" class="lg:col-span-3 relative h-[600px] bg-black/80 border-2 border-white/10 rounded-xl overflow-hidden flex items-center justify-center">
+                  <!-- Arena Placeholder -->
+                  <div id="arena-placeholder" class="text-center p-6">
+                      <div class="text-4xl mb-4 text-white/20">🔍</div>
+                      <p class="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]">Selecciona o arrastra una carta para ver detalles</p>
                   </div>
+                  <!-- Arena Content -->
+                  <div id="arena-content" class="hidden w-full h-full"></div>
                   
-                  <div class="relative z-10 text-center p-8 backdrop-blur-sm bg-black/30 w-full h-full flex flex-col items-center justify-center border-4 border-dashed border-white/10 rounded-xl group-hover:border-[var(--primary)]/50 transition-colors">
-                      <div class="flex items-center gap-2 mb-6 animate-pulse">
-                          <div class="w-2 h-2 bg-red-500 rounded-full"></div>
-                          <span class="text-[10px] font-black text-red-500 uppercase tracking-widest">LIVE FEED // ARENA CAM 1</span>
-                      </div>
-                      
-                      <div class="text-6xl mb-4 animate-bounce text-white/80 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">⇩</div>
-                      <h3 class="text-3xl font-black uppercase text-white tracking-widest mb-2 glitch-text" data-text="ZONA DE CARTAS">ZONA DE CARTAS</h3>
-                      <p class="text-xs font-mono text-gray-400 uppercase tracking-wider bg-black/50 px-2 py-1">Arrastra una carta para ver sus stats</p>
-                  </div>
+                  <!-- CRT Scanline Effect -->
+                  <div class="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-20 bg-[length:100%_2px,3px_100%] pointer-events-none opacity-30"></div>
               </div>
 
-              <!-- Active Artist State (Hidden by default) -->
-              <div id="arena-content" class="hidden absolute inset-0 w-full h-full flex flex-col md:flex-row">
-                  <!-- Dynamic Content Injected Here -->
-              </div>
-              
-              <!-- CRT Scanline Effect -->
-              <div class="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-20 bg-[length:100%_2px,3px_100%] pointer-events-none"></div>
-              
-              <!-- Corner Decorations -->
-              <div class="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-[var(--primary)] rounded-tl-lg"></div>
-              <div class="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-[var(--primary)] rounded-tr-lg"></div>
-              <div class="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-[var(--primary)] rounded-bl-lg"></div>
-              <div class="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-[var(--primary)] rounded-br-lg"></div>
           </div>
-
       </div>
 
       <!-- NEW SECTION: BATTLE LOGIC & BRACKETS -->
@@ -612,8 +609,66 @@ const config = {
             
             // Re-generate brackets when mode changes
             generateBrackets(btn.getAttribute('data-mode'));
+            
+            // Initialize main arena slots based on mode
+            initSlots(btn.getAttribute('data-mode'));
         });
     });
+
+    // ARENA SLOTS INITIALIZATION
+    function initSlots(mode = '3v3') {
+        const slotsContainer = document.querySelector('.grid.grid-cols-3.gap-4');
+        if (!slotsContainer) return;
+
+        const count = mode === '3v3' ? 3 : mode === '2v2' ? 2 : 1;
+        slotsContainer.innerHTML = '';
+        
+        for (let i = 0; i < count; i++) {
+            const slot = document.createElement('div');
+            slot.className = 'team-slot group/slot relative w-full h-32 md:h-40 border-2 border-white/10 rounded-xl flex items-center justify-center cursor-pointer transition-all hover:border-white/30 overflow-hidden bg-black/40';
+            slot.innerHTML = `
+                <span class="text-[10px] font-black text-white/20 uppercase tracking-widest z-10 transition-opacity">SLOT ${i+1}</span>
+                <div class="slot-content absolute inset-0 hidden"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover/slot:opacity-100 transition-opacity pointer-events-none"></div>
+            `;
+            slotsContainer.appendChild(slot);
+            setupSlotEvents(slot);
+        }
+    }
+
+    function setupSlotEvents(slot) {
+        slot.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'copy';
+        });
+
+        slot.addEventListener('dragenter', () => {
+            slot.classList.add('border-[var(--primary)]', 'bg-[var(--primary)]/20');
+        });
+
+        slot.addEventListener('dragleave', () => {
+            slot.classList.remove('border-[var(--primary)]', 'bg-[var(--primary)]/20');
+        });
+
+        slot.addEventListener('drop', (e) => {
+            e.preventDefault();
+            slot.classList.remove('border-[var(--primary)]', 'bg-[var(--primary)]/20', 'border-dashed', 'border-white/50');
+            const id = e.dataTransfer.getData('text/plain');
+            if (id) fillTeamSlot(slot, id);
+        });
+
+        slot.addEventListener('click', () => {
+            const contentDiv = slot.querySelector('.slot-content');
+            if (!contentDiv.classList.contains('hidden')) {
+                contentDiv.innerHTML = '';
+                contentDiv.classList.add('hidden');
+                slot.querySelector('span').classList.remove('opacity-0');
+                slot.classList.remove('border-[var(--primary)]');
+                slot.removeAttribute('data-artist-id');
+                checkTeamStatus();
+            }
+        });
+    }
 
     // BRACKET GENERATION LOGIC
     const bracketsContainer = document.getElementById('brackets-container');
@@ -644,6 +699,9 @@ const config = {
     }
 
     function createMatchElement(teamA, teamB, index, mode) {
+        const teamAName = "TEAM ALPHA";
+        const teamBName = "TEAM OMEGA";
+
         return `
             <div class="match-card bg-black/60 border border-white/10 rounded-xl overflow-hidden backdrop-blur-md group hover:border-[var(--primary)]/50 transition-all duration-500 animate-fade-in" style="animation-delay: ${index * 0.1}s">
                 <!-- Match Header -->
@@ -651,7 +709,7 @@ const config = {
                     <span class="text-[10px] font-black text-[var(--primary)] tracking-tighter">ENFRENTAMIENTO #${index}</span>
                     <div class="flex items-center gap-1">
                         <div class="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></div>
-                        <span class="text-[8px] font-bold text-gray-400">READY</span>
+                        <span class="text-[8px] font-bold text-gray-400 uppercase tracking-widest">${mode} READY</span>
                     </div>
                 </div>
 
@@ -663,37 +721,69 @@ const config = {
                     </div>
 
                     <!-- Team A -->
-                    <div class="flex items-center gap-3 bg-white/5 p-2 rounded-lg border border-white/5 group-hover:bg-white/10 transition-colors">
+                    <div class="team-container flex items-center gap-3 bg-white/5 p-2 rounded-lg border border-white/5 group-hover:bg-white/10 transition-all cursor-pointer hover:border-[var(--primary)]/30" onclick="setWinner(this, '${teamAName}')">
                         <div class="flex -space-x-3 overflow-hidden">
                             ${teamA.map(a => `<img src="${a.imagenes.profile}" class="inline-block h-8 w-8 rounded-full ring-2 ring-black object-cover grayscale group-hover:grayscale-0 transition-all" />`).join('')}
                         </div>
                         <div class="flex-1 min-w-0">
                             <p class="text-[10px] font-black text-white truncate uppercase">${teamA.map(a => a.nombre.split(' ')[0]).join(' & ')}</p>
-                            <p class="text-[8px] text-gray-500 font-bold uppercase tracking-widest">TEAM ALPHA</p>
+                            <p class="team-label text-[8px] text-gray-500 font-bold uppercase tracking-widest flex items-center gap-1">
+                                ${teamAName}
+                                <svg class="w-2 h-2 opacity-0 transition-opacity" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg>
+                            </p>
                         </div>
                     </div>
 
                     <!-- Team B -->
-                    <div class="flex items-center gap-3 bg-white/5 p-2 rounded-lg border border-white/5 group-hover:bg-white/10 transition-colors">
+                    <div class="team-container flex items-center gap-3 bg-white/5 p-2 rounded-lg border border-white/5 group-hover:bg-white/10 transition-all cursor-pointer hover:border-[var(--primary)]/30" onclick="setWinner(this, '${teamBName}')">
                         <div class="flex -space-x-3 overflow-hidden">
                             ${teamB.map(a => `<img src="${a.imagenes.profile}" class="inline-block h-8 w-8 rounded-full ring-2 ring-black object-cover grayscale group-hover:grayscale-0 transition-all" />`).join('')}
                         </div>
                         <div class="flex-1 min-w-0">
                             <p class="text-[10px] font-black text-white truncate uppercase text-right">${teamB.map(a => a.nombre.split(' ')[0]).join(' & ')}</p>
-                            <p class="text-[8px] text-gray-500 font-bold uppercase tracking-widest text-right">TEAM OMEGA</p>
+                            <p class="team-label text-[8px] text-gray-500 font-bold uppercase tracking-widest text-right flex items-center justify-end gap-1">
+                                <svg class="w-2 h-2 opacity-0 transition-opacity" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg>
+                                ${teamBName}
+                            </p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Match Footer -->
-                <div class="px-4 py-2 bg-black/40 flex justify-center border-t border-white/5">
+                <div class="px-4 py-2 bg-black/40 flex justify-between items-center border-t border-white/5">
+                    <button class="edit-team-btn text-[7px] font-bold text-gray-500 hover:text-white transition-colors uppercase tracking-[0.2em]" onclick="renameTeam(this)">EDITAR NOMBRES</button>
                     <button class="text-[9px] font-black text-white/40 hover:text-[var(--primary)] transition-colors tracking-widest uppercase flex items-center gap-2 group/btn">
-                        SIMULAR BATALLA
+                        SIMULAR
                         <svg class="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
                     </button>
                 </div>
             </div>
         `;
+    }
+
+    // WINNER SELECTION
+    window.setWinner = function(el, teamName) {
+        const parent = el.closest('.p-4');
+        parent.querySelectorAll('.team-container').forEach(t => {
+            t.classList.remove('border-[var(--primary)]', 'bg-[var(--primary)]/10');
+            t.querySelector('.team-label').classList.remove('text-[var(--primary)]');
+            t.querySelector('svg').classList.add('opacity-0');
+        });
+        
+        el.classList.add('border-[var(--primary)]', 'bg-[var(--primary)]/10');
+        el.querySelector('.team-label').classList.add('text-[var(--primary)]');
+        el.querySelector('svg').classList.remove('opacity-0');
+    }
+
+    // RENAME TEAM
+    window.renameTeam = function(btn) {
+        const card = btn.closest('.match-card');
+        const labels = card.querySelectorAll('.team-label');
+        const newNameA = prompt("Nuevo nombre para TEAM A:", labels[0].innerText.trim());
+        const newNameB = prompt("Nuevo nombre para TEAM B:", labels[1].innerText.trim());
+        
+        if (newNameA) labels[0].innerHTML = `${newNameA} <svg class="w-2 h-2 opacity-0 transition-opacity" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg>`;
+        if (newNameB) labels[1].innerHTML = `<svg class="w-2 h-2 opacity-0 transition-opacity" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg> ${newNameB}`;
     }
 
     if (regenerateBtn) {
@@ -708,8 +798,9 @@ const config = {
         });
     }
 
-    // Initialize brackets on load
+    // Initialize on load
     generateBrackets();
+    initSlots('3v3'); // Default 3v3 slots
 
     function renderArtist(id) {
         const artist = artists.find(a => a.id == id);
@@ -858,48 +949,81 @@ const config = {
   }
   
   /* ARCADE FONTS & ANIMATIONS */
-  .arcade-font {
-    font-family: 'Courier New', Courier, monospace;
+  .vertical-text {
+    writing-mode: vertical-rl;
+    text-orientation: uppercase;
+    transform: rotate(180deg);
+    white-space: nowrap;
   }
-  
-  .arcade-title {
-    text-shadow: 2px 2px 0px #fff, 4px 4px 0px #000;
+
+  .perspective-1000 {
+    perspective: 1000px;
   }
 
   .custom-scrollbar::-webkit-scrollbar {
     width: 4px;
   }
+  
   .custom-scrollbar::-webkit-scrollbar-track {
-    background: rgba(255,255,255,0.05);
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: var(--primary);
-    border-radius: 2px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #fff;
-  }
-
-  @keyframes slideInLeft {
-    from { transform: translateX(-50px); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-  }
-  @keyframes slideInRight {
-    from { transform: translateX(50px); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-  }
-  @keyframes fillBar {
-    from { width: 0; }
+    background: rgba(0,0,0,0.2);
   }
   
-  .animate-slide-in-left {
-    animation: slideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 10px;
   }
-  .animate-slide-in-right {
-    animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+  @keyframes slide-in-left {
+    from { transform: translateX(-100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
   }
-  .animate-fill-bar {
-    animation: fillBar 1s ease-out forwards;
+
+  @keyframes slide-in-right {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  @keyframes fill-bar {
+    from { width: 0; }
+  }
+
+  .animate-slide-in-left { animation: slide-in-left 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
+  .animate-slide-in-right { animation: slide-in-right 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
+  .animate-fill-bar { animation: fill-bar 1s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
+
+  /* BATTLE SLOT STYLES */
+  .battle-slot {
+    width: 80px;
+    height: 110px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 2px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+  }
+
+  .battle-slot:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--primary);
+    transform: scale(1.05);
+  }
+
+  .battle-slot.active-drag {
+    border-color: var(--primary);
+    background: rgba(201, 131, 0, 0.1);
+    box-shadow: 0 0 20px rgba(201, 131, 0, 0.2);
+  }
+
+  .battle-slot.filled {
+    border-style: solid;
+    border-color: var(--primary);
+    background: black;
+    box-shadow: 0 0 15px rgba(201, 131, 0, 0.3);
   }
 
   /* CRT Scanlines helper */
