@@ -240,7 +240,7 @@ const config = {
                     <!-- Machine Header -->
                     <div class="flex justify-between items-center mb-8 border-b-2 border-white/5 pb-4">
                         <div>
-                            <h3 class="text-sm font-black text-[var(--primary)] uppercase tracking-tighter">CASINO WILD</h3>
+                            <h3 class="text-sm font-black text-[var(--primary)] uppercase tracking-tighter">WILD SLOT MACHINE</h3>
                             <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">LUCKY DRAW V1</p>
                         </div>
                         <div class="flex gap-1">
@@ -323,6 +323,26 @@ const config = {
                                         <h5 class="text-[10px] font-black text-gray-500 uppercase tracking-[0.4em] mb-1">Estilo</h5>
                                         <p id="lucky-artist-style" class="text-white font-bold uppercase tracking-tighter text-lg">---</p>
                                     </div>
+                                    <div>
+                                        <h5 class="text-[10px] font-black text-gray-500 uppercase tracking-[0.4em] mb-1">Rareza</h5>
+                                        <p id="lucky-artist-rarity" class="text-[var(--primary)] font-black uppercase tracking-tighter text-lg">---</p>
+                                    </div>
+                                    <div>
+                                        <h5 class="text-[10px] font-black text-gray-500 uppercase tracking-[0.4em] mb-1">Poder Total</h5>
+                                        <div class="flex items-center gap-2">
+                                            <div class="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
+                                                <div id="lucky-artist-power-bar" class="h-full bg-[var(--primary)] transition-all duration-1000" style="width: 0%"></div>
+                                            </div>
+                                            <span id="lucky-artist-power" class="text-white font-bold text-lg">00</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="lucky-artist-streak" class="hidden bg-[var(--primary)]/10 border border-[var(--primary)]/30 rounded-xl p-3 flex items-center justify-between">
+                                    <span class="text-[10px] font-black text-[var(--primary)] uppercase tracking-widest">RACHA DE VICTORIAS</span>
+                                    <div class="flex gap-1">
+                                        <div class="w-2 h-2 rounded-full bg-[var(--primary)] animate-ping"></div>
+                                        <span id="lucky-artist-streak-count" class="text-white font-black italic">5 WIN STREAK</span>
+                                    </div>
                                 </div>
                             </div>
 
@@ -342,7 +362,7 @@ const config = {
                         <svg class="w-10 h-10 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4"></path></svg>
                     </div>
                     <h4 class="text-xl font-black text-white/30 uppercase italic">Esperando Selección</h4>
-                    <p class="text-xs text-white/20 uppercase tracking-widest mt-2">Jala la palanca del Casino Wild para empezar</p>
+                    <p class="text-xs text-white/20 uppercase tracking-widest mt-2">Jala la palanca de la Wild Slot Machine para empezar</p>
                 </div>
             </div>
         </div>
@@ -365,6 +385,11 @@ const config = {
     const luckyBio = document.getElementById('lucky-artist-bio');
     const luckyOrigin = document.getElementById('lucky-artist-origin');
     const luckyStyle = document.getElementById('lucky-artist-style');
+    const luckyRarity = document.getElementById('lucky-artist-rarity');
+    const luckyPower = document.getElementById('lucky-artist-power');
+    const luckyPowerBar = document.getElementById('lucky-artist-power-bar');
+    const luckyStreak = document.getElementById('lucky-artist-streak');
+    const luckyStreakCount = document.getElementById('lucky-artist-streak-count');
     const viewProfileLink = document.getElementById('view-profile-link');
     
     const quickSelects = document.querySelectorAll('.artist-quick-select');
@@ -399,6 +424,12 @@ const config = {
         luckyPanel.style.opacity = '0';
         luckyPanel.style.transform = 'translateX(20px)';
         
+        // Random Stats for effect
+        const rarities = ['COMÚN', 'RARO', 'ÉPICO', 'LEGENDARIO', 'MÍTICO'];
+        const rarity = rarities[Math.floor(Math.random() * rarities.length)];
+        const power = Math.floor(Math.random() * 30) + 70; // 70-100
+        const streak = Math.floor(Math.random() * 8) + 2; // 2-10
+
         setTimeout(() => {
             if (luckyImg) luckyImg.src = artist.imagenes.profile;
             if (luckyName) luckyName.textContent = artist.nombre;
@@ -408,6 +439,20 @@ const config = {
             if (luckyStyle) luckyStyle.textContent = artist.estilo || '---';
             if (viewProfileLink) viewProfileLink.href = `/artista/${artist.slug}`;
             
+            // New Creative Fields
+            if (luckyRarity) luckyRarity.textContent = rarity;
+            if (luckyPower) luckyPower.textContent = power;
+            if (luckyPowerBar) luckyPowerBar.style.width = `${power}%`;
+            
+            if (luckyStreak && luckyStreakCount) {
+                if (streak > 5) {
+                    luckyStreak.classList.remove('hidden');
+                    luckyStreakCount.textContent = `${streak} WIN STREAK`;
+                } else {
+                    luckyStreak.classList.add('hidden');
+                }
+            }
+
             luckyPanel.style.opacity = '1';
             luckyPanel.style.transform = 'translateX(0)';
         }, 50);
