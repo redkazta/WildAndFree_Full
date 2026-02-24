@@ -536,6 +536,8 @@ const honorAndFreeData = [
 </style>
 
 <script>
+    import { Favorites } from '../lib/favorites.js';
+
     const searchInput = document.getElementById('spotify-search') as HTMLInputElement;
     const searchResults = document.getElementById('search-results');
     let debounceTimer: any;
@@ -579,18 +581,37 @@ const honorAndFreeData = [
         const html = tracks.map(track => {
             const image = track.album.images[2]?.url || track.album.images[0]?.url;
             const artist = track.artists.map((a: any) => a.name).join(', ');
+            // Escape quotes for data attributes
+            const safeTrack = JSON.stringify({
+                id: track.id,
+                title: track.name,
+                artist: artist,
+                image: image
+            }).replace(/"/g, '&quot;');
+            
+            const isFav = Favorites.has(track.id);
+            const favClass = isFav ? 'text-[var(--wild-orange)] fill-current' : 'text-gray-400 hover:text-white';
+            const fillAttr = isFav ? 'currentColor' : 'none';
+
             return `
-            <div class="flex items-center gap-4 p-3 hover:bg-white/10 cursor-pointer border-b border-white/5 last:border-0 transition-colors group" onclick="window.playSpotifyTrack('${track.id}')">
-                <div class="w-10 h-10 rounded overflow-hidden relative">
+            <div class="flex items-center gap-4 p-3 hover:bg-white/10 cursor-pointer border-b border-white/5 last:border-0 transition-colors group relative" onclick="window.playSpotifyTrack('${track.id}')">
+                <div class="w-10 h-10 rounded overflow-hidden relative flex-shrink-0">
                     <img src="${image}" class="w-full h-full object-cover" />
                     <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
                     </div>
                 </div>
-                <div class="flex-1 min-w-0">
+                <div class="flex-1 min-w-0 pr-8">
                     <h4 class="text-xs font-black text-white uppercase truncate">${track.name}</h4>
                     <p class="text-[10px] text-gray-400 font-bold truncate">${artist}</p>
                 </div>
+                <button 
+                    class="fav-track-btn absolute right-3 top-1/2 -translate-y-1/2 p-2 transition-colors z-10 ${favClass}"
+                    data-track="${safeTrack}"
+                    onclick="event.stopPropagation(); window.toggleTrackFavorite(this, '${track.id}')"
+                >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="${fillAttr}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </button>
             </div>
             `;
         }).join('');
@@ -598,6 +619,20 @@ const honorAndFreeData = [
         searchResults.innerHTML = html;
         searchResults.classList.remove('hidden');
     }
+
+    (window as any).toggleTrackFavorite = async (btn: HTMLElement, trackId: string) => {
+        const trackData = JSON.parse(btn.dataset.track || '{}');
+        const isFav = await Favorites.toggle(trackData);
+        
+        const svg = btn.querySelector('svg');
+        if (isFav) {
+            btn.className = "fav-track-btn absolute right-3 top-1/2 -translate-y-1/2 p-2 transition-colors z-10 text-[var(--wild-orange)] fill-current";
+            svg?.setAttribute('fill', 'currentColor');
+        } else {
+            btn.className = "fav-track-btn absolute right-3 top-1/2 -translate-y-1/2 p-2 transition-colors z-10 text-gray-400 hover:text-white";
+            svg?.setAttribute('fill', 'none');
+        }
+    };
 
     (window as any).playSpotifyTrack = (id: string) => {
         window.dispatchEvent(new CustomEvent('play-spotify-track', { detail: { id } }));

@@ -4,8 +4,7 @@ FROM golang:1.22-alpine AS builder
 WORKDIR /app
 
 # Copy go mod and sum files
-COPY go.mod ./
-# COPY go.sum ./ # No go.sum yet if no external deps
+COPY go.mod go.sum ./
 
 # Download dependencies
 RUN go mod download
@@ -21,9 +20,12 @@ FROM alpine:latest
 
 WORKDIR /root/
 
+# Install CA certificates for HTTPS calls (needed for Spotify API)
+RUN apk --no-cache add ca-certificates
+
 COPY --from=builder /app/core-engine .
 
-# Expose port
+# Default port (can be overridden by env var)
 EXPOSE 8080
 
 # Command to run

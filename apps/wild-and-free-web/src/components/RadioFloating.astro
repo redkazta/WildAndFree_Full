@@ -24,8 +24,8 @@
 
     <!-- Controls -->
     <div class="px-4 pb-4 flex items-center justify-between gap-2 border-t border-white/5 pt-2">
-        <button class="p-2 text-gray-400 hover:text-white transition-colors" title="Agregar a Favoritos">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <button id="radio-fav-btn" class="p-2 text-gray-400 hover:text-white transition-colors" title="Agregar a Favoritos">
+            <svg id="radio-fav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         </button>
         
         <!-- Visualizer -->
@@ -51,11 +51,47 @@
 </style>
 
 <script>
+    import { Favorites } from '../lib/favorites.js';
+
     const radioToggle = document.getElementById('radio-toggle');
     const radioPlay = document.getElementById('radio-play');
     const radioPause = document.getElementById('radio-pause');
     const radioEq = document.getElementById('radio-eq');
+    const radioFavBtn = document.getElementById('radio-fav-btn');
+    const radioFavIcon = document.getElementById('radio-fav-icon');
+    
     let isPlaying = false;
+    const RADIO_TRACK_ID = 'radio-wild-free-fm';
+    const RADIO_METADATA = {
+        id: RADIO_TRACK_ID,
+        title: 'Wild & Free FM',
+        artist: 'En Vivo • 24/7',
+        image: 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=150&q=80'
+    };
+
+    // Favorites Logic
+    const updateFavIcon = () => {
+        if (Favorites.has(RADIO_TRACK_ID)) {
+            radioFavIcon?.setAttribute('fill', 'currentColor');
+            radioFavIcon?.classList.add('text-[var(--primary)]');
+        } else {
+            radioFavIcon?.setAttribute('fill', 'none');
+            radioFavIcon?.classList.remove('text-[var(--primary)]');
+        }
+    };
+
+    radioFavBtn?.addEventListener('click', async () => {
+        await Favorites.toggle(RADIO_METADATA);
+        updateFavIcon();
+    });
+
+    // Listen for updates from other components
+    window.addEventListener('favorites-updated', updateFavIcon);
+    
+    // Initial check
+    // Wait a bit for auth to settle or use event
+    setTimeout(updateFavIcon, 1000);
+
 
     // Simulate audio player
     const audio = new Audio('https://stream.zeno.fm/ez250525258uv'); // Example stream or placeholder

@@ -7,8 +7,12 @@ import (
 	"os"
 	"time"
 
+	"github.com/joho/godotenv"
+
 	"core-engine/internal/spotify"
 	"core-engine/internal/tenant"
+	"core-engine/internal/database"
+	"core-engine/internal/commerce"
 )
 
 type HealthStatus struct {
@@ -26,6 +30,18 @@ type Artist struct {
 }
 
 func main() {
+	// Load environment variables
+	if err := godotenv.Load(); err != nil {
+		log.Println("No .env file found, using system environment variables")
+	}
+
+	// Initialize Database
+	if err := database.Init(); err != nil {
+		log.Printf("Database initialization failed: %v", err)
+	} else {
+		log.Println("Database initialized successfully")
+	}
+
 	mux := http.NewServeMux()
 
 	// Spotify Client
@@ -125,12 +141,26 @@ func main() {
 		_ = json.NewEncoder(w).Encode(result)
 	})
 
+	// Commerce Handlers (Cart & Wishlist)
+	mux.HandleFunc("GET /api/v1/cart", commerce.HandleGetCart)
+	mux.HandleFunc("POST /api/v1/cart/add", commerce.HandleAddToCart)
+	mux.HandleFunc("DELETE /api/v1/cart/remove", commerce.HandleRemoveFromCart)
+
+	mux.HandleFunc("GET /api/v1/wishlist", commerce.HandleGetWishlist)
+	mux.HandleFunc("POST /api/v1/wishlist/add", commerce.HandleAddToWishlist)
+	mux.HandleFunc("DELETE /api/v1/wishlist/remove", commerce.HandleRemoveFromWishlist)
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
 	server := &http.Server{
-		Addr:              ":8080",
+		Addr:              ":" + port,
 		Handler:           mux,
 		ReadHeaderTimeout: 5 * time.Second,
 	}
 
-	log.Println("Core Engine Starting...")
+	log.Printf("Core Engine Starting on port %s...", port)
 	log.Fatal(server.ListenAndServe())
 }
