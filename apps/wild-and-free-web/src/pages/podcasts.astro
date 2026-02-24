@@ -14,42 +14,52 @@ const podcasts = [
     id: 1, 
     title: "El Origen del Flow", 
     host: "MC Nova", 
-    description: "Hablamos de cómo inició todo en las calles de Torreón.", 
+    description: "Hablamos de cómo inició todo en las calles de Torreón. Historias inéditas del movimiento urbano.", 
     duration: "45:00", 
     date: "12 OCT", 
     image: "https://images.unsplash.com/photo-1478737270239-2f02b77ac6d5?w=500&q=80",
-    tags: ["Entrevista", "Historia"]
+    tags: ["Entrevista", "Historia"],
+    spotifyId: "4cOdK2wGLETKBW3PvgPWqT" // Mock ID
   },
   { 
     id: 2, 
     title: "Producción Musical 101", 
     host: "DJ Beatmaker", 
-    description: "Tips esenciales para empezar a producir tus propios beats.", 
+    description: "Tips esenciales para empezar a producir tus propios beats desde tu cuarto.", 
     duration: "32:15", 
     date: "10 OCT", 
     image: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=500&q=80",
-    tags: ["Tutorial", "Producción"]
+    tags: ["Tutorial", "Producción"],
+    spotifyId: "5T8EDUDqKcs6OSOwEsfqG7"
   },
   { 
     id: 3, 
     title: "La Escena Underground", 
     host: "La Jefa", 
-    description: "Analizamos el estado actual del rap underground en México.", 
+    description: "Analizamos el estado actual del rap underground en México. ¿Quiénes son los nuevos talentos?", 
     duration: "58:30", 
     date: "05 OCT", 
     image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500&q=80",
-    tags: ["Debate", "Escena"]
+    tags: ["Debate", "Escena"],
+    spotifyId: "0VjIjW4GlUZAMYd2vXMi3b"
   },
   { 
     id: 4, 
     title: "Freestyle vs Escrito", 
     host: "Aczino (Invitado)", 
-    description: "Diferencias, ventajas y desventajas de cada disciplina.", 
+    description: "Diferencias, ventajas y desventajas de cada disciplina. Una masterclass de improvisación.", 
     duration: "1:12:00", 
     date: "01 OCT", 
     image: "https://images.unsplash.com/photo-1514525253361-bee871871771?w=500&q=80",
-    tags: ["Freestyle", "Técnica"]
+    tags: ["Freestyle", "Técnica"],
+    spotifyId: "6I9VzXrHx5PPVOaxqdz5lY"
   }
+];
+
+const studioShots = [
+    "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=500&q=80",
+    "https://images.unsplash.com/photo-1478737270239-2f02b77ac6d5?w=500&q=80",
+    "https://images.unsplash.com/photo-1621645592815-56586036124f?w=500&q=80"
 ];
 ---
 
@@ -57,104 +67,249 @@ const podcasts = [
   <div class="min-h-screen bg-[#050505] text-white font-mono selection:bg-[var(--wild-orange)] selection:text-black pb-20 relative overflow-hidden">
     
     <!-- Background Noise/Texture -->
-    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 pointer-events-none"></div>
-    <div class="absolute inset-0 bg-gradient-to-b from-black via-black/90 to-[var(--secondary)]/20 pointer-events-none"></div>
+    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 pointer-events-none fixed"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-black via-black/95 to-[#1a0505]/30 pointer-events-none fixed"></div>
 
     <div class="container mx-auto px-4 pt-24 relative z-10">
       
-      <!-- HEADER -->
-      <div class="flex flex-col md:flex-row justify-between items-end border-b-2 border-white/10 pb-6 mb-12 gap-6">
-        <div>
-          <h1 class="text-5xl md:text-8xl font-black italic uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">
-            WILD <span class="text-[var(--primary)]">TALKS</span>
-          </h1>
-          <p class="text-xs md:text-sm font-bold text-gray-400 uppercase tracking-[0.4em] mt-2">
-            VOCES DEL MOVIMIENTO // PODCAST SERIES
-          </p>
+      <!-- HERO: LA CABINA (THE BOOTH) -->
+      <div class="flex flex-col lg:flex-row items-center justify-between mb-24 gap-12">
+        <div class="lg:w-1/2 space-y-6">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-red-600/20 border border-red-600 rounded text-red-500 text-[10px] font-black uppercase tracking-widest animate-pulse">
+                <span class="w-2 h-2 bg-red-600 rounded-full"></span>
+                Grabando Ahora
+            </div>
+            <h1 class="text-6xl md:text-8xl font-black italic uppercase tracking-tighter leading-[0.9]">
+                WILD <br/> <span class="text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] to-white">TALKS</span>
+            </h1>
+            <p class="text-gray-400 font-bold max-w-md text-lg leading-relaxed">
+                Conversaciones crudas desde el corazón del underground. Sin filtros, sin guiones, solo la verdad de la calle.
+            </p>
+            <div class="flex flex-wrap gap-4 pt-4">
+                <button class="px-8 py-4 bg-white text-black font-black uppercase tracking-widest text-xs hover:bg-[var(--primary)] transition-all transform hover:-translate-y-1 shadow-[0_10px_30px_-10px_rgba(255,255,255,0.3)]">
+                    Suscribirse
+                </button>
+                <button class="px-8 py-4 bg-transparent border border-white/20 text-white font-black uppercase tracking-widest text-xs hover:border-white transition-all">
+                    Ver Archivo
+                </button>
+            </div>
         </div>
         
-        <div class="flex gap-2">
-            <button class="px-4 py-2 bg-[var(--primary)] text-black font-black uppercase tracking-widest text-xs hover:bg-white transition-colors">
-                Todos
-            </button>
-            <button class="px-4 py-2 bg-white/5 text-white font-black uppercase tracking-widest text-xs hover:bg-white/20 transition-colors">
-                Entrevistas
-            </button>
-            <button class="px-4 py-2 bg-white/5 text-white font-black uppercase tracking-widest text-xs hover:bg-white/20 transition-colors">
-                Tutoriales
-            </button>
-        </div>
-      </div>
-
-      <!-- FEATURED EPISODE (HERO) -->
-      <div class="mb-16 relative group cursor-pointer">
-        <div class="absolute inset-0 bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] opacity-0 group-hover:opacity-20 blur-3xl transition-opacity duration-700"></div>
-        <div class="relative bg-[#111] border border-white/10 rounded-3xl overflow-hidden flex flex-col md:flex-row h-auto md:h-[400px]">
-            <div class="w-full md:w-1/2 relative h-[300px] md:h-auto overflow-hidden">
-                <img src={podcasts[0].image} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                <div class="absolute inset-0 bg-gradient-to-t from-[#111] to-transparent md:bg-gradient-to-r"></div>
-                <div class="absolute top-4 left-4">
-                    <span class="px-3 py-1 bg-[var(--primary)] text-black text-[10px] font-black uppercase tracking-widest">Nuevo Episodio</span>
-                </div>
-            </div>
-            <div class="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center items-start gap-4">
-                <div class="flex items-center gap-2 text-gray-500 text-xs font-mono">
-                    <span>{podcasts[0].date}</span>
-                    <span>•</span>
-                    <span>{podcasts[0].duration}</span>
-                </div>
-                <h2 class="text-3xl md:text-5xl font-black uppercase leading-none group-hover:text-[var(--primary)] transition-colors">
-                    {podcasts[0].title}
-                </h2>
-                <p class="text-gray-400 font-medium max-w-md">
-                    {podcasts[0].description}
-                </p>
-                <div class="mt-4 flex items-center gap-4">
-                    <button class="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center hover:scale-110 transition-transform">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                    </button>
-                    <span class="text-xs font-black uppercase tracking-widest">Escuchar Ahora</span>
-                </div>
-            </div>
-        </div>
-      </div>
-
-      <!-- EPISODES GRID -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {podcasts.slice(1).map((pod) => (
-            <div class="group bg-[#111] border border-white/10 rounded-2xl overflow-hidden hover:border-[var(--primary)]/50 transition-colors">
-                <div class="relative aspect-video overflow-hidden">
-                    <img src={pod.image} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                    <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <button class="w-12 h-12 bg-[var(--primary)] text-black rounded-full flex items-center justify-center transform scale-0 group-hover:scale-100 transition-transform duration-300">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                        </button>
+        <!-- Interactive Visualizer Mock -->
+        <div class="lg:w-1/2 relative">
+            <div class="relative z-10 bg-[#111] border border-white/10 p-6 rounded-3xl shadow-2xl transform rotate-2 hover:rotate-0 transition-all duration-500 group">
+                <div class="absolute -top-4 -right-4 w-24 h-24 bg-[var(--primary)] rounded-full blur-[50px] opacity-20 group-hover:opacity-40 transition-opacity"></div>
+                
+                <div class="flex items-center justify-between mb-6 border-b border-white/5 pb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-2 h-2 bg-green-500 rounded-full animate-ping"></div>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-gray-500">Señal Maestra • 11.11 KHz</span>
+                    </div>
+                    <div class="flex gap-1">
+                        <span class="w-1 h-3 bg-white/20 rounded-full"></span>
+                        <span class="w-1 h-3 bg-white/20 rounded-full"></span>
+                        <span class="w-1 h-3 bg-white/20 rounded-full"></span>
                     </div>
                 </div>
-                <div class="p-6">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex gap-2">
-                            {pod.tags.map(tag => (
-                                <span class="text-[9px] font-black uppercase tracking-widest px-2 py-1 bg-white/5 text-gray-400 rounded">{tag}</span>
-                            ))}
+
+                <div class="space-y-4">
+                    <!-- Fake Waveform -->
+                    <div class="flex items-end justify-between h-24 gap-1 px-4">
+                        {Array.from({ length: 30 }).map((_, i) => (
+                            <div 
+                                class="w-1.5 bg-[var(--primary)] rounded-t-sm animate-wave" 
+                                style={`height: ${Math.random() * 100}%; animation-delay: ${i * 0.05}s; animation-duration: ${0.5 + Math.random()}s`}
+                            ></div>
+                        ))}
+                    </div>
+                    
+                    <div class="flex items-center justify-between pt-4">
+                        <div>
+                            <p class="text-[10px] font-black uppercase text-gray-500 mb-1">En Cabina</p>
+                            <p class="text-xl font-black text-white uppercase">MC Nova & La Jefa</p>
                         </div>
-                        <span class="text-[10px] font-mono text-gray-500">{pod.duration}</span>
-                    </div>
-                    <h3 class="text-xl font-black uppercase leading-tight mb-2 group-hover:text-[var(--primary)] transition-colors">
-                        {pod.title}
-                    </h3>
-                    <p class="text-sm text-gray-500 mb-4 line-clamp-2">
-                        {pod.description}
-                    </p>
-                    <div class="flex items-center gap-2 pt-4 border-t border-white/5">
-                        <div class="w-6 h-6 rounded-full bg-gray-800"></div>
-                        <span class="text-xs font-bold text-gray-400 uppercase">{pod.host}</span>
+                        <div class="text-right">
+                            <p class="text-[10px] font-black uppercase text-gray-500 mb-1">Duración</p>
+                            <p class="text-xl font-mono text-white">45:00</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        ))}
+            
+            <!-- Background Elements -->
+            <div class="absolute -bottom-10 -left-10 w-full h-full border-2 border-white/5 rounded-3xl -z-10 transform -rotate-2"></div>
+        </div>
+      </div>
+
+      <!-- SECTION: EPISODIOS RECIENTES -->
+      <div class="mb-24">
+        <div class="flex items-end justify-between mb-12 border-b border-white/10 pb-4">
+            <h2 class="text-4xl md:text-5xl font-black uppercase tracking-tighter">
+                <span class="text-[var(--primary)]">///</span> Últimos Cortes
+            </h2>
+            <div class="hidden md:flex gap-2">
+                {['Todos', 'Entrevistas', 'Freestyle', 'Historia'].map(tag => (
+                    <button class="px-4 py-1.5 border border-white/10 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all">
+                        {tag}
+                    </button>
+                ))}
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12">
+            {podcasts.map((pod) => (
+                <div class="group flex flex-col md:flex-row gap-6 items-start p-4 rounded-2xl hover:bg-white/5 transition-all cursor-pointer border border-transparent hover:border-white/10">
+                    <div class="relative w-full md:w-48 aspect-square flex-shrink-0 overflow-hidden rounded-xl bg-gray-900">
+                        <img src={pod.image} class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 grayscale group-hover:grayscale-0" />
+                        <div class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button 
+                                class="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-xl play-podcast-btn"
+                                data-spotify-id={pod.spotifyId}
+                            >
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                            </button>
+                        </div>
+                        <span class="absolute top-2 left-2 bg-black/80 backdrop-blur px-2 py-0.5 rounded text-[9px] font-mono font-bold">{pod.duration}</span>
+                    </div>
+                    <div class="flex-1 min-w-0 py-2">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="text-[10px] font-black text-[var(--primary)] uppercase tracking-widest">{pod.date}</span>
+                            <span class="w-1 h-1 bg-gray-500 rounded-full"></span>
+                            <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">{pod.tags[0]}</span>
+                        </div>
+                        <h3 class="text-2xl font-black uppercase leading-none mb-3 group-hover:text-[var(--primary)] transition-colors line-clamp-2">
+                            {pod.title}
+                        </h3>
+                        <p class="text-sm text-gray-400 leading-relaxed mb-4 line-clamp-2">
+                            {pod.description}
+                        </p>
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full bg-gray-800 border border-white/20"></div>
+                            <span class="text-[10px] font-black text-gray-300 uppercase tracking-wider">Host: {pod.host}</span>
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </div>
+      </div>
+
+      <!-- SECTION: LA PECERA (THE STUDIO) -->
+      <div class="mb-24 relative">
+        <div class="absolute inset-0 bg-gradient-to-r from-[var(--primary)]/10 to-transparent blur-3xl -z-10"></div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div class="lg:col-span-5 space-y-8">
+                <h2 class="text-5xl md:text-7xl font-black italic uppercase tracking-tighter leading-none">
+                    DENTRO DE <br/> <span class="text-transparent bg-clip-text bg-gradient-to-br from-white to-gray-600">LA PECERA</span>
+                </h2>
+                <div class="space-y-6 border-l-2 border-[var(--primary)] pl-6">
+                    <p class="text-lg font-bold text-white">
+                        Nuestro estudio no es solo un cuarto con micrófonos. Es el confesionario del barrio.
+                    </p>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Equipado con lo mejor para capturar cada respiro, cada barra y cada silencio incómodo. Aquí es donde las leyendas se sientan a hablar de lo que nadie más se atreve a preguntar.
+                    </p>
+                </div>
+                <div class="flex gap-4">
+                    <div class="text-center p-4 bg-white/5 rounded-xl border border-white/10">
+                        <span class="block text-2xl font-black text-[var(--primary)]">111</span>
+                        <span class="text-[9px] font-bold uppercase tracking-widest text-gray-500">Episodios</span>
+                    </div>
+                    <div class="text-center p-4 bg-white/5 rounded-xl border border-white/10">
+                        <span class="block text-2xl font-black text-[var(--primary)]">11.1K</span>
+                        <span class="text-[9px] font-bold uppercase tracking-widest text-gray-500">Oyentes</span>
+                    </div>
+                    <div class="text-center p-4 bg-white/5 rounded-xl border border-white/10">
+                        <span class="block text-2xl font-black text-[var(--primary)]">24/7</span>
+                        <span class="text-[9px] font-bold uppercase tracking-widest text-gray-500">Streaming</span>
+                    </div>
+                </div>
+            </div>
+            <div class="lg:col-span-7 grid grid-cols-2 gap-4">
+                <div class="space-y-4 mt-12">
+                    <img src={studioShots[0]} class="w-full h-64 object-cover rounded-2xl grayscale hover:grayscale-0 transition-all duration-500 rotate-1" />
+                    <img src={studioShots[1]} class="w-full h-48 object-cover rounded-2xl grayscale hover:grayscale-0 transition-all duration-500 -rotate-2" />
+                </div>
+                <div class="space-y-4">
+                    <img src={studioShots[2]} class="w-full h-80 object-cover rounded-2xl grayscale hover:grayscale-0 transition-all duration-500 rotate-2" />
+                    <div class="bg-[var(--primary)] p-6 rounded-2xl flex items-center justify-center -rotate-1">
+                        <span class="text-4xl font-black text-black text-center uppercase leading-none">Solo <br/> Verdad</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <!-- SECTION: FRASES DE LA CALLE (QUOTES) -->
+      <div class="mb-24 py-12 border-y border-white/10 relative overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/concrete-wall.png')] opacity-10 pointer-events-none"></div>
+        <div class="text-center max-w-4xl mx-auto relative z-10">
+            <span class="text-[var(--primary)] text-6xl font-serif">"</span>
+            <h3 class="text-3xl md:text-5xl font-black uppercase italic tracking-tight leading-tight mb-6">
+                El rap no es solo música, es la CNN del barrio. Si no lo cuentas tú, alguien más va a mentir por ti.
+            </h3>
+            <div class="flex items-center justify-center gap-4">
+                <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-[var(--primary)]">
+                    <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100&q=80" class="w-full h-full object-cover" />
+                </div>
+                <div class="text-left">
+                    <p class="text-sm font-black text-white uppercase">Phantom G</p>
+                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Episodio #042</p>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <!-- SECTION: SÚBETE AL MIC (CTA) -->
+      <div class="relative bg-gradient-to-b from-[#111] to-black border border-white/10 rounded-3xl p-8 md:p-16 text-center overflow-hidden group">
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[var(--primary)] to-transparent opacity-50"></div>
+        
+        <div class="relative z-10 max-w-2xl mx-auto space-y-8">
+            <h2 class="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white mb-4">
+                ¿Tienes algo que decir?
+            </h2>
+            <p class="text-gray-400 text-lg font-medium">
+                Buscamos nuevas voces, nuevas historias y nuevos beats. Si crees que tienes lo necesario para sentarte en La Pecera, mándanos tu demo.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                <a href="#" class="w-full sm:w-auto px-8 py-4 bg-[var(--primary)] text-black font-black uppercase tracking-[0.2em] text-xs rounded hover:bg-white transition-all transform hover:scale-105 shadow-[0_0_30px_rgba(201,131,0,0.4)]">
+                    Enviar Demo
+                </a>
+                <a href="#" class="w-full sm:w-auto px-8 py-4 bg-transparent border border-white/20 text-white font-black uppercase tracking-[0.2em] text-xs rounded hover:bg-white/10 transition-all flex items-center justify-center gap-2">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                    WhatsApp
+                </a>
+            </div>
+        </div>
       </div>
 
     </div>
   </div>
 </Layout>
+
+<style>
+    @keyframes wave {
+        0%, 100% { height: 10%; }
+        50% { height: 100%; }
+    }
+    .animate-wave {
+        animation: wave 1s ease-in-out infinite;
+    }
+</style>
+
+<script>
+    // Simple script to handle play buttons (dispatch event for Floating Player)
+    document.querySelectorAll('.play-podcast-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            const spotifyId = (e.currentTarget as HTMLElement).dataset.spotifyId;
+            if (spotifyId) {
+                // Dispatch event to global window for Floating Player to pick up
+                window.dispatchEvent(new CustomEvent('play-spotify-track', { 
+                    detail: { id: spotifyId } 
+                }));
+            }
+        });
+    });
+</script>
