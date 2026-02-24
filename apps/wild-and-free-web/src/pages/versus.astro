@@ -322,60 +322,54 @@ const config = {
           <!-- BATTLE STAGE (VERTICAL LAYOUT) -->
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
               
-              <!-- LEFT: SLOT MACHINE SELECTOR -->
+              <!-- LEFT: ARTIST PREVIEW PANEL -->
               <div class="lg:col-span-4 flex flex-col gap-4">
-                  <div class="bg-[#1a1a1a] border-4 border-[#333] rounded-3xl p-6 shadow-[0_0_50px_rgba(0,0,0,0.5)] relative overflow-hidden group">
-                      <!-- Slot Machine Header -->
-                      <div class="flex justify-between items-center mb-6 border-b-2 border-white/5 pb-4">
+                  <div id="artist-preview-panel" class="bg-black/60 border-2 border-white/5 rounded-3xl p-6 backdrop-blur-md min-h-[500px] flex flex-col items-center justify-center text-center relative overflow-hidden group">
+                      <!-- Background Glow -->
+                      <div class="absolute inset-0 bg-[var(--primary)]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                      
+                      <div id="preview-empty-state" class="flex flex-col items-center gap-6">
+                          <div class="w-24 h-24 rounded-full border-2 border-dashed border-white/10 flex items-center justify-center animate-pulse">
+                              <svg class="w-10 h-10 text-white/10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                          </div>
                           <div>
-                              <h3 class="text-xs font-black text-[var(--primary)] uppercase tracking-tighter">CASINO WILD</h3>
-                              <p class="text-[8px] text-gray-500 font-bold uppercase tracking-widest">LUCKY DRAW V1</p>
-                          </div>
-                          <div class="flex gap-1">
-                              <div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
-                              <div class="w-2 h-2 rounded-full bg-yellow-500 animate-pulse [animation-delay:0.2s]"></div>
-                              <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse [animation-delay:0.4s]"></div>
+                              <h4 class="text-xl font-black text-white/30 uppercase italic tracking-tighter">Selecciona un Artista</h4>
+                              <p class="text-[10px] text-white/10 uppercase tracking-[0.3em] mt-2">Haz click en la crew para ver detalles</p>
                           </div>
                       </div>
 
-                      <div class="flex gap-4 items-center">
-                          <!-- The Slot Reel -->
-                          <div class="flex-1 bg-black rounded-xl border-4 border-[#222] h-48 relative overflow-hidden shadow-[inset_0_0_20px_rgba(0,0,0,1)]">
-                              <div id="slot-reel" class="absolute inset-0 flex flex-col transition-transform duration-[3s] cubic-bezier(0.1, 0, 0.1, 1)">
-                                  <!-- Reel items will be injected by JS -->
+                      <div id="preview-content" class="hidden w-full h-full flex flex-col gap-6 animate-fade-in">
+                          <div class="w-full aspect-[3/4] rounded-2xl overflow-hidden border-4 border-white/10 relative shadow-2xl">
+                              <img id="preview-img" src="" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" />
+                              <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                              <div class="absolute bottom-6 left-6 text-left">
+                                  <h4 id="preview-name" class="text-4xl font-black italic text-white uppercase tracking-tighter leading-none drop-shadow-2xl">---</h4>
+                                  <span id="preview-role" class="text-xs font-bold text-[var(--primary)] uppercase tracking-[0.3em]">---</span>
                               </div>
-                              <!-- Glass Overlay -->
-                              <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/60 pointer-events-none z-10"></div>
-                              <div class="absolute inset-y-0 left-0 right-0 border-y border-white/10 z-20 pointer-events-none h-1/3 top-1/3 bg-white/5"></div>
                           </div>
 
-                          <!-- The Lever -->
-                          <div class="relative h-48 w-12 flex flex-col items-center">
-                              <div class="w-2 h-full bg-gradient-to-b from-gray-400 to-gray-800 rounded-full shadow-lg"></div>
-                              <button id="slot-lever" class="absolute -top-2 w-10 h-10 bg-red-600 rounded-full border-4 border-red-800 shadow-[0_5px_0_rgb(153,27,27)] active:shadow-none active:translate-y-1 transition-all hover:scale-110 group-active:translate-y-32 duration-300">
-                                  <div class="w-full h-full rounded-full bg-gradient-to-tr from-transparent to-white/30"></div>
-                              </button>
-                          </div>
-                      </div>
-
-                      <div class="mt-6 text-center">
-                          <p class="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em]">¡JALA LA PALANCA!</p>
-                      </div>
-                  </div>
-
-                  <!-- Artist Info Panel (Appears after draw) -->
-                  <div id="artist-lucky-panel" class="bg-black/60 border-2 border-white/5 rounded-2xl p-4 backdrop-blur-sm opacity-0 translate-y-4 transition-all duration-500 h-[320px] overflow-hidden">
-                      <div class="flex gap-4 h-full">
-                          <div class="w-1/3 h-full rounded-xl overflow-hidden border-2 border-white/10">
-                              <img id="lucky-artist-img" src="" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" />
-                          </div>
-                          <div class="flex-1 flex flex-col">
-                              <h4 id="lucky-artist-name" class="text-xl font-black italic text-[var(--primary)] uppercase tracking-tighter">---</h4>
-                              <span id="lucky-artist-role" class="text-[8px] font-bold text-gray-500 uppercase tracking-widest mb-2 border-b border-white/5 pb-1">---</span>
-                              <div class="flex-1 overflow-y-auto custom-scrollbar pr-2">
-                                  <p id="lucky-artist-bio" class="text-[10px] text-gray-400 leading-relaxed italic">---</p>
+                          <div class="space-y-4 text-left">
+                              <div>
+                                  <h5 class="text-[10px] font-black text-gray-500 uppercase tracking-[0.4em] mb-2 border-b border-white/5 pb-2">Habilidades Especiales</h5>
+                                  <div id="preview-tracks" class="flex flex-wrap gap-2">
+                                      <!-- Tracks will be injected here -->
+                                  </div>
                               </div>
-                              <button id="add-to-team-btn" class="mt-4 bg-white text-black text-[10px] font-black py-2 rounded-lg uppercase tracking-widest hover:bg-[var(--primary)] transition-colors">Añadir al Equipo</button>
+                              
+                              <div class="grid grid-cols-3 gap-2">
+                                  <div class="bg-white/5 p-2 rounded-lg border border-white/5">
+                                      <span class="block text-[8px] font-black text-gray-500 uppercase">Power</span>
+                                      <span id="stat-power" class="text-lg font-black text-white italic">00</span>
+                                  </div>
+                                  <div class="bg-white/5 p-2 rounded-lg border border-white/5">
+                                      <span class="block text-[8px] font-black text-gray-500 uppercase">Speed</span>
+                                      <span id="stat-speed" class="text-lg font-black text-white italic">00</span>
+                                  </div>
+                                  <div class="bg-white/5 p-2 rounded-lg border border-white/5">
+                                      <span class="block text-[8px] font-black text-gray-500 uppercase">Tech</span>
+                                      <span id="stat-tech" class="text-lg font-black text-white italic">00</span>
+                                  </div>
+                              </div>
                           </div>
                       </div>
                   </div>
@@ -481,102 +475,104 @@ const config = {
 
 <!-- CLIENT SIDE LOGIC -->
 <script define:vars={{ artists }}>
-    const arena = document.getElementById('battle-arena');
-    const placeholder = document.getElementById('arena-placeholder');
-    const content = document.getElementById('arena-content');
+    const arena = document.getElementById('page-container');
+    const previewPanel = document.getElementById('preview-content');
+    const emptyPreview = document.getElementById('preview-empty-state');
+    
+    // Arena elements
+    const arenaPlaceholder = document.getElementById('arena-placeholder');
+    const arenaContent = document.getElementById('arena-content');
+    
+    const previewImg = document.getElementById('preview-img');
+    const previewName = document.getElementById('preview-name');
+    const previewRole = document.getElementById('preview-role');
+    const previewTracks = document.getElementById('preview-tracks');
+    
+    const statPower = document.getElementById('stat-power');
+    const statSpeed = document.getElementById('stat-speed');
+    const statTech = document.getElementById('stat-tech');
+
     const tokens = document.querySelectorAll('.artist-token');
-    
-    // Slot Machine Elements
-    const slotReel = document.getElementById('slot-reel');
-    const slotLever = document.getElementById('slot-lever');
-    const luckyPanel = document.getElementById('artist-lucky-panel');
-    const luckyImg = document.getElementById('lucky-artist-img');
-    const luckyName = document.getElementById('lucky-artist-name');
-    const luckyRole = document.getElementById('lucky-artist-role');
-    const luckyBio = document.getElementById('lucky-artist-bio');
-    const addToTeamBtn = document.getElementById('add-to-team-btn');
 
-    let selectedLuckyArtist = null;
+    function renderArtist(id) {
+        const artist = artists.find(a => a.id == id);
+        if (!artist) return;
 
-    // --- SLOT MACHINE LOGIC ---
-    function initSlotMachine() {
-        if (!slotReel) return;
-        
-        // Populate reel with some random artists initially
-        const reelHtml = [...artists, ...artists, ...artists].map(artist => `
-            <div class="h-16 w-full flex-shrink-0 border-b border-white/5 flex items-center px-4 gap-3 bg-zinc-900/50">
-                <img src="${artist.imagenes.profile}" class="w-10 h-10 rounded-md object-cover grayscale" />
-                <span class="text-[10px] font-black uppercase tracking-tighter truncate">${artist.nombre}</span>
-            </div>
-        `).join('');
-        
-        slotReel.innerHTML = reelHtml;
-    }
+        // 1. Update Preview Panel (Left)
+        if (previewPanel && emptyPreview) {
+            emptyPreview.classList.add('hidden');
+            previewPanel.classList.remove('hidden');
 
-    async function spinSlots() {
-        if (!slotReel || !slotLever) return;
-
-        // Reset panel
-        luckyPanel?.classList.add('opacity-0', 'translate-y-4');
-        
-        // Animation lever
-        slotLever.style.transition = 'transform 0.3s cubic-bezier(0.1, 0, 0.1, 1)';
-        slotLever.style.transform = 'translateY(150px)';
-        setTimeout(() => slotLever.style.transform = 'translateY(0)', 300);
-
-        // Random selection
-        const randomIndex = Math.floor(Math.random() * artists.length);
-        selectedLuckyArtist = artists[randomIndex];
-
-        // Spin calculation
-        const itemHeight = 64; // h-16 = 64px
-        const targetPos = (artists.length * 2 + randomIndex) * itemHeight;
-        
-        slotReel.style.transition = 'transform 3s cubic-bezier(0.1, 0, 0.1, 1)';
-        slotReel.style.transform = `translateY(-${targetPos}px)`;
-
-        // Show result
-        setTimeout(() => {
-            if (luckyImg && luckyName && luckyRole && luckyBio && luckyPanel) {
-                luckyImg.src = selectedLuckyArtist.imagenes.profile;
-                luckyName.textContent = selectedLuckyArtist.nombre;
-                luckyRole.textContent = selectedLuckyArtist.estilo || 'Artist';
-                luckyBio.textContent = selectedLuckyArtist.bio || 'Sin biografía disponible.';
-                
-                luckyPanel.classList.remove('opacity-0', 'translate-y-4');
-                
-                // Reset reel position for next spin without transition
-                setTimeout(() => {
-                    slotReel.style.transition = 'none';
-                    const resetPos = (randomIndex) * itemHeight;
-                    slotReel.style.transform = `translateY(-${resetPos}px)`;
-                }, 500);
-            }
-        }, 3200);
-    }
-
-    slotLever?.addEventListener('click', spinSlots);
-    
-    addToTeamBtn?.addEventListener('click', () => {
-        if (selectedLuckyArtist) {
-            // Logic to add to first empty slot in ANY team, prioritizing Alpha
-            const alphaSlots = document.querySelectorAll('#team-alpha-slots .team-slot:not([data-artist-id])');
-            const omegaSlots = document.querySelectorAll('#team-omega-slots .team-slot:not([data-artist-id])');
+            if (previewImg) previewImg.src = artist.imagenes.profile;
+            if (previewName) previewName.textContent = artist.nombre;
+            if (previewRole) previewRole.textContent = artist.estilo;
             
-            const emptySlot = alphaSlots[0] || omegaSlots[0];
-            
-            if (emptySlot) {
-                fillTeamSlot(emptySlot, selectedLuckyArtist.id);
+            // Stats
+            if (statPower) statPower.textContent = artist.stats?.power || '85';
+            if (statSpeed) statSpeed.textContent = artist.stats?.speed || '80';
+            if (statTech) statTech.textContent = artist.stats?.technique || '90';
+
+            // Tracks
+            if (previewTracks) {
+                previewTracks.innerHTML = (artist.tracks || []).map(track => `
+                    <span class="text-[7px] font-black bg-white/10 text-white px-2 py-1 rounded uppercase tracking-widest border border-white/5 group-hover:border-[var(--primary)]/30 transition-colors">
+                        ${track}
+                    </span>
+                `).join('');
             }
         }
-    });
 
-    initSlotMachine();
+        // 2. Update Arena (Right) with Detailed Arcade UI
+        if (arenaContent && arenaPlaceholder) {
+            arenaPlaceholder.classList.add('hidden');
+            arenaContent.classList.remove('hidden');
+            
+            arenaContent.innerHTML = `
+                <div class="flex flex-col md:flex-row w-full h-full">
+                    <!-- BIG PORTRAIT -->
+                    <div class="w-full md:w-5/12 h-1/2 md:h-full relative overflow-hidden bg-black border-r-2 border-[var(--primary)]/30">
+                        <img src="${artist.imagenes.profile}" class="w-full h-full object-cover grayscale opacity-80" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                        <div class="absolute bottom-4 left-4">
+                            <h2 class="text-2xl font-black italic text-white uppercase tracking-tighter">${artist.nombre}</h2>
+                        </div>
+                    </div>
 
-    // Auto-select first artist on load for visual impact
-    setTimeout(() => {
-        // renderArtist(artists[0].id); // Optional: Auto-load
-    }, 500);
+                    <!-- STATS & INFO -->
+                    <div class="w-full md:w-7/12 h-1/2 md:h-full bg-zinc-900/90 p-4 flex flex-col gap-4 overflow-y-auto custom-scrollbar">
+                        <div class="space-y-4">
+                            <div class="bg-white/5 p-3 rounded border border-white/5">
+                                <h4 class="text-[8px] font-black text-[var(--primary)] uppercase tracking-widest mb-1">Biografía</h4>
+                                <p class="text-[10px] text-gray-400 italic">"${artist.bio}"</p>
+                            </div>
+
+                            <div class="space-y-2">
+                                ${['power', 'speed', 'technique'].map(stat => `
+                                    <div class="flex flex-col gap-1">
+                                        <div class="flex justify-between text-[8px] font-black uppercase">
+                                            <span class="text-gray-500">${stat}</span>
+                                            <span class="text-white">${artist.stats?.[stat] || 80}</span>
+                                        </div>
+                                        <div class="h-1.5 bg-black rounded-full overflow-hidden border border-white/5">
+                                            <div class="h-full bg-[var(--primary)] w-0 animate-fill-bar" style="width: ${artist.stats?.[stat] || 80}%"></div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <div class="mt-auto">
+                             <div class="flex flex-wrap gap-1">
+                                ${(artist.tracks || []).slice(0, 3).map(track => `
+                                    <span class="text-[6px] font-black bg-white/5 border border-white/10 px-1.5 py-0.5 rounded uppercase">${track}</span>
+                                `).join('')}
+                             </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    }
 
     // DRAG EVENTS
     function initDragEvents() {
@@ -975,109 +971,6 @@ const config = {
     // Initialize on load
     generateBrackets();
     initSlots('3v3'); // Default 3v3 slots
-
-    function renderArtist(id) {
-        const artist = artists.find(a => a.id == id);
-        if (!artist) return;
-
-        // Hide Placeholder
-        placeholder.style.display = 'none';
-        content.classList.remove('hidden');
-        
-        // Construct HTML
-        content.innerHTML = `
-            <!-- BIG PORTRAIT (LEFT) -->
-            <div class="w-full md:w-5/12 h-1/2 md:h-full relative overflow-hidden bg-black animate-slide-in-left border-r-4 border-[var(--primary)]/50 group-inner">
-                <img src="${artist.imagenes.profile}" class="w-full h-full object-cover object-top opacity-90 contrast-125 transition-transform duration-[5s] hover:scale-110" />
-                <div class="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent"></div>
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-                
-                <!-- Character Name Plate -->
-                <div class="absolute bottom-8 left-0 bg-gradient-to-r from-[var(--secondary)] to-transparent py-3 px-8 w-full transform -skew-x-12 -translate-x-4 border-t border-white/20 border-b border-white/20">
-                    <h2 class="text-4xl md:text-5xl font-black text-white italic uppercase tracking-tighter leading-none drop-shadow-md transform skew-x-12 pl-4" style="text-shadow: 3px 3px 0px #000;">
-                        ${artist.nombre}
-                    </h2>
-                    <p class="text-[10px] font-black uppercase tracking-[0.4em] text-white/80 transform skew-x-12 pl-4 mt-1">${artist.estilo} • ${artist.origen}</p>
-                </div>
-            </div>
-
-            <!-- STATS & INFO (RIGHT) -->
-            <div class="w-full md:w-7/12 h-1/2 md:h-full bg-zinc-900/95 p-6 md:p-8 flex flex-col justify-between animate-slide-in-right relative overflow-hidden">
-                
-                <!-- Background Element -->
-                <div class="absolute top-0 right-0 text-[150px] font-black text-white/5 leading-none pointer-events-none select-none -translate-y-4 translate-x-4 overflow-hidden">VS</div>
-
-                <div class="space-y-6 relative z-10">
-                    <!-- Bio Section -->
-                    <div class="border-l-4 border-[var(--primary)] pl-4 py-2 bg-white/5 rounded-r-lg backdrop-blur-sm">
-                        <h4 class="text-[10px] font-black uppercase text-[var(--primary)] tracking-widest mb-1 flex items-center gap-2">
-                            <span class="w-2 h-2 bg-[var(--primary)] rounded-full"></span>
-                            Perfil de Carta
-                        </h4>
-                        <p class="text-gray-300 font-medium text-sm leading-relaxed line-clamp-3 italic">"${artist.bio}"</p>
-                    </div>
-                    
-                    <!-- STAT BARS (Hexagon Mock via Bars) -->
-                    <div class="space-y-3 pt-2">
-                        <!-- Power -->
-                        <div class="flex items-center gap-3 group/stat">
-                            <span class="w-16 text-[10px] font-black text-red-500 uppercase tracking-wider group-hover/stat:scale-110 transition-transform">Poder</span>
-                            <div class="flex-1 h-4 bg-black border border-white/20 skew-x-[-12deg] overflow-hidden relative">
-                                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/diagonal-stripes.png')] opacity-20"></div>
-                                <div class="h-full bg-gradient-to-r from-red-900 via-red-600 to-red-400 w-0 animate-fill-bar" style="width: ${artist.stats.power || 80}%; animation-delay: 0.1s"></div>
-                            </div>
-                            <span class="text-[12px] font-black font-mono text-white w-8 text-right">${artist.stats.power || 80}</span>
-                        </div>
-                        <!-- Speed -->
-                        <div class="flex items-center gap-3 group/stat">
-                            <span class="w-16 text-[10px] font-black text-blue-400 uppercase tracking-wider group-hover/stat:scale-110 transition-transform">Velocidad</span>
-                            <div class="flex-1 h-4 bg-black border border-white/20 skew-x-[-12deg] overflow-hidden relative">
-                                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/diagonal-stripes.png')] opacity-20"></div>
-                                <div class="h-full bg-gradient-to-r from-blue-900 via-blue-600 to-cyan-400 w-0 animate-fill-bar" style="width: ${artist.stats.speed || 75}%; animation-delay: 0.2s"></div>
-                            </div>
-                            <span class="text-[12px] font-black font-mono text-white w-8 text-right">${artist.stats.speed || 75}</span>
-                        </div>
-                        <!-- Tech -->
-                        <div class="flex items-center gap-3 group/stat">
-                            <span class="w-16 text-[10px] font-black text-green-500 uppercase tracking-wider group-hover/stat:scale-110 transition-transform">Técnica</span>
-                            <div class="flex-1 h-4 bg-black border border-white/20 skew-x-[-12deg] overflow-hidden relative">
-                                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/diagonal-stripes.png')] opacity-20"></div>
-                                <div class="h-full bg-gradient-to-r from-green-900 via-green-600 to-lime-400 w-0 animate-fill-bar" style="width: ${artist.stats.technique || 85}%; animation-delay: 0.3s"></div>
-                            </div>
-                            <span class="text-[12px] font-black font-mono text-white w-8 text-right">${artist.stats.technique || 85}</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SPECIAL MOVES (TRACKS) -->
-                <div class="mt-6 relative z-10 flex-1 overflow-y-auto custom-scrollbar pr-2 min-h-0">
-                    <h3 class="text-xs font-black text-white uppercase mb-3 border-b border-white/20 pb-2 flex justify-between items-center bg-white/5 px-3 py-2 rounded">
-                        <span class="text-[var(--primary)]">Habilidades</span>
-                        <span class="text-[9px] text-gray-400 tracking-widest">SKILLS</span>
-                    </h3>
-                    <ul class="space-y-2">
-                        ${(artist.tracks || ['Pista Desconocida 1', 'Pista Desconocida 2']).map((track, i) => `
-                            <li class="flex items-center justify-between group cursor-pointer hover:bg-white/10 p-2 rounded transition-all border border-transparent hover:border-[var(--primary)]/30">
-                                <div class="flex items-center gap-3">
-                                    <span class="text-[var(--primary)] font-black font-mono text-[10px] w-28 text-right opacity-70 group-hover:opacity-100 transition-opacity">LVL ${[1, 2, 3, 5][i]}</span>
-                                    <span class="text-white font-bold uppercase text-[10px] md:text-xs group-hover:text-[var(--primary)] transition-colors tracking-wide">${track}</span>
-                                </div>
-                                <span class="opacity-0 group-hover:opacity-100 text-[8px] text-red-500 font-black animate-pulse bg-red-900/20 px-2 py-0.5 rounded border border-red-500/50">ACTIVE</span>
-                            </li>
-                        `).join('')}
-                    </ul>
-                </div>
-
-                <!-- ACTION BUTTON -->
-                <div class="pt-6 relative z-10 mt-auto">
-                    <a href="/versus/artista/${artist.slug}" class="relative overflow-hidden block w-full py-4 bg-gradient-to-r from-[var(--primary)] to-yellow-600 hover:from-white hover:to-white text-black font-black text-xl uppercase tracking-[0.2em] text-center skew-x-[-12deg] shadow-[4px_4px_0px_rgba(255,255,255,0.2)] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_rgba(255,255,255,0.4)] transition-all group">
-                        <span class="relative z-10 group-hover:text-black transition-colors">SELECCIONAR CARTA</span>
-                        <div class="absolute inset-0 bg-white transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 skew-x-12"></div>
-                    </a>
-                </div>
-            </div>
-        `;
-    }
 </script>
 
 <style>
