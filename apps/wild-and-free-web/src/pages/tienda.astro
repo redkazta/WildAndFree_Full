@@ -633,7 +633,7 @@ const products = [
             // Simulate network delay
             await new Promise(resolve => setTimeout(resolve, 600));
 
-            cartStore.addItem(product);
+            cartStore.addToCart(product);
             
             if (spinner) spinner.classList.add('hidden');
             if (text) text.classList.remove('opacity-0');
@@ -656,11 +656,11 @@ const products = [
             const product = JSON.parse(productData);
             const wasInWishlist = cartStore.isInWishlist(product.id);
             
+            cartStore.toggleWishlist(product);
+
             if (wasInWishlist) {
-                cartStore.removeFromWishlist(product.id);
                 showWishlistToast(false);
             } else {
-                cartStore.addToWishlist(product);
                 // Trigger Animation
                 const rect = button.getBoundingClientRect();
                 createFloatingHeart(rect.left + rect.width/2, rect.top);
