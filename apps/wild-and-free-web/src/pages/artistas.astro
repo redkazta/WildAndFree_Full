@@ -215,102 +215,193 @@ const config = {
 ---
 
 <Layout config={config}>
-  <div class="relative h-screen w-full bg-[#050505] overflow-hidden flex flex-col md:flex-row" id="roster-container">
+  <div class="min-h-screen bg-[#050505] overflow-x-hidden">
     
-    <!-- BACKGROUND (Full Screen Image) -->
-    <div class="absolute inset-0 z-0 transition-all duration-700 ease-out" id="artist-bg">
-        <div class="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/80 to-transparent z-10"></div>
-        <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent z-10"></div>
-        <img 
-            id="bg-image" 
-            src={artists[0].imagenes.profile} 
-            class="w-full h-full object-cover opacity-50 scale-105 transition-transform duration-[2000ms]" 
-        />
-    </div>
-
-    <!-- NOISE & TEXTURE OVERLAY -->
-    <div class="absolute inset-0 z-0 opacity-[0.15] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] mix-blend-overlay"></div>
-    <div class="absolute inset-0 z-0 opacity-10 pointer-events-none animate-noise bg-repeat"></div>
-
-    <!-- MAIN INTERFACE -->
-    <div class="relative z-20 w-full h-full flex flex-col md:flex-row">
+    <!-- SECTION 1: HERO SPOTLIGHT (Sticky) -->
+    <section class="relative h-[60vh] md:h-[70vh] w-full overflow-hidden flex flex-col md:flex-row border-b border-white/10" id="roster-hero">
         
-        <!-- LEFT: ARTIST LIST (The Roster) -->
-        <div class="w-full md:w-[40%] h-[30vh] md:h-full flex flex-col justify-center px-6 md:px-12 py-8 relative z-30">
-            <!-- Decorative Header -->
-            <div class="absolute top-8 left-6 md:left-12 flex items-center gap-3">
-                <div class="w-2 h-2 bg-[var(--wild-orange)] rounded-full animate-pulse"></div>
-                <span class="text-[10px] font-mono text-gray-500 uppercase tracking-[0.3em]">Select Fighter</span>
+        <!-- BACKGROUND (Full Screen Image) -->
+        <div class="absolute inset-0 z-0 transition-all duration-700 ease-out" id="artist-bg">
+            <div class="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/80 to-transparent z-10"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/50 to-transparent z-10"></div>
+            <img 
+                id="bg-image" 
+                src={artists[0].imagenes.profile} 
+                class="w-full h-full object-cover opacity-40 scale-105 transition-transform duration-[2000ms]" 
+            />
+        </div>
+
+        <!-- NOISE & TEXTURE OVERLAY -->
+        <div class="absolute inset-0 z-0 opacity-[0.15] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] mix-blend-overlay"></div>
+        <div class="absolute inset-0 z-0 opacity-10 pointer-events-none animate-noise bg-repeat"></div>
+
+        <!-- MAIN INTERFACE -->
+        <div class="relative z-20 w-full h-full flex flex-col md:flex-row container mx-auto px-4 md:px-8">
+            
+            <!-- LEFT: ARTIST LIST (The Roster) -->
+            <div class="w-full md:w-[35%] h-full flex flex-col justify-center py-8 relative z-30">
+                <!-- Decorative Header -->
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-2 h-2 bg-[var(--wild-orange)] rounded-full animate-pulse"></div>
+                    <span class="text-[10px] font-mono text-gray-500 uppercase tracking-[0.3em]">Featured Artists</span>
+                </div>
+
+                <!-- Scrollable List -->
+                <div class="h-[200px] md:h-[400px] overflow-y-auto pr-4 space-y-1 no-scrollbar mask-gradient-y" id="artist-list">
+                    {artists.map((artist: any, idx: number) => (
+                        <button 
+                            class={`artist-trigger group w-full text-left py-2 md:py-3 transition-all duration-300 focus:outline-none flex items-center justify-between border-b border-white/5 hover:border-[var(--wild-orange)] hover:pl-4 ${idx === 0 ? 'active' : ''}`}
+                            data-index={idx}
+                            data-image={artist.imagenes.profile}
+                            data-name={artist.nombre}
+                            data-bio={artist.bio}
+                            data-style={artist.estilo}
+                            data-origin={artist.origen}
+                            data-slug={artist.slug}
+                        >
+                            <h3 class="text-xl md:text-2xl font-black uppercase italic text-gray-600 group-hover:text-white transition-colors duration-300 leading-none group-[.active]:text-white">
+                                {artist.nombre}
+                            </h3>
+                            <span class="text-[9px] text-[var(--wild-orange)] opacity-0 group-hover:opacity-100 group-[.active]:opacity-100 transition-opacity font-mono tracking-widest">
+                                {artist.estilo}
+                            </span>
+                        </button>
+                    ))}
+                </div>
             </div>
 
-            <!-- Scrollable List -->
-            <div class="h-full max-h-[60vh] overflow-y-auto pr-4 space-y-1 no-scrollbar mask-gradient-y" id="artist-list">
-                {artists.map((artist: any, idx: number) => (
-                    <button 
-                        class={`artist-trigger group w-full text-left py-2 md:py-3 transition-all duration-300 focus:outline-none flex items-center justify-between border-b border-white/5 hover:border-[var(--wild-orange)] hover:pl-4 ${idx === 0 ? 'active' : ''}`}
-                        data-index={idx}
-                        data-image={artist.imagenes.profile}
-                        data-name={artist.nombre}
-                        data-bio={artist.bio}
-                        data-style={artist.estilo}
-                        data-origin={artist.origen}
-                        data-slug={artist.slug}
-                    >
-                        <h3 class="text-2xl md:text-4xl font-black uppercase italic text-gray-700 group-hover:text-white transition-colors duration-300 leading-none group-[.active]:text-white">
-                            {artist.nombre}
-                        </h3>
-                        <span class="text-[10px] text-[var(--wild-orange)] opacity-0 group-hover:opacity-100 group-[.active]:opacity-100 transition-opacity font-mono tracking-widest">
-                            // {artist.estilo}
+            <!-- RIGHT: SELECTED ARTIST DETAILS -->
+            <div class="w-full md:w-[65%] h-full flex flex-col justify-end md:justify-center p-6 md:p-12 relative pointer-events-none">
+                 <div id="artist-details" class="space-y-4 md:space-y-6 pointer-events-auto transform translate-y-0 transition-all duration-500">
+                    
+                    <!-- Badge -->
+                    <div class="overflow-hidden">
+                        <span id="detail-style" class="inline-block px-3 py-1 bg-[var(--wild-orange)]/10 border border-[var(--wild-orange)] text-[var(--wild-orange)] text-[9px] font-black uppercase tracking-[0.3em] backdrop-blur-md animate-slide-up">
+                            {artists[0].estilo}
                         </span>
-                    </button>
-                ))}
+                    </div>
+                    
+                    <!-- Name -->
+                    <h1 id="detail-name" class="text-4xl md:text-8xl font-black text-white italic uppercase leading-[0.85] tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)] mix-blend-screen animate-glitch">
+                        {artists[0].nombre}
+                    </h1>
+                    
+                    <!-- Bio & Origin -->
+                    <div class="flex flex-col md:flex-row gap-6 md:items-end">
+                        <div class="flex-1">
+                             <div class="flex items-center gap-3 text-gray-400 text-[10px] md:text-xs font-mono border-l-2 border-[var(--wild-orange)] pl-3 mb-3">
+                                <span id="detail-origin">{artists[0].origen}</span>
+                                <span class="text-[var(--wild-orange)]">•</span>
+                                <span>WILD GVNG</span>
+                            </div>
+                            <p id="detail-bio" class="text-sm text-gray-300 font-medium leading-relaxed drop-shadow-md line-clamp-3 md:line-clamp-none">
+                                {artists[0].bio}
+                            </p>
+                        </div>
+                        
+                        <!-- CTA -->
+                        <div class="shrink-0">
+                             <a id="detail-link" href={`/artista/${artists[0].slug}`} class="group inline-flex items-center gap-3 bg-white text-black px-6 py-3 font-black uppercase tracking-widest hover:bg-[var(--wild-orange)] hover:text-white transition-all duration-300 shadow-[4px_4px_0px_var(--wild-orange)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] text-xs">
+                                <span>Ver Perfil</span>
+                                <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                            </a>
+                        </div>
+                    </div>
+
+                 </div>
             </div>
         </div>
-
-        <!-- RIGHT: SELECTED ARTIST DETAILS -->
-        <div class="w-full md:w-[60%] h-[70vh] md:h-full flex flex-col justify-end md:justify-center p-6 md:p-20 relative pointer-events-none">
-             <div id="artist-details" class="space-y-4 md:space-y-8 pointer-events-auto transform translate-y-0 transition-all duration-500">
-                
-                <!-- Badge -->
-                <div class="overflow-hidden">
-                    <span id="detail-style" class="inline-block px-3 py-1 bg-[var(--wild-orange)]/10 border border-[var(--wild-orange)] text-[var(--wild-orange)] text-[9px] md:text-xs font-black uppercase tracking-[0.3em] backdrop-blur-md animate-slide-up">
-                        {artists[0].estilo}
-                    </span>
-                </div>
-                
-                <!-- Name -->
-                <h1 id="detail-name" class="text-5xl md:text-9xl font-black text-white italic uppercase leading-[0.8] tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)] mix-blend-screen animate-glitch">
-                    {artists[0].nombre}
-                </h1>
-                
-                <!-- Origin -->
-                <div class="flex items-center gap-4 text-gray-400 text-xs md:text-sm font-mono border-l-2 border-[var(--wild-orange)] pl-4">
-                    <span id="detail-origin">{artists[0].origen}</span>
-                    <span class="text-[var(--wild-orange)]">•</span>
-                    <span>WILD GVNG MEMBER</span>
-                </div>
-
-                <!-- Bio -->
-                <p id="detail-bio" class="text-sm md:text-xl text-gray-300 font-medium max-w-2xl leading-relaxed drop-shadow-md">
-                    {artists[0].bio}
-                </p>
-
-                <!-- CTA -->
-                <div class="pt-4">
-                    <a id="detail-link" href={`/artista/${artists[0].slug}`} class="group inline-flex items-center gap-4 bg-white text-black px-6 md:px-10 py-3 md:py-4 font-black uppercase tracking-widest hover:bg-[var(--wild-orange)] hover:text-white transition-all duration-300 shadow-[4px_4px_0px_var(--wild-orange)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]">
-                        <span>Ver Perfil</span>
-                        <svg class="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                    </a>
-                </div>
-             </div>
+        
+        <!-- PROGRESS BAR -->
+        <div class="absolute bottom-0 left-0 h-[2px] bg-white/10 w-full z-40">
+            <div id="progress-bar" class="h-full bg-[var(--wild-orange)] transition-all duration-300" style={`width: ${100/artists.length}%`}></div>
         </div>
+    </section>
 
-    </div>
+    <!-- SECTION 2: CONTENT GRID (More Info) -->
+    <section class="relative z-10 bg-[#0a0a0a] py-16 md:py-24">
+        <div class="container mx-auto px-4 md:px-8">
+            
+            <div class="flex items-end justify-between mb-12 border-b border-white/10 pb-6">
+                <div>
+                    <h2 class="text-3xl md:text-5xl font-black uppercase tracking-tighter text-white mb-2">Últimos Lanzamientos</h2>
+                    <p class="text-gray-500 font-mono text-xs md:text-sm tracking-widest">FRESH FROM THE STUDIO</p>
+                </div>
+                <a href="/musica" class="hidden md:flex items-center gap-2 text-[var(--wild-orange)] text-xs font-bold uppercase tracking-widest hover:text-white transition-colors group">
+                    Ver discografía
+                    <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </a>
+            </div>
 
-    <!-- PROGRESS BAR (Bottom) -->
-    <div class="absolute bottom-0 left-0 h-1 bg-white/10 w-full z-40">
-        <div id="progress-bar" class="h-full bg-[var(--wild-orange)] transition-all duration-300" style={`width: ${100/artists.length}%`}></div>
-    </div>
+            <!-- Releases Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
+                 {[1, 2, 3].map((_, i) => (
+                    <div class="group relative bg-[#111] border border-white/5 hover:border-[var(--wild-orange)]/50 transition-all duration-500 hover:-translate-y-2">
+                        <div class="aspect-square overflow-hidden relative">
+                             <img src={`https://images.unsplash.com/photo-${1500000000000 + i * 500}?w=600&h=600&fit=crop`} class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" />
+                             <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm">
+                                <button class="w-12 h-12 bg-[var(--wild-orange)] rounded-full flex items-center justify-center text-white hover:scale-110 transition-transform">
+                                    <svg class="w-5 h-5 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                </button>
+                             </div>
+                        </div>
+                        <div class="p-6">
+                            <span class="text-[10px] text-[var(--wild-orange)] font-bold uppercase tracking-widest mb-2 block">New Single</span>
+                            <h3 class="text-2xl font-black text-white uppercase italic mb-1">Neon Nights</h3>
+                            <p class="text-gray-500 text-sm mb-4">ft. {artists[i].nombre}</p>
+                            <div class="flex items-center justify-between border-t border-white/5 pt-4">
+                                <span class="text-xs text-gray-400 font-mono">2024 • 3:45</span>
+                                <div class="flex gap-2">
+                                    <a href="#" class="text-gray-400 hover:text-white"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm3.707 13.074c-1.379.78-2.096 1.185-2.222 1.259-.06.037-.104.052-.148.052-.089 0-.163-.044-.215-.133-.03-.052-.03-.126-.03-.252V9.006c0-.126 0-.2.03-.252.052-.089.126-.133.215-.133.044 0 .089.015.148.052.126.074.844.479 2.222 1.259 1.385.78 2.081 1.17 2.081 1.563 0 .393-.696.783-2.081 1.563z"/></svg></a>
+                                    <a href="#" class="text-gray-400 hover:text-white"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm4.5 13.5h-9v-1.5h9v1.5zm0-3h-9V9h9v1.5zm0-3h-9V6h9v1.5z"/></svg></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                 ))}
+            </div>
+
+            <!-- Upcoming Events Mini -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 border-t border-white/10 pt-16">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-black uppercase tracking-tighter text-white mb-6">Próximos Shows</h2>
+                    <div class="space-y-4">
+                        {[1, 2, 3].map((_, i) => (
+                            <div class="flex items-center gap-6 group hover:bg-white/5 p-4 rounded-xl transition-colors border border-transparent hover:border-white/5">
+                                <div class="text-center shrink-0">
+                                    <span class="block text-2xl font-black text-[var(--wild-orange)] leading-none">2{i+4}</span>
+                                    <span class="text-[10px] font-bold text-gray-500 uppercase">OCT</span>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="text-lg font-bold text-white group-hover:text-[var(--wild-orange)] transition-colors uppercase">Wild Night Vol. {i+1}</h4>
+                                    <p class="text-sm text-gray-400">Arena CDMX • {artists[i+3].nombre} + Guests</p>
+                                </div>
+                                <button class="px-4 py-2 text-[10px] font-black uppercase tracking-widest border border-white/20 hover:bg-white hover:text-black transition-all rounded">Tickets</button>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                
+                <!-- Newsletter / Community -->
+                <div class="relative rounded-2xl overflow-hidden bg-[#151515] p-8 md:p-12 flex flex-col justify-center border border-white/5">
+                    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
+                    <div class="relative z-10">
+                        <span class="text-[var(--wild-orange)] font-mono text-xs tracking-widest mb-2 block">UNETE A LA COMUNIDAD</span>
+                        <h2 class="text-3xl md:text-5xl font-black uppercase italic text-white mb-6 leading-none">NO TE PIERDAS<br/>NADA.</h2>
+                        <p class="text-gray-400 mb-8 max-w-md">Suscríbete para recibir lanzamientos exclusivos, preventa de boletos y contenido detrás de cámaras de tus artistas favoritos.</p>
+                        
+                        <form class="flex gap-2">
+                            <input type="email" placeholder="TU CORREO" class="bg-black/50 border border-white/10 text-white px-4 py-3 w-full text-sm focus:outline-none focus:border-[var(--wild-orange)] transition-colors" />
+                            <button class="bg-[var(--wild-orange)] text-white px-6 py-3 font-black uppercase tracking-widest hover:brightness-110 transition-all">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
 
   </div>
 </Layout>
@@ -367,7 +458,6 @@ const config = {
     const detailOrigin = document.getElementById('detail-origin');
     const detailLink = document.getElementById('detail-link') as HTMLAnchorElement;
     const progressBar = document.getElementById('progress-bar');
-    const artistList = document.getElementById('artist-list');
     const artistDetails = document.getElementById('artist-details');
 
     let currentIndex = 0;
@@ -385,16 +475,16 @@ const config = {
         // Update Content with animation
         if(artistDetails) {
             artistDetails.style.opacity = '0';
-            artistDetails.style.transform = 'translateY(20px)';
+            artistDetails.style.transform = 'translateY(10px)';
         }
 
         setTimeout(() => {
             if (bgImage) {
-                bgImage.style.opacity = '0';
+                bgImage.style.opacity = '0.2';
                 setTimeout(() => {
                     bgImage.src = data.image || '';
                     bgImage.onload = () => {
-                        bgImage.style.opacity = '0.5';
+                        bgImage.style.opacity = '0.4';
                         bgImage.style.transform = 'scale(1.05)';
                         setTimeout(() => bgImage.style.transform = 'scale(1)', 50);
                     };
@@ -411,7 +501,7 @@ const config = {
                 artistDetails.style.opacity = '1';
                 artistDetails.style.transform = 'translateY(0)';
             }
-        }, 300);
+        }, 200);
 
         // Update Progress
         if (progressBar) {
@@ -425,30 +515,8 @@ const config = {
     buttons.forEach(btn => {
         btn.addEventListener('mouseenter', () => updateArtist(btn));
         btn.addEventListener('click', (e) => {
-            // Mobile tap or click to navigate directly? 
-            // For now, click just selects, link button navigates
              updateArtist(btn);
         });
-    });
-
-    // Auto-advance on mobile/idle?
-    // Maybe just keyboard navigation
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowDown') {
-            const next = (currentIndex + 1) % totalArtists;
-            const btn = document.querySelector(`.artist-trigger[data-index="${next}"]`);
-            if (btn) {
-                updateArtist(btn);
-                btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        } else if (e.key === 'ArrowUp') {
-            const prev = (currentIndex - 1 + totalArtists) % totalArtists;
-            const btn = document.querySelector(`.artist-trigger[data-index="${prev}"]`);
-            if (btn) {
-                updateArtist(btn);
-                btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        }
     });
 
 </script>
