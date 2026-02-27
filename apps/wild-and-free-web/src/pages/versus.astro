@@ -285,10 +285,17 @@ const config = {
           </h1>
           
           <!-- MODE SELECTOR (Compact) -->
-          <div class="flex gap-2 p-1 bg-white/5 rounded-full border border-white/10 backdrop-blur-sm">
-              <button class="mode-btn px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all hover:bg-white/10 text-gray-500 active" data-mode="1v1">1 VS 1</button>
-              <button class="mode-btn px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all hover:bg-white/10 text-gray-500" data-mode="2v2">2 VS 2</button>
-              <button class="mode-btn px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all hover:bg-white/10 text-gray-500" data-mode="3v3">3 VS 3</button>
+          <div class="flex flex-col md:flex-row items-center gap-4">
+              <div class="flex gap-2 p-1 bg-white/5 rounded-full border border-white/10 backdrop-blur-sm shadow-[0_0_15px_rgba(255,255,255,0.05)]">
+                  <button class="mode-btn px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all hover:bg-white/10 text-gray-500 active" data-mode="1v1">1 VS 1</button>
+                  <button class="mode-btn px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all hover:bg-white/10 text-gray-500" data-mode="2v2">2 VS 2</button>
+                  <button class="mode-btn px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all hover:bg-white/10 text-gray-500" data-mode="3v3">3 VS 3</button>
+              </div>
+              
+              <button id="auto-fill-btn" class="px-4 py-2 bg-[var(--primary)]/10 border border-[var(--primary)]/30 text-[var(--primary)] rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-[var(--primary)] hover:text-black transition-all flex items-center gap-2 group">
+                  <svg class="w-3 h-3 group-hover:rotate-180 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                  AUTO-FILL
+              </button>
           </div>
       </div>
 
@@ -304,9 +311,9 @@ const config = {
           </div>
 
           <!-- CENTER: VS & ACTION -->
-          <div class="flex flex-col items-center justify-center gap-8 order-1 md:order-2 py-10">
+          <div class="flex flex-col items-center justify-center gap-8 order-1 md:order-2 py-10 relative">
               <!-- VS CIRCLE -->
-              <div class="relative group cursor-default">
+              <div class="relative group cursor-default z-10">
                   <div class="absolute inset-0 bg-[var(--primary)] rounded-full blur-[50px] opacity-20 group-hover:opacity-40 transition-opacity animate-pulse"></div>
                   <div class="w-32 h-32 md:w-40 md:h-40 bg-black border-4 border-[var(--primary)] rounded-full flex items-center justify-center relative z-10 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
                       <span class="text-6xl md:text-7xl font-black italic text-white tracking-tighter transform -rotate-12 drop-shadow-[4px_4px_0px_var(--primary)]">VS</span>
@@ -314,14 +321,17 @@ const config = {
               </div>
 
               <!-- FIGHT BUTTON -->
-              <button id="fight-btn" class="group relative px-12 py-4 bg-white text-black font-black uppercase tracking-[0.2em] italic rounded-xl overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_50px_var(--primary)]">
+              <button id="fight-btn" class="group relative px-12 py-4 bg-white text-black font-black uppercase tracking-[0.2em] italic rounded-xl overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_50px_var(--primary)] z-10">
                   <span class="relative z-10 text-xl">FIGHT!</span>
                   <div class="absolute inset-0 bg-gradient-to-r from-[var(--primary)] via-white to-[var(--primary)] opacity-0 group-hover:opacity-100 transition-opacity"></div>
               </button>
 
-              <!-- INFO DISPLAY (Placeholder for selected artist info) -->
-              <div id="center-info" class="text-center opacity-50 h-12 flex flex-col justify-end">
-                  <p class="text-[8px] font-mono uppercase tracking-widest text-gray-500">Selecciona un artista para ver stats</p>
+              <!-- INFO DISPLAY (BATTLE COMPUTER) -->
+              <div id="center-info" class="w-full max-w-[200px] h-32 flex flex-col justify-center items-center text-center opacity-50 transition-opacity z-10">
+                  <div class="flex flex-col items-center gap-2">
+                      <svg class="w-6 h-6 text-white/20 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
+                      <p class="text-[8px] font-mono uppercase tracking-widest text-gray-500">Selecciona un artista<br>para ver análisis</p>
+                  </div>
               </div>
           </div>
 
@@ -346,6 +356,36 @@ const config = {
           </div>
           <div id="brackets-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <!-- Brackets injected via JS -->
+          </div>
+      </div>
+
+      <!-- BATTLE OVERLAY (Hidden by default) -->
+      <div id="battle-overlay" class="fixed inset-0 z-[200] bg-black/90 backdrop-blur-xl hidden flex-col items-center justify-center">
+          <div class="relative w-full max-w-4xl h-[60vh] flex items-center justify-center">
+              <!-- BACKGROUND FX -->
+              <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 animate-pulse"></div>
+              
+              <!-- CLASH ANIMATION CONTAINER -->
+              <div id="clash-container" class="relative w-full h-full flex items-center justify-center overflow-hidden">
+                  <div id="team-alpha-clash" class="absolute left-0 top-0 bottom-0 w-1/2 bg-gradient-to-r from-black to-[var(--primary)] transform -translate-x-full transition-transform duration-1000 flex items-center justify-end pr-10">
+                      <h2 class="text-6xl md:text-9xl font-black italic text-white uppercase tracking-tighter mix-blend-overlay opacity-50">ALPHA</h2>
+                  </div>
+                  <div id="team-omega-clash" class="absolute right-0 top-0 bottom-0 w-1/2 bg-gradient-to-l from-black to-red-600 transform translate-x-full transition-transform duration-1000 flex items-center justify-start pl-10">
+                      <h2 class="text-6xl md:text-9xl font-black italic text-white uppercase tracking-tighter mix-blend-overlay opacity-50">OMEGA</h2>
+                  </div>
+                  
+                  <!-- VS FLASH -->
+                  <div id="vs-flash" class="absolute z-10 text-9xl font-black text-white italic scale-0 transition-transform duration-300 drop-shadow-[0_0_50px_white]">VS</div>
+              </div>
+
+              <!-- WINNER REVEAL -->
+              <div id="winner-reveal" class="absolute inset-0 flex flex-col items-center justify-center hidden">
+                  <h3 class="text-2xl font-black text-[var(--primary)] uppercase tracking-[1em] mb-4 animate-fade-in-down">VICTORIA PARA</h3>
+                  <h1 id="winner-name" class="text-6xl md:text-9xl font-black italic text-white uppercase tracking-tighter drop-shadow-[0_0_30px_var(--primary)] scale-150 animate-bounce-in">TEAM ALPHA</h1>
+                  <button id="close-overlay" class="mt-12 px-8 py-3 bg-white text-black font-black uppercase tracking-widest hover:bg-[var(--primary)] transition-colors animate-fade-in-up">
+                      VOLVER A LA ARENA
+                  </button>
+              </div>
           </div>
       </div>
 
@@ -420,14 +460,46 @@ const config = {
 
     function showArtistInfo(name, role, stats) {
         if (!centerInfo) return;
+        
+        // Calculate percentages for bars
+        const pwr = stats.power;
+        const spd = stats.speed;
+        const tec = stats.technique;
+        
         centerInfo.innerHTML = `
-            <div class="animate-fade-in-up">
-                <h4 class="text-lg font-black italic uppercase text-white tracking-tighter leading-none">${name}</h4>
-                <p class="text-[9px] font-bold text-[var(--primary)] uppercase tracking-[0.3em] mb-1">${role}</p>
-                <div class="flex gap-2 justify-center text-[8px] font-mono text-gray-500">
-                    <span>PWR:${stats.power}</span>
-                    <span>SPD:${stats.speed}</span>
-                    <span>TEC:${stats.technique}</span>
+            <div class="animate-fade-in-up w-full bg-black/80 backdrop-blur-md p-3 rounded-xl border border-white/10 shadow-2xl relative overflow-hidden">
+                <div class="absolute inset-0 bg-[var(--primary)]/5"></div>
+                
+                <h4 class="text-sm font-black italic uppercase text-white tracking-tighter leading-none mb-1 truncate">${name}</h4>
+                <p class="text-[8px] font-bold text-[var(--primary)] uppercase tracking-[0.2em] mb-2 truncate">${role}</p>
+                
+                <div class="flex flex-col gap-1 w-full">
+                    <!-- POWER -->
+                    <div class="flex items-center gap-1">
+                        <span class="text-[6px] font-black text-gray-400 w-6">PWR</span>
+                        <div class="flex-1 h-1 bg-white/10 rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-orange-500 to-red-600 w-0 animate-fill-bar" style="width: ${pwr}%"></div>
+                        </div>
+                        <span class="text-[6px] font-mono text-white">${pwr}</span>
+                    </div>
+                    
+                    <!-- SPEED -->
+                    <div class="flex items-center gap-1">
+                        <span class="text-[6px] font-black text-gray-400 w-6">SPD</span>
+                        <div class="flex-1 h-1 bg-white/10 rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-blue-400 to-cyan-500 w-0 animate-fill-bar" style="width: ${spd}%"></div>
+                        </div>
+                        <span class="text-[6px] font-mono text-white">${spd}</span>
+                    </div>
+
+                    <!-- TECH -->
+                    <div class="flex items-center gap-1">
+                        <span class="text-[6px] font-black text-gray-400 w-6">TEC</span>
+                        <div class="flex-1 h-1 bg-white/10 rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-purple-500 to-pink-500 w-0 animate-fill-bar" style="width: ${tec}%"></div>
+                        </div>
+                        <span class="text-[6px] font-mono text-white">${tec}</span>
+                    </div>
                 </div>
             </div>
         `;
@@ -479,7 +551,7 @@ const config = {
         if (!artist) return;
 
         const contentDiv = slot.querySelector('.slot-content');
-        slot.querySelector('.placeholder-text').classList.add('hidden');
+        slot.querySelector('.placeholder-content').classList.add('hidden');
         contentDiv.classList.remove('hidden');
         
         // Use the same square size and style as the dock tokens
@@ -521,7 +593,7 @@ const config = {
         slot.classList.remove('filled', 'border-[var(--primary)]');
         slot.querySelector('.slot-content').innerHTML = '';
         slot.querySelector('.slot-content').classList.add('hidden');
-        slot.querySelector('.placeholder-text').classList.remove('hidden');
+        slot.querySelector('.placeholder-content').classList.remove('hidden');
         checkTeamStatus();
     }
 
@@ -582,8 +654,21 @@ const config = {
         // Square slots matching dock token size: w-20 h-20 md:w-24 md:h-24
         slot.className = `team-slot group/slot relative w-20 h-20 md:w-24 md:h-24 bg-white/5 border-2 border-white/10 rounded-xl flex items-center justify-center cursor-pointer transition-all hover:border-[var(--primary)]/50 overflow-hidden`;
         slot.innerHTML = `
-            <span class="placeholder-text text-[8px] font-black text-white/10 uppercase tracking-widest z-10 pointer-events-none select-none">${team} ${index}</span>
-            <div class="slot-content absolute inset-0 hidden w-full h-full"></div>
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 pointer-events-none"></div>
+            <div class="absolute inset-0 border border-white/5 rounded-xl pointer-events-none"></div>
+            
+            <!-- Holographic Corner Accents -->
+            <div class="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-white/20 rounded-tl-sm group-hover/slot:border-[var(--primary)] transition-colors"></div>
+            <div class="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-white/20 rounded-tr-sm group-hover/slot:border-[var(--primary)] transition-colors"></div>
+            <div class="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-white/20 rounded-bl-sm group-hover/slot:border-[var(--primary)] transition-colors"></div>
+            <div class="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-white/20 rounded-br-sm group-hover/slot:border-[var(--primary)] transition-colors"></div>
+
+            <div class="flex flex-col items-center gap-1 opacity-50 group-hover/slot:opacity-100 transition-opacity placeholder-content">
+                <svg class="w-4 h-4 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4"></path></svg>
+                <span class="text-[6px] font-black text-white/30 uppercase tracking-widest pointer-events-none select-none">${team} ${index}</span>
+            </div>
+            
+            <div class="slot-content absolute inset-0 hidden w-full h-full z-20"></div>
         `;
         return slot;
     }
@@ -656,8 +741,43 @@ const config = {
         });
     }
 
+    // AUTO-FILL
+    const autoFillBtn = document.getElementById('auto-fill-btn');
+    if (autoFillBtn) {
+        autoFillBtn.addEventListener('click', () => {
+            const emptySlots = Array.from(document.querySelectorAll('.team-slot:not(.filled)'));
+            if (emptySlots.length === 0) return;
+
+            // Get available artist IDs (not already in a slot)
+            const usedIds = Array.from(document.querySelectorAll('.team-slot[data-artist-id]'))
+                                .map(s => parseInt(s.getAttribute('data-artist-id')));
+            
+            const availableArtists = artists.filter(a => !usedIds.includes(a.id));
+            
+            // Shuffle available
+            const shuffled = availableArtists.sort(() => 0.5 - Math.random());
+            
+            emptySlots.forEach((slot, i) => {
+                if (shuffled[i]) {
+                    setTimeout(() => {
+                        fillTeamSlot(slot, shuffled[i].id);
+                    }, i * 100); // Stagger effect
+                }
+            });
+        });
+    }
+
     // FIGHT BUTTON
     const fightBtn = document.getElementById('fight-btn');
+    const battleOverlay = document.getElementById('battle-overlay');
+    const closeOverlayBtn = document.getElementById('close-overlay');
+    const winnerName = document.getElementById('winner-name');
+    const teamAlphaClash = document.getElementById('team-alpha-clash');
+    const teamOmegaClash = document.getElementById('team-omega-clash');
+    const vsFlash = document.getElementById('vs-flash');
+    const winnerReveal = document.getElementById('winner-reveal');
+    const clashContainer = document.getElementById('clash-container');
+
     fightBtn?.addEventListener('click', () => {
         const filledSlots = document.querySelectorAll('.team-slot[data-artist-id]').length;
         const totalNeeded = document.querySelectorAll('.team-slot').length;
@@ -667,21 +787,46 @@ const config = {
             return;
         }
 
-        fightBtn.innerHTML = "<span class='animate-ping'>LUCHANDO...</span>";
-        fightBtn.classList.add('bg-red-600', 'text-white', 'scale-110');
+        // START BATTLE SEQUENCE
+        battleOverlay.classList.remove('hidden');
+        battleOverlay.classList.add('flex');
         
-        // Shake screen effect
-        const page = document.getElementById('page-container');
-        page.classList.add('animate-shake');
-        
+        // Reset animations
+        teamAlphaClash.style.transform = 'translateX(-100%)';
+        teamOmegaClash.style.transform = 'translateX(100%)';
+        vsFlash.classList.remove('scale-100');
+        vsFlash.classList.add('scale-0');
+        winnerReveal.classList.add('hidden');
+        clashContainer.classList.remove('hidden');
+
+        // 1. Clash In
         setTimeout(() => {
-            page.classList.remove('animate-shake');
-            fightBtn.innerHTML = "<span class='relative z-10 text-xl'>FIGHT!</span>";
-            fightBtn.classList.remove('bg-red-600', 'text-white', 'scale-110');
+            teamAlphaClash.style.transform = 'translateX(0)';
+            teamOmegaClash.style.transform = 'translateX(0)';
+        }, 100);
+
+        // 2. VS Flash
+        setTimeout(() => {
+            vsFlash.classList.remove('scale-0');
+            vsFlash.classList.add('scale-150', 'rotate-12');
+        }, 800);
+
+        // 3. Reveal Winner
+        setTimeout(() => {
+            clashContainer.classList.add('hidden');
+            winnerReveal.classList.remove('hidden');
             
+            // Random Winner Logic
             const winner = Math.random() > 0.5 ? 'TEAM ALPHA' : 'TEAM OMEGA';
-            alert(`¡EL GANADOR ES ${winner}!`);
-        }, 1500);
+            winnerName.innerText = winner;
+            winnerName.className = `text-6xl md:text-9xl font-black italic uppercase tracking-tighter drop-shadow-[0_0_30px_var(--primary)] scale-150 animate-bounce-in ${winner === 'TEAM ALPHA' ? 'text-[var(--primary)]' : 'text-red-600'}`;
+            
+        }, 2000);
+    });
+
+    closeOverlayBtn?.addEventListener('click', () => {
+        battleOverlay.classList.add('hidden');
+        battleOverlay.classList.remove('flex');
     });
 
     // Init

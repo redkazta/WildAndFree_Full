@@ -3,7 +3,17 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
 
-export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
+const validateSupabaseUrl = (url: string | undefined) => {
+  if (!url) return false;
+  try {
+    new URL(url);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey && validateSupabaseUrl(supabaseUrl));
 
 const notConfiguredError = new Error('Supabase no está configurado: falta PUBLIC_SUPABASE_URL / PUBLIC_SUPABASE_ANON_KEY');
 
