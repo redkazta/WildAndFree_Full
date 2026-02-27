@@ -12,10 +12,9 @@ const config = {
 };
 
 const categories = [
-  { id: 'all', name: 'Todo' },
   { id: 'clothing', name: 'Ropa Urbana' },
-  { id: 'accessories', name: 'Accesorios' },
   { id: 'music', name: 'Música (Vinilos/CDs)' },
+  { id: 'accessories', name: 'Accesorios' },
   { id: 'art', name: 'Arte y Pósters' },
   { id: 'tech', name: 'Equipo de Audio' }
 ];
@@ -38,6 +37,7 @@ const carouselOffers = [
 ];
 
 const products = [
+  // Ropa Urbana
   {
     id: 1,
     name: 'Sudadera Wild Gvng Oversize',
@@ -52,17 +52,6 @@ const products = [
     isBestSeller: true
   },
   {
-    id: 2,
-    name: 'Gorra Neon Táctica',
-    price: 450,
-    rating: 4.5,
-    reviews: 89,
-    image: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=500&h=500&fit=crop',
-    category: 'Accesorios',
-    inStock: true,
-    isNew: true
-  },
-  {
     id: 3,
     name: 'Camiseta Tokyo Nights',
     price: 600,
@@ -73,14 +62,50 @@ const products = [
     inStock: true
   },
   {
-    id: 4,
-    name: 'Box Set Vinilos 2024',
-    price: 2500,
-    rating: 5.0,
+    id: 8,
+    name: 'Bomber Jacket Edición Limitada',
+    price: 2800,
+    originalPrice: 3500,
+    rating: 4.8,
+    reviews: 67,
+    image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=500&h=500&fit=crop',
+    category: 'Ropa Urbana',
+    inStock: true
+  },
+  {
+    id: 9,
+    name: 'Pantalones Cargo Tech',
+    price: 1100,
+    rating: 4.6,
     reviews: 45,
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&h=500&fit=crop',
-    category: 'Música (Vinilos/CDs)',
-    inStock: false
+    image: 'https://images.unsplash.com/photo-1517445312882-5633b3b4d455?w=500&h=500&fit=crop',
+    category: 'Ropa Urbana',
+    inStock: true,
+    isNew: true
+  },
+  {
+    id: 10,
+    name: 'Hoodie Gráfico "Chaos"',
+    price: 1350,
+    originalPrice: 1600,
+    rating: 4.7,
+    reviews: 89,
+    image: 'https://images.unsplash.com/photo-1509942774463-acf339cf87d5?w=500&h=500&fit=crop',
+    category: 'Ropa Urbana',
+    inStock: true
+  },
+  
+  // Accesorios
+  {
+    id: 2,
+    name: 'Gorra Neon Táctica',
+    price: 450,
+    rating: 4.5,
+    reviews: 89,
+    image: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=500&h=500&fit=crop',
+    category: 'Accesorios',
+    inStock: true,
+    isNew: true
   },
   {
     id: 5,
@@ -94,6 +119,61 @@ const products = [
     inStock: true
   },
   {
+    id: 11,
+    name: 'Cadenas de Plata Industrial',
+    price: 850,
+    rating: 4.4,
+    reviews: 32,
+    image: 'https://images.unsplash.com/photo-1599643478518-17488fbbcd75?w=500&h=500&fit=crop',
+    category: 'Accesorios',
+    inStock: true
+  },
+  {
+    id: 12,
+    name: 'Gafas de Sol Cyberpunk',
+    price: 1200,
+    rating: 4.8,
+    reviews: 112,
+    image: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=500&h=500&fit=crop',
+    category: 'Accesorios',
+    inStock: false
+  },
+
+  // Música
+  {
+    id: 4,
+    name: 'Box Set Vinilos 2024',
+    price: 2500,
+    rating: 5.0,
+    reviews: 45,
+    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&h=500&fit=crop',
+    category: 'Música (Vinilos/CDs)',
+    inStock: false
+  },
+  {
+    id: 13,
+    name: 'Vinilo "Neon Dreams" LP',
+    price: 650,
+    rating: 4.9,
+    reviews: 28,
+    image: 'https://images.unsplash.com/photo-1539375665275-f9de415ef9ac?w=500&h=500&fit=crop',
+    category: 'Música (Vinilos/CDs)',
+    inStock: true,
+    isNew: true
+  },
+  {
+    id: 14,
+    name: 'Cassette Retro Mix Vol. 1',
+    price: 250,
+    rating: 4.5,
+    reviews: 15,
+    image: 'https://images.unsplash.com/photo-1594434533760-02e0f3faaa68?w=500&h=500&fit=crop',
+    category: 'Música (Vinilos/CDs)',
+    inStock: true
+  },
+
+  // Arte
+  {
     id: 6,
     name: 'Set de Pósters Neón',
     price: 350,
@@ -103,6 +183,18 @@ const products = [
     category: 'Arte y Pósters',
     inStock: true
   },
+  {
+    id: 15,
+    name: 'Lienzo Abstracto "City"',
+    price: 1500,
+    rating: 4.8,
+    reviews: 12,
+    image: 'https://images.unsplash.com/photo-1549490349-8643362247b5?w=500&h=500&fit=crop',
+    category: 'Arte y Pósters',
+    inStock: true
+  },
+
+  // Audio
   {
     id: 7,
     name: 'Audífonos Studio Pro',
@@ -115,14 +207,24 @@ const products = [
     isNew: true
   },
   {
-    id: 8,
-    name: 'Bomber Jacket Edición Limitada',
-    price: 2800,
-    originalPrice: 3500,
+    id: 16,
+    name: 'Altavoz Bluetooth Portátil',
+    price: 1200,
+    originalPrice: 1500,
+    rating: 4.6,
+    reviews: 95,
+    image: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500&h=500&fit=crop',
+    category: 'Equipo de Audio',
+    inStock: true
+  },
+  {
+    id: 17,
+    name: 'Micrófono Podcast Pro',
+    price: 2100,
     rating: 4.8,
-    reviews: 67,
-    image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=500&h=500&fit=crop',
-    category: 'Ropa Urbana',
+    reviews: 44,
+    image: 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=500&h=500&fit=crop',
+    category: 'Equipo de Audio',
     inStock: true
   }
 ];
@@ -131,114 +233,89 @@ const products = [
 <Layout config={config}>
   <div class="min-h-screen bg-[#050505] text-white pb-20 selection:bg-[var(--wild-orange)] selection:text-black">
     
-    <!-- Top Bar Promocional con Gradiente -->
-    <div class="bg-gradient-to-r from-[var(--wild-blood)] via-[var(--wild-orange)] to-[var(--wild-blood)] text-white text-[10px] md:text-xs font-black text-center py-2 uppercase tracking-[0.2em] animate-gradient-x shadow-lg shadow-[var(--wild-crimson)]/20">
+    <!-- Top Bar Promocional -->
+    <div class="bg-gradient-to-r from-[var(--wild-blood)] via-[var(--wild-orange)] to-[var(--wild-blood)] text-white text-[10px] md:text-xs font-black text-center py-2 uppercase tracking-[0.2em] animate-gradient-x shadow-lg shadow-[var(--wild-crimson)]/20 sticky top-0 z-40">
       Envío gratis en pedidos superiores a $999 • Devoluciones sin costo
     </div>
 
     <div class="container-fluid px-4 md:px-8 py-8 w-full max-w-[1920px] mx-auto">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 relative">
         
-        <!-- Sidebar (Filtros y Navegación) - Now wider on large screens -->
+        <!-- Sidebar Sticky Independiente -->
         <aside class="hidden lg:block lg:col-span-2 xl:col-span-2">
-            <div class="sticky top-24 space-y-6">
+            <div class="sticky top-20 h-[calc(100vh-6rem)] overflow-y-auto pr-2 space-y-8 scrollbar-hide">
+              
               <!-- Búsqueda -->
-              <div class="bg-[#0a0a0a] p-6 rounded-xl shadow-lg border border-[var(--wild-dark-red)]/30 backdrop-blur-sm relative group overflow-hidden">
-                <div class="absolute inset-0 bg-gradient-to-b from-[var(--wild-crimson)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-                <h3 class="font-black uppercase text-lg mb-4 text-white flex items-center gap-2">
-                   <span class="w-1 h-6 bg-[var(--wild-orange)] rounded-full"></span>
-                   Buscar
-                </h3>
-                <div class="relative">
-                  <input 
-                    type="text" 
-                    placeholder="Buscar productos..." 
-                    class="w-full bg-[#151515] border border-white/10 rounded-lg px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[var(--wild-orange)] focus:ring-1 focus:ring-[var(--wild-orange)] focus:bg-[#1a1a1a] transition-all"
-                  />
-                  <button class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[var(--wild-orange)] transition-colors">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                  </button>
+              <div class="space-y-2">
+                <h3 class="font-black uppercase text-xs text-gray-500 tracking-widest mb-4">Buscar</h3>
+                <div class="relative group">
+                  <div class="absolute inset-0 bg-gradient-to-r from-[var(--wild-orange)] to-[var(--wild-crimson)] rounded-lg opacity-20 group-hover:opacity-100 transition-opacity blur-sm"></div>
+                  <div class="relative bg-[#0a0a0a] rounded-lg border border-white/10 flex items-center p-1">
+                      <input 
+                        type="text" 
+                        placeholder="Buscar..." 
+                        class="w-full bg-transparent border-none text-xs text-white placeholder-gray-600 focus:ring-0 px-3 py-2"
+                      />
+                      <button class="p-2 text-gray-500 hover:text-[var(--wild-orange)] transition-colors">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                      </button>
+                  </div>
                 </div>
               </div>
 
-              <!-- Categorías -->
-              <div class="bg-[#0a0a0a] p-6 rounded-xl shadow-lg border border-[var(--wild-dark-red)]/30 relative group overflow-hidden">
-                 <div class="absolute inset-0 bg-gradient-to-b from-[var(--wild-crimson)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-                <h3 class="font-black uppercase text-lg mb-4 text-white flex items-center gap-2">
-                    <span class="w-1 h-6 bg-[var(--wild-crimson)] rounded-full"></span>
-                    Categorías
-                </h3>
-                <ul class="space-y-1">
-                  {categories.map(cat => (
-                    <li>
-                      <a href="#" class="group/link flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-white/5 transition-all relative overflow-hidden">
-                        <span class="w-1.5 h-1.5 bg-gray-700 rounded-full group-hover/link:bg-[var(--wild-orange)] group-hover/link:scale-125 transition-all"></span>
-                        <span class="text-sm font-medium text-gray-400 group-hover/link:text-white group-hover/link:translate-x-1 transition-all">{cat.name}</span>
-                        <div class="absolute bottom-0 left-0 h-[1px] w-0 bg-[var(--wild-orange)] group-hover/link:w-full transition-all duration-300"></div>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
+              <!-- Navegación por Categorías -->
+              <div class="space-y-4">
+                 <h3 class="font-black uppercase text-xs text-gray-500 tracking-widest">Explorar</h3>
+                 <nav class="flex flex-col space-y-1">
+                    <a href="#offers" class="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-white/5 text-gray-300 hover:text-white transition-all group">
+                        <span class="w-1.5 h-1.5 bg-[var(--wild-orange)] rounded-full group-hover:scale-150 transition-transform"></span>
+                        <span class="text-sm font-bold uppercase tracking-wider">Ofertas</span>
+                    </a>
+                    {categories.map(cat => (
+                        <a href={`#${cat.id}`} class="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-white/5 text-gray-400 hover:text-white transition-all group">
+                            <span class="w-1.5 h-1.5 bg-gray-700 rounded-full group-hover:bg-[var(--wild-orange)] group-hover:scale-150 transition-all"></span>
+                            <span class="text-sm font-medium">{cat.name}</span>
+                        </a>
+                    ))}
+                 </nav>
               </div>
 
-              <!-- Filtro de Precio -->
-              <div class="bg-[#0a0a0a] p-6 rounded-xl shadow-lg border border-[var(--wild-dark-red)]/30 relative group overflow-hidden">
-                 <div class="absolute inset-0 bg-gradient-to-b from-[var(--wild-crimson)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-                <h3 class="font-black uppercase text-lg mb-4 text-white flex items-center gap-2">
-                    <span class="w-1 h-6 bg-[var(--wild-blood)] rounded-full"></span>
-                    Precio
-                </h3>
-                <div class="space-y-3">
-                  <label class="flex items-center gap-3 cursor-pointer group/check p-2 hover:bg-white/5 rounded-lg transition-colors">
-                    <div class="relative flex items-center">
-                        <input type="checkbox" class="peer appearance-none w-5 h-5 border-2 border-gray-600 rounded bg-transparent checked:border-[var(--wild-orange)] checked:bg-[var(--wild-orange)] transition-all" />
-                        <svg class="absolute w-3 h-3 text-black pointer-events-none opacity-0 peer-checked:opacity-100 left-1 top-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                    </div>
-                    <span class="text-sm text-gray-400 group-hover/check:text-white transition-colors">Hasta $500</span>
-                  </label>
-                  <label class="flex items-center gap-3 cursor-pointer group/check p-2 hover:bg-white/5 rounded-lg transition-colors">
-                    <div class="relative flex items-center">
-                        <input type="checkbox" class="peer appearance-none w-5 h-5 border-2 border-gray-600 rounded bg-transparent checked:border-[var(--wild-orange)] checked:bg-[var(--wild-orange)] transition-all" />
-                        <svg class="absolute w-3 h-3 text-black pointer-events-none opacity-0 peer-checked:opacity-100 left-1 top-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                    </div>
-                    <span class="text-sm text-gray-400 group-hover/check:text-white transition-colors">$500 - $1,000</span>
-                  </label>
-                  <label class="flex items-center gap-3 cursor-pointer group/check p-2 hover:bg-white/5 rounded-lg transition-colors">
-                    <div class="relative flex items-center">
-                        <input type="checkbox" class="peer appearance-none w-5 h-5 border-2 border-gray-600 rounded bg-transparent checked:border-[var(--wild-orange)] checked:bg-[var(--wild-orange)] transition-all" />
-                        <svg class="absolute w-3 h-3 text-black pointer-events-none opacity-0 peer-checked:opacity-100 left-1 top-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                    </div>
-                    <span class="text-sm text-gray-400 group-hover/check:text-white transition-colors">$1,000 - $2,000</span>
-                  </label>
-                  <label class="flex items-center gap-3 cursor-pointer group/check p-2 hover:bg-white/5 rounded-lg transition-colors">
-                    <div class="relative flex items-center">
-                        <input type="checkbox" class="peer appearance-none w-5 h-5 border-2 border-gray-600 rounded bg-transparent checked:border-[var(--wild-orange)] checked:bg-[var(--wild-orange)] transition-all" />
-                        <svg class="absolute w-3 h-3 text-black pointer-events-none opacity-0 peer-checked:opacity-100 left-1 top-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                    </div>
-                    <span class="text-sm text-gray-400 group-hover/check:text-white transition-colors">Más de $2,000</span>
-                  </label>
+              <!-- Filtros -->
+              <div class="space-y-4">
+                <h3 class="font-black uppercase text-xs text-gray-500 tracking-widest">Filtros</h3>
+                <div class="space-y-2">
+                    {['Menos de $500', '$500 - $1500', '$1500+'].map((label, i) => (
+                        <label class="flex items-center gap-3 cursor-pointer group hover:bg-white/5 p-2 rounded-lg transition-colors">
+                            <div class="relative flex items-center justify-center w-4 h-4 border border-gray-600 rounded bg-transparent group-hover:border-[var(--wild-orange)] transition-colors">
+                                <input type="checkbox" class="peer appearance-none w-full h-full cursor-pointer absolute inset-0 z-10" />
+                                <div class="w-2.5 h-2.5 bg-[var(--wild-orange)] rounded-sm opacity-0 peer-checked:opacity-100 transition-opacity"></div>
+                            </div>
+                            <span class="text-xs text-gray-400 group-hover:text-white transition-colors">{label}</span>
+                        </label>
+                    ))}
                 </div>
               </div>
 
               <!-- Banner Lateral -->
-              <div class="relative overflow-hidden bg-[#0a0a0a] border border-[var(--wild-orange)]/30 text-white p-8 rounded-xl text-center space-y-4 group">
+              <div class="relative overflow-hidden bg-[#0a0a0a] border border-[var(--wild-orange)]/30 text-white p-6 rounded-xl text-center space-y-3 group">
                 <div class="absolute inset-0 bg-gradient-to-br from-[var(--wild-orange)]/10 via-transparent to-[var(--wild-crimson)]/10 opacity-50 group-hover:opacity-100 transition-opacity duration-700"></div>
                 <div class="relative z-10">
-                    <p class="font-black text-3xl text-[var(--wild-orange)] uppercase italic tracking-tighter drop-shadow-md">WILD CLUB</p>
-                    <p class="text-xs text-gray-300 font-medium leading-relaxed">Únete al club y obtén <span class="text-white font-bold">10% de descuento</span> en tu primera compra.</p>
-                    <button class="mt-4 w-full bg-gradient-to-r from-[var(--wild-orange)] to-[var(--wild-crimson)] text-white font-black py-3 text-[10px] uppercase tracking-[0.2em] hover:brightness-110 transition-all shadow-lg shadow-[var(--wild-orange)]/20 rounded-lg">
+                    <p class="font-black text-2xl text-[var(--wild-orange)] uppercase italic tracking-tighter drop-shadow-md">WILD CLUB</p>
+                    <p class="text-[10px] text-gray-400 font-medium leading-relaxed">Únete y obtén <span class="text-white font-bold">10% OFF</span> en tu primera compra.</p>
+                    <button class="mt-2 w-full bg-white text-black font-black py-2 text-[10px] uppercase tracking-[0.2em] hover:bg-[var(--wild-orange)] hover:text-white transition-all">
                     Suscribirse
                     </button>
                 </div>
               </div>
+
           </div>
         </aside>
 
-        <!-- Main Content - Expanded -->
-        <main class="col-span-1 lg:col-span-10 xl:col-span-10 space-y-16">
+        <!-- Main Content -->
+        <main class="col-span-1 lg:col-span-10 xl:col-span-10 space-y-20">
           
-          <!-- Hero Carousel (Ofertas) - Full Width Feel -->
-          <section class="relative h-[400px] md:h-[600px] rounded-3xl overflow-hidden group border border-white/10 shadow-2xl shadow-black/50 mx-auto w-full">
+          <!-- Hero Carousel (Ofertas) -->
+          <section id="offers" class="scroll-mt-32 relative h-[400px] md:h-[550px] rounded-3xl overflow-hidden group border border-white/10 shadow-2xl shadow-black/50 mx-auto w-full">
             <div class="absolute inset-0 flex transition-transform duration-500 ease-out" id="hero-slider">
               {carouselOffers.map(offer => (
                 <div class="min-w-full h-full relative">
@@ -256,181 +333,106 @@ const products = [
               ))}
             </div>
             <!-- Controles simples -->
-            <button class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 backdrop-blur-sm text-white p-3 rounded-full hover:bg-[var(--wild-orange)] hover:text-white transition-all opacity-0 group-hover:opacity-100 border border-white/10 hover:scale-110">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
-            </button>
-            <button class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 backdrop-blur-sm text-white p-3 rounded-full hover:bg-[var(--wild-orange)] hover:text-white transition-all opacity-0 group-hover:opacity-100 border border-white/10 hover:scale-110">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            </button>
+            <div class="absolute bottom-8 right-8 flex gap-2">
+                <button class="bg-black/50 backdrop-blur-md text-white p-3 rounded-full hover:bg-[var(--wild-orange)] hover:text-white transition-all border border-white/10">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                <button class="bg-black/50 backdrop-blur-md text-white p-3 rounded-full hover:bg-[var(--wild-orange)] hover:text-white transition-all border border-white/10">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
+            </div>
           </section>
 
-          <!-- Sección: Ofertas en Tendencia (Horizontal Scroll) -->
-          <section>
-            <div class="flex justify-between items-end mb-8 border-b border-white/10 pb-4">
-              <h2 class="text-3xl md:text-5xl font-black uppercase tracking-tight text-white flex items-center gap-4">
-                <span class="w-3 h-10 bg-gradient-to-b from-[var(--wild-orange)] to-[var(--wild-crimson)] rounded-sm"></span>
-                Ofertas en Tendencia
-              </h2>
-              <a href="#" class="text-sm font-bold text-[var(--wild-light-orange)] hover:text-white hover:underline uppercase tracking-widest transition-colors flex items-center gap-2 group">
-                Ver todo 
-                <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-              </a>
-            </div>
-            
-            <div class="flex gap-8 overflow-x-auto pb-8 snap-x scrollbar-hide -mx-4 px-4">
-              {products.filter(p => p.originalPrice).map((product, idx) => (
-                <div class="min-w-[320px] md:min-w-[350px] snap-start bg-[#0a0a0a] rounded-2xl overflow-hidden border border-white/5 hover:border-[var(--wild-orange)]/50 transition-all duration-500 group hover:-translate-y-2 hover:shadow-[0_20px_50px_-10px_rgba(255,85,0,0.2)] flex flex-col h-full">
-                  <div class="relative h-[300px] bg-[#151515] overflow-hidden">
-                    <img src={product.image} class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700 ease-out" />
-                    
-                    <!-- Gradient Overlay on Hover -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-[var(--wild-blood)]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <!-- Secciones por Categoría -->
+          {categories.map(category => {
+            const categoryProducts = products.filter(p => p.category === category.name);
+            if (categoryProducts.length === 0) return null;
 
-                    {product.originalPrice && (
-                      <div class={`absolute top-3 left-3 text-[10px] font-black px-3 py-1.5 uppercase rounded shadow-[4px_4px_0px_rgba(0,0,0,0.5)] transform -rotate-2 z-20 border ${idx % 2 === 0 ? 'bg-[var(--wild-crimson)] text-white border-white/20' : 'bg-white text-black border-black'}`}>
-                        -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
-                      </div>
-                    )}
-                  </div>
-                  <div class="p-5 space-y-3 flex-1 flex flex-col relative bg-gradient-to-b from-[#0a0a0a] to-[#050505]">
-                    <!-- Top accent line -->
-                    <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[var(--wild-orange)]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-
-                    <p class="text-[10px] text-[var(--wild-light-orange)] uppercase font-bold tracking-[0.2em]">{product.category}</p>
-                    <h3 class="font-black text-sm text-white leading-tight line-clamp-2 h-10 group-hover:text-[var(--wild-orange)] transition-colors">{product.name}</h3>
-                    
-                    <div class="flex items-center gap-1 mb-2">
-                      <div class="flex text-[var(--wild-orange)] text-xs">
-                        {'★'.repeat(Math.floor(product.rating))}
-                        <span class="text-gray-700">{'★'.repeat(5 - Math.floor(product.rating))}</span>
-                      </div>
-                      <span class="text-[10px] text-gray-500 font-medium">({product.reviews})</span>
-                    </div>
-
-                    <div class="mt-auto pt-3 border-t border-white/5">
-                        <div class="flex items-baseline gap-2 mb-4">
-                            <span class="text-xl font-black text-white">${product.price}</span>
-                            <span class="text-xs text-gray-500 line-through font-bold decoration-[var(--wild-crimson)] decoration-2">${product.originalPrice}</span>
-                        </div>
-                        
-                        <!-- Botones separados -->
-                        <div class="flex gap-2">
-                            <button class="flex-1 bg-white text-black py-2.5 text-[10px] font-black uppercase tracking-[0.15em] hover:bg-[var(--wild-orange)] hover:text-white transition-all rounded shadow-[0px_4px_0px_#1a1a1a] active:shadow-none active:translate-y-[4px] add-to-cart-btn cursor-pointer flex items-center justify-center gap-2 group/btn overflow-hidden relative" data-product={JSON.stringify(product)}>
-                            <div class="absolute inset-0 bg-gradient-to-r from-[var(--wild-orange)] to-[var(--wild-crimson)] opacity-0 group-hover/btn:opacity-100 transition-opacity z-0"></div>
-                            <span class="btn-text relative z-10 flex items-center gap-2">
-                                <span>AGREGAR</span>
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                            </span>
-                            <span class="btn-spinner hidden animate-spin relative z-10">
-                                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                            </span>
-                            </button>
-                            <button class="w-10 bg-[#1a1a1a] text-gray-400 border border-white/10 rounded flex items-center justify-center hover:border-[var(--wild-crimson)] hover:text-[var(--wild-crimson)] hover:bg-[var(--wild-crimson)]/10 transition-colors toggle-wishlist-btn cursor-pointer" data-product={JSON.stringify(product)} title="Lista de Deseos">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                            </button>
-                        </div>
-                    </div>
-                  </div>
+            return (
+              <section id={category.id} class="scroll-mt-32">
+                <div class="flex items-center gap-4 mb-8">
+                    <h2 class="text-3xl md:text-4xl font-black uppercase tracking-tight text-white flex items-center gap-4">
+                        <span class="w-2 h-8 bg-[var(--wild-orange)] rounded-sm"></span>
+                        {category.name}
+                    </h2>
+                    <div class="h-[1px] flex-1 bg-gradient-to-r from-white/10 to-transparent"></div>
+                    <a href={`#${category.id}`} class="text-[10px] font-bold uppercase tracking-widest text-gray-500 hover:text-[var(--wild-orange)] transition-colors">Ver todos</a>
                 </div>
-              ))}
-            </div>
-          </section>
 
-          <!-- Sección: Catálogo Completo (Grid) -->
-          <section>
-            <div class="flex justify-between items-end mb-8 border-b border-white/10 pb-4">
-              <h2 class="text-3xl md:text-5xl font-black uppercase tracking-tight text-white flex items-center gap-4">
-                <span class="w-3 h-10 bg-gradient-to-b from-[var(--wild-crimson)] to-[var(--wild-blood)] rounded-sm"></span>
-                Catálogo Completo
-              </h2>
-              <div class="flex gap-2">
-                <button class="p-3 bg-[#111] border border-white/20 rounded-lg hover:border-[var(--wild-orange)] text-white transition-colors">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-                </button>
-                <button class="p-3 bg-[#111] border border-white/20 rounded-lg hover:border-[var(--wild-orange)] text-gray-500 hover:text-white transition-colors">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
-                </button>
-              </div>
-            </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                  {categoryProducts.map((product, idx) => (
+                    <div class="bg-[#0a0a0a] rounded-xl overflow-hidden border border-white/5 hover:border-[var(--wild-crimson)]/40 transition-all duration-300 group flex flex-col h-full hover:-translate-y-2 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] relative">
+                      
+                      <!-- Etiquetas (New/Sale) -->
+                      <div class="absolute top-3 left-3 z-20 flex flex-col gap-2 items-start pointer-events-none">
+                         {product.isNew && (
+                            <span class="bg-[var(--wild-accent)] text-black text-[9px] font-black px-2 py-1 uppercase tracking-widest rounded-sm shadow-lg">New</span>
+                         )}
+                         {product.originalPrice && (
+                            <span class="bg-[var(--wild-crimson)] text-white text-[9px] font-black px-2 py-1 uppercase tracking-widest rounded-sm shadow-lg">
+                                -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
+                            </span>
+                         )}
+                      </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-              {products.map((product, idx) => (
-                <div class="bg-[#0a0a0a] rounded-2xl overflow-hidden border border-white/5 hover:border-[var(--wild-crimson)]/40 transition-all duration-300 group flex flex-col h-full hover:-translate-y-3 hover:shadow-[0_25px_60px_-15px_rgba(220,20,60,0.15)] relative">
-                  <!-- Efecto de brillo en hover -->
-                  <div class="absolute inset-0 bg-gradient-to-tr from-[var(--wild-blood)]/10 via-transparent to-[var(--wild-orange)]/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10"></div>
-                  
-                  <div class="relative aspect-[4/5] bg-[#151515] overflow-hidden">
-                    <img src={product.image} class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out" />
-                    
-                    <div class="absolute top-0 left-0 p-3 w-full flex justify-between items-start z-20">
-                        {product.isBestSeller && (
-                          <div class="bg-[var(--wild-orange)] text-white text-[9px] font-black px-2 py-1 uppercase tracking-widest rounded-sm shadow-lg border border-white/20">
-                            Top Seller
+                      <!-- Wishlist Button (Absolute Top Right) -->
+                      <button 
+                        class="absolute top-3 right-3 z-30 w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white hover:bg-[var(--wild-crimson)] hover:border-[var(--wild-crimson)] transition-all toggle-wishlist-btn group/wish"
+                        data-product={JSON.stringify(product)}
+                        title="Agregar a Wishlist"
+                      >
+                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover/wish:scale-110 transition-transform"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                      </button>
+
+                      <div class="relative aspect-[4/5] bg-[#151515] overflow-hidden">
+                        <img src={product.image} class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out" />
+                        
+                        {!product.inStock && (
+                          <div class="absolute inset-0 bg-black/80 backdrop-blur-[2px] flex items-center justify-center z-20">
+                            <span class="text-[var(--wild-crimson)] text-sm font-black uppercase tracking-[0.2em] border-2 border-[var(--wild-crimson)] px-3 py-1 -rotate-12">Agotado</span>
                           </div>
                         )}
-                        {!product.isBestSeller && <div></div>} <!-- Spacer -->
-                    </div>
-
-                    {!product.inStock && (
-                      <div class="absolute inset-0 bg-black/80 backdrop-blur-[2px] flex items-center justify-center z-20">
-                        <div class="border-2 border-[var(--wild-crimson)] text-[var(--wild-crimson)] px-4 py-2 text-sm font-black uppercase tracking-[0.2em] -rotate-12 bg-black shadow-[0_0_20px_rgba(220,20,60,0.5)]">
-                            Agotado
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  
-                  <div class="p-5 flex flex-col flex-grow relative z-20 bg-gradient-to-b from-[#0a0a0a] to-[#050505]">
-                    <div class="mb-3">
-                        <p class="text-[9px] text-[var(--wild-light-orange)] uppercase font-bold tracking-[0.2em] mb-1.5 opacity-80 group-hover:opacity-100 transition-opacity">{product.category}</p>
-                        <h3 class="font-black text-sm text-white leading-tight line-clamp-2 group-hover:text-[var(--wild-orange)] transition-colors">{product.name}</h3>
-                    </div>
-                    
-                    <div class="mt-auto space-y-4">
-                      <div class="flex items-end justify-between border-t border-white/5 pt-4">
-                        <div class="flex flex-col">
-                          <span class="text-[10px] text-gray-500 font-medium mb-0.5 uppercase tracking-wider">Precio</span>
-                          <div class="flex items-baseline gap-2">
-                              <span class="text-lg font-black text-white tracking-tight">${product.price}</span>
-                              {product.originalPrice && <span class="text-xs text-gray-600 line-through font-bold">${product.originalPrice}</span>}
-                          </div>
-                        </div>
-                        <div class="flex items-center gap-1">
-                          <span class="text-[var(--wild-orange)] text-xs">★</span>
-                          <span class="text-[10px] font-bold text-gray-400 group-hover:text-white transition-colors">{product.rating}</span>
-                        </div>
                       </div>
                       
-                      <!-- Action Buttons -->
-                      <div class="flex gap-2">
-                          <button 
-                            class={`flex-1 py-3 text-[10px] font-black uppercase tracking-[0.2em] rounded-lg transition-all flex items-center justify-center gap-2 add-to-cart-btn group/btn overflow-hidden relative cursor-pointer ${
-                              product.inStock 
-                              ? 'bg-white text-black hover:bg-[var(--wild-orange)] hover:text-white hover:shadow-[0_0_25px_rgba(255,85,0,0.4)]' 
-                              : 'bg-[#1a1a1a] text-gray-600 cursor-not-allowed border border-white/5'
-                            }`}
-                            disabled={!product.inStock}
-                            data-product={product.inStock ? JSON.stringify(product) : undefined}
-                          >
-                             {product.inStock && <div class="absolute inset-0 bg-gradient-to-r from-[var(--wild-orange)] to-[var(--wild-crimson)] opacity-0 group-hover/btn:opacity-100 transition-opacity z-0"></div>}
-                            <span class="btn-text relative z-10 flex items-center gap-2">
-                                {product.inStock ? 'AGREGAR' : 'SIN STOCK'}
-                            </span>
-                            <span class="btn-spinner hidden animate-spin absolute z-20">
-                                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                            </span>
-                          </button>
-                          
-                          <button class="w-12 bg-[#1a1a1a] border border-white/10 rounded-lg flex items-center justify-center hover:border-[var(--wild-crimson)] hover:text-[var(--wild-crimson)] hover:bg-[var(--wild-crimson)]/10 transition-colors toggle-wishlist-btn cursor-pointer group/wish" data-product={JSON.stringify(product)} title="Lista de Deseos">
-                               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover/wish:scale-110 transition-transform"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                          </button>
+                      <div class="p-4 flex flex-col flex-grow bg-gradient-to-b from-[#0a0a0a] to-[#050505]">
+                        <div class="mb-2">
+                            <h3 class="font-bold text-sm text-white leading-tight line-clamp-2 group-hover:text-[var(--wild-orange)] transition-colors">{product.name}</h3>
+                        </div>
+                        
+                        <div class="mt-auto pt-3 border-t border-white/5 flex items-center justify-between">
+                            <div class="flex flex-col">
+                                <span class="text-[10px] text-gray-500 uppercase tracking-wider">Precio</span>
+                                <div class="flex items-baseline gap-2">
+                                    <span class="text-base font-black text-white">${product.price}</span>
+                                    {product.originalPrice && <span class="text-[10px] text-gray-600 line-through font-bold">${product.originalPrice}</span>}
+                                </div>
+                            </div>
+                            
+                            <button 
+                                class={`w-10 h-10 rounded-lg flex items-center justify-center transition-all add-to-cart-btn relative group/btn ${
+                                product.inStock 
+                                ? 'bg-white text-black hover:bg-[var(--wild-orange)] hover:text-white' 
+                                : 'bg-[#1a1a1a] text-gray-600 cursor-not-allowed border border-white/5'
+                                }`}
+                                disabled={!product.inStock}
+                                data-product={product.inStock ? JSON.stringify(product) : undefined}
+                                title="Agregar al Carrito"
+                            >
+                                <span class="btn-text">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                                </span>
+                                <span class="btn-spinner hidden animate-spin absolute">
+                                    <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                </span>
+                            </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </section>
+              </section>
+            );
+          })}
 
         </main>
       </div>
@@ -442,62 +444,74 @@ const products = [
   :root {
     --street-primary: var(--streetPrimary);
     --street-accent: var(--streetAccent);
-    
-    /* New Palette */
     --wild-orange: #FF5500;
     --wild-light-orange: #FF8C00;
     --wild-blood: #8A0303;
     --wild-crimson: #DC143C;
-    --wild-dark-red: #4A0404;
+    --wild-accent: #00FF9D;
   }
 
-  /* Ocultar barra de scroll en navegadores */
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
   @keyframes gradient-x {
-      0%, 100% {
-          background-position: 0% 50%;
-      }
-      50% {
-          background-position: 100% 50%;
-      }
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
   }
   .animate-gradient-x {
       background-size: 200% 200%;
       animation: gradient-x 6s ease infinite;
   }
+  
+  /* Wishlist Animation Keyframes */
+  @keyframes heart-burst {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.5); }
+      100% { transform: scale(1); }
+  }
+  .heart-burst {
+      animation: heart-burst 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  
+  @keyframes float-up-fade {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-40px) scale(1.2); opacity: 0; }
+  }
+  .float-heart {
+      position: fixed;
+      pointer-events: none;
+      z-index: 100;
+      color: var(--wild-crimson);
+      animation: float-up-fade 1s ease-out forwards;
+  }
 </style>
 
-<!-- Confirmation Modal -->
+<!-- Confirmation Modal (Cart) -->
 <dialog id="cart-confirm-dialog" class="bg-transparent p-0 backdrop:bg-black/80 backdrop:backdrop-blur-sm open:animate-fade-in z-50 rounded-xl shadow-2xl">
   <div class="bg-[#0a0a0a] border border-[var(--wild-orange)]/30 text-white p-6 rounded-xl max-w-sm w-full mx-auto relative overflow-hidden shadow-[0_0_50px_rgba(255,85,0,0.15)]">
      <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[var(--wild-orange)] to-[var(--wild-crimson)]"></div>
-     <div class="absolute -top-10 -right-10 w-32 h-32 bg-[var(--wild-orange)]/10 blur-3xl rounded-full"></div>
-     
      <div class="text-center mb-6 relative z-10">
-        <div class="w-16 h-16 bg-gradient-to-br from-[var(--wild-orange)]/20 to-[var(--wild-crimson)]/20 rounded-full flex items-center justify-center mx-auto mb-4 text-[var(--wild-orange)] border border-[var(--wild-orange)]/20">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-        </div>
         <h3 class="text-xl font-black uppercase tracking-tight">¡Agregado al Carrito!</h3>
         <p class="text-[var(--wild-light-orange)] text-sm mt-2 font-medium" id="modal-product-name">Producto</p>
      </div>
-
      <div class="flex gap-3 relative z-10">
-        <button id="modal-keep-shopping" class="flex-1 py-3 border border-white/10 rounded-lg font-bold text-[10px] uppercase tracking-widest hover:bg-white/5 hover:text-white hover:border-white/30 transition-all">
+        <button id="modal-keep-shopping" class="flex-1 py-3 border border-white/10 rounded-lg font-bold text-[10px] uppercase tracking-widest hover:bg-white/5 hover:text-white transition-all">
             Seguir Comprando
         </button>
-        <button id="modal-go-cart" class="flex-1 py-3 bg-gradient-to-r from-[var(--wild-orange)] to-[var(--wild-crimson)] text-white rounded-lg font-bold text-[10px] uppercase tracking-widest hover:brightness-110 transition-all shadow-lg shadow-[var(--wild-orange)]/20">
+        <button id="modal-go-cart" class="flex-1 py-3 bg-gradient-to-r from-[var(--wild-orange)] to-[var(--wild-crimson)] text-white rounded-lg font-bold text-[10px] uppercase tracking-widest hover:brightness-110 transition-all">
             Ir al Carrito
         </button>
      </div>
   </div>
 </dialog>
+
+<!-- Wishlist Notification Toast -->
+<div id="wishlist-toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-[#1a1a1a] border border-[var(--wild-crimson)] text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 translate-y-24 opacity-0 transition-all duration-300 z-50">
+    <div class="bg-[var(--wild-crimson)]/20 p-1.5 rounded-full text-[var(--wild-crimson)]">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+    </div>
+    <span class="text-xs font-bold uppercase tracking-wider" id="wishlist-toast-message">Agregado a Wishlist</span>
+</div>
 
 <script>
   import { cartStore } from '../lib/cart.js';
@@ -506,79 +520,78 @@ const products = [
   const modalProductName = document.getElementById('modal-product-name');
   const modalKeepShopping = document.getElementById('modal-keep-shopping');
   const modalGoCart = document.getElementById('modal-go-cart');
+  const wishlistToast = document.getElementById('wishlist-toast');
+  const wishlistToastMsg = document.getElementById('wishlist-toast-message');
 
   // Modal Handlers
-  if (modalKeepShopping) {
-      modalKeepShopping.addEventListener('click', () => dialog.close());
-  }
-  if (modalGoCart) {
-      modalGoCart.addEventListener('click', () => {
-          dialog.close();
-          // Navegar al carrito (open drawer or page)
-          console.log("Navegar al carrito");
-          window.location.href = '/checkout'; // O abrir drawer si existe
-      });
-  }
-
-  // Click outside to close
+  if (modalKeepShopping) modalKeepShopping.addEventListener('click', () => dialog.close());
+  if (modalGoCart) modalGoCart.addEventListener('click', () => {
+      dialog.close();
+      window.location.href = '/checkout';
+  });
   dialog.addEventListener('click', (e) => {
     const rect = dialog.getBoundingClientRect();
-    if (e.clientX < rect.left || e.clientX > rect.right || 
-        e.clientY < rect.top || e.clientY > rect.bottom) {
+    if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) {
       dialog.close();
     }
   });
 
-  const initShop = async () => {
-    // Wait for cart store to be ready
-    if (!cartStore.initialized) {
-        await cartStore.init();
-    }
+  // Wishlist Animation & Toast
+  const showWishlistToast = (added: boolean) => {
+      if (!wishlistToast || !wishlistToastMsg) return;
+      
+      wishlistToastMsg.textContent = added ? 'Agregado a tu lista' : 'Eliminado de tu lista';
+      wishlistToast.classList.remove('translate-y-24', 'opacity-0');
+      
+      setTimeout(() => {
+          wishlistToast.classList.add('translate-y-24', 'opacity-0');
+      }, 2500);
+  };
 
-    // Helper to update wishlist icon state
+  const createFloatingHeart = (x: number, y: number) => {
+      const heart = document.createElement('div');
+      heart.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;
+      heart.className = 'float-heart';
+      heart.style.left = `${x}px`;
+      heart.style.top = `${y}px`;
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 1000);
+  };
+
+  const initShop = async () => {
+    if (!cartStore.initialized) await cartStore.init();
+
     const updateWishlistIcon = (btn: Element, isActive: boolean) => {
         const icon = btn.querySelector('svg');
         if (icon) {
             if (isActive) {
                 icon.style.fill = 'currentColor';
-                icon.style.color = 'var(--wild-crimson)';
-                btn.classList.add('border-[var(--wild-crimson)]', 'text-[var(--wild-crimson)]', 'bg-[var(--wild-crimson)]/10');
-                btn.classList.remove('border-white/10', 'text-gray-400', 'bg-[#1a1a1a]');
-                
-                // Add pop effect
-                btn.classList.add('scale-110');
-                setTimeout(() => btn.classList.remove('scale-110'), 200);
+                icon.style.color = '#DC143C'; // wild-crimson
+                btn.classList.add('bg-white', 'text-[#DC143C]', 'border-[#DC143C]');
+                btn.classList.remove('bg-black/50', 'text-white', 'border-white/10');
             } else {
                 icon.style.fill = 'none';
                 icon.style.color = 'currentColor';
-                btn.classList.remove('border-[var(--wild-crimson)]', 'text-[var(--wild-crimson)]', 'bg-[var(--wild-crimson)]/10', 'scale-110');
-                btn.classList.add('border-white/10', 'text-gray-400', 'bg-[#1a1a1a]');
+                btn.classList.remove('bg-white', 'text-[#DC143C]', 'border-[#DC143C]');
+                btn.classList.add('bg-black/50', 'text-white', 'border-white/10');
             }
         }
     };
 
-    // Helper to check Cart State for buttons
     const updateCartButtonState = (btn: Element, isInCart: boolean) => {
-        // Skip styling updates for disabled (out of stock) buttons unless they are in cart
-        if (btn.hasAttribute('disabled') && !isInCart) return;
-
-        const textSpan = btn.querySelector('.btn-text');
+        if (btn.hasAttribute('disabled')) return;
+        const icon = btn.querySelector('svg');
         if (isInCart) {
-            if(textSpan) textSpan.innerHTML = `<span>EN CARRITO</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
-            
-            btn.classList.add('border', 'border-[var(--wild-orange)]', 'bg-black', 'text-[var(--wild-orange)]');
-            btn.classList.remove('bg-white', 'text-black', 'bg-[#1a1a1a]');
+             btn.classList.add('bg-[var(--wild-orange)]', 'text-white');
+             btn.classList.remove('bg-white', 'text-black');
+             if(icon) icon.innerHTML = '<polyline points="20 6 9 17 4 12"></polyline>'; // checkmark
         } else {
-            // Reset to default state based on stock
-            if (btn.hasAttribute('disabled')) return; 
-            
-            if(textSpan) textSpan.innerHTML = `<span>AGREGAR</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
-            btn.classList.remove('border', 'border-[var(--wild-orange)]', 'bg-black', 'text-[var(--wild-orange)]');
-            btn.classList.add('bg-white', 'text-black');
+             btn.classList.remove('bg-[var(--wild-orange)]', 'text-white');
+             btn.classList.add('bg-white', 'text-black');
+             if(icon) icon.innerHTML = '<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path>'; // bag
         }
     };
 
-    // Initialize Button States
     const syncButtons = () => {
         document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
             const productData = (btn as HTMLElement).dataset.product;
@@ -603,88 +616,66 @@ const products = [
         });
     };
 
-    syncButtons();
-
-    // Listen for global updates to keep buttons in sync
-    window.addEventListener('cart:updated', () => syncButtons());
-    window.addEventListener('wishlist:updated', () => syncButtons());
-
-    // --- Event Listeners ---
-
-    // Add to Cart Buttons
+    // Listeners
     document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
-      const newBtn = btn.cloneNode(true);
-      btn.parentNode?.replaceChild(newBtn, btn);
-      
-      newBtn.addEventListener('click', async (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const targetBtn = e.currentTarget as HTMLElement;
-        const productData = targetBtn.dataset.product;
-        
-        if (productData) {
-          try {
+        btn.addEventListener('click', async (e) => {
+            const button = e.currentTarget as HTMLButtonElement;
+            const productData = button.dataset.product;
+            if (!productData) return;
+
             const product = JSON.parse(productData);
+            const spinner = button.querySelector('.btn-spinner');
+            const text = button.querySelector('.btn-text');
             
-            // Loading State
-            const textSpan = targetBtn.querySelector('.btn-text');
-            const spinner = targetBtn.querySelector('.btn-spinner');
-            
-            if(textSpan) textSpan.classList.add('opacity-0');
-            if(spinner) spinner.classList.remove('hidden');
-            targetBtn.setAttribute('disabled', 'true');
+            if (spinner) spinner.classList.remove('hidden');
+            if (text) text.classList.add('opacity-0');
 
-            // Simulate network delay for UX
-            await new Promise(r => setTimeout(r, 600));
-            
-            await cartStore.addToCart(product);
+            // Simulate network delay
+            await new Promise(resolve => setTimeout(resolve, 600));
 
-            // Restore State
-            if(textSpan) textSpan.classList.remove('opacity-0');
-            if(spinner) spinner.classList.add('hidden');
-            targetBtn.removeAttribute('disabled');
+            cartStore.addItem(product);
             
-            // Show Confirmation Modal
+            if (spinner) spinner.classList.add('hidden');
+            if (text) text.classList.remove('opacity-0');
+            
+            syncButtons();
+
+            // Show confirmation
             if (modalProductName) modalProductName.textContent = product.name;
             dialog.showModal();
-            
-          } catch (err) {
-            console.error('Error adding to cart:', err);
-            // Restore state on error
-            const textSpan = targetBtn.querySelector('.btn-text');
-            const spinner = targetBtn.querySelector('.btn-spinner');
-            if(textSpan) textSpan.classList.remove('opacity-0');
-            if(spinner) spinner.classList.add('hidden');
-            targetBtn.removeAttribute('disabled');
-          }
-        }
-      });
+        });
     });
 
-    // Toggle Wishlist Buttons
     document.querySelectorAll('.toggle-wishlist-btn').forEach(btn => {
-      const newBtn = btn.cloneNode(true);
-      btn.parentNode?.replaceChild(newBtn, btn);
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const button = e.currentTarget as HTMLElement;
+            const productData = button.dataset.product;
+            if (!productData) return;
 
-      newBtn.addEventListener('click', async (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const targetBtn = e.currentTarget as HTMLElement;
-        const productData = targetBtn.dataset.product;
-        
-        if (productData) {
-          try {
             const product = JSON.parse(productData);
-            await cartStore.toggleWishlist(product);
-           } catch (err) {
-             console.error('Error toggling wishlist:', err);
-           }
-         }
-       });
-     });
+            const wasInWishlist = cartStore.isInWishlist(product.id);
+            
+            if (wasInWishlist) {
+                cartStore.removeFromWishlist(product.id);
+                showWishlistToast(false);
+            } else {
+                cartStore.addToWishlist(product);
+                // Trigger Animation
+                const rect = button.getBoundingClientRect();
+                createFloatingHeart(rect.left + rect.width/2, rect.top);
+                button.classList.add('heart-burst');
+                setTimeout(() => button.classList.remove('heart-burst'), 400);
+                showWishlistToast(true);
+            }
+            syncButtons();
+        });
+    });
+
+    syncButtons();
   };
 
-  // Init on load and after swap
   initShop();
-  document.addEventListener('astro:after-swap', initShop);
+  // Re-run on View Transitions
+  document.addEventListener('astro:page-load', initShop);
 </script>

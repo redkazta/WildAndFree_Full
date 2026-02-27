@@ -301,7 +301,7 @@ const config = {
             filterBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            const filter = btn.getAttribute('data-filter');
+            const filter = btn.getAttribute('data-filter') || 'all';
 
             cards.forEach((card) => {
                 const style = card.getAttribute('data-style') || '';
