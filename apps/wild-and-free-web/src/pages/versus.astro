@@ -258,237 +258,143 @@ const config = {
 ---
 
 <Layout config={config}>
-  <div id="page-container" class="min-h-screen bg-[#0a0a0a] text-white font-sans overflow-x-hidden relative selection:bg-[var(--wild-orange)] selection:text-black pb-40">
+  <div id="page-container" class="min-h-screen bg-[#0a0a0a] text-white font-sans overflow-x-hidden relative selection:bg-[var(--wild-orange)] selection:text-black pb-48">
     
     <!-- ARCADE BACKGROUND -->
-    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-30 pointer-events-none z-0"></div>
-    <div class="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black pointer-events-none z-0"></div>
+    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 pointer-events-none z-0"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-black via-black/90 to-black pointer-events-none z-0"></div>
     
     <!-- TOP BAR -->
     <div class="relative z-50 bg-black/90 backdrop-blur-md border-b border-white/10 py-3">
         <div class="container mx-auto px-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div class="w-3 h-3 bg-[var(--primary)] animate-pulse rounded-full shadow-[0_0_10px_var(--primary)]"></div>
-                <span class="text-xs font-black uppercase tracking-[0.2em] text-white arcade-font">VERSUS MODE // CARD BATTLE</span>
+                <div class="w-2 h-2 bg-[var(--primary)] animate-pulse rounded-full shadow-[0_0_10px_var(--primary)]"></div>
+                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-white arcade-font">VERSUS MODE // SYSTEM V2.0</span>
             </div>
-            
-            <div class="text-xs font-mono text-gray-500 font-bold uppercase">SISTEMA DE COMBATE V1.0</div>
+            <div class="text-[10px] font-mono text-gray-500 font-bold uppercase hidden md:block">BATTLE ARENA ONLINE</div>
         </div>
     </div>
 
     <!-- MAIN ARENA CONTAINER -->
-    <div class="relative z-10 container mx-auto px-4 py-8 h-auto flex flex-col gap-6">
+    <div class="relative z-10 container mx-auto px-4 py-8 flex flex-col items-center">
       
-      <!-- HEADER -->
-      <div class="text-center animate-fade-in-down mb-4">
-          <h1 class="text-4xl md:text-7xl font-black italic uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-[var(--primary)] to-red-600 drop-shadow-[0_5px_5px_rgba(255,0,0,0.5)] arcade-title">
-              VERSUS: CARD BATTLE
+      <!-- HEADER & MODE SELECTOR -->
+      <div class="text-center animate-fade-in-down mb-10 w-full max-w-4xl flex flex-col items-center gap-6">
+          <h1 class="text-5xl md:text-8xl font-black italic uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-[var(--primary)] to-white drop-shadow-[0_0_30px_rgba(255,255,255,0.2)] arcade-title">
+              VERSUS
           </h1>
-          <p class="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-[0.5em] mt-2 animate-pulse">
-              CONSTRUYE TU MAZO Y DOMINA EL ASFALTO
-          </p>
-      </div>
-
-      <!-- GAME LAYOUT: GRID + STAGE -->
-      <div class="flex flex-col gap-8">
           
-          <!-- BATTLE STAGE (VERTICAL LAYOUT) -->
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-              
-              <!-- LEFT: ARTIST PREVIEW PANEL -->
-              <div class="lg:col-span-4 flex flex-col gap-4">
-                  <div id="artist-preview-panel" class="bg-black/60 border-2 border-white/5 rounded-3xl p-6 backdrop-blur-md min-h-[500px] flex flex-col items-center justify-center text-center relative overflow-hidden group">
-                      <!-- Background Glow -->
-                      <div class="absolute inset-0 bg-[var(--primary)]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                      
-                      <div id="preview-empty-state" class="flex flex-col items-center gap-6">
-                          <div class="w-24 h-24 rounded-full border-2 border-dashed border-white/10 flex items-center justify-center animate-pulse">
-                              <svg class="w-10 h-10 text-white/10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                          </div>
-                          <div>
-                              <h4 class="text-xl font-black text-white/30 uppercase italic tracking-tighter">Selecciona un Artista</h4>
-                              <p class="text-[10px] text-white/10 uppercase tracking-[0.3em] mt-2">Haz click en la crew para ver detalles</p>
-                          </div>
-                      </div>
-
-                      <div id="preview-content" class="hidden w-full h-full flex flex-col gap-6 animate-fade-in">
-                          <div class="w-full aspect-[3/4] rounded-2xl overflow-hidden border-4 border-white/10 relative shadow-2xl">
-                              <img id="preview-img" src="" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" />
-                              <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-                              <div class="absolute bottom-6 left-6 text-left">
-                                  <h4 id="preview-name" class="text-4xl font-black italic text-white uppercase tracking-tighter leading-none drop-shadow-2xl">---</h4>
-                                  <span id="preview-role" class="text-xs font-bold text-[var(--primary)] uppercase tracking-[0.3em]">---</span>
-                              </div>
-                          </div>
-
-                          <div class="space-y-4 text-left">
-                              <div>
-                                  <h5 class="text-[10px] font-black text-gray-500 uppercase tracking-[0.4em] mb-2 border-b border-white/5 pb-2">Habilidades Especiales</h5>
-                                  <div id="preview-tracks" class="flex flex-wrap gap-2">
-                                      <!-- Tracks will be injected here -->
-                                  </div>
-                              </div>
-                              
-                              <div class="grid grid-cols-3 gap-2">
-                                  <div class="bg-white/5 p-2 rounded-lg border border-white/5">
-                                      <span class="block text-[8px] font-black text-gray-500 uppercase">Power</span>
-                                      <span id="stat-power" class="text-lg font-black text-white italic">00</span>
-                                  </div>
-                                  <div class="bg-white/5 p-2 rounded-lg border border-white/5">
-                                      <span class="block text-[8px] font-black text-gray-500 uppercase">Speed</span>
-                                      <span id="stat-speed" class="text-lg font-black text-white italic">00</span>
-                                  </div>
-                                  <div class="bg-white/5 p-2 rounded-lg border border-white/5">
-                                      <span class="block text-[8px] font-black text-gray-500 uppercase">Tech</span>
-                                      <span id="stat-tech" class="text-lg font-black text-white italic">00</span>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-
-              <!-- CENTER: VERTICAL BATTLE SLOTS -->
-              <div class="lg:col-span-8 flex flex-col items-center justify-center py-10 bg-black/40 border border-white/5 rounded-3xl relative overflow-hidden">
-                  <!-- BACKGROUND DECANTER -->
-                  <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 pointer-events-none"></div>
-                  
-                  <div class="relative z-10 w-full flex flex-col gap-12 items-center px-8">
-                      <!-- VERTICAL STACK FOR TEAMS AND VS -->
-                      <div class="w-full flex flex-col items-center gap-12">
-                          
-                          <!-- TEAM ALPHA (Top) -->
-                          <div class="w-full flex flex-col items-center gap-4">
-                              <div class="text-2xl font-black text-white/20 uppercase tracking-tighter italic border-b-4 border-[var(--primary)] pb-2 px-8">TEAM ALPHA</div>
-                              <div id="team-alpha-slots" class="grid grid-cols-2 gap-6 w-full max-w-[400px] justify-center">
-                                  <!-- Slots will be injected here -->
-                              </div>
-                          </div>
-
-                          <!-- VS MIDDLE -->
-                          <div class="flex flex-col items-center gap-6 py-4">
-                              <div class="w-24 h-24 bg-[var(--primary)] text-black rounded-full flex items-center justify-center font-black text-4xl italic shadow-[0_0_50px_var(--primary)] border-4 border-black relative z-20 animate-pulse">
-                                  VS
-                              </div>
-                              <button id="fight-btn" class="group relative px-10 py-4 bg-white text-black font-black uppercase tracking-[0.2em] italic rounded-full overflow-hidden transition-all hover:scale-110 active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.3)]">
-                                  <span class="relative z-10 text-lg">ENFRENTARLOS</span>
-                                  <div class="absolute inset-0 bg-gradient-to-r from-red-600 via-[var(--primary)] to-orange-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                  <div class="absolute inset-0 bg-black translate-y-full group-hover:translate-y-0 transition-transform duration-300 opacity-10"></div>
-                              </button>
-                          </div>
-
-                          <!-- TEAM OMEGA (Bottom) -->
-                          <div class="w-full flex flex-col items-center gap-4">
-                              <div class="text-2xl font-black text-white/20 uppercase tracking-tighter italic border-t-4 border-red-600 pt-2 px-8">TEAM OMEGA</div>
-                              <div id="team-omega-slots" class="grid grid-cols-2 gap-6 w-full max-w-[400px] justify-center">
-                                  <!-- Slots will be injected here -->
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-
-                  <!-- MODE SELECTOR (Moved Down & Bigger) -->
-                  <div class="mt-16 w-full max-w-2xl px-8">
-                      <div class="text-center mb-6">
-                          <span class="text-xs font-black text-[var(--primary)] uppercase tracking-[0.3em] animate-pulse">1.- Selecciona tu modo de juego</span>
-                      </div>
-                      <div class="grid grid-cols-3 gap-4">
-                          <button class="mode-btn group relative py-6 rounded-2xl overflow-hidden border-2 border-white/10 transition-all hover:border-[var(--primary)]/50 active" data-mode="3v3">
-                              <div class="absolute inset-0 bg-gradient-to-br from-[var(--primary)] to-yellow-600 opacity-0 group-[.active]:opacity-100 transition-opacity"></div>
-                              <div class="relative z-10 flex flex-col items-center">
-                                  <span class="text-2xl font-black italic text-white group-[.active]:text-black transition-colors">3 VS 3</span>
-                                  <span class="text-[8px] font-bold text-gray-500 group-[.active]:text-black/60 uppercase tracking-widest mt-1">TRIO BATTLE</span>
-                              </div>
-                          </button>
-                          <button class="mode-btn group relative py-6 rounded-2xl overflow-hidden border-2 border-white/10 transition-all hover:border-[var(--primary)]/50" data-mode="2v2">
-                              <div class="absolute inset-0 bg-gradient-to-br from-[var(--primary)] to-yellow-600 opacity-0 group-[.active]:opacity-100 transition-opacity"></div>
-                              <div class="relative z-10 flex flex-col items-center">
-                                  <span class="text-2xl font-black italic text-white group-[.active]:text-black transition-colors">2 VS 2</span>
-                                  <span class="text-[8px] font-bold text-gray-500 group-[.active]:text-black/60 uppercase tracking-widest mt-1">DUO BATTLE</span>
-                              </div>
-                          </button>
-                          <button class="mode-btn group relative py-6 rounded-2xl overflow-hidden border-2 border-white/10 transition-all hover:border-[var(--primary)]/50" data-mode="1v1">
-                              <div class="absolute inset-0 bg-gradient-to-br from-[var(--primary)] to-yellow-600 opacity-0 group-[.active]:opacity-100 transition-opacity"></div>
-                              <div class="relative z-10 flex flex-col items-center">
-                                  <span class="text-2xl font-black italic text-white group-[.active]:text-black transition-colors">1 VS 1</span>
-                                  <span class="text-[8px] font-bold text-gray-500 group-[.active]:text-black/60 uppercase tracking-widest mt-1">SOLO DUEL</span>
-                              </div>
-                          </button>
-                      </div>
-              </div>
-          </div>
-
-      <!-- ARTIST PICKER DOCK (Floating Bottom) -->
-      <div id="artist-dock" class="fixed bottom-0 left-0 right-0 z-[100] bg-black/90 backdrop-blur-xl border-t border-white/10 p-4 transform transition-transform duration-500 shadow-[0_-20px_50px_rgba(0,0,0,0.5)]">
-          <div class="container mx-auto">
-              <div class="flex items-center justify-between mb-3 px-2">
-                  <div class="flex items-center gap-3">
-                      <div class="w-1.5 h-1.5 bg-[var(--primary)] rounded-full animate-ping"></div>
-                      <h3 class="text-[10px] font-black text-white uppercase tracking-[0.3em] arcade-font">Crew Disponible</h3>
-                  </div>
-                  <div class="flex items-center gap-4">
-                      <span class="text-[8px] font-bold text-white/30 uppercase tracking-[0.2em] hidden md:block">Arrastra artistas a los slots de combate</span>
-                      <button id="toggle-dock" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-all border border-white/10">
-                          <svg id="dock-icon" class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                      </button>
-                  </div>
-              </div>
-              
-              <div id="dock-content" class="flex gap-4 overflow-x-auto pb-4 pt-2 px-2 custom-scrollbar mask-fade-edges">
-                   {artists.map((artist: any) => (
-                       <div 
-                         class="artist-token flex-shrink-0 w-16 h-16 md:w-20 md:h-20 relative group cursor-grab active:cursor-grabbing border-2 border-white/5 hover:border-[var(--primary)] hover:scale-110 transition-all duration-300 overflow-hidden bg-zinc-900 rounded-xl shadow-2xl"
-                         draggable="true"
-                         data-id={artist.id}
-                         data-name={artist.nombre}
-                       >
-                           <img src={artist.imagenes.profile} class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" loading="lazy" />
-                           <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center p-2">
-                               <span class="text-[7px] font-black text-white uppercase text-center leading-none truncate w-full tracking-tighter">{artist.nombre}</span>
-                           </div>
-                           <div class="absolute top-1 right-1 w-2 h-2 bg-[var(--primary)] rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-[0_0_10px_var(--primary)]"></div>
-                       </div>
-                   ))}
-               </div>
+          <!-- MODE SELECTOR (Compact) -->
+          <div class="flex gap-2 p-1 bg-white/5 rounded-full border border-white/10 backdrop-blur-sm">
+              <button class="mode-btn px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all hover:bg-white/10 text-gray-500 active" data-mode="1v1">1 VS 1</button>
+              <button class="mode-btn px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all hover:bg-white/10 text-gray-500" data-mode="2v2">2 VS 2</button>
+              <button class="mode-btn px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all hover:bg-white/10 text-gray-500" data-mode="3v3">3 VS 3</button>
           </div>
       </div>
 
-      <!-- NEW SECTION: BATTLE LOGIC & BRACKETS -->
-      <div class="relative z-10 mt-12 mb-20 animate-fade-in-up">
-          <div class="flex items-center justify-between mb-8 border-b border-white/10 pb-4">
-              <div>
-                  <h2 class="text-3xl font-black uppercase italic tracking-tighter text-white">Próximos Enfrentamientos</h2>
-                  <p class="text-xs font-mono text-gray-500 uppercase tracking-widest mt-1">Generación aleatoria de brackets por IA</p>
+      <!-- BATTLE RING LAYOUT (SYMMETRICAL) -->
+      <div class="w-full max-w-6xl grid grid-cols-1 md:grid-cols-3 gap-8 items-center justify-center relative">
+          
+          <!-- LEFT: TEAM ALPHA -->
+          <div class="flex flex-col items-center gap-6 order-2 md:order-1">
+              <div class="text-2xl font-black text-white/10 uppercase tracking-tighter italic border-b-2 border-[var(--primary)] px-8 pb-1 transform -skew-x-12">TEAM ALPHA</div>
+              <div id="team-alpha-slots" class="flex flex-col gap-4">
+                  <!-- Slots injected via JS -->
               </div>
-              <button id="regenerate-brackets" class="px-6 py-2 bg-white/5 border border-white/20 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-[var(--primary)] hover:text-black hover:border-[var(--primary)] transition-all flex items-center gap-2 group">
-                  <svg class="w-3 h-3 group-hover:rotate-180 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                  RE-CALCULAR LLAVES
+          </div>
+
+          <!-- CENTER: VS & ACTION -->
+          <div class="flex flex-col items-center justify-center gap-8 order-1 md:order-2 py-10">
+              <!-- VS CIRCLE -->
+              <div class="relative group cursor-default">
+                  <div class="absolute inset-0 bg-[var(--primary)] rounded-full blur-[50px] opacity-20 group-hover:opacity-40 transition-opacity animate-pulse"></div>
+                  <div class="w-32 h-32 md:w-40 md:h-40 bg-black border-4 border-[var(--primary)] rounded-full flex items-center justify-center relative z-10 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+                      <span class="text-6xl md:text-7xl font-black italic text-white tracking-tighter transform -rotate-12 drop-shadow-[4px_4px_0px_var(--primary)]">VS</span>
+                  </div>
+              </div>
+
+              <!-- FIGHT BUTTON -->
+              <button id="fight-btn" class="group relative px-12 py-4 bg-white text-black font-black uppercase tracking-[0.2em] italic rounded-xl overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_50px_var(--primary)]">
+                  <span class="relative z-10 text-xl">FIGHT!</span>
+                  <div class="absolute inset-0 bg-gradient-to-r from-[var(--primary)] via-white to-[var(--primary)] opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              </button>
+
+              <!-- INFO DISPLAY (Placeholder for selected artist info) -->
+              <div id="center-info" class="text-center opacity-50 h-12 flex flex-col justify-end">
+                  <p class="text-[8px] font-mono uppercase tracking-widest text-gray-500">Selecciona un artista para ver stats</p>
+              </div>
+          </div>
+
+          <!-- RIGHT: TEAM OMEGA -->
+          <div class="flex flex-col items-center gap-6 order-3">
+              <div class="text-2xl font-black text-white/10 uppercase tracking-tighter italic border-b-2 border-red-600 px-8 pb-1 transform skew-x-12">TEAM OMEGA</div>
+              <div id="team-omega-slots" class="flex flex-col gap-4">
+                  <!-- Slots injected via JS -->
+              </div>
+          </div>
+
+      </div>
+
+      <!-- BRACKETS SECTION (Moved down) -->
+      <div class="mt-24 w-full max-w-5xl border-t border-white/5 pt-12">
+          <div class="flex items-center justify-between mb-8">
+              <h3 class="text-xl font-black uppercase tracking-widest text-white/40">Torneo Generado</h3>
+              <button id="regenerate-brackets" class="text-[10px] font-bold text-[var(--primary)] uppercase tracking-widest hover:text-white transition-colors flex items-center gap-2">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                  Recalcular
               </button>
           </div>
-
-          <!-- BRACKETS GRID -->
-          <div id="brackets-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <!-- Brackets will be injected here -->
+          <div id="brackets-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <!-- Brackets injected via JS -->
           </div>
       </div>
+
     </div>
+
+    <!-- ARTIST PICKER DOCK (Floating Bottom) -->
+    <div id="artist-dock" class="fixed bottom-0 left-0 right-0 z-[100] bg-black/90 backdrop-blur-xl border-t border-white/10 p-4 transform transition-transform duration-500 shadow-[0_-20px_50px_rgba(0,0,0,0.5)]">
+        <div class="container mx-auto">
+            <div class="flex items-center justify-between mb-3 px-2">
+                <div class="flex items-center gap-3">
+                    <div class="w-1.5 h-1.5 bg-[var(--primary)] rounded-full animate-ping"></div>
+                    <h3 class="text-[10px] font-black text-white uppercase tracking-[0.3em] arcade-font">Crew Disponible</h3>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span class="text-[8px] font-bold text-white/30 uppercase tracking-[0.2em] hidden md:block">Arrastra artistas a los slots de combate</span>
+                    <button id="toggle-dock" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-all border border-white/10">
+                        <svg id="dock-icon" class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                </div>
+            </div>
+            
+            <div id="dock-content" class="flex gap-4 overflow-x-auto pb-4 pt-2 px-2 custom-scrollbar mask-fade-edges justify-center md:justify-start">
+                 {artists.map((artist: any) => (
+                     <div 
+                       class="artist-token flex-shrink-0 w-20 h-20 md:w-24 md:h-24 relative group cursor-grab active:cursor-grabbing border-2 border-white/5 hover:border-[var(--primary)] hover:scale-110 transition-all duration-300 overflow-hidden bg-zinc-900 rounded-xl shadow-2xl"
+                       draggable="true"
+                       data-id={artist.id}
+                       data-name={artist.nombre}
+                       data-role={artist.estilo}
+                       data-stats={JSON.stringify(artist.stats)}
+                     >
+                         <img src={artist.imagenes.profile} class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" loading="lazy" />
+                         <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center p-2">
+                             <span class="text-[7px] font-black text-white uppercase text-center leading-none truncate w-full tracking-tighter">{artist.nombre}</span>
+                         </div>
+                         <div class="absolute top-1 right-1 w-2 h-2 bg-[var(--primary)] rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-[0_0_10px_var(--primary)]"></div>
+                     </div>
+                 ))}
+             </div>
+        </div>
+    </div>
+
   </div>
 </Layout>
 
 <!-- CLIENT SIDE LOGIC -->
 <script define:vars={{ artists }}>
     const arena = document.getElementById('page-container');
-    const previewPanel = document.getElementById('preview-content');
-    const emptyPreview = document.getElementById('preview-empty-state');
-    
-    const previewImg = document.getElementById('preview-img');
-    const previewName = document.getElementById('preview-name');
-    const previewRole = document.getElementById('preview-role');
-    const previewTracks = document.getElementById('preview-tracks');
-    
-    const statPower = document.getElementById('stat-power');
-    const statSpeed = document.getElementById('stat-speed');
-    const statTech = document.getElementById('stat-tech');
+    const centerInfo = document.getElementById('center-info');
 
     // DOCK TOGGLE LOGIC
     const dock = document.getElementById('artist-dock');
@@ -509,59 +415,25 @@ const config = {
         });
     }
 
+    // DRAG & INFO LOGIC
     const tokens = document.querySelectorAll('.artist-token');
 
-    function renderArtist(id) {
-        const artist = artists.find(a => a.id == id);
-        if (!artist) return;
-
-        // Update Preview Panel (Left)
-        if (previewPanel && emptyPreview) {
-            emptyPreview.classList.add('hidden');
-            previewPanel.classList.remove('hidden');
-
-            if (previewImg) {
-                previewImg.classList.add('opacity-0');
-                setTimeout(() => {
-                    previewImg.src = artist.imagenes.profile;
-                    previewImg.classList.remove('opacity-0');
-                }, 150);
-            }
-            if (previewName) previewName.textContent = artist.nombre;
-            if (previewRole) previewRole.textContent = artist.estilo;
-            
-            // Stats with mini-animation
-            if (statPower) animateStat(statPower, artist.stats?.power || 85);
-            if (statSpeed) animateStat(statSpeed, artist.stats?.speed || 80);
-            if (statTech) animateStat(statTech, artist.stats?.technique || 90);
-
-            // Tracks
-            if (previewTracks) {
-                previewTracks.innerHTML = (artist.tracks || []).map(track => `
-                    <span class="text-[7px] font-black bg-white/5 text-white/70 px-2 py-1 rounded uppercase tracking-widest border border-white/5 hover:border-[var(--primary)]/30 transition-all cursor-default">
-                        ${track}
-                    </span>
-                `).join('');
-            }
-        }
+    function showArtistInfo(name, role, stats) {
+        if (!centerInfo) return;
+        centerInfo.innerHTML = `
+            <div class="animate-fade-in-up">
+                <h4 class="text-lg font-black italic uppercase text-white tracking-tighter leading-none">${name}</h4>
+                <p class="text-[9px] font-bold text-[var(--primary)] uppercase tracking-[0.3em] mb-1">${role}</p>
+                <div class="flex gap-2 justify-center text-[8px] font-mono text-gray-500">
+                    <span>PWR:${stats.power}</span>
+                    <span>SPD:${stats.speed}</span>
+                    <span>TEC:${stats.technique}</span>
+                </div>
+            </div>
+        `;
+        centerInfo.classList.remove('opacity-50');
     }
 
-    function animateStat(el, value) {
-        let current = 0;
-        const duration = 500;
-        const step = value / (duration / 16);
-        const interval = setInterval(() => {
-            current += step;
-            if (current >= value) {
-                el.textContent = value;
-                clearInterval(interval);
-            } else {
-                el.textContent = Math.floor(current).toString().padStart(2, '0');
-            }
-        }, 16);
-    }
-
-    // DRAG EVENTS
     function initDragEvents() {
         const tokens = document.querySelectorAll('.artist-token');
         tokens.forEach(token => {
@@ -569,44 +441,37 @@ const config = {
                 const id = token.getAttribute('data-id');
                 e.dataTransfer.setData('text/plain', id);
                 e.dataTransfer.effectAllowed = 'copy';
-                arena.classList.add('border-[var(--primary)]', 'bg-[var(--primary)]/5');
                 
-                document.querySelectorAll('.team-slot').forEach(s => {
-                    if (!s.getAttribute('data-artist-id')) {
-                        s.classList.add('border-dashed', 'border-[var(--primary)]/30', 'animate-pulse');
-                    }
+                // Highlight empty slots
+                document.querySelectorAll('.team-slot:not(.filled)').forEach(s => {
+                    s.classList.add('border-[var(--primary)]/50', 'animate-pulse');
                 });
             });
 
             token.addEventListener('dragend', () => {
-                arena.classList.remove('border-[var(--primary)]', 'bg-[var(--primary)]/5');
                 document.querySelectorAll('.team-slot').forEach(s => {
-                    s.classList.remove('border-dashed', 'border-[var(--primary)]/30', 'animate-pulse');
+                    s.classList.remove('border-[var(--primary)]/50', 'animate-pulse');
                 });
             });
 
             token.addEventListener('click', () => {
-                const id = token.getAttribute('data-id');
-                renderArtist(id);
-                tokens.forEach(t => t.classList.remove('border-[var(--primary)]', 'scale-105', 'z-20', 'grayscale-0'));
-                token.classList.add('border-[var(--primary)]', 'scale-105', 'z-20', 'grayscale-0');
+                const name = token.getAttribute('data-name');
+                const role = token.getAttribute('data-role');
+                const stats = JSON.parse(token.getAttribute('data-stats'));
+                showArtistInfo(name, role, stats);
+                
+                // Visual feedback
+                tokens.forEach(t => t.classList.remove('ring-2', 'ring-[var(--primary)]'));
+                token.classList.add('ring-2', 'ring-[var(--primary)]');
             });
         });
     }
 
     initDragEvents();
 
-    // ARENA DROP ZONE
-    arena.addEventListener('dragover', (e) => e.preventDefault());
-    arena.addEventListener('drop', (e) => {
-        e.preventDefault();
-        const id = e.dataTransfer.getData('text/plain');
-        if (id) renderArtist(id);
-    });
-
     // TEAM SLOTS LOGIC
     function fillTeamSlot(slot, artistId) {
-        // Cross-team duplicate check
+        // Check duplicate across all slots
         const isAlreadySelected = Array.from(document.querySelectorAll('.team-slot')).some(s => s.getAttribute('data-artist-id') == artistId);
         if (isAlreadySelected) return;
 
@@ -614,58 +479,64 @@ const config = {
         if (!artist) return;
 
         const contentDiv = slot.querySelector('.slot-content');
-        slot.querySelector('span').classList.add('opacity-0');
+        slot.querySelector('.placeholder-text').classList.add('hidden');
         contentDiv.classList.remove('hidden');
         
-        // 3D Card Animation
+        // Use the same square size and style as the dock tokens
         contentDiv.innerHTML = `
-            <div class="card-container w-full h-full perspective-1000">
-                <div class="card-inner w-full h-full relative preserve-3d transition-transform duration-[5000ms]">
-                    <!-- FRONT: BLACK WITH WILD GVNG (2 ROWS) -->
-                    <div class="card-front absolute inset-0 w-full h-full backface-hidden flex flex-col items-center justify-center p-2 bg-black border-2 border-[var(--primary)]/50 rounded-lg shadow-[0_0_15px_rgba(201,131,0,0.3)]">
-                        <div class="absolute inset-0 bg-gradient-to-br from-zinc-900 to-black opacity-50"></div>
-                        <div class="relative z-10 flex flex-col items-center justify-center">
-                            <div class="text-[var(--primary)] font-black text-[10px] md:text-[12px] tracking-[0.2em] leading-tight uppercase italic arcade-font">WILD</div>
-                            <div class="text-white font-black text-[10px] md:text-[12px] tracking-[0.2em] leading-tight uppercase italic arcade-font">GVNG</div>
-                        </div>
-                        <div class="absolute top-1 right-1 w-1 h-1 bg-[var(--primary)] rounded-full animate-pulse"></div>
-                        <div class="absolute bottom-1 left-1 w-1 h-1 bg-[var(--primary)] rounded-full animate-pulse"></div>
-                    </div>
-                    <!-- BACK: ARTIST -->
-                    <div class="card-back absolute inset-0 w-full h-full backface-hidden rotate-y-180 bg-zinc-900 rounded-lg overflow-hidden">
-                        <img src="${artist.imagenes.profile}" class="w-full h-full object-cover grayscale" />
-                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
-                        <div class="absolute bottom-0 left-0 right-0 p-1.5 text-center bg-black/40 backdrop-blur-sm">
-                            <span class="text-[8px] font-black text-white uppercase tracking-tighter leading-none block truncate">${artist.nombre}</span>
-                        </div>
-                    </div>
+            <div class="w-full h-full relative group overflow-hidden bg-zinc-900 animate-fade-in">
+                <img src="${artist.imagenes.profile}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-1 text-center bg-black/60 backdrop-blur-sm">
+                    <span class="text-[7px] font-black text-white uppercase tracking-tighter leading-none block truncate">${artist.nombre}</span>
                 </div>
+                <button class="remove-btn absolute top-1 right-1 w-4 h-4 bg-red-600 rounded-full text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:scale-110">
+                    <svg class="w-2 h-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
             </div>
         `;
         
-        slot.classList.add('border-[var(--primary)]', 'filled');
+        slot.classList.add('filled', 'border-[var(--primary)]');
         slot.setAttribute('data-artist-id', artistId);
-        
-        // Auto-flip after a small delay to show the back
-        setTimeout(() => {
-            const inner = contentDiv.querySelector('.card-inner');
-            if (inner) inner.style.transform = 'rotateY(180deg)';
-        }, 600); // Give user a moment to see the "WILD GVNG" back
 
+        // Remove listener
+        const removeBtn = contentDiv.querySelector('.remove-btn');
+        if (removeBtn) {
+            removeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                clearSlot(slot);
+            });
+        }
+        
+        // Show info on click
+        slot.addEventListener('click', () => {
+             showArtistInfo(artist.nombre, artist.estilo, artist.stats);
+        });
+
+        checkTeamStatus();
+    }
+
+    function clearSlot(slot) {
+        slot.removeAttribute('data-artist-id');
+        slot.classList.remove('filled', 'border-[var(--primary)]');
+        slot.querySelector('.slot-content').innerHTML = '';
+        slot.querySelector('.slot-content').classList.add('hidden');
+        slot.querySelector('.placeholder-text').classList.remove('hidden');
         checkTeamStatus();
     }
 
     function checkTeamStatus() {
         const filledSlots = document.querySelectorAll('.team-slot[data-artist-id]').length;
         const totalNeeded = document.querySelectorAll('.team-slot').length;
-        const statusText = document.querySelector('.arcade-font');
+        const fightBtn = document.getElementById('fight-btn');
         
         if (filledSlots === totalNeeded && totalNeeded > 0) {
-            statusText.innerText = "MAZO COMPLETO // READY TO FIGHT";
-            statusText.classList.add('text-[var(--primary)]', 'animate-pulse');
+            fightBtn.classList.remove('grayscale', 'pointer-events-none', 'opacity-50');
+            fightBtn.classList.add('animate-pulse');
         } else {
-            statusText.innerText = "VERSUS MODE // CARD BATTLE";
-            statusText.classList.remove('text-[var(--primary)]', 'animate-pulse');
+            // fightBtn.classList.add('grayscale', 'pointer-events-none', 'opacity-50');
+            // fightBtn.classList.remove('animate-pulse');
+            // Optional: Disable fight button until full
         }
     }
 
@@ -673,15 +544,20 @@ const config = {
     const modeBtns = document.querySelectorAll('.mode-btn');
     modeBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            modeBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+            modeBtns.forEach(b => {
+                b.classList.remove('active', 'bg-[var(--primary)]', 'text-black');
+                b.classList.add('text-gray-500');
+            });
+            btn.classList.add('active', 'bg-[var(--primary)]', 'text-black');
+            btn.classList.remove('text-gray-500');
+            
             const mode = btn.getAttribute('data-mode');
             initSlots(mode);
             generateBrackets(mode);
         });
     });
 
-    function initSlots(mode = '3v3') {
+    function initSlots(mode = '1v1') {
         const containers = {
             alpha: document.getElementById('team-alpha-slots'),
             omega: document.getElementById('team-omega-slots')
@@ -703,33 +579,24 @@ const config = {
 
     function createSlotElement(index, team) {
         const slot = document.createElement('div');
-        slot.className = `team-slot group/slot relative w-20 h-28 md:w-24 md:h-32 border-2 border-white/5 rounded-xl flex items-center justify-center cursor-pointer transition-all hover:border-[var(--primary)]/30 overflow-hidden bg-white/5`;
+        // Square slots matching dock token size: w-20 h-20 md:w-24 md:h-24
+        slot.className = `team-slot group/slot relative w-20 h-20 md:w-24 md:h-24 bg-white/5 border-2 border-white/10 rounded-xl flex items-center justify-center cursor-pointer transition-all hover:border-[var(--primary)]/50 overflow-hidden`;
         slot.innerHTML = `
-            <span class="text-[8px] font-black text-white/10 uppercase tracking-widest z-10 transition-opacity">${team} ${index}</span>
-            <div class="slot-content absolute inset-0 hidden"></div>
+            <span class="placeholder-text text-[8px] font-black text-white/10 uppercase tracking-widest z-10 pointer-events-none select-none">${team} ${index}</span>
+            <div class="slot-content absolute inset-0 hidden w-full h-full"></div>
         `;
         return slot;
     }
 
     function setupSlotEvents(slot) {
         slot.addEventListener('dragover', (e) => e.preventDefault());
-        slot.addEventListener('dragenter', () => slot.classList.add('bg-[var(--primary)]/10', 'border-[var(--primary)]/30'));
-        slot.addEventListener('dragleave', () => slot.classList.remove('bg-[var(--primary)]/10', 'border-[var(--primary)]/30'));
+        slot.addEventListener('dragenter', () => slot.classList.add('bg-[var(--primary)]/10', 'border-[var(--primary)]/50'));
+        slot.addEventListener('dragleave', () => slot.classList.remove('bg-[var(--primary)]/10', 'border-[var(--primary)]/50'));
         slot.addEventListener('drop', (e) => {
             e.preventDefault();
-            slot.classList.remove('bg-[var(--primary)]/10', 'border-[var(--primary)]/30');
+            slot.classList.remove('bg-[var(--primary)]/10', 'border-[var(--primary)]/50');
             const id = e.dataTransfer.getData('text/plain');
             if (id) fillTeamSlot(slot, id);
-        });
-        slot.addEventListener('click', () => {
-            if (slot.getAttribute('data-artist-id')) {
-                slot.removeAttribute('data-artist-id');
-                slot.querySelector('.slot-content').innerHTML = '';
-                slot.querySelector('.slot-content').classList.add('hidden');
-                slot.querySelector('span').classList.remove('opacity-0');
-                slot.classList.remove('border-[var(--primary)]');
-                checkTeamStatus();
-            }
         });
     }
 
@@ -737,7 +604,7 @@ const config = {
     const bracketsContainer = document.getElementById('brackets-container');
     const regenerateBtn = document.getElementById('regenerate-brackets');
 
-    function generateBrackets(mode = '3v3') {
+    function generateBrackets(mode = '1v1') {
         if (!bracketsContainer) return;
         bracketsContainer.innerHTML = '';
         const shuffled = [...artists].sort(() => 0.5 - Math.random());
@@ -759,40 +626,33 @@ const config = {
                     <span class="text-[8px] font-black text-[var(--primary)] tracking-widest uppercase">MATCH #${index}</span>
                     <span class="text-[8px] font-bold text-gray-500 uppercase">${mode}</span>
                 </div>
-                <div class="p-4 flex flex-col gap-2 relative">
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-6 h-6 bg-black border border-white/10 rounded-full flex items-center justify-center text-[8px] font-black italic text-[var(--primary)]">VS</div>
-                    ${[teamA, teamB].map((team, i) => `
-                        <div class="team-container flex items-center gap-2 p-1.5 rounded-lg border border-transparent hover:border-white/10 transition-all cursor-pointer" onclick="setWinner(this)">
-                            <div class="flex -space-x-2">
-                                ${team.map(a => `<img src="${a.imagenes.profile}" class="w-6 h-6 rounded-full border border-black object-cover grayscale" />`).join('')}
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <p class="text-[9px] font-black text-white truncate uppercase">${team.map(a => a.nombre.split(' ')[0]).join(' & ')}</p>
-                                <div class="flex items-center gap-1">
-                                    <div class="win-indicator w-1 h-1 rounded-full bg-[var(--primary)] opacity-0"></div>
-                                    <span class="text-[7px] font-bold text-gray-500 uppercase tracking-widest">${i === 0 ? 'ALPHA' : 'OMEGA'}</span>
-                                </div>
-                            </div>
+                <div class="p-3 flex items-center justify-between gap-2 relative">
+                    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-black rounded-full border border-white/10 flex items-center justify-center text-[6px] text-white font-bold z-10">VS</div>
+                    
+                    <!-- Team A -->
+                    <div class="flex-1 flex flex-col items-center gap-1">
+                        <div class="flex -space-x-2">
+                             ${teamA.map(a => `<img src="${a.imagenes.profile}" class="w-6 h-6 rounded-full border border-black grayscale object-cover" />`).join('')}
                         </div>
-                    `).join('')}
+                        <span class="text-[7px] font-bold text-gray-400 uppercase truncate max-w-[60px]">${teamA[0].nombre}</span>
+                    </div>
+
+                    <!-- Team B -->
+                    <div class="flex-1 flex flex-col items-center gap-1">
+                        <div class="flex -space-x-2">
+                             ${teamB.map(a => `<img src="${a.imagenes.profile}" class="w-6 h-6 rounded-full border border-black grayscale object-cover" />`).join('')}
+                        </div>
+                        <span class="text-[7px] font-bold text-gray-400 uppercase truncate max-w-[60px]">${teamB[0].nombre}</span>
+                    </div>
                 </div>
             </div>
         `;
     }
 
-    window.setWinner = function(el) {
-        const match = el.closest('.p-4');
-        match.querySelectorAll('.team-container').forEach(t => {
-            t.classList.remove('bg-[var(--primary)]/5', 'border-[var(--primary)]/20');
-            t.querySelector('.win-indicator').classList.add('opacity-0');
-        });
-        el.classList.add('bg-[var(--primary)]/5', 'border-[var(--primary)]/20');
-        el.querySelector('.win-indicator').classList.remove('opacity-0');
-    }
-
     if (regenerateBtn) {
         regenerateBtn.addEventListener('click', () => {
-            generateBrackets(document.querySelector('.mode-btn.active')?.getAttribute('data-mode') || '3v3');
+            const activeMode = document.querySelector('.mode-btn.active')?.getAttribute('data-mode') || '1v1';
+            generateBrackets(activeMode);
         });
     }
 
@@ -807,90 +667,41 @@ const config = {
             return;
         }
 
-        fightBtn.innerText = "¡LUCHANDO!";
+        fightBtn.innerHTML = "<span class='animate-ping'>LUCHANDO...</span>";
         fightBtn.classList.add('bg-red-600', 'text-white', 'scale-110');
         
         // Shake screen effect
         const page = document.getElementById('page-container');
-        page.classList.add('animate-bounce');
+        page.classList.add('animate-shake');
         
         setTimeout(() => {
-            page.classList.remove('animate-bounce');
-            fightBtn.innerText = "ENFRENTARLOS";
+            page.classList.remove('animate-shake');
+            fightBtn.innerHTML = "<span class='relative z-10 text-xl'>FIGHT!</span>";
             fightBtn.classList.remove('bg-red-600', 'text-white', 'scale-110');
             
-            // Random winner logic
-            const winner = Math.random() > 0.5 ? 'ALPHA' : 'OMEGA';
-            alert(`¡EL GANADOR ES EL TEAM ${winner}!`);
-        }, 2000);
+            const winner = Math.random() > 0.5 ? 'TEAM ALPHA' : 'TEAM OMEGA';
+            alert(`¡EL GANADOR ES ${winner}!`);
+        }, 1500);
     });
 
     // Init
-    generateBrackets();
-    initSlots('3v3');
+    generateBrackets('1v1');
+    initSlots('1v1');
 
 </script>
 
 <style>
-  /* CARD FLIP ANIMATION */
-  .perspective-1000 {
-    perspective: 1000px;
-  }
-  
-  .preserve-3d {
-    transform-style: preserve-3d;
-  }
-  
-  .backface-hidden {
-    backface-visibility: hidden;
-  }
-  
-  .rotate-y-180 {
-    transform: rotateY(180deg);
-  }
-
-  .card-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transition: transform 5s cubic-bezier(0.4, 0, 0.2, 1);
-    transform-style: preserve-3d;
-  }
-
-  .card-flipped .card-inner {
-    transform: rotateY(180deg);
-  }
-
-  .card-front, .card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden; /* Safari */
-  }
-
-  .card-back {
-    transform: rotateY(180deg);
-  }
-  
-  /* ARCADE FONTS & ANIMATIONS */
-  .vertical-text {
-    writing-mode: vertical-rl;
-    text-orientation: uppercase;
-    transform: rotate(180deg);
-    white-space: nowrap;
-  }
-
-  .perspective-1000 {
-    perspective: 1000px;
+  /* UTILS */
+  .mask-fade-edges {
+    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
   }
 
   .custom-scrollbar::-webkit-scrollbar {
-    width: 4px;
+    height: 4px;
   }
   
   .custom-scrollbar::-webkit-scrollbar-track {
-    background: rgba(0,0,0,0.2);
+    background: rgba(255,255,255,0.05);
   }
   
   .custom-scrollbar::-webkit-scrollbar-thumb {
@@ -898,145 +709,17 @@ const config = {
     border-radius: 10px;
   }
 
-  @keyframes slide-in-left {
-    from { transform: translateX(-100%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
   }
 
-  @keyframes slide-in-right {
-    from { transform: translateX(100%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-  }
-
-  @keyframes fill-bar {
-    from { width: 0; }
-  }
-
-  .animate-slide-in-left { animation: slide-in-left 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
-  .animate-slide-in-right { animation: slide-in-right 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
-  .animate-fill-bar { animation: fill-bar 1s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
-
-  /* BATTLE SLOT STYLES */
-  .battle-slot {
-    width: 80px;
-    height: 110px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 2px dashed rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    display: flex; 
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: pointer;
-  }
-
-  .battle-slot:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: var(--primary);
-    transform: scale(1.05);
-  }
-
-  .battle-slot.active-drag {
-    border-color: var(--primary);
-    background: rgba(201, 131, 0, 0.1);
-    box-shadow: 0 0 20px rgba(201, 131, 0, 0.2);
-  }
-
-  .battle-slot.filled {
-    border-style: solid;
-    border-color: var(--primary);
-    background: black;
-    box-shadow: 0 0 15px rgba(201, 131, 0, 0.3);
-  }
-
-  /* CRT Scanlines helper */
-  .scanlines {
-    background: linear-gradient(
-      to bottom,
-      rgba(255,255,255,0),
-      rgba(255,255,255,0) 50%,
-      rgba(0,0,0,0.2) 50%,
-      rgba(0,0,0,0.2)
-    );
-    background-size: 100% 4px;
-  }
-
-  /* GLITCH TEXT EFFECT */
-  .glitch-text {
-    position: relative;
+  .animate-shake {
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
   }
   
-  .glitch-text::before,
-  .glitch-text::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-  
-  .glitch-text::before {
-    left: 2px;
-    text-shadow: -1px 0 #ff00c1;
-    clip: rect(44px, 450px, 56px, 0);
-    animation: glitch-anim 5s infinite linear alternate-reverse;
-  }
-  
-  .glitch-text::after {
-    left: -2px;
-    text-shadow: -1px 0 #00fff9;
-    clip: rect(44px, 450px, 56px, 0);
-    animation: glitch-anim2 5s infinite linear alternate-reverse;
-  }
-  
-  @keyframes glitch-anim {
-    0% { clip: rect(70px, 9999px, 71px, 0); }
-    5% { clip: rect(29px, 9999px, 83px, 0); }
-    10% { clip: rect(6px, 9999px, 67px, 0); }
-    15% { clip: rect(43px, 9999px, 16px, 0); }
-    20% { clip: rect(10px, 9999px, 92px, 0); }
-    25% { clip: rect(18px, 9999px, 3px, 0); }
-    30% { clip: rect(78px, 9999px, 7px, 0); }
-    35% { clip: rect(54px, 9999px, 47px, 0); }
-    40% { clip: rect(16px, 9999px, 35px, 0); }
-    45% { clip: rect(34px, 9999px, 14px, 0); }
-    50% { clip: rect(89px, 9999px, 55px, 0); }
-    55% { clip: rect(21px, 9999px, 76px, 0); }
-    60% { clip: rect(68px, 9999px, 1px, 0); }
-    65% { clip: rect(93px, 9999px, 87px, 0); }
-    70% { clip: rect(40px, 9999px, 20px, 0); }
-    75% { clip: rect(5px, 9999px, 59px, 0); }
-    80% { clip: rect(31px, 9999px, 95px, 0); }
-    85% { clip: rect(65px, 9999px, 27px, 0); }
-    90% { clip: rect(11px, 9999px, 51px, 0); }
-    95% { clip: rect(57px, 9999px, 80px, 0); }
-    100% { clip: rect(83px, 9999px, 4px, 0); }
-  }
-  
-  @keyframes glitch-anim2 {
-    0% { clip: rect(65px, 9999px, 100px, 0); }
-    5% { clip: rect(52px, 9999px, 74px, 0); }
-    10% { clip: rect(79px, 9999px, 85px, 0); }
-    15% { clip: rect(75px, 9999px, 5px, 0); }
-    20% { clip: rect(67px, 9999px, 61px, 0); }
-    25% { clip: rect(14px, 9999px, 79px, 0); }
-    30% { clip: rect(1px, 9999px, 66px, 0); }
-    35% { clip: rect(86px, 9999px, 30px, 0); }
-    40% { clip: rect(23px, 9999px, 98px, 0); }
-    45% { clip: rect(85px, 9999px, 72px, 0); }
-    50% { clip: rect(71px, 9999px, 75px, 0); }
-    55% { clip: rect(2px, 9999px, 48px, 0); }
-    60% { clip: rect(30px, 9999px, 16px, 0); }
-    65% { clip: rect(59px, 9999px, 50px, 0); }
-    70% { clip: rect(98px, 9999px, 4px, 0); }
-    75% { clip: rect(18px, 9999px, 55px, 0); }
-    80% { clip: rect(94px, 9999px, 11px, 0); }
-    85% { clip: rect(35px, 9999px, 77px, 0); }
-    90% { clip: rect(41px, 9999px, 36px, 0); }
-    95% { clip: rect(56px, 9999px, 81px, 0); }
-    100% { clip: rect(81px, 9999px, 25px, 0); }
+  .arcade-font {
+    font-family: 'Courier New', Courier, monospace; /* Fallback if no custom font */
   }
 </style>
