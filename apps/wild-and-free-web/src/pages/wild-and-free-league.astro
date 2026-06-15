@@ -1,4 +1,4 @@
----
+﻿---
 import Layout from '../layouts/Layout.astro';
 import tenantConfig from '../../../../packages/shared-types/tenant-config.json';
 
@@ -61,7 +61,7 @@ const initialParticipants = [
               class="participant-item group relative aspect-square rounded-xl overflow-hidden cursor-grab active:cursor-grabbing border-2 border-white hover:border-[var(--primary)] transition-all duration-300 shadow-lg hover:shadow-[0_0_15px_var(--primary)] hover:-translate-y-1"
               style={`animation-delay: ${i * 50}ms`}
             >
-              <img src={p.image} alt={p.name} class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-500" />
+              <img src={p.image} alt={p.name} width="200" height="200" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-500" />
               <div class="participant-used hidden absolute inset-0 bg-black/80 backdrop-blur-[2px] flex items-center justify-center">
                 <div class="w-10 h-10 border-2 border-white/50 flex items-center justify-center text-white font-black text-xl leading-none rounded-full">×</div>
               </div>
@@ -571,13 +571,13 @@ const initialParticipants = [
     const locked = Boolean(bracketState?.[slotId || '']?.locked);
     const draggable = Boolean(data?.id) && !locked;
     slot.innerHTML = `
-      <img src="${data.image}" class="slot-bg-img" />
+      <img src="${data.image}" width="200" height="200" class="slot-bg-img" />
       <div class="slot-overlay">
         <div class="slot-aka-box ${locked ? '' : 'hidden'}">
           <span class="slot-name">${data.name}</span>
         </div>
       </div>
-      <button class="slot-menu-btn" data-slot="${slotId}" aria-label="Opciones">⋮</button>
+      <button class="slot-menu-btn" data-slot="${slotId}" aria-label="Opciones">â‹®</button>
       <button class="remove-btn ${locked ? 'hidden' : ''}" data-slot="${slotId}">×</button>
     `;
     slot.classList.add('filled');

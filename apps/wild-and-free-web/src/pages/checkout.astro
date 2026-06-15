@@ -1,4 +1,4 @@
----
+﻿---
 import Layout from '../layouts/Layout.astro';
 import tenantConfig from '../../../../packages/shared-types/tenant-config.json';
 
@@ -88,7 +88,7 @@ const config = {
     const itemsHtml = cart.map(item => `
       <div class="flex gap-4 items-center bg-[#181818] p-4 rounded border border-white/5">
         <div class="w-20 h-20 bg-[#222] flex-shrink-0 overflow-hidden">
-          <img src="${item.image}" class="w-full h-full object-cover" />
+          <img src="${item.image}" width="80" height="80" class="w-full h-full object-cover" />
         </div>
         <div class="flex-1 min-w-0">
           <h4 class="font-bold text-white uppercase text-sm truncate">${item.name}</h4>

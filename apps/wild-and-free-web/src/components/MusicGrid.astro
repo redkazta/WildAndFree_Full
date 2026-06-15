@@ -1,4 +1,4 @@
----
+﻿---
 const releases = [
   {
     title: "Neon Nights",
@@ -27,27 +27,29 @@ const releases = [
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
   {releases.map((release) => (
     <article class="group space-y-6">
-      <div class="relative aspect-square overflow-hidden rounded-3xl bg-[#111] border border-white/5 group-hover:border-orange-500/30 transition-all duration-500">
+      <div class="relative aspect-square overflow-hidden rounded-wild-xl bg-[#111] border border-white/10 group-hover:border-wild-orange/30 transition-all duration-500">
         <img 
           src={release.cover} 
-          alt={release.title} 
+          alt={release.title}
+          width="600"
+          height="600"
           loading="lazy" 
           class="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700"
         />
         <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
-          <button class="w-16 h-16 rounded-full bg-orange-500 text-black flex items-center justify-center transform scale-90 group-hover:scale-100 transition-transform duration-500 shadow-2xl shadow-orange-500/40">
+          <button class="w-16 h-16 rounded-full bg-wild-orange text-black flex items-center justify-center transform scale-90 group-hover:scale-100 transition-transform duration-500 shadow-2xl shadow-wild-orange/40">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="translate-x-0.5"><path d="M8 5v14l11-7z"/></svg>
           </button>
         </div>
       </div>
       <div class="space-y-2 text-center lg:text-left px-2">
         <div class="flex items-center justify-center lg:justify-start gap-3">
-          <span class="px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-widest bg-white/10 border border-white/20 text-white group-hover:text-orange-500 group-hover:border-orange-500/20 transition-colors">
+          <span class="px-2 py-0.5 rounded text-label-sm font-black uppercase tracking-widest bg-white/10 border border-white/10 text-white group-hover:text-wild-orange group-hover:border-wild-orange/20 transition-colors">
             {release.type}
           </span>
         </div>
-        <h3 class="text-xl font-black uppercase tracking-tight text-white group-hover:text-orange-500 transition-colors">{release.title}</h3>
-        <a href={`/artista/${release.artistId}`} class="inline-block text-sm text-white font-black uppercase tracking-widest hover:text-orange-500 transition-colors">{release.artist}</a>
+        <h3 class="text-xl font-black uppercase tracking-tight text-white group-hover:text-wild-orange transition-colors">{release.title}</h3>
+        <a href={`/artista/${release.artistId}`} class="inline-block text-sm text-white font-black uppercase tracking-widest hover:text-wild-orange transition-colors">{release.artist}</a>
       </div>
     </article>
   ))}

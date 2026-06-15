@@ -1,4 +1,4 @@
----
+﻿---
 import Layout from '../layouts/Layout.astro';
 import { supabase } from '../lib/supabase.js';
 
@@ -89,7 +89,7 @@ const assignedTagIds = userTags?.map(ut => ut.tag_id) || [];
                     disabled={isAssigned}
                   >
                     {tag.name}
-                    {isAssigned && <span class="ml-1">✓</span>}
+                    {isAssigned && <span class="ml-1">âœ“</span>}
                   </button>
                 );
               })}
@@ -98,7 +98,7 @@ const assignedTagIds = userTags?.map(ut => ut.tag_id) || [];
         </div>
 
         <div class="mt-8 text-center">
-          <a href="/perfil" class="inline-block bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-bold transition-colors">
+          <a href="/perfil" class="inline-block bg-wild-orange hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-bold transition-colors">
             VOLVER AL PERFIL
           </a>
         </div>

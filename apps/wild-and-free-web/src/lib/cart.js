@@ -21,7 +21,7 @@ class CartStore {
     if (this.initialized) return;
     
     // Escuchar cambios de auth
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+    const { data: { subscription: _subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       const prevUser = this.user;
       this.user = session?.user || null;
 

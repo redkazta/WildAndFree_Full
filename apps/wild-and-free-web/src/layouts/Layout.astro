@@ -1,4 +1,4 @@
----
+﻿---
 import SidebarLeft from '../components/SidebarLeft.astro';
 // import Player from '../components/Player.astro';
 import RadioFloating from '../components/RadioFloating.astro';
@@ -47,6 +47,7 @@ const isActive = (href: string) => {
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{config.name}</title>
+		<slot name="head" />
 		<ClientRouter />
 		
 		<style is:global>
@@ -267,18 +268,18 @@ const isActive = (href: string) => {
 			}
 		</style>
 	</head>
-	<body class="bg-black text-white selection:bg-orange-500/50 selection:text-white overflow-x-hidden" style={`--primary: ${config.primary_color}; --secondary: ${config.secondary_color};`}>
+	<body class="bg-black text-white selection:bg-wild-orange/50 selection:text-white overflow-x-hidden" style={`--primary: ${config.primary_color}; --secondary: ${config.secondary_color}; --wild-orange: ${config.primary_color}; --wild-red: ${config.secondary_color}; --tenant-primary: ${config.primary_color}; --tenant-secondary: ${config.secondary_color}; --tenant-glow: ${config.primary_color}33;`}>
 		<header class="fixed top-0 left-0 right-0 z-[1000] bg-black border-b-2 border-white shadow-2xl transition-all duration-500">
 			<div class="w-full mx-auto px-4 md:px-8 h-20 flex items-center justify-between gap-2">
 				<div class="flex items-center gap-2 md:gap-4 flex-shrink-0">
-					<button id="sidebar-trigger" class="p-2 text-white hover:text-orange-500 transition-all transform active:scale-90" aria-label="Abrir menú">
+					<button id="sidebar-trigger" class="p-2 text-white hover:text-wild-orange transition-all transform active:scale-90" aria-label="Abrir menú">
 						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
 					</button>
 
 					<a href="/" class="flex flex-col items-start group min-w-max">
 						<div class="flex items-baseline gap-0.5">
 							<span class="allow-color text-xl md:text-2xl font-black tracking-tighter text-white italic leading-none group-hover:scale-105 transition-transform origin-left">WILD</span>
-							<span class="allow-color text-xl md:text-2xl font-black tracking-tighter text-orange-500 italic leading-none group-hover:scale-105 transition-transform origin-left">GVNG</span>
+							<span class="allow-color text-xl md:text-2xl font-black tracking-tighter text-wild-orange italic leading-none group-hover:scale-105 transition-transform origin-left">GVNG</span>
 						</div>
 					</a>
 				</div>
@@ -287,7 +288,7 @@ const isActive = (href: string) => {
 					{navItems.map(item => (
 						<a 
 							href={item.href} 
-							class={`px-2 xl:px-3 py-2 text-[9px] xl:text-[10px] font-black uppercase tracking-[0.15em] rounded-full transition-all duration-300 whitespace-nowrap ${isActive(item.href) ? 'text-orange-500 bg-white/10' : 'text-white hover:text-orange-500 hover:bg-white/10'}`}
+							class={`px-2 xl:px-3 py-2 text-[9px] xl:text-[10px] font-black uppercase tracking-[0.15em] rounded-full transition-all duration-300 whitespace-nowrap ${isActive(item.href) ? 'text-wild-orange bg-white/10' : 'text-white hover:text-wild-orange hover:bg-white/10'}`}
 						>
 							<span class="flex items-center gap-1.5">
 								<svg class="w-3.5 h-3.5 xl:w-4 xl:h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -303,7 +304,7 @@ const isActive = (href: string) => {
 					<!-- Header Action Icons -->
 					<div class="hidden sm:flex items-center gap-0.5 xl:gap-1 border-r-2 border-white pr-2 xl:pr-4">
 						<div class="relative group/pop">
-							<button class="popover-trigger p-2.5 text-white hover:text-orange-500 hover:bg-white/10 rounded-lg transition-all" data-target="location-popover">
+							<button class="popover-trigger p-2.5 text-white hover:text-wild-orange hover:bg-white/10 rounded-lg transition-all" data-target="location-popover">
 								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
 							</button>
 							<div id="location-popover" class="popover">
@@ -334,9 +335,9 @@ const isActive = (href: string) => {
 						</div>
 
 						<div class="relative group/pop">
-							<button class="popover-trigger p-2.5 text-white hover:text-orange-500 hover:bg-white/10 rounded-lg transition-all relative" data-target="wishlist-popover">
+							<button class="popover-trigger p-2.5 text-white hover:text-wild-orange hover:bg-white/10 rounded-lg transition-all relative" data-target="wishlist-popover">
 								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-								<span class="hidden absolute top-1.5 right-1.5 w-4 h-4 bg-orange-500 text-black text-[10px] font-black rounded-full flex items-center justify-center shadow-lg shadow-orange-500/40">0</span>
+								<span class="hidden absolute top-1.5 right-1.5 w-4 h-4 bg-wild-orange text-black text-[10px] font-black rounded-full flex items-center justify-center shadow-lg shadow-wild-orange/40">0</span>
 							</button>
 									<div id="wishlist-popover" class="popover">
 										<div class="popover-header">
@@ -345,7 +346,7 @@ const isActive = (href: string) => {
 										<div class="popover-content">
 											<div class="unauth-popover-msg hidden space-y-4 text-center py-4">
 												<p class="text-[10px] text-white uppercase font-black">Inicia sesión para ver tus favoritos</p>
-												<a href="/login" class="block w-full py-3 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-orange-500 transition-all">Entrar</a>
+												<a href="/login" class="block w-full py-3 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-wild-orange transition-all">Entrar</a>
 											</div>
 											<div class="auth-popover-content hidden space-y-4">
 												<!-- Dynamic Content -->
@@ -355,9 +356,9 @@ const isActive = (href: string) => {
 						</div>
 
 						<div class="relative group/pop">
-							<button class="popover-trigger p-2.5 text-white hover:text-orange-500 hover:bg-white/10 rounded-lg transition-all relative" data-target="cart-popover">
+							<button class="popover-trigger p-2.5 text-white hover:text-wild-orange hover:bg-white/10 rounded-lg transition-all relative" data-target="cart-popover">
 								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-								<span class="hidden absolute top-1.5 right-1.5 w-4 h-4 bg-orange-500 text-black text-[10px] font-black rounded-full flex items-center justify-center shadow-lg shadow-orange-500/40">0</span>
+								<span class="hidden absolute top-1.5 right-1.5 w-4 h-4 bg-wild-orange text-black text-[10px] font-black rounded-full flex items-center justify-center shadow-lg shadow-wild-orange/40">0</span>
 							</button>
 							<div id="cart-popover" class="popover">
 								<div class="popover-header">
@@ -366,7 +367,7 @@ const isActive = (href: string) => {
 								<div class="popover-content">
 									<div class="unauth-popover-msg hidden space-y-4 text-center py-4">
 										<p class="text-[10px] text-white uppercase font-black">Inicia sesión para ver tu carrito</p>
-										<a href="/login" class="block w-full py-3 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-orange-500 transition-all">Entrar</a>
+										<a href="/login" class="block w-full py-3 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-wild-orange transition-all">Entrar</a>
 									</div>
 									<div class="auth-popover-content hidden space-y-6">
 										<!-- Dynamic Content -->
@@ -378,31 +379,31 @@ const isActive = (href: string) => {
 
 					<div class="flex items-center gap-4 auth-actions-container">
 						<div class="relative group/pop">
-							<a href="/login" class="hidden sm:block text-[12px] font-black uppercase tracking-[0.15em] text-white hover:text-orange-500 transition-all py-4">Entrar</a>
+							<a href="/login" class="hidden sm:block text-[12px] font-black uppercase tracking-[0.15em] text-white hover:text-wild-orange transition-all py-4">Entrar</a>
 							<div class="popover w-64">
 								<div class="popover-header"><span class="popover-title text-center block w-full">Tu Cuenta</span></div>
 								<div class="popover-content space-y-4">
 									<p class="text-[10px] text-white uppercase font-black text-center">Accede a contenido exclusivo</p>
-									<a href="/login" class="block w-full py-3 bg-white text-black text-center text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-orange-500 transition-all">Iniciar Sesión</a>
-									<a href="/perfil" class="block text-center text-[10px] text-white hover:text-orange-500 font-black uppercase tracking-widest">Mi Perfil</a>
+									<a href="/login" class="block w-full py-3 bg-white text-black text-center text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-wild-orange transition-all">Iniciar Sesión</a>
+									<a href="/perfil" class="block text-center text-[10px] text-white hover:text-wild-orange font-black uppercase tracking-widest">Mi Perfil</a>
 								</div>
 							</div>
 						</div>
 
 						<div class="relative group/pop">
-							<a href="/registro" class="group relative px-5 md:px-8 py-3 bg-white text-black text-[10px] md:text-[12px] font-black uppercase tracking-[0.15em] rounded-xl md:rounded-2xl hover:bg-orange-500 transition-all duration-500 transform hover:-translate-y-1 shadow-2xl">
+							<a href="/registro" class="group relative px-5 md:px-8 py-3 bg-white text-black text-[10px] md:text-[12px] font-black uppercase tracking-[0.15em] rounded-xl md:rounded-2xl hover:bg-wild-orange transition-all duration-500 transform hover:-translate-y-1 shadow-2xl">
 								<span class="relative z-10">Unirse</span>
-								<div class="absolute inset-0 rounded-xl md:rounded-2xl bg-gradient-to-r from-orange-500 to-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-0"></div>
+								<div class="absolute inset-0 rounded-xl md:rounded-2xl bg-gradient-to-r from-wild-orange to-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-0"></div>
 							</a>
 							<div class="popover w-72">
 								<div class="popover-header"><span class="popover-title text-center block w-full">Sé parte de la Crew</span></div>
 								<div class="popover-content space-y-4">
 									<ul class="space-y-2">
-										<li class="flex items-center justify-center gap-2 text-[10px] text-white font-black uppercase tracking-widest"><span class="text-orange-500">✓</span> Acceso anticipado</li>
-										<li class="flex items-center justify-center gap-2 text-[10px] text-white font-black uppercase tracking-widest"><span class="text-orange-500">✓</span> Merch exclusiva</li>
-										<li class="flex items-center justify-center gap-2 text-[10px] text-white font-black uppercase tracking-widest"><span class="text-orange-500">✓</span> Eventos VIP</li>
+										<li class="flex items-center justify-center gap-2 text-[10px] text-white font-black uppercase tracking-widest"><span class="text-wild-orange">âœ“</span> Acceso anticipado</li>
+										<li class="flex items-center justify-center gap-2 text-[10px] text-white font-black uppercase tracking-widest"><span class="text-wild-orange">âœ“</span> Merch exclusiva</li>
+										<li class="flex items-center justify-center gap-2 text-[10px] text-white font-black uppercase tracking-widest"><span class="text-wild-orange">âœ“</span> Eventos VIP</li>
 									</ul>
-									<a href="/registro" class="block w-full py-3 bg-orange-500 text-white text-center text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-white hover:text-black transition-all">Registrarse Ahora</a>
+									<a href="/registro" class="block w-full py-3 bg-wild-orange text-white text-center text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-white hover:text-black transition-all">Registrarse Ahora</a>
 								</div>
 							</div>
 						</div>
@@ -421,347 +422,10 @@ const isActive = (href: string) => {
 		</main>
 		
 		<script>
-			// --- Sidebar Core Logic (Independent) ---
-			const setupSidebar = () => {
-				const body = document.body;
-				const trigger = document.getElementById('sidebar-trigger');
-				const closeBtn = document.getElementById('sidebar-close');
-				const overlay = document.getElementById('sidebar-overlay');
-				const sidebar = document.getElementById('sidebar');
-
-				if (trigger) {
-					trigger.addEventListener('click', (e) => {
-						e.preventDefault();
-						e.stopPropagation();
-						body.classList.toggle('sidebar-open');
-					});
-				}
-
-				if (closeBtn) {
-					closeBtn.addEventListener('click', (e) => {
-						e.preventDefault();
-						e.stopPropagation();
-						body.classList.remove('sidebar-open');
-					});
-				}
-
-				if (overlay) {
-					overlay.addEventListener('click', () => {
-						body.classList.remove('sidebar-open');
-					});
-				}
-
-				// Click outside to close
-				document.addEventListener('click', (e) => {
-					if (body.classList.contains('sidebar-open')) {
-						const target = e.target;
-						if (target instanceof Node && !sidebar?.contains(target) && !trigger?.contains(target)) {
-							body.classList.remove('sidebar-open');
-						}
-					}
-				});
-			};
-
-			// Initialize
-			setupSidebar();
-			document.addEventListener('astro:after-swap', setupSidebar);
-		</script>
-
-		<script>
-			import { supabase } from '../lib/supabase.js';
-			import { getRole, requireRole } from '../lib/role.js';
-			import { ensureProfile } from '../lib/profile.js';
-			import { cartStore, CartEvents } from '../lib/cart.js';
-
-			// Types
-			interface CartItem {
-				id: string;
-				name: string;
-				price: number;
-				quantity: number;
-				image: string;
-			}
-
-			interface WishlistItem {
-				id: string;
-				name: string;
-				price: number;
-				image: string;
-			}
-
-			interface CartDetail {
-				cart: CartItem[];
-				wishlist: WishlistItem[];
-				count: number;
-			}
-
-			// --- Cart & Wishlist Logic ---
-			const updateCartUI = (detail: CartDetail) => {
-				const { cart, wishlist, count } = detail;
-				
-				// Update counters
-				const cartCountEl = document.querySelector('[data-target="cart-popover"] span');
-				const wishlistCountEl = document.querySelector('[data-target="wishlist-popover"] span');
-				
-				if (cartCountEl) {
-					cartCountEl.textContent = count.toString();
-					cartCountEl.classList.toggle('hidden', count === 0);
-                    // Animation
-                    cartCountEl.parentElement?.classList.add('scale-110', 'text-orange-500');
-                    setTimeout(() => cartCountEl.parentElement?.classList.remove('scale-110', 'text-orange-500'), 200);
-				}
-				if (wishlistCountEl) {
-					wishlistCountEl.textContent = wishlist.length.toString();
-					wishlistCountEl.classList.toggle('hidden', wishlist.length === 0);
-                    // Animation
-                    wishlistCountEl.parentElement?.classList.add('scale-110', 'text-orange-500');
-                    setTimeout(() => wishlistCountEl.parentElement?.classList.remove('scale-110', 'text-orange-500'), 200);
-				}
-
-				// Update Cart Popover Content
-				const cartContent = document.querySelector('#cart-popover .auth-popover-content');
-				if (cartContent) {
-					if (cart.length === 0) {
-						cartContent.innerHTML = '<p class="text-[10px] text-center text-gray-500 font-bold uppercase tracking-widest py-8">Tu carrito está vacío</p>';
-					} else {
-						const itemsHtml = cart.map(item => `
-							<div class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors group relative">
-								<div class="w-12 h-12 rounded-md overflow-hidden bg-white/5 flex-shrink-0">
-									<img src="${item.image}" class="w-full h-full object-cover" />
-								</div>
-								<div class="flex-1 min-w-0">
-									<h4 class="text-[10px] font-black uppercase text-white truncate group-hover:text-[var(--primary)] transition-colors">${item.name}</h4>
-									<div class="flex justify-between items-center mt-1">
-										<p class="text-[9px] text-gray-500 font-bold uppercase tracking-wider">x${item.quantity}</p>
-										<p class="text-[10px] font-black text-white">$${(item.price * item.quantity).toFixed(2)}</p>
-									</div>
-								</div>
-								<button class="w-6 h-6 flex items-center justify-center text-gray-500 hover:text-red-500 transition-colors remove-cart-btn opacity-0 group-hover:opacity-100" data-id="${item.id}">
-									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-								</button>
-							</div>
-						`).join('');
-						
-						const total = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-						
-						cartContent.innerHTML = `
-							<div class="space-y-1 max-h-[300px] overflow-y-auto pr-1 custom-scrollbar">
-								${itemsHtml}
-							</div>
-							<div class="border-t border-white/10 pt-4 mt-2 space-y-4">
-								<div class="flex justify-between items-center px-2">
-									<span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Total</span>
-									<span class="text-sm font-black text-[var(--primary)]">$${total.toFixed(2)}</span>
-								</div>
-								<a href="/checkout" class="block w-full py-3 bg-white text-black text-center text-[10px] font-black uppercase tracking-[0.2em] rounded-xl hover:bg-[var(--primary)] hover:text-black transition-all shadow-lg transform hover:-translate-y-0.5">Finalizar Compra</a>
-							</div>
-						`;
-
-						// Attach remove listeners
-						cartContent.querySelectorAll('.remove-cart-btn').forEach(btn => {
-							btn.addEventListener('click', (e) => {
-								e.stopPropagation();
-								const target = e.currentTarget as HTMLElement;
-								if (target && target.dataset.id) {
-									cartStore.removeFromCart(target.dataset.id);
-								}
-							});
-						});
-					}
-				}
-
-				// Update Wishlist Popover Content
-				const wishlistContent = document.querySelector('#wishlist-popover .auth-popover-content');
-				if (wishlistContent) {
-					if (wishlist.length === 0) {
-						wishlistContent.innerHTML = '<p class="text-[10px] text-center text-gray-500 font-bold uppercase tracking-widest py-8">Tu lista está vacía</p>';
-					} else {
-						const itemsHtml = wishlist.map(item => `
-							<div class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors group relative">
-								<div class="w-10 h-10 rounded-md overflow-hidden bg-white/5 flex-shrink-0">
-									<img src="${item.image}" class="w-full h-full object-cover" />
-								</div>
-								<div class="flex-1 min-w-0">
-									<h4 class="text-[10px] font-black uppercase text-white truncate group-hover:text-[var(--primary)] transition-colors">${item.name}</h4>
-									<p class="text-[10px] font-bold text-gray-400 mt-0.5">$${item.price}</p>
-								</div>
-								<button class="w-8 h-8 rounded-full bg-[var(--primary)] text-black flex items-center justify-center transform scale-0 group-hover:scale-100 transition-all duration-300 add-from-wishlist-btn shadow-[0_0_10px_var(--primary)] hover:bg-white" data-id="${item.id}">
-									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12h14"/></svg>
-								</button>
-							</div>
-						`).join('');
-
-						wishlistContent.innerHTML = `
-							<div class="space-y-1 max-h-[300px] overflow-y-auto pr-1 custom-scrollbar">
-								${itemsHtml}
-							</div>
-							<a href="/perfil" class="block w-full py-2 bg-white/5 border border-white/10 text-white text-center text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-[var(--primary)] hover:text-black hover:border-[var(--primary)] transition-all mt-3">Ver Todos</a>
-						`;
-
-						// Attach add listeners (wishlist -> cart)
-						wishlistContent.querySelectorAll('.add-from-wishlist-btn').forEach(btn => {
-							btn.addEventListener('click', (e) => {
-								e.stopPropagation();
-								const target = e.currentTarget as HTMLElement;
-								if (target && target.dataset.id) {
-									const item = wishlist.find(i => i.id == target.dataset.id);
-									if (item) cartStore.addToCart(item);
-								}
-							});
-						});
-					}
-				}
-			};
-
-			// --- Auth & Session Logic ---
-			const updateAuthUI = async () => {
-				const authContainer = document.querySelector('.auth-actions-container');
-				const { data: { session } } = await supabase.auth.getSession();
-				const { role } = await getRole();
-				(window as any).__wildRole = role;
-				(window as any).requireRole = requireRole;
-				document.documentElement.setAttribute('data-role', role);
-				
-				if (session) {
-					const { data: profile, error: profileError } = await supabase
-						.from('profiles')
-						.select('*')
-						.eq('id', session.user.id)
-						.single();
-					
-					if (profileError) {
-						await ensureProfile(session);
-					}
-
-					document.querySelectorAll('.unauth-popover-msg').forEach(el => el.classList.add('hidden'));
-					document.querySelectorAll('.auth-popover-content').forEach(el => el.classList.remove('hidden'));
-
-					if (authContainer) {
-						authContainer.innerHTML = `
-							<div class="relative group/pop">
-								<a href="/perfil" class="flex items-center gap-3 px-4 py-2 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 hover:border-[var(--primary)]/50 transition-all cursor-pointer group">
-									<div class="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] flex items-center justify-center text-[10px] font-black uppercase text-white shadow-[0_0_10px_rgba(201,131,0,0.3)] group-hover:shadow-[0_0_15px_var(--primary)] transition-all">
-										${profile?.nombre?.substring(0, 2) || 'WG'}
-									</div>
-									<div class="hidden md:flex flex-col">
-										<span class="text-[10px] font-black uppercase tracking-widest text-white group-hover:text-[var(--primary)] transition-colors leading-none mb-0.5">${profile?.nombre?.split(' ')[0] || 'Usuario'}</span>
-										<span class="text-[8px] font-bold text-gray-500 uppercase tracking-wider">Miembro</span>
-									</div>
-								</a>
-								<div class="popover w-64">
-									<div class="popover-header">
-										<span class="popover-title">Mi Cuenta</span>
-										<span class="text-[9px] text-[var(--primary)] font-mono">${role === 'admin' ? 'ADMIN' : 'MEMBER'}</span>
-									</div>
-									<div class="popover-content space-y-2">
-										<a href="/perfil" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 group transition-colors">
-											<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400 group-hover:text-white"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-											<span class="text-[10px] font-bold uppercase tracking-widest text-gray-300 group-hover:text-white">Mi Perfil</span>
-										</a>
-										<a href="/pedidos" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 group transition-colors">
-											<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400 group-hover:text-white"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
-											<span class="text-[10px] font-bold uppercase tracking-widest text-gray-300 group-hover:text-white">Mis Pedidos</span>
-										</a>
-										<a href="/configuracion" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 group transition-colors">
-											<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400 group-hover:text-white"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-											<span class="text-[10px] font-bold uppercase tracking-widest text-gray-300 group-hover:text-white">Configuración</span>
-										</a>
-										<div class="h-px bg-white/10 my-2"></div>
-										<button id="logout-btn" class="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-red-500/10 group transition-colors text-left">
-											<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-red-500"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-											<span class="text-[10px] font-black uppercase tracking-widest text-red-500 group-hover:text-red-400">Cerrar Sesión</span>
-										</button>
-									</div>
-								</div>
-							</div>
-						`;
-
-						document.getElementById('logout-btn')?.addEventListener('click', async () => {
-							await supabase.auth.signOut();
-							// Cart store will handle cleanup via auth listener
-							window.location.reload();
-						});
-					}
-
-					// Update popover messages for auth users (hide "sign in to view")
-					document.querySelectorAll('.unauth-popover-msg').forEach(el => el.classList.add('hidden'));
-					document.querySelectorAll('.auth-popover-content').forEach(el => el.classList.remove('hidden'));
-				} else {
-					// Guest State
-					document.querySelectorAll('.unauth-popover-msg').forEach(el => el.classList.add('hidden')); // Actually, for guest cart we WANT to show content, not "sign in" message anymore
-					document.querySelectorAll('.auth-popover-content').forEach(el => el.classList.remove('hidden')); // Show cart/wishlist even for guests
-				}
-			};
-
-			// --- Popover Logic ---
-			const initPopovers = () => {
-				const triggers = document.querySelectorAll('.popover-trigger');
-				const popovers = document.querySelectorAll('.popover');
-
-				triggers.forEach(trigger => {
-					trigger.addEventListener('click', (e) => {
-						e.stopPropagation();
-						const targetId = trigger.getAttribute('data-target');
-						if (!targetId) return;
-						const targetPopover = document.getElementById(targetId);
-						const isActive = targetPopover?.classList.contains('active');
-						popovers.forEach(p => p.classList.remove('active'));
-						if (!isActive) targetPopover?.classList.add('active');
-					});
-				});
-
-				document.addEventListener('click', (e) => {
-					if (document.body.classList.contains('sidebar-open')) {
-						const sidebar = document.getElementById('sidebar');
-						const trigger = document.getElementById('sidebar-trigger');
-						const target = e.target;
-						if (target instanceof Node && !sidebar?.contains(target) && !trigger?.contains(target)) {
-							document.body.classList.remove('sidebar-open');
-						}
-					}
-
-					const el = e.target instanceof Element ? e.target : null;
-					const isTrigger = el?.closest('.popover-trigger');
-					const isPopover = el?.closest('.popover');
-					if (!isTrigger && !isPopover) {
-						popovers.forEach(p => p.classList.remove('active'));
-					}
-				});
-			};
-
-			// Initialize everything
-			const init = async () => {
-				initPopovers();
-				await updateAuthUI();
-				
-				// Init Cart
-				cartStore.init();
-				
-				// Listen for cart updates
-				window.addEventListener(CartEvents.UPDATED, (e: Event) => updateCartUI((e as CustomEvent).detail));
-				window.addEventListener(CartEvents.WISHLIST_UPDATED, (e: Event) => updateCartUI((e as CustomEvent).detail));
-				
-				// Initial UI render (empty or from local storage)
-				updateCartUI({ 
-					cart: cartStore.cart, 
-					wishlist: cartStore.wishlist, 
-					count: cartStore.cart.reduce((acc: number, item: CartItem) => acc + item.quantity, 0) 
-				});
-			};
-
-			init();
-			document.addEventListener('astro:after-swap', init);
-
-			// Header background on scroll
-			window.addEventListener('scroll', () => {
-				const header = document.querySelector('header');
-				if (window.scrollY > 50) {
-					header?.classList.add('bg-black/95', 'py-2');
-					header?.classList.remove('bg-black/90', 'py-0');
-				} else {
-					header?.classList.add('bg-black/90', 'py-0');
-					header?.classList.remove('bg-black/95', 'py-2');
-				}
+			import { initLayout } from '../lib/layout';
+			initLayout();
+			document.addEventListener('astro:after-swap', () => {
+				import('../lib/layout').then(({ initLayout }) => initLayout());
 			});
 		</script>
 	</body>

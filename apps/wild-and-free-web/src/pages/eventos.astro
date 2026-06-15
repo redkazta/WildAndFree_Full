@@ -1,4 +1,4 @@
----
+﻿---
 import Layout from '../layouts/Layout.astro';
 import tenantConfig from '../../../../packages/shared-types/tenant-config.json';
 
@@ -30,7 +30,7 @@ const events = [
     lugar: 'C3 STAGE', 
     ciudad: 'GUADALAJARA',
     imagen: 'https://images.unsplash.com/photo-1459749411177-042180ce673c?auto=format&fit=crop&w=800&q=80',
-    descripcion: 'EL FESTIVAL URBANO MÁS IMPORTANTE DE OCCIDENTE',
+    descripcion: 'EL FESTIVAL URBANO MÃS IMPORTANTE DE OCCIDENTE',
     precio_min: 350,
     status: 'proximo'
   },
@@ -50,29 +50,29 @@ const events = [
 ---
 
 <Layout config={config}>
-  <div class="min-h-screen bg-[#050505] text-white pb-20 selection:bg-[var(--wild-orange)] selection:text-black">
+  <div class="min-h-screen bg-black text-white pb-20 selection:bg-wild-orange selection:text-black">
     
     <!-- Top Bar -->
     <div class="bg-gradient-to-r from-black via-[#111] to-black border-b border-white/10 py-3">
-        <div class="container mx-auto px-4 max-w-[1600px] flex justify-between items-center">
-            <span class="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--wild-orange)] animate-pulse">Wild Tour 2026</span>
+        <div class="container mx-auto px-4 max-w-wide flex justify-between items-center">
+            <span class="text-label-sm font-black uppercase tracking-widest text-wild-orange animate-pulse">Wild Tour 2026</span>
             <div class="flex gap-4">
-                <span class="text-[10px] font-bold uppercase tracking-widest text-white">Tickets & VIP</span>
+                <span class="text-label-sm font-bold uppercase tracking-widest text-white">Tickets & VIP</span>
             </div>
         </div>
     </div>
 
-    <div class="container mx-auto px-4 py-8 max-w-[1600px] space-y-24 relative z-10 animate-fade-in-up">
+    <div class="container mx-auto px-4 py-8 max-w-wide space-y-24 relative z-10 animate-fade-in-up">
       
       <!-- Header Brutalista -->
       <div class="border-b border-white/10 pb-8 mt-8 relative">
-        <div class="absolute bottom-0 left-0 w-32 h-1 bg-[var(--wild-orange)] z-10"></div>
+        <div class="absolute bottom-0 left-0 w-32 h-1 bg-wild-orange z-10"></div>
         <div class="flex flex-col md:flex-row items-end gap-6 mb-8">
-          <h1 class="text-7xl md:text-9xl font-black tracking-tighter text-white uppercase leading-none hover:text-[var(--wild-orange)] transition-colors duration-500 cursor-default drop-shadow-2xl">
+          <h1 class="text-7xl md:text-9xl font-black tracking-tighter text-white uppercase leading-none hover:text-wild-orange transition-colors duration-500 cursor-default drop-shadow-2xl">
             TOUR
           </h1>
           <div class="flex flex-col mb-4 md:mb-6">
-             <span class="text-xl font-bold text-white bg-[var(--wild-orange)] px-4 py-1 inline-block w-fit transform skew-x-12 shadow-lg shadow-[var(--wild-orange)]/20">SHOWS EN VIVO</span>
+             <span class="text-xl font-bold text-white bg-wild-orange px-4 py-1 inline-block w-fit transform skew-x-12 shadow-lg shadow-wild-orange/20">SHOWS EN VIVO</span>
              <span class="text-sm font-mono text-gray-500 tracking-widest mt-2 text-right">MUNDIAL • 2024-2025</span>
           </div>
         </div>
@@ -81,16 +81,16 @@ const events = [
       <!-- Lista de Eventos (Estilo Ticket Moderno) -->
       <div class="space-y-12">
         {events.map((event, index) => (
-          <div class="group relative flex flex-col lg:flex-row bg-[#0a0a0a] border border-white/10 rounded-2xl overflow-hidden hover:border-[var(--wild-orange)] transition-all duration-300 hover:shadow-[0_0_40px_rgba(255,85,0,0.1)] hover:-translate-y-1 animate-stagger" style={`animation-delay: ${index * 100}ms`}>
+          <div class="group relative flex flex-col lg:flex-row bg-neutral-950 border border-white/10 rounded-wild-lg overflow-hidden hover:border-wild-orange transition-all duration-300 hover:shadow-wild-glow hover:-translate-y-1 animate-stagger" style={`animation-delay: ${index * 100}ms`}>
             
             <!-- Caja de Fecha (Talón Izquierdo) -->
             <div class="lg:w-56 bg-white text-black p-8 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-dashed border-black/20 relative pattern-dots">
                <!-- Semi-círculos de perforación -->
-               <div class="absolute -right-[8px] top-1/2 -translate-y-1/2 w-4 h-8 bg-[#050505] rounded-l-full hidden lg:block z-10"></div>
-               <div class="absolute -left-[8px] top-1/2 -translate-y-1/2 w-4 h-8 bg-[#050505] rounded-r-full hidden lg:block z-10"></div>
+               <div class="absolute -right-[8px] top-1/2 -translate-y-1/2 w-4 h-8 bg-black rounded-l-full hidden lg:block z-10"></div>
+               <div class="absolute -left-[8px] top-1/2 -translate-y-1/2 w-4 h-8 bg-black rounded-r-full hidden lg:block z-10"></div>
 
                <div class="font-mono font-bold text-xl leading-none opacity-50">
-                 N.º<span class="text-[var(--wild-orange)]">{String(index + 1).padStart(3, '0')}</span>
+                 N.º<span class="text-wild-orange">{String(index + 1).padStart(3, '0')}</span>
                </div>
                <div class="text-center my-6 lg:my-0">
                  <span class="block text-5xl font-black tracking-tighter">{event.fecha.split(' ')[0]}</span>
@@ -105,44 +105,44 @@ const events = [
             <div class="flex-1 p-6 lg:p-10 relative overflow-hidden">
                <!-- Background Image Faded -->
                <div class="absolute inset-0 opacity-20 group-hover:opacity-40 transition-opacity grayscale group-hover:grayscale-0 duration-700">
-                  <img src={event.imagen} class="w-full h-full object-cover" />
+                  <img src={event.imagen} width="800" height="500" class="w-full h-full object-cover" />
                </div>
-               <div class="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-[#0a0a0a]/90 to-transparent"></div>
+               <div class="absolute inset-0 bg-gradient-to-r from-neutral-950 via-neutral-950/90 to-transparent"></div>
 
                <div class="relative z-10 flex flex-col justify-between h-full space-y-6">
                   <div>
                     <div class="flex items-center gap-3 mb-4">
-                       <div class="text-[10px] font-mono font-bold uppercase tracking-widest">
+                       <div class="text-label-sm font-mono font-bold uppercase tracking-widest">
                          {event.status === 'sold_out' ? (
                            <span class="bg-red-600 text-white px-2 py-1 rounded">AGOTADO</span>
                          ) : event.status === 'proximo' ? (
-                           <span class="bg-white/10 text-white px-2 py-1 rounded border border-white/20">PRÓXIMAMENTE</span>
+                           <span class="bg-white/10 text-white px-2 py-1 rounded border border-white/10">PRÓXIMAMENTE</span>
                          ) : (
-                           <span class="bg-[var(--wild-orange)] text-white px-2 py-1 rounded animate-pulse shadow-lg shadow-[var(--wild-orange)]/20">DISPONIBLE</span>
+                           <span class="bg-wild-orange text-white px-2 py-1 rounded animate-pulse shadow-lg shadow-wild-orange/20">DISPONIBLE</span>
                          )}
                        </div>
                        <span class="text-white/50 text-sm font-mono tracking-widest uppercase flex items-center gap-2">
-                         <span class="w-1.5 h-1.5 rounded-full bg-[var(--wild-orange)]"></span>
+                         <span class="w-1.5 h-1.5 rounded-full bg-wild-orange"></span>
                          {event.ciudad}
                        </span>
                     </div>
                     <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter leading-none group-hover:text-white transition-colors drop-shadow-lg">
                       {event.titulo}
                     </h2>
-                    <p class="text-[var(--wild-orange)] font-mono text-lg mt-2 uppercase font-bold tracking-tight">{event.lugar}</p>
+                    <p class="text-wild-orange font-mono text-lg mt-2 uppercase font-bold tracking-tight">{event.lugar}</p>
                   </div>
 
-                  <p class="text-gray-400 font-medium max-w-xl text-sm md:text-base uppercase tracking-wide border-l-4 border-[var(--wild-orange)] pl-4 py-1">
+                  <p class="text-gray-400 font-medium max-w-xl text-sm md:text-base uppercase tracking-wide border-l-4 border-wild-orange pl-4 py-1">
                      {event.descripcion}
                   </p>
                </div>
             </div>
 
             <!-- Action / Barcode (Right Stub) -->
-            <div class="lg:w-72 bg-[#111] border-t lg:border-t-0 lg:border-l border-dashed border-white/20 p-8 flex flex-col justify-between items-center relative">
+            <div class="lg:w-72 bg-[#111] border-t lg:border-t-0 lg:border-l border-dashed border-white/10 p-8 flex flex-col justify-between items-center relative">
                
                <div class="w-full text-right mb-6">
-                  <span class="block text-white/40 text-[10px] font-mono uppercase tracking-[0.2em] mb-1">General Admission</span>
+                  <span class="block text-white/40 text-label-sm font-mono uppercase tracking-widest mb-1">General Admission</span>
                   <span class="block text-4xl font-black text-white">${event.precio_min}</span>
                </div>
 
@@ -156,10 +156,10 @@ const events = [
                   ))}
                </div>
 
-               <a href={`/evento/${event.id}`} class={`w-full py-4 px-6 font-black uppercase text-center text-xs tracking-[0.2em] rounded-xl transition-all duration-300 transform active:scale-95 ${
+               <a href={`/evento/${event.id}`} class={`w-full py-4 px-6 font-black uppercase text-center text-xs tracking-[0.2em] rounded-wild-lg transition-all duration-300 transform active:scale-95 ${
                   event.status === 'sold_out' 
                   ? 'bg-white/5 text-gray-500 cursor-not-allowed border border-white/5'
-                  : 'bg-white text-black hover:bg-[var(--wild-orange)] hover:text-white hover:shadow-lg hover:shadow-[var(--wild-orange)]/30'
+                  : 'bg-white text-black hover:bg-wild-orange hover:text-white hover:shadow-lg hover:shadow-wild-orange/30'
                }`}>
                   {event.status === 'sold_out' ? 'Sold Out' : 'Comprar Tickets'}
                </a>

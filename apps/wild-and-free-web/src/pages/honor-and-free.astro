@@ -1,4 +1,4 @@
----
+﻿---
 import Layout from '../layouts/Layout.astro';
 import tenantConfig from '../../../../packages/shared-types/tenant-config.json';
 
@@ -10,7 +10,7 @@ const config = {
 };
 
 const honorAndFreeData = [
-    { id: 1, name: "MC LÁSER", points: 450, wins: 15, kos: 12, image: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=200&h=200&fit=crop", origin: "Torreón" },
+    { id: 1, name: "MC LÃSER", points: 450, wins: 15, kos: 12, image: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=200&h=200&fit=crop", origin: "Torreón" },
     { id: 2, name: "D-MENTE", points: 380, wins: 12, kos: 8, image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&h=200&fit=crop", origin: "Gómez" },
     { id: 3, name: "K-ROAD", points: 310, wins: 10, kos: 5, image: "https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=200&h=200&fit=crop", origin: "Lerdo" },
     { id: 4, name: "ZIKO", points: 290, wins: 9, kos: 20, image: "https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=200&h=200&fit=crop", origin: "Matamoros" },
@@ -22,27 +22,27 @@ const honorAndFreeData = [
 ---
 
 <Layout config={config}>
-  <div class="min-h-screen bg-[#050505] text-white pb-32 font-sans selection:bg-[var(--wild-orange)] selection:text-black">
-    
+  <div class="min-h-screen bg-black text-white pb-section-lg font-body selection:bg-wild-orange selection:text-black">
+
     <!-- Top Bar -->
-    <div class="bg-black/90 backdrop-blur border-b border-white/5 py-2 sticky top-0 z-50">
-        <div class="container mx-auto px-4 max-w-3xl flex justify-between items-center">
+    <div class="bg-black/90 backdrop-blur border-b border-white/10 py-2 sticky top-0 z-50">
+        <div class="container mx-auto px-4 max-w-content flex justify-between items-center">
             <div class="flex items-center gap-2">
-                <div class="w-1.5 h-1.5 bg-[var(--wild-orange)] rounded-full animate-pulse"></div>
-                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-white">Ranking Oficial</span>
+                <div class="w-1.5 h-1.5 bg-wild-orange rounded-full animate-pulse"></div>
+                <span class="text-label-sm font-black text-white">Ranking Oficial</span>
             </div>
-            <span class="text-[10px] font-mono text-gray-600">SEASON 2026</span>
+            <span class="text-label-sm font-mono text-gray-600">SEASON 2026</span>
         </div>
     </div>
 
-    <div class="container mx-auto px-4 py-12 max-w-3xl animate-fade-in-up space-y-12">
-        
+    <div class="container mx-auto px-4 py-section max-w-content animate-fade-in-up space-y-section">
+
         <!-- Header Minimal -->
         <div class="text-center space-y-2">
-            <h1 class="text-5xl md:text-7xl font-black uppercase tracking-tighter text-white">
-                Honor <span class="text-[var(--wild-orange)]">&</span> Free
+            <h1 class="text-display-lg font-black uppercase tracking-tighter text-white">
+                Honor <span class="text-wild-orange">&</span> Free
             </h1>
-            <p class="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-[0.4em]">
+            <p class="text-label font-bold text-gray-500 uppercase">
                 Tabla General de Posiciones
             </p>
         </div>
@@ -50,67 +50,67 @@ const honorAndFreeData = [
         <!-- Leaderboard List -->
         <div class="space-y-1">
             {honorAndFreeData.map((mc, i) => (
-                <div class="group relative flex items-center justify-between p-4 bg-[#0a0a0a] border-b border-white/5 hover:bg-[#111] transition-all duration-300 overflow-hidden cursor-pointer">
-                    
+                <div class="group relative flex items-center justify-between p-4 bg-neutral-950 border-b border-white/10 hover:bg-[#111] transition-all duration-wild overflow-hidden cursor-pointer">
+
                     <!-- Hover Accent -->
-                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-[var(--wild-orange)] transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300"></div>
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-wild-orange transform -translate-x-full group-hover:translate-x-0 transition-transform duration-wild"></div>
 
                     <!-- Rank & Avatar -->
                     <div class="flex items-center gap-6 relative z-10">
-                        <span class={`text-xl font-mono font-bold w-8 text-center ${i < 3 ? 'text-[var(--wild-orange)]' : 'text-gray-700'}`}>
+                        <span class={`text-xl font-mono font-bold w-8 text-center ${i < 3 ? 'text-wild-orange' : 'text-gray-700'}`}>
                             {(i + 1).toString().padStart(2, '0')}
                         </span>
-                        
+
                         <div class="flex items-center gap-4">
-                            <img src={mc.image} class="w-10 h-10 rounded-full object-cover grayscale group-hover:grayscale-0 transition-all border border-white/10 group-hover:border-[var(--wild-orange)]" />
+                            <img src={mc.image} width="40" height="40" class="w-10 h-10 rounded-full object-cover grayscale group-hover:grayscale-0 transition-all border border-white/10 group-hover:border-wild-orange" />
                             <div>
                                 <h3 class="text-lg font-black text-white uppercase tracking-tight leading-none group-hover:tracking-wide transition-all">{mc.name}</h3>
-                                <p class="text-[9px] text-gray-500 uppercase font-mono">{mc.origin} • {mc.wins}W / {mc.kos}KO</p>
+                                <p class="text-label-sm text-gray-500 uppercase font-mono">{mc.origin} • {mc.wins}W / {mc.kos}KO</p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Points -->
                     <div class="text-right relative z-10">
-                        <span class="block text-2xl font-black text-white leading-none group-hover:text-[var(--wild-orange)] transition-colors">{mc.points}</span>
-                        <span class="text-[8px] text-gray-600 uppercase tracking-widest">PTS</span>
+                        <span class="block text-2xl font-black text-white leading-none group-hover:text-wild-orange transition-colors duration-wild">{mc.points}</span>
+                        <span class="text-label-sm text-gray-600 uppercase tracking-widest">PTS</span>
                     </div>
 
                     <!-- Background Gradient on Hover -->
-                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[var(--wild-orange)]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-wild-orange/5 opacity-0 group-hover:opacity-100 transition-opacity duration-wild-slow"></div>
                 </div>
             ))}
         </div>
 
         <!-- Top 3 Showcase (Bottom) -->
-        <div class="pt-8 border-t border-white/5">
-            <h3 class="text-[10px] font-black text-gray-600 uppercase tracking-widest mb-6 text-center">Podio Actual</h3>
+        <div class="pt-8 border-t border-white/10">
+            <h3 class="text-label-sm font-black text-gray-600 uppercase tracking-widest mb-6 text-center">Podio Actual</h3>
             <div class="flex justify-center items-end gap-4">
                 <!-- 2nd Place -->
-                <div class="flex flex-col items-center gap-2 opacity-60 hover:opacity-100 transition-opacity">
-                    <img src={honorAndFreeData[1].image} class="w-16 h-16 rounded-full border-2 border-gray-400 object-cover" />
+                <div class="flex flex-col items-center gap-2 opacity-60 hover:opacity-100 transition-opacity duration-wild">
+                    <img src={honorAndFreeData[1].image} width="64" height="64" class="w-16 h-16 rounded-full border-2 border-gray-400 object-cover" />
                     <div class="text-center">
                         <span class="block text-xs font-black text-white">{honorAndFreeData[1].name}</span>
-                        <span class="block text-[9px] font-mono text-gray-500">#2</span>
+                        <span class="block text-label-sm font-mono text-gray-500">#2</span>
                     </div>
                 </div>
                 <!-- 1st Place -->
                 <div class="flex flex-col items-center gap-2 -translate-y-4">
                     <div class="relative">
-                        <img src={honorAndFreeData[0].image} class="w-24 h-24 rounded-full border-4 border-[var(--wild-orange)] object-cover shadow-[0_0_20px_rgba(201,131,0,0.3)]" />
-                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-[var(--wild-orange)] text-black text-[9px] font-black px-2 py-0.5 rounded-full uppercase">King</div>
+                        <img src={honorAndFreeData[0].image} width="96" height="96" class="w-24 h-24 rounded-full border-4 border-wild-orange object-cover shadow-wild-glow" />
+                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-wild-orange text-black text-label-sm font-black px-2 py-0.5 rounded-full uppercase">King</div>
                     </div>
                     <div class="text-center">
-                        <span class="block text-sm font-black text-[var(--wild-orange)]">{honorAndFreeData[0].name}</span>
-                        <span class="block text-[9px] font-mono text-gray-500">#1</span>
+                        <span class="block text-sm font-black text-wild-orange">{honorAndFreeData[0].name}</span>
+                        <span class="block text-label-sm font-mono text-gray-500">#1</span>
                     </div>
                 </div>
                 <!-- 3rd Place -->
-                <div class="flex flex-col items-center gap-2 opacity-60 hover:opacity-100 transition-opacity">
-                    <img src={honorAndFreeData[2].image} class="w-16 h-16 rounded-full border-2 border-amber-700 object-cover" />
+                <div class="flex flex-col items-center gap-2 opacity-60 hover:opacity-100 transition-opacity duration-wild">
+                    <img src={honorAndFreeData[2].image} width="64" height="64" class="w-16 h-16 rounded-full border-2 border-amber-700 object-cover" />
                     <div class="text-center">
                         <span class="block text-xs font-black text-white">{honorAndFreeData[2].name}</span>
-                        <span class="block text-[9px] font-mono text-gray-500">#3</span>
+                        <span class="block text-label-sm font-mono text-gray-500">#3</span>
                     </div>
                 </div>
             </div>
@@ -119,13 +119,3 @@ const honorAndFreeData = [
     </div>
   </div>
 </Layout>
-
-<style is:global define:vars={{ streetAccent: tenant.primary_color }}>
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .animate-fade-in-up {
-    animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-  }
-</style>

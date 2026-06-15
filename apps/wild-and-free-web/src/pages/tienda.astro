@@ -1,4 +1,4 @@
----
+﻿---
 import Layout from '../layouts/Layout.astro';
 import tenantConfig from '../../../../packages/shared-types/tenant-config.json';
 
@@ -284,7 +284,7 @@ const products = [
               <div class="space-y-4">
                 <h3 class="font-black uppercase text-xs text-gray-500 tracking-widest">Filtros</h3>
                 <div class="space-y-2">
-                    {['Menos de $500', '$500 - $1500', '$1500+'].map((label, i) => (
+                    {['Menos de $500', '$500 - $1500', '$1500+'].map((label, _i) => (
                         <label class="flex items-center gap-3 cursor-pointer group hover:bg-white/5 p-2 rounded-lg transition-colors">
                             <div class="relative flex items-center justify-center w-4 h-4 border border-gray-600 rounded bg-transparent group-hover:border-[var(--wild-orange)] transition-colors">
                                 <input type="checkbox" class="peer appearance-none w-full h-full cursor-pointer absolute inset-0 z-10" />
@@ -319,7 +319,7 @@ const products = [
             <div class="absolute inset-0 flex transition-transform duration-500 ease-out" id="hero-slider">
               {carouselOffers.map(offer => (
                 <div class="min-w-full h-full relative">
-                  <img src={offer.image} class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000 ease-in-out scale-105 hover:scale-100" />
+                  <img src={offer.image} width="800" height="550" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000 ease-in-out scale-105 hover:scale-100" />
                   <div class="absolute inset-0 bg-gradient-to-r from-black via-black/60 to-transparent flex flex-col justify-center p-8 md:p-16">
                     <div class="border-l-4 border-[var(--wild-orange)] pl-6 md:pl-8">
                         <h2 class="text-4xl md:text-7xl font-black text-white uppercase leading-[0.9] mb-4 drop-shadow-xl" style="text-shadow: 4px 4px 0px rgba(0,0,0,0.8);">{offer.title}</h2>
@@ -360,7 +360,7 @@ const products = [
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {categoryProducts.map((product, idx) => (
+                  {categoryProducts.map((product, _idx) => (
                     <div class="bg-[#0a0a0a] rounded-xl overflow-hidden border border-white/5 hover:border-[var(--wild-crimson)]/40 transition-all duration-300 group flex flex-col h-full hover:-translate-y-2 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] relative">
                       
                       <!-- Etiquetas (New/Sale) -->
@@ -385,7 +385,7 @@ const products = [
                       </button>
 
                       <div class="relative aspect-[4/5] bg-[#151515] overflow-hidden">
-                        <img src={product.image} class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out" />
+                        <img src={product.image} width="400" height="500" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out" />
                         
                         {!product.inStock && (
                           <div class="absolute inset-0 bg-black/80 backdrop-blur-[2px] flex items-center justify-center z-20">

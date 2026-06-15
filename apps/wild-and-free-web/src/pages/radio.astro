@@ -1,4 +1,4 @@
----
+﻿---
 import Layout from '../layouts/Layout.astro';
 import tenantConfig from '../../../../packages/shared-types/tenant-config.json';
 
@@ -17,11 +17,11 @@ const recentEpisodes = [
 ---
 
 <Layout config={config}>
-  <div class="min-h-screen bg-[#050505] text-white font-mono selection:bg-[var(--wild-orange)] selection:text-black pb-20 relative overflow-hidden">
+  <div class="min-h-screen bg-black text-white font-mono selection:bg-wild-orange selection:text-black pb-20 relative overflow-hidden">
     
     <!-- Background Noise/Texture -->
     <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 pointer-events-none"></div>
-    <div class="absolute inset-0 bg-gradient-to-br from-black via-black/90 to-[var(--secondary)]/20 pointer-events-none"></div>
+    <div class="absolute inset-0 bg-gradient-to-br from-black via-black/90 to-tenant-secondary/20 pointer-events-none"></div>
 
     <div class="container mx-auto px-4 pt-16 relative z-10">
       
@@ -29,7 +29,7 @@ const recentEpisodes = [
       <div class="flex justify-between items-center border-b-2 border-white/10 pb-4 mb-8">
         <div>
           <h1 class="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">
-            FRECUENCIA <span class="text-[var(--primary)]">PIRATA</span>
+            FRECUENCIA <span class="text-tenant-primary">PIRATA</span>
           </h1>
           <p class="text-xs md:text-sm font-bold text-gray-400 uppercase tracking-[0.4em] mt-2">
             TRANSMITIENDO DESDE EL UNDERGROUND // 111.1 FM
@@ -40,7 +40,7 @@ const recentEpisodes = [
             <div class="w-3 h-3 bg-red-600 rounded-full"></div>
             <span class="text-red-500 font-black uppercase text-xs tracking-widest">EN VIVO AHORA</span>
           </div>
-          <span class="text-[10px] text-gray-500 mt-2 font-mono">LISTENER COUNT: 1111</span>
+          <span class="text-label-sm text-gray-500 mt-2 font-mono">LISTENER COUNT: 1111</span>
         </div>
       </div>
 
@@ -50,24 +50,24 @@ const recentEpisodes = [
         <div class="lg:col-span-8 space-y-8">
           
           <!-- MAIN PLAYER CARD -->
-          <div class="relative bg-[#111] border border-white/10 rounded-3xl overflow-hidden group shadow-[0_0_50px_rgba(201,131,0,0.1)]">
+          <div class="relative bg-[#111] border border-white/10 rounded-wild-xl overflow-hidden group shadow-wild-glow">
             <!-- Background Image -->
             <div class="absolute inset-0">
-              <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1200&q=80" class="w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform duration-[20s]" />
-              <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/50 to-transparent"></div>
+              <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1200&q=80" width="1200" height="800" class="w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform duration-[20s]" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
             </div>
 
             <div class="relative p-8 min-h-[350px] flex flex-col justify-end">
               <!-- Equalizer Bars (Visual) -->
               <div class="flex items-end gap-1 h-16 mb-6 opacity-80">
-                <div class="w-2 bg-[var(--primary)] animate-equalizer-1"></div>
-                <div class="w-2 bg-[var(--primary)] animate-equalizer-2"></div>
-                <div class="w-2 bg-[var(--primary)] animate-equalizer-3"></div>
-                <div class="w-2 bg-[var(--primary)] animate-equalizer-4"></div>
-                <div class="w-2 bg-[var(--primary)] animate-equalizer-2"></div>
-                <div class="w-2 bg-[var(--primary)] animate-equalizer-5"></div>
-                <div class="w-2 bg-[var(--primary)] animate-equalizer-1"></div>
-                <div class="w-2 bg-[var(--primary)] animate-equalizer-3"></div>
+                <div class="w-2 bg-tenant-primary animate-equalizer-1"></div>
+                <div class="w-2 bg-tenant-primary animate-equalizer-2"></div>
+                <div class="w-2 bg-tenant-primary animate-equalizer-3"></div>
+                <div class="w-2 bg-tenant-primary animate-equalizer-4"></div>
+                <div class="w-2 bg-tenant-primary animate-equalizer-2"></div>
+                <div class="w-2 bg-tenant-primary animate-equalizer-5"></div>
+                <div class="w-2 bg-tenant-primary animate-equalizer-1"></div>
+                <div class="w-2 bg-tenant-primary animate-equalizer-3"></div>
               </div>
 
               <h2 class="text-3xl md:text-4xl font-black text-white uppercase tracking-tight mb-2">
@@ -78,11 +78,11 @@ const recentEpisodes = [
               </p>
 
               <div class="flex items-center gap-6">
-                <button onclick="window.dispatchEvent(new CustomEvent('play-radio'))" class="w-16 h-16 bg-[var(--primary)] text-black rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-[0_0_30px_var(--primary)]">
+                <button onclick="window.dispatchEvent(new CustomEvent('play-radio'))" class="w-16 h-16 bg-tenant-primary text-black rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-tenant-glow">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                 </button>
                 <div class="space-y-1">
-                  <div class="text-[10px] font-black uppercase tracking-widest text-gray-500">Ahora Sonando</div>
+                  <div class="text-label-sm font-black uppercase tracking-widest text-gray-500">Ahora Sonando</div>
                   <div class="text-lg font-bold text-white marquee-container overflow-hidden w-64">
                     <span class="marquee-content">MC Kalle - Barrio Fino (Remix) • DJ Wasted - Scratch Intro • </span>
                   </div>
@@ -95,30 +95,30 @@ const recentEpisodes = [
           <div>
             <div class="flex items-center justify-between mb-6">
               <h3 class="text-2xl font-black uppercase tracking-tighter text-white">
-                <span class="text-[var(--primary)]">///</span> Últimos Episodios
+                <span class="text-tenant-primary">///</span> Últimos Episodios
               </h3>
-              <a href="#" class="text-[10px] font-black uppercase tracking-widest hover:text-[var(--primary)] transition-colors">Ver Archivo</a>
+              <a href="#" class="text-label-sm font-black uppercase tracking-widest hover:text-tenant-primary transition-colors">Ver Archivo</a>
             </div>
 
             <div class="space-y-4">
               {recentEpisodes.map((ep) => (
-                <div class="group flex items-center gap-4 p-4 bg-white/5 border border-white/5 hover:border-[var(--primary)]/50 rounded-xl transition-all cursor-pointer hover:bg-white/10">
-                  <div class="relative w-24 h-24 flex-shrink-0 overflow-hidden rounded-lg">
-                    <img src={ep.image} class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" />
+                <div class="group flex items-center gap-4 p-4 bg-white/5 border border-white/5 hover:border-tenant-primary/50 rounded-wild-lg transition-all cursor-pointer hover:bg-white/10">
+                  <div class="relative w-24 h-24 flex-shrink-0 overflow-hidden rounded-wild">
+                    <img src={ep.image} width="500" height="500" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" />
                     <div class="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     </div>
                   </div>
                   <div class="flex-1 min-w-0">
                     <div class="flex items-center gap-2 mb-1">
-                      <span class="px-2 py-0.5 bg-white/10 rounded text-[9px] font-bold uppercase tracking-wider text-gray-400">{ep.date}</span>
-                      <span class="px-2 py-0.5 bg-white/10 rounded text-[9px] font-bold uppercase tracking-wider text-gray-400">{ep.duration}</span>
+                      <span class="px-2 py-0.5 bg-white/10 rounded text-label-sm font-bold uppercase tracking-wider text-gray-400">{ep.date}</span>
+                      <span class="px-2 py-0.5 bg-white/10 rounded text-label-sm font-bold uppercase tracking-wider text-gray-400">{ep.duration}</span>
                     </div>
-                    <h4 class="text-lg font-black text-white uppercase truncate group-hover:text-[var(--primary)] transition-colors">{ep.title}</h4>
+                    <h4 class="text-lg font-black text-white uppercase truncate group-hover:text-tenant-primary transition-colors">{ep.title}</h4>
                     <p class="text-sm text-gray-500 font-medium">Host: {ep.host}</p>
                   </div>
-                  <button class="w-10 h-10 border border-white/20 rounded-full flex items-center justify-center text-white/50 group-hover:text-white group-hover:border-white transition-all">
-                    ↓
+                  <button class="w-10 h-10 border border-white/10 rounded-full flex items-center justify-center text-white/50 group-hover:text-white group-hover:border-white transition-all">
+                    â†“
                   </button>
                 </div>
               ))}
@@ -131,7 +131,7 @@ const recentEpisodes = [
         <aside class="lg:col-span-4 space-y-8">
           
           <!-- REQUEST LINE BOX -->
-          <div class="bg-[var(--primary)] text-black p-8 rounded-3xl relative overflow-hidden shadow-[0_0_40px_rgba(201,131,0,0.3)] transform hover:-rotate-1 transition-transform duration-300">
+          <div class="bg-tenant-primary text-black p-8 rounded-wild-xl relative overflow-hidden shadow-tenant-glow transform hover:-rotate-1 transition-transform duration-300">
             <div class="absolute -right-10 -top-10 text-9xl text-black/10 font-black rotate-12">?</div>
             
             <h3 class="text-3xl font-black uppercase leading-none mb-4 relative z-10">
@@ -141,33 +141,33 @@ const recentEpisodes = [
               Manda tus saludos, pide tu rola o tíranos hate. Leemos todo al aire.
             </p>
 
-            <div class="bg-black/10 backdrop-blur-sm p-4 rounded-xl border border-black/10 flex flex-col items-center gap-4 relative z-10">
+            <div class="bg-black/10 backdrop-blur-sm p-4 rounded-wild border border-black/10 flex flex-col items-center gap-4 relative z-10">
               <!-- QR Placeholder -->
-              <div class="bg-white p-2 rounded-lg shadow-lg">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://wa.me/525512345678" alt="Scan to Request" class="w-32 h-32 mix-blend-multiply" />
+              <div class="bg-white p-2 rounded-wild shadow-lg">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://wa.me/525512345678" alt="Scan to Request" width="150" height="150" class="w-32 h-32 mix-blend-multiply" />
               </div>
               
               <div class="text-center">
-                <p class="text-[10px] font-black uppercase tracking-widest mb-1">WhatsApp Directo</p>
+                <p class="text-label-sm font-black uppercase tracking-widest mb-1">WhatsApp Directo</p>
                 <p class="text-2xl font-black tracking-tighter">+52 (55) 1111-1111</p>
               </div>
             </div>
             
-            <div class="mt-6 flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest opacity-60">
+            <div class="mt-6 flex items-center justify-center gap-2 text-label-sm font-bold uppercase tracking-widest opacity-60">
               <span class="w-2 h-2 bg-black rounded-full animate-pulse"></span>
               Línea Abierta
             </div>
           </div>
 
           <!-- SCHEDULE WIDGET -->
-          <div class="bg-[#111] border border-white/10 p-6 rounded-2xl">
+          <div class="bg-[#111] border border-white/10 p-6 rounded-wild-lg">
             <h3 class="text-sm font-black text-gray-500 uppercase tracking-widest mb-6 border-b border-white/10 pb-2">
               Próximos Shows
             </h3>
             <ul class="space-y-6">
-              <li class="relative pl-6 border-l-2 border-[var(--primary)]">
-                <div class="absolute -left-[5px] top-0 w-2 h-2 bg-[var(--primary)] rounded-full"></div>
-                <span class="block text-xs font-mono text-[var(--primary)] mb-1">11:11 - 11:11</span>
+              <li class="relative pl-6 border-l-2 border-tenant-primary">
+                <div class="absolute -left-[5px] top-0 w-2 h-2 bg-tenant-primary rounded-full"></div>
+                <span class="block text-xs font-mono text-tenant-primary mb-1">11:11 - 11:11</span>
                 <span class="block text-lg font-bold text-white uppercase leading-none">Batallas de Gallos</span>
                 <span class="text-xs text-gray-500">Live desde el Parque Morelos</span>
               </li>
@@ -181,10 +181,10 @@ const recentEpisodes = [
           </div>
 
           <!-- AD / BANNER -->
-          <div class="aspect-square bg-[#1a1a1a] border-2 border-dashed border-white/20 rounded-xl flex items-center justify-center p-6 text-center group cursor-pointer hover:border-[var(--primary)] transition-colors">
+          <div class="aspect-square bg-[#1a1a1a] border-2 border-dashed border-white/10 rounded-wild-lg flex items-center justify-center p-6 text-center group cursor-pointer hover:border-tenant-primary transition-colors">
             <div>
-              <p class="text-4xl font-black text-white/20 group-hover:text-[var(--primary)] transition-colors">TU <br/> PUBLICIDAD <br/> AQUÍ</p>
-              <p class="text-[10px] text-gray-500 mt-4 uppercase tracking-widest">Apoya al movimiento</p>
+              <p class="text-4xl font-black text-white/20 group-hover:text-tenant-primary transition-colors">TU <br/> PUBLICIDAD <br/> AQUÍ</p>
+              <p class="text-label-sm text-gray-500 mt-4 uppercase tracking-widest">Apoya al movimiento</p>
             </div>
           </div>
 

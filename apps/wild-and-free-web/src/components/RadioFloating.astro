@@ -1,4 +1,4 @@
----
+﻿---
 ---
 <!-- Radio Floating Player (Global) -->
 <div id="radio-floating" transition:persist class="fixed bottom-6 left-6 z-[9999] w-[260px] sm:w-[300px]">
@@ -7,7 +7,7 @@
     <!-- Player Header -->
     <div class="p-3 flex gap-3 items-center bg-gradient-to-r from-[#111] to-black">
         <div class="w-10 h-10 bg-zinc-900 rounded-lg overflow-hidden flex-shrink-0 relative border border-white/5">
-            <img id="radio-cover" src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=150&q=80" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
+            <img id="radio-cover" src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=150&q=80" width="40" height="40" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
             <div class="absolute inset-0 flex items-center justify-center bg-black/20">
                 <div class="w-2 h-2 bg-[var(--primary)] rounded-full animate-pulse shadow-[0_0_10px_var(--primary)]"></div>
             </div>
@@ -127,6 +127,28 @@
             radioPause?.classList.remove('hidden');
             radioEq?.classList.remove('opacity-0');
             audio.play().catch(e => console.log('Audio play failed', e));
+        }
+    });
+
+    // Listen for artist radio request from artist profile page
+    window.addEventListener('wild-play', (e: Event) => {
+        const detail = (e as CustomEvent).detail;
+        if (detail && detail.title && detail.artist && detail.image) {
+            // Update metadata
+            const radioTitle = document.getElementById('radio-title');
+            const radioArtist = document.getElementById('radio-artist');
+            const radioCover = document.getElementById('radio-cover') as HTMLImageElement;
+            if (radioTitle) radioTitle.textContent = detail.title;
+            if (radioArtist) radioArtist.textContent = detail.artist;
+            if (radioCover) radioCover.src = detail.image;
+            // Auto-play if not playing
+            if (!isPlaying) {
+                isPlaying = true;
+                radioPlay?.classList.add('hidden');
+                radioPause?.classList.remove('hidden');
+                radioEq?.classList.remove('opacity-0');
+                audio.play().catch(err => console.log('Audio play failed', err));
+            }
         }
     });
 

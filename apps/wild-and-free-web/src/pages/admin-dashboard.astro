@@ -1,4 +1,4 @@
----
+﻿---
 import Layout from '../layouts/Layout.astro';
 ---
 
@@ -106,7 +106,7 @@ import Layout from '../layouts/Layout.astro';
   const ok = document.getElementById('admin-ok')
   const denied = document.getElementById('admin-denied')
 
-  const show = (el) => el?.classList.remove('hidden')
+  const show = (el: HTMLElement | null) => el?.classList.remove('hidden')
 
   try {
     const { role } = await getRole()

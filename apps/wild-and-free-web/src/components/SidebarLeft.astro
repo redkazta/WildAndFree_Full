@@ -1,4 +1,4 @@
----
+﻿---
 declare const Astro: any;
 
 const currentPath = Astro.url.pathname;
@@ -31,9 +31,9 @@ const isActive = (href: string) => {
     <!-- Header Sidebar -->
     <div class="flex items-center justify-between mb-12">
       <div class="py-2">
-        <span class="text-2xl font-black tracking-tighter italic"><span class="text-orange-500">WILD</span> <span class="text-white">GVNG</span></span>
+        <span class="text-2xl font-black tracking-tighter italic"><span class="text-wild-orange">WILD</span> <span class="text-white">GVNG</span></span>
       </div>
-      <button id="sidebar-close" class="p-2 text-white hover:text-orange-500 transition-all duration-300 group" aria-label="Cerrar menú">
+      <button id="sidebar-close" class="p-2 text-white hover:text-wild-orange transition-all duration-300 group" aria-label="Cerrar menú">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="group-hover:rotate-90 transition-transform duration-300"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
       </button>
     </div>
@@ -41,14 +41,14 @@ const isActive = (href: string) => {
     <div class="space-y-12">
       <!-- Nav Section -->
       <div class="space-y-6">
-        <h4 class="text-[12px] font-black uppercase tracking-[0.4em] text-orange-500 border-l-4 border-orange-500 pl-4">Explorar</h4>
+        <h4 class="text-[12px] font-black uppercase tracking-[0.4em] text-wild-orange border-l-4 border-wild-orange pl-4">Explorar</h4>
         <nav class="flex flex-col gap-1">
           {navItems.map(item => (
             <a 
               href={item.href} 
-              class={`group flex items-center gap-4 py-4 px-4 text-xs font-black uppercase tracking-widest rounded-xl transition-all ${isActive(item.href) ? 'text-orange-500 bg-white/10' : 'text-white hover:text-orange-500 hover:bg-white/10'}`}
+              class={`group flex items-center gap-4 py-4 px-4 text-xs font-black uppercase tracking-widest rounded-xl transition-all ${isActive(item.href) ? 'text-wild-orange bg-white/10' : 'text-white hover:text-wild-orange hover:bg-white/10'}`}
             >
-              <span class={`w-2 h-2 rounded-full transition-colors ${isActive(item.href) ? 'bg-orange-500' : 'bg-white group-hover:bg-orange-500'}`}></span>
+              <span class={`w-2 h-2 rounded-full transition-colors ${isActive(item.href) ? 'bg-wild-orange' : 'bg-white group-hover:bg-wild-orange'}`}></span>
               {item.label}
             </a>
           ))}
@@ -59,12 +59,12 @@ const isActive = (href: string) => {
       <div class="space-y-6">
         <h4 class="text-[12px] font-black uppercase tracking-[0.4em] text-white border-l-4 border-white pl-4">Cuenta</h4>
         <nav class="flex flex-col gap-1">
-          <a href="/login" class="group flex items-center gap-4 py-4 px-4 text-xs font-black uppercase tracking-widest text-white hover:text-orange-500 hover:bg-white/10 rounded-xl transition-all">
-            <span class="w-2 h-2 rounded-full bg-white group-hover:bg-orange-500 transition-colors"></span>
+          <a href="/login" class="group flex items-center gap-4 py-4 px-4 text-xs font-black uppercase tracking-widest text-white hover:text-wild-orange hover:bg-white/10 rounded-xl transition-all">
+            <span class="w-2 h-2 rounded-full bg-white group-hover:bg-wild-orange transition-colors"></span>
             Entrar
           </a>
-          <a href="/perfil" class="group flex items-center gap-4 py-4 px-4 text-xs font-black uppercase tracking-widest text-white hover:text-orange-500 hover:bg-white/10 rounded-xl transition-all">
-            <span class="w-2 h-2 rounded-full bg-white group-hover:bg-orange-500 transition-colors"></span>
+          <a href="/perfil" class="group flex items-center gap-4 py-4 px-4 text-xs font-black uppercase tracking-widest text-white hover:text-wild-orange hover:bg-white/10 rounded-xl transition-all">
+            <span class="w-2 h-2 rounded-full bg-white group-hover:bg-wild-orange transition-colors"></span>
             Mi Perfil
           </a>
         </nav>
@@ -74,12 +74,12 @@ const isActive = (href: string) => {
     <!-- Footer Sidebar -->
     <div class="mt-auto pt-8 border-t-2 border-white space-y-6">
       <div class="flex items-center gap-4">
-        <button class="location-btn w-full py-5 px-6 bg-black border-2 border-white text-[11px] font-black uppercase tracking-[0.2em] text-white hover:bg-orange-500 hover:text-black transition-all">
+        <button class="location-btn w-full py-5 px-6 bg-black border-2 border-white text-[11px] font-black uppercase tracking-[0.2em] text-white hover:bg-wild-orange hover:text-black transition-all">
           Ubicación: Torreón Coahuila
         </button>
       </div>
       <div class="text-center">
-        <div class="text-[11px] font-black tracking-[0.4em] text-orange-500">WILD GVNG © 2026</div>
+        <div class="text-[11px] font-black tracking-[0.4em] text-wild-orange">WILD GVNG © 2026</div>
       </div>
     </div>
   </div>

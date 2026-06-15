@@ -1,4 +1,4 @@
----
+﻿---
 import Layout from '../../layouts/Layout.astro';
 
 // Para la página de admin, vamos a hacer la verificación en el cliente
@@ -52,7 +52,7 @@ import Layout from '../../layouts/Layout.astro';
               <input 
                 type="text" 
                 id="tag-name" 
-                class="w-full p-2 bg-gray-800 border border-gray-600 rounded focus:outline-none focus:border-orange-500"
+                class="w-full p-2 bg-gray-800 border border-gray-600 rounded focus:outline-none focus:border-wild-orange"
                 required
               />
             </div>
@@ -69,7 +69,7 @@ import Layout from '../../layouts/Layout.astro';
               <label class="block text-sm font-medium mb-2">Animación</label>
               <select 
                 id="tag-animation" 
-                class="w-full p-2 bg-gray-800 border border-gray-600 rounded focus:outline-none focus:border-orange-500"
+                class="w-full p-2 bg-gray-800 border border-gray-600 rounded focus:outline-none focus:border-wild-orange"
               >
                 <option value="none">Ninguna</option>
                 <option value="pulse">Pulso</option>
@@ -224,7 +224,7 @@ import Layout from '../../layouts/Layout.astro';
         </td>
         <td class="py-2">
           <button 
-            class="text-orange-500 hover:text-orange-400 text-xs"
+            class="text-wild-orange hover:text-orange-400 text-xs"
             onclick="showAssignModal('${user.id}', '${user.username}')"
           >
             Asignar Tag

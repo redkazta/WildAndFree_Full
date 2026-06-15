@@ -1,4 +1,4 @@
----
+﻿---
 import Layout from '../layouts/Layout.astro';
 ---
 
@@ -11,14 +11,14 @@ import Layout from '../layouts/Layout.astro';
     <!-- Unauthenticated State -->
     <div id="unauth-state" class="hidden flex flex-col items-center justify-center min-h-[60vh] text-center space-y-8">
       <div class="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mb-4">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-500"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-wild-orange"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       </div>
       <div class="space-y-2">
         <h2 class="text-3xl font-black text-white uppercase tracking-tighter">Acceso Restringido</h2>
         <p class="text-white/40 text-sm font-bold uppercase tracking-widest">Debes iniciar sesión para ver tu perfil</p>
       </div>
       <div class="flex flex-col sm:flex-row gap-4 pt-4">
-        <a href="/login" class="px-12 py-4 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-orange-500 hover:text-white transition-all">Iniciar Sesión</a>
+        <a href="/login" class="px-12 py-4 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-wild-orange hover:text-white transition-all">Iniciar Sesión</a>
         <a href="/registro" class="px-12 py-4 bg-white/5 border border-white/10 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-white/10 transition-all">Crear Cuenta</a>
       </div>
     </div>
@@ -36,7 +36,7 @@ import Layout from '../layouts/Layout.astro';
               <div id="avatar-placeholder" class="w-full h-full flex items-center justify-center text-6xl font-black text-white bg-[#111]">
                 WG
               </div>
-              <img id="profile-avatar-img" src="" alt="Avatar" class="w-full h-full object-cover hidden">
+              <img id="profile-avatar-img" src="" alt="Avatar" width="256" height="256" class="w-full h-full object-cover hidden">
             </div>
             <button class="avatar-edit absolute -bottom-4 -right-4 w-12 h-12 bg-[#FF5500] text-black border-2 border-black flex items-center justify-center hover:scale-110 transition-transform shadow-[4px_4px_0px_#000]">
               <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/></svg>
@@ -114,7 +114,7 @@ import Layout from '../layouts/Layout.astro';
               <h3 class="text-xl font-black text-white uppercase border-l-4 border-[#FF5500] pl-4 mb-6">Artistas Favoritos</h3>
               <div class="flex gap-4 flex-wrap">
                 <div class="text-center cursor-pointer hover:-translate-y-1 transition-transform">
-                  <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=80&h=80&fit=crop" alt="Artista" class="w-20 h-20 rounded-full object-cover border-2 border-[#333] mb-2 mx-auto">
+                  <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=80&h=80&fit=crop" width="80" height="80" alt="Artista" class="w-20 h-20 rounded-full object-cover border-2 border-[#333] mb-2 mx-auto" loading="lazy" decoding="async">
                   <span class="block text-xs font-bold text-white uppercase">Artista 1</span>
                 </div>
                 <!-- ... more artists ... -->
@@ -532,7 +532,6 @@ import Layout from '../layouts/Layout.astro';
   </style>
 
 <script>
-  import lottie from 'lottie-web';
   import { supabase } from '../lib/supabase.js';
   import { getRole } from '../lib/role.js';
   import { getUserTags } from '../lib/tags-gateway.js';
@@ -715,16 +714,6 @@ import Layout from '../layouts/Layout.astro';
       displayUserTags([{ name: 'FAN', cssClass: 'role-fan' }]);
     }
     
-    // Los roles ahora son invisibles (solo para permisos internos)
-    // Mantener la corona solo para referencia interna, pero no mostrar roles
-    const { role: resolvedRoleCheck } = await getRole(); 
-    const roleRaw = (resolvedRoleCheck || profile.role || session.user?.user_metadata?.role || 'fan');
-    
-    // const roleId = parseInt(roleRaw) || 0;
-    
-    // La corona se muestra solo para owners (1-11) como referencia interna
-    // crownEl?.classList.toggle('is-visible', roleId >= 1 && roleId <= 11); // Removed crownEl usage
-    
     if (profile.avatar_url && avatarImg instanceof HTMLImageElement) {
       avatarImg.src = profile.avatar_url;
       avatarImg.classList.remove('hidden');
@@ -777,10 +766,10 @@ import Layout from '../layouts/Layout.astro';
     const playBtns = document.querySelectorAll('.play-btn');
     playBtns.forEach(btn => {
       btn.addEventListener('click', () => {
-        if (btn.textContent === '▶') {
-          btn.textContent = '⏸';
+        if (btn.textContent === 'â–¶') {
+          btn.textContent = 'â¸';
         } else {
-          btn.textContent = '▶';
+          btn.textContent = 'â–¶';
         }
       });
     });

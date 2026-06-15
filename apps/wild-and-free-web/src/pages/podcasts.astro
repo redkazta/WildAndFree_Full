@@ -1,4 +1,4 @@
----
+﻿---
 import Layout from '../layouts/Layout.astro';
 import tenantConfig from '../../../../packages/shared-types/tenant-config.json';
 
@@ -160,7 +160,7 @@ const studioShots = [
             {podcasts.map((pod) => (
                 <div class="group flex flex-col md:flex-row gap-6 items-start p-4 rounded-2xl hover:bg-white/5 transition-all cursor-pointer border border-transparent hover:border-white/10">
                     <div class="relative w-full md:w-48 aspect-square flex-shrink-0 overflow-hidden rounded-xl bg-gray-900">
-                        <img src={pod.image} class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 grayscale group-hover:grayscale-0" />
+                        <img src={pod.image} width="192" height="192" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 grayscale group-hover:grayscale-0" />
                         <div class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
                             <button 
                                 class="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-xl play-podcast-btn"
@@ -226,11 +226,11 @@ const studioShots = [
             </div>
             <div class="lg:col-span-7 grid grid-cols-2 gap-4">
                 <div class="space-y-4 mt-12">
-                    <img src={studioShots[0]} class="w-full h-64 object-cover rounded-2xl grayscale hover:grayscale-0 transition-all duration-500 rotate-1" />
-                    <img src={studioShots[1]} class="w-full h-48 object-cover rounded-2xl grayscale hover:grayscale-0 transition-all duration-500 -rotate-2" />
+                    <img src={studioShots[0]} width="600" height="256" loading="lazy" decoding="async" class="w-full h-64 object-cover rounded-2xl grayscale hover:grayscale-0 transition-all duration-500 rotate-1" />
+                    <img src={studioShots[1]} width="600" height="192" loading="lazy" decoding="async" class="w-full h-48 object-cover rounded-2xl grayscale hover:grayscale-0 transition-all duration-500 -rotate-2" />
                 </div>
                 <div class="space-y-4">
-                    <img src={studioShots[2]} class="w-full h-80 object-cover rounded-2xl grayscale hover:grayscale-0 transition-all duration-500 rotate-2" />
+                    <img src={studioShots[2]} width="600" height="320" loading="lazy" decoding="async" class="w-full h-80 object-cover rounded-2xl grayscale hover:grayscale-0 transition-all duration-500 rotate-2" />
                     <div class="bg-[var(--primary)] p-6 rounded-2xl flex items-center justify-center -rotate-1">
                         <span class="text-4xl font-black text-black text-center uppercase leading-none">Solo <br/> Verdad</span>
                     </div>
@@ -249,7 +249,7 @@ const studioShots = [
             </h3>
             <div class="flex items-center justify-center gap-4">
                 <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-[var(--primary)]">
-                    <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100&q=80" class="w-full h-full object-cover" />
+                    <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100&q=80" width="48" height="48" class="w-full h-full object-cover" loading="lazy" decoding="async" />
                 </div>
                 <div class="text-left">
                     <p class="text-sm font-black text-white uppercase">Phantom G</p>

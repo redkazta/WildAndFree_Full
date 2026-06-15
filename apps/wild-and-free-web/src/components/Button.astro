@@ -1,0 +1,45 @@
+﻿---
+export type Props = {
+  variant?: 'primary' | 'ghost' | 'glow' | 'danger' | 'outline';
+  size?: 'sm' | 'md' | 'lg';
+  href?: string;
+  type?: 'button' | 'submit';
+  fullWidth?: boolean;
+};
+
+const { variant = 'primary', size = 'md', href, type = 'button', fullWidth = false } = Astro.props;
+
+const baseClasses = [
+  'inline-flex items-center justify-center gap-2',
+  'font-black uppercase tracking-widest',
+  'rounded-wild transition-all duration-wild',
+  'transform active:scale-95',
+  fullWidth ? 'w-full' : '',
+];
+
+const sizeClasses = {
+  sm: 'px-4 py-2 text-label-sm min-h-touch',
+  md: 'px-6 py-3 text-label min-h-touch',
+  lg: 'px-8 py-4 text-label min-h-touch',
+};
+
+const variantClasses = {
+  primary: 'bg-white text-black hover:bg-wild-orange hover:text-black shadow-lg hover:shadow-wild-glow',
+  ghost: 'bg-transparent border border-white/10 text-white hover:border-wild-orange hover:text-wild-orange',
+  glow: 'bg-wild-orange text-black shadow-wild-glow hover:shadow-wild-glow-lg hover:-translate-y-0.5',
+  danger: 'bg-red-600 text-white hover:bg-red-500 shadow-lg',
+  outline: 'bg-transparent border-2 border-white text-white hover:bg-white hover:text-black',
+};
+
+const classes = [...baseClasses, sizeClasses[size], variantClasses[variant]].join(' ');
+---
+
+{href ? (
+  <a href={href} class={classes}>
+    <slot />
+  </a>
+) : (
+  <button type={type} class={classes}>
+    <slot />
+  </button>
+)}
