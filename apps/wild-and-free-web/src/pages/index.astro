@@ -81,7 +81,6 @@ const artists: Artist[] = gatewayConfig?.data.artists ?? [
   },
 ];
 
-// Mock data for music tracks
 const tracks = [
   {
     id: 't1',
@@ -113,7 +112,6 @@ const tracks = [
   },
 ];
 
-// Mock data for events with ticket info
 const events = [
   {
     id: 'e1',
@@ -159,7 +157,6 @@ const events = [
   }
 ];
 
-// Mock data for products with variations
 const products = [
   {
     id: 'p1',
@@ -232,27 +229,83 @@ const products = [
 
 <Layout config={config}>
 	<Hero crewName={config.name} />
-	
+
+	<!-- Marquee Ticker -->
+	<div class="overflow-hidden bg-wild-orange py-4 border-y border-black/20">
+		<div class="flex whitespace-nowrap animate-marquee">
+			{Array(6).fill(null).map(() => (
+				<span class="text-black font-black uppercase tracking-[0.3em] text-sm md:text-base mx-8 flex items-center gap-8">
+					<span>Wild Gvng</span>
+					<span class="w-2 h-2 bg-black rounded-full"></span>
+					<span>Libertad Absoluta</span>
+					<span class="w-2 h-2 bg-black rounded-full"></span>
+					<span>Underground</span>
+					<span class="w-2 h-2 bg-black rounded-full"></span>
+					<span>Drill Sessions</span>
+					<span class="w-2 h-2 bg-black rounded-full"></span>
+					<span>La Liga Original</span>
+					<span class="w-2 h-2 bg-black rounded-full"></span>
+				</span>
+			))}
+		</div>
+	</div>
+
 	<main class="max-w-7xl mx-auto px-6 space-y-32 md:space-y-48 pb-32">
+		<!-- Stats Banner -->
+		<section class="grid grid-cols-2 md:grid-cols-4 gap-6 -mt-16 relative z-10">
+			{[
+				{ num: '50+', label: 'Tracks' },
+				{ num: '12+', label: 'Artistas' },
+				{ num: '2.4M', label: 'Seguidores' },
+				{ num: '15+', label: 'Eventos' },
+			].map((stat) => (
+				<div class="group bg-[#111] border border-white/10 rounded-wild-xl p-6 md:p-8 text-center hover:border-wild-orange/30 transition-all duration-500 hover:-translate-y-1">
+					<div class="text-3xl md:text-4xl font-black text-white group-hover:text-wild-orange transition-colors">{stat.num}</div>
+					<div class="text-label-sm font-black uppercase tracking-widest text-white/40 mt-2">{stat.label}</div>
+				</div>
+			))}
+		</section>
+
 		<!-- Historia Section -->
-		<section id="wild-and-free" class="relative group overflow-hidden rounded-wild-xl bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 p-8 md:p-16">
-			<div class="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-wild-orange/10 blur-[100px] rounded-full group-hover:bg-wild-orange/20 transition-colors duration-700"></div>
-			<div class="relative grid md:grid-cols-2 gap-12 items-center">
-				<div class="space-y-6">
-					<div class="inline-block px-4 py-1.5 rounded-full bg-wild-orange/10 border border-wild-orange/20 text-wild-orange text-xs font-bold uppercase tracking-widest">
+		<section id="wild-and-free" class="relative group overflow-hidden rounded-wild-xl border border-white/10">
+			<div class="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent"></div>
+			<div class="absolute top-0 right-0 -mr-32 -mt-32 w-[500px] h-[500px] bg-wild-orange/10 blur-[150px] rounded-full group-hover:bg-wild-orange/20 transition-colors duration-1000"></div>
+			<div class="absolute bottom-0 left-0 -ml-32 -mb-32 w-[400px] h-[400px] bg-wild-red/5 blur-[120px] rounded-full group-hover:bg-wild-red/10 transition-colors duration-1000"></div>
+			<div class="relative grid md:grid-cols-2 gap-0">
+				<div class="p-8 md:p-16 flex flex-col justify-center space-y-8">
+					<div class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-wild-orange/10 border border-wild-orange/20 text-wild-orange text-xs font-black uppercase tracking-widest w-fit">
+						<span class="relative flex h-2 w-2">
+							<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-wild-orange opacity-75"></span>
+							<span class="relative inline-flex rounded-full h-2 w-2 bg-wild-orange"></span>
+						</span>
 						La liga original
 					</div>
-					<h2 class="text-4xl md:text-6xl font-black tracking-tighter leading-none">
-						WILD <span class="text-transparent bg-clip-text bg-gradient-to-r from-wild-orange to-wild-red">AND FREE</span>
+					<h2 class="text-5xl md:text-7xl font-black tracking-tighter leading-[0.9]">
+						WILD<br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-wild-orange via-wild-red to-wild-orange bg-[length:200%_auto] animate-gradient-shift">AND FREE</span>
 					</h2>
 					<div class="space-y-4 text-lg text-white font-bold leading-relaxed">
-						<p>El movimiento que inició todo. WILD AND FREE no es solo un nombre, es una filosofía de vida que representa libertad absoluta, autenticidad cruda y resistencia contra lo establecido.</p>
-						<p>Desde los primeros beats en los sótanos hasta los escenarios más grandes, mantenemos viva la esencia del underground.</p>
+						<p class="border-l-2 border-wild-orange pl-6">El movimiento que inició todo. WILD AND FREE no es solo un nombre, es una filosofía de vida que representa libertad absoluta, autenticidad cruda y resistencia contra lo establecido.</p>
+						<p class="border-l-2 border-white/20 pl-6">Desde los primeros beats en los sótanos hasta los escenarios más grandes, mantenemos viva la esencia del underground.</p>
 					</div>
+					<a href="#artists" class="group/link inline-flex items-center gap-3 text-wild-orange font-black uppercase tracking-widest text-sm hover:text-white transition-colors w-fit">
+						Conoce la crew
+						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="group-hover/link:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+					</a>
 				</div>
-				<div class="relative group aspect-square rounded-wild-lg overflow-hidden shadow-2xl shadow-black/50">
-					<img src="https://images.unsplash.com/photo-1493225255756-d9584f8606e9?auto=format&fit=crop&w=800&q=80" alt="WILD AND FREE" width="800" height="800" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100" loading="lazy" />
-					<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60 group-hover:opacity-20 transition-opacity"></div>
+				<div class="relative aspect-[4/5] md:aspect-auto overflow-hidden">
+					<img src="https://images.unsplash.com/photo-1493225255756-d9584f8606e9?auto=format&fit=crop&w=800&q=80" alt="WILD AND FREE" width="800" height="1000" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-100" loading="lazy" />
+					<div class="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-transparent md:bg-gradient-to-t md:from-black/60 md:via-transparent md:to-transparent"></div>
+					<div class="absolute bottom-8 left-8 right-8">
+						<div class="flex items-center gap-4">
+							<div class="w-12 h-12 rounded-full bg-wild-orange flex items-center justify-center">
+								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-black"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+							</div>
+							<div>
+								<div class="text-label-sm font-black uppercase tracking-widest text-white/60">Est.</div>
+								<div class="text-2xl font-black text-white">2024</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</section>
@@ -260,17 +313,21 @@ const products = [
 		<!-- Artistas Section -->
 		<section id="artists" class="space-y-12 md:space-y-16 pt-20">
 			<div class="flex flex-col md:flex-row items-center md:items-end justify-between border-b border-white/10 pb-8 gap-6">
-				<div class="space-y-2 text-center md:text-left">
-					<h2 class="text-4xl md:text-6xl font-black tracking-tighter text-white uppercase">NUESTRA CREW</h2>
-					<p class="text-wild-orange font-black uppercase tracking-[0.3em] text-label-sm md:text-xs">Los rostros que lideran el asfalto</p>
+				<div class="space-y-3 text-center md:text-left">
+					<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-label-sm font-black uppercase tracking-widest text-white/60">Crew 2024</div>
+					<h2 class="text-5xl md:text-7xl font-black tracking-tighter text-white uppercase leading-none">NUESTRA<br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-wild-orange to-wild-red">CREW</span></h2>
+					<p class="text-white/40 font-black uppercase tracking-[0.3em] text-label-sm md:text-xs max-w-md">Los rostros que lideran el asfalto y definen el sonido del underground</p>
 				</div>
-				<a href="/artistas" class="group flex items-center gap-2 text-white font-black uppercase tracking-[0.2em] text-label-sm hover:text-wild-orange transition-all">
-					Ver todos <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+				<a href="/artistas" class="group flex items-center gap-3 px-6 py-3 bg-white/5 border border-white/10 rounded-full text-white font-black uppercase tracking-[0.2em] text-label-sm hover:bg-wild-orange hover:border-wild-orange hover:text-black transition-all duration-300">
+					Ver todos
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
 				</a>
 			</div>
 			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-				{artists.map((artist) => (
-					<ArtistCard artist={artist} />
+				{artists.map((artist, i) => (
+					<div class="group relative" style={`animation-delay: ${i * 100}ms`}>
+						<ArtistCard artist={artist} />
+					</div>
 				))}
 			</div>
 		</section>
@@ -278,27 +335,34 @@ const products = [
 		<!-- Música Section -->
 		<section id="music" class="space-y-12 md:space-y-16">
 			<div class="flex flex-col md:flex-row items-center md:items-end justify-between border-b border-white/10 pb-8 gap-6">
-				<div class="space-y-2 text-center md:text-left">
-					<h2 class="text-4xl md:text-6xl font-black tracking-tighter text-white uppercase">ÚLTIMOS LANZAMIENTOS</h2>
-					<p class="text-wild-orange font-black uppercase tracking-[0.3em] text-label-sm md:text-xs">Los beats que definen la cultura</p>
+				<div class="space-y-3 text-center md:text-left">
+					<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-wild-orange/10 border border-wild-orange/20 text-label-sm font-black uppercase tracking-widest text-wild-orange">Nuevos Beats</div>
+					<h2 class="text-5xl md:text-7xl font-black tracking-tighter text-white uppercase leading-none">ÚLTIMOS<br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-wild-orange to-wild-red">LANZAMIENTOS</span></h2>
+					<p class="text-white/40 font-black uppercase tracking-[0.3em] text-label-sm md:text-xs max-w-md">Los beats que definen la cultura urbana</p>
 				</div>
-				<a href="/musica" class="group flex items-center gap-2 text-white font-black uppercase tracking-[0.2em] text-label-sm hover:text-wild-orange transition-all">
-					Ver música <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+				<a href="/musica" class="group flex items-center gap-3 px-6 py-3 bg-white/5 border border-white/10 rounded-full text-white font-black uppercase tracking-[0.2em] text-label-sm hover:bg-wild-orange hover:border-wild-orange hover:text-black transition-all duration-300">
+					Ver música
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
 				</a>
 			</div>
 			<MusicGrid tracks={tracks} />
 		</section>
 
 		<!-- Video Destacado -->
-		<section id="featured-video" class="relative rounded-wild-xl overflow-hidden aspect-video group cursor-pointer shadow-2xl">
-			<img src="https://images.unsplash.com/photo-1493225255756-d9584f8606e9?auto=format&fit=crop&w=1200&q=80" alt="Video Preview" width="1200" height="675" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000" />
-			<div class="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-colors flex flex-col items-center justify-center gap-6">
-				<div class="w-24 h-24 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center group-hover:scale-110 group-hover:bg-wild-orange transition-all duration-500">
-					<svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" class="text-white group-hover:text-black transform translate-x-1"><path d="M8 5v14l11-7z"/></svg>
+		<section id="featured-video" class="relative rounded-wild-xl overflow-hidden aspect-video group cursor-pointer">
+			<img src="https://images.unsplash.com/photo-1493225255756-d9584f8606e9?auto=format&fit=crop&w=1200&q=80" alt="Video Preview" width="1200" height="675" class="w-full h-full object-cover grayscale group-hover:grayscale-0 scale-105 group-hover:scale-110 transition-all duration-[2000ms]" />
+			<div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/20 group-hover:from-black/80 group-hover:via-black/40 group-hover:to-black/10 transition-all duration-700"></div>
+			<div class="absolute inset-0 flex flex-col items-center justify-center gap-8">
+				<div class="relative">
+					<div class="absolute inset-0 rounded-full bg-wild-orange/30 blur-xl scale-150 animate-pulse"></div>
+					<div class="relative w-28 h-28 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center group-hover:bg-wild-orange group-hover:border-wild-orange transition-all duration-500 group-hover:scale-110">
+						<svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" class="text-white group-hover:text-black transform translate-x-1 transition-colors"><path d="M8 5v14l11-7z"/></svg>
+					</div>
 				</div>
-				<div class="text-center space-y-2">
-					<h3 class="text-2xl font-black tracking-widest uppercase text-white">Video Oficial</h3>
-					<p class="text-wild-orange font-black uppercase tracking-widest text-sm">Último lanzamiento visual</p>
+				<div class="text-center space-y-3">
+					<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-label-sm font-black uppercase tracking-widest text-white/80">Lanzamiento Visual</div>
+					<h3 class="text-3xl md:text-5xl font-black tracking-tighter uppercase text-white">SIN REGLAS</h3>
+					<p class="text-wild-orange font-black uppercase tracking-widest text-sm">Video Oficial · Nova K</p>
 				</div>
 			</div>
 		</section>
@@ -306,13 +370,14 @@ const products = [
 		<!-- Eventos Section -->
 		<section id="events" class="space-y-12 md:space-y-16">
 			<div class="flex flex-col md:flex-row items-center md:items-end justify-between border-b border-white/10 pb-8 gap-6">
-				<div class="space-y-2 text-center md:text-left">
-					<h2 class="text-4xl md:text-6xl font-black tracking-tighter text-white uppercase">PRÓXIMAS FECHAS</h2>
-					<p class="text-wild-orange font-black uppercase tracking-widest text-label-sm md:text-sm">Donde el movimiento cobra vida</p>
+				<div class="space-y-3 text-center md:text-left">
+					<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-wild-red/10 border border-wild-red/20 text-label-sm font-black uppercase tracking-widest text-wild-red">En vivo</div>
+					<h2 class="text-5xl md:text-7xl font-black tracking-tighter text-white uppercase leading-none">PRÓXIMAS<br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-wild-orange to-wild-red">FECHAS</span></h2>
+					<p class="text-white/40 font-black uppercase tracking-[0.3em] text-label-sm md:text-xs max-w-md">Donde el movimiento cobra vida en el escenario</p>
 				</div>
-				<a href="/eventos" class="group flex items-center gap-2 text-wild-orange font-bold uppercase tracking-widest text-label-sm md:text-xs hover:text-white transition-colors">
+				<a href="/eventos" class="group flex items-center gap-3 px-6 py-3 bg-white/5 border border-white/10 rounded-full text-white font-black uppercase tracking-[0.2em] text-label-sm hover:bg-wild-orange hover:border-wild-orange hover:text-black transition-all duration-300">
 					Ver todos
-					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="transform group-hover:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
 				</a>
 			</div>
 			<EventsList events={events} />
@@ -321,26 +386,32 @@ const products = [
 		<!-- Shop Section -->
 		<section id="shop" class="space-y-12 md:space-y-16">
 			<div class="flex flex-col md:flex-row items-center md:items-end justify-between border-b border-white/10 pb-8 gap-6">
-				<div class="space-y-2 text-center md:text-left">
-					<h2 class="text-4xl md:text-6xl font-black tracking-tighter text-white uppercase">MERCH OFICIAL</h2>
-					<p class="text-wild-orange font-black uppercase tracking-widest text-label-sm md:text-sm">Viste el movimiento</p>
+				<div class="space-y-3 text-center md:text-left">
+					<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-label-sm font-black uppercase tracking-widest text-white/60">Drop Limitado</div>
+					<h2 class="text-5xl md:text-7xl font-black tracking-tighter text-white uppercase leading-none">MERCH<br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-wild-orange to-wild-red">OFICIAL</span></h2>
+					<p class="text-white/40 font-black uppercase tracking-[0.3em] text-label-sm md:text-xs max-w-md">Viste el movimiento, lleva la identidad</p>
 				</div>
-				<a href="/tienda" class="group flex items-center gap-2 text-wild-orange font-bold uppercase tracking-widest text-label-sm md:text-xs hover:text-white transition-colors">
+				<a href="/tienda" class="group flex items-center gap-3 px-6 py-3 bg-white/5 border border-white/10 rounded-full text-white font-black uppercase tracking-[0.2em] text-label-sm hover:bg-wild-orange hover:border-wild-orange hover:text-black transition-all duration-300">
 					Ver tienda
-					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="transform group-hover:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
 				</a>
 			</div>
 			<ShopGrid products={products} />
 		</section>
 
 		<!-- CTA Section -->
-		<section id="login" class="relative rounded-wild-xl overflow-hidden bg-white py-24 px-8 text-black text-center group">
-			<div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-wild-orange/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
-			<div class="relative max-w-2xl mx-auto space-y-8">
-				<h2 class="text-5xl md:text-7xl font-black tracking-tighter leading-none text-black">ÚNETE A LA CREW</h2>
-				<p class="text-lg md:text-xl font-black text-black">Acceso exclusivo a drops, tickets y contenido detrás de escenas.</p>
-				<div class="flex flex-wrap gap-4 justify-center">
-					<a href="/registro" class="px-10 py-4 bg-black text-white text-xs font-black uppercase tracking-[0.2em] rounded-wild-lg hover:bg-wild-orange transition-all shadow-2xl">Registrarse Ahora</a>
+		<section id="login" class="relative rounded-wild-xl overflow-hidden border border-white/10 group">
+			<div class="absolute inset-0 bg-gradient-to-br from-wild-orange/10 via-transparent to-wild-red/5 opacity-50 group-hover:opacity-100 transition-opacity duration-1000"></div>
+			<div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-wild-orange/20 blur-[150px] rounded-full"></div>
+			<div class="relative py-24 px-8 text-center">
+				<div class="max-w-3xl mx-auto space-y-10">
+					<div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-label-sm font-black uppercase tracking-widest text-white/60">Acceso Exclusivo</div>
+					<h2 class="text-6xl md:text-8xl font-black tracking-tighter leading-[0.85] text-white">ÚNETE A LA<br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-wild-orange to-wild-red">CREW</span></h2>
+					<p class="text-lg md:text-xl font-bold text-white/60 max-w-xl mx-auto">Acceso exclusivo a drops, tickets y contenido detrás de escenas. Sé parte del movimiento.</p>
+					<div class="flex flex-wrap gap-4 justify-center pt-4">
+						<a href="/registro" class="px-12 py-5 bg-wild-orange text-black text-sm font-black uppercase tracking-[0.2em] rounded-wild-lg hover:bg-white transition-all duration-300 shadow-2xl shadow-wild-orange/20 hover:shadow-white/20 hover:-translate-y-1">Registrarse Ahora</a>
+						<a href="/login" class="px-12 py-5 bg-transparent border-2 border-white/20 text-white text-sm font-black uppercase tracking-[0.2em] rounded-wild-lg hover:border-white hover:bg-white hover:text-black transition-all duration-300">Iniciar Sesión</a>
+					</div>
 				</div>
 			</div>
 		</section>
@@ -350,34 +421,34 @@ const products = [
 </Layout>
 
 <style>
-	/* Eliminamos los estilos antiguos para usar Tailwind puro */
+	@keyframes marquee {
+		0% { transform: translateX(0); }
+		100% { transform: translateX(-50%); }
+	}
+	.animate-marquee {
+		animation: marquee 30s linear infinite;
+	}
+	@keyframes fade-in-up {
+		0% { opacity: 0; transform: translateY(30px); }
+		100% { opacity: 1; transform: translateY(0); }
+	}
+	.animate-fade-in-up {
+		animation: fade-in-up 0.8s ease-out forwards;
+	}
 </style>
 
 <script>
-	const parallaxImages = document.querySelectorAll('.parallax-img');
-	
-	const updateParallax = () => {
- 		parallaxImages.forEach(img => {
- 			const parent = img.parentElement;
- 			if (!parent) return;
- 			
- 			const rect = parent.getBoundingClientRect();
- 			const windowHeight = window.innerHeight;
- 			
- 			// Si la imagen está visible en el viewport
- 			if (rect.top < windowHeight && rect.bottom > 0) {
- 				// Calculamos el progreso (0 a 1) de la imagen cruzando la pantalla
- 				const progress = (windowHeight - rect.top) / (windowHeight + rect.height);
- 				// Movemos la imagen entre -10% y 10% de su altura (ya que tiene h-[120%] y -top-[10%])
- 				const yPos = (progress - 0.5) * 20; // Esto dará un rango de -10 a 10
- 				(img as HTMLElement).style.transform = `translateY(${yPos}%)`;
- 			}
- 		});
- 		requestAnimationFrame(updateParallax);
- 	};
+	const observer = new IntersectionObserver((entries) => {
+		entries.forEach(entry => {
+			if (entry.isIntersecting) {
+				entry.target.classList.add('animate-fade-in-up');
+				observer.unobserve(entry.target);
+			}
+		});
+	}, { threshold: 0.1 });
 
-	// Solo iniciar si hay imágenes con parallax
-	if (parallaxImages.length > 0) {
-		requestAnimationFrame(updateParallax);
-	}
+	document.querySelectorAll('section').forEach(section => {
+		section.classList.add('opacity-0');
+		observer.observe(section);
+	});
 </script>
