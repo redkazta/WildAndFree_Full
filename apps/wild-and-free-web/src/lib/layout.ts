@@ -232,7 +232,9 @@ const updateAuthUI = async () => {
   document.documentElement.setAttribute("data-role", role || "");
 
   if (session) {
-    const { data: profile, error: profileError } = await supabase
+    // Try to fetch profile; if RLS blocks it, first ensure the profile exists.
+    let profile: any = null;
+    const { data: profileData, error: profileError } = await supabase
       .from("profiles")
       .select("*")
       .eq("id", session.user.id)
@@ -240,24 +242,49 @@ const updateAuthUI = async () => {
 
     if (profileError) {
       await ensureProfile(session);
+      // Retry once
+      const retry = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", session.user.id)
+        .single();
+      profile = retry.data;
+    } else {
+      profile = profileData;
     }
 
     if (authContainer) {
+      // Build display name: use nombre, or fall back to email prefix, else "Usuario"
+      const displayName =
+        profile?.nombre?.split(" ")[0] ||
+        session.user.email?.split("@")[0] ||
+        "Usuario";
+      // Build initials from display name
+      const initials = (profile?.nombre || session.user.email || "WG")
+        .substring(0, 2)
+        .toUpperCase();
+      // Role display string
+      const roleDisplay = role
+        ? role.charAt(0).toUpperCase() + role.slice(1)
+        : "Miembro";
+      // Avatar HTML: show image if avatar_url exists, otherwise initials
+      const avatarHtml = profile?.avatar_url
+        ? `<img src="${profile.avatar_url}" alt="" class="w-8 h-8 rounded-full object-cover" />`
+        : `<div class="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] flex items-center justify-center text-[10px] font-black uppercase text-white shadow-[0_0_10px_rgba(201,131,0,0.3)] group-hover:shadow-[0_0_15px_var(--primary)] transition-all">${initials}</div>`;
+
       authContainer.innerHTML = `
         <div class="relative group/pop">
           <a href="/perfil" class="flex items-center gap-3 px-4 py-2 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 hover:border-[var(--primary)]/50 transition-all cursor-pointer group">
-            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] flex items-center justify-center text-[10px] font-black uppercase text-white shadow-[0_0_10px_rgba(201,131,0,0.3)] group-hover:shadow-[0_0_15px_var(--primary)] transition-all">
-              ${(profile as any)?.nombre?.substring(0, 2) || "WG"}
-            </div>
+            ${avatarHtml}
             <div class="hidden md:flex flex-col">
-              <span class="text-[10px] font-black uppercase tracking-widest text-white group-hover:text-[var(--primary)] transition-colors leading-none mb-0.5">${(profile as any)?.nombre?.split(" ")[0] || "Usuario"}</span>
-              <span class="text-[8px] font-bold text-gray-500 uppercase tracking-wider">Miembro</span>
+              <span class="text-[10px] font-black uppercase tracking-widest text-white group-hover:text-[var(--primary)] transition-colors leading-none mb-0.5">${displayName}</span>
+              <span class="text-[8px] font-bold text-gray-500 uppercase tracking-wider">${roleDisplay}</span>
             </div>
           </a>
           <div class="popover w-64">
             <div class="popover-header">
               <span class="popover-title">Mi Cuenta</span>
-              <span class="text-[9px] text-[var(--primary)] font-mono">${role === "admin" ? "ADMIN" : "MEMBER"}</span>
+              <span class="text-[9px] text-[var(--primary)] font-mono">${role?.toUpperCase() || "MIEMBRO"}</span>
             </div>
             <div class="popover-content space-y-2">
               <a href="/perfil" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 group transition-colors">

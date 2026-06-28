@@ -750,13 +750,69 @@ import Layout from '../layouts/Layout.astro';
       });
     });
 
-    // Avatar edit button
+    // Avatar upload via Supabase Storage
+    const createAvatarInput = () => {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*';
+      input.style.display = 'none';
+      input.id = 'avatar-upload-input';
+      return input;
+    };
+
+    let avatarInput = document.getElementById('avatar-upload-input') as HTMLInputElement | null;
+    if (!avatarInput) {
+      avatarInput = createAvatarInput();
+      document.body.appendChild(avatarInput);
+    }
+
     const avatarEdit = document.querySelector('.avatar-edit');
     if (avatarEdit) {
       avatarEdit.addEventListener('click', () => {
-        alert('Función de cambio de avatar - Próximamente');
+        avatarInput?.click();
       });
     }
+
+    avatarInput.addEventListener('change', async () => {
+      const file = avatarInput?.files?.[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('avatar', file);
+
+      try {
+        const res = await fetch('/api/upload-avatar', {
+          method: 'POST',
+          body: formData,
+        });
+        const result = await res.json();
+
+        if (res.ok && result.avatar_url) {
+          // Update the cached profile's avatar_url
+          if (profile) profile.avatar_url = result.avatar_url;
+
+          // Update header avatar (handled by updateAuthUI on next init)
+
+          // Update page avatar
+          const img = document.getElementById('profile-avatar-img');
+          if (img instanceof HTMLImageElement) {
+            img.src = result.avatar_url;
+            img.classList.remove('hidden');
+            const placeholder = document.getElementById('avatar-placeholder');
+            if (placeholder) placeholder.classList.add('hidden');
+          }
+        } else {
+          console.error('Avatar upload failed:', result.error);
+          alert('Error al subir la foto: ' + (result.error || 'Desconocido'));
+        }
+      } catch (err) {
+        console.error('Avatar upload error:', err);
+        alert('Error de conexión al subir la foto');
+      }
+
+      // Reset input so the same file can be re-selected
+      avatarInput!.value = '';
+    });
 
     // Following buttons
     const followingBtns = document.querySelectorAll('.following-btn');
