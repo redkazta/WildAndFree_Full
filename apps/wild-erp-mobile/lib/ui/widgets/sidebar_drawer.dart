@@ -162,7 +162,7 @@ class SidebarDrawer extends StatelessWidget {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Text(
-                                      profile?.displayName ?? profile?.nombre ?? profile?.email ?? '',
+                                      profile?.displayName ?? profile?.email ?? '',
                                       style: const TextStyle(
                                         color: AppTheme.textPrimary,
                                         fontSize: 12,
