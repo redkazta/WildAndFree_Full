@@ -38,10 +38,9 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
 <script>
   import { supabase } from '../../lib/supabase';
 
-  // Permission check
   const perms: string[] = (window as any).__wildPermissions || [];
-  const canView = perms.includes('orders.view');
-  const canManage = perms.includes('orders.manage');
+  const canView = perms.includes('*') || perms.includes('orders.view');
+  const canManage = perms.includes('*') || perms.includes('orders.manage');
 
   if (!canView) {
     document.querySelector('.erp-content')!.innerHTML = '<div class="erp-card" style="text-align:center;padding:60px;"><p style="color:rgba(255,255,255,0.3);">No tienes permiso para ver pedidos.</p></div>';

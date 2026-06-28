@@ -228,10 +228,9 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
 <script>
   import { supabase } from '../../lib/supabase';
 
-  // Permission check
   const perms: string[] = (window as any).__wildPermissions || [];
-  const canView = perms.includes('inventory.view');
-  const canManage = perms.includes('inventory.manage');
+  const canView = perms.includes('*') || perms.includes('inventory.view');
+  const canManage = perms.includes('*') || perms.includes('inventory.manage');
 
   if (!canView) {
     document.querySelector('.erp-content')!.innerHTML = '<div class="erp-card" style="text-align:center;padding:60px;"><p style="color:rgba(255,255,255,0.3);">No tienes permiso para ver el inventario.</p></div>';

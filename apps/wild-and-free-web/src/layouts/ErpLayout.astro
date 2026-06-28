@@ -659,7 +659,14 @@ const modules = [
       throw new Error('Access denied');
     }
 
-    // Load permissions for this role
+    // Store global role + immediate wildcard permissions for admin
+    (window as any).__wildRole = role;
+    if (role === 'admin') {
+      (window as any).__wildPermissions = ['*'];
+      document.documentElement.setAttribute('data-permissions', '*');
+    }
+
+    // Load detailed permissions for this role
     let permissions: string[] = [];
 
     if (role === 'admin') {

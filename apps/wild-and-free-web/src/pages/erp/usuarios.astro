@@ -235,11 +235,10 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
 <script>
   import { supabase } from '../../lib/supabase';
 
-  // Permission check
   const perms: string[] = (window as any).__wildPermissions || [];
-  const canView = perms.includes('users.view');
-  const canManage = perms.includes('users.manage');
-  const canVerify = perms.includes('users.verify_artist');
+  const canView = perms.includes('*') || perms.includes('users.view');
+  const canManage = perms.includes('*') || perms.includes('users.manage');
+  const canVerify = perms.includes('*') || perms.includes('users.verify_artist');
 
   if (!canView) {
     document.querySelector('.erp-content')!.innerHTML = '<div class="erp-card" style="text-align:center;padding:60px;"><p style="color:rgba(255,255,255,0.3);">No tienes permiso para ver usuarios.</p></div>';

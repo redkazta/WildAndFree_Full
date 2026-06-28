@@ -1,0 +1,1 @@
+SELECT schemaname, tablename, policyname, permissive, roles, cmd, qual FROM pg_policies WHERE schemaname = 'public' AND tablename IN ('user_roles', 'roles', 'permissions', 'role_permissions') ORDER BY tablename, policyname;

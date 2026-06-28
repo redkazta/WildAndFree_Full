@@ -193,10 +193,9 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
 <script>
   import { supabase } from '../../lib/supabase';
 
-  // Permission check
   const perms: string[] = (window as any).__wildPermissions || [];
-  const canView = perms.includes('content.view');
-  const canApprove = perms.includes('content.approve');
+  const canView = perms.includes('*') || perms.includes('content.view');
+  const canApprove = perms.includes('*') || perms.includes('content.approve');
   const canCreate = perms.includes('content.create') || perms.includes('content.create_crew');
 
   if (!canView) {

@@ -1,0 +1,1 @@
+SELECT rp.role_id, r.name as role_name, rp.permission_id, p.name as perm_name FROM public.role_permissions rp JOIN public.roles r ON r.id = rp.role_id JOIN public.permissions p ON p.id = rp.permission_id ORDER BY rp.role_id, rp.permission_id;
