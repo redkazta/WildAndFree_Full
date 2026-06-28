@@ -1,7 +1,7 @@
-import { supabase } from './supabase.js';
-import { getRole, requireRole } from './role.js';
-import { ensureProfile } from './profile.js';
-import { cartStore, CartEvents } from './cart.js';
+import { supabase } from "./supabase.js";
+import { getRole, requireRole } from "./role.js";
+import { ensureProfile } from "./profile.js";
+import { cartStore, CartEvents } from "./cart.js";
 
 interface CartItem {
   id: string;
@@ -27,38 +27,42 @@ interface CartDetail {
 // --- Sidebar Core Logic ---
 const setupSidebar = () => {
   const body = document.body;
-  const trigger = document.getElementById('sidebar-trigger');
-  const closeBtn = document.getElementById('sidebar-close');
-  const overlay = document.getElementById('sidebar-overlay');
-  const sidebar = document.getElementById('sidebar');
+  const trigger = document.getElementById("sidebar-trigger");
+  const closeBtn = document.getElementById("sidebar-close");
+  const overlay = document.getElementById("sidebar-overlay");
+  const sidebar = document.getElementById("sidebar");
 
   if (trigger) {
-    trigger.addEventListener('click', (e) => {
+    trigger.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
-      body.classList.toggle('sidebar-open');
+      body.classList.toggle("sidebar-open");
     });
   }
 
   if (closeBtn) {
-    closeBtn.addEventListener('click', (e) => {
+    closeBtn.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
-      body.classList.remove('sidebar-open');
+      body.classList.remove("sidebar-open");
     });
   }
 
   if (overlay) {
-    overlay.addEventListener('click', () => {
-      body.classList.remove('sidebar-open');
+    overlay.addEventListener("click", () => {
+      body.classList.remove("sidebar-open");
     });
   }
 
-  document.addEventListener('click', (e) => {
-    if (body.classList.contains('sidebar-open')) {
+  document.addEventListener("click", (e) => {
+    if (body.classList.contains("sidebar-open")) {
       const target = e.target;
-      if (target instanceof Node && !sidebar?.contains(target) && !trigger?.contains(target)) {
-        body.classList.remove('sidebar-open');
+      if (
+        target instanceof Node &&
+        !sidebar?.contains(target) &&
+        !trigger?.contains(target)
+      ) {
+        body.classList.remove("sidebar-open");
       }
     }
   });
@@ -68,28 +72,54 @@ const setupSidebar = () => {
 const updateCartUI = (detail: CartDetail) => {
   const { cart, wishlist, count } = detail;
 
-  const cartCountEl = document.querySelector('[data-target="cart-popover"] span');
-  const wishlistCountEl = document.querySelector('[data-target="wishlist-popover"] span');
+  const cartCountEl = document.querySelector(
+    '[data-target="cart-popover"] span',
+  );
+  const wishlistCountEl = document.querySelector(
+    '[data-target="wishlist-popover"] span',
+  );
 
   if (cartCountEl) {
     cartCountEl.textContent = count.toString();
-    cartCountEl.classList.toggle('hidden', count === 0);
-    cartCountEl.parentElement?.classList.add('scale-110', 'text-wild-orange');
-    setTimeout(() => cartCountEl.parentElement?.classList.remove('scale-110', 'text-wild-orange'), 200);
+    cartCountEl.classList.toggle("hidden", count === 0);
+    cartCountEl.parentElement?.classList.add("scale-110", "text-wild-orange");
+    setTimeout(
+      () =>
+        cartCountEl.parentElement?.classList.remove(
+          "scale-110",
+          "text-wild-orange",
+        ),
+      200,
+    );
   }
   if (wishlistCountEl) {
     wishlistCountEl.textContent = wishlist.length.toString();
-    wishlistCountEl.classList.toggle('hidden', wishlist.length === 0);
-    wishlistCountEl.parentElement?.classList.add('scale-110', 'text-wild-orange');
-    setTimeout(() => wishlistCountEl.parentElement?.classList.remove('scale-110', 'text-wild-orange'), 200);
+    wishlistCountEl.classList.toggle("hidden", wishlist.length === 0);
+    wishlistCountEl.parentElement?.classList.add(
+      "scale-110",
+      "text-wild-orange",
+    );
+    setTimeout(
+      () =>
+        wishlistCountEl.parentElement?.classList.remove(
+          "scale-110",
+          "text-wild-orange",
+        ),
+      200,
+    );
   }
 
-  const cartContent = document.querySelector('#cart-popover .auth-popover-content');
+  const cartContent = document.querySelector(
+    "#cart-popover .auth-popover-content",
+  );
   if (cartContent) {
     if (cart.length === 0) {
-      cartContent.innerHTML = '<p class="text-[10px] text-center text-gray-500 font-bold uppercase tracking-widest py-8">Tu carrito está vacío</p>';
+      cartContent.innerHTML =
+        '<p class="text-[10px] text-center text-gray-500 font-bold uppercase tracking-widest py-8">Tu carrito está vacío</p>';
     } else {
-      const itemsHtml = cart.map(item => `
+      const itemsHtml = cart
+        .map(
+          (item) => `
         <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors group relative">
           <div class="w-12 h-12 rounded-md overflow-hidden bg-white/5 flex-shrink-0">
             <img src="${item.image}" width="48" height="48" class="w-full h-full object-cover" />
@@ -105,9 +135,14 @@ const updateCartUI = (detail: CartDetail) => {
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
           </button>
         </div>
-      `).join('');
+      `,
+        )
+        .join("");
 
-      const total = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+      const total = cart.reduce(
+        (acc, item) => acc + item.price * item.quantity,
+        0,
+      );
 
       cartContent.innerHTML = `
         <div class="space-y-1 max-h-[300px] overflow-y-auto pr-1 custom-scrollbar">
@@ -122,8 +157,8 @@ const updateCartUI = (detail: CartDetail) => {
         </div>
       `;
 
-      cartContent.querySelectorAll('.remove-cart-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
+      cartContent.querySelectorAll(".remove-cart-btn").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
           e.stopPropagation();
           const target = e.currentTarget as HTMLElement;
           if (target && target.dataset.id) {
@@ -134,12 +169,17 @@ const updateCartUI = (detail: CartDetail) => {
     }
   }
 
-  const wishlistContent = document.querySelector('#wishlist-popover .auth-popover-content');
+  const wishlistContent = document.querySelector(
+    "#wishlist-popover .auth-popover-content",
+  );
   if (wishlistContent) {
     if (wishlist.length === 0) {
-      wishlistContent.innerHTML = '<p class="text-[10px] text-center text-gray-500 font-bold uppercase tracking-widest py-8">Tu lista está vacía</p>';
+      wishlistContent.innerHTML =
+        '<p class="text-[10px] text-center text-gray-500 font-bold uppercase tracking-widest py-8">Tu lista está vacía</p>';
     } else {
-      const itemsHtml = wishlist.map(item => `
+      const itemsHtml = wishlist
+        .map(
+          (item) => `
         <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors group relative">
           <div class="w-10 h-10 rounded-md overflow-hidden bg-white/5 flex-shrink-0">
             <img src="${item.image}" width="40" height="40" class="w-full h-full object-cover" />
@@ -152,7 +192,9 @@ const updateCartUI = (detail: CartDetail) => {
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12h14"/></svg>
           </button>
         </div>
-      `).join('');
+      `,
+        )
+        .join("");
 
       wishlistContent.innerHTML = `
         <div class="space-y-1 max-h-[300px] overflow-y-auto pr-1 custom-scrollbar">
@@ -161,59 +203,78 @@ const updateCartUI = (detail: CartDetail) => {
         <a href="/perfil" class="block w-full py-2 bg-white/5 border border-white/10 text-white text-center text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-[var(--primary)] hover:text-black hover:border-[var(--primary)] transition-all mt-3">Ver Todos</a>
       `;
 
-      wishlistContent.querySelectorAll('.add-from-wishlist-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const target = e.currentTarget as HTMLElement;
-          if (target && target.dataset.id) {
-            const item = wishlist.find(i => i.id == target.dataset.id);
-            if (item) cartStore.addToCart(item);
-          }
+      wishlistContent
+        .querySelectorAll(".add-from-wishlist-btn")
+        .forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const target = e.currentTarget as HTMLElement;
+            if (target && target.dataset.id) {
+              const item = wishlist.find((i) => i.id == target.dataset.id);
+              if (item) cartStore.addToCart(item);
+            }
+          });
         });
-      });
     }
   }
 };
 
 // --- Auth & Session Logic ---
 const updateAuthUI = async () => {
-  const authContainer = document.querySelector('.auth-actions-container');
-  const { data: { session } } = await supabase.auth.getSession();
+  const authContainer = document.querySelector(".auth-actions-container");
+  console.log(
+    "[WG] updateAuthUI called, isSupabaseConfigured:",
+    (supabase as any).__supabaseConfigured !== false,
+  );
+  const {
+    data: { session },
+    error: sessionError,
+  } = await supabase.auth.getSession();
+  console.log("[WG] getSession result:", {
+    hasSession: !!session,
+    sessionError,
+    userId: session?.user?.id,
+  });
   const { role } = await getRole();
+  console.log("[WG] getRole result:", role);
   (window as any).__wildRole = role;
   (window as any).requireRole = requireRole;
-  document.documentElement.setAttribute('data-role', role || '');
+  document.documentElement.setAttribute("data-role", role || "");
 
   if (session) {
     const { data: profile, error: profileError } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', session.user.id)
+      .from("profiles")
+      .select("*")
+      .eq("id", session.user.id)
       .single();
 
     if (profileError) {
       await ensureProfile(session);
     }
 
-    document.querySelectorAll('.unauth-popover-msg').forEach(el => el.classList.add('hidden'));
-    document.querySelectorAll('.auth-popover-content').forEach(el => el.classList.remove('hidden'));
+    document
+      .querySelectorAll(".unauth-popover-msg")
+      .forEach((el) => el.classList.add("hidden"));
+    document
+      .querySelectorAll(".auth-popover-content")
+      .forEach((el) => el.classList.remove("hidden"));
 
     if (authContainer) {
       authContainer.innerHTML = `
         <div class="relative group/pop">
           <a href="/perfil" class="flex items-center gap-3 px-4 py-2 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 hover:border-[var(--primary)]/50 transition-all cursor-pointer group">
             <div class="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] flex items-center justify-center text-[10px] font-black uppercase text-white shadow-[0_0_10px_rgba(201,131,0,0.3)] group-hover:shadow-[0_0_15px_var(--primary)] transition-all">
-              ${(profile as any)?.nombre?.substring(0, 2) || 'WG'}
+              ${(profile as any)?.nombre?.substring(0, 2) || "WG"}
             </div>
             <div class="hidden md:flex flex-col">
-              <span class="text-[10px] font-black uppercase tracking-widest text-white group-hover:text-[var(--primary)] transition-colors leading-none mb-0.5">${(profile as any)?.nombre?.split(' ')[0] || 'Usuario'}</span>
+              <span class="text-[10px] font-black uppercase tracking-widest text-white group-hover:text-[var(--primary)] transition-colors leading-none mb-0.5">${(profile as any)?.nombre?.split(" ")[0] || "Usuario"}</span>
               <span class="text-[8px] font-bold text-gray-500 uppercase tracking-wider">Miembro</span>
             </div>
           </a>
           <div class="popover w-64">
             <div class="popover-header">
               <span class="popover-title">Mi Cuenta</span>
-              <span class="text-[9px] text-[var(--primary)] font-mono">${role === 'admin' ? 'ADMIN' : 'MEMBER'}</span>
+              <span class="text-[9px] text-[var(--primary)] font-mono">${role === "admin" ? "ADMIN" : "MEMBER"}</span>
             </div>
             <div class="popover-content space-y-2">
               <a href="/perfil" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 group transition-colors">
@@ -238,55 +299,68 @@ const updateAuthUI = async () => {
         </div>
       `;
 
-      document.getElementById('logout-btn')?.addEventListener('click', async () => {
-        await supabase.auth.signOut();
-        window.location.reload();
-      });
+      document
+        .getElementById("logout-btn")
+        ?.addEventListener("click", async () => {
+          await supabase.auth.signOut();
+          window.location.reload();
+        });
     }
 
-    document.querySelectorAll('.unauth-popover-msg').forEach(el => el.classList.add('hidden'));
-    document.querySelectorAll('.auth-popover-content').forEach(el => el.classList.remove('hidden'));
+    document
+      .querySelectorAll(".unauth-popover-msg")
+      .forEach((el) => el.classList.add("hidden"));
+    document
+      .querySelectorAll(".auth-popover-content")
+      .forEach((el) => el.classList.remove("hidden"));
   } else {
-    document.querySelectorAll('.unauth-popover-msg').forEach(el => el.classList.remove('hidden'));
-    document.querySelectorAll('.auth-popover-content').forEach(el => el.classList.add('hidden'));
+    document
+      .querySelectorAll(".unauth-popover-msg")
+      .forEach((el) => el.classList.remove("hidden"));
+    document
+      .querySelectorAll(".auth-popover-content")
+      .forEach((el) => el.classList.add("hidden"));
   }
 
-  document.body.setAttribute('data-auth-loaded', 'true');
+  document.body.setAttribute("data-auth-loaded", "true");
 };
-
 
 // --- Popover Logic ---
 const initPopovers = () => {
-  const triggers = document.querySelectorAll('.popover-trigger');
-  const popovers = document.querySelectorAll('.popover');
+  const triggers = document.querySelectorAll(".popover-trigger");
+  const popovers = document.querySelectorAll(".popover");
 
-  triggers.forEach(trigger => {
-    trigger.addEventListener('click', (e) => {
+  triggers.forEach((trigger) => {
+    trigger.addEventListener("click", (e) => {
       e.stopPropagation();
-      const targetId = trigger.getAttribute('data-target');
+      const targetId = trigger.getAttribute("data-target");
       if (!targetId) return;
       const targetPopover = document.getElementById(targetId);
-      const isActive = targetPopover?.classList.contains('active');
-      popovers.forEach(p => p.classList.remove('active'));
-      if (!isActive) targetPopover?.classList.add('active');
+      const isActive = targetPopover?.classList.contains("active");
+      popovers.forEach((p) => p.classList.remove("active"));
+      if (!isActive) targetPopover?.classList.add("active");
     });
   });
 
-  document.addEventListener('click', (e) => {
-    if (document.body.classList.contains('sidebar-open')) {
-      const sidebar = document.getElementById('sidebar');
-      const trigger = document.getElementById('sidebar-trigger');
+  document.addEventListener("click", (e) => {
+    if (document.body.classList.contains("sidebar-open")) {
+      const sidebar = document.getElementById("sidebar");
+      const trigger = document.getElementById("sidebar-trigger");
       const target = e.target;
-      if (target instanceof Node && !sidebar?.contains(target) && !trigger?.contains(target)) {
-        document.body.classList.remove('sidebar-open');
+      if (
+        target instanceof Node &&
+        !sidebar?.contains(target) &&
+        !trigger?.contains(target)
+      ) {
+        document.body.classList.remove("sidebar-open");
       }
     }
 
     const el = e.target instanceof Element ? e.target : null;
-    const isTrigger = el?.closest('.popover-trigger');
-    const isPopover = el?.closest('.popover');
+    const isTrigger = el?.closest(".popover-trigger");
+    const isPopover = el?.closest(".popover");
     if (!isTrigger && !isPopover) {
-      popovers.forEach(p => p.classList.remove('active'));
+      popovers.forEach((p) => p.classList.remove("active"));
     }
   });
 };
@@ -297,26 +371,33 @@ const init = async () => {
   await updateAuthUI();
   cartStore.init();
 
-  window.addEventListener(CartEvents.UPDATED, (e: Event) => updateCartUI((e as CustomEvent).detail));
-  window.addEventListener(CartEvents.WISHLIST_UPDATED, (e: Event) => updateCartUI((e as CustomEvent).detail));
+  window.addEventListener(CartEvents.UPDATED, (e: Event) =>
+    updateCartUI((e as CustomEvent).detail),
+  );
+  window.addEventListener(CartEvents.WISHLIST_UPDATED, (e: Event) =>
+    updateCartUI((e as CustomEvent).detail),
+  );
 
   updateCartUI({
     cart: cartStore.cart,
     wishlist: cartStore.wishlist,
-    count: cartStore.cart.reduce((acc: number, item: CartItem) => acc + item.quantity, 0)
+    count: cartStore.cart.reduce(
+      (acc: number, item: CartItem) => acc + item.quantity,
+      0,
+    ),
   });
 };
 
 // --- Header Scroll Effect ---
 const setupHeaderScroll = () => {
-  window.addEventListener('scroll', () => {
-    const header = document.querySelector('header');
+  window.addEventListener("scroll", () => {
+    const header = document.querySelector("header");
     if (window.scrollY > 50) {
-      header?.classList.add('bg-black/95', 'py-2');
-      header?.classList.remove('bg-black/90', 'py-0');
+      header?.classList.add("bg-black/95", "py-2");
+      header?.classList.remove("bg-black/90", "py-0");
     } else {
-      header?.classList.add('bg-black/90', 'py-0');
-      header?.classList.remove('bg-black/95', 'py-2');
+      header?.classList.add("bg-black/90", "py-0");
+      header?.classList.remove("bg-black/95", "py-2");
     }
   });
 };
