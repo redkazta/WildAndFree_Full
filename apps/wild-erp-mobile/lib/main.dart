@@ -10,6 +10,7 @@ import 'ui/providers/orders_provider.dart';
 import 'ui/providers/inventory_provider.dart';
 import 'ui/providers/content_provider.dart';
 import 'ui/providers/users_provider.dart';
+// force rebuild: gradle.properties cleaned
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
