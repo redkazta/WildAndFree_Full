@@ -7,7 +7,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
   <div class="erp-card" style="margin-bottom:24px;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
       <div class="erp-card-title" style="margin-bottom:0;">Categorías de Tags</div>
-      <button class="erp-btn erp-btn--primary" onclick="openCategoryForm()">+ Nueva Categoría</button>
+      <button class="erp-btn erp-btn--primary" id="newCategoryBtn" onclick="openCategoryForm()">+ Nueva Categoría</button>
     </div>
 
     <!-- Category Form (hidden by default) -->
@@ -50,7 +50,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
   <div class="erp-card" style="margin-bottom:24px;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
       <div class="erp-card-title" style="margin-bottom:0;">Tags</div>
-      <button class="erp-btn erp-btn--primary" onclick="openTagForm()">+ Nuevo Tag</button>
+      <button class="erp-btn erp-btn--primary" id="newTagBtn" onclick="openTagForm()">+ Nuevo Tag</button>
     </div>
 
     <!-- Tag Form (hidden by default) -->
@@ -188,6 +188,15 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
 
 <script>
   import { supabase } from '../../lib/supabase';
+
+  // Permission check
+  const perms: string[] = (window as any).__wildPermissions || [];
+  const canManage = perms.includes('tags.manage');
+
+  if (!canManage) {
+    document.querySelector('.erp-content')!.innerHTML = '<div class="erp-card" style="text-align:center;padding:60px;"><p style="color:rgba(255,255,255,0.3);">No tienes permiso para gestionar tags.</p></div>';
+    throw new Error('Permission denied');
+  }
 
   // ── State ──
   let categories: any[] = [];

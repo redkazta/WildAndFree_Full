@@ -235,6 +235,17 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
 <script>
   import { supabase } from '../../lib/supabase';
 
+  // Permission check
+  const perms: string[] = (window as any).__wildPermissions || [];
+  const canView = perms.includes('users.view');
+  const canManage = perms.includes('users.manage');
+  const canVerify = perms.includes('users.verify_artist');
+
+  if (!canView) {
+    document.querySelector('.erp-content')!.innerHTML = '<div class="erp-card" style="text-align:center;padding:60px;"><p style="color:rgba(255,255,255,0.3);">No tienes permiso para ver usuarios.</p></div>';
+    throw new Error('Permission denied');
+  }
+
   // --- State ---
   let allProfiles = [];
   let allRoles = [];
@@ -362,8 +373,8 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
         <td style="font-size:11px;color:rgba(255,255,255,0.4);">${formatDate(p.created_at)}</td>
         <td>
           <div style="display:flex;gap:6px;">
-            <button class="erp-btn erp-btn--primary" style="padding:4px 10px;font-size:10px;" onclick="approveVerification('${p.id}')">Aprobar</button>
-            <button class="erp-btn erp-btn--danger" style="padding:4px 10px;font-size:10px;" onclick="rejectVerification('${p.id}')">Rechazar</button>
+            ${canVerify ? `<button class="erp-btn erp-btn--primary" style="padding:4px 10px;font-size:10px;" onclick="approveVerification('${p.id}')">Aprobar</button>` : ''}
+            ${canVerify ? `<button class="erp-btn erp-btn--danger" style="padding:4px 10px;font-size:10px;" onclick="rejectVerification('${p.id}')">Rechazar</button>` : ''}
           </div>
         </td>
       </tr>
@@ -436,9 +447,9 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
           <td>
             <div style="display:flex;gap:4px;flex-wrap:wrap;">
               <button class="action-btn" title="Ver detalles" onclick="viewDetail('${p.id}')">👁</button>
-              <button class="action-btn" title="Gestionar roles" onclick="openRoleModal('${p.id}')">🛡</button>
-              <button class="action-btn" title="Gestionar tags" onclick="openTagModal('${p.id}')">🏷</button>
-              <button class="action-btn" title="Editar perfil" onclick="openEditModal('${p.id}')">✏️</button>
+              ${canManage ? `<button class="action-btn" title="Gestionar roles" onclick="openRoleModal('${p.id}')">🛡</button>` : ''}
+              ${canManage ? `<button class="action-btn" title="Gestionar tags" onclick="openTagModal('${p.id}')">🏷</button>` : ''}
+              ${canManage ? `<button class="action-btn" title="Editar perfil" onclick="openEditModal('${p.id}')">✏️</button>` : ''}
             </div>
           </td>
         </tr>

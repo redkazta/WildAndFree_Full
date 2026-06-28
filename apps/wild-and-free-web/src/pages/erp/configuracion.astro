@@ -160,6 +160,10 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
 <script>
   import { supabase } from '../../lib/supabase';
 
+  // Permission check - view is always allowed, manage is for editing
+  const perms: string[] = (window as any).__wildPermissions || [];
+  const canManage = perms.includes('config.manage');
+
   const PAGE_SIZE = 20;
   let currentOffset = 0;
   let hasMore = true;

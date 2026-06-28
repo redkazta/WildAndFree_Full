@@ -382,9 +382,56 @@ const modules = [
       throw new Error('Access denied');
     }
 
-    // Show user badge
+    // Load permissions for this role
+    let permissions: string[] = [];
+
+    if (role === 'admin') {
+      const { data: allPerms } = await supabase.from('permissions').select('name');
+      permissions = allPerms?.map((p: any) => p.name) || [];
+    } else {
+      const { data: userRole } = await supabase
+        .from('user_roles')
+        .select('role_id')
+        .eq('user_id', session.user.id)
+        .single();
+
+      if (userRole) {
+        const { data: rolePerms } = await supabase
+          .from('role_permissions')
+          .select('permissions(name, module)')
+          .eq('role_id', userRole.role_id);
+
+        permissions = rolePerms?.map((rp: any) => rp.permissions?.name).filter(Boolean) || [];
+      }
+    }
+
+    // Store permissions globally for ERP pages
+    (window as any).__wildPermissions = permissions;
+    document.documentElement.setAttribute('data-permissions', permissions.join(','));
+
+    // Show user badge with role
     const badge = document.getElementById('erpUserBadge');
     if (badge) badge.textContent = role.toUpperCase();
+
+    // Hide nav items based on permissions
+    const permMap: Record<string, string> = {
+      'inventario': 'inventory.view',
+      'contenido': 'content.view',
+      'usuarios': 'users.view',
+      'tags': 'tags.manage',
+      'eventos': 'events.manage',
+      'versus': 'versus.manage',
+      'configuracion': 'config.view',
+      'pedidos': 'orders.view'
+    };
+
+    document.querySelectorAll('.erp-nav-item').forEach(item => {
+      const href = item.getAttribute('href') || '';
+      const mod = Object.keys(permMap).find(m => href.includes(m));
+      if (mod && !permissions.includes(permMap[mod])) {
+        item.style.display = 'none';
+      }
+    });
 
     // Mobile menu
     const toggle = document.getElementById('menuToggle');

@@ -14,7 +14,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
     <div class="erp-card" style="margin-bottom:24px;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
         <div class="erp-card-title" style="margin-bottom:0;">Freestylers</div>
-        <button class="erp-btn erp-btn--primary" onclick="openFreestylerForm()">+ Nuevo Freestyler</button>
+        <button class="erp-btn erp-btn--primary" id="newFreestylerBtn" onclick="openFreestylerForm()">+ Nuevo Freestyler</button>
       </div>
 
       <!-- Freestyler Form -->
@@ -83,7 +83,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
     <div class="erp-card" style="margin-bottom:24px;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
         <div class="erp-card-title" style="margin-bottom:0;">Battles</div>
-        <button class="erp-btn erp-btn--primary" onclick="openBattleForm()">+ Nueva Battle</button>
+        <button class="erp-btn erp-btn--primary" id="newBattleBtn" onclick="openBattleForm()">+ Nueva Battle</button>
       </div>
 
       <!-- Battle Form -->
@@ -291,6 +291,15 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
 
 <script>
   import { supabase } from '../../lib/supabase';
+
+  // Permission check
+  const perms: string[] = (window as any).__wildPermissions || [];
+  const canManage = perms.includes('versus.manage');
+
+  if (!canManage) {
+    document.querySelector('.erp-content')!.innerHTML = '<div class="erp-card" style="text-align:center;padding:60px;"><p style="color:rgba(255,255,255,0.3);">No tienes permiso para gestionar versus.</p></div>';
+    throw new Error('Permission denied');
+  }
 
   let allFreestylers: any[] = [];
   let allBattles: any[] = [];

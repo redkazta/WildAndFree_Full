@@ -38,6 +38,16 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
 <script>
   import { supabase } from '../../lib/supabase';
 
+  // Permission check
+  const perms: string[] = (window as any).__wildPermissions || [];
+  const canView = perms.includes('orders.view');
+  const canManage = perms.includes('orders.manage');
+
+  if (!canView) {
+    document.querySelector('.erp-content')!.innerHTML = '<div class="erp-card" style="text-align:center;padding:60px;"><p style="color:rgba(255,255,255,0.3);">No tienes permiso para ver pedidos.</p></div>';
+    throw new Error('Permission denied');
+  }
+
   let currentFilter = 'all';
 
   async function loadOrders(filter = 'all') {
@@ -64,14 +74,14 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
         <td><span class="erp-status erp-status--${o.status}">${o.status}</span></td>
         <td style="font-size:11px;color:rgba(255,255,255,0.4);">${new Date(o.created_at).toLocaleDateString('es-MX')}</td>
         <td>
-          <select class="erp-btn erp-btn--ghost" style="padding:4px 8px;font-size:11px;" onchange="updateOrderStatus('${o.id}', this.value)">
+          ${canManage ? `<select class="erp-btn erp-btn--ghost" style="padding:4px 8px;font-size:11px;" onchange="updateOrderStatus('${o.id}', this.value)">
             <option value="pending" ${o.status==='pending'?'selected':''}>Pendiente</option>
             <option value="paid" ${o.status==='paid'?'selected':''}>Pagado</option>
             <option value="processing" ${o.status==='processing'?'selected':''}>Procesando</option>
             <option value="shipped" ${o.status==='shipped'?'selected':''}>Enviado</option>
             <option value="delivered" ${o.status==='delivered'?'selected':''}>Entregado</option>
             <option value="cancelled" ${o.status==='cancelled'?'selected':''}>Cancelado</option>
-          </select>
+          </select>` : `<span class="erp-status erp-status--${o.status}" style="font-size:11px;">${o.status}</span>`}
         </td>
       </tr>
     `).join('');

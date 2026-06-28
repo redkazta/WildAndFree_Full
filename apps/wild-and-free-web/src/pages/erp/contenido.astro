@@ -33,7 +33,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
       <button class="erp-btn erp-btn--ghost filter-btn" data-filter="published">Publicados</button>
     </div>
     <div style="display:flex;gap:8px;">
-      <button class="erp-btn erp-btn--primary" onclick="openModal('new')">+ Nuevo Contenido</button>
+      <button class="erp-btn erp-btn--primary" id="newContentBtn" onclick="openModal('new')">+ Nuevo Contenido</button>
     </div>
   </div>
 
@@ -193,6 +193,23 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
 <script>
   import { supabase } from '../../lib/supabase';
 
+  // Permission check
+  const perms: string[] = (window as any).__wildPermissions || [];
+  const canView = perms.includes('content.view');
+  const canApprove = perms.includes('content.approve');
+  const canCreate = perms.includes('content.create') || perms.includes('content.create_crew');
+
+  if (!canView) {
+    document.querySelector('.erp-content')!.innerHTML = '<div class="erp-card" style="text-align:center;padding:60px;"><p style="color:rgba(255,255,255,0.3);">No tienes permiso para ver contenido.</p></div>';
+    throw new Error('Permission denied');
+  }
+
+  // Hide create button if no permission
+  if (!canCreate) {
+    const newBtn = document.getElementById('newContentBtn');
+    if (newBtn) newBtn.style.display = 'none';
+  }
+
   let currentFilter = 'all';
   let currentRejectId: string | null = null;
 
@@ -227,9 +244,9 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
         <td>
           <div style="display:flex;gap:4px;flex-wrap:wrap;">
             <button class="erp-btn erp-btn--ghost" style="padding:4px 8px;font-size:10px;" onclick="showDetail('${c.id}')">Ver</button>
-            ${c.status !== 'published' ? `<button class="erp-btn erp-btn--primary" style="padding:4px 8px;font-size:10px;" onclick="approveContent('${c.id}')">Aprobar</button>` : ''}
-            ${c.status !== 'rejected' ? `<button class="erp-btn erp-btn--danger" style="padding:4px 8px;font-size:10px;" onclick="openRejectModal('${c.id}')">Rechazar</button>` : ''}
-            <button class="erp-btn erp-btn--danger" style="padding:4px 8px;font-size:10px;background:rgba(255,68,68,0.25);" onclick="deleteContent('${c.id}')">🗑️</button>
+            ${canApprove && c.status !== 'published' ? `<button class="erp-btn erp-btn--primary" style="padding:4px 8px;font-size:10px;" onclick="approveContent('${c.id}')">Aprobar</button>` : ''}
+            ${canApprove && c.status !== 'rejected' ? `<button class="erp-btn erp-btn--danger" style="padding:4px 8px;font-size:10px;" onclick="openRejectModal('${c.id}')">Rechazar</button>` : ''}
+            ${canApprove ? `<button class="erp-btn erp-btn--danger" style="padding:4px 8px;font-size:10px;background:rgba(255,68,68,0.25);" onclick="deleteContent('${c.id}')">🗑️</button>` : ''}
           </div>
         </td>
       </tr>
@@ -267,8 +284,8 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
           <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px;">Por ${p.profiles?.nombre || p.profiles?.username || 'Desconocido'} · ${new Date(p.created_at).toLocaleDateString('es-MX')}</div>
         </div>
         <div style="display:flex;gap:6px;">
-          <button class="erp-btn erp-btn--primary" style="padding:4px 10px;font-size:11px;" onclick="approveCrewPost('${p.id}')">Aprobar</button>
-          <button class="erp-btn erp-btn--danger" style="padding:4px 10px;font-size:11px;" onclick="rejectCrewPost('${p.id}')">Rechazar</button>
+          ${canApprove ? `<button class="erp-btn erp-btn--primary" style="padding:4px 10px;font-size:11px;" onclick="approveCrewPost('${p.id}')">Aprobar</button>` : ''}
+          ${canApprove ? `<button class="erp-btn erp-btn--danger" style="padding:4px 10px;font-size:11px;" onclick="rejectCrewPost('${p.id}')">Rechazar</button>` : ''}
         </div>
       </div>
     `).join('');

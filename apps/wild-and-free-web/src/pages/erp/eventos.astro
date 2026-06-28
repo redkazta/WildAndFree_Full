@@ -28,7 +28,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
       <button class="erp-btn erp-btn--ghost filter-btn" data-filter="past">Pasados</button>
       <button class="erp-btn erp-btn--ghost filter-btn" data-filter="inactive">Inactivos</button>
     </div>
-    <button class="erp-btn erp-btn--primary" onclick="openAddModal()">＋ Nuevo Evento</button>
+    <button class="erp-btn erp-btn--primary" id="newEventBtn" onclick="openAddModal()">＋ Nuevo Evento</button>
   </div>
 
   <!-- Events Table -->
@@ -196,6 +196,15 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
 
 <script>
   import { supabase } from '../../lib/supabase';
+
+  // Permission check
+  const perms: string[] = (window as any).__wildPermissions || [];
+  const canManage = perms.includes('events.manage');
+
+  if (!canManage) {
+    document.querySelector('.erp-content')!.innerHTML = '<div class="erp-card" style="text-align:center;padding:60px;"><p style="color:rgba(255,255,255,0.3);">No tienes permiso para gestionar eventos.</p></div>';
+    throw new Error('Permission denied');
+  }
 
   // ── State ──
   let allEvents: any[] = [];

@@ -11,7 +11,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
         <option value="all">Todas las categorías</option>
       </select>
     </div>
-    <button class="erp-btn erp-btn--primary" id="newProductBtn">+ Nuevo Producto</button>
+    <button class="erp-btn erp-btn--primary" id="newProductBtn" data-manage="true">+ Nuevo Producto</button>
   </div>
 
   <!-- Stats -->
@@ -46,7 +46,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
           <th>Estado</th>
           <th>Stock</th>
           <th>Creado</th>
-          <th>Acciones</th>
+          <th data-manage="true">Acciones</th>
         </tr>
       </thead>
       <tbody id="productsBody">
@@ -228,6 +228,21 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
 <script>
   import { supabase } from '../../lib/supabase';
 
+  // Permission check
+  const perms: string[] = (window as any).__wildPermissions || [];
+  const canView = perms.includes('inventory.view');
+  const canManage = perms.includes('inventory.manage');
+
+  if (!canView) {
+    document.querySelector('.erp-content')!.innerHTML = '<div class="erp-card" style="text-align:center;padding:60px;"><p style="color:rgba(255,255,255,0.3);">No tienes permiso para ver el inventario.</p></div>';
+    throw new Error('Permission denied');
+  }
+
+  // Hide manage-only elements
+  if (!canManage) {
+    document.querySelectorAll('[data-manage]').forEach(el => (el as HTMLElement).style.display = 'none');
+  }
+
   interface Product {
     id: string;
     name: string;
@@ -407,6 +422,16 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
       const statusClass = p.is_active ? 'erp-status--approved' : 'erp-status--rejected';
       const statusText = p.is_active ? 'Activo' : 'Inactivo';
 
+      const manageActions = canManage ? `
+            <div class="action-group">
+              <button class="action-btn action-btn--toggle ${p.is_active ? 'active' : 'inactive'}" onclick="toggleActive('${p.id}', ${!p.is_active})" title="${p.is_active ? 'Desactivar' : 'Activar'}">
+                ${p.is_active ? '●' : '○'}
+              </button>
+              <button class="action-btn" onclick="openVariantModal('${p.id}')" title="Agregar variante">+</button>
+              <button class="action-btn" onclick="editProduct('${p.id}')" title="Editar">✎</button>
+              <button class="action-btn action-btn--danger" onclick="deleteProduct('${p.id}')" title="Eliminar">✕</button>
+            </div>` : '';
+
       let html = `
         <tr data-product-id="${p.id}">
           <td>
@@ -418,16 +443,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
           <td><span class="erp-status ${statusClass}">${statusText}</span></td>
           <td>${totalStock} <span style="color:rgba(255,255,255,0.3);font-size:11px;">(${variantCount} vars)</span></td>
           <td style="font-size:11px;color:rgba(255,255,255,0.4);">${new Date(p.created_at).toLocaleDateString('es-MX')}</td>
-          <td>
-            <div class="action-group">
-              <button class="action-btn action-btn--toggle ${p.is_active ? 'active' : 'inactive'}" onclick="toggleActive('${p.id}', ${!p.is_active})" title="${p.is_active ? 'Desactivar' : 'Activar'}">
-                ${p.is_active ? '●' : '○'}
-              </button>
-              <button class="action-btn" onclick="openVariantModal('${p.id}')" title="Agregar variante">+</button>
-              <button class="action-btn" onclick="editProduct('${p.id}')" title="Editar">✎</button>
-              <button class="action-btn action-btn--danger" onclick="deleteProduct('${p.id}')" title="Eliminar">✕</button>
-            </div>
-          </td>
+          <td>${manageActions}</td>
         </tr>`;
 
       if (isExpanded && p.product_variants?.length) {
