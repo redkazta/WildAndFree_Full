@@ -39,3 +39,5 @@ bin/
 *.dylib
 *.test
 *.out
+
+flutter/

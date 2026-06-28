@@ -31,14 +31,18 @@ const modules = [
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 </head>
 <body class="erp-body">
   <!-- Sidebar -->
   <aside class="erp-sidebar" id="sidebar">
     <div class="erp-sidebar-header">
       <a href="/erp" class="erp-logo">
-        <span class="text-wild-orange">WILD</span><span>GVNG</span>
+        <div class="erp-logo-icon">W</div>
+        <div class="erp-logo-text">
+          <span class="erp-logo-wild">WILD</span>
+          <span class="erp-logo-gvng">GVNG</span>
+        </div>
       </a>
       <span class="erp-badge">ERP</span>
     </div>
@@ -51,14 +55,22 @@ const modules = [
         >
           <span class="erp-nav-icon">{m.icon}</span>
           <span class="erp-nav-label">{m.label}</span>
+          {activeModule === m.id && <span class="erp-nav-indicator"></span>}
         </a>
       ))}
     </nav>
 
     <div class="erp-sidebar-footer">
-      <a href="/" class="erp-nav-item">
-        <span class="erp-nav-icon">🏠</span>
-        <span class="erp-nav-label">Volver al sitio</span>
+      <div class="erp-user-section">
+        <div class="erp-user-avatar" id="erpUserAvatar">A</div>
+        <div class="erp-user-info">
+          <span class="erp-user-name" id="erpUserName">Admin</span>
+          <span class="erp-user-role" id="erpUserBadge">Cargando...</span>
+        </div>
+      </div>
+      <a href="/" class="erp-nav-item erp-nav-item--exit">
+        <span class="erp-nav-icon">🚪</span>
+        <span class="erp-nav-label">Salir</span>
       </a>
     </div>
   </aside>
@@ -66,10 +78,22 @@ const modules = [
   <!-- Main -->
   <div class="erp-main">
     <header class="erp-topbar">
-      <button class="erp-menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
-      <h1 class="erp-page-title">{title}</h1>
+      <button class="erp-menu-toggle" id="menuToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="erp-topbar-left">
+        <h1 class="erp-page-title">{title}</h1>
+        <span class="erp-page-subtitle">Panel de control</span>
+      </div>
       <div class="erp-topbar-right">
-        <span class="erp-user-badge" id="erpUserBadge">Cargando...</span>
+        <div class="erp-search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" placeholder="Buscar..." class="erp-search-input" />
+        </div>
+        <div class="erp-notifications">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="erp-notifications-badge">3</span>
+        </div>
       </div>
     </header>
     <main class="erp-content">
@@ -83,16 +107,16 @@ const modules = [
     .erp-body {
       display: flex;
       min-height: 100vh;
-      background: #0a0a0a;
-      color: #e5e5e5;
-      font-family: 'Outfit', system-ui, sans-serif;
+      background: #050505;
+      color: #e0e0e0;
+      font-family: 'Space Grotesk', system-ui, sans-serif;
     }
 
     /* Sidebar */
     .erp-sidebar {
-      width: 240px;
-      background: #111;
-      border-right: 1px solid rgba(255,255,255,0.06);
+      width: 260px;
+      background: linear-gradient(180deg, #0d0d0d 0%, #080808 100%);
+      border-right: 1px solid rgba(255,255,255,0.04);
       display: flex;
       flex-direction: column;
       position: fixed;
@@ -100,78 +124,185 @@ const modules = [
       left: 0;
       bottom: 0;
       z-index: 50;
-      transition: transform 0.2s;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .erp-sidebar::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 1px;
+      height: 100%;
+      background: linear-gradient(180deg, transparent 0%, rgba(201,131,0,0.3) 50%, transparent 100%);
     }
 
     .erp-sidebar-header {
-      padding: 20px;
+      padding: 24px 20px;
       display: flex;
       align-items: center;
-      gap: 10px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
     }
 
     .erp-logo {
-      font-size: 18px;
-      font-weight: 900;
-      letter-spacing: 0.15em;
+      display: flex;
+      align-items: center;
+      gap: 12px;
       text-decoration: none;
+    }
+
+    .erp-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #C98300 0%, #FF5500 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 900;
+      color: #000;
+      box-shadow: 0 4px 12px rgba(201,131,0,0.3);
+    }
+
+    .erp-logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1;
+    }
+
+    .erp-logo-wild {
+      font-size: 14px;
+      font-weight: 700;
       color: #fff;
+      letter-spacing: 0.1em;
+    }
+
+    .erp-logo-gvng {
+      font-size: 10px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.2em;
     }
 
     .erp-badge {
-      font-size: 9px;
-      font-weight: 800;
-      letter-spacing: 0.1em;
-      background: #C98300;
-      color: #000;
-      padding: 2px 6px;
-      border-radius: 4px;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      background: rgba(201,131,0,0.15);
+      color: #C98300;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(201,131,0,0.2);
     }
 
     .erp-nav {
       flex: 1;
-      padding: 12px 8px;
+      padding: 16px 12px;
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 4px;
       overflow-y: auto;
     }
 
     .erp-nav-item {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 8px;
+      gap: 12px;
+      padding: 11px 14px;
+      border-radius: 10px;
       text-decoration: none;
-      color: rgba(255,255,255,0.5);
+      color: rgba(255,255,255,0.4);
       font-size: 13px;
-      font-weight: 600;
-      transition: all 0.15s;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      position: relative;
     }
 
     .erp-nav-item:hover {
-      background: rgba(255,255,255,0.05);
-      color: #fff;
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.8);
     }
 
     .erp-nav-item--active {
-      background: rgba(201,131,0,0.12);
+      background: rgba(201,131,0,0.1);
       color: #C98300;
+      font-weight: 600;
     }
 
-    .erp-nav-icon { font-size: 16px; width: 20px; text-align: center; }
+    .erp-nav-item--active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 20px;
+      background: #C98300;
+      border-radius: 0 3px 3px 0;
+    }
+
+    .erp-nav-icon { font-size: 16px; width: 24px; text-align: center; }
+
+    .erp-nav-indicator { display: none; }
 
     .erp-sidebar-footer {
-      padding: 12px 8px;
-      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 16px 12px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .erp-user-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      margin-bottom: 8px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .erp-user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #C98300 0%, #FF5500 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: #000;
+    }
+
+    .erp-user-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .erp-user-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .erp-user-role {
+      font-size: 10px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .erp-nav-item--exit:hover {
+      background: rgba(255,68,68,0.1);
+      color: #ff4444;
     }
 
     /* Main */
     .erp-main {
       flex: 1;
-      margin-left: 240px;
+      margin-left: 260px;
       display: flex;
       flex-direction: column;
       min-height: 100vh;
@@ -181,10 +312,10 @@ const modules = [
       display: flex;
       align-items: center;
       gap: 16px;
-      padding: 16px 24px;
-      background: rgba(17,17,17,0.8);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      backdrop-filter: blur(12px);
+      padding: 16px 28px;
+      background: rgba(5,5,5,0.8);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      backdrop-filter: blur(20px);
       position: sticky;
       top: 0;
       z-index: 40;
@@ -192,62 +323,147 @@ const modules = [
 
     .erp-menu-toggle {
       display: none;
+      flex-direction: column;
+      gap: 5px;
       background: none;
       border: none;
-      color: #fff;
-      font-size: 20px;
       cursor: pointer;
+      padding: 4px;
+    }
+
+    .erp-menu-toggle span {
+      width: 20px;
+      height: 2px;
+      background: #fff;
+      border-radius: 2px;
+      transition: all 0.2s;
+    }
+
+    .erp-topbar-left {
+      display: flex;
+      flex-direction: column;
     }
 
     .erp-page-title {
-      font-size: 16px;
-      font-weight: 800;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #fff;
     }
 
-    .erp-topbar-right { margin-left: auto; }
-
-    .erp-user-badge {
+    .erp-page-subtitle {
       font-size: 11px;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.05em;
+    }
+
+    .erp-topbar-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .erp-search {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      transition: all 0.2s;
+    }
+
+    .erp-search:focus-within {
+      border-color: rgba(201,131,0,0.3);
+      background: rgba(255,255,255,0.06);
+    }
+
+    .erp-search svg { color: rgba(255,255,255,0.3); }
+
+    .erp-search-input {
+      background: none;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-size: 12px;
+      font-family: inherit;
+      width: 160px;
+    }
+
+    .erp-search-input::placeholder { color: rgba(255,255,255,0.25); }
+
+    .erp-notifications {
+      position: relative;
+      padding: 8px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .erp-notifications:hover {
+      background: rgba(255,255,255,0.08);
+    }
+
+    .erp-notifications svg { color: rgba(255,255,255,0.5); }
+
+    .erp-notifications-badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      width: 16px;
+      height: 16px;
+      background: #ff4444;
+      border-radius: 50%;
+      font-size: 9px;
       font-weight: 700;
-      color: #C98300;
-      background: rgba(201,131,0,0.1);
-      padding: 4px 12px;
-      border-radius: 20px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .erp-content {
       flex: 1;
-      padding: 24px;
+      padding: 28px;
     }
 
     /* Cards */
     .erp-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 14px;
+      padding: 24px;
+      transition: all 0.2s ease;
+    }
+
+    .erp-card:hover {
+      border-color: rgba(255,255,255,0.08);
       background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 12px;
-      padding: 20px;
     }
 
     .erp-card-title {
-      font-size: 13px;
-      font-weight: 700;
+      font-size: 11px;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.35);
       margin-bottom: 12px;
     }
 
     .erp-stat {
-      font-size: 28px;
-      font-weight: 900;
+      font-size: 32px;
+      font-weight: 700;
       color: #fff;
+      letter-spacing: -0.03em;
     }
 
     .erp-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 16px;
     }
 
@@ -260,19 +476,19 @@ const modules = [
 
     .erp-table th {
       text-align: left;
-      padding: 10px 12px;
+      padding: 12px 16px;
       font-size: 10px;
-      font-weight: 800;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: rgba(255,255,255,0.4);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.3);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
     }
 
     .erp-table td {
-      padding: 10px 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-      color: rgba(255,255,255,0.8);
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      color: rgba(255,255,255,0.7);
     }
 
     .erp-table tr:hover td {
@@ -281,67 +497,114 @@ const modules = [
 
     /* Status badges */
     .erp-status {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       font-size: 10px;
-      font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 4px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
     }
 
-    .erp-status--pending { background: rgba(255,200,0,0.15); color: #ffc800; }
-    .erp-status--approved { background: rgba(0,255,136,0.12); color: #00ff88; }
-    .erp-status--rejected { background: rgba(255,68,68,0.12); color: #ff4444; }
-    .erp-status--shipped { background: rgba(0,191,255,0.12); color: #00bfff; }
-    .erp-status--delivered { background: rgba(0,255,136,0.12); color: #00ff88; }
-    .erp-status--paid { background: rgba(0,255,136,0.12); color: #00ff88; }
+    .erp-status::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .erp-status--pending { background: rgba(255,200,0,0.1); color: #ffc800; }
+    .erp-status--pending::before { background: #ffc800; }
+    .erp-status--approved { background: rgba(0,255,136,0.1); color: #00ff88; }
+    .erp-status--approved::before { background: #00ff88; }
+    .erp-status--rejected { background: rgba(255,68,68,0.1); color: #ff4444; }
+    .erp-status--rejected::before { background: #ff4444; }
+    .erp-status--shipped { background: rgba(0,191,255,0.1); color: #00bfff; }
+    .erp-status--shipped::before { background: #00bfff; }
+    .erp-status--delivered { background: rgba(0,255,136,0.1); color: #00ff88; }
+    .erp-status--delivered::before { background: #00ff88; }
+    .erp-status--paid { background: rgba(0,255,136,0.1); color: #00ff88; }
+    .erp-status--paid::before { background: #00ff88; }
 
     /* Buttons */
     .erp-btn {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 8px 16px;
-      border-radius: 8px;
+      padding: 10px 18px;
+      border-radius: 10px;
       border: none;
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 600;
       cursor: pointer;
-      transition: all 0.15s;
+      transition: all 0.2s ease;
       text-transform: uppercase;
       letter-spacing: 0.05em;
+      font-family: inherit;
     }
 
     .erp-btn--primary {
-      background: #C98300;
+      background: linear-gradient(135deg, #C98300 0%, #e69500 100%);
       color: #000;
+      box-shadow: 0 4px 12px rgba(201,131,0,0.25);
     }
 
     .erp-btn--primary:hover {
-      background: #e69500;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(201,131,0,0.35);
     }
 
     .erp-btn--ghost {
-      background: rgba(255,255,255,0.05);
-      color: #fff;
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.7);
+      border: 1px solid rgba(255,255,255,0.08);
     }
 
     .erp-btn--ghost:hover {
-      background: rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.08);
+      color: #fff;
     }
 
     .erp-btn--danger {
-      background: rgba(255,68,68,0.15);
+      background: rgba(255,68,68,0.1);
       color: #ff4444;
+      border: 1px solid rgba(255,68,68,0.15);
     }
+
+    .erp-btn--danger:hover {
+      background: rgba(255,68,68,0.2);
+    }
+
+    /* Inputs */
+    .erp-input {
+      width: 100%;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      color: #fff;
+      font-size: 13px;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    .erp-input:focus {
+      outline: none;
+      border-color: rgba(201,131,0,0.4);
+      background: rgba(255,255,255,0.06);
+    }
+
+    .erp-input::placeholder { color: rgba(255,255,255,0.25); }
 
     /* Loading */
     .erp-loading {
       text-align: center;
-      padding: 60px;
-      color: rgba(255,255,255,0.3);
+      padding: 80px;
+      color: rgba(255,255,255,0.2);
       font-size: 13px;
+      letter-spacing: 0.05em;
     }
 
     /* Mobile */
@@ -352,6 +615,7 @@ const modules = [
 
       .erp-sidebar--open {
         transform: translateX(0);
+        box-shadow: 20px 0 60px rgba(0,0,0,0.5);
       }
 
       .erp-main {
@@ -359,11 +623,15 @@ const modules = [
       }
 
       .erp-menu-toggle {
-        display: block;
+        display: flex;
       }
 
       .erp-content {
         padding: 16px;
+      }
+
+      .erp-search {
+        display: none;
       }
     }
   </style>
@@ -378,11 +646,14 @@ const modules = [
 
     if (!session || !allowed.includes(role)) {
       document.body.innerHTML = `
-        <div style="min-height:100vh;display:grid;place-items:center;background:#0a0a0a;color:#fff;font-family:system-ui;">
+        <div style="min-height:100vh;display:grid;place-items:center;background:#050505;color:#fff;font-family:'Space Grotesk',system-ui;">
           <div style="text-align:center;padding:40px;">
-            <h1 style="font-size:24px;font-weight:900;color:#ff4444;margin-bottom:12px;">ACCESO DENEGADO</h1>
-            <p style="color:rgba(255,255,255,0.5);margin-bottom:24px;">No tienes permisos para acceder al ERP.</p>
-            <a href="/" style="color:#C98300;text-decoration:none;font-weight:700;">Volver al sitio</a>
+            <div style="width:64px;height:64px;background:rgba(255,68,68,0.1);border-radius:16px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:20px;">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff4444" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <h1 style="font-size:20px;font-weight:700;color:#ff4444;margin-bottom:8px;">Acceso Denegado</h1>
+            <p style="color:rgba(255,255,255,0.35);margin-bottom:28px;font-size:13px;">No tienes permisos para acceder al panel de administración.</p>
+            <a href="/" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;color:#C98300;text-decoration:none;font-weight:600;font-size:13px;transition:all 0.2s;">← Volver al sitio</a>
           </div>
         </div>`;
       throw new Error('Access denied');
@@ -418,6 +689,12 @@ const modules = [
     // Show user badge with role
     const badge = document.getElementById('erpUserBadge');
     if (badge) badge.textContent = role.toUpperCase();
+
+    const userName = document.getElementById('erpUserName');
+    if (userName) userName.textContent = session.user.email?.split('@')[0] || 'Admin';
+
+    const userAvatar = document.getElementById('erpUserAvatar');
+    if (userAvatar) userAvatar.textContent = (session.user.email?.[0] || 'A').toUpperCase();
 
     // Hide nav items based on permissions
     const permMap: Record<string, string> = {
@@ -457,6 +734,6 @@ const modules = [
       });
     });
   </script>
-		<Analytics />
-	</body>
+  <Analytics />
+</body>
 </html>
