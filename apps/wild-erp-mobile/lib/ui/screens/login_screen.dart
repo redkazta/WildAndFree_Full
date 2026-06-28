@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/validators.dart';
-import '../../core/widgets/wild_logo.dart';
+
 import '../providers/auth_provider.dart';
 import 'dashboard_screen.dart';
 
@@ -74,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       color: AppTheme.primary.withAlpha(20),
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: const WildLogo(size: 36),
+                    child: Image.asset('assets/wg_logo.png', width: 48, height: 68, fit: BoxFit.contain),
                   ),
                   const SizedBox(height: 24),
                   const Text(

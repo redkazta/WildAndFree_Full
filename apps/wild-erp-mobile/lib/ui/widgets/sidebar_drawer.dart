@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/theme/app_theme.dart';
-import '../../core/widgets/wild_logo.dart';
+
 import '../providers/auth_provider.dart';
 
 class SidebarDrawer extends StatelessWidget {
@@ -40,7 +40,7 @@ class SidebarDrawer extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: AppTheme.primary, width: 1),
                     ),
-                    child: const WildLogo(size: 36),
+                    child: Image.asset('assets/wg_logo.png', width: 40, height: 56, fit: BoxFit.contain),
                   ),
                   const SizedBox(height: 12),
                   const Text(

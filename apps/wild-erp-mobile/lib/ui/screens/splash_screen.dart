@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../core/theme/app_theme.dart';
-import '../../core/widgets/wild_logo.dart';
+
 import '../../data/services/auth_service.dart';
 import '../providers/auth_provider.dart';
 import 'login_screen.dart';
@@ -50,14 +50,14 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: AppTheme.background,
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             // Logo
-            const WildLogo(size: 64),
+            Image.asset('assets/wg_logo.png', width: 64, height: 90, fit: BoxFit.contain),
             const SizedBox(height: 16),
             const Text(
               'Wild Gvng',
