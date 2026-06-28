@@ -14,153 +14,301 @@ class SidebarDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: AppTheme.surface,
-      child: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: const BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(color: AppTheme.border),
+      backgroundColor: Colors.transparent,
+      child: Container(
+        decoration: const BoxDecoration(
+          gradient: AppTheme.sideBarGradient,
+          border: Border(
+            right: BorderSide(color: AppTheme.borderGlow, width: 0.5),
+          ),
+        ),
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header with premium styling
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: AppTheme.borderGlow),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Logo container
+                    Container(
+                      width: 56,
+                      height: 72,
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: AppTheme.primary.withAlpha(12),
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(
+                          color: AppTheme.borderGlow,
+                          width: 1,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppTheme.primary.withAlpha(20),
+                            blurRadius: 12,
+                            spreadRadius: 1,
+                          ),
+                        ],
+                      ),
+                      child: Image.asset(
+                        'assets/wg_logo.png',
+                        width: 44,
+                        height: 60,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    // WILD GVNG title with gradient
+                    ShaderMask(
+                      shaderCallback: (bounds) => const LinearGradient(
+                        colors: [AppTheme.primary, Colors.white70],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ).createShader(bounds),
+                      child: const Text(
+                        'WILD GVNG',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 1.5,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      'ERP',
+                      style: TextStyle(
+                        color: AppTheme.textMuted,
+                        fontSize: 11,
+                        letterSpacing: 3,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Consumer<AuthProvider>(
+                      builder: (context, auth, _) => Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppTheme.surfaceLight,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: AppTheme.border,
+                            width: 0.5,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: 6,
+                              height: 6,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppTheme.accent,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: AppTheme.accent.withAlpha(60),
+                                    blurRadius: 4,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Flexible(
+                              child: Text(
+                                auth.profile?.email ?? '',
+                                style: const TextStyle(
+                                  color: AppTheme.textSecondary,
+                                  fontSize: 11,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 50,
-                    height: 68,
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      color: AppTheme.primary.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: AppTheme.primary, width: 1),
+
+              // Navigation
+              Expanded(
+                child: ListView(
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+                  children: [
+                    _buildSectionLabel('MENÚ PRINCIPAL'),
+                    const SizedBox(height: 4),
+                    _buildNavItem(
+                      context,
+                      icon: Icons.dashboard_rounded,
+                      label: 'Dashboard',
+                      route: '/dashboard',
                     ),
-                    child: Image.asset('assets/wg_logo.png', width: 40, height: 56, fit: BoxFit.contain),
-                  ),
-                  const SizedBox(height: 12),
-                  const Text(
-                    'Wild Gvng ERP',
-                    style: TextStyle(
-                      color: AppTheme.textPrimary,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
+                    _buildNavItem(
+                      context,
+                      icon: Icons.shopping_bag_outlined,
+                      label: 'Pedidos',
+                      route: '/orders',
                     ),
+                    _buildNavItem(
+                      context,
+                      icon: Icons.inventory_2_outlined,
+                      label: 'Inventario',
+                      route: '/inventory',
+                    ),
+                    _buildNavItem(
+                      context,
+                      icon: Icons.article_outlined,
+                      label: 'Contenido',
+                      route: '/content',
+                    ),
+                    _buildNavItem(
+                      context,
+                      icon: Icons.people_outlined,
+                      label: 'Usuarios',
+                      route: '/users',
+                    ),
+                    const SizedBox(height: 8),
+                    _buildSectionLabel('GESTIÓN'),
+                    const SizedBox(height: 4),
+                    _buildNavItem(
+                      context,
+                      icon: Icons.label_outlined,
+                      label: 'Tags',
+                      route: '/tags',
+                    ),
+                    _buildNavItem(
+                      context,
+                      icon: Icons.event_outlined,
+                      label: 'Eventos',
+                      route: '/events',
+                    ),
+                    _buildNavItem(
+                      context,
+                      icon: Icons.sports_martial_arts_outlined,
+                      label: 'Versus',
+                      route: '/versus',
+                    ),
+                    _buildNavItem(
+                      context,
+                      icon: Icons.settings_outlined,
+                      label: 'Configuración',
+                      route: '/settings',
+                    ),
+                  ],
+                ),
+              ),
+
+              // Footer actions
+              Container(
+                decoration: const BoxDecoration(
+                  border: Border(
+                    top: BorderSide(color: AppTheme.borderGlow),
                   ),
-                  const SizedBox(height: 4),
-                  Consumer<AuthProvider>(
-                    builder: (context, auth, _) {
-                      return Text(
-                        auth.profile?.email ?? '',
-                        style: const TextStyle(
-                          color: AppTheme.textMuted,
-                          fontSize: 12,
+                ),
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: Container(
+                        width: 32,
+                        height: 32,
+                        decoration: BoxDecoration(
+                          color: AppTheme.surfaceLight,
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                      );
-                    },
-                  ),
-                ],
+                        child: const Icon(
+                          Icons.open_in_new,
+                          color: AppTheme.textSecondary,
+                          size: 16,
+                        ),
+                      ),
+                      title: const Text(
+                        'Volver al sitio',
+                        style: TextStyle(
+                          color: AppTheme.textSecondary,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.pop(context);
+                        // Could launch URL to web app
+                      },
+                      dense: true,
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                      child: ListTile(
+                        leading: Container(
+                          width: 32,
+                          height: 32,
+                          decoration: BoxDecoration(
+                            color: AppTheme.error.withAlpha(15),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Icon(
+                            Icons.logout,
+                            color: AppTheme.error,
+                            size: 16,
+                          ),
+                        ),
+                        title: const Text(
+                          'Cerrar sesión',
+                          style: TextStyle(
+                            color: AppTheme.error,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        onTap: () {
+                          Navigator.pop(context);
+                          context.read<AuthProvider>().signOut();
+                          Navigator.pushReplacementNamed(context, '/login');
+                        },
+                        dense: true,
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
-            // Navigation
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                children: [
-                  _buildNavItem(
-                    context,
-                    icon: Icons.dashboard_outlined,
-                    label: 'Dashboard',
-                    route: '/dashboard',
-                  ),
-                  _buildNavItem(
-                    context,
-                    icon: Icons.shopping_bag_outlined,
-                    label: 'Pedidos',
-                    route: '/orders',
-                  ),
-                  _buildNavItem(
-                    context,
-                    icon: Icons.inventory_2_outlined,
-                    label: 'Inventario',
-                    route: '/inventory',
-                  ),
-                  _buildNavItem(
-                    context,
-                    icon: Icons.article_outlined,
-                    label: 'Contenido',
-                    route: '/content',
-                  ),
-                  _buildNavItem(
-                    context,
-                    icon: Icons.people_outlined,
-                    label: 'Usuarios',
-                    route: '/users',
-                  ),
-                  _buildNavItem(
-                    context,
-                    icon: Icons.label_outlined,
-                    label: 'Tags',
-                    route: '/tags',
-                  ),
-                  _buildNavItem(
-                    context,
-                    icon: Icons.event_outlined,
-                    label: 'Eventos',
-                    route: '/events',
-                  ),
-                  _buildNavItem(
-                    context,
-                    icon: Icons.sports_martial_arts_outlined,
-                    label: 'Versus',
-                    route: '/versus',
-                  ),
-                  _buildNavItem(
-                    context,
-                    icon: Icons.settings_outlined,
-                    label: 'Configuración',
-                    route: '/settings',
-                  ),
-                ],
-              ),
-            ),
-
-            // Footer actions
-            const Divider(color: AppTheme.border),
-            ListTile(
-              leading: const Icon(Icons.open_in_new, color: AppTheme.textSecondary, size: 20),
-              title: const Text(
-                'Volver al sitio',
-                style: TextStyle(color: AppTheme.textSecondary, fontSize: 13),
-              ),
-              onTap: () {
-                Navigator.pop(context);
-                // Could launch URL to web app
-              },
-              dense: true,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-            ),
-            ListTile(
-              leading: const Icon(Icons.logout, color: AppTheme.error, size: 20),
-              title: const Text(
-                'Cerrar sesión',
-                style: TextStyle(color: AppTheme.error, fontSize: 13),
-              ),
-              onTap: () {
-                Navigator.pop(context);
-                context.read<AuthProvider>().signOut();
-                Navigator.pushReplacementNamed(context, '/login');
-              },
-              dense: true,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-            ),
-            const SizedBox(height: 8),
-          ],
+  Widget _buildSectionLabel(String label) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: Text(
+        label,
+        style: const TextStyle(
+          color: AppTheme.textMuted,
+          fontSize: 10,
+          letterSpacing: 1.5,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );
@@ -174,33 +322,79 @@ class SidebarDrawer extends StatelessWidget {
   }) {
     final isActive = currentRoute == route;
 
-    return ListTile(
-      leading: Icon(
-        icon,
-        color: isActive ? AppTheme.primary : AppTheme.textSecondary,
-        size: 20,
-      ),
-      title: Text(
-        label,
-        style: TextStyle(
-          color: isActive ? AppTheme.primary : AppTheme.textSecondary,
-          fontSize: 14,
-          fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 1),
+      decoration: isActive
+          ? BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              gradient: LinearGradient(
+                colors: [
+                  AppTheme.primary.withAlpha(20),
+                  AppTheme.primary.withAlpha(5),
+                ],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+            )
+          : null,
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(10),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(10),
+          splashColor: AppTheme.primary.withAlpha(10),
+          highlightColor: AppTheme.primary.withAlpha(5),
+          onTap: () {
+            Navigator.pop(context);
+            if (!isActive) {
+              Navigator.pushReplacementNamed(context, route);
+            }
+          },
+          child: Container(
+            decoration: isActive
+                ? const BoxDecoration(
+                    border: Border(
+                      left: BorderSide(color: AppTheme.primary, width: 2.5),
+                    ),
+                  )
+                : null,
+            child: ListTile(
+              leading: Icon(
+                icon,
+                color: isActive ? AppTheme.primary : AppTheme.textSecondary,
+                size: 20,
+              ),
+              title: Text(
+                label,
+                style: TextStyle(
+                  color: isActive ? AppTheme.primary : AppTheme.textSecondary,
+                  fontSize: 14,
+                  fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+                  letterSpacing: 0.2,
+                ),
+              ),
+              trailing: isActive
+                  ? Container(
+                      width: 4,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppTheme.primary,
+                      ),
+                    )
+                  : null,
+              selected: isActive,
+              selectedTileColor: Colors.transparent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+              dense: true,
+              visualDensity: VisualDensity.compact,
+            ),
+          ),
         ),
       ),
-      selected: isActive,
-      selectedTileColor: AppTheme.primary.withAlpha(20),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
-      dense: true,
-      onTap: () {
-        Navigator.pop(context);
-        if (!isActive) {
-          Navigator.pushReplacementNamed(context, route);
-        }
-      },
     );
   }
 }

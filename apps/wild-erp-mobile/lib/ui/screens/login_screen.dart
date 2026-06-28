@@ -66,34 +66,66 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Logo
+                  // Logo with glow and premium border
                   Container(
-                    width: 72,
-                    height: 100,
+                    width: 88,
+                    height: 116,
                     decoration: BoxDecoration(
-                      color: AppTheme.primary.withAlpha(20),
-                      borderRadius: BorderRadius.circular(16),
+                      color: AppTheme.surface,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: AppTheme.borderGlow,
+                        width: 1.5,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppTheme.primary.withAlpha(25),
+                          blurRadius: 20,
+                          spreadRadius: 2,
+                        ),
+                        BoxShadow(
+                          color: Colors.black.withAlpha(60),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
                     ),
-                    child: Image.asset('assets/wg_logo.png', width: 48, height: 68, fit: BoxFit.contain),
-                  ),
-                  const SizedBox(height: 24),
-                  const Text(
-                    'Wild Gvng ERP',
-                    style: TextStyle(
-                      color: AppTheme.textPrimary,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
+                    alignment: Alignment.center,
+                    child: Image.asset(
+                      'assets/wg_logo.png',
+                      width: 56,
+                      height: 76,
+                      fit: BoxFit.contain,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 28),
+                  // Title with gradient
+                  ShaderMask(
+                    shaderCallback: (bounds) => const LinearGradient(
+                      colors: [AppTheme.primary, Color(0xFFFFCC80)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ).createShader(bounds),
+                    child: const Text(
+                      'Wild Gvng ERP',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 26,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: -0.3,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
                   const Text(
                     'Inicia sesión para continuar',
                     style: TextStyle(
-                      color: AppTheme.textMuted,
+                      color: AppTheme.textSecondary,
                       fontSize: 14,
+                      letterSpacing: 0.2,
                     ),
                   ),
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 44),
 
                   // Email
                   TextFormField(
@@ -101,12 +133,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     validator: Validators.email,
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
+                    style: const TextStyle(color: AppTheme.textPrimary, fontSize: 14),
                     decoration: const InputDecoration(
                       labelText: 'Email',
-                      prefixIcon: Icon(Icons.email_outlined, size: 20),
+                      prefixIcon: Icon(Icons.email_outlined, size: 20, color: AppTheme.textMuted),
+                      prefixIconConstraints: BoxConstraints(minWidth: 48),
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 18),
 
                   // Password
                   TextFormField(
@@ -115,15 +149,18 @@ class _LoginScreenState extends State<LoginScreen> {
                     obscureText: _obscurePassword,
                     textInputAction: TextInputAction.done,
                     onFieldSubmitted: (_) => _handleLogin(),
+                    style: const TextStyle(color: AppTheme.textPrimary, fontSize: 14),
                     decoration: InputDecoration(
                       labelText: 'Contraseña',
-                      prefixIcon: const Icon(Icons.lock_outline, size: 20),
+                      prefixIcon: const Icon(Icons.lock_outline, size: 20, color: AppTheme.textMuted),
+                      prefixIconConstraints: const BoxConstraints(minWidth: 48),
                       suffixIcon: IconButton(
                         icon: Icon(
                           _obscurePassword
                               ? Icons.visibility_outlined
                               : Icons.visibility_off_outlined,
                           size: 20,
+                          color: AppTheme.textMuted,
                         ),
                         onPressed: () {
                           setState(() {
@@ -133,26 +170,71 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 36),
 
-                  // Login button
+                  // Login button with gradient
                   Consumer<AuthProvider>(
                     builder: (context, auth, _) {
                       return SizedBox(
                         width: double.infinity,
-                        height: 48,
-                        child: ElevatedButton(
-                          onPressed: auth.isLoading ? null : _handleLogin,
-                          child: auth.isLoading
-                              ? const SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: Colors.white,
+                        height: 50,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            gradient: auth.isLoading
+                                ? AppTheme.buttonDisabledGradient
+                                : AppTheme.buttonGradient,
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppTheme.primary.withAlpha(50),
+                                blurRadius: 16,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: ElevatedButton(
+                            onPressed: auth.isLoading ? null : _handleLogin,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              disabledBackgroundColor: Colors.transparent,
+                              shadowColor: Colors.transparent,
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: auth.isLoading
+                                ? const SizedBox(
+                                    width: 22,
+                                    height: 22,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2.5,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        AppTheme.textSecondary,
+                                      ),
+                                    ),
+                                  )
+                                : const Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'Iniciar Sesión',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600,
+                                          letterSpacing: 0.3,
+                                        ),
+                                      ),
+                                      SizedBox(width: 8),
+                                      Icon(
+                                        Icons.arrow_forward_rounded,
+                                        size: 18,
+                                        color: Colors.white,
+                                      ),
+                                    ],
                                   ),
-                                )
-                              : const Text('Iniciar Sesión'),
+                          ),
                         ),
                       );
                     },
