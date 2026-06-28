@@ -17,14 +17,6 @@ export const isSupabaseConfigured = Boolean(
   supabaseUrl && supabaseAnonKey && validateSupabaseUrl(supabaseUrl),
 );
 
-if (typeof window !== "undefined") {
-  console.log("[WG] supabase init:", {
-    url: supabaseUrl ? "SET" : "MISSING",
-    key: supabaseAnonKey ? "SET" : "MISSING",
-    configured: isSupabaseConfigured,
-  });
-}
-
 const notConfiguredError = new Error(
   "Supabase no está configurado: falta PUBLIC_SUPABASE_URL / PUBLIC_SUPABASE_ANON_KEY",
 );
