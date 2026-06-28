@@ -244,7 +244,6 @@ class AppTheme {
           side: const BorderSide(color: borderGlow, width: 0.5),
         ),
         behavior: SnackBarBehavior.floating,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: surface,
