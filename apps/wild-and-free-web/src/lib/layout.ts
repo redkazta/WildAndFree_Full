@@ -247,10 +247,13 @@ const updateAuthUI = async () => {
     document.querySelectorAll('.unauth-popover-msg').forEach(el => el.classList.add('hidden'));
     document.querySelectorAll('.auth-popover-content').forEach(el => el.classList.remove('hidden'));
   } else {
-    document.querySelectorAll('.unauth-popover-msg').forEach(el => el.classList.add('hidden'));
-    document.querySelectorAll('.auth-popover-content').forEach(el => el.classList.remove('hidden'));
+    document.querySelectorAll('.unauth-popover-msg').forEach(el => el.classList.remove('hidden'));
+    document.querySelectorAll('.auth-popover-content').forEach(el => el.classList.add('hidden'));
   }
+
+  document.body.setAttribute('data-auth-loaded', 'true');
 };
+
 
 // --- Popover Logic ---
 const initPopovers = () => {

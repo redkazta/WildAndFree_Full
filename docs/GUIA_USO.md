@@ -7,6 +7,74 @@
 2. Ingresar email y contraseña
 3. Click en "Iniciar Sesión"
 
+### Flujo de Navegación por Rol
+
+#### 👑 Admin (`admin@wildgvng.com.mx` / `Admin1122**`)
+1. Login → Header muestra avatar con "ADMIN" en el popover
+2. **Sitio público**: Navega cualquier módulo (artistas, versus, música, radio, eventos, tienda)
+3. **ERP**: Ir a `/erp` → Dashboard con stats de pedidos, usuarios, contenido pendiente
+4. **Gestión completa**: `/erp/pedidos`, `/erp/inventario`, `/erp/contenido`, `/erp/usuarios`, `/erp/tags`, `/erp/eventos`, `/erp/versus`, `/erp/configuracion`
+5. **Muro**: Crea posts públicos desde `/` (feed principal)
+6. **Tags**: Asigna tags a usuarios desde `/erp/tags` o `/gestionar-tags`
+7. **Contenido**: Aprueba/rechaza contenido de artistas desde `/erp/contenido`
+8. **Logout**: Click avatar → "Cerrar Sesión" en el popover
+
+#### 👔 Staff Senior (`staff_manager@wildgvng.com.mx` / `Staff1122**`)
+1. Login → Header muestra avatar con "MEMBER"
+2. **ERP**: `/erp` → Dashboard, `/erp/pedidos`, `/erp/inventario`, `/erp/contenido`, `/erp/usuarios`
+3. **Permisos**: Ve pedidos, gestiona inventario, aprueba contenido, ve usuarios (no admin)
+4. **Reportes**: Acceso a reportes en `/erp`
+5. **No puede**: Cambiar configuración del sistema, gestionar tags, versus
+
+#### 📣 Staff Marketing (`marketing@wildgvng.com.mx` / `Marketing1122**`)
+1. Login → Header muestra avatar con "MEMBER"
+2. **ERP**: `/erp/contenido` → Ve contenido, aprueba/rechaza
+3. **Crear contenido crew**: Puede publicar contenido en nombre del crew
+4. **No puede**: Pedidos, inventario, usuarios, configuración
+
+#### 📦 Staff Básico (`staff@wildgvng.com.mx` / `Staff1122**`)
+1. Login → Header muestra avatar con "MEMBER"
+2. **ERP**: `/erp/pedidos` (ve/gestiona), `/erp/inventario` (ve), `/erp/contenido` (ve/aprueba)
+3. **No puede**: Usuarios, tags, eventos, versus, configuración, reportes
+
+#### 🎤 Artista (`young_kazta@wildgvng.com.mx` / `Artist1122**`)
+1. Login → Header muestra avatar con "MEMBER"
+2. **Perfil público**: `/artista/young_kazta` → Música, bio, redes, estado
+3. **Mi perfil**: `/perfil` → Editar bio, foto (sujeta a revisión), links sociales
+4. **Subir contenido**: Publica en su muro (texto + imágenes) → Va a aprobación del ERP
+5. **Música**: Desde perfil, vincula Spotify/YouTube links
+6. **Social**: Sigue a otros, comenta posts, da likes
+7. **Mensajería**: Chatea con fans (1:1) y en grupos (máx. 11)
+8. **Tokens**: Compra en `/wildgvngtokens` (mocked)
+9. **No puede**: ERP, gestión de tienda, configuración del crew
+
+#### 🎵 Otros Artistas
+- **mc_delta@wildgvng.com.mx** / `Artist1122**` → `/artista/mc_delta`
+- **lil_fuego@wildgvng.com.mx** / `Artist1122**` → `/artista/lil_fuego`
+
+#### 🙌 Fan (`fan_torreon@wildgvng.com.mx` / `Fan1122**`)
+1. Login → Header muestra avatar con "MEMBER"
+2. **Explorar**: Navega artistas, música, radio, eventos, tienda, versus
+3. **Perfil**: `/perfil` → Editar nombre, bio, foto, links sociales
+4. **Social**: Sigue artistas, comenta en muros, da likes, comparte posts
+5. **Amistad**: Envía solicitudes a otros fans (desbloquea mensajes 1:1)
+6. **Mensajería**: Chatea con amigos, crea grupos (máx. 11)
+7. **Tienda**: Compra merch → `/pedidos` para ver estado
+8. **Tokens**: Compra en `/wildgvngtokens` → Gasta en contenido exclusivo
+9. **Versus**: Vota en batallas de freestylers (5/día, 1 token c/u)
+10. **No puede**: ERP, subir contenido, moderar
+11. **Solicitar verificación artista**: Botón "¿Eres artista? Solicita verificarte" en perfil → Envía petición a ERP
+
+#### 🙌 Otros Fans
+- **fan_mty@wildgvng.com.mx** / `Fan1122**`
+- **fan_cdmx@wildgvng.com.mx** / `Fan1122**`
+
+#### 👤 Visitante (sin login)
+1. Navega módulos públicos: Inicio, Artistas, Música, Radio, Podcasts, Eventos, Versus, Tienda
+2. No puede: Comentar, dar likes, seguir, chatear, comprar, votar
+3. Botón "Iniciar Sesión" / "Unirse" en header
+4. Redirige a `/login` o `/registro`
+
 ### Módulos Públicos (sin login)
 | Ruta | Módulo |
 |------|--------|
@@ -124,6 +192,31 @@ La app usa caché en memoria con TTL de 5 minutos. Las consultas frecuentes se c
 
 ---
 
+## 📱 App Móvil ERP (Flutter) — Flujo por Rol
+
+### Admin
+1. Login → Dashboard con stats de pedidos, usuarios, contenido pendiente
+2. Tabs: Dashboard, Pedidos, Inventario, Contenido, Usuarios, Eventos, Versus, Tags, Config
+3. Puede hacer todo: CRUD completo, cambiar estados, asignar roles, configurar sistema
+
+### Staff Senior
+1. Login → Dashboard
+2. Tabs: Pedidos, Inventario, Contenido, Usuarios (solo vista)
+3. Puede: Gestionar pedidos, asignar guías, ver reportes
+4. No puede: Configuración, tags, versus
+
+### Staff Marketing
+1. Login → Dashboard
+2. Tabs: Contenido
+3. Puede: Ver/aprobar contenido, crear posts del crew
+
+### Staff Básico
+1. Login → Dashboard
+2. Tabs: Pedidos, Inventario (solo vista), Contenido
+3. Puede: Gestionar pedidos básicos
+
+---
+
 ## 🔧 Configuración de Vercel (Requerido)
 
 Las environment variables deben configurarse en el Dashboard de Vercel:
@@ -185,5 +278,13 @@ Las environment variables deben configurarse en el Dashboard de Vercel:
 ### Economía de Tokens
 - 1 token = $0.10 MXN
 - Límite: 10 tokens/día por IP
-- Vigencia: 1 mes
+- Vigencia: 1 mes (configurable)
 - Se compran en `/wildgvngtokens` (mocked por ahora)
+- Se ganan participando en versus (mocked)
+
+### UX Notas
+- El header resuelve autenticación de forma async. El contenedor de auth aparece con fade-in cuando la sesión carga.
+- Popover de carrito/favoritos muestra "Inicia sesión" si no hay sesión, contenido dinámico si la hay.
+- Los artistas publican contenido → va a cola de aprobación en ERP → admin/staff aprueba/rechaza.
+- La foto de perfil del artista se revisa manualmente antes de publicarse.
+- La verificación de artista se solicita desde el perfil del fan → petición al ERP → admin aprueba.
