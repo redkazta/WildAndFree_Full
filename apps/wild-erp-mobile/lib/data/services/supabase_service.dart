@@ -27,9 +27,7 @@ class SupabaseService {
     try {
       PostgrestFilterBuilder query = _client.from(table).select(select ?? '*');
 
-      if (filter != null) {
-        query = query.filter(filter.contains('->'), '') as PostgrestFilterBuilder;
-      }
+
 
       if (filters != null) {
         for (final entry in filters.entries) {
