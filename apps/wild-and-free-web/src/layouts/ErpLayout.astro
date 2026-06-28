@@ -432,13 +432,16 @@ const modules = [
       'pedidos': 'orders.view'
     };
 
-    document.querySelectorAll('.erp-nav-item').forEach(item => {
-      const href = item.getAttribute('href') || '';
-      const mod = Object.keys(permMap).find(m => href.includes(m));
-      if (mod && !permissions.includes(permMap[mod])) {
-        item.style.display = 'none';
-      }
-    });
+    // Admin sees everything - skip permission filtering
+    if (role !== 'admin') {
+      document.querySelectorAll('.erp-nav-item').forEach(item => {
+        const href = item.getAttribute('href') || '';
+        const mod = Object.keys(permMap).find(m => href.includes(m));
+        if (mod && !permissions.includes(permMap[mod])) {
+          item.style.display = 'none';
+        }
+      });
+    }
 
     // Mobile menu
     const toggle = document.getElementById('menuToggle');
