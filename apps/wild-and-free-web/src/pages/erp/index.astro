@@ -1,0 +1,80 @@
+---
+import ErpLayout from '../../layouts/ErpLayout.astro';
+---
+
+<ErpLayout title="Dashboard" activeModule="dashboard">
+  <div class="erp-grid" id="statsGrid">
+    <div class="erp-card">
+      <div class="erp-card-title">Usuarios</div>
+      <div class="erp-stat" id="statUsers">-</div>
+    </div>
+    <div class="erp-card">
+      <div class="erp-card-title">Artistas Verificados</div>
+      <div class="erp-stat" id="statArtists">-</div>
+    </div>
+    <div class="erp-card">
+      <div class="erp-card-title">Pedidos Pendientes</div>
+      <div class="erp-stat" id="statOrders">-</div>
+    </div>
+    <div class="erp-card">
+      <div class="erp-card-title">Contenido Pendiente</div>
+      <div class="erp-stat" id="statContent">-</div>
+    </div>
+    <div class="erp-card">
+      <div class="erp-card-title">Tokens en Circulación</div>
+      <div class="erp-stat" id="statTokens">-</div>
+    </div>
+    <div class="erp-card">
+      <div class="erp-card-title">Eventos Activos</div>
+      <div class="erp-stat" id="statEvents">-</div>
+    </div>
+  </div>
+
+  <h2 style="margin:24px 0 12px;font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.5);">Actividad Reciente</h2>
+  <div class="erp-card">
+    <div id="activityFeed" class="erp-loading">Cargando actividad...</div>
+  </div>
+</ErpLayout>
+
+<script>
+  import { supabase } from '../../lib/supabase';
+
+  async function loadDashboard() {
+    const [users, artists, orders, content, tokens, events] = await Promise.all([
+      supabase.from('profiles').select('id', { count: 'exact', head: true }),
+      supabase.from('profiles').select('id', { count: 'exact', head: true }).eq('is_verified_artist', true),
+      supabase.from('store_orders').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
+      supabase.from('exclusive_content').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
+      supabase.from('user_tokens').select('balance'),
+      supabase.from('events').select('id', { count: 'exact', head: true }).eq('is_active', true)
+    ]);
+
+    document.getElementById('statUsers').textContent = users.count ?? '0';
+    document.getElementById('statArtists').textContent = artists.count ?? '0';
+    document.getElementById('statOrders').textContent = orders.count ?? '0';
+    document.getElementById('statContent').textContent = content.count ?? '0';
+    document.getElementById('statTokens').textContent = tokens.data?.reduce((sum, r) => sum + (r.balance || 0), 0).toLocaleString() ?? '0';
+    document.getElementById('statEvents').textContent = events.count ?? '0';
+
+    // Recent activity
+    const { data: logs } = await supabase
+      .from('activity_log')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(10);
+
+    const feed = document.getElementById('activityFeed');
+    if (!logs || logs.length === 0) {
+      feed.innerHTML = '<p style="color:rgba(255,255,255,0.3);padding:20px;text-align:center;">Sin actividad reciente</p>';
+    } else {
+      feed.innerHTML = logs.map(l => `
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);">
+          <span style="font-size:11px;color:rgba(255,255,255,0.3);min-width:120px;">${new Date(l.created_at).toLocaleDateString('es-MX')}</span>
+          <span style="font-size:13px;color:rgba(255,255,255,0.7);">${l.action}</span>
+        </div>
+      `).join('');
+    }
+  }
+
+  loadDashboard();
+</script>

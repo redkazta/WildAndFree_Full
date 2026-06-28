@@ -1,0 +1,292 @@
+---
+import ErpLayout from '../../layouts/ErpLayout.astro';
+---
+
+<ErpLayout title="Configuración" activeModule="configuracion">
+
+  <!-- Section: General Settings -->
+  <h2 style="margin:0 0 12px;font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.5);">General</h2>
+  <div class="erp-grid" style="margin-bottom:24px;">
+    <div class="erp-card">
+      <div class="erp-card-title">Crew</div>
+      <div class="erp-stat" style="font-size:20px;" id="crewName">Wild Gvng</div>
+      <p style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:6px;">Tenant actual</p>
+    </div>
+    <div class="erp-card">
+      <div class="erp-card-title">Plataforma</div>
+      <div style="font-size:14px;color:#fff;font-weight:700;">Wild & Free</div>
+      <p style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:6px;">Plataforma de contenido exclusivo para artistas independientes</p>
+    </div>
+    <div class="erp-card">
+      <div class="erp-card-title">Versión</div>
+      <div class="erp-stat" style="font-size:20px;">v1.0.0</div>
+      <p style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:6px;">Versión actual del sistema</p>
+    </div>
+  </div>
+
+  <!-- Section: Token Economy -->
+  <h2 style="margin:0 0 12px;font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.5);">Token Economy</h2>
+  <div class="erp-grid" style="margin-bottom:24px;">
+    <div class="erp-card">
+      <div class="erp-card-title">Precio por Token</div>
+      <div class="erp-stat" style="font-size:20px;">$0.10 MXN</div>
+      <p style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:6px;">1 token = $0.10 MXN</p>
+    </div>
+    <div class="erp-card">
+      <div class="erp-card-title">Límite Diario / IP</div>
+      <div class="erp-stat" style="font-size:20px;">10</div>
+      <p style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:6px;">tokens por dirección IP</p>
+    </div>
+    <div class="erp-card">
+      <div class="erp-card-title">Expiración de Tokens</div>
+      <div class="erp-stat" style="font-size:20px;">1 mes</div>
+      <p style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:6px;">Tokens expiran después de 30 días</p>
+    </div>
+    <div class="erp-card">
+      <div class="erp-card-title">Máx. Tokens / Usuario</div>
+      <div class="erp-stat" style="font-size:20px;">10</div>
+      <p style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:6px;">Balance máximo por cuenta</p>
+    </div>
+  </div>
+
+  <!-- Section: Notifications -->
+  <h2 style="margin:0 0 12px;font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.5);">Notificaciones</h2>
+  <div class="erp-grid" style="margin-bottom:24px;">
+    <div class="erp-card">
+      <div class="erp-card-title">No Leídas</div>
+      <div class="erp-stat" id="notifUnread">-</div>
+    </div>
+    <div class="erp-card">
+      <div class="erp-card-title">Total</div>
+      <div class="erp-stat" id="notifTotal">-</div>
+    </div>
+  </div>
+
+  <div class="erp-card" style="margin-bottom:24px;overflow-x:auto;">
+    <div id="notifTable">
+      <div class="erp-loading">Cargando notificaciones...</div>
+    </div>
+  </div>
+
+  <!-- Section: System Health -->
+  <h2 style="margin:0 0 12px;font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.5);">Estado del Sistema</h2>
+  <div class="erp-grid" style="margin-bottom:24px;">
+    <div class="erp-card">
+      <div class="erp-card-title">Perfiles</div>
+      <div class="erp-stat" id="healthProfiles">-</div>
+    </div>
+    <div class="erp-card">
+      <div class="erp-card-title">Pedidos</div>
+      <div class="erp-stat" id="healthOrders">-</div>
+    </div>
+    <div class="erp-card">
+      <div class="erp-card-title">Contenido</div>
+      <div class="erp-stat" id="healthContent">-</div>
+    </div>
+    <div class="erp-card">
+      <div class="erp-card-title">Mensajes</div>
+      <div class="erp-stat" id="healthMessages">-</div>
+    </div>
+  </div>
+
+  <!-- Quick Links -->
+  <h2 style="margin:0 0 12px;font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.5);">Accesos Rápidos</h2>
+  <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px;">
+    <a href="/erp" class="erp-btn erp-btn--ghost">📊 Dashboard</a>
+    <a href="/erp/pedidos" class="erp-btn erp-btn--ghost">📦 Pedidos</a>
+    <a href="/erp/inventario" class="erp-btn erp-btn--ghost">🏷️ Inventario</a>
+    <a href="/erp/contenido" class="erp-btn erp-btn--ghost">🎬 Contenido</a>
+    <a href="/erp/usuarios" class="erp-btn erp-btn--ghost">👥 Usuarios</a>
+    <a href="/erp/tags" class="erp-btn erp-btn--ghost">🏷️ Tags</a>
+    <a href="/erp/eventos" class="erp-btn erp-btn--ghost">🎤 Eventos</a>
+    <a href="/erp/versus" class="erp-btn erp-btn--ghost">⚔️ Versus</a>
+  </div>
+
+  <!-- Section: Activity Log -->
+  <h2 style="margin:0 0 12px;font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.5);">Activity Log</h2>
+  <div class="erp-card" style="overflow-x:auto;margin-bottom:16px;">
+    <table class="erp-table">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Usuario</th>
+          <th>Acción</th>
+          <th>Entidad</th>
+          <th>Detalles</th>
+        </tr>
+      </thead>
+      <tbody id="activityBody">
+        <tr><td colspan="5" class="erp-loading">Cargando actividad...</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="text-align:center;margin-bottom:32px;">
+    <button class="erp-btn erp-btn--ghost" id="loadMoreBtn" onclick="loadMoreActivity()" style="display:none;">Cargar más</button>
+  </div>
+</ErpLayout>
+
+<style>
+  .config-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .config-row:last-child {
+    border-bottom: none;
+  }
+  .config-label {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+  }
+  .config-value {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .notif-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .notif-row:last-child {
+    border-bottom: none;
+  }
+</style>
+
+<script>
+  import { supabase } from '../../lib/supabase';
+
+  const PAGE_SIZE = 20;
+  let currentOffset = 0;
+  let hasMore = true;
+
+  async function loadStats() {
+    const [profiles, orders, content, messages] = await Promise.all([
+      supabase.from('profiles').select('id', { count: 'exact', head: true }),
+      supabase.from('store_orders').select('id', { count: 'exact', head: true }),
+      supabase.from('exclusive_content').select('id', { count: 'exact', head: true }),
+      supabase.from('messages').select('id', { count: 'exact', head: true }),
+    ]);
+
+    document.getElementById('healthProfiles').textContent = String(profiles.count ?? 0);
+    document.getElementById('healthOrders').textContent = String(orders.count ?? 0);
+    document.getElementById('healthContent').textContent = String(content.count ?? 0);
+    document.getElementById('healthMessages').textContent = String(messages.count ?? 0);
+  }
+
+  async function loadNotifications() {
+    const { count } = await supabase
+      .from('notifications')
+      .select('id', { count: 'exact', head: true });
+
+    const { count: unreadCount } = await supabase
+      .from('notifications')
+      .select('id', { count: 'exact', head: true })
+      .eq('read', false);
+
+    document.getElementById('notifTotal').textContent = String(count ?? 0);
+    document.getElementById('notifUnread').textContent = String(unreadCount ?? 0);
+
+    // Recent notifications
+    const { data: notifs } = await supabase
+      .from('notifications')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(10);
+
+    const container = document.getElementById('notifTable')!;
+    if (!notifs || notifs.length === 0) {
+      container.innerHTML = '<p style="color:rgba(255,255,255,0.3);text-align:center;padding:24px;">Sin notificaciones recientes</p>';
+      return;
+    }
+
+    container.innerHTML = notifs.map(n => `
+      <div class="notif-row">
+        <span style="font-size:11px;color:rgba(255,255,255,0.3);min-width:140px;">${new Date(n.created_at).toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+        <span style="flex:1;font-size:13px;color:rgba(255,255,255,0.8);">${escapeHtml(n.message || n.title || 'Sin mensaje')}</span>
+        <span class="erp-status ${n.read ? 'erp-status--approved' : 'erp-status--pending'}">${n.read ? 'Leído' : 'No leído'}</span>
+      </div>
+    `).join('');
+  }
+
+  async function loadActivityLog() {
+    const { data: logs } = await supabase
+      .from('activity_log')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .range(currentOffset, currentOffset + PAGE_SIZE - 1);
+
+    const tbody = document.getElementById('activityBody')!;
+
+    if (!logs || logs.length === 0) {
+      if (currentOffset === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="erp-loading">Sin actividad registrada</td></tr>';
+      }
+      hasMore = false;
+      updateLoadMoreBtn();
+      return;
+    }
+
+    // Fetch profile names for unique user_ids
+    const userIds = [...new Set(logs.map(l => l.user_id).filter(Boolean))];
+    let profileMap: Record<string, string> = {};
+
+    if (userIds.length > 0) {
+      const { data: profiles } = await supabase
+        .from('profiles')
+        .select('id, username')
+        .in('id', userIds);
+
+      if (profiles) {
+        profiles.forEach(p => { profileMap[p.id] = p.username || p.id; });
+      }
+    }
+
+    // Remove loading row on first load
+    if (currentOffset === 0) {
+      tbody.innerHTML = '';
+    }
+
+    const rows = logs.map(l => `
+      <tr>
+        <td style="white-space:nowrap;">${new Date(l.created_at).toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</td>
+        <td>${escapeHtml(profileMap[l.user_id] || 'Sistema')}</td>
+        <td><span class="erp-status erp-status--pending" style="font-size:9px;">${escapeHtml(l.action || '-')}</span></td>
+        <td style="color:rgba(255,255,255,0.6);">${escapeHtml(l.entity_type || '-')}</td>
+        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:rgba(255,255,255,0.5);">${escapeHtml(l.details || '-')}</td>
+      </tr>
+    `).join('');
+
+    tbody.insertAdjacentHTML('beforeend', rows);
+
+    currentOffset += logs.length;
+    hasMore = logs.length === PAGE_SIZE;
+    updateLoadMoreBtn();
+  }
+
+  function updateLoadMoreBtn() {
+    const btn = document.getElementById('loadMoreBtn');
+    if (btn) btn.style.display = hasMore ? 'inline-flex' : 'none';
+  }
+
+  function escapeHtml(str: string) {
+    if (!str) return '';
+    const div = document.createElement('div');
+    div.textContent = String(str);
+    return div.innerHTML;
+  }
+
+  (window as any).loadMoreActivity = loadMoreActivity;
+  async function loadMoreActivity() {
+    await loadActivityLog();
+  }
+
+  // Init
+  loadStats();
+  loadNotifications();
+  loadActivityLog();
+</script>

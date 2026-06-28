@@ -1,0 +1,404 @@
+---
+interface Props {
+  title: string;
+  activeModule?: string;
+}
+
+const { title, activeModule = 'dashboard' } = Astro.props;
+
+const modules = [
+  { id: 'dashboard', label: 'Dashboard', icon: '📊', href: '/erp' },
+  { id: 'pedidos', label: 'Pedidos', icon: '📦', href: '/erp/pedidos' },
+  { id: 'inventario', label: 'Inventario', icon: '🏷️', href: '/erp/inventario' },
+  { id: 'contenido', label: 'Contenido', icon: '🎬', href: '/erp/contenido' },
+  { id: 'usuarios', label: 'Usuarios', icon: '👥', href: '/erp/usuarios' },
+  { id: 'tags', label: 'Tags', icon: '🏷️', href: '/erp/tags' },
+  { id: 'eventos', label: 'Eventos', icon: '🎤', href: '/erp/eventos' },
+  { id: 'versus', label: 'Versus', icon: '⚔️', href: '/erp/versus' },
+  { id: 'configuracion', label: 'Config', icon: '⚙️', href: '/erp/configuracion' },
+];
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title} | Wild Gvng ERP</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+</head>
+<body class="erp-body">
+  <!-- Sidebar -->
+  <aside class="erp-sidebar" id="sidebar">
+    <div class="erp-sidebar-header">
+      <a href="/erp" class="erp-logo">
+        <span class="text-wild-orange">WILD</span><span>GVNG</span>
+      </a>
+      <span class="erp-badge">ERP</span>
+    </div>
+
+    <nav class="erp-nav">
+      {modules.map(m => (
+        <a
+          href={m.href}
+          class={`erp-nav-item ${activeModule === m.id ? 'erp-nav-item--active' : ''}`}
+        >
+          <span class="erp-nav-icon">{m.icon}</span>
+          <span class="erp-nav-label">{m.label}</span>
+        </a>
+      ))}
+    </nav>
+
+    <div class="erp-sidebar-footer">
+      <a href="/" class="erp-nav-item">
+        <span class="erp-nav-icon">🏠</span>
+        <span class="erp-nav-label">Volver al sitio</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="erp-main">
+    <header class="erp-topbar">
+      <button class="erp-menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+      <h1 class="erp-page-title">{title}</h1>
+      <div class="erp-topbar-right">
+        <span class="erp-user-badge" id="erpUserBadge">Cargando...</span>
+      </div>
+    </header>
+    <main class="erp-content">
+      <slot />
+    </main>
+  </div>
+
+  <style is:global>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    .erp-body {
+      display: flex;
+      min-height: 100vh;
+      background: #0a0a0a;
+      color: #e5e5e5;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+
+    /* Sidebar */
+    .erp-sidebar {
+      width: 240px;
+      background: #111;
+      border-right: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 50;
+      transition: transform 0.2s;
+    }
+
+    .erp-sidebar-header {
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .erp-logo {
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      text-decoration: none;
+      color: #fff;
+    }
+
+    .erp-badge {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      background: #C98300;
+      color: #000;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .erp-nav {
+      flex: 1;
+      padding: 12px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      overflow-y: auto;
+    }
+
+    .erp-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: rgba(255,255,255,0.5);
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.15s;
+    }
+
+    .erp-nav-item:hover {
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+    }
+
+    .erp-nav-item--active {
+      background: rgba(201,131,0,0.12);
+      color: #C98300;
+    }
+
+    .erp-nav-icon { font-size: 16px; width: 20px; text-align: center; }
+
+    .erp-sidebar-footer {
+      padding: 12px 8px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    /* Main */
+    .erp-main {
+      flex: 1;
+      margin-left: 240px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .erp-topbar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 24px;
+      background: rgba(17,17,17,0.8);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .erp-menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .erp-page-title {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .erp-topbar-right { margin-left: auto; }
+
+    .erp-user-badge {
+      font-size: 11px;
+      font-weight: 700;
+      color: #C98300;
+      background: rgba(201,131,0,0.1);
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    .erp-content {
+      flex: 1;
+      padding: 24px;
+    }
+
+    /* Cards */
+    .erp-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .erp-card-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 12px;
+    }
+
+    .erp-stat {
+      font-size: 28px;
+      font-weight: 900;
+      color: #fff;
+    }
+
+    .erp-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    /* Tables */
+    .erp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .erp-table th {
+      text-align: left;
+      padding: 10px 12px;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.4);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .erp-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.8);
+    }
+
+    .erp-table tr:hover td {
+      background: rgba(255,255,255,0.02);
+    }
+
+    /* Status badges */
+    .erp-status {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .erp-status--pending { background: rgba(255,200,0,0.15); color: #ffc800; }
+    .erp-status--approved { background: rgba(0,255,136,0.12); color: #00ff88; }
+    .erp-status--rejected { background: rgba(255,68,68,0.12); color: #ff4444; }
+    .erp-status--shipped { background: rgba(0,191,255,0.12); color: #00bfff; }
+    .erp-status--delivered { background: rgba(0,255,136,0.12); color: #00ff88; }
+    .erp-status--paid { background: rgba(0,255,136,0.12); color: #00ff88; }
+
+    /* Buttons */
+    .erp-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: none;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .erp-btn--primary {
+      background: #C98300;
+      color: #000;
+    }
+
+    .erp-btn--primary:hover {
+      background: #e69500;
+    }
+
+    .erp-btn--ghost {
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+    }
+
+    .erp-btn--ghost:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .erp-btn--danger {
+      background: rgba(255,68,68,0.15);
+      color: #ff4444;
+    }
+
+    /* Loading */
+    .erp-loading {
+      text-align: center;
+      padding: 60px;
+      color: rgba(255,255,255,0.3);
+      font-size: 13px;
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .erp-sidebar {
+        transform: translateX(-100%);
+      }
+
+      .erp-sidebar--open {
+        transform: translateX(0);
+      }
+
+      .erp-main {
+        margin-left: 0;
+      }
+
+      .erp-menu-toggle {
+        display: block;
+      }
+
+      .erp-content {
+        padding: 16px;
+      }
+    }
+  </style>
+
+  <script>
+    import { supabase } from '../lib/supabase';
+    import { getRole } from '../lib/role';
+
+    // Auth guard
+    const { role, session } = await getRole();
+    const allowed = ['admin', 'staff_manager', 'staff', 'staff_marketing'];
+
+    if (!session || !allowed.includes(role)) {
+      document.body.innerHTML = `
+        <div style="min-height:100vh;display:grid;place-items:center;background:#0a0a0a;color:#fff;font-family:system-ui;">
+          <div style="text-align:center;padding:40px;">
+            <h1 style="font-size:24px;font-weight:900;color:#ff4444;margin-bottom:12px;">ACCESO DENEGADO</h1>
+            <p style="color:rgba(255,255,255,0.5);margin-bottom:24px;">No tienes permisos para acceder al ERP.</p>
+            <a href="/" style="color:#C98300;text-decoration:none;font-weight:700;">Volver al sitio</a>
+          </div>
+        </div>`;
+      throw new Error('Access denied');
+    }
+
+    // Show user badge
+    const badge = document.getElementById('erpUserBadge');
+    if (badge) badge.textContent = role.toUpperCase();
+
+    // Mobile menu
+    const toggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    toggle?.addEventListener('click', () => {
+      sidebar?.classList.toggle('erp-sidebar--open');
+    });
+
+    // Close sidebar on nav click (mobile)
+    document.querySelectorAll('.erp-nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        sidebar?.classList.remove('erp-sidebar--open');
+      });
+    });
+  </script>
+</body>
+</html>

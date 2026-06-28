@@ -1,0 +1,597 @@
+---
+import ErpLayout from '../../layouts/ErpLayout.astro';
+---
+
+<ErpLayout title="Inventario" activeModule="inventario">
+  <!-- Toolbar -->
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+      <input type="text" id="searchInput" placeholder="Buscar por nombre..." style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:8px 14px;color:#fff;font-size:13px;outline:none;min-width:200px;" />
+      <select id="categoryFilter" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:8px 14px;color:#fff;font-size:13px;outline:none;">
+        <option value="all">Todas las categorías</option>
+      </select>
+    </div>
+    <button class="erp-btn erp-btn--primary" id="newProductBtn">+ Nuevo Producto</button>
+  </div>
+
+  <!-- Stats -->
+  <div class="erp-grid" style="margin-bottom:20px;">
+    <div class="erp-card">
+      <div class="erp-card-title">Productos</div>
+      <div class="erp-stat" id="statProducts">-</div>
+    </div>
+    <div class="erp-card">
+      <div class="erp-card-title">Activos</div>
+      <div class="erp-stat" id="statActive">-</div>
+    </div>
+    <div class="erp-card">
+      <div class="erp-card-title">Variantes</div>
+      <div class="erp-stat" id="statVariants">-</div>
+    </div>
+    <div class="erp-card">
+      <div class="erp-card-title">Stock Total</div>
+      <div class="erp-stat" id="statStock">-</div>
+    </div>
+  </div>
+
+  <!-- Products Table -->
+  <div class="erp-card" style="overflow-x:auto;">
+    <table class="erp-table" id="productsTable">
+      <thead>
+        <tr>
+          <th style="width:30px;"></th>
+          <th>Nombre</th>
+          <th>Categoría</th>
+          <th>Precio Base</th>
+          <th>Estado</th>
+          <th>Stock</th>
+          <th>Creado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="productsBody">
+        <tr><td colspan="8" class="erp-loading">Cargando productos...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Product Modal -->
+  <div id="productModal" style="display:none;position:fixed;inset:0;z-index:100;display:none;place-items:center;">
+    <div style="position:absolute;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);" id="modalOverlay"></div>
+    <div class="erp-card" style="position:relative;z-index:1;width:100%;max-width:540px;max-height:90vh;overflow-y:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+        <h2 id="modalTitle" style="font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;">Nuevo Producto</h2>
+        <button class="erp-btn erp-btn--ghost" id="closeModalBtn" style="padding:4px 10px;">✕</button>
+      </div>
+      <form id="productForm" style="display:flex;flex-direction:column;gap:14px;">
+        <input type="hidden" id="formProductId" />
+        <div>
+          <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.4);margin-bottom:6px;">Nombre *</label>
+          <input type="text" id="formName" required style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px 14px;color:#fff;font-size:13px;outline:none;" />
+        </div>
+        <div>
+          <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.4);margin-bottom:6px;">Descripción</label>
+          <textarea id="formDescription" rows="3" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px 14px;color:#fff;font-size:13px;outline:none;resize:vertical;"></textarea>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.4);margin-bottom:6px;">Precio Base *</label>
+            <input type="number" id="formPrice" step="0.01" min="0" required style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px 14px;color:#fff;font-size:13px;outline:none;" />
+          </div>
+          <div>
+            <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.4);margin-bottom:6px;">Categoría</label>
+            <input type="text" id="formCategory" placeholder="Ej:/playeras" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px 14px;color:#fff;font-size:13px;outline:none;" />
+          </div>
+        </div>
+        <div>
+          <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.4);margin-bottom:6px;">URL de Imagen</label>
+          <input type="url" id="formImageUrl" placeholder="https://..." style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px 14px;color:#fff;font-size:13px;outline:none;" />
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px;">
+          <button type="button" class="erp-btn erp-btn--ghost" id="cancelFormBtn">Cancelar</button>
+          <button type="submit" class="erp-btn erp-btn--primary" id="submitFormBtn">Crear Producto</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Variant Modal -->
+  <div id="variantModal" style="display:none;position:fixed;inset:0;z-index:100;display:none;place-items:center;">
+    <div style="position:absolute;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);" id="variantOverlay"></div>
+    <div class="erp-card" style="position:relative;z-index:1;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+        <h2 id="variantModalTitle" style="font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;">Nueva Variante</h2>
+        <button class="erp-btn erp-btn--ghost" id="closeVariantBtn" style="padding:4px 10px;">✕</button>
+      </div>
+      <form id="variantForm" style="display:flex;flex-direction:column;gap:14px;">
+        <input type="hidden" id="vFormId" />
+        <input type="hidden" id="vFormProductId" />
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.4);margin-bottom:6px;">Talla</label>
+            <input type="text" id="vFormSize" placeholder="Ej: M, L, XL" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px 14px;color:#fff;font-size:13px;outline:none;" />
+          </div>
+          <div>
+            <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.4);margin-bottom:6px;">Color</label>
+            <input type="text" id="vFormColor" placeholder="Ej: Negro, Blanco" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px 14px;color:#fff;font-size:13px;outline:none;" />
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.4);margin-bottom:6px;">Stock *</label>
+            <input type="number" id="vFormStock" min="0" required style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px 14px;color:#fff;font-size:13px;outline:none;" />
+          </div>
+          <div>
+            <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.4);margin-bottom:6px;">SKU</label>
+            <input type="text" id="vFormSku" placeholder="Ej: WGP-NB-M" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px 14px;color:#fff;font-size:13px;outline:none;" />
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px;">
+          <button type="button" class="erp-btn erp-btn--ghost" id="cancelVariantBtn">Cancelar</button>
+          <button type="submit" class="erp-btn erp-btn--primary" id="submitVariantBtn">Crear Variante</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" style="position:fixed;bottom:24px;right:24px;z-index:200;display:none;background:#1a1a1a;border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 20px;font-size:13px;font-weight:600;color:#fff;box-shadow:0 8px 32px rgba(0,0,0,0.5);transition:opacity 0.3s;"></div>
+</ErpLayout>
+
+<style>
+  .filter-btn.active {
+    background: rgba(201,131,0,0.2);
+    color: #C98300;
+  }
+  .expand-btn {
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.4);
+    font-size: 14px;
+    transition: transform 0.2s, color 0.2s;
+    padding: 2px 6px;
+  }
+  .expand-btn:hover { color: #C98300; }
+  .expand-btn.open { transform: rotate(90deg); color: #C98300; }
+  .variant-row td {
+    background: rgba(255,255,255,0.015) !important;
+    padding: 6px 12px 6px 42px !important;
+  }
+  .variant-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  .variant-table th {
+    text-align: left;
+    padding: 6px 12px;
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.3);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .variant-table td {
+    padding: 6px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    color: rgba(255,255,255,0.6);
+  }
+  .stock-input {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    padding: 3px 8px;
+    color: #fff;
+    font-size: 12px;
+    width: 70px;
+    text-align: center;
+    outline: none;
+  }
+  .stock-input:focus {
+    border-color: #C98300;
+  }
+  .action-group {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+  .action-btn {
+    background: rgba(255,255,255,0.05);
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    transition: all 0.15s;
+  }
+  .action-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+  }
+  .action-btn--danger:hover {
+    background: rgba(255,68,68,0.2);
+    color: #ff4444;
+  }
+  .action-btn--toggle.active {
+    color: #00ff88;
+    background: rgba(0,255,136,0.1);
+  }
+  .action-btn--toggle.inactive {
+    color: #ff4444;
+    background: rgba(255,68,68,0.1);
+  }
+</style>
+
+<script>
+  import { supabase } from '../../lib/supabase';
+
+  interface Product {
+    id: string;
+    name: string;
+    description: string;
+    base_price: number;
+    category: string;
+    image_url: string;
+    is_active: boolean;
+    created_at: string;
+    product_variants?: Variant[];
+  }
+
+  interface Variant {
+    id: string;
+    product_id: string;
+    size: string;
+    color: string;
+    stock: number;
+    sku: string;
+  }
+
+  let allProducts: Product[] = [];
+  let expandedProducts = new Set<string>();
+  let searchTerm = '';
+  let categoryFilter = 'all';
+
+  // --- DOM refs ---
+  const productsBody = document.getElementById('productsBody')!;
+  const searchInput = document.getElementById('searchInput') as HTMLInputElement;
+  const categoryFilterEl = document.getElementById('categoryFilter') as HTMLSelectElement;
+  const productModal = document.getElementById('productModal')!;
+  const variantModal = document.getElementById('variantModal')!;
+  const productForm = document.getElementById('productForm') as HTMLFormElement;
+  const variantForm = document.getElementById('variantForm') as HTMLFormElement;
+  const toast = document.getElementById('toast')!;
+
+  // --- Toast ---
+  function showToast(msg: string, duration = 3000) {
+    toast.textContent = msg;
+    toast.style.display = 'block';
+    toast.style.opacity = '1';
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      setTimeout(() => (toast.style.display = 'none'), 300);
+    }, duration);
+  }
+
+  // --- Product Modal ---
+  document.getElementById('newProductBtn')!.addEventListener('click', () => openProductModal());
+  document.getElementById('closeModalBtn')!.addEventListener('click', () => closeProductModal());
+  document.getElementById('cancelFormBtn')!.addEventListener('click', () => closeProductModal());
+  document.getElementById('modalOverlay')!.addEventListener('click', () => closeProductModal());
+
+  function openProductModal(product?: Product) {
+    const title = document.getElementById('modalTitle')!;
+    const submitBtn = document.getElementById('submitFormBtn')!;
+    if (product) {
+      title.textContent = 'Editar Producto';
+      submitBtn.textContent = 'Guardar Cambios';
+      (document.getElementById('formProductId') as HTMLInputElement).value = product.id;
+      (document.getElementById('formName') as HTMLInputElement).value = product.name;
+      (document.getElementById('formDescription') as HTMLTextAreaElement).value = product.description || '';
+      (document.getElementById('formPrice') as HTMLInputElement).value = String(product.base_price);
+      (document.getElementById('formCategory') as HTMLInputElement).value = product.category || '';
+      (document.getElementById('formImageUrl') as HTMLInputElement).value = product.image_url || '';
+    } else {
+      title.textContent = 'Nuevo Producto';
+      submitBtn.textContent = 'Crear Producto';
+      productForm.reset();
+      (document.getElementById('formProductId') as HTMLInputElement).value = '';
+    }
+    productModal.style.display = 'grid';
+  }
+
+  function closeProductModal() {
+    productModal.style.display = 'none';
+  }
+
+  // --- Variant Modal ---
+  document.getElementById('closeVariantBtn')!.addEventListener('click', () => closeVariantModal());
+  document.getElementById('cancelVariantBtn')!.addEventListener('click', () => closeVariantModal());
+  document.getElementById('variantOverlay')!.addEventListener('click', () => closeVariantModal());
+
+  function openVariantModal(productId: string, variant?: Variant) {
+    const title = document.getElementById('variantModalTitle')!;
+    const submitBtn = document.getElementById('submitVariantBtn')!;
+    (document.getElementById('vFormProductId') as HTMLInputElement).value = productId;
+    if (variant) {
+      title.textContent = 'Editar Variante';
+      submitBtn.textContent = 'Guardar Cambios';
+      (document.getElementById('vFormId') as HTMLInputElement).value = variant.id;
+      (document.getElementById('vFormSize') as HTMLInputElement).value = variant.size || '';
+      (document.getElementById('vFormColor') as HTMLInputElement).value = variant.color || '';
+      (document.getElementById('vFormStock') as HTMLInputElement).value = String(variant.stock);
+      (document.getElementById('vFormSku') as HTMLInputElement).value = variant.sku || '';
+    } else {
+      title.textContent = 'Nueva Variante';
+      submitBtn.textContent = 'Crear Variante';
+      variantForm.reset();
+      (document.getElementById('vFormId') as HTMLInputElement).value = '';
+      (document.getElementById('vFormProductId') as HTMLInputElement).value = productId;
+    }
+    variantModal.style.display = 'grid';
+  }
+
+  function closeVariantModal() {
+    variantModal.style.display = 'none';
+  }
+
+  // --- Filters ---
+  searchInput.addEventListener('input', (e) => {
+    searchTerm = (e.target as HTMLInputElement).value.toLowerCase().trim();
+    renderProducts();
+  });
+
+  categoryFilterEl.addEventListener('change', (e) => {
+    categoryFilter = (e.target as HTMLSelectElement).value;
+    renderProducts();
+  });
+
+  // --- Load Data ---
+  async function loadProducts() {
+    const { data: products, error } = await supabase
+      .from('store_products')
+      .select('*, product_variants(*)')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error loading products:', error);
+      productsBody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#ff4444;padding:40px;">Error al cargar productos</td></tr>';
+      return;
+    }
+
+    allProducts = (products || []) as Product[];
+    populateCategories();
+    updateStats();
+    renderProducts();
+  }
+
+  function populateCategories() {
+    const categories = [...new Set(allProducts.map(p => p.category).filter(Boolean))].sort();
+    categoryFilterEl.innerHTML = '<option value="all">Todas las categorías</option>' +
+      categories.map(c => `<option value="${c}" ${categoryFilter === c ? 'selected' : ''}>${c}</option>`).join('');
+  }
+
+  function updateStats() {
+    const active = allProducts.filter(p => p.is_active).length;
+    const totalVariants = allProducts.reduce((sum, p) => sum + (p.product_variants?.length || 0), 0);
+    const totalStock = allProducts.reduce((sum, p) =>
+      sum + (p.product_variants?.reduce((vs, v) => vs + (v.stock || 0), 0) || 0), 0);
+
+    document.getElementById('statProducts')!.textContent = String(allProducts.length);
+    document.getElementById('statActive')!.textContent = String(active);
+    document.getElementById('statVariants')!.textContent = String(totalVariants);
+    document.getElementById('statStock')!.textContent = String(totalStock);
+  }
+
+  function renderProducts() {
+    let filtered = allProducts;
+
+    if (searchTerm) {
+      filtered = filtered.filter(p => p.name?.toLowerCase().includes(searchTerm));
+    }
+    if (categoryFilter !== 'all') {
+      filtered = filtered.filter(p => p.category === categoryFilter);
+    }
+
+    if (!filtered.length) {
+      productsBody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:rgba(255,255,255,0.3);padding:40px;">Sin productos encontrados</td></tr>';
+      return;
+    }
+
+    productsBody.innerHTML = filtered.map(p => {
+      const isExpanded = expandedProducts.has(p.id);
+      const variantCount = p.product_variants?.length || 0;
+      const totalStock = p.product_variants?.reduce((s, v) => s + (v.stock || 0), 0) || 0;
+      const statusClass = p.is_active ? 'erp-status--approved' : 'erp-status--rejected';
+      const statusText = p.is_active ? 'Activo' : 'Inactivo';
+
+      let html = `
+        <tr data-product-id="${p.id}">
+          <td>
+            <button class="expand-btn ${isExpanded ? 'open' : ''}" onclick="toggleVariants('${p.id}')">▶</button>
+          </td>
+          <td style="font-weight:700;">${p.name}</td>
+          <td>${p.category || '-'}</td>
+          <td style="font-weight:700;">$${Number(p.base_price).toFixed(2)}</td>
+          <td><span class="erp-status ${statusClass}">${statusText}</span></td>
+          <td>${totalStock} <span style="color:rgba(255,255,255,0.3);font-size:11px;">(${variantCount} vars)</span></td>
+          <td style="font-size:11px;color:rgba(255,255,255,0.4);">${new Date(p.created_at).toLocaleDateString('es-MX')}</td>
+          <td>
+            <div class="action-group">
+              <button class="action-btn action-btn--toggle ${p.is_active ? 'active' : 'inactive'}" onclick="toggleActive('${p.id}', ${!p.is_active})" title="${p.is_active ? 'Desactivar' : 'Activar'}">
+                ${p.is_active ? '●' : '○'}
+              </button>
+              <button class="action-btn" onclick="openVariantModal('${p.id}')" title="Agregar variante">+</button>
+              <button class="action-btn" onclick="editProduct('${p.id}')" title="Editar">✎</button>
+              <button class="action-btn action-btn--danger" onclick="deleteProduct('${p.id}')" title="Eliminar">✕</button>
+            </div>
+          </td>
+        </tr>`;
+
+      if (isExpanded && p.product_variants?.length) {
+        html += `<tr class="variant-row"><td colspan="8">
+          <table class="variant-table">
+            <thead>
+              <tr>
+                <th>Talla</th>
+                <th>Color</th>
+                <th>SKU</th>
+                <th>Stock</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${p.product_variants.map(v => `
+                <tr>
+                  <td>${v.size || '-'}</td>
+                  <td>${v.color || '-'}</td>
+                  <td style="font-family:monospace;font-size:11px;">${v.sku || '-'}</td>
+                  <td>
+                    <input type="number" class="stock-input" value="${v.stock}" min="0"
+                      onchange="updateStock('${v.id}', this.value)" />
+                  </td>
+                  <td>
+                    <div class="action-group">
+                      <button class="action-btn" onclick="editVariant('${p.id}', '${v.id}')" title="Editar">✎</button>
+                      <button class="action-btn action-btn--danger" onclick="deleteVariant('${v.id}')" title="Eliminar">✕</button>
+                    </div>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </td></tr>`;
+      } else if (isExpanded) {
+        html += `<tr class="variant-row"><td colspan="8" style="text-align:center;color:rgba(255,255,255,0.25);padding:16px;font-size:12px;">
+          Sin variantes — haz clic en <strong>+</strong> para agregar una
+        </td></tr>`;
+      }
+
+      return html;
+    }).join('');
+  }
+
+  // --- Product CRUD ---
+  productForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = (document.getElementById('formProductId') as HTMLInputElement).value;
+    const payload = {
+      name: (document.getElementById('formName') as HTMLInputElement).value.trim(),
+      description: (document.getElementById('formDescription') as HTMLTextAreaElement).value.trim(),
+      base_price: parseFloat((document.getElementById('formPrice') as HTMLInputElement).value),
+      category: (document.getElementById('formCategory') as HTMLInputElement).value.trim(),
+      image_url: (document.getElementById('formImageUrl') as HTMLInputElement).value.trim(),
+    };
+
+    if (!payload.name || isNaN(payload.base_price)) return;
+
+    if (id) {
+      const { error } = await supabase.from('store_products').update(payload).eq('id', id);
+      if (error) { showToast('Error al actualizar: ' + error.message); return; }
+      showToast('Producto actualizado');
+    } else {
+      const { error } = await supabase.from('store_products').insert({ ...payload, is_active: true });
+      if (error) { showToast('Error al crear: ' + error.message); return; }
+      showToast('Producto creado');
+    }
+
+    closeProductModal();
+    await loadProducts();
+  });
+
+  (window as any).editProduct = (id: string) => {
+    const product = allProducts.find(p => p.id === id);
+    if (product) openProductModal(product);
+  };
+
+  (window as any).deleteProduct = async (id: string) => {
+    if (!confirm('¿Eliminar este producto? Esta acción no se puede deshacer.')) return;
+    const { error } = await supabase.from('store_products').delete().eq('id', id);
+    if (error) { showToast('Error al eliminar: ' + error.message); return; }
+    showToast('Producto eliminado');
+    expandedProducts.delete(id);
+    await loadProducts();
+  };
+
+  (window as any).toggleActive = async (id: string, newState: boolean) => {
+    const { error } = await supabase.from('store_products').update({ is_active: newState }).eq('id', id);
+    if (error) { showToast('Error al cambiar estado'); return; }
+    showToast(newState ? 'Producto activado' : 'Producto desactivado');
+    await loadProducts();
+  };
+
+  (window as any).toggleVariants = (id: string) => {
+    if (expandedProducts.has(id)) {
+      expandedProducts.delete(id);
+    } else {
+      expandedProducts.add(id);
+    }
+    renderProducts();
+  };
+
+  // --- Variant CRUD ---
+  variantForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = (document.getElementById('vFormId') as HTMLInputElement).value;
+    const productId = (document.getElementById('vFormProductId') as HTMLInputElement).value;
+    const payload = {
+      product_id: productId,
+      size: (document.getElementById('vFormSize') as HTMLInputElement).value.trim(),
+      color: (document.getElementById('vFormColor') as HTMLInputElement).value.trim(),
+      stock: parseInt((document.getElementById('vFormStock') as HTMLInputElement).value, 10),
+      sku: (document.getElementById('vFormSku') as HTMLInputElement).value.trim(),
+    };
+
+    if (isNaN(payload.stock)) return;
+
+    if (id) {
+      const { error } = await supabase.from('product_variants').update({
+        size: payload.size,
+        color: payload.color,
+        stock: payload.stock,
+        sku: payload.sku,
+      }).eq('id', id);
+      if (error) { showToast('Error al actualizar variante: ' + error.message); return; }
+      showToast('Variante actualizada');
+    } else {
+      const { error } = await supabase.from('product_variants').insert(payload);
+      if (error) { showToast('Error al crear variante: ' + error.message); return; }
+      showToast('Variante creada');
+    }
+
+    closeVariantModal();
+    await loadProducts();
+  });
+
+  (window as any).openVariantModal = (productId: string) => {
+    openVariantModal(productId);
+  };
+
+  (window as any).editVariant = (productId: string, variantId: string) => {
+    const product = allProducts.find(p => p.id === productId);
+    const variant = product?.product_variants?.find(v => v.id === variantId);
+    if (variant) openVariantModal(productId, variant);
+  };
+
+  (window as any).deleteVariant = async (id: string) => {
+    if (!confirm('¿Eliminar esta variante?')) return;
+    const { error } = await supabase.from('product_variants').delete().eq('id', id);
+    if (error) { showToast('Error al eliminar variante: ' + error.message); return; }
+    showToast('Variante eliminada');
+    await loadProducts();
+  };
+
+  (window as any).updateStock = async (variantId: string, value: string) => {
+    const stock = parseInt(value, 10);
+    if (isNaN(stock) || stock < 0) return;
+    const { error } = await supabase.from('product_variants').update({ stock }).eq('id', variantId);
+    if (error) { showToast('Error al actualizar stock'); return; }
+    showToast('Stock actualizado');
+    await loadProducts();
+  };
+
+  // --- Init ---
+  loadProducts();
+</script>

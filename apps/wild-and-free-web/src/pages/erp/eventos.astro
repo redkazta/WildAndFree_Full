@@ -1,0 +1,445 @@
+---
+import ErpLayout from '../../layouts/ErpLayout.astro';
+---
+
+<ErpLayout title="Eventos" activeModule="eventos">
+  <!-- Stats -->
+  <div class="erp-grid" style="margin-bottom:24px;">
+    <div class="erp-card">
+      <div class="erp-card-title">Total Eventos</div>
+      <div class="erp-stat" id="statTotal">-</div>
+    </div>
+    <div class="erp-card">
+      <div class="erp-card-title">Activos</div>
+      <div class="erp-stat" id="statActive">-</div>
+    </div>
+    <div class="erp-card">
+      <div class="erp-card-title">Próximos</div>
+      <div class="erp-stat" id="statUpcoming">-</div>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
+    <div style="display:flex;gap:8px;">
+      <button class="erp-btn erp-btn--ghost filter-btn active" data-filter="all">Todos</button>
+      <button class="erp-btn erp-btn--ghost filter-btn" data-filter="active">Activos</button>
+      <button class="erp-btn erp-btn--ghost filter-btn" data-filter="upcoming">Próximos</button>
+      <button class="erp-btn erp-btn--ghost filter-btn" data-filter="past">Pasados</button>
+      <button class="erp-btn erp-btn--ghost filter-btn" data-filter="inactive">Inactivos</button>
+    </div>
+    <button class="erp-btn erp-btn--primary" onclick="openAddModal()">＋ Nuevo Evento</button>
+  </div>
+
+  <!-- Events Table -->
+  <div class="erp-card" style="overflow-x:auto;">
+    <table class="erp-table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Tipo</th>
+          <th>Fecha</th>
+          <th>Ubicación</th>
+          <th>Imagen</th>
+          <th>Activo</th>
+          <th>Creado Por</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="eventsBody">
+        <tr><td colspan="8" class="erp-loading">Cargando eventos...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Add / Edit Modal -->
+  <div id="eventModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;place-items:center;">
+    <div class="erp-card" style="width:90%;max-width:520px;max-height:85vh;overflow-y:auto;position:relative;">
+      <button onclick="closeModal('eventModal')" style="position:absolute;top:16px;right:16px;background:none;border:none;color:rgba(255,255,255,0.4);font-size:18px;cursor:pointer;">✕</button>
+      <h3 id="eventModalTitle" style="font-size:16px;font-weight:800;margin-bottom:16px;color:#C98300;">Nuevo Evento</h3>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <label class="field-label">Nombre</label>
+        <input id="eventName" type="text" placeholder="Nombre del evento" class="field-input" />
+        <label class="field-label">Descripción</label>
+        <textarea id="eventDescription" rows="3" placeholder="Descripción del evento" class="field-input" style="resize:vertical;"></textarea>
+        <label class="field-label">Tipo de Evento</label>
+        <select id="eventType" class="field-input">
+          <option value="battle">Battle</option>
+          <option value="concert">Concierto</option>
+          <option value="meet_greet">Meet & Greet</option>
+          <option value="other">Otro</option>
+        </select>
+        <label class="field-label">Fecha y Hora</label>
+        <input id="eventDate" type="datetime-local" class="field-input" />
+        <label class="field-label">Ubicación</label>
+        <input id="eventLocation" type="text" placeholder="Ubicación del evento" class="field-input" />
+        <label class="field-label">URL de Imagen</label>
+        <input id="eventImageUrl" type="text" placeholder="https://..." class="field-input" />
+        <label class="field-label">Activo</label>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <input id="eventIsActive" type="checkbox" checked style="accent-color:#C98300;width:16px;height:16px;cursor:pointer;" />
+          <span style="font-size:12px;color:rgba(255,255,255,0.5);">Visible para usuarios</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:20px;">
+        <button class="erp-btn erp-btn--ghost" onclick="closeModal('eventModal')">Cancelar</button>
+        <button class="erp-btn erp-btn--primary" id="eventSaveBtn" onclick="saveEvent()">Crear Evento</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="deleteModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;place-items:center;">
+    <div class="erp-card" style="width:90%;max-width:400px;position:relative;text-align:center;">
+      <h3 style="font-size:16px;font-weight:800;margin-bottom:8px;color:#ff4444;">Eliminar Evento</h3>
+      <p style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:20px;">¿Estás seguro de que deseas eliminar este evento? Esta acción no se puede deshacer.</p>
+      <div style="display:flex;gap:8px;justify-content:center;">
+        <button class="erp-btn erp-btn--ghost" onclick="closeModal('deleteModal')">Cancelar</button>
+        <button class="erp-btn erp-btn--danger" id="confirmDeleteBtn" onclick="confirmDelete()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</ErpLayout>
+
+<style>
+  #eventModal, #deleteModal {
+    display: none;
+    place-items: center;
+  }
+  #eventModal.active, #deleteModal.active {
+    display: grid;
+  }
+  .filter-btn.active {
+    background: rgba(201,131,0,0.15);
+    color: #C98300;
+    border-color: rgba(201,131,0,0.3);
+  }
+  .field-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: -4px;
+  }
+  .field-input {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 8px 14px;
+    color: #fff;
+    font-size: 13px;
+    outline: none;
+    font-family: inherit;
+  }
+  .field-input:focus {
+    border-color: #C98300;
+  }
+  .type-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .type-badge--battle { background: rgba(255,68,68,0.15); color: #ff4444; }
+  .type-badge--concert { background: rgba(0,191,255,0.12); color: #00bfff; }
+  .type-badge--meet_greet { background: rgba(0,255,136,0.12); color: #00ff88; }
+  .type-badge--other { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.5); }
+  .toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 36px;
+    height: 20px;
+    cursor: pointer;
+  }
+  .toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.1);
+    border-radius: 20px;
+    transition: background 0.2s;
+  }
+  .toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    left: 3px;
+    top: 3px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 50%;
+    transition: all 0.2s;
+  }
+  .toggle-switch input:checked + .toggle-slider {
+    background: rgba(0,255,136,0.25);
+  }
+  .toggle-switch input:checked + .toggle-slider::before {
+    transform: translateX(16px);
+    background: #00ff88;
+  }
+  .event-thumb {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    object-fit: cover;
+    background: rgba(255,255,255,0.05);
+  }
+</style>
+
+<script>
+  import { supabase } from '../../lib/supabase';
+
+  // ── State ──
+  let allEvents: any[] = [];
+  let currentFilter = 'all';
+  let editingEventId: string | null = null;
+  let deletingEventId: string | null = null;
+
+  // ── Helpers ──
+  (window as any).closeModal = (id: string) => {
+    document.getElementById(id)?.classList.remove('active');
+  };
+
+  function openModal(id: string) {
+    document.getElementById(id)?.classList.add('active');
+  }
+
+  function esc(s: string) {
+    if (!s) return '';
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function formatDate(iso: string) {
+    if (!iso) return '-';
+    return new Date(iso).toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  }
+
+  function formatShortDate(iso: string) {
+    if (!iso) return '-';
+    return new Date(iso).toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' });
+  }
+
+  function toLocalDatetime(iso: string) {
+    if (!iso) return '';
+    const d = new Date(iso);
+    const offset = d.getTimezoneOffset();
+    const local = new Date(d.getTime() - offset * 60000);
+    return local.toISOString().slice(0, 16);
+  }
+
+  const typeLabels: Record<string, string> = {
+    battle: 'Battle',
+    concert: 'Concierto',
+    meet_greet: 'Meet & Greet',
+    other: 'Otro',
+  };
+
+  // ── Load Events ──
+  async function loadEvents(filter = 'all') {
+    currentFilter = filter;
+    let query = supabase
+      .from('events')
+      .select('*, profiles!events_created_by_fkey(username, nombre)')
+      .order('event_date', { ascending: false });
+
+    const { data: events } = await query;
+    allEvents = events || [];
+
+    let filtered = allEvents;
+    const now = new Date().toISOString();
+
+    if (filter === 'active') {
+      filtered = allEvents.filter(e => e.is_active);
+    } else if (filter === 'upcoming') {
+      filtered = allEvents.filter(e => e.event_date >= now);
+    } else if (filter === 'past') {
+      filtered = allEvents.filter(e => e.event_date < now);
+    } else if (filter === 'inactive') {
+      filtered = allEvents.filter(e => !e.is_active);
+    }
+
+    updateStats();
+    renderTable(filtered);
+  }
+
+  // ── Stats ──
+  function updateStats() {
+    const now = new Date().toISOString();
+    const total = allEvents.length;
+    const active = allEvents.filter(e => e.is_active).length;
+    const upcoming = allEvents.filter(e => e.event_date >= now).length;
+
+    document.getElementById('statTotal')!.textContent = String(total);
+    document.getElementById('statActive')!.textContent = String(active);
+    document.getElementById('statUpcoming')!.textContent = String(upcoming);
+  }
+
+  // ── Render Table ──
+  function renderTable(events: any[]) {
+    const tbody = document.getElementById('eventsBody')!;
+    if (!events.length) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:rgba(255,255,255,0.3);padding:40px;">Sin eventos</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = events.map(e => {
+      const imageHtml = e.image_url
+        ? `<img class="event-thumb" src="${esc(e.image_url)}" alt="" onerror="this.style.display='none'" />`
+        : '<span style="color:rgba(255,255,255,0.2);font-size:11px;">Sin imagen</span>';
+
+      const checked = e.is_active ? 'checked' : '';
+
+      return `
+        <tr>
+          <td style="font-weight:700;">${esc(e.name || '-')}</td>
+          <td><span class="type-badge type-badge--${e.event_type || 'other'}">${typeLabels[e.event_type] || e.event_type || 'Otro'}</span></td>
+          <td style="font-size:11px;color:rgba(255,255,255,0.5);">${formatShortDate(e.event_date)}</td>
+          <td style="font-size:12px;">${esc(e.location || '-')}</td>
+          <td>${imageHtml}</td>
+          <td>
+            <label class="toggle-switch">
+              <input type="checkbox" ${checked} onchange="toggleActive('${e.id}', this.checked)" />
+              <span class="toggle-slider"></span>
+            </label>
+          </td>
+          <td style="font-size:12px;">${esc(e.profiles?.username || e.created_by?.slice(0, 8) || '-')}</td>
+          <td>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;">
+              <button class="erp-btn erp-btn--ghost" style="padding:4px 8px;font-size:10px;" onclick="openEditModal('${e.id}')">✏️ Editar</button>
+              <button class="erp-btn erp-btn--danger" style="padding:4px 8px;font-size:10px;" onclick="openDeleteModal('${e.id}')">🗑️</button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // ── Toggle Active ──
+  (window as any).toggleActive = async (id: string, isActive: boolean) => {
+    await supabase.from('events').update({
+      is_active: isActive,
+      updated_at: new Date().toISOString(),
+    }).eq('id', id);
+    loadEvents(currentFilter);
+  };
+
+  // ── Add Modal ──
+  (window as any).openAddModal = () => {
+    editingEventId = null;
+    document.getElementById('eventModalTitle')!.textContent = 'Nuevo Evento';
+    document.getElementById('eventSaveBtn')!.textContent = 'Crear Evento';
+    (document.getElementById('eventName') as HTMLInputElement).value = '';
+    (document.getElementById('eventDescription') as HTMLTextAreaElement).value = '';
+    (document.getElementById('eventType') as HTMLSelectElement).value = 'battle';
+    (document.getElementById('eventDate') as HTMLInputElement).value = '';
+    (document.getElementById('eventLocation') as HTMLInputElement).value = '';
+    (document.getElementById('eventImageUrl') as HTMLInputElement).value = '';
+    (document.getElementById('eventIsActive') as HTMLInputElement).checked = true;
+    openModal('eventModal');
+  };
+
+  // ── Edit Modal ──
+  (window as any).openEditModal = (id: string) => {
+    const event = allEvents.find(e => e.id === id);
+    if (!event) return;
+
+    editingEventId = id;
+    document.getElementById('eventModalTitle')!.textContent = 'Editar Evento';
+    document.getElementById('eventSaveBtn')!.textContent = 'Guardar Cambios';
+    (document.getElementById('eventName') as HTMLInputElement).value = event.name || '';
+    (document.getElementById('eventDescription') as HTMLTextAreaElement).value = event.description || '';
+    (document.getElementById('eventType') as HTMLSelectElement).value = event.event_type || 'other';
+    (document.getElementById('eventDate') as HTMLInputElement).value = toLocalDatetime(event.event_date);
+    (document.getElementById('eventLocation') as HTMLInputElement).value = event.location || '';
+    (document.getElementById('eventImageUrl') as HTMLInputElement).value = event.image_url || '';
+    (document.getElementById('eventIsActive') as HTMLInputElement).checked = event.is_active ?? true;
+    openModal('eventModal');
+  };
+
+  // ── Save Event ──
+  (window as any).saveEvent = async () => {
+    const name = (document.getElementById('eventName') as HTMLInputElement).value.trim();
+    const description = (document.getElementById('eventDescription') as HTMLTextAreaElement).value.trim();
+    const event_type = (document.getElementById('eventType') as HTMLSelectElement).value;
+    const event_date_val = (document.getElementById('eventDate') as HTMLInputElement).value;
+    const location = (document.getElementById('eventLocation') as HTMLInputElement).value.trim();
+    const image_url = (document.getElementById('eventImageUrl') as HTMLInputElement).value.trim();
+    const is_active = (document.getElementById('eventIsActive') as HTMLInputElement).checked;
+
+    if (!name) { alert('El nombre es obligatorio'); return; }
+    if (!event_date_val) { alert('La fecha es obligatoria'); return; }
+
+    const event_date = new Date(event_date_val).toISOString();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    const payload = {
+      name,
+      description: description || null,
+      event_type,
+      event_date,
+      location: location || null,
+      image_url: image_url || null,
+      is_active,
+      created_by: user?.id || null,
+      updated_at: new Date().toISOString(),
+    };
+
+    if (editingEventId) {
+      await supabase.from('events').update(payload).eq('id', editingEventId);
+    } else {
+      payload.created_at = new Date().toISOString();
+      await supabase.from('events').insert(payload);
+    }
+
+    closeModal('eventModal');
+    editingEventId = null;
+    loadEvents(currentFilter);
+  };
+
+  // ── Delete Modal ──
+  (window as any).openDeleteModal = (id: string) => {
+    deletingEventId = id;
+    openModal('deleteModal');
+  };
+
+  (window as any).confirmDelete = async () => {
+    if (!deletingEventId) return;
+    await supabase.from('events').delete().eq('id', deletingEventId);
+    deletingEventId = null;
+    closeModal('deleteModal');
+    loadEvents(currentFilter);
+  };
+
+  // ── Filters ──
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      loadEvents((btn as HTMLElement).dataset.filter);
+    });
+  });
+
+  // ── Modal backdrop & escape ──
+  ['eventModal', 'deleteModal'].forEach(id => {
+    document.getElementById(id)?.addEventListener('click', (e: any) => {
+      if (e.target.id === id) closeModal(id);
+    });
+  });
+
+  document.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      ['eventModal', 'deleteModal'].forEach(closeModal);
+    }
+  });
+
+  // ── Init ──
+  loadEvents();
+</script>

@@ -1,107 +1,59 @@
-// Servicio para administración de tags - usa API Gateway en lugar de Supabase directo
-import { supabase } from './supabase';
+import { supabase } from "./supabase";
 
 export async function getAllTags() {
-  try {
-    const response = await fetch('/gateway/tags/all', {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching all tags:', error);
-    return { tags: [] };
-  }
+  const { data, error } = await supabase
+    .from("tags")
+    .select("*, tag_categories(name)")
+    .order("name");
+  if (error) return { tags: [] };
+  return { tags: data };
 }
 
 export async function createTag(tagData) {
-  try {
-    // Obtener el userId del perfil actual
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) throw new Error('No authenticated user');
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session) throw new Error("No authenticated user");
 
-    const response = await fetch('/gateway/tags/create', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-user-id': session.user.id
-      },
-      body: JSON.stringify(tagData)
-    });
-    
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    return await response.json();
-  } catch (error) {
-    console.error('Error creating tag:', error);
-    throw error;
-  }
+  const { data, error } = await supabase
+    .from("tags")
+    .insert({
+      name: tagData.name,
+      color: tagData.color,
+      animation: tagData.animation || "none",
+      category_id: tagData.category_id,
+      token_price: tagData.token_price,
+      is_purchasable: tagData.is_purchasable || false,
+      achievement_key: tagData.achievement_key,
+    })
+    .select()
+    .single();
+
+  if (error) throw error;
+  return { tag: data };
 }
 
 export async function deleteTag(tagId) {
-  try {
-    // Obtener el userId del perfil actual
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) throw new Error('No authenticated user');
-
-    const response = await fetch(`/gateway/tags/delete/${tagId}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-user-id': session.user.id
-      }
-    });
-    
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    return await response.json();
-  } catch (error) {
-    console.error('Error deleting tag:', error);
-    throw error;
-  }
+  const { data, error } = await supabase.from("tags").delete().eq("id", tagId);
+  if (error) throw error;
+  return { success: true };
 }
 
 export async function getUsersWithTags() {
-  try {
-    // Obtener el userId del perfil actual
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) throw new Error('No authenticated user');
-
-    const response = await fetch('/gateway/tags/users-with-tags', {
-      headers: {
-        'Content-Type': 'application/json',
-        'x-user-id': session.user.id
-      }
-    });
-    
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching users with tags:', error);
-    return { users: [] };
-  }
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("id, username, nombre, user_has_tags(tag_id, tags(name, color))");
+  if (error) return { users: [] };
+  return { users: data };
 }
 
 export async function assignTagToUser(userId, tagId) {
-  try {
-    // Obtener el userId del perfil actual
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) throw new Error('No authenticated user');
-
-    const response = await fetch('/gateway/tags/assign', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-user-id': session.user.id
-      },
-      body: JSON.stringify({ userId, tagId })
-    });
-    
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    return await response.json();
-  } catch (error) {
-    console.error('Error assigning tag to user:', error);
-    throw error;
-  }
+  const { data, error } = await supabase
+    .from("user_has_tags")
+    .upsert(
+      { user_id: userId, tag_id: tagId },
+      { onConflict: "user_id,tag_id" },
+    );
+  if (error) throw error;
+  return { success: true };
 }

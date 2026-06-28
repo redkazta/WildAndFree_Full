@@ -1,0 +1,530 @@
+---
+import ErpLayout from '../../layouts/ErpLayout.astro';
+---
+
+<ErpLayout title="Tags" activeModule="tags">
+  <!-- Tag Categories Section -->
+  <div class="erp-card" style="margin-bottom:24px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <div class="erp-card-title" style="margin-bottom:0;">Categorías de Tags</div>
+      <button class="erp-btn erp-btn--primary" onclick="openCategoryForm()">+ Nueva Categoría</button>
+    </div>
+
+    <!-- Category Form (hidden by default) -->
+    <div id="categoryForm" style="display:none;margin-bottom:16px;padding:16px;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid rgba(255,255,255,0.06);">
+      <input type="hidden" id="categoryEditId" />
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div>
+          <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:rgba(255,255,255,0.5);margin-bottom:6px;">Nombre</label>
+          <input type="text" id="categoryName" style="width:100%;padding:8px 12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:#fff;font-size:13px;" />
+        </div>
+        <div>
+          <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:rgba(255,255,255,0.5);margin-bottom:6px;">Descripción</label>
+          <input type="text" id="categoryDescription" style="width:100%;padding:8px 12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:#fff;font-size:13px;" />
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="erp-btn erp-btn--primary" onclick="saveCategory()">Guardar</button>
+        <button class="erp-btn erp-btn--ghost" onclick="closeCategoryForm()">Cancelar</button>
+      </div>
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table class="erp-table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Fecha Creación</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="categoriesBody">
+          <tr><td colspan="4" class="erp-loading">Cargando categorías...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Tags Section -->
+  <div class="erp-card" style="margin-bottom:24px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <div class="erp-card-title" style="margin-bottom:0;">Tags</div>
+      <button class="erp-btn erp-btn--primary" onclick="openTagForm()">+ Nuevo Tag</button>
+    </div>
+
+    <!-- Tag Form (hidden by default) -->
+    <div id="tagForm" style="display:none;margin-bottom:16px;padding:16px;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid rgba(255,255,255,0.06);">
+      <input type="hidden" id="tagEditId" />
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div>
+          <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:rgba(255,255,255,0.5);margin-bottom:6px;">Nombre</label>
+          <input type="text" id="tagName" style="width:100%;padding:8px 12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:#fff;font-size:13px;" />
+        </div>
+        <div>
+          <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:rgba(255,255,255,0.5);margin-bottom:6px;">Color</label>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input type="color" id="tagColor" value="#C98300" style="width:40px;height:36px;border:none;border-radius:6px;cursor:pointer;background:transparent;" />
+            <input type="text" id="tagColorHex" value="#C98300" style="flex:1;padding:8px 12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:#fff;font-size:13px;" />
+          </div>
+        </div>
+        <div>
+          <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:rgba(255,255,255,0.5);margin-bottom:6px;">Animación</label>
+          <select id="tagAnimation" style="width:100%;padding:8px 12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:#fff;font-size:13px;">
+            <option value="none">Ninguna</option>
+            <option value="pulse">Pulse</option>
+            <option value="glow">Glow</option>
+            <option value="shake">Shake</option>
+            <option value="rainbow">Rainbow</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div>
+          <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:rgba(255,255,255,0.5);margin-bottom:6px;">Categoría</label>
+          <select id="tagCategory" style="width:100%;padding:8px 12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:#fff;font-size:13px;">
+            <option value="">Sin categoría</option>
+          </select>
+        </div>
+        <div>
+          <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:rgba(255,255,255,0.5);margin-bottom:6px;">Token Price</label>
+          <input type="number" id="tagTokenPrice" value="0" min="0" style="width:100%;padding:8px 12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:#fff;font-size:13px;" />
+        </div>
+        <div>
+          <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:rgba(255,255,255,0.5);margin-bottom:6px;">Achievement Key</label>
+          <input type="text" id="tagAchievementKey" placeholder="ej: first_post" style="width:100%;padding:8px 12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:#fff;font-size:13px;" />
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:rgba(255,255,255,0.7);">
+          <input type="checkbox" id="tagPurchasable" style="accent-color:#C98300;" />
+          Comprable en tienda
+        </label>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="erp-btn erp-btn--primary" onclick="saveTag()">Guardar</button>
+        <button class="erp-btn erp-btn--ghost" onclick="closeTagForm()">Cancelar</button>
+      </div>
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table class="erp-table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Color</th>
+            <th>Animación</th>
+            <th>Categoría</th>
+            <th>Token Price</th>
+            <th>Comprable</th>
+            <th>Achievement Key</th>
+            <th>Fecha</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tagsBody">
+          <tr><td colspan="9" class="erp-loading">Cargando tags...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- User-Tag Assignment Section -->
+  <div class="erp-card">
+    <div class="erp-card-title" style="margin-bottom:16px;">Asignar Tags a Usuarios</div>
+
+    <!-- Search user -->
+    <div style="display:flex;gap:12px;margin-bottom:16px;">
+      <input type="text" id="userSearch" placeholder="Buscar usuario por username..." style="flex:1;padding:8px 12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:#fff;font-size:13px;" />
+      <button class="erp-btn erp-btn--primary" onclick="searchUser()">Buscar</button>
+    </div>
+
+    <!-- User detail panel (hidden by default) -->
+    <div id="userDetailPanel" style="display:none;margin-bottom:16px;padding:16px;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid rgba(255,255,255,0.06);">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div>
+          <span style="font-weight:700;font-size:14px;" id="userDetailName">-</span>
+          <span style="color:rgba(255,255,255,0.4);font-size:12px;margin-left:8px;" id="userDetailUsername">-</span>
+        </div>
+        <button class="erp-btn erp-btn--ghost" onclick="closeUserDetail()" style="font-size:11px;">Cerrar</button>
+      </div>
+
+      <div style="margin-bottom:12px;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:rgba(255,255,255,0.5);margin-bottom:8px;">Tags Actuales</div>
+        <div id="userCurrentTags" style="display:flex;flex-wrap:wrap;gap:6px;">
+          <span style="color:rgba(255,255,255,0.3);font-size:12px;">Sin tags</span>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:rgba(255,255,255,0.5);margin-bottom:8px;">Asignar Nuevo Tag</div>
+        <div style="display:flex;gap:8px;">
+          <select id="userTagSelect" style="flex:1;padding:8px 12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:#fff;font-size:13px;">
+            <option value="">Seleccionar tag...</option>
+          </select>
+          <button class="erp-btn erp-btn--primary" onclick="assignTagToUser()">Asignar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Users list with tags -->
+    <div style="overflow-x:auto;">
+      <table class="erp-table">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Nombre</th>
+            <th>Tags</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="usersBody">
+          <tr><td colspan="4" class="erp-loading">Cargando usuarios...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ErpLayout>
+
+<script>
+  import { supabase } from '../../lib/supabase';
+
+  // ── State ──
+  let categories: any[] = [];
+  let tags: any[] = [];
+  let allTags: any[] = [];
+  let selectedUserId: string | null = null;
+
+  // ── Color picker sync ──
+  const colorPicker = document.getElementById('tagColor') as HTMLInputElement;
+  const colorHex = document.getElementById('tagColorHex') as HTMLInputElement;
+
+  colorPicker?.addEventListener('input', () => {
+    colorHex.value = colorPicker.value;
+  });
+  colorHex?.addEventListener('input', () => {
+    if (/^#[0-9A-Fa-f]{6}$/.test(colorHex.value)) {
+      colorPicker.value = colorHex.value;
+    }
+  });
+
+  // ── Categories CRUD ──
+  async function loadCategories() {
+    const { data } = await supabase.from('tag_categories').select('*').order('created_at', { ascending: false });
+    categories = data || [];
+    renderCategories();
+    populateCategorySelect();
+  }
+
+  function renderCategories() {
+    const tbody = document.getElementById('categoriesBody');
+    if (!categories.length) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:rgba(255,255,255,0.3);padding:30px;">Sin categorías</td></tr>';
+      return;
+    }
+    tbody.innerHTML = categories.map(c => `
+      <tr>
+        <td style="font-weight:700;">${c.name}</td>
+        <td style="color:rgba(255,255,255,0.6);">${c.description || '-'}</td>
+        <td style="font-size:11px;color:rgba(255,255,255,0.4);">${new Date(c.created_at).toLocaleDateString('es-MX')}</td>
+        <td>
+          <div style="display:flex;gap:6px;">
+            <button class="erp-btn erp-btn--ghost" style="padding:4px 8px;font-size:11px;" onclick="editCategory('${c.id}')">Editar</button>
+            <button class="erp-btn erp-btn--danger" style="padding:4px 8px;font-size:11px;" onclick="deleteCategory('${c.id}')">Eliminar</button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function populateCategorySelect() {
+    const select = document.getElementById('tagCategory') as HTMLSelectElement;
+    if (!select) return;
+    select.innerHTML = '<option value="">Sin categoría</option>' +
+      categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+  }
+
+  (window as any).openCategoryForm = (cat?: any) => {
+    document.getElementById('categoryForm').style.display = 'block';
+    document.getElementById('categoryEditId').value = cat?.id || '';
+    (document.getElementById('categoryName') as HTMLInputElement).value = cat?.name || '';
+    (document.getElementById('categoryDescription') as HTMLInputElement).value = cat?.description || '';
+  };
+
+  (window as any).closeCategoryForm = () => {
+    document.getElementById('categoryForm').style.display = 'none';
+    document.getElementById('categoryEditId').value = '';
+    (document.getElementById('categoryName') as HTMLInputElement).value = '';
+    (document.getElementById('categoryDescription') as HTMLInputElement).value = '';
+  };
+
+  (window as any).saveCategory = async () => {
+    const editId = (document.getElementById('categoryEditId') as HTMLInputElement).value;
+    const name = (document.getElementById('categoryName') as HTMLInputElement).value.trim();
+    const description = (document.getElementById('categoryDescription') as HTMLInputElement).value.trim();
+
+    if (!name) return alert('El nombre es requerido');
+
+    if (editId) {
+      await supabase.from('tag_categories').update({ name, description, updated_at: new Date().toISOString() }).eq('id', editId);
+    } else {
+      await supabase.from('tag_categories').insert({ name, description });
+    }
+    (window as any).closeCategoryForm();
+    loadCategories();
+  };
+
+  (window as any).editCategory = async (id: string) => {
+    const cat = categories.find(c => c.id === id);
+    if (cat) (window as any).openCategoryForm(cat);
+  };
+
+  (window as any).deleteCategory = async (id: string) => {
+    if (!confirm('¿Eliminar esta categoría?')) return;
+    await supabase.from('tag_categories').delete().eq('id', id);
+    loadCategories();
+  };
+
+  // ── Tags CRUD ──
+  async function loadTags() {
+    const { data } = await supabase.from('tags').select('*, tag_categories(name)').order('created_at', { ascending: false });
+    tags = data || [];
+    allTags = data || [];
+    renderTags();
+    populateUserTagSelect();
+  }
+
+  function renderTags() {
+    const tbody = document.getElementById('tagsBody');
+    if (!tags.length) {
+      tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:rgba(255,255,255,0.3);padding:30px;">Sin tags</td></tr>';
+      return;
+    }
+    tbody.innerHTML = tags.map(t => `
+      <tr>
+        <td style="font-weight:700;">${t.name}</td>
+        <td>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="width:24px;height:24px;border-radius:6px;background:${t.color || '#666'};display:inline-block;border:1px solid rgba(255,255,255,0.1);"></span>
+            <span style="font-size:11px;color:rgba(255,255,255,0.4);">${t.color || '-'}</span>
+          </div>
+        </td>
+        <td style="font-size:12px;">${t.animation || 'none'}</td>
+        <td style="font-size:12px;">${t.tag_categories?.name || '-'}</td>
+        <td style="font-size:12px;">${t.token_price ?? 0}</td>
+        <td>
+          ${t.is_purchasable
+            ? '<span class="erp-status erp-status--approved">Sí</span>'
+            : '<span class="erp-status erp-status--pending">No</span>'
+          }
+        </td>
+        <td style="font-size:11px;color:rgba(255,255,255,0.4);">${t.achievement_key || '-'}</td>
+        <td style="font-size:11px;color:rgba(255,255,255,0.4);">${new Date(t.created_at).toLocaleDateString('es-MX')}</td>
+        <td>
+          <div style="display:flex;gap:6px;">
+            <button class="erp-btn erp-btn--ghost" style="padding:4px 8px;font-size:11px;" onclick="editTag('${t.id}')">Editar</button>
+            <button class="erp-btn erp-btn--danger" style="padding:4px 8px;font-size:11px;" onclick="deleteTag('${t.id}')">Eliminar</button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  (window as any).openTagForm = (tag?: any) => {
+    document.getElementById('tagForm').style.display = 'block';
+    document.getElementById('tagEditId').value = tag?.id || '';
+    (document.getElementById('tagName') as HTMLInputElement).value = tag?.name || '';
+    (document.getElementById('tagColor') as HTMLInputElement).value = tag?.color || '#C98300';
+    (document.getElementById('tagColorHex') as HTMLInputElement).value = tag?.color || '#C98300';
+    (document.getElementById('tagAnimation') as HTMLSelectElement).value = tag?.animation || 'none';
+    (document.getElementById('tagCategory') as HTMLSelectElement).value = tag?.category_id || '';
+    (document.getElementById('tagTokenPrice') as HTMLInputElement).value = tag?.token_price ?? 0;
+    (document.getElementById('tagPurchasable') as HTMLInputElement).checked = tag?.is_purchasable || false;
+    (document.getElementById('tagAchievementKey') as HTMLInputElement).value = tag?.achievement_key || '';
+  };
+
+  (window as any).closeTagForm = () => {
+    document.getElementById('tagForm').style.display = 'none';
+    document.getElementById('tagEditId').value = '';
+    (document.getElementById('tagName') as HTMLInputElement).value = '';
+    (document.getElementById('tagColor') as HTMLInputElement).value = '#C98300';
+    (document.getElementById('tagColorHex') as HTMLInputElement).value = '#C98300';
+    (document.getElementById('tagAnimation') as HTMLSelectElement).value = 'none';
+    (document.getElementById('tagCategory') as HTMLSelectElement).value = '';
+    (document.getElementById('tagTokenPrice') as HTMLInputElement).value = '0';
+    (document.getElementById('tagPurchasable') as HTMLInputElement).checked = false;
+    (document.getElementById('tagAchievementKey') as HTMLInputElement).value = '';
+  };
+
+  (window as any).saveTag = async () => {
+    const editId = (document.getElementById('tagEditId') as HTMLInputElement).value;
+    const name = (document.getElementById('tagName') as HTMLInputElement).value.trim();
+    const color = (document.getElementById('tagColorHex') as HTMLInputElement).value.trim();
+    const animation = (document.getElementById('tagAnimation') as HTMLSelectElement).value;
+    const category_id = (document.getElementById('tagCategory') as HTMLSelectElement).value || null;
+    const token_price = parseInt((document.getElementById('tagTokenPrice') as HTMLInputElement).value) || 0;
+    const is_purchasable = (document.getElementById('tagPurchasable') as HTMLInputElement).checked;
+    const achievement_key = (document.getElementById('tagAchievementKey') as HTMLInputElement).value.trim() || null;
+
+    if (!name) return alert('El nombre es requerido');
+
+    const payload = { name, color, animation, category_id, token_price, is_purchasable, achievement_key };
+
+    if (editId) {
+      await supabase.from('tags').update({ ...payload, updated_at: new Date().toISOString() }).eq('id', editId);
+    } else {
+      await supabase.from('tags').insert(payload);
+    }
+    (window as any).closeTagForm();
+    loadTags();
+  };
+
+  (window as any).editTag = async (id: string) => {
+    const tag = tags.find(t => t.id === id);
+    if (tag) (window as any).openTagForm(tag);
+  };
+
+  (window as any).deleteTag = async (id: string) => {
+    if (!confirm('¿Eliminar este tag?')) return;
+    await supabase.from('tags').delete().eq('id', id);
+    loadTags();
+  };
+
+  // ── User-Tag Assignment ──
+  function populateUserTagSelect() {
+    const select = document.getElementById('userTagSelect') as HTMLSelectElement;
+    if (!select) return;
+    select.innerHTML = '<option value="">Seleccionar tag...</option>' +
+      allTags.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+  }
+
+  async function loadUsersWithTags() {
+    const { data: users } = await supabase.from('profiles').select('id, username, nombre').order('username', { ascending: true }).limit(50);
+    if (!users?.length) {
+      document.getElementById('usersBody').innerHTML = '<tr><td colspan="4" style="text-align:center;color:rgba(255,255,255,0.3);padding:30px;">Sin usuarios</td></tr>';
+      return;
+    }
+
+    const { data: userTags } = await supabase.from('user_has_tags').select('user_id, tag_id, tags(name, color)');
+
+    const tagMap: Record<string, any[]> = {};
+    (userTags || []).forEach(ut => {
+      if (!tagMap[ut.user_id]) tagMap[ut.user_id] = [];
+      tagMap[ut.user_id].push(ut);
+    });
+
+    document.getElementById('usersBody').innerHTML = users.map(u => {
+      const userT = tagMap[u.id] || [];
+      const tagBadges = userT.length
+        ? userT.map(ut => `<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;background:${ut.tags?.color || '#666'}22;color:${ut.tags?.color || '#aaa'};border:1px solid ${ut.tags?.color || '#666'}44;">${ut.tags?.name || '?'}</span>`).join('')
+        : '<span style="color:rgba(255,255,255,0.3);font-size:11px;">Sin tags</span>';
+      return `
+        <tr>
+          <td style="font-size:12px;">@${u.username || '-'}</td>
+          <td style="font-size:12px;">${u.nombre || '-'}</td>
+          <td><div style="display:flex;flex-wrap:wrap;gap:4px;">${tagBadges}</div></td>
+          <td>
+            <button class="erp-btn erp-btn--ghost" style="padding:4px 8px;font-size:11px;" onclick="openUserDetail('${u.id}', '${u.username || ''}', '${u.nombre || ''}')">Gestionar</button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  (window as any).searchUser = async () => {
+    const query = (document.getElementById('userSearch') as HTMLInputElement).value.trim().toLowerCase();
+    if (!query) return loadUsersWithTags();
+
+    const { data: users } = await supabase.from('profiles').select('id, username, nombre').ilike('username', `%${query}%`).limit(20);
+    if (!users?.length) {
+      document.getElementById('usersBody').innerHTML = '<tr><td colspan="4" style="text-align:center;color:rgba(255,255,255,0.3);padding:30px;">Sin resultados</td></tr>';
+      return;
+    }
+
+    const { data: userTags } = await supabase.from('user_has_tags').select('user_id, tag_id, tags(name, color)');
+    const tagMap: Record<string, any[]> = {};
+    (userTags || []).forEach(ut => {
+      if (!tagMap[ut.user_id]) tagMap[ut.user_id] = [];
+      tagMap[ut.user_id].push(ut);
+    });
+
+    document.getElementById('usersBody').innerHTML = users.map(u => {
+      const userT = tagMap[u.id] || [];
+      const tagBadges = userT.length
+        ? userT.map(ut => `<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;background:${ut.tags?.color || '#666'}22;color:${ut.tags?.color || '#aaa'};border:1px solid ${ut.tags?.color || '#666'}44;">${ut.tags?.name || '?'}</span>`).join('')
+        : '<span style="color:rgba(255,255,255,0.3);font-size:11px;">Sin tags</span>';
+      return `
+        <tr>
+          <td style="font-size:12px;">@${u.username || '-'}</td>
+          <td style="font-size:12px;">${u.nombre || '-'}</td>
+          <td><div style="display:flex;flex-wrap:wrap;gap:4px;">${tagBadges}</div></td>
+          <td>
+            <button class="erp-btn erp-btn--ghost" style="padding:4px 8px;font-size:11px;" onclick="openUserDetail('${u.id}', '${u.username || ''}', '${u.nombre || ''}')">Gestionar</button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  };
+
+  (window as any).openUserDetail = async (userId: string, username: string, nombre: string) => {
+    selectedUserId = userId;
+    document.getElementById('userDetailPanel').style.display = 'block';
+    document.getElementById('userDetailName').textContent = nombre || username;
+    document.getElementById('userDetailUsername').textContent = '@' + username;
+
+    await loadUserDetailTags(userId);
+  };
+
+  async function loadUserDetailTags(userId: string) {
+    const { data: userTags } = await supabase.from('user_has_tags').select('id, tag_id, tags(id, name, color)').eq('user_id', userId);
+    const container = document.getElementById('userCurrentTags');
+
+    if (!userTags?.length) {
+      container.innerHTML = '<span style="color:rgba(255,255,255,0.3);font-size:12px;">Sin tags</span>';
+      return;
+    }
+
+    container.innerHTML = userTags.map(ut => `
+      <span style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;background:${ut.tags?.color || '#666'}22;color:${ut.tags?.color || '#aaa'};border:1px solid ${ut.tags?.color || '#666'}44;">
+        ${ut.tags?.name || '?'}
+        <button onclick="removeTagFromUser('${ut.id}')" style="background:none;border:none;color:rgba(255,255,255,0.5);cursor:pointer;font-size:13px;padding:0;line-height:1;" title="Remover">×</button>
+      </span>
+    `).join('');
+  }
+
+  (window as any).assignTagToUser = async () => {
+    if (!selectedUserId) return;
+    const tagId = (document.getElementById('userTagSelect') as HTMLSelectElement).value;
+    if (!tagId) return alert('Selecciona un tag');
+
+    // Check if already assigned
+    const { data: existing } = await supabase.from('user_has_tags').select('id').eq('user_id', selectedUserId).eq('tag_id', tagId).single();
+    if (existing) return alert('Este tag ya está asignado al usuario');
+
+    await supabase.from('user_has_tags').insert({ user_id: selectedUserId, tag_id: tagId });
+    await loadUserDetailTags(selectedUserId);
+    loadUsersWithTags();
+  };
+
+  (window as any).removeTagFromUser = async (recordId: string) => {
+    if (!confirm('¿Remover este tag del usuario?')) return;
+    await supabase.from('user_has_tags').delete().eq('id', recordId);
+    if (selectedUserId) await loadUserDetailTags(selectedUserId);
+    loadUsersWithTags();
+  };
+
+  (window as any).closeUserDetail = () => {
+    selectedUserId = null;
+    document.getElementById('userDetailPanel').style.display = 'none';
+  };
+
+  // Enter key for user search
+  document.getElementById('userSearch')?.addEventListener('keydown', (e) => {
+    if ((e as KeyboardEvent).key === 'Enter') (window as any).searchUser();
+  });
+
+  // ── Init ──
+  loadCategories();
+  loadTags();
+  loadUsersWithTags();
+</script>

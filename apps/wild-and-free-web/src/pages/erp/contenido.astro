@@ -1,0 +1,453 @@
+---
+import ErpLayout from '../../layouts/ErpLayout.astro';
+---
+
+<ErpLayout title="Contenido" activeModule="contenido">
+  <!-- Stats -->
+  <div class="erp-grid" id="statsGrid" style="margin-bottom:20px;">
+    <div class="erp-card">
+      <div class="erp-card-title">Pendientes</div>
+      <div class="erp-stat" id="statPending">-</div>
+    </div>
+    <div class="erp-card">
+      <div class="erp-card-title">Publicados</div>
+      <div class="erp-stat" id="statPublished">-</div>
+    </div>
+    <div class="erp-card">
+      <div class="erp-card-title">Rechazados</div>
+      <div class="erp-stat" id="statRejected">-</div>
+    </div>
+    <div class="erp-card">
+      <div class="erp-card-title">Total</div>
+      <div class="erp-stat" id="statTotal">-</div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
+    <div style="display:flex;gap:8px;">
+      <button class="erp-btn erp-btn--ghost filter-btn active" data-filter="all">Todos</button>
+      <button class="erp-btn erp-btn--ghost filter-btn" data-filter="pending">Pendientes</button>
+      <button class="erp-btn erp-btn--ghost filter-btn" data-filter="approved">Aprobados</button>
+      <button class="erp-btn erp-btn--ghost filter-btn" data-filter="rejected">Rechazados</button>
+      <button class="erp-btn erp-btn--ghost filter-btn" data-filter="published">Publicados</button>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button class="erp-btn erp-btn--primary" onclick="openModal('new')">+ Nuevo Contenido</button>
+    </div>
+  </div>
+
+  <!-- Content Table -->
+  <div class="erp-card" style="overflow-x:auto;margin-bottom:24px;">
+    <table class="erp-table" id="contentTable">
+      <thead>
+        <tr>
+          <th>Título</th>
+          <th>Artista</th>
+          <th>Tipo</th>
+          <th>Precio Tokens</th>
+          <th>Precio Real</th>
+          <th>Estado</th>
+          <th>Fecha</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="contentBody">
+        <tr><td colspan="8" class="erp-loading">Cargando contenido...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Crew Posts Section -->
+  <div class="erp-card" style="margin-bottom:24px;">
+    <h3 class="erp-card-title" style="margin-bottom:16px;">📋 Posts del Crew - Pendientes de Aprobación</h3>
+    <div id="crewPostsBody" style="color:rgba(255,255,255,0.3);text-align:center;padding:40px;">Cargando posts del crew...</div>
+  </div>
+
+  <!-- Reject Modal -->
+  <div id="rejectModal" class="content-modal" style="display:none;">
+    <div class="content-modal-backdrop" onclick="closeRejectModal()"></div>
+    <div class="content-modal-panel">
+      <h3 style="font-size:16px;font-weight:800;margin-bottom:16px;color:#ff4444;">Rechazar Contenido</h3>
+      <p style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:12px;">Motivo del rechazo:</p>
+      <textarea id="rejectReason" class="erp-input" rows="4" placeholder="Describe el motivo del rechazo..." style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px;color:#fff;font-size:13px;resize:vertical;font-family:inherit;"></textarea>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px;">
+        <button class="erp-btn erp-btn--ghost" onclick="closeRejectModal()">Cancelar</button>
+        <button class="erp-btn erp-btn--danger" id="confirmRejectBtn">Rechazar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Modal -->
+  <div id="detailModal" class="content-modal" style="display:none;">
+    <div class="content-modal-backdrop" onclick="closeDetailModal()"></div>
+    <div class="content-modal-panel" style="max-width:640px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;">
+        <h3 id="detailTitle" style="font-size:16px;font-weight:800;color:#fff;"></h3>
+        <button class="erp-btn erp-btn--ghost" onclick="closeDetailModal()" style="padding:4px 10px;">✕</button>
+      </div>
+      <div id="detailContent" style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.7;"></div>
+    </div>
+  </div>
+
+  <!-- New Content Modal -->
+  <div id="newModal" class="content-modal" style="display:none;">
+    <div class="content-modal-backdrop" onclick="closeNewModal()"></div>
+    <div class="content-modal-panel" style="max-width:600px;">
+      <h3 style="font-size:16px;font-weight:800;margin-bottom:16px;color:#C98300;">Nuevo Contenido Exclusivo</h3>
+      <div style="display:grid;gap:12px;">
+        <div>
+          <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Título *</label>
+          <input id="newTitle" class="erp-input" type="text" placeholder="Título del contenido" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px;color:#fff;font-size:13px;" />
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Descripción</label>
+          <textarea id="newDescription" class="erp-input" rows="3" placeholder="Descripción del contenido" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px;color:#fff;font-size:13px;resize:vertical;font-family:inherit;"></textarea>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Tipo *</label>
+            <select id="newType" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px;color:#fff;font-size:13px;">
+              <option value="video">Video</option>
+              <option value="audio">Audio</option>
+              <option value="download">Download</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Artista ID</label>
+            <input id="newArtistId" class="erp-input" type="text" placeholder="UUID del artista" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px;color:#fff;font-size:13px;" />
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Precio Tokens</label>
+            <input id="newTokenPrice" class="erp-input" type="number" min="0" placeholder="0" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px;color:#fff;font-size:13px;" />
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Precio Real (MXN)</label>
+            <input id="newRealPrice" class="erp-input" type="number" min="0" step="0.01" placeholder="0.00" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px;color:#fff;font-size:13px;" />
+          </div>
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">URL del Archivo</label>
+          <input id="newFileUrl" class="erp-input" type="url" placeholder="https://..." style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px;color:#fff;font-size:13px;" />
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">URL de Preview</label>
+          <input id="newPreviewUrl" class="erp-input" type="url" placeholder="https://..." style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px;color:#fff;font-size:13px;" />
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px;">
+        <button class="erp-btn erp-btn--ghost" onclick="closeNewModal()">Cancelar</button>
+        <button class="erp-btn erp-btn--primary" onclick="createContent()">Crear Contenido</button>
+      </div>
+    </div>
+  </div>
+</ErpLayout>
+
+<style>
+  .content-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .content-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+  }
+  .content-modal-panel {
+    position: relative;
+    background: #1a1a1a;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 24px;
+    width: 90%;
+    max-width: 480px;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  .filter-btn.active {
+    background: rgba(201,131,0,0.15) !important;
+    color: #C98300 !important;
+  }
+  .detail-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 2px;
+  }
+  .detail-value {
+    font-size: 13px;
+    color: #fff;
+    margin-bottom: 12px;
+  }
+</style>
+
+<script>
+  import { supabase } from '../../lib/supabase';
+
+  let currentFilter = 'all';
+  let currentRejectId: string | null = null;
+
+  async function loadContent(filter = 'all') {
+    currentFilter = filter;
+    let query = supabase
+      .from('exclusive_content')
+      .select('*, profiles!exclusive_content_artist_id_fkey(nombre, username)');
+    if (filter !== 'all') query = query.eq('status', filter);
+    query = query.order('created_at', { ascending: false });
+
+    const { data: items } = await query;
+    const tbody = document.getElementById('contentBody');
+    if (!items?.length) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:rgba(255,255,255,0.3);padding:40px;">Sin contenido</td></tr>';
+      updateStats(items || []);
+      return;
+    }
+
+    updateStats(items);
+    const typeIcon: Record<string, string> = { video: '🎥', audio: '🎵', download: '📥' };
+
+    tbody.innerHTML = items.map(c => `
+      <tr>
+        <td style="font-weight:700;">${c.title || 'Sin título'}</td>
+        <td>${c.profiles?.nombre || c.profiles?.username || 'N/A'}</td>
+        <td><span style="font-size:14px;">${typeIcon[c.content_type] || '📄'}</span> ${c.content_type || '-'}</td>
+        <td style="font-weight:700;color:#C98300;">${c.token_price ?? 0} 🪙</td>
+        <td style="font-weight:700;">$${(c.real_price_mxn ?? 0).toFixed(2)}</td>
+        <td><span class="erp-status erp-status--${c.status}">${c.status}</span></td>
+        <td style="font-size:11px;color:rgba(255,255,255,0.4);">${new Date(c.created_at).toLocaleDateString('es-MX')}</td>
+        <td>
+          <div style="display:flex;gap:4px;flex-wrap:wrap;">
+            <button class="erp-btn erp-btn--ghost" style="padding:4px 8px;font-size:10px;" onclick="showDetail('${c.id}')">Ver</button>
+            ${c.status !== 'published' ? `<button class="erp-btn erp-btn--primary" style="padding:4px 8px;font-size:10px;" onclick="approveContent('${c.id}')">Aprobar</button>` : ''}
+            ${c.status !== 'rejected' ? `<button class="erp-btn erp-btn--danger" style="padding:4px 8px;font-size:10px;" onclick="openRejectModal('${c.id}')">Rechazar</button>` : ''}
+            <button class="erp-btn erp-btn--danger" style="padding:4px 8px;font-size:10px;background:rgba(255,68,68,0.25);" onclick="deleteContent('${c.id}')">🗑️</button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function updateStats(items: any[]) {
+    const pending = items.filter(i => i.status === 'pending').length;
+    const published = items.filter(i => i.status === 'published').length;
+    const rejected = items.filter(i => i.status === 'rejected').length;
+    const el = (id: string) => document.getElementById(id);
+    el('statPending').textContent = String(pending);
+    el('statPublished').textContent = String(published);
+    el('statRejected').textContent = String(rejected);
+    el('statTotal').textContent = String(items.length);
+  }
+
+  async function loadCrewPosts() {
+    const { data: posts } = await supabase
+      .from('crew_posts')
+      .select('*, profiles!crew_posts_user_id_fkey(nombre, username)')
+      .eq('status', 'pending')
+      .order('created_at', { ascending: false });
+
+    const container = document.getElementById('crewPostsBody');
+    if (!posts?.length) {
+      container.innerHTML = '<div style="text-align:center;color:rgba(255,255,255,0.3);padding:40px;">No hay posts pendientes del crew</div>';
+      return;
+    }
+
+    container.innerHTML = posts.map(p => `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.04);">
+        <div>
+          <div style="font-weight:700;font-size:13px;color:#fff;">${p.title || p.content?.slice(0, 60) || 'Sin contenido'}</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px;">Por ${p.profiles?.nombre || p.profiles?.username || 'Desconocido'} · ${new Date(p.created_at).toLocaleDateString('es-MX')}</div>
+        </div>
+        <div style="display:flex;gap:6px;">
+          <button class="erp-btn erp-btn--primary" style="padding:4px 10px;font-size:11px;" onclick="approveCrewPost('${p.id}')">Aprobar</button>
+          <button class="erp-btn erp-btn--danger" style="padding:4px 10px;font-size:11px;" onclick="rejectCrewPost('${p.id}')">Rechazar</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // --- Actions exposed to window ---
+
+  (window as any).approveContent = async (id: string) => {
+    await supabase.from('exclusive_content').update({
+      status: 'published',
+      approved_by: (await supabase.auth.getUser()).data.user?.id,
+      approved_at: new Date().toISOString(),
+    }).eq('id', id);
+    loadContent(currentFilter);
+  };
+
+  (window as any).openRejectModal = (id: string) => {
+    currentRejectId = id;
+    document.getElementById('rejectModal').style.display = 'flex';
+    document.getElementById('rejectReason').value = '';
+    document.getElementById('rejectReason').focus();
+  };
+
+  (window as any).closeRejectModal = () => {
+    currentRejectId = null;
+    document.getElementById('rejectModal').style.display = 'none';
+  };
+
+  (window as any).confirmRejectBtn = document.getElementById('confirmRejectBtn');
+  document.getElementById('confirmRejectBtn').addEventListener('click', async () => {
+    if (!currentRejectId) return;
+    const reason = (document.getElementById('rejectReason') as HTMLTextAreaElement).value.trim();
+    if (!reason) { alert('Ingresa un motivo de rechazo'); return; }
+    await supabase.from('exclusive_content').update({
+      status: 'rejected',
+      rejection_reason: reason,
+    }).eq('id', currentRejectId);
+    currentRejectId = null;
+    document.getElementById('rejectModal').style.display = 'none';
+    loadContent(currentFilter);
+  });
+
+  (window as any).deleteContent = async (id: string) => {
+    if (!confirm('¿Eliminar este contenido permanentemente?')) return;
+    await supabase.from('exclusive_content').delete().eq('id', id);
+    loadContent(currentFilter);
+  };
+
+  (window as any).showDetail = async (id: string) => {
+    const { data: item } = await supabase
+      .from('exclusive_content')
+      .select('*, profiles!exclusive_content_artist_id_fkey(nombre, username)')
+      .eq('id', id)
+      .single();
+
+    if (!item) return;
+
+    document.getElementById('detailTitle').textContent = item.title || 'Sin título';
+    document.getElementById('detailContent').innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div>
+          <div class="detail-label">Descripción</div>
+          <div class="detail-value">${item.description || 'Sin descripción'}</div>
+        </div>
+        <div>
+          <div class="detail-label">Artista</div>
+          <div class="detail-value">${item.profiles?.nombre || item.profiles?.username || 'N/A'}</div>
+        </div>
+        <div>
+          <div class="detail-label">Tipo de Contenido</div>
+          <div class="detail-value">${item.content_type || '-'}</div>
+        </div>
+        <div>
+          <div class="detail-label">Estado</div>
+          <div class="detail-value"><span class="erp-status erp-status--${item.status}">${item.status}</span></div>
+        </div>
+        <div>
+          <div class="detail-label">Precio Tokens</div>
+          <div class="detail-value" style="color:#C98300;font-weight:700;">${item.token_price ?? 0} 🪙</div>
+        </div>
+        <div>
+          <div class="detail-label">Precio Real (MXN)</div>
+          <div class="detail-value" style="font-weight:700;">$${(item.real_price_mxn ?? 0).toFixed(2)}</div>
+        </div>
+        <div>
+          <div class="detail-label">URL del Archivo</div>
+          <div class="detail-value" style="word-break:break-all;"><a href="${item.file_url || '#'}" target="_blank" style="color:#C98300;text-decoration:none;">${item.file_url || 'No disponible'}</a></div>
+        </div>
+        <div>
+          <div class="detail-label">URL de Preview</div>
+          <div class="detail-value" style="word-break:break-all;"><a href="${item.preview_url || '#'}" target="_blank" style="color:#C98300;text-decoration:none;">${item.preview_url || 'No disponible'}</a></div>
+        </div>
+        <div>
+          <div class="detail-label">Motivo de Rechazo</div>
+          <div class="detail-value">${item.rejection_reason || 'N/A'}</div>
+        </div>
+        <div>
+          <div class="detail-label">Fecha de Creación</div>
+          <div class="detail-value">${new Date(item.created_at).toLocaleString('es-MX')}</div>
+        </div>
+      </div>
+    `;
+    document.getElementById('detailModal').style.display = 'flex';
+  };
+
+  (window as any).closeDetailModal = () => {
+    document.getElementById('detailModal').style.display = 'none';
+  };
+
+  (window as any).openModal = (type: string) => {
+    if (type === 'new') {
+      document.getElementById('newModal').style.display = 'flex';
+    }
+  };
+
+  (window as any).closeNewModal = () => {
+    document.getElementById('newModal').style.display = 'none';
+  };
+
+  (window as any).createContent = async () => {
+    const title = (document.getElementById('newTitle') as HTMLInputElement).value.trim();
+    const description = (document.getElementById('newDescription') as HTMLTextAreaElement).value.trim();
+    const content_type = (document.getElementById('newType') as HTMLSelectElement).value;
+    const artist_id = (document.getElementById('newArtistId') as HTMLInputElement).value.trim() || null;
+    const token_price = Number((document.getElementById('newTokenPrice') as HTMLInputElement).value) || 0;
+    const real_price_mxn = Number((document.getElementById('newRealPrice') as HTMLInputElement).value) || 0;
+    const file_url = (document.getElementById('newFileUrl') as HTMLInputElement).value.trim();
+    const preview_url = (document.getElementById('newPreviewUrl') as HTMLInputElement).value.trim();
+
+    if (!title) { alert('El título es obligatorio'); return; }
+
+    const { error } = await supabase.from('exclusive_content').insert({
+      title,
+      description: description || null,
+      content_type,
+      artist_id,
+      token_price,
+      real_price_mxn,
+      file_url: file_url || null,
+      preview_url: preview_url || null,
+      status: 'pending',
+    });
+
+    if (error) { alert('Error al crear contenido: ' + error.message); return; }
+    document.getElementById('newModal').style.display = 'none';
+    loadContent(currentFilter);
+  };
+
+  // Crew posts actions
+  (window as any).approveCrewPost = async (id: string) => {
+    await supabase.from('crew_posts').update({ status: 'approved' }).eq('id', id);
+    loadCrewPosts();
+  };
+
+  (window as any).rejectCrewPost = async (id: string) => {
+    if (!confirm('¿Rechazar este post del crew?')) return;
+    await supabase.from('crew_posts').update({ status: 'rejected' }).eq('id', id);
+    loadCrewPosts();
+  };
+
+  // Filter buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      loadContent(btn.dataset.filter);
+    });
+  });
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.getElementById('rejectModal').style.display = 'none';
+      document.getElementById('detailModal').style.display = 'none';
+      document.getElementById('newModal').style.display = 'none';
+    }
+  });
+
+  // Init
+  loadContent();
+  loadCrewPosts();
+</script>
