@@ -234,8 +234,9 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
 
 <script>
   import { supabase } from '../../lib/supabase';
+  import { waitForPermissions } from '../../lib/erp-permissions';
 
-  const perms: string[] = (window as any).__wildPermissions || [];
+  const { perms, role } = await waitForPermissions();
   const canView = perms.includes('*') || perms.includes('users.view');
   const canManage = perms.includes('*') || perms.includes('users.manage');
   const canVerify = perms.includes('*') || perms.includes('users.verify_artist');
