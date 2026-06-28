@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../core/theme/app_theme.dart';
+import '../../core/widgets/wild_logo.dart';
 import '../../data/services/auth_service.dart';
 import '../providers/auth_provider.dart';
 import 'login_screen.dart';
@@ -56,13 +57,9 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             // Logo
-            Icon(
-              Icons.music_note,
-              size: 64,
-              color: AppTheme.primary,
-            ),
-            SizedBox(height: 16),
-            Text(
+            const WildLogo(size: 64),
+            const SizedBox(height: 16),
+            const Text(
               'Wild Gvng',
               style: TextStyle(
                 color: AppTheme.textPrimary,
@@ -72,7 +69,7 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             ),
             SizedBox(height: 4),
-            Text(
+            const Text(
               'ERP Mobile',
               style: TextStyle(
                 color: AppTheme.textMuted,

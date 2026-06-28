@@ -17,8 +17,10 @@ on:
           - "false"
 
 env:
-  FLUTTER_VERSION: "stable"
+  FLUTTER_VERSION: "3.44.4"
   APP_DIR: apps/wild-erp-mobile
+  JAVA_VERSION: "17"
+  GRADLE_VERSION: "9.1.0"
 
 jobs:
   build:
@@ -30,10 +32,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: "gradle"
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: ${{ env.FLUTTER_VERSION }}
+          channel: "stable"
+          flutter-version: ${{ env.FLUTTER_VERSION }}
           cache: true
 
       - name: Flutter version
@@ -46,21 +56,25 @@ jobs:
         run: flutter analyze --no-fatal-infos
         continue-on-error: true
 
-      - name: Build Android APK
-        run: flutter build apk --release
-
-      - name: Build iOS (no codesign)
-        run: flutter build ios --no-codesign
-        continue-on-error: true
+      - name: Build Android APK (debug)
+        run: flutter build apk --debug
+        env:
+          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dkotlin.compiler.execution.strategy=in-process -Dkotlin.daemon.enabled=false"
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: wild-erp-android
-          path: ${{ env.APP_DIR }}/build/app/outputs/flutter-apk/app-release.apk
+          name: wild-erp-android-debug
+          path: ${{ env.APP_DIR }}/build/app/outputs/flutter-apk/app-debug.apk
+
+      - name: Build Android APK (release)
+        if: github.event.inputs.create_release == 'true'
+        run: flutter build apk --release
+        env:
+          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dkotlin.compiler.execution.strategy=in-process -Dkotlin.daemon.enabled=false"
 
       - name: Create Release
-        if: github.event.inputs.create_release == 'true' || startsWith(github.ref, 'refs/tags/')
+        if: github.event.inputs.create_release == 'true'
         uses: softprops/action-gh-release@v2
         with:
           name: "Wild Gvng ERP v${{ github.run_number }}"

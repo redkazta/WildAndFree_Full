@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/validators.dart';
+import '../../core/widgets/wild_logo.dart';
 import '../providers/auth_provider.dart';
 import 'dashboard_screen.dart';
 
@@ -68,16 +69,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   // Logo
                   Container(
                     width: 72,
-                    height: 72,
+                    height: 100,
                     decoration: BoxDecoration(
                       color: AppTheme.primary.withAlpha(20),
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: const Icon(
-                      Icons.music_note,
-                      size: 36,
-                      color: AppTheme.primary,
-                    ),
+                    child: const WildLogo(size: 36),
                   ),
                   const SizedBox(height: 24),
                   const Text(
