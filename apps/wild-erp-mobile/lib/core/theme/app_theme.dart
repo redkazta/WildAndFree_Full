@@ -244,7 +244,6 @@ class AppTheme {
           side: const BorderSide(color: borderGlow, width: 0.5),
         ),
         behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.all(16),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
@@ -279,7 +278,7 @@ class AppTheme {
         selectionColor: Color(0x4DC98300),
         selectionHandleColor: primary,
       ),
-      tabBarTheme: TabBarTheme(
+      tabBarTheme: TabBarThemeData(
         labelColor: textPrimary,
         unselectedLabelColor: textMuted,
         labelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
