@@ -274,192 +274,47 @@ const isActive = (href: string) => {
 		</style>
 	</head>
 	<body class="bg-black text-white selection:bg-wild-orange/50 selection:text-white overflow-x-hidden" style={`--primary: ${config.primary_color}; --secondary: ${config.secondary_color}; --wild-orange: ${config.primary_color}; --wild-red: ${config.secondary_color}; --tenant-primary: ${config.primary_color}; --tenant-secondary: ${config.secondary_color}; --tenant-glow: ${config.primary_color}33;`}>
-		<!-- Top Navigation Header Bar -->
-		<header class="top-header">
-			<div class="top-header-inner">
-				<div class="top-header-left">
-					<button id="sidebar-trigger" class="top-header-hamburger" aria-label="Abrir menú">
-						<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+		<header class="fixed top-0 left-0 right-0 z-[3000] bg-black/90 backdrop-blur-md border-b border-white/5 transition-all duration-300">
+			<div class="max-w-[1440px] mx-auto px-6 h-16 flex items-center justify-between">
+				<!-- Left side -->
+				<div class="flex items-center gap-6">
+					<button id="sidebar-trigger" class="flex items-center justify-center w-10 h-10 text-white hover:text-wild-orange transition-colors" aria-label="Abrir men\u00FA">
+						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
 							<line x1="3" y1="6" x2="21" y2="6"></line>
 							<line x1="3" y1="12" x2="21" y2="12"></line>
 							<line x1="3" y1="18" x2="21" y2="18"></line>
 						</svg>
 					</button>
-					<a href="/" class="top-header-logo-link">
-						<img src="/wg_logo.png" alt="Wild Gvng" class="top-header-logo" />
-						<span class="top-header-brand">
-							<span class="top-header-brand-wild">WILD</span>
-							<span class="top-header-brand-gvng">GVNG</span>
+					<a href="/" class="flex items-center gap-2">
+						<img src="/wg_logo.png" alt="Wild Gvng" class="w-7 h-7 object-contain" />
+						<span class="text-lg font-black tracking-tight">
+							<span class="text-white">WILD</span>
+							<span class="text-wild-orange">GVNG</span>
 						</span>
 					</a>
+					<nav class="hidden md:flex items-center gap-1">
+						<a href="/artistas" class="px-3 py-2 text-[11px] font-black uppercase tracking-[0.15em] text-white/70 hover:text-wild-orange transition-colors rounded-lg hover:bg-white/5">Artistas</a>
+						<a href="/versus" class="px-3 py-2 text-[11px] font-black uppercase tracking-[0.15em] text-white/70 hover:text-wild-orange transition-colors rounded-lg hover:bg-white/5">Versus</a>
+						<a href="/musica" class="px-3 py-2 text-[11px] font-black uppercase tracking-[0.15em] text-white/70 hover:text-wild-orange transition-colors rounded-lg hover:bg-white/5">M\u00FAsica</a>
+						<a href="/eventos" class="px-3 py-2 text-[11px] font-black uppercase tracking-[0.15em] text-white/70 hover:text-wild-orange transition-colors rounded-lg hover:bg-white/5">Eventos</a>
+						<a href="/tienda" class="px-3 py-2 text-[11px] font-black uppercase tracking-[0.15em] text-white/70 hover:text-wild-orange transition-colors rounded-lg hover:bg-white/5">Tienda</a>
+						<a href="/wild-and-free-league" class="px-3 py-2 text-[11px] font-black uppercase tracking-[0.15em] text-white/70 hover:text-wild-orange transition-colors rounded-lg hover:bg-white/5">Liga</a>
+					</nav>
 				</div>
-				<div class="top-header-right">
-					<a href="/login" class="top-header-login">Entrar</a>
-					<a href="/registro" class="top-header-register">Unirse</a>
+				<!-- Right side -->
+				<div class="flex items-center gap-3">
+					<a href="/login" class="px-4 py-2 text-[11px] font-black uppercase tracking-[0.15em] text-white/80 hover:text-wild-orange transition-colors">Entrar</a>
+					<a href="/registro" class="px-5 py-2 bg-white text-black text-[11px] font-black uppercase tracking-[0.15em] rounded-lg hover:bg-wild-orange hover:text-black transition-all">Unirse</a>
 				</div>
 			</div>
 		</header>
-
-		<style>
-			.top-header {
-				position: fixed;
-				top: 0;
-				left: 0;
-				right: 0;
-				height: 56px;
-				z-index: 3000;
-				background: rgba(0, 0, 0, 0.65);
-				backdrop-filter: blur(16px);
-				-webkit-backdrop-filter: blur(16px);
-				border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-				transition: background 0.3s ease;
-			}
-
-			.top-header-inner {
-				max-width: 1440px;
-				margin: 0 auto;
-				padding: 0 16px;
-				height: 100%;
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-			}
-
-			.top-header-left {
-				display: flex;
-				align-items: center;
-				gap: 12px;
-			}
-
-			.top-header-hamburger {
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				width: 38px;
-				height: 38px;
-				color: #fff;
-				background: rgba(255, 255, 255, 0.06);
-				border: 1px solid rgba(255, 255, 255, 0.1);
-				border-radius: 10px;
-				cursor: pointer;
-				transition: all 0.2s ease;
-				flex-shrink: 0;
-			}
-
-			.top-header-hamburger:hover {
-				color: var(--wild-orange, #c98300);
-				background: rgba(201, 131, 0, 0.1);
-				border-color: rgba(201, 131, 0, 0.3);
-			}
-
-			.top-header-hamburger:active {
-				transform: scale(0.92);
-			}
-
-			.top-header-logo-link {
-				display: flex;
-				align-items: center;
-				gap: 10px;
-				text-decoration: none;
-			}
-
-			.top-header-logo {
-				width: 32px;
-				height: 32px;
-				object-fit: contain;
-				flex-shrink: 0;
-			}
-
-			.top-header-brand {
-				display: flex;
-				align-items: baseline;
-				gap: 1px;
-			}
-
-			.top-header-brand-wild {
-				font-size: 18px;
-				font-weight: 900;
-				letter-spacing: -0.04em;
-				font-style: italic;
-				color: #fff;
-				line-height: 1;
-			}
-
-			.top-header-brand-gvng {
-				font-size: 18px;
-				font-weight: 900;
-				letter-spacing: -0.04em;
-				font-style: italic;
-				color: var(--wild-orange, #c98300);
-				line-height: 1;
-			}
-
-			.top-header-right {
-				display: flex;
-				align-items: center;
-				gap: 8px;
-			}
-
-			.top-header-login {
-				padding: 8px 16px;
-				font-size: 11px;
-				font-weight: 900;
-				text-transform: uppercase;
-				letter-spacing: 0.12em;
-				color: #fff;
-				text-decoration: none;
-				border-radius: 8px;
-				transition: all 0.2s ease;
-			}
-
-			.top-header-login:hover {
-				color: var(--wild-orange, #c98300);
-				background: rgba(201, 131, 0, 0.1);
-			}
-
-			.top-header-register {
-				padding: 8px 18px;
-				font-size: 11px;
-				font-weight: 900;
-				text-transform: uppercase;
-				letter-spacing: 0.12em;
-				color: #000;
-				background: #fff;
-				text-decoration: none;
-				border-radius: 8px;
-				transition: all 0.2s ease;
-			}
-
-			.top-header-register:hover {
-				background: var(--wild-orange, #c98300);
-				color: #fff;
-			}
-
-			@media (max-width: 480px) {
-				.top-header-inner {
-					padding: 0 12px;
-				}
-				.top-header-brand-wild,
-				.top-header-brand-gvng {
-					font-size: 15px;
-				}
-				.top-header-login {
-					padding: 6px 10px;
-					font-size: 10px;
-				}
-				.top-header-register {
-					padding: 6px 12px;
-					font-size: 10px;
-				}
-			}
-		</style>
 
 		<div id="sidebar-overlay"></div>
 		<SidebarLeft />
 		<RadioFloating />
 		<SpotifyFloating />
 
-		<main class="pt-14">
+		<main class="pt-16">
 			<slot />
 		</main>
 
