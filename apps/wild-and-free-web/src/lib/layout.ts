@@ -263,14 +263,29 @@ const updateAuthUI = async () => {
       const initials = (profile?.nombre || session.user.email || "WG")
         .substring(0, 2)
         .toUpperCase();
-      // Role display string
-      const roleDisplay = role
-        ? role.charAt(0).toUpperCase() + role.slice(1)
-        : "Miembro";
-      // Avatar HTML: show image if avatar_url exists, otherwise initials
+      // Role display string with proper mapping
+      const roleDisplay = (() => {
+        switch (role) {
+          case "admin":
+            return "ADMIN";
+          case "artist":
+            return "ARTIST";
+          case "fan":
+            return "FAN";
+          default:
+            return role ? role.toUpperCase() : "MIEMBRO";
+        }
+      })();
+      // Avatar HTML: show image if avatar_url exists, otherwise person icon + ? overlay
       const avatarHtml = profile?.avatar_url
         ? `<img src="${profile.avatar_url}" alt="" class="w-8 h-8 rounded-full object-cover" />`
-        : `<div class="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] flex items-center justify-center text-[10px] font-black uppercase text-white shadow-[0_0_10px_rgba(201,131,0,0.3)] group-hover:shadow-[0_0_15px_var(--primary)] transition-all">${initials}</div>`;
+        : `<div class="relative w-8 h-8 rounded-full bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] flex items-center justify-center shadow-[0_0_10px_rgba(201,131,0,0.3)] group-hover:shadow-[0_0_15px_var(--primary)] transition-all">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white">
+              <circle cx="12" cy="8" r="4"/>
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            </svg>
+            <span class="absolute -top-1 -right-1 w-4 h-4 bg-wild-orange rounded-full flex items-center justify-center text-[8px] font-black text-black">?</span>
+          </div>`;
 
       authContainer.innerHTML = `
         <div class="relative group/pop">
@@ -284,7 +299,7 @@ const updateAuthUI = async () => {
           <div class="popover w-64">
             <div class="popover-header">
               <span class="popover-title">Mi Cuenta</span>
-              <span class="text-[9px] text-[var(--primary)] font-mono">${role?.toUpperCase() || "MIEMBRO"}</span>
+              <span class="text-[9px] text-[var(--primary)] font-mono">${roleDisplay}</span>
             </div>
             <div class="popover-content space-y-2">
               <a href="/perfil" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 group transition-colors">

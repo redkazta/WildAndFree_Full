@@ -75,371 +75,344 @@ class _DashboardScreenState extends State<DashboardScreen> {
             onRefresh: () => provider.refresh(),
             color: AppTheme.primary,
             backgroundColor: AppTheme.surface,
-            child: ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                // Welcome section with premium styling
-                Consumer<AuthProvider>(
-                  builder: (context, auth, _) {
-                    return Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            AppTheme.primary.withAlpha(12),
-                            Colors.transparent,
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: AppTheme.borderGlow,
-                          width: 0.5,
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                width: 40,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  gradient: AppTheme.primaryGradient,
-                                  borderRadius: BorderRadius.circular(12),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: AppTheme.primary.withAlpha(50),
-                                      blurRadius: 12,
-                                      offset: const Offset(0, 4),
-                                    ),
-                                  ],
-                                ),
-                                child: const Icon(
-                                  Icons.dashboard_rounded,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                              ),
-                              const SizedBox(width: 14),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Hola, ${auth.profile?.displayName ?? 'Admin'}',
-                                      style: const TextStyle(
-                                        color: AppTheme.textPrimary,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w700,
-                                        letterSpacing: -0.2,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      'Resumen general del sistema',
-                                      style: TextStyle(
-                                        color: AppTheme.textSecondary,
-                                        fontSize: 13,
-                                        letterSpacing: 0.2,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                width: 8,
-                                height: 8,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppTheme.accent,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: AppTheme.accent.withAlpha(60),
-                                      blurRadius: 6,
-                                      spreadRadius: 1,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-
-                const SizedBox(height: 20),
-
-                // Stats Grid - glass morphism cards
-                GridView.count(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  childAspectRatio: 1.35,
-                  children: [
-                    _buildStatCard(
-                      'Usuarios',
-                      Formatters.formatCompact(provider.stats.totalUsers),
-                      Icons.people_outline,
-                      AppTheme.primary,
-                      () => Navigator.pushNamed(context, '/users'),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight,
                     ),
-                    _buildStatCard(
-                      'Artistas',
-                      Formatters.formatCompact(provider.stats.totalArtists),
-                      Icons.mic_none,
-                      AppTheme.accent,
-                      () => Navigator.pushNamed(context, '/users'),
-                    ),
-                    _buildStatCard(
-                      'Pedidos Pendientes',
-                      provider.stats.pendingOrders.toString(),
-                      Icons.shopping_bag_outlined,
-                      Colors.orange,
-                      () => Navigator.pushNamed(context, '/orders'),
-                    ),
-                    _buildStatCard(
-                      'Contenido Pendiente',
-                      provider.stats.pendingContent.toString(),
-                      Icons.article_outlined,
-                      const Color(0xFF60A5FA),
-                      () => Navigator.pushNamed(context, '/content'),
-                    ),
-                    _buildStatCard(
-                      'Tokens Totales',
-                      Formatters.formatToken(provider.stats.totalTokens),
-                      Icons.token,
-                      const Color(0xFFA78BFA),
-                      () => Navigator.pushNamed(context, '/settings'),
-                    ),
-                    _buildStatCard(
-                      'Eventos',
-                      provider.stats.totalEvents.toString(),
-                      Icons.event_outlined,
-                      const Color(0xFF34D399),
-                      () => Navigator.pushNamed(context, '/events'),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 24),
-
-                // Revenue card with premium gradient
-                Container(
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0x18C98300), Color(0x08FFFFFF)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: AppTheme.borderGlow,
-                      width: 1,
-                    ),
-                    boxShadow: AppTheme.cardShadow,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Row(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Container(
-                          width: 52,
-                          height: 52,
-                          decoration: BoxDecoration(
-                            gradient: AppTheme.primaryGradient,
-                            borderRadius: BorderRadius.circular(14),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppTheme.primary.withAlpha(40),
-                                blurRadius: 12,
-                                offset: const Offset(0, 4),
+                        // Welcome section with premium styling - compact
+                        Consumer<AuthProvider>(
+                          builder: (context, auth, _) {
+                            return Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    AppTheme.primary.withAlpha(12),
+                                    Colors.transparent,
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: AppTheme.borderGlow,
+                                  width: 0.5,
+                                ),
                               ),
-                            ],
-                          ),
-                          child: const Icon(
-                            Icons.attach_money,
-                            color: Colors.white,
-                            size: 24,
-                          ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 32,
+                                    height: 32,
+                                    decoration: BoxDecoration(
+                                      gradient: AppTheme.primaryGradient,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: const Icon(
+                                      Icons.dashboard_rounded,
+                                      color: Colors.white,
+                                      size: 16,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Hola, ${auth.profile?.displayName ?? 'Admin'}',
+                                          style: const TextStyle(
+                                            color: AppTheme.textPrimary,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Resumen general del sistema',
+                                          style: TextStyle(
+                                            color: AppTheme.textSecondary,
+                                            fontSize: 11,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    width: 6,
+                                    height: 6,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: AppTheme.accent,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: AppTheme.accent.withAlpha(60),
+                                          blurRadius: 4,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                         ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Ingresos Totales',
-                                style: TextStyle(
-                                  color: AppTheme.textSecondary,
-                                  fontSize: 13,
-                                  letterSpacing: 0.3,
-                                ),
-                              ),
-                              const SizedBox(height: 6),
-                              Text(
-                                Formatters.formatNumber(provider.stats.totalRevenue),
-                                style: const TextStyle(
-                                  color: AppTheme.textPrimary,
-                                  fontSize: 26,
-                                  fontWeight: FontWeight.w800,
-                                  letterSpacing: -0.5,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 2,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: AppTheme.accent.withAlpha(25),
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                child: const Text(
-                                  '+12.5% vs mes anterior',
-                                  style: TextStyle(
-                                    color: AppTheme.accent,
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w500,
+
+                        const SizedBox(height: 6),
+
+                        // Stats Grid - compact 2x3
+                        GridView.count(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 6,
+                          mainAxisSpacing: 6,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          childAspectRatio: 1.6,
+                          children: [
+                            _buildStatCard(
+                              'Usuarios',
+                              Formatters.formatCompact(provider.stats.totalUsers),
+                              Icons.people_outline,
+                              AppTheme.primary,
+                              () => Navigator.pushNamed(context, '/users'),
+                            ),
+                            _buildStatCard(
+                              'Artistas',
+                              Formatters.formatCompact(provider.stats.totalArtists),
+                              Icons.mic_none,
+                              AppTheme.accent,
+                              () => Navigator.pushNamed(context, '/users'),
+                            ),
+                            _buildStatCard(
+                              'Pedidos Pendientes',
+                              provider.stats.pendingOrders.toString(),
+                              Icons.shopping_bag_outlined,
+                              Colors.orange,
+                              () => Navigator.pushNamed(context, '/orders'),
+                            ),
+                            _buildStatCard(
+                              'Contenido Pendiente',
+                              provider.stats.pendingContent.toString(),
+                              Icons.article_outlined,
+                              const Color(0xFF60A5FA),
+                              () => Navigator.pushNamed(context, '/content'),
+                            ),
+                            _buildStatCard(
+                              'Tokens Totales',
+                              Formatters.formatToken(provider.stats.totalTokens),
+                              Icons.token,
+                              const Color(0xFFA78BFA),
+                              () => Navigator.pushNamed(context, '/settings'),
+                            ),
+                            _buildStatCard(
+                              'Eventos',
+                              provider.stats.totalEvents.toString(),
+                              Icons.event_outlined,
+                              const Color(0xFF34D399),
+                              () => Navigator.pushNamed(context, '/events'),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 6),
+
+                        // Revenue card - compact
+                        Container(
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0x18C98300), Color(0x08FFFFFF)],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: AppTheme.borderGlow,
+                              width: 0.5,
+                            ),
+                            boxShadow: AppTheme.cardShadow,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 36,
+                                  height: 36,
+                                  decoration: BoxDecoration(
+                                    gradient: AppTheme.primaryGradient,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: const Icon(
+                                    Icons.attach_money,
+                                    color: Colors.white,
+                                    size: 18,
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const Icon(
-                          Icons.trending_up_rounded,
-                          color: AppTheme.accent,
-                          size: 28,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 28),
-
-                // Quick actions
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.flash_on_rounded,
-                      color: AppTheme.primary,
-                      size: 18,
-                    ),
-                    const SizedBox(width: 8),
-                    const Text(
-                      'Acciones Rápidas',
-                      style: TextStyle(
-                        color: AppTheme.textPrimary,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: -0.2,
-                      ),
-                    ),
-                    const Spacer(),
-                    Text(
-                      'Ver todo',
-                      style: TextStyle(
-                        color: AppTheme.primary.withAlpha(180),
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    Icon(
-                      Icons.chevron_right,
-                      color: AppTheme.primary.withAlpha(180),
-                      size: 16,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 14),
-                Row(
-                  children: [
-                    _buildQuickAction(
-                      'Pedidos',
-                      Icons.shopping_bag_outlined,
-                      () => Navigator.pushNamed(context, '/orders'),
-                    ),
-                    const SizedBox(width: 12),
-                    _buildQuickAction(
-                      'Inventario',
-                      Icons.inventory_2_outlined,
-                      () => Navigator.pushNamed(context, '/inventory'),
-                    ),
-                    const SizedBox(width: 12),
-                    _buildQuickAction(
-                      'Usuarios',
-                      Icons.people_outlined,
-                      () => Navigator.pushNamed(context, '/users'),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 24),
-
-                // Total products card
-                Container(
-                  decoration: AppTheme.cardDecoration,
-                  child: Padding(
-                    padding: const EdgeInsets.all(18),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: AppTheme.primary.withAlpha(20),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Icon(
-                            Icons.inventory_2_outlined,
-                            color: AppTheme.primary,
-                            size: 20,
-                          ),
-                        ),
-                        const SizedBox(width: 14),
-                        const Text(
-                          'Productos en inventario',
-                          style: TextStyle(
-                            color: AppTheme.textSecondary,
-                            fontSize: 13,
-                          ),
-                        ),
-                        const Spacer(),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 6,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppTheme.primary.withAlpha(20),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            provider.stats.totalProducts.toString(),
-                            style: const TextStyle(
-                              color: AppTheme.primary,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Text(
+                                        'Ingresos Totales',
+                                        style: TextStyle(
+                                          color: AppTheme.textSecondary,
+                                          fontSize: 10,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        Formatters.formatNumber(provider.stats.totalRevenue),
+                                        style: const TextStyle(
+                                          color: AppTheme.textPrimary,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w800,
+                                          letterSpacing: -0.3,
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 6,
+                                          vertical: 1,
+                                        ),
+                                        margin: const EdgeInsets.only(top: 1),
+                                        decoration: BoxDecoration(
+                                          color: AppTheme.accent.withAlpha(25),
+                                          borderRadius: BorderRadius.circular(4),
+                                        ),
+                                        child: const Text(
+                                          '+12.5% vs mes anterior',
+                                          style: TextStyle(
+                                            color: AppTheme.accent,
+                                            fontSize: 8,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const Icon(
+                                  Icons.trending_up_rounded,
+                                  color: AppTheme.accent,
+                                  size: 22,
+                                ),
+                              ],
                             ),
                           ),
                         ),
+
+                        const SizedBox(height: 6),
+
+                        // Quick actions label + 3 buttons
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.flash_on_rounded,
+                              color: AppTheme.primary,
+                              size: 14,
+                            ),
+                            const SizedBox(width: 6),
+                            const Text(
+                              'Acciones Rápidas',
+                              style: TextStyle(
+                                color: AppTheme.textPrimary,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 6),
+                        Row(
+                          children: [
+                            _buildQuickAction(
+                              'Pedidos',
+                              Icons.shopping_bag_outlined,
+                              () => Navigator.pushNamed(context, '/orders'),
+                            ),
+                            const SizedBox(width: 6),
+                            _buildQuickAction(
+                              'Inventario',
+                              Icons.inventory_2_outlined,
+                              () => Navigator.pushNamed(context, '/inventory'),
+                            ),
+                            const SizedBox(width: 6),
+                            _buildQuickAction(
+                              'Usuarios',
+                              Icons.people_outlined,
+                              () => Navigator.pushNamed(context, '/users'),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 6),
+
+                        // Total products card - compact row
+                        Container(
+                          decoration: AppTheme.cardDecoration,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 28,
+                                  height: 28,
+                                  decoration: BoxDecoration(
+                                    color: AppTheme.primary.withAlpha(20),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: const Icon(
+                                    Icons.inventory_2_outlined,
+                                    color: AppTheme.primary,
+                                    size: 16,
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                const Text(
+                                  'Productos en inventario',
+                                  style: TextStyle(
+                                    color: AppTheme.textSecondary,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                                const Spacer(),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 3,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: AppTheme.primary.withAlpha(20),
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: Text(
+                                    provider.stats.totalProducts.toString(),
+                                    style: const TextStyle(
+                                      color: AppTheme.primary,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 6),
                       ],
                     ),
                   ),
-                ),
-
-                const SizedBox(height: 16),
-              ],
+                );
+              },
             ),
           );
         },
@@ -491,43 +464,44 @@ class _DashboardScreenState extends State<DashboardScreen> {
           splashColor: color.withAlpha(15),
           highlightColor: color.withAlpha(8),
           child: Padding(
-            padding: const EdgeInsets.all(14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            padding: const EdgeInsets.all(8),
+            child: Row(
               children: [
                 Container(
-                  width: 34,
-                  height: 34,
+                  width: 28,
+                  height: 28,
                   decoration: BoxDecoration(
                     color: color.withAlpha(25),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Icon(icon, color: color, size: 18),
+                  child: Icon(icon, color: color, size: 14),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      value,
-                      style: TextStyle(
-                        color: color,
-                        fontSize: 22,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: -0.3,
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        value,
+                        style: TextStyle(
+                          color: color,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: -0.2,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        color: AppTheme.textMuted,
-                        fontSize: 11,
-                        letterSpacing: 0.2,
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          color: AppTheme.textMuted,
+                          fontSize: 9,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -541,18 +515,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(10),
           border: Border.all(
             color: AppTheme.borderGlow,
             width: 0.5,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withAlpha(50),
-              blurRadius: 8,
-              offset: const Offset(0, 3),
-            ),
-          ],
         ),
         child: Material(
           color: AppTheme.surface,
@@ -563,25 +530,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
             splashColor: AppTheme.primary.withAlpha(15),
             highlightColor: AppTheme.primary.withAlpha(8),
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 18),
+              padding: const EdgeInsets.symmetric(vertical: 8),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    width: 44,
-                    height: 44,
+                    width: 30,
+                    height: 30,
                     decoration: BoxDecoration(
                       color: AppTheme.primary.withAlpha(15),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Icon(icon, color: AppTheme.primary, size: 22),
+                    child: Icon(icon, color: AppTheme.primary, size: 16),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 4),
                   Text(
                     label,
                     style: const TextStyle(
                       color: AppTheme.textSecondary,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],

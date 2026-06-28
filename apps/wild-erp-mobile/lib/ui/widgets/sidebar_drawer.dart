@@ -38,107 +38,154 @@ class SidebarDrawer extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Logo container
-                    Container(
-                      width: 56,
-                      height: 72,
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: AppTheme.primary.withAlpha(12),
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(
-                          color: AppTheme.borderGlow,
-                          width: 1,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppTheme.primary.withAlpha(20),
-                            blurRadius: 12,
-                            spreadRadius: 1,
+                    // Logo + Title side by side - vertically aligned
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        // Logo container - same height as text
+                        Container(
+                          width: 40,
+                          height: 40,
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: AppTheme.primary.withAlpha(12),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: AppTheme.borderGlow,
+                              width: 1,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppTheme.primary.withAlpha(20),
+                                blurRadius: 12,
+                                spreadRadius: 1,
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      child: Image.asset(
-                        'assets/wg_logo.png',
-                        width: 44,
-                        height: 60,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    // WILD GVNG title with gradient
-                    ShaderMask(
-                      shaderCallback: (bounds) => const LinearGradient(
-                        colors: [AppTheme.primary, Colors.white70],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                      ).createShader(bounds),
-                      child: const Text(
-                        'WILD GVNG',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: 1.5,
+                          child: Image.asset(
+                            'assets/wg_logo.png',
+                            width: 28,
+                            height: 28,
+                            fit: BoxFit.contain,
+                          ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      'ERP',
-                      style: TextStyle(
-                        color: AppTheme.textMuted,
-                        fontSize: 11,
-                        letterSpacing: 3,
-                        fontWeight: FontWeight.w400,
-                      ),
+                        const SizedBox(width: 12),
+                        // Title block
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              ShaderMask(
+                                shaderCallback: (bounds) => const LinearGradient(
+                                  colors: [AppTheme.primary, Colors.white70],
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                ).createShader(bounds),
+                                child: const Text(
+                                  'WILD GVNG',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w800,
+                                    letterSpacing: 1.5,
+                                  ),
+                                ),
+                              ),
+                              const Text(
+                                'ERP',
+                                style: TextStyle(
+                                  color: AppTheme.textMuted,
+                                  fontSize: 10,
+                                  letterSpacing: 3,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 10),
                     Consumer<AuthProvider>(
-                      builder: (context, auth, _) => Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppTheme.surfaceLight,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: AppTheme.border,
-                            width: 0.5,
+                      builder: (context, auth, _) {
+                        final profile = auth.profile;
+                        final hasAvatar = profile?.avatarUrl != null && profile!.avatarUrl!.isNotEmpty;
+                        final roleRaw = profile?.role ?? '';
+                        String roleLabel;
+                        switch (roleRaw.toLowerCase()) {
+                          case 'admin':
+                            roleLabel = 'ADMIN';
+                            break;
+                          case 'artist':
+                            roleLabel = 'ARTIST';
+                            break;
+                          case 'fan':
+                            roleLabel = 'FAN';
+                            break;
+                          default:
+                            roleLabel = roleRaw.isEmpty ? 'USER' : roleRaw.toUpperCase();
+                        }
+                        return Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 6,
                           ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              width: 6,
-                              height: 6,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppTheme.accent,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: AppTheme.accent.withAlpha(60),
-                                    blurRadius: 4,
-                                  ),
-                                ],
-                              ),
+                          decoration: BoxDecoration(
+                            color: AppTheme.surfaceLight,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: AppTheme.border,
+                              width: 0.5,
                             ),
-                            const SizedBox(width: 8),
-                            Flexible(
-                              child: Text(
-                                auth.profile?.email ?? '',
-                                style: const TextStyle(
-                                  color: AppTheme.textSecondary,
-                                  fontSize: 11,
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              // Avatar
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: hasAvatar
+                                    ? Image.network(
+                                        profile!.avatarUrl!,
+                                        width: 32,
+                                        height: 32,
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (context, error, stackTrace) => _buildNoAvatar(),
+                                      )
+                                    : _buildNoAvatar(),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      profile?.displayName ?? profile?.nombre ?? profile?.email ?? '',
+                                      style: const TextStyle(
+                                        color: AppTheme.textPrimary,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    Text(
+                                      roleLabel,
+                                      style: const TextStyle(
+                                        color: AppTheme.primary,
+                                        fontSize: 9,
+                                        fontWeight: FontWeight.w700,
+                                        letterSpacing: 1.2,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                overflow: TextOverflow.ellipsis,
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
+                            ],
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -296,6 +343,60 @@ class SidebarDrawer extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildNoAvatar() {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          width: 32,
+          height: 32,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                AppTheme.primary.withAlpha(60),
+                AppTheme.primary.withAlpha(20),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: AppTheme.borderGlow,
+              width: 0.5,
+            ),
+          ),
+          child: const Icon(
+            Icons.person,
+            color: AppTheme.textSecondary,
+            size: 18,
+          ),
+        ),
+        Positioned(
+          top: -2,
+          right: -2,
+          child: Container(
+            width: 14,
+            height: 14,
+            decoration: const BoxDecoration(
+              color: AppTheme.accent,
+              shape: BoxShape.circle,
+            ),
+            child: const Center(
+              child: Text(
+                '?',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 9,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
