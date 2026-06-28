@@ -4,6 +4,7 @@ import SidebarLeft from '../components/SidebarLeft.astro';
 import RadioFloating from '../components/RadioFloating.astro';
 import SpotifyFloating from '../components/SpotifyFloating.astro';
 import { ClientRouter } from 'astro:transitions';
+import Analytics from '@vercel/analytics/astro';
 
 export type Props = {
   config: {
@@ -437,5 +438,6 @@ const isActive = (href: string) => {
 				import('../lib/layout').then(({ initLayout }) => initLayout());
 			});
 		</script>
+		<Analytics />
 	</body>
 </html>

@@ -3,7 +3,7 @@ description: Wild Gvng Music Hub - Mobile ERP
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -20,7 +20,7 @@ dev_dependencies:
   flutter_lints: ^3.0.1
 
 dependency_overrides:
-  app_links: 6.0.2
+  app_links: ^6.4.0
 
 flutter:
   uses-material-design: true

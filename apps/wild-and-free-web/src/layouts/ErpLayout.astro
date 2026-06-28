@@ -1,4 +1,6 @@
 ---
+import Analytics from '@vercel/analytics/astro';
+
 interface Props {
   title: string;
   activeModule?: string;
@@ -452,5 +454,6 @@ const modules = [
       });
     });
   </script>
-</body>
+		<Analytics />
+	</body>
 </html>
