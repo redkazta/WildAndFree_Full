@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
@@ -13,9 +13,13 @@ const validateSupabaseUrl = (url: string | undefined) => {
   }
 };
 
-export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey && validateSupabaseUrl(supabaseUrl));
+export const isSupabaseConfigured = Boolean(
+  supabaseUrl && supabaseAnonKey && validateSupabaseUrl(supabaseUrl),
+);
 
-const notConfiguredError = new Error('Supabase no está configurado: falta PUBLIC_SUPABASE_URL / PUBLIC_SUPABASE_ANON_KEY');
+const notConfiguredError = new Error(
+  "Supabase no está configurado: falta PUBLIC_SUPABASE_URL / PUBLIC_SUPABASE_ANON_KEY",
+);
 
 const makeStub = () => {
   const errorResult = { data: null, error: notConfiguredError };
@@ -83,5 +87,11 @@ const makeStub = () => {
 };
 
 export const supabase = isSupabaseConfigured
-  ? createClient(supabaseUrl!, supabaseAnonKey!)
+  ? createClient(supabaseUrl!, supabaseAnonKey!, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+      },
+    })
   : (makeStub() as any);
