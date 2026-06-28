@@ -25,10 +25,10 @@ import Layout from '../layouts/Layout.astro';
 
     <!-- Authenticated Content -->
     <div id="auth-content" class="hidden w-full max-w-[1200px] mx-auto">
-      
+
       <!-- New Clean Vertical Layout -->
       <div class="flex flex-col md:flex-row gap-12 items-start pt-12 mb-20">
-        
+
         <!-- Left: Identity Column (Sticky) -->
         <div class="w-full md:w-1/3 flex flex-col items-center md:items-start md:sticky md:top-24">
           <div class="relative group mb-8">
@@ -54,7 +54,12 @@ import Layout from '../layouts/Layout.astro';
             <!-- Tags loaded dynamically -->
           </div>
 
-          <div class="w-full border-t border-white/20 pt-6 mt-2">
+          <button id="profile-logout-btn" class="w-full py-3 px-4 bg-transparent border-2 border-red-500/40 text-red-500 font-black text-xs uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all flex items-center justify-center gap-2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Cerrar Sesión
+          </button>
+
+          <div class="w-full border-t border-white/20 pt-6 mt-6">
              <div class="flex justify-between items-center mb-2">
                 <span class="text-xs font-bold text-[#666] uppercase tracking-widest">Nivel Actual</span>
                 <span class="text-xl font-black text-[#FF5500] uppercase">Rookie</span>
@@ -71,13 +76,13 @@ import Layout from '../layouts/Layout.astro';
 
         <!-- Right: Content Column -->
         <div class="w-full md:w-2/3">
-          
+
           <!-- Bio & Stats Row -->
           <div class="bg-[#111] border border-white/10 p-8 mb-12 shadow-[12px_12px_0px_rgba(0,0,0,0.5)]">
             <p id="profile-bio" class="text-xl text-white/90 font-medium leading-relaxed mb-8 border-l-4 border-[#FF5500] pl-6">
               Cargando biografía...
             </p>
-            
+
             <div class="grid grid-cols-3 gap-8 border-t border-white/10 pt-8">
               <div class="text-center">
                 <span id="stat-following" class="block text-4xl font-black text-white mb-1">0</span>
@@ -143,7 +148,7 @@ import Layout from '../layouts/Layout.astro';
              <!-- ... -->
            </div>
         </div>
-        
+
         <div class="tab-content hidden" id="playlists">
            <div class="bg-[#111] border border-white/10 p-6 shadow-[8px_8px_0px_rgba(0,0,0,0.5)]">
              <h3 class="text-xl font-black text-white uppercase border-l-4 border-[#FF5500] pl-4 mb-6">Mis Playlists</h3>
@@ -181,7 +186,7 @@ import Layout from '../layouts/Layout.astro';
   .tab.active {
     color: white;
   }
-  
+
   .tab.active::after {
     content: '';
     position: absolute;
@@ -191,22 +196,22 @@ import Layout from '../layouts/Layout.astro';
     height: 4px;
     background-color: var(--p-orange);
   }
-  
+
   /* Animation Utilities */
   @keyframes avatar-pulse {
     0%, 100% { box-shadow: 0 0 0 0px rgba(255, 85, 0, 0.4); border-color: white; }
     50% { box-shadow: 0 0 0 10px rgba(255, 85, 0, 0); border-color: #eee; }
   }
-  
+
   /* Custom Scrollbar for tabs */
   .profile-tabs::-webkit-scrollbar {
     height: 4px;
   }
-  
+
   .profile-tabs::-webkit-scrollbar-track {
     background: #111;
   }
-  
+
   .profile-tabs::-webkit-scrollbar-thumb {
     background: #333;
   }
@@ -216,121 +221,121 @@ import Layout from '../layouts/Layout.astro';
 
   /* Animaciones para Tags */
   @keyframes golden-pulse {
-    0% { 
-      transform: scale(1); 
+    0% {
+      transform: scale(1);
       box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7);
       filter: brightness(1);
     }
-    50% { 
-      transform: scale(1.05); 
+    50% {
+      transform: scale(1.05);
       box-shadow: 0 0 20px 10px rgba(255, 215, 0, 0.3);
       filter: brightness(1.2);
     }
-    100% { 
-      transform: scale(1); 
+    100% {
+      transform: scale(1);
       box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
       filter: brightness(1);
     }
   }
 
   @keyframes origins-glow {
-    0% { 
+    0% {
       box-shadow: 0 0 5px rgba(255, 107, 53, 0.5);
       filter: brightness(1);
     }
-    50% { 
+    50% {
       box-shadow: 0 0 15px rgba(255, 107, 53, 0.8);
       filter: brightness(1.1);
     }
-    100% { 
+    100% {
       box-shadow: 0 0 5px rgba(255, 107, 53, 0.5);
       filter: brightness(1);
     }
   }
 
   @keyframes member-shine {
-    0% { 
+    0% {
       filter: brightness(1) saturate(1);
     }
-    50% { 
+    50% {
       filter: brightness(1.2) saturate(1.3);
     }
-    100% { 
+    100% {
       filter: brightness(1) saturate(1);
     }
   }
 
   @keyframes artist-sparkle {
-    0% { 
+    0% {
       filter: brightness(1) hue-rotate(0deg);
     }
-    25% { 
+    25% {
       filter: brightness(1.3) hue-rotate(90deg);
     }
-    50% { 
+    50% {
       filter: brightness(1.1) hue-rotate(180deg);
     }
-    75% { 
+    75% {
       filter: brightness(1.3) hue-rotate(270deg);
     }
-    100% { 
+    100% {
       filter: brightness(1) hue-rotate(360deg);
     }
   }
 
   @keyframes media-pulse {
-    0% { 
+    0% {
       transform: scale(1);
       opacity: 1;
     }
-    50% { 
+    50% {
       transform: scale(1.02);
       opacity: 0.9;
     }
-    100% { 
+    100% {
       transform: scale(1);
       opacity: 1;
     }
   }
 
   @keyframes developer-code {
-    0% { 
+    0% {
       text-shadow: 0 0 2px rgba(0, 255, 0, 0.5);
     }
-    50% { 
+    50% {
       text-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
     }
-    100% { 
+    100% {
       text-shadow: 0 0 2px rgba(0, 255, 0, 0.5);
     }
   }
 
   @keyframes designer-flow {
-    0% { 
+    0% {
       transform: translateY(0px) rotate(0deg);
     }
-    25% { 
+    25% {
       transform: translateY(-2px) rotate(1deg);
     }
-    50% { 
+    50% {
       transform: translateY(0px) rotate(0deg);
     }
-    75% { 
+    75% {
       transform: translateY(2px) rotate(-1deg);
     }
-    100% { 
+    100% {
       transform: translateY(0px) rotate(0deg);
     }
   }
 
   @keyframes editor-creative {
-    0% { 
+    0% {
       filter: contrast(1) brightness(1);
     }
-    50% { 
+    50% {
       filter: contrast(1.2) brightness(1.1);
     }
-    100% { 
+    100% {
       filter: contrast(1) brightness(1);
     }
   }
@@ -429,19 +434,19 @@ import Layout from '../layouts/Layout.astro';
 
   /* Animación Chidotota: Wild Pulse Neon */
   @keyframes wild-pulse {
-      0% { 
-        box-shadow: 0 0 5px rgba(255, 255, 255, 0.1), inset 0 0 0 rgba(255,255,255,0); 
+      0% {
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.1), inset 0 0 0 rgba(255,255,255,0);
         transform: scale(1);
         filter: brightness(1);
       }
-      50% { 
-        box-shadow: 0 0 20px rgba(255, 255, 255, 0.3), inset 0 0 10px rgba(255,255,255,0.1); 
+      50% {
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.3), inset 0 0 10px rgba(255,255,255,0.1);
         transform: scale(1.05);
         filter: brightness(1.3);
         border-color: rgba(255, 255, 255, 0.9);
       }
-      100% { 
-        box-shadow: 0 0 5px rgba(255, 255, 255, 0.1), inset 0 0 0 rgba(255,255,255,0); 
+      100% {
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.1), inset 0 0 0 rgba(255,255,255,0);
         transform: scale(1);
         filter: brightness(1);
       }
@@ -536,14 +541,19 @@ import Layout from '../layouts/Layout.astro';
   import { getRole } from '../lib/role.js';
   import { getUserTags } from '../lib/tags-gateway.js';
 
+  document.getElementById('profile-logout-btn')?.addEventListener('click', async () => {
+    await supabase.auth.signOut();
+    window.location.href = '/';
+  });
+
   const initProfile = async () => {
     const profileMain = document.getElementById('profile-main');
     const unauthSection = document.getElementById('unauth-state');
     const authContent = document.getElementById('auth-content');
-    
+
     // 1. Check Session
     const { data: { session } } = await supabase.auth.getSession();
-    
+
     if (!session) {
       unauthSection?.classList.remove('hidden');
       profileMain?.classList.remove('opacity-0');
@@ -594,7 +604,7 @@ import Layout from '../layouts/Layout.astro';
       const parts = String(userBirthdate).split('-').map(n => parseInt(n, 10));
       if (parts.length === 3 && !isNaN(parts[0])) {
         const bYear = parts[0];
-        const bMonth = parts[1]; 
+        const bMonth = parts[1];
         const bDay = parts[2];
         const birthDateObj = new Date(bYear, bMonth - 1, bDay);
 
@@ -630,7 +640,7 @@ import Layout from '../layouts/Layout.astro';
       tags.forEach(tag => {
         const tagElement = document.createElement('span');
         tagElement.className = 'role-tag';
-        
+
         const tagLabel = document.createElement('span');
         tagLabel.className = 'role-tag-label';
         tagLabel.textContent = tag.name;
@@ -642,7 +652,7 @@ import Layout from '../layouts/Layout.astro';
         tagElement.style.letterSpacing = '1px';
         tagElement.style.padding = '6px 16px';
         tagElement.style.fontSize = '12px';
-        
+
         if (tag.isRole) {
            // Roles get special orange treatment
            tagElement.style.background = 'var(--p-white)';
@@ -713,7 +723,7 @@ import Layout from '../layouts/Layout.astro';
       console.error('Error loading user tags/roles:', error);
       displayUserTags([{ name: 'FAN', cssClass: 'role-fan' }]);
     }
-    
+
     if (profile.avatar_url && avatarImg instanceof HTMLImageElement) {
       avatarImg.src = profile.avatar_url;
       avatarImg.classList.remove('hidden');
@@ -781,17 +791,17 @@ import Layout from '../layouts/Layout.astro';
       console.error('Error en initProfile:', error);
     });
   };
-  
+
   // Ejecutar inmediatamente si el DOM está listo
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', run);
   } else {
     run();
   }
-  
+
   // También ejecutar después de cambios de página en Astro
   document.addEventListener('astro:after-swap', run);
-  
+
   // Timeout adicional para asegurar que todo esté cargado
   setTimeout(() => {
     console.log('Ejecutando timeout adicional...');
@@ -800,7 +810,7 @@ import Layout from '../layouts/Layout.astro';
       const isHidden = birthdayBanner.classList.contains('hidden');
       const hasActive = birthdayBanner.classList.contains('is-active');
       console.log('Timeout check - hidden:', isHidden, 'active:', hasActive);
-      
+
       if (!isHidden && !hasActive) {
         console.log('Forzando oculto desde timeout');
         birthdayBanner.classList.add('hidden');
