@@ -141,11 +141,6 @@ const isActive = (href: string) => {
 				opacity: 0;
 			}
 
-			.sidebar-open main,
-			.sidebar-open header {
-				transform: none;
-			}
-
 			.sidebar-open main {
 				opacity: 0.6;
 				filter: blur(4px);
@@ -168,7 +163,7 @@ const isActive = (href: string) => {
 				visibility: visible;
 			}
 
-			header, main, #sidebar-trigger {
+			main, #sidebar-trigger {
 				transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.5s ease, filter 0.5s ease;
 			}
 
@@ -279,155 +274,192 @@ const isActive = (href: string) => {
 		</style>
 	</head>
 	<body class="bg-black text-white selection:bg-wild-orange/50 selection:text-white overflow-x-hidden" style={`--primary: ${config.primary_color}; --secondary: ${config.secondary_color}; --wild-orange: ${config.primary_color}; --wild-red: ${config.secondary_color}; --tenant-primary: ${config.primary_color}; --tenant-secondary: ${config.secondary_color}; --tenant-glow: ${config.primary_color}33;`}>
-		<header class="fixed top-0 left-0 right-0 z-[1000] bg-black border-b-2 border-white shadow-2xl transition-all duration-500">
-			<div class="w-full mx-auto px-4 md:px-8 h-20 flex items-center justify-between gap-2">
-				<div class="flex items-center gap-2 md:gap-4 flex-shrink-0">
-					<button id="sidebar-trigger" class="p-2 text-white hover:text-wild-orange transition-all transform active:scale-90" aria-label="Abrir menú">
-						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+		<!-- Top Navigation Header Bar -->
+		<header class="top-header">
+			<div class="top-header-inner">
+				<div class="top-header-left">
+					<button id="sidebar-trigger" class="top-header-hamburger" aria-label="Abrir menú">
+						<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+							<line x1="3" y1="6" x2="21" y2="6"></line>
+							<line x1="3" y1="12" x2="21" y2="12"></line>
+							<line x1="3" y1="18" x2="21" y2="18"></line>
+						</svg>
 					</button>
-
-					<a href="/" class="flex flex-col items-start group min-w-max">
-						<div class="flex items-baseline gap-0.5">
-							<span class="allow-color text-xl md:text-2xl font-black tracking-tighter text-white italic leading-none group-hover:scale-105 transition-transform origin-left">WILD</span>
-							<span class="allow-color text-xl md:text-2xl font-black tracking-tighter text-wild-orange italic leading-none group-hover:scale-105 transition-transform origin-left">GVNG</span>
-						</div>
+					<a href="/" class="top-header-logo-link">
+						<img src="/wg_logo.png" alt="Wild Gvng" class="top-header-logo" />
+						<span class="top-header-brand">
+							<span class="top-header-brand-wild">WILD</span>
+							<span class="top-header-brand-gvng">GVNG</span>
+						</span>
 					</a>
 				</div>
-
-				<nav class="hidden lg:flex items-center gap-0.5 xl:gap-1 flex-1 justify-center">
-					{navItems.map(item => (
-						<a
-							href={item.href}
-							class={`px-2 xl:px-3 py-2 text-[9px] xl:text-[10px] font-black uppercase tracking-[0.15em] rounded-full transition-all duration-300 whitespace-nowrap ${isActive(item.href) ? 'text-wild-orange bg-white/10' : 'text-white hover:text-wild-orange hover:bg-white/10'}`}
-						>
-							<span class="flex items-center gap-1.5">
-								<svg class="w-3.5 h-3.5 xl:w-4 xl:h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-									{item.iconPaths.map(path => <path d={path} />)}
-								</svg>
-								{item.label}
-							</span>
-						</a>
-					))}
-				</nav>
-
-				<div class="flex items-center gap-2 xl:gap-4 flex-shrink-0">
-					<!-- Header Action Icons -->
-					<div class="hidden sm:flex items-center gap-0.5 xl:gap-1 border-r-2 border-white pr-2 xl:pr-4">
-						<div class="relative group/pop">
-							<button class="popover-trigger p-2.5 text-white hover:text-wild-orange hover:bg-white/10 rounded-lg transition-all" data-target="location-popover">
-								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-							</button>
-							<div id="location-popover" class="popover">
-								<div class="popover-header">
-									<span class="popover-title">Ubicación Actual</span>
-									<span class="w-2 h-2 rounded-full bg-[var(--primary)] animate-pulse shadow-[0_0_10px_var(--primary)]"></span>
-								</div>
-								<div class="popover-content">
-									<div class="space-y-4">
-										<p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider text-center">Selecciona tu zona</p>
-										<div class="grid grid-cols-2 gap-2">
-											<button class="px-4 py-3 bg-white/5 border border-white/10 text-white text-[10px] font-black uppercase tracking-widest hover:bg-[var(--primary)] hover:text-black hover:border-[var(--primary)] transition-all rounded-lg group">
-												Torreón
-											</button>
-											<button class="px-4 py-3 bg-white/5 border border-white/10 text-white text-[10px] font-black uppercase tracking-widest hover:bg-[var(--primary)] hover:text-black hover:border-[var(--primary)] transition-all rounded-lg group">
-												Gómez
-											</button>
-											<button class="px-4 py-3 bg-white/5 border border-white/10 text-white text-[10px] font-black uppercase tracking-widest hover:bg-[var(--primary)] hover:text-black hover:border-[var(--primary)] transition-all rounded-lg group">
-												Lerdo
-											</button>
-											<button class="px-4 py-3 bg-white/5 border border-white/10 text-white text-[10px] font-black uppercase tracking-widest hover:bg-[var(--primary)] hover:text-black hover:border-[var(--primary)] transition-all rounded-lg group">
-												Monterrey
-											</button>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="relative group/pop">
-							<button class="popover-trigger p-2.5 text-white hover:text-wild-orange hover:bg-white/10 rounded-lg transition-all relative" data-target="wishlist-popover">
-								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-								<span class="hidden absolute top-1.5 right-1.5 w-4 h-4 bg-wild-orange text-black text-[10px] font-black rounded-full flex items-center justify-center shadow-lg shadow-wild-orange/40">0</span>
-							</button>
-									<div id="wishlist-popover" class="popover">
-										<div class="popover-header">
-											<span class="popover-title">Favoritos</span>
-										</div>
-										<div class="popover-content">
-											<div class="unauth-popover-msg hidden space-y-4 text-center py-4">
-												<p class="text-[10px] text-white uppercase font-black">Inicia sesión para ver tus favoritos</p>
-												<a href="/login" class="block w-full py-3 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-wild-orange transition-all">Entrar</a>
-											</div>
-											<div class="auth-popover-content hidden space-y-4">
-												<!-- Dynamic Content -->
-											</div>
-										</div>
-									</div>
-						</div>
-
-						<div class="relative group/pop">
-							<button class="popover-trigger p-2.5 text-white hover:text-wild-orange hover:bg-white/10 rounded-lg transition-all relative" data-target="cart-popover">
-								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-								<span class="hidden absolute top-1.5 right-1.5 w-4 h-4 bg-wild-orange text-black text-[10px] font-black rounded-full flex items-center justify-center shadow-lg shadow-wild-orange/40">0</span>
-							</button>
-							<div id="cart-popover" class="popover">
-								<div class="popover-header">
-									<span class="popover-title">Tu Carrito</span>
-								</div>
-								<div class="popover-content">
-									<div class="unauth-popover-msg hidden space-y-4 text-center py-4">
-										<p class="text-[10px] text-white uppercase font-black">Inicia sesión para ver tu carrito</p>
-										<a href="/login" class="block w-full py-3 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-wild-orange transition-all">Entrar</a>
-									</div>
-									<div class="auth-popover-content hidden space-y-6">
-										<!-- Dynamic Content -->
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="flex items-center gap-4 auth-actions-container">
-						<div class="relative group/pop">
-							<a href="/login" class="hidden sm:block text-[12px] font-black uppercase tracking-[0.15em] text-white hover:text-wild-orange transition-all py-4">Entrar</a>
-							<div class="popover w-64">
-								<div class="popover-header"><span class="popover-title text-center block w-full">Tu Cuenta</span></div>
-								<div class="popover-content space-y-4">
-									<p class="text-[10px] text-white uppercase font-black text-center">Accede a contenido exclusivo</p>
-									<a href="/login" class="block w-full py-3 bg-white text-black text-center text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-wild-orange transition-all">Iniciar Sesión</a>
-									<a href="/perfil" class="block text-center text-[10px] text-white hover:text-wild-orange font-black uppercase tracking-widest">Mi Perfil</a>
-								</div>
-							</div>
-						</div>
-
-						<div class="relative group/pop">
-							<a href="/registro" class="group relative px-5 md:px-8 py-3 bg-white text-black text-[10px] md:text-[12px] font-black uppercase tracking-[0.15em] rounded-xl md:rounded-2xl hover:bg-wild-orange transition-all duration-500 transform hover:-translate-y-1 shadow-2xl">
-								<span class="relative z-10">Unirse</span>
-								<div class="absolute inset-0 rounded-xl md:rounded-2xl bg-gradient-to-r from-wild-orange to-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-0"></div>
-							</a>
-							<div class="popover w-72">
-								<div class="popover-header"><span class="popover-title text-center block w-full">Sé parte de la Crew</span></div>
-								<div class="popover-content space-y-4">
-									<ul class="space-y-2">
-										<li class="flex items-center justify-center gap-2 text-[10px] text-white font-black uppercase tracking-widest"><span class="text-wild-orange">âœ“</span> Acceso anticipado</li>
-										<li class="flex items-center justify-center gap-2 text-[10px] text-white font-black uppercase tracking-widest"><span class="text-wild-orange">âœ“</span> Merch exclusiva</li>
-										<li class="flex items-center justify-center gap-2 text-[10px] text-white font-black uppercase tracking-widest"><span class="text-wild-orange">âœ“</span> Eventos VIP</li>
-									</ul>
-									<a href="/registro" class="block w-full py-3 bg-wild-orange text-white text-center text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-white hover:text-black transition-all">Registrarse Ahora</a>
-								</div>
-							</div>
-						</div>
-					</div>
+				<div class="top-header-right">
+					<a href="/login" class="top-header-login">Entrar</a>
+					<a href="/registro" class="top-header-register">Unirse</a>
 				</div>
 			</div>
 		</header>
+
+		<style>
+			.top-header {
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				height: 56px;
+				z-index: 3000;
+				background: rgba(0, 0, 0, 0.65);
+				backdrop-filter: blur(16px);
+				-webkit-backdrop-filter: blur(16px);
+				border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+				transition: background 0.3s ease;
+			}
+
+			.top-header-inner {
+				max-width: 1440px;
+				margin: 0 auto;
+				padding: 0 16px;
+				height: 100%;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+			}
+
+			.top-header-left {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+			}
+
+			.top-header-hamburger {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 38px;
+				height: 38px;
+				color: #fff;
+				background: rgba(255, 255, 255, 0.06);
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				border-radius: 10px;
+				cursor: pointer;
+				transition: all 0.2s ease;
+				flex-shrink: 0;
+			}
+
+			.top-header-hamburger:hover {
+				color: var(--wild-orange, #c98300);
+				background: rgba(201, 131, 0, 0.1);
+				border-color: rgba(201, 131, 0, 0.3);
+			}
+
+			.top-header-hamburger:active {
+				transform: scale(0.92);
+			}
+
+			.top-header-logo-link {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				text-decoration: none;
+			}
+
+			.top-header-logo {
+				width: 32px;
+				height: 32px;
+				object-fit: contain;
+				flex-shrink: 0;
+			}
+
+			.top-header-brand {
+				display: flex;
+				align-items: baseline;
+				gap: 1px;
+			}
+
+			.top-header-brand-wild {
+				font-size: 18px;
+				font-weight: 900;
+				letter-spacing: -0.04em;
+				font-style: italic;
+				color: #fff;
+				line-height: 1;
+			}
+
+			.top-header-brand-gvng {
+				font-size: 18px;
+				font-weight: 900;
+				letter-spacing: -0.04em;
+				font-style: italic;
+				color: var(--wild-orange, #c98300);
+				line-height: 1;
+			}
+
+			.top-header-right {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+			}
+
+			.top-header-login {
+				padding: 8px 16px;
+				font-size: 11px;
+				font-weight: 900;
+				text-transform: uppercase;
+				letter-spacing: 0.12em;
+				color: #fff;
+				text-decoration: none;
+				border-radius: 8px;
+				transition: all 0.2s ease;
+			}
+
+			.top-header-login:hover {
+				color: var(--wild-orange, #c98300);
+				background: rgba(201, 131, 0, 0.1);
+			}
+
+			.top-header-register {
+				padding: 8px 18px;
+				font-size: 11px;
+				font-weight: 900;
+				text-transform: uppercase;
+				letter-spacing: 0.12em;
+				color: #000;
+				background: #fff;
+				text-decoration: none;
+				border-radius: 8px;
+				transition: all 0.2s ease;
+			}
+
+			.top-header-register:hover {
+				background: var(--wild-orange, #c98300);
+				color: #fff;
+			}
+
+			@media (max-width: 480px) {
+				.top-header-inner {
+					padding: 0 12px;
+				}
+				.top-header-brand-wild,
+				.top-header-brand-gvng {
+					font-size: 15px;
+				}
+				.top-header-login {
+					padding: 6px 10px;
+					font-size: 10px;
+				}
+				.top-header-register {
+					padding: 6px 12px;
+					font-size: 10px;
+				}
+			}
+		</style>
 
 		<div id="sidebar-overlay"></div>
 		<SidebarLeft />
 		<RadioFloating />
 		<SpotifyFloating />
 
-		<main class="pt-20">
+		<main class="pt-14">
 			<slot />
 		</main>
 
