@@ -242,22 +242,28 @@ const updateAuthUI = async () => {
   document.documentElement.setAttribute("data-role", role || "");
 
   if (session) {
+    console.log(
+      "[WG] session found, fetching profile for user:",
+      session.user.id,
+    );
     const { data: profile, error: profileError } = await supabase
       .from("profiles")
       .select("*")
       .eq("id", session.user.id)
       .single();
 
+    console.log("[WG] profile fetch:", {
+      hasProfile: !!profile,
+      profileError: profileError?.message,
+      profileNombre: (profile as any)?.nombre,
+    });
+
     if (profileError) {
+      console.log("[WG] calling ensureProfile...");
       await ensureProfile(session);
     }
 
-    document
-      .querySelectorAll(".unauth-popover-msg")
-      .forEach((el) => el.classList.add("hidden"));
-    document
-      .querySelectorAll(".auth-popover-content")
-      .forEach((el) => el.classList.remove("hidden"));
+    console.log("[WG] authContainer found:", !!authContainer);
 
     if (authContainer) {
       authContainer.innerHTML = `
@@ -314,6 +320,7 @@ const updateAuthUI = async () => {
       .querySelectorAll(".auth-popover-content")
       .forEach((el) => el.classList.remove("hidden"));
   } else {
+    console.log("[WG] NO session found, showing unauth state");
     document
       .querySelectorAll(".unauth-popover-msg")
       .forEach((el) => el.classList.remove("hidden"));
@@ -323,6 +330,7 @@ const updateAuthUI = async () => {
   }
 
   document.body.setAttribute("data-auth-loaded", "true");
+  console.log("[WG] updateAuthUI complete, data-auth-loaded set");
 };
 
 // --- Popover Logic ---
