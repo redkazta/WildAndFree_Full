@@ -15,6 +15,7 @@ const modules = [
   { id: 'tags', label: 'Tags', icon: '🏷️', href: '/erp/tags' },
   { id: 'eventos', label: 'Eventos', icon: '🎤', href: '/erp/eventos' },
   { id: 'versus', label: 'Versus', icon: '⚔️', href: '/erp/versus' },
+  { id: 'correos', label: 'Correos', icon: '📧', href: '/erp/correos' },
   { id: 'configuracion', label: 'Config', icon: '⚙️', href: '/erp/configuracion' },
 ];
 ---
@@ -26,6 +27,9 @@ const modules = [
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title} | Wild Gvng ERP</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
 </head>
 <body class="erp-body">
   <!-- Sidebar -->
@@ -79,7 +83,7 @@ const modules = [
       min-height: 100vh;
       background: #0a0a0a;
       color: #e5e5e5;
-      font-family: 'Inter', system-ui, sans-serif;
+      font-family: 'Outfit', system-ui, sans-serif;
     }
 
     /* Sidebar */
@@ -422,6 +426,7 @@ const modules = [
       'eventos': 'events.manage',
       'versus': 'versus.manage',
       'configuracion': 'config.view',
+      'correos': 'config.manage',
       'pedidos': 'orders.view'
     };
 

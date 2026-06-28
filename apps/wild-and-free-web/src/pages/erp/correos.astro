@@ -1,0 +1,111 @@
+---
+import ErpLayout from '../../layouts/ErpLayout.astro';
+---
+
+<ErpLayout title="Correos" activeModule="correos">
+  <h2 style="margin:0 0 12px;font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.5);">Enviar Correo</h2>
+
+  <div class="erp-card" style="max-width:640px;">
+    <form id="emailForm" style="display:flex;flex-direction:column;gap:16px;">
+      <div>
+        <label style="display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.4);margin-bottom:6px;">Para (email)</label>
+        <input type="email" id="emailTo" required placeholder="usuario@email.com"
+          style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;font-size:13px;outline:none;transition:border-color 0.15s;"
+          onfocus="this.style.borderColor='#C98300'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'" />
+      </div>
+
+      <div>
+        <label style="display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.4);margin-bottom:6px;">Asunto</label>
+        <input type="text" id="emailSubject" required placeholder="Asunto del correo"
+          style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;font-size:13px;outline:none;transition:border-color 0.15s;"
+          onfocus="this.style.borderColor='#C98300'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'" />
+      </div>
+
+      <div>
+        <label style="display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.4);margin-bottom:6px;">Cuerpo (HTML)</label>
+        <textarea id="emailBody" required rows="8" placeholder="<h1>Hola</h1><p>Mensaje...</p>"
+          style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;font-size:13px;font-family:monospace;outline:none;resize:vertical;transition:border-color 0.15s;"
+          onfocus="this.style.borderColor='#C98300'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'" />
+      </div>
+
+      <div style="display:flex;gap:10px;align-items:center;">
+        <button type="submit" class="erp-btn erp-btn--primary" id="sendBtn">📧 Enviar</button>
+        <span id="emailStatus" style="font-size:12px;"></span>
+      </div>
+    </form>
+  </div>
+
+  <h2 style="margin:32px 0 12px;font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.5);">Plantillas Rápidas</h2>
+  <div style="display:flex;flex-wrap:wrap;gap:10px;">
+    <button class="erp-btn erp-btn--ghost" onclick="loadTemplate('bienvenida')">👋 Bienvenida</button>
+    <button class="erp-btn erp-btn--ghost" onclick="loadTemplate('pedido')">📦 Pedido Confirmado</button>
+    <button class="erp-btn erp-btn--ghost" onclick="loadTemplate('contenido')">🎬 Contenido Aprobado</button>
+    <button class="erp-btn erp-btn--ghost" onclick="loadTemplate('verificacion')">✅ Verificación Artista</button>
+  </div>
+</ErpLayout>
+
+<script>
+  const templates: Record<string, { subject: string; html: string }> = {
+    bienvenida: {
+      subject: 'Bienvenido a Wild Gvng 🐺',
+      html: '<div style="font-family:system-ui;background:#0a0a0a;color:#fff;padding:40px;text-align:center;"><h1 style="color:#C98300;font-size:28px;">WILD GVNG</h1><p style="color:rgba(255,255,255,0.7);margin:20px 0;">Tu cuenta fue creada exitosamente.</p><p style="color:rgba(255,255,255,0.5);font-size:14px;">Bienvenido a la crew.</p></div>'
+    },
+    pedido: {
+      subject: 'Tu pedido fue confirmado ✅',
+      html: '<div style="font-family:system-ui;background:#0a0a0a;color:#fff;padding:40px;text-align:center;"><h1 style="color:#C98300;font-size:24px;">Pedido Confirmado</h1><p style="color:rgba(255,255,255,0.7);margin:20px 0;">Tu pedido está siendo procesado.</p><p style="color:rgba(255,255,255,0.5);font-size:14px;">Te notificaremos cuando sea enviado.</p></div>'
+    },
+    contenido: {
+      subject: 'Tu contenido fue publicado 🎬',
+      html: '<div style="font-family:system-ui;background:#0a0a0a;color:#fff;padding:40px;text-align:center;"><h1 style="color:#C98300;font-size:24px;">Contenido Publicado</h1><p style="color:rgba(255,255,255,0.7);margin:20px 0;">Tu contenido fue aprobado y ya está visible.</p></div>'
+    },
+    verificacion: {
+      subject: 'Verificación de artista',
+      html: '<div style="font-family:system-ui;background:#0a0a0a;color:#fff;padding:40px;text-align:center;"><h1 style="color:#C98300;font-size:24px;">Solicitud de Verificación</h1><p style="color:rgba(255,255,255,0.7);margin:20px 0;">Tu solicitud está siendo revisada.</p><p style="color:rgba(255,255,255,0.5);font-size:14px;">Te contactaremos pronto.</p></div>'
+    },
+  };
+
+  (window as any).loadTemplate = (key: string) => {
+    const t = templates[key];
+    if (!t) return;
+    (document.getElementById('emailSubject') as HTMLInputElement).value = t.subject;
+    (document.getElementById('emailBody') as HTMLTextAreaElement).value = t.html;
+  };
+
+  document.getElementById('emailForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('sendBtn') as HTMLButtonElement;
+    const status = document.getElementById('emailStatus')!;
+    const to = (document.getElementById('emailTo') as HTMLInputElement).value;
+    const subject = (document.getElementById('emailSubject') as HTMLInputElement).value;
+    const html = (document.getElementById('emailBody') as HTMLTextAreaElement).value;
+
+    btn.disabled = true;
+    btn.textContent = '⏳ Enviando...';
+    status.textContent = '';
+    status.style.color = 'rgba(255,255,255,0.4)';
+
+    try {
+      const res = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ to, subject, html }),
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        status.textContent = '✅ Enviado correctamente';
+        status.style.color = '#00ff88';
+        (document.getElementById('emailForm') as HTMLFormElement).reset();
+      } else {
+        status.textContent = `❌ Error: ${data.error}`;
+        status.style.color = '#ff4444';
+      }
+    } catch (err: any) {
+      status.textContent = `❌ Error de red: ${err.message}`;
+      status.style.color = '#ff4444';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '📧 Enviar';
+    }
+  });
+</script>
