@@ -30,7 +30,8 @@ const isActive = (href: string) => {
   <div class="p-8 flex flex-col h-full relative">
     <!-- Header Sidebar -->
     <div class="flex items-center justify-between mb-12">
-      <div class="py-2">
+      <div class="py-2 flex items-center gap-3">
+        <img src="/assets/wildgvng-logo.svg" alt="Wild Gvng Logo" class="w-12 h-12 md:w-14 md:h-14 object-contain" />
         <span class="text-2xl font-black tracking-tighter italic"><span class="text-wild-orange">WILD</span> <span class="text-white">GVNG</span></span>
       </div>
       <button id="sidebar-close" class="p-2 text-white hover:text-wild-orange transition-all duration-300 group" aria-label="Cerrar menú">
@@ -44,8 +45,8 @@ const isActive = (href: string) => {
         <h4 class="text-[12px] font-black uppercase tracking-[0.4em] text-wild-orange border-l-4 border-wild-orange pl-4">Explorar</h4>
         <nav class="flex flex-col gap-1">
           {navItems.map(item => (
-            <a 
-              href={item.href} 
+            <a
+              href={item.href}
               class={`group flex items-center gap-4 py-4 px-4 text-xs font-black uppercase tracking-widest rounded-xl transition-all ${isActive(item.href) ? 'text-wild-orange bg-white/10' : 'text-white hover:text-wild-orange hover:bg-white/10'}`}
             >
               <span class={`w-2 h-2 rounded-full transition-colors ${isActive(item.href) ? 'bg-wild-orange' : 'bg-white group-hover:bg-wild-orange'}`}></span>

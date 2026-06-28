@@ -31,21 +31,17 @@ class SidebarDrawer extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    width: 40,
-                    height: 40,
+                    width: 50,
+                    height: 50,
+                    padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
-                      color: AppTheme.primary,
+                      color: AppTheme.primary.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: AppTheme.primary, width: 1),
                     ),
-                    child: const Center(
-                      child: Text(
-                        'W',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 18,
-                        ),
-                      ),
+                    child: Image.asset(
+                      'assets/wildgvng-logo.svg',
+                      fit: BoxFit.contain,
                     ),
                   ),
                   const SizedBox(height: 12),
