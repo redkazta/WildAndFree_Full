@@ -34,14 +34,13 @@ class DashboardService {
     if (cached != null) return cached;
 
     try {
-      // Fetch counts in parallel where possible
       final results = await Future.wait([
         _countTable('profiles'),
-        _countTable('profiles', filter: 'is_artist', value: true),
-        _countTable('orders', filter: 'status', value: 'pending'),
-        _countTable('content_items', filter: 'status', value: 'pending'),
+        _countTable('profiles', filter: 'is_verified_artist', value: true),
+        _countTable('store_orders', filter: 'status', value: 'pending'),
+        _countTable('exclusive_content', filter: 'status', value: 'pending'),
         _countTable('events'),
-        _countTable('products'),
+        _countTable('store_products'),
         _getTotalTokens(),
         _getTotalRevenue(),
       ]);
@@ -84,10 +83,10 @@ class DashboardService {
   static Future<int> _getTotalTokens() async {
     try {
       final data = await _client
-          .from('profiles')
-          .select('tokens');
+          .from('user_tokens')
+          .select('balance');
       final list = data as List;
-      return list.fold<int>(0, (sum, e) => sum + ((e['tokens'] as int?) ?? 0));
+      return list.fold<int>(0, (sum, e) => sum + ((e['balance'] as int?) ?? 0));
     } catch (e) {
       return 0;
     }
@@ -96,11 +95,11 @@ class DashboardService {
   static Future<int> _getTotalRevenue() async {
     try {
       final data = await _client
-          .from('orders')
-          .select('total_amount');
+          .from('store_orders')
+          .select('total');
       final list = data as List;
       return list.fold<int>(
-          0, (sum, e) => sum + ((e['total_amount'] as int?) ?? 0));
+          0, (sum, e) => sum + ((e['total'] as int?) ?? 0));
     } catch (e) {
       return 0;
     }

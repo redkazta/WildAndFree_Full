@@ -15,9 +15,9 @@ class OrdersService {
   }) async {
     try {
       final data = await SupabaseService.fetchCached(
-        table: 'orders',
+        table: 'store_orders',
         cacheKey: 'orders_${status ?? "all"}_$search',
-        select: '*, profiles:user_id(display_name, email)',
+        select: '*, profiles:user_id(nombre, username)',
         filters: status != null ? {'status': status} : null,
         orderBy: 'created_at',
         ascending: false,
@@ -27,8 +27,8 @@ class OrdersService {
 
       return data.map((json) {
         final profile = json.remove('profiles') as Map<String, dynamic>?;
-        json['user_name'] = profile?['display_name'];
-        json['user_email'] = profile?['email'];
+        json['user_name'] = profile?['nombre'];
+        json['user_email'] = profile?['username'];
         return Order.fromJson(json);
       }).toList();
     } catch (e) {
@@ -39,14 +39,14 @@ class OrdersService {
   static Future<Order?> getOrderById(String id) async {
     try {
       final data = await SupabaseService.fetchById(
-        table: 'orders',
+        table: 'store_orders',
         id: id,
-        select: '*, profiles:user_id(display_name, email)',
+        select: '*, profiles:user_id(nombre, username)',
       );
       if (data == null) return null;
       final profile = data.remove('profiles') as Map<String, dynamic>?;
-      data['user_name'] = profile?['display_name'];
-      data['user_email'] = profile?['email'];
+      data['user_name'] = profile?['nombre'];
+      data['user_email'] = profile?['username'];
       return Order.fromJson(data);
     } catch (e) {
       rethrow;
@@ -56,7 +56,7 @@ class OrdersService {
   static Future<Order> updateOrderStatus(String id, String status) async {
     try {
       final data = await SupabaseService.update(
-        table: 'orders',
+        table: 'store_orders',
         id: id,
         data: {'status': status},
       );
@@ -69,7 +69,7 @@ class OrdersService {
   static Future<Order> updateOrder(String id, Map<String, dynamic> updates) async {
     try {
       final data = await SupabaseService.update(
-        table: 'orders',
+        table: 'store_orders',
         id: id,
         data: updates,
       );
@@ -87,7 +87,6 @@ class OrdersService {
       );
       return (data as num?)?.toInt() ?? 0;
     } catch (e) {
-      // Fallback: fetch and count
       final orders = await getOrders(status: status, limit: 9999);
       return orders.length;
     }

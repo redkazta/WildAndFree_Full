@@ -1,32 +1,26 @@
 class Event {
   final String id;
-  final String title;
+  final String name;
   final String? description;
-  final String type; // concert, workshop, battle, meetup, stream
-  final DateTime startDate;
-  final DateTime? endDate;
+  final String eventType;
+  final DateTime eventDate;
   final String? location;
-  final String? streamUrl;
-  final int? maxAttendees;
-  final int currentAttendees;
-  final int? tokenReward;
+  final String? imageUrl;
   final bool isActive;
+  final String? createdBy;
   final DateTime createdAt;
   final DateTime updatedAt;
 
   Event({
     required this.id,
-    required this.title,
+    required this.name,
     this.description,
-    this.type = 'meetup',
-    required this.startDate,
-    this.endDate,
+    this.eventType = 'other',
+    required this.eventDate,
     this.location,
-    this.streamUrl,
-    this.maxAttendees,
-    this.currentAttendees = 0,
-    this.tokenReward,
+    this.imageUrl,
     this.isActive = true,
+    this.createdBy,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -34,20 +28,15 @@ class Event {
   factory Event.fromJson(Map<String, dynamic> json) {
     return Event(
       id: json['id'] as String,
-      title: json['title'] as String? ?? '',
+      name: json['name'] as String? ?? '',
       description: json['description'] as String?,
-      type: json['type'] as String? ?? 'meetup',
-      startDate: DateTime.tryParse(json['start_date'] as String? ?? '') ??
+      eventType: json['event_type'] as String? ?? 'other',
+      eventDate: DateTime.tryParse(json['event_date'] as String? ?? '') ??
           DateTime.now(),
-      endDate: json['end_date'] != null
-          ? DateTime.tryParse(json['end_date'] as String)
-          : null,
       location: json['location'] as String?,
-      streamUrl: json['stream_url'] as String?,
-      maxAttendees: json['max_attendees'] as int?,
-      currentAttendees: json['current_attendees'] as int? ?? 0,
-      tokenReward: json['token_reward'] as int?,
+      imageUrl: json['image_url'] as String?,
       isActive: json['is_active'] as bool? ?? true,
+      createdBy: json['created_by'] as String?,
       createdAt: DateTime.tryParse(json['created_at'] as String? ?? '') ??
           DateTime.now(),
       updatedAt: DateTime.tryParse(json['updated_at'] as String? ?? '') ??
@@ -58,31 +47,19 @@ class Event {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'title': title,
+      'name': name,
       'description': description,
-      'type': type,
-      'start_date': startDate.toIso8601String(),
-      'end_date': endDate?.toIso8601String(),
+      'event_type': eventType,
+      'event_date': eventDate.toIso8601String(),
       'location': location,
-      'stream_url': streamUrl,
-      'max_attendees': maxAttendees,
-      'current_attendees': currentAttendees,
-      'token_reward': tokenReward,
+      'image_url': imageUrl,
       'is_active': isActive,
+      'created_by': createdBy,
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
     };
   }
 
-  bool get isUpcoming => startDate.isAfter(DateTime.now());
-  bool get isLive =>
-      startDate.isBefore(DateTime.now()) &&
-      (endDate?.isAfter(DateTime.now()) ?? true);
-  bool get isPast =>
-      endDate != null && endDate!.isBefore(DateTime.now());
-
-  double get attendanceRate =>
-      maxAttendees != null && maxAttendees! > 0
-          ? currentAttendees / maxAttendees!
-          : 0;
+  bool get isUpcoming => eventDate.isAfter(DateTime.now());
+  bool get isPast => eventDate.isBefore(DateTime.now());
 }

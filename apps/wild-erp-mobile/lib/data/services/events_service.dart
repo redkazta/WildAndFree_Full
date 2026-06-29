@@ -14,7 +14,7 @@ class EventsService {
   }) async {
     try {
       final filters = <String, dynamic>{};
-      if (type != null) filters['type'] = type;
+      if (type != null) filters['event_type'] = type;
       if (isActive != null) filters['is_active'] = isActive;
 
       final data = await SupabaseService.fetchCached(
@@ -22,7 +22,7 @@ class EventsService {
         cacheKey: 'events_${type ?? "all"}_${isActive ?? "all"}',
         select: '*',
         filters: filters.isNotEmpty ? filters : null,
-        orderBy: 'start_date',
+        orderBy: 'event_date',
         ascending: true,
         limit: limit,
         offset: offset,

@@ -208,18 +208,18 @@ class _EventsScreenState extends State<EventsScreen> {
                                 width: 40,
                                 height: 40,
                                 decoration: BoxDecoration(
-                                  color: _getEventColor(event.type)
+                                  color: _getEventColor(event.eventType)
                                       .withAlpha(20),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Icon(
-                                  _getEventIcon(event.type),
-                                  color: _getEventColor(event.type),
+                                  _getEventIcon(event.eventType),
+                                  color: _getEventColor(event.eventType),
                                   size: 20,
                                 ),
                               ),
                               title: Text(
-                                event.title,
+                                event.name,
                                 style: const TextStyle(
                                   color: AppTheme.textPrimary,
                                   fontSize: 14,
@@ -231,7 +231,7 @@ class _EventsScreenState extends State<EventsScreen> {
                                 children: [
                                   const SizedBox(height: 4),
                                   Text(
-                                    '${event.type.toUpperCase()} · ${Formatters.formatDate(event.startDate)}',
+                                    '${event.eventType.toUpperCase()} · ${Formatters.formatDate(event.eventDate)}',
                                     style: const TextStyle(
                                       color: AppTheme.textMuted,
                                       fontSize: 12,
@@ -280,7 +280,7 @@ class _EventsScreenState extends State<EventsScreen> {
                                       context: context,
                                       title: 'Eliminar Evento',
                                       message:
-                                          '¿Eliminar "${event.title}"?',
+                                          '¿Eliminar "${event.name}"?',
                                       confirmLabel: 'Eliminar',
                                       confirmColor: AppTheme.error,
                                     );
@@ -304,12 +304,10 @@ class _EventsScreenState extends State<EventsScreen> {
     switch (type) {
       case 'concert':
         return AppTheme.primary;
-      case 'workshop':
-        return Colors.blue;
       case 'battle':
         return AppTheme.error;
-      case 'stream':
-        return Colors.purple;
+      case 'meet_greet':
+        return Colors.blue;
       default:
         return AppTheme.accent;
     }
@@ -319,12 +317,10 @@ class _EventsScreenState extends State<EventsScreen> {
     switch (type) {
       case 'concert':
         return Icons.music_note;
-      case 'workshop':
-        return Icons.school_outlined;
       case 'battle':
         return Icons.sports_martial_arts;
-      case 'stream':
-        return Icons.live_tv;
+      case 'meet_greet':
+        return Icons.people_outline;
       default:
         return Icons.event_outlined;
     }
