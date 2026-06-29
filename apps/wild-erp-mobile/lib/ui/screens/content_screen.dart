@@ -32,7 +32,14 @@ class _ContentScreenState extends State<ContentScreen> {
         title: const Text('Contenido'),
         flexibleSpace: Container(
           decoration: const BoxDecoration(
-            gradient: AppTheme.appBarGradient,
+            gradient: LinearGradient(
+              colors: [Color(0xFF0A0A0A), Color(0xFF0D0D0D), Color(0xFF0A0A0A)],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+            border: Border(
+              bottom: BorderSide(color: AppTheme.borderGlow, width: 0.5),
+            ),
           ),
         ),
         actions: [
@@ -65,14 +72,6 @@ class _ContentScreenState extends State<ContentScreen> {
                     style: TextStyle(
                       color: AppTheme.textSecondary,
                       fontSize: 16,
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'El contenido pendiente aparecerá aquí',
-                    style: TextStyle(
-                      color: AppTheme.textMuted,
-                      fontSize: 13,
                     ),
                   ),
                 ],
@@ -127,149 +126,150 @@ class _ContentScreenState extends State<ContentScreen> {
                     itemBuilder: (context, index) {
                       final item = items[index];
                       return Container(
-                                        margin: const EdgeInsets.symmetric(
-                                            horizontal: 16, vertical: 4),
-                                        decoration: AppTheme.cardDecoration,
-                                        padding: const EdgeInsets.all(16),
-                                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Container(
-                                    width: 36,
-                                    height: 36,
-                                    decoration: BoxDecoration(
-                                      color: AppTheme.primary.withAlpha(20),
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Icon(
-                                      _getContentIcon(item.type),
-                                      color: AppTheme.primary,
-                                      size: 18,
-                                    ),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 4),
+                        decoration: AppTheme.cardDecoration,
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  width: 36,
+                                  height: 36,
+                                  decoration: BoxDecoration(
+                                    color: AppTheme.primary.withAlpha(20),
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          item.title,
-                                          style: const TextStyle(
-                                            color: AppTheme.textPrimary,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        Text(
-                                          '${item.userName ?? "Desconocido"} · ${Formatters.timeAgo(item.createdAt)}',
-                                          style: const TextStyle(
-                                            color: AppTheme.textMuted,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                  child: Icon(
+                                    _getContentIcon(item.type),
+                                    color: AppTheme.primary,
+                                    size: 18,
                                   ),
-                                  StatusBadge.fromStatus(item.status),
-                                ],
-                              ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        item.title,
+                                        style: const TextStyle(
+                                          color: AppTheme.textPrimary,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      Text(
+                                        '${item.userName ?? "Desconocido"} · ${Formatters.timeAgo(item.createdAt)}',
+                                        style: const TextStyle(
+                                          color: AppTheme.textMuted,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                StatusBadge.fromStatus(item.status),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+                            Row(
+                              children: [
+                                Icon(Icons.favorite_outline,
+                                    size: 14, color: AppTheme.textMuted),
+                                const SizedBox(width: 4),
+                                Text('${item.likes}',
+                                    style: const TextStyle(
+                                        color: AppTheme.textMuted,
+                                        fontSize: 12)),
+                                const SizedBox(width: 12),
+                                Icon(Icons.visibility_outlined,
+                                    size: 14, color: AppTheme.textMuted),
+                                const SizedBox(width: 4),
+                                Text('${item.views}',
+                                    style: const TextStyle(
+                                        color: AppTheme.textMuted,
+                                        fontSize: 12)),
+                                const Spacer(),
+                                Text(item.type.toUpperCase(),
+                                    style: const TextStyle(
+                                        color: AppTheme.textMuted,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w600)),
+                              ],
+                            ),
+                            if (item.isPending) ...[
                               const SizedBox(height: 12),
                               Row(
                                 children: [
-                                  Icon(Icons.favorite_outline,
-                                      size: 14, color: AppTheme.textMuted),
-                                  const SizedBox(width: 4),
-                                  Text('${item.likes}',
-                                      style: const TextStyle(
-                                          color: AppTheme.textMuted,
-                                          fontSize: 12)),
-                                  const SizedBox(width: 12),
-                                  Icon(Icons.visibility_outlined,
-                                      size: 14, color: AppTheme.textMuted),
-                                  const SizedBox(width: 4),
-                                  Text('${item.views}',
-                                      style: const TextStyle(
-                                          color: AppTheme.textMuted,
-                                          fontSize: 12)),
-                                  const Spacer(),
-                                  Text(item.type.toUpperCase(),
-                                      style: const TextStyle(
-                                          color: AppTheme.textMuted,
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w600)),
+                                  Expanded(
+                                    child: OutlinedButton.icon(
+                                      onPressed: () async {
+                                        final confirmed =
+                                            await ConfirmDialog.show(
+                                          context: context,
+                                          title: 'Aprobar Contenido',
+                                          message:
+                                              '¿Aprobar "${item.title}"?',
+                                          confirmLabel: 'Aprobar',
+                                          confirmColor: AppTheme.accent,
+                                        );
+                                        if (confirmed && context.mounted) {
+                                          await provider
+                                              .approveContent(item.id);
+                                          if (context.mounted) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                content:
+                                                    Text('Contenido aprobado'),
+                                                backgroundColor:
+                                                    AppTheme.accent,
+                                              ),
+                                            );
+                                          }
+                                        }
+                                      },
+                                      icon: const Icon(Icons.check,
+                                          size: 16, color: AppTheme.accent),
+                                      label: const Text('Aprobar',
+                                          style: TextStyle(
+                                              color: AppTheme.accent)),
+                                      style: OutlinedButton.styleFrom(
+                                        side: BorderSide(
+                                            color: AppTheme.accent
+                                                .withAlpha(80)),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: OutlinedButton.icon(
+                                      onPressed: () {
+                                        _showRejectDialog(
+                                            context, provider, item.id);
+                                      },
+                                      icon: const Icon(Icons.close,
+                                          size: 16, color: AppTheme.error),
+                                      label: const Text('Rechazar',
+                                          style: TextStyle(
+                                              color: AppTheme.error)),
+                                      style: OutlinedButton.styleFrom(
+                                        side: BorderSide(
+                                            color: AppTheme.error
+                                                .withAlpha(80)),
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
-                              if (item.isPending) ...[
-                                const SizedBox(height: 12),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: OutlinedButton.icon(
-                                        onPressed: () async {
-                                          final confirmed =
-                                              await ConfirmDialog.show(
-                                            context: context,
-                                            title: 'Aprobar Contenido',
-                                            message:
-                                                '¿Aprobar "${item.title}"?',
-                                            confirmLabel: 'Aprobar',
-                                            confirmColor: AppTheme.accent,
-                                          );
-                                          if (confirmed && context.mounted) {
-                                            await provider
-                                                .approveContent(item.id);
-                                            if (context.mounted) {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                const SnackBar(
-                                                  content: Text(
-                                                      'Contenido aprobado'),
-                                                  backgroundColor:
-                                                      AppTheme.accent,
-                                                ),
-                                              );
-                                            }
-                                          }
-                                        },
-                                        icon: const Icon(Icons.check,
-                                            size: 16, color: AppTheme.accent),
-                                        label: const Text('Aprobar',
-                                            style: TextStyle(
-                                                color: AppTheme.accent)),
-                                        style: OutlinedButton.styleFrom(
-                                          side: BorderSide(
-                                              color: AppTheme.accent
-                                                  .withAlpha(80)),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Expanded(
-                                      child: OutlinedButton.icon(
-                                        onPressed: () {
-                                          _showRejectDialog(
-                                              context, provider, item.id);
-                                        },
-                                        icon: const Icon(Icons.close,
-                                            size: 16, color: AppTheme.error),
-                                        label: const Text('Rechazar',
-                                            style: TextStyle(
-                                                color: AppTheme.error)),
-                                        style: OutlinedButton.styleFrom(
-                                          side: BorderSide(
-                                              color: AppTheme.error
-                                                  .withAlpha(80)),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
                             ],
+                          ],
+                        ),
                       );
                     },
                   ),
@@ -328,11 +328,7 @@ class _ContentScreenState extends State<ContentScreen> {
       labelStyle: TextStyle(
         color: isSelected ? Colors.white : AppTheme.textSecondary,
         fontSize: 12,
-        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
       ),
-      backgroundColor: AppTheme.surfaceLight,
-      selectedShadowColor: AppTheme.primary.withAlpha(60),
-      elevation: 0,
     );
   }
 
