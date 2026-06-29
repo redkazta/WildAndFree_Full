@@ -98,9 +98,15 @@ class _VersusScreenState extends State<VersusScreen>
       drawer: const SidebarDrawer(currentRoute: '/versus'),
       appBar: AppBar(
         title: const Text('Versus'),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: AppTheme.appBarGradient,
+          ),
+        ),
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: AppTheme.primary,
+          indicatorWeight: 3,
           tabs: const [
             Tab(text: 'Freestylers'),
             Tab(text: 'Batallas'),
@@ -142,10 +148,10 @@ class _VersusScreenState extends State<VersusScreen>
         itemCount: _freestylers.length,
         itemBuilder: (context, index) {
           final fs = _freestylers[index];
-          return Card(
+          return Container(
             margin: const EdgeInsets.only(bottom: 8),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
+            decoration: AppTheme.cardDecoration,
+            padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -252,7 +258,6 @@ class _VersusScreenState extends State<VersusScreen>
                   ),
                 ],
               ),
-            ),
           );
         },
       ),
@@ -294,10 +299,10 @@ class _VersusScreenState extends State<VersusScreen>
         itemCount: _battles.length,
         itemBuilder: (context, index) {
           final battle = _battles[index];
-          return Card(
+          return Container(
             margin: const EdgeInsets.only(bottom: 8),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
+            decoration: AppTheme.cardDecoration,
+            padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -378,7 +383,6 @@ class _VersusScreenState extends State<VersusScreen>
                   ),
                 ],
               ),
-            ),
           );
         },
       ),

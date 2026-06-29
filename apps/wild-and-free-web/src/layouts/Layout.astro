@@ -275,23 +275,54 @@ const isActive = (href: string) => {
 				.sidebar-open #sidebar {
 					left: 0 !important;
 				}
+
+				/* Header mobile overrides */
+				.wg-header {
+					height: 56px !important;
+				}
+
+				.wg-header .wg-logo-img {
+					width: 20px !important;
+					height: 20px !important;
+				}
+
+				.wg-header .wg-wild-text,
+				.wg-header .wg-gvng-text {
+					font-size: 16px !important;
+				}
+
+				.wg-header .wg-right-section {
+					display: none !important;
+				}
+
+				.wg-header .wg-login-link {
+					display: inline-flex !important;
+				}
+
+				.wg-header .wg-login-btn {
+					display: none !important;
+				}
+
+				.wg-header .wg-actions-desktop {
+					display: none !important;
+				}
 			}
 		</style>
 	</head>
 	<body class="bg-black text-white selection:bg-wild-orange/50 selection:text-white overflow-x-hidden" style={`--primary: ${config.primary_color}; --secondary: ${config.secondary_color}; --wild-orange: ${config.primary_color}; --wild-red: ${config.secondary_color}; --tenant-primary: ${config.primary_color}; --tenant-secondary: ${config.secondary_color}; --tenant-glow: ${config.primary_color}33;`}>
-		<header class="fixed top-0 left-0 right-0 z-[1000] bg-black border-b-2 border-white shadow-2xl transition-all duration-500">
-			<div class="w-full mx-auto px-4 md:px-8 h-20 flex items-center justify-between gap-2">
-				<div class="flex items-center gap-2 md:gap-4 flex-shrink-0">
-					<button id="sidebar-trigger" class="p-2 text-white hover:text-wild-orange transition-all transform active:scale-90" aria-label="Abrir menú">
-						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-					</button>
+		<header class="fixed top-0 left-0 right-0 z-[1000] bg-black border-b-2 border-white shadow-2xl transition-all duration-500 wg-header">
+						<div class="w-full mx-auto px-4 md:px-8 h-20 flex items-center justify-between gap-2">
+							<div class="flex items-center gap-2 md:gap-4 flex-shrink-0">
+								<button id="sidebar-trigger" class="p-2 text-white hover:text-wild-orange transition-all transform active:scale-90" aria-label="Abrir menú">
+									<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+								</button>
 
-					<a href="/" class="flex items-center gap-0.5 group min-w-max">
-						<img src="/wg_logo.png" alt="Wild Gvng" class="w-7 h-7 object-contain flex-shrink-0" />
-						<span class="allow-color text-xl md:text-2xl font-black tracking-tighter text-white italic leading-none group-hover:scale-105 transition-transform origin-left">WILD</span>
-						<span class="allow-color text-xl md:text-2xl font-black tracking-tighter text-wild-orange italic leading-none group-hover:scale-105 transition-transform origin-left">GVNG</span>
-					</a>
-				</div>
+								<a href="/" class="flex items-center gap-0.5 group min-w-max">
+									<img src="/wg_logo.png" alt="Wild Gvng" class="w-7 h-7 object-contain flex-shrink-0 wg-logo-img" />
+									<span class="allow-color text-xl md:text-2xl font-black tracking-tighter text-white italic leading-none group-hover:scale-105 transition-transform origin-left wg-wild-text">WILD</span>
+									<span class="allow-color text-xl md:text-2xl font-black tracking-tighter text-wild-orange italic leading-none group-hover:scale-105 transition-transform origin-left wg-gvng-text">GVNG</span>
+								</a>
+							</div>
 
 				<nav class="hidden lg:flex items-center gap-0.5 xl:gap-1 flex-1 justify-center">
 					{navItems.map(item => (
@@ -309,9 +340,9 @@ const isActive = (href: string) => {
 					))}
 				</nav>
 
-				<div class="flex items-center gap-2 xl:gap-4 flex-shrink-0">
-					<!-- Header Action Icons -->
-					<div class="hidden sm:flex items-center gap-0.5 xl:gap-1 border-r-2 border-white pr-2 xl:pr-4">
+				<div class="flex items-center gap-2 xl:gap-4 flex-shrink-0 wg-right-section">
+										<!-- Header Action Icons -->
+										<div class="hidden sm:flex items-center gap-0.5 xl:gap-1 border-r-2 border-white pr-2 xl:pr-4 wg-actions-desktop">
 						<div class="relative group/pop">
 							<button class="popover-trigger p-2.5 text-white hover:text-wild-orange hover:bg-white/10 rounded-lg transition-all" data-target="location-popover">
 								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -371,9 +402,10 @@ const isActive = (href: string) => {
 					</div>
 
 					<div class="auth-actions-container">
-						<a href="/login" class="px-5 py-2 bg-white text-black text-[10px] xl:text-[11px] font-black uppercase tracking-[0.15em] rounded-full hover:bg-[var(--primary)] transition-all shadow-lg">Entrar</a>
-					</div>
-				</div>
+												<a href="/login" class="px-5 py-2 bg-white text-black text-[10px] xl:text-[11px] font-black uppercase tracking-[0.15em] rounded-full hover:bg-[var(--primary)] transition-all shadow-lg wg-login-btn">Entrar</a>
+												<a href="/login" class="text-[10px] font-black uppercase tracking-[0.15em] text-white hover:text-wild-orange transition-all wg-login-link" style="display:none;">Entrar</a>
+											</div>
+										</div>
 			</div>
 		</header>
 

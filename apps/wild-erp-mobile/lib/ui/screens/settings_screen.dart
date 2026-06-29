@@ -39,6 +39,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
       drawer: const SidebarDrawer(currentRoute: '/settings'),
       appBar: AppBar(
         title: const Text('Configuración'),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: AppTheme.appBarGradient,
+          ),
+        ),
       ),
       body: _isLoading
           ? const Center(
@@ -47,9 +52,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               padding: const EdgeInsets.all(16),
               children: [
                 // System info
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
+                Container(
+                  decoration: AppTheme.cardDecoration,
+                  padding: const EdgeInsets.all(16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -72,16 +77,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             '${CacheService.size} items'),
                       ],
                     ),
-                  ),
                 ),
 
                 const SizedBox(height: 16),
 
                 // Token economy
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
+                Container(
+                  decoration: AppTheme.cardDecoration,
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
@@ -134,15 +138,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                       ],
                     ),
-                  ),
                 ),
 
                 const SizedBox(height: 16),
 
                 // Quick stats
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
+                Container(
+                  decoration: AppTheme.cardDecoration,
+                  padding: const EdgeInsets.all(16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -165,16 +168,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             'Eventos totales', _stats.totalEvents.toString()),
                       ],
                     ),
-                  ),
                 ),
 
                 const SizedBox(height: 16),
 
                 // Actions
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
+                Container(
+                  decoration: AppTheme.cardDecoration,
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
@@ -225,7 +227,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                       ],
                     ),
-                  ),
                 ),
 
                 const SizedBox(height: 24),

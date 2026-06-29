@@ -48,7 +48,14 @@ class StatusBadge extends StatelessWidget {
         vertical: small ? 3 : 6,
       ),
       decoration: BoxDecoration(
-        color: colors.$1.withAlpha(30),
+        gradient: LinearGradient(
+          colors: [
+            colors.$1.withAlpha(25),
+            colors.$1.withAlpha(10),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: colors.$1.withAlpha(60)),
       ),
@@ -57,7 +64,7 @@ class StatusBadge extends StatelessWidget {
         style: TextStyle(
           color: colors.$1,
           fontSize: small ? 10 : 12,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w700,
           letterSpacing: 0.5,
         ),
       ),

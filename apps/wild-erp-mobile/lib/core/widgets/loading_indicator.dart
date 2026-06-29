@@ -14,21 +14,36 @@ class LoadingIndicator extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(
-            width: size,
-            height: size,
-            child: const CircularProgressIndicator(
-              strokeWidth: 2.5,
-              color: AppTheme.primary,
+          Container(
+            width: size + 16,
+            height: size + 16,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: AppTheme.primary.withAlpha(40),
+                  blurRadius: 12,
+                  spreadRadius: 2,
+                ),
+              ],
+            ),
+            child: SizedBox(
+              width: size,
+              height: size,
+              child: const CircularProgressIndicator(
+                strokeWidth: 2.5,
+                color: AppTheme.primary,
+              ),
             ),
           ),
           if (message != null) ...[
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
             Text(
               message!,
               style: const TextStyle(
                 color: AppTheme.textSecondary,
                 fontSize: 13,
+                letterSpacing: 0.3,
               ),
             ),
           ],

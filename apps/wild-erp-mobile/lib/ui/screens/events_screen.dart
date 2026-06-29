@@ -152,6 +152,11 @@ class _EventsScreenState extends State<EventsScreen> {
       drawer: const SidebarDrawer(currentRoute: '/events'),
       appBar: AppBar(
         title: const Text('Eventos'),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: AppTheme.appBarGradient,
+          ),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
@@ -195,8 +200,9 @@ class _EventsScreenState extends State<EventsScreen> {
                         itemCount: _events.length,
                         itemBuilder: (context, index) {
                           final event = _events[index];
-                          return Card(
+                          return Container(
                             margin: const EdgeInsets.only(bottom: 8),
+                            decoration: AppTheme.cardDecoration,
                             child: ListTile(
                               leading: Container(
                                 width: 40,

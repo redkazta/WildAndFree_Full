@@ -38,6 +38,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
       drawer: const SidebarDrawer(currentRoute: '/orders'),
       appBar: AppBar(
         title: const Text('Pedidos'),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: AppTheme.appBarGradient,
+          ),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh_outlined),
@@ -60,6 +65,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
                 prefixIcon: const Icon(Icons.search, size: 20),
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                filled: true,
+                fillColor: AppTheme.surfaceLight,
               ),
             ),
           ),
@@ -130,6 +137,14 @@ class _OrdersScreenState extends State<OrdersScreen> {
                             fontSize: 16,
                           ),
                         ),
+                        SizedBox(height: 8),
+                        Text(
+                          'Los pedidos aparecerán aquí',
+                          style: TextStyle(
+                            color: AppTheme.textMuted,
+                            fontSize: 13,
+                          ),
+                        ),
                       ],
                     ),
                   );
@@ -182,7 +197,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
       labelStyle: TextStyle(
         color: isSelected ? Colors.white : AppTheme.textSecondary,
         fontSize: 12,
+        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
       ),
+      backgroundColor: AppTheme.surfaceLight,
+      selectedShadowColor: AppTheme.primary.withAlpha(60),
+      elevation: 0,
     );
   }
 }

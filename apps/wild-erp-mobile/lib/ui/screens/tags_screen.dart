@@ -186,9 +186,15 @@ class _TagsScreenState extends State<TagsScreen>
       drawer: const SidebarDrawer(currentRoute: '/tags'),
       appBar: AppBar(
         title: const Text('Tags'),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: AppTheme.appBarGradient,
+          ),
+        ),
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: AppTheme.primary,
+          indicatorWeight: 3,
           tabs: const [
             Tab(text: 'Categorías'),
             Tab(text: 'Tags'),
@@ -237,8 +243,9 @@ class _TagsScreenState extends State<TagsScreen>
         itemCount: _categories.length,
         itemBuilder: (context, index) {
           final category = _categories[index];
-          return Card(
+          return Container(
             margin: const EdgeInsets.only(bottom: 8),
+            decoration: AppTheme.cardDecoration,
             child: ListTile(
               leading: Container(
                 width: 40,
@@ -307,8 +314,9 @@ class _TagsScreenState extends State<TagsScreen>
         itemCount: _tags.length,
         itemBuilder: (context, index) {
           final tag = _tags[index];
-          return Card(
+          return Container(
             margin: const EdgeInsets.only(bottom: 8),
+            decoration: AppTheme.cardDecoration,
             child: ListTile(
               leading: Container(
                 width: 40,

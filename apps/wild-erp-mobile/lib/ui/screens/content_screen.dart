@@ -30,6 +30,11 @@ class _ContentScreenState extends State<ContentScreen> {
       drawer: const SidebarDrawer(currentRoute: '/content'),
       appBar: AppBar(
         title: const Text('Contenido'),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: AppTheme.appBarGradient,
+          ),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh_outlined),
@@ -60,6 +65,14 @@ class _ContentScreenState extends State<ContentScreen> {
                     style: TextStyle(
                       color: AppTheme.textSecondary,
                       fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'El contenido pendiente aparecerá aquí',
+                    style: TextStyle(
+                      color: AppTheme.textMuted,
+                      fontSize: 13,
                     ),
                   ),
                 ],
@@ -113,12 +126,12 @@ class _ContentScreenState extends State<ContentScreen> {
                     itemCount: items.length,
                     itemBuilder: (context, index) {
                       final item = items[index];
-                      return Card(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 4),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
+                      return Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 16, vertical: 4),
+                                        decoration: AppTheme.cardDecoration,
+                                        padding: const EdgeInsets.all(16),
+                                        child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
@@ -274,10 +287,10 @@ class _ContentScreenState extends State<ContentScreen> {
   Widget _buildCountBadge(String label, int count, Color color) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
-          color: color.withAlpha(20),
-          borderRadius: BorderRadius.circular(8),
+          color: color.withAlpha(15),
+          borderRadius: BorderRadius.circular(10),
           border: Border.all(color: color.withAlpha(40)),
         ),
         child: Column(
@@ -317,7 +330,11 @@ class _ContentScreenState extends State<ContentScreen> {
       labelStyle: TextStyle(
         color: isSelected ? Colors.white : AppTheme.textSecondary,
         fontSize: 12,
+        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
       ),
+      backgroundColor: AppTheme.surfaceLight,
+      selectedShadowColor: AppTheme.primary.withAlpha(60),
+      elevation: 0,
     );
   }
 

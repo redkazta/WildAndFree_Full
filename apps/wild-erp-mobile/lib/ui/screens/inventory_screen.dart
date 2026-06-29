@@ -127,6 +127,11 @@ class _InventoryScreenState extends State<InventoryScreen> {
       drawer: const SidebarDrawer(currentRoute: '/inventory'),
       appBar: AppBar(
         title: const Text('Inventario'),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: AppTheme.appBarGradient,
+          ),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
@@ -147,6 +152,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
                 prefixIcon: const Icon(Icons.search, size: 20),
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                filled: true,
+                fillColor: AppTheme.surfaceLight,
               ),
             ),
           ),
@@ -168,9 +175,17 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.inventory_2_outlined,
-                            color: AppTheme.textMuted, size: 48),
-                        const SizedBox(height: 12),
+                        Container(
+                          width: 72,
+                          height: 72,
+                          decoration: BoxDecoration(
+                            color: AppTheme.border.withAlpha(40),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: const Icon(Icons.inventory_2_outlined,
+                              color: AppTheme.textMuted, size: 32),
+                        ),
+                        const SizedBox(height: 20),
                         const Text(
                           'No hay productos',
                           style: TextStyle(
@@ -178,11 +193,27 @@ class _InventoryScreenState extends State<InventoryScreen> {
                             fontSize: 16,
                           ),
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 8),
+                        const Text(
+                          'Agrega tu primer producto',
+                          style: TextStyle(
+                            color: AppTheme.textMuted,
+                            fontSize: 13,
+                          ),
+                        ),
+                        const SizedBox(height: 24),
                         ElevatedButton.icon(
                           onPressed: _showAddProductDialog,
                           icon: const Icon(Icons.add, size: 18),
                           label: const Text('Agregar Producto'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppTheme.primary,
+                            foregroundColor: Colors.black,
+                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
                         ),
                       ],
                     ),

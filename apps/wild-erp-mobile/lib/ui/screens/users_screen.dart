@@ -37,6 +37,11 @@ class _UsersScreenState extends State<UsersScreen> {
       drawer: const SidebarDrawer(currentRoute: '/users'),
       appBar: AppBar(
         title: const Text('Usuarios'),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: AppTheme.appBarGradient,
+          ),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh_outlined),
@@ -56,6 +61,8 @@ class _UsersScreenState extends State<UsersScreen> {
                 prefixIcon: const Icon(Icons.search, size: 20),
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                filled: true,
+                fillColor: AppTheme.surfaceLight,
               ),
             ),
           ),
@@ -104,6 +111,14 @@ class _UsersScreenState extends State<UsersScreen> {
                             fontSize: 16,
                           ),
                         ),
+                        SizedBox(height: 8),
+                        Text(
+                          'Los usuarios registrados aparecerán aquí',
+                          style: TextStyle(
+                            color: AppTheme.textMuted,
+                            fontSize: 13,
+                          ),
+                        ),
                       ],
                     ),
                   );
@@ -116,9 +131,10 @@ class _UsersScreenState extends State<UsersScreen> {
                     itemCount: users.length,
                     itemBuilder: (context, index) {
                       final user = users[index];
-                      return Card(
+                      return Container(
                         margin: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 4),
+                        decoration: AppTheme.cardDecoration,
                         child: ListTile(
                           leading: CircleAvatar(
                             backgroundColor:
@@ -206,7 +222,11 @@ class _UsersScreenState extends State<UsersScreen> {
           labelStyle: TextStyle(
             color: isSelected ? Colors.white : AppTheme.textSecondary,
             fontSize: 12,
+            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
           ),
+          backgroundColor: AppTheme.surfaceLight,
+          selectedShadowColor: AppTheme.primary.withAlpha(60),
+          elevation: 0,
         );
       },
     );

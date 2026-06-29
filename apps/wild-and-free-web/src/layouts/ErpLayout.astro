@@ -609,33 +609,100 @@ const modules = [
       letter-spacing: 0.05em;
     }
 
-    /* Mobile */
-    @media (max-width: 768px) {
-      .erp-sidebar {
-        transform: translateX(-100%);
-      }
+  	  /* Mobile */
+  	  @media (max-width: 768px) {
+  	    .erp-sidebar {
+  	      transform: translateX(-100%);
+  	    }
 
-      .erp-sidebar--open {
-        transform: translateX(0);
-        box-shadow: 20px 0 60px rgba(0,0,0,0.5);
-      }
+  	    .erp-sidebar--open {
+  	      transform: translateX(0);
+  	      box-shadow: 20px 0 60px rgba(0,0,0,0.5);
+  	    }
 
-      .erp-main {
-        margin-left: 0;
-      }
+  	    .erp-main {
+  	      margin-left: 0;
+  	    }
 
-      .erp-menu-toggle {
-        display: flex;
-      }
+  	    .erp-menu-toggle {
+  	      display: flex;
+  	    }
 
-      .erp-content {
-        padding: 16px;
-      }
+  	    .erp-content {
+  	      padding: 12px;
+  	    }
 
-      .erp-search {
-        display: none;
-      }
-    }
+  	    .erp-search {
+  	      display: none;
+  	    }
+
+  	    .erp-grid {
+  	      grid-template-columns: 1fr !important;
+  	    }
+
+  	    .erp-table {
+  	      font-size: 11px !important;
+  	    }
+
+  	    .erp-table th,
+  	    .erp-table td {
+  	      padding: 8px 10px !important;
+  	    }
+
+  	    .erp-btn {
+  	      padding: 8px 14px !important;
+  	      font-size: 11px !important;
+  	    }
+
+  	    .erp-topbar {
+  	      padding: 12px;
+  	    }
+
+  	    .erp-page-title {
+  	      font-size: 15px;
+  	    }
+
+  	    .erp-content .erp-card {
+  	      padding: 14px;
+  	    }
+
+  	    /* Inputs and selects full width on mobile */
+  	    .erp-content input[type="text"],
+  	    .erp-content input[type="number"],
+  	    .erp-content input[type="email"],
+  	    .erp-content input[type="url"],
+  	    .erp-content input[type="datetime-local"],
+  	    .erp-content select,
+  	    .erp-content textarea {
+  	      width: 100% !important;
+  	      min-width: 0 !important;
+  	      max-width: 100% !important;
+  	    }
+
+  	    /* Filter buttons wrap/scroll horizontally */
+  	    .erp-content div[style*="display:flex"],
+  	    .erp-content div[style*="display: flex"] {
+  	      flex-wrap: wrap;
+  	    }
+
+  	    /* Modal widths 95vw */
+  	    .erp-card[style*="max-width"],
+  	    [id$="Modal"] .erp-card {
+  	      max-width: 95vw !important;
+  	      width: 95vw !important;
+  	    }
+
+  	    /* Table container horizontal scroll */
+  	    .erp-card[style*="overflow-x:auto"],
+  	    .erp-card[style*="overflow-x: auto"] {
+  	      overflow-x: auto;
+  	      -webkit-overflow-scrolling: touch;
+  	    }
+
+  	    .erp-table {
+  	      min-width: 600px;
+  	    }
+  	  }
   </style>
 
   <script>
