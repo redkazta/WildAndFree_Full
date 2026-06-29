@@ -5,7 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../core/theme/app_theme.dart';
-import '../services/radio_service.dart';
+import '../../data/services/radio_service.dart';
 import '../widgets/sidebar_drawer.dart';
 
 class RadioScreen extends StatefulWidget {
@@ -651,11 +651,11 @@ class _RadioScreenState extends State<RadioScreen> {
                     onSelected: (val) async {
                       if (val == 'toggle') {
                         try {
-                          final ep = await RadioService.updateEpisode(ep.id, {
+                          final updatedEp = await RadioService.updateEpisode(ep.id, {
                             'is_published': !ep.isPublished,
                             'published_at': !ep.isPublished ? DateTime.now().toIso8601String() : null,
                           });
-                          setState(() => _episodes = _episodes.map((e) => e.id == ep.id ? ep : e).toList());
+                          setState(() => _episodes = _episodes.map((e) => e.id == updatedEp.id ? updatedEp : e).toList());
                         } catch (e) {
                           if (mounted) _showError('Error: $e');
                         }
