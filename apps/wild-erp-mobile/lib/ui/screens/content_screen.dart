@@ -270,8 +270,6 @@ class _ContentScreenState extends State<ContentScreen> {
                                 ),
                               ],
                             ],
-                          ),
-                        ),
                       );
                     },
                   ),
