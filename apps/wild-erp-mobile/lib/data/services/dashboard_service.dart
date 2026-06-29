@@ -36,7 +36,7 @@ class DashboardService {
     try {
       final results = await Future.wait([
         _countTable('profiles'),
-        _countTable('profiles', filter: 'is_verified_artist', value: true),
+        _countTable('profiles', filter: 'is_artist', value: true),
         _countTable('store_orders', filter: 'status', value: 'pending'),
         _countTable('exclusive_content', filter: 'status', value: 'pending'),
         _countTable('events'),

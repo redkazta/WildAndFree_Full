@@ -251,6 +251,12 @@ class SidebarDrawer extends StatelessWidget {
                     ),
                     _buildNavItem(
                       context,
+                      icon: Icons.radio_outlined,
+                      label: 'Radio',
+                      route: '/radio',
+                    ),
+                    _buildNavItem(
+                      context,
                       icon: Icons.settings_outlined,
                       label: 'Configuración',
                       route: '/settings',

@@ -33,7 +33,7 @@ class Profile {
     return Profile(
       id: json['id'] as String,
       email: json['email'] as String? ?? '',
-      displayName: json['display_name'] as String?,
+      displayName: (json['display_name'] ?? json['nombre'] ?? json['username']) as String?,
       avatarUrl: json['avatar_url'] as String?,
       role: json['role'] as String? ?? 'user',
       isArtist: json['is_artist'] as bool? ?? false,

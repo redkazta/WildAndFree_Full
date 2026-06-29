@@ -21,7 +21,7 @@ class InventoryService {
       if (category != null) filters['category'] = category;
 
       final data = await SupabaseService.fetchCached(
-        table: 'products',
+        table: 'store_products',
         cacheKey: 'products_${category ?? "all"}_${isActive ?? "all"}_$search',
         select: '*',
         filters: filters.isNotEmpty ? filters : null,
@@ -52,14 +52,14 @@ class InventoryService {
   static Future<Product?> getProductById(String id) async {
     try {
       final data = await SupabaseService.fetchById(
-        table: 'products',
+        table: 'store_products',
         id: id,
       );
       if (data == null) return null;
 
       // Fetch variants
       final variantsData = await SupabaseService.fetchCached(
-        table: 'variants',
+        table: 'product_variants',
         cacheKey: 'variants_$id',
         select: '*',
         filters: {'product_id': id},
@@ -76,7 +76,7 @@ class InventoryService {
   static Future<Product> createProduct(Map<String, dynamic> data) async {
     try {
       final result = await SupabaseService.insert(
-        table: 'products',
+        table: 'store_products',
         data: data,
       );
       return Product.fromJson(result);
@@ -89,7 +89,7 @@ class InventoryService {
       String id, Map<String, dynamic> data) async {
     try {
       final result = await SupabaseService.update(
-        table: 'products',
+        table: 'store_products',
         id: id,
         data: data,
       );
@@ -101,7 +101,7 @@ class InventoryService {
 
   static Future<void> deleteProduct(String id) async {
     try {
-      await SupabaseService.delete(table: 'products', id: id);
+      await SupabaseService.delete(table: 'store_products', id: id);
     } catch (e) {
       rethrow;
     }
@@ -111,7 +111,7 @@ class InventoryService {
   static Future<List<Variant>> getVariants(String productId) async {
     try {
       final data = await SupabaseService.fetchCached(
-        table: 'variants',
+        table: 'product_variants',
         cacheKey: 'variants_$productId',
         select: '*',
         filters: {'product_id': productId},
@@ -126,10 +126,10 @@ class InventoryService {
   static Future<Variant> createVariant(Map<String, dynamic> data) async {
     try {
       final result = await SupabaseService.insert(
-        table: 'variants',
+        table: 'product_variants',
         data: data,
       );
-      CacheService.invalidatePattern('variants');
+      CacheService.invalidatePattern('product_variants');
       return Variant.fromJson(result);
     } catch (e) {
       rethrow;
@@ -140,11 +140,11 @@ class InventoryService {
       String id, Map<String, dynamic> data) async {
     try {
       final result = await SupabaseService.update(
-        table: 'variants',
+        table: 'product_variants',
         id: id,
         data: data,
       );
-      CacheService.invalidatePattern('variants');
+      CacheService.invalidatePattern('product_variants');
       return Variant.fromJson(result);
     } catch (e) {
       rethrow;
@@ -153,8 +153,8 @@ class InventoryService {
 
   static Future<void> deleteVariant(String id) async {
     try {
-      await SupabaseService.delete(table: 'variants', id: id);
-      CacheService.invalidatePattern('variants');
+      await SupabaseService.delete(table: 'product_variants', id: id);
+      CacheService.invalidatePattern('product_variants');
     } catch (e) {
       rethrow;
     }
@@ -164,11 +164,11 @@ class InventoryService {
       String variantId, int newStock) async {
     try {
       await SupabaseService.update(
-        table: 'variants',
+        table: 'product_variants',
         id: variantId,
         data: {'stock': newStock},
       );
-      CacheService.invalidatePattern('variants');
+      CacheService.invalidatePattern('product_variants');
     } catch (e) {
       rethrow;
     }

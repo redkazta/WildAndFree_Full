@@ -1,0 +1,726 @@
+---
+import ErpLayout from '../../layouts/ErpLayout.astro';
+import tenantConfig from '../../../../../packages/shared-types/tenant-config.json';
+
+const tenant = tenantConfig['wild-and-free'];
+---
+
+<ErpLayout title="Radio" activeModule="radio">
+  <div class="radio-erp" style="display: flex; flex-direction: column; gap: 24px;">
+
+    <!-- ====== STATUS BAR ====== -->
+    <div class="erp-card" id="radio-status-bar">
+      <div class="erp-card-title">Estado de la Radio</div>
+      <div id="radio-status-content" class="erp-loading">Cargando estado...</div>
+    </div>
+
+    <!-- ====== CONFIG SECTION ====== -->
+    <div class="erp-card">
+      <div class="erp-card-title">Configuración General</div>
+      <div id="radio-config-form" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <label style="font-size: 11px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.1em;">Zeno Stream URL</label>
+          <input type="text" id="cfg-zeno-stream" class="erp-input" placeholder="https://stream.zeno.fm/..." />
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <label style="font-size: 11px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.1em;">Zeno Embed URL</label>
+          <input type="text" id="cfg-zeno-embed" class="erp-input" placeholder="https://zeno.fm/embed/..." />
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <label style="font-size: 11px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.1em;">WhatsApp</label>
+          <input type="text" id="cfg-whatsapp" class="erp-input" placeholder="+52 (871) 111-1111" />
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <label style="font-size: 11px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.1em;">Current Show</label>
+          <input type="text" id="cfg-show" class="erp-input" placeholder="Wild Gvng Radio" />
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <label style="font-size: 11px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.1em;">Current Host</label>
+          <input type="text" id="cfg-host" class="erp-input" placeholder="KAZTA" />
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <label style="font-size: 11px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.1em;">Spotify Playlist URI / ID</label>
+          <input type="text" id="cfg-spotify-playlist" class="erp-input" placeholder="Dejar vacío si no usas playlist" />
+        </div>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; align-items: center;">
+        <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: rgba(255,255,255,0.6); cursor: pointer;">
+          <input type="checkbox" id="cfg-is-live" style="accent-color: #C98300;" />
+          <span>EN VIVO (override)</span>
+        </label>
+        <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: rgba(255,255,255,0.6); cursor: pointer;">
+          <input type="checkbox" id="cfg-auto-radio" style="accent-color: #C98300;" />
+          <span>Auto Radio (Spotify)</span>
+        </label>
+        <button id="cfg-save-btn" class="erp-btn erp-btn--primary">Guardar Configuración</button>
+        <span id="cfg-save-msg" style="font-size: 11px; color: rgba(255,255,255,0.4);"></span>
+      </div>
+    </div>
+
+    <!-- ====== AUTO RADIO TRACKS ====== -->
+    <div class="erp-card">
+      <div class="erp-card-title" style="display: flex; justify-content: space-between; align-items: center;">
+        <span>Auto Radio Tracks</span>
+        <button id="add-track-btn" class="erp-btn erp-btn--ghost" style="padding: 4px 12px; font-size: 10px;">+ Agregar Track</button>
+      </div>
+      <div style="overflow-x: auto;">
+        <table class="erp-table">
+          <thead>
+            <tr>
+              <th>Orden</th>
+              <th>Título</th>
+              <th>Artista</th>
+              <th>Spotify URL</th>
+              <th>Activo</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="auto-tracks-tbody">
+            <tr><td colspan="6" style="text-align:center; padding: 32px; color: rgba(255,255,255,0.2);">Cargando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Add/Edit Track Modal -->
+      <div id="track-modal" class="modal-overlay" style="display:none;">
+        <div class="erp-card" style="max-width: 480px; width: 90vw; position: relative;">
+          <button id="track-modal-close" style="position:absolute; top:12px; right:12px; background:none; border:none; color:rgba(255,255,255,0.4); cursor:pointer; font-size:18px;">&times;</button>
+          <div class="erp-card-title" id="track-modal-title">Agregar Track</div>
+          <input type="hidden" id="track-edit-id" />
+          <div style="display:grid; gap:12px; margin-top:12px;">
+            <input type="text" id="track-spotify-url" class="erp-input" placeholder="Spotify Track URL (https://open.spotify.com/track/...)" />
+            <input type="text" id="track-spotify-embed" class="erp-input" placeholder="Spotify Embed URL (https://open.spotify.com/embed/track/...)" />
+            <input type="text" id="track-title" class="erp-input" placeholder="Título (opcional)" />
+            <input type="text" id="track-artist" class="erp-input" placeholder="Artista (opcional)" />
+            <input type="text" id="track-cover" class="erp-input" placeholder="Cover URL (opcional)" />
+            <input type="number" id="track-order" class="erp-input" placeholder="Orden (opcional)" value="0" />
+            <label style="display:flex; align-items:center; gap:8px; font-size:12px; color:rgba(255,255,255,0.6); cursor:pointer;">
+              <input type="checkbox" id="track-active" checked style="accent-color:#C98300;" />
+              <span>Activo</span>
+            </label>
+            <button id="track-save-btn" class="erp-btn erp-btn--primary">Guardar Track</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== EPISODES ====== -->
+    <div class="erp-card">
+      <div class="erp-card-title" style="display: flex; justify-content: space-between; align-items: center;">
+        <span>Episodios</span>
+        <button id="add-episode-btn" class="erp-btn erp-btn--ghost" style="padding: 4px 12px; font-size: 10px;">+ Nuevo Episodio</button>
+      </div>
+      <div style="overflow-x: auto;">
+        <table class="erp-table">
+          <thead>
+            <tr><th>Título</th><th>Host</th><th>Duración</th><th>Categoría</th><th>Publicado</th><th>Fecha</th><th>Acciones</th></tr>
+          </thead>
+          <tbody id="episodes-tbody">
+            <tr><td colspan="7" style="text-align:center; padding:32px; color:rgba(255,255,255,0.2);">Cargando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Add Episode Modal -->
+      <div id="episode-modal" class="modal-overlay" style="display:none;">
+        <div class="erp-card" style="max-width: 520px; width: 90vw; position: relative;">
+          <button id="episode-modal-close" style="position:absolute; top:12px; right:12px; background:none; border:none; color:rgba(255,255,255,0.4); cursor:pointer; font-size:18px;">&times;</button>
+          <div class="erp-card-title">Nuevo Episodio</div>
+          <form id="episode-form" style="display:grid; gap:12px; margin-top:12px;">
+            <input type="text" id="ep-title" class="erp-input" placeholder="Título *" required />
+            <textarea id="ep-description" class="erp-input" placeholder="Descripción" rows="3" style="resize:vertical;"></textarea>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+              <input type="text" id="ep-host" class="erp-input" placeholder="Host (ej: KAZTA)" value="KAZTA" />
+              <input type="text" id="ep-duration" class="erp-input" placeholder="Duración (ej: 45:00)" />
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+              <select id="ep-category" class="erp-input">
+                <option value="mix">Mix</option>
+                <option value="entrevista">Entrevista</option>
+                <option value="sesion">Sesión</option>
+                <option value="especial">Especial</option>
+                <option value="live">Live</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:11px; color:rgba(255,255,255,0.4); text-transform:uppercase; letter-spacing:0.1em;">Archivo de Audio *</label>
+              <input type="file" id="ep-audio" accept="audio/*" style="margin-top:4px; color:rgba(255,255,255,0.6); font-size:12px;" />
+            </div>
+            <div>
+              <label style="font-size:11px; color:rgba(255,255,255,0.4); text-transform:uppercase; letter-spacing:0.1em;">Cover (opcional)</label>
+              <input type="file" id="ep-cover" accept="image/*" style="margin-top:4px; color:rgba(255,255,255,0.6); font-size:12px;" />
+            </div>
+            <div style="display:flex; gap:12px; align-items:center;">
+              <button type="submit" class="erp-btn erp-btn--primary" id="episode-submit">Subir Episodio</button>
+              <span id="episode-upload-msg" style="font-size:11px; color:rgba(255,255,255,0.4);"></span>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== SCHEDULE ====== -->
+    <div class="erp-card">
+      <div class="erp-card-title" style="display: flex; justify-content: space-between; align-items: center;">
+        <span>Programación</span>
+        <button id="add-schedule-btn" class="erp-btn erp-btn--ghost" style="padding: 4px 12px; font-size: 10px;">+ Agregar Show</button>
+      </div>
+      <div style="overflow-x: auto;">
+        <table class="erp-table">
+          <thead>
+            <tr><th>Día</th><th>Inicio</th><th>Fin</th><th>Show</th><th>Host</th><th>Activo</th><th>Acciones</th></tr>
+          </thead>
+          <tbody id="schedule-tbody">
+            <tr><td colspan="7" style="text-align:center; padding:32px; color:rgba(255,255,255,0.2);">Cargando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Schedule Modal -->
+      <div id="schedule-modal" class="modal-overlay" style="display:none;">
+        <div class="erp-card" style="max-width: 480px; width: 90vw; position: relative;">
+          <button id="schedule-modal-close" style="position:absolute; top:12px; right:12px; background:none; border:none; color:rgba(255,255,255,0.4); cursor:pointer; font-size:18px;">&times;</button>
+          <div class="erp-card-title" id="schedule-modal-title">Agregar Show</div>
+          <input type="hidden" id="sched-edit-id" />
+          <div style="display:grid; gap:12px; margin-top:12px;">
+            <select id="sched-day" class="erp-input">
+              <option value="0">Domingo</option>
+              <option value="1">Lunes</option>
+              <option value="2">Martes</option>
+              <option value="3">Miércoles</option>
+              <option value="4">Jueves</option>
+              <option value="5" selected>Viernes</option>
+              <option value="6">Sábado</option>
+            </select>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+              <input type="time" id="sched-start" class="erp-input" value="20:00" />
+              <input type="time" id="sched-end" class="erp-input" value="22:00" />
+            </div>
+            <input type="text" id="sched-show-name" class="erp-input" placeholder="Nombre del Show *" />
+            <input type="text" id="sched-host" class="erp-input" placeholder="Host (ej: KAZTA)" />
+            <textarea id="sched-desc" class="erp-input" placeholder="Descripción" rows="2" style="resize:vertical;"></textarea>
+            <label style="display:flex; align-items:center; gap:8px; font-size:12px; color:rgba(255,255,255,0.6); cursor:pointer;">
+              <input type="checkbox" id="sched-active" checked style="accent-color:#C98300;" />
+              <span>Activo</span>
+            </label>
+            <button id="schedule-save-btn" class="erp-btn erp-btn--primary">Guardar Show</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ErpLayout>
+
+<style>
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+  }
+  .modal-overlay .erp-card {
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .erp-btn--small {
+    padding: 4px 10px !important;
+    font-size: 10px !important;
+  }
+  .erp-card-title {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 12px;
+  }
+  .erp-card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 14px;
+    padding: 24px;
+  }
+</style>
+
+<script>
+  import { supabase } from '../../lib/supabase';
+
+  const DAY_NAMES = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+
+  // ====== UTILITY ======
+  function getConfigId() { return 1; }
+
+  async function apiPost(path, body) {
+    const res = await fetch(path, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    return res.json();
+  }
+
+  async function apiPatch(path, body) {
+    const res = await fetch(path, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    return res.json();
+  }
+
+  async function apiDelete(path) {
+    const res = await fetch(path, { method: 'DELETE' });
+    return res.json();
+  }
+
+  function sanitizeId(id) {
+    if (!id) return id;
+    // Convert numeric string IDs to numbers for SERIAL primary keys
+    const num = Number(id);
+    return Number.isNaN(num) ? id : num;
+  }
+
+  // ====== STATUS BAR ======
+  async function loadStatus() {
+    const content = document.getElementById('radio-status-content');
+    try {
+      const { data: config } = await supabase.from('radio_config').select('*').limit(1).single();
+      if (!config) { content.innerHTML = '<span style="color:rgba(255,255,255,0.2);">Sin configuración</span>'; return; }
+
+      const isLive = config.is_live ? '<span style="color:#ff4444; font-weight:700;">🔴 EN VIVO</span>' : '<span style="color:#888;">OFFLINE</span>';
+      const autoRadio = config.auto_radio ? '<span style="color:#00ff88; font-weight:700;">🎵 AUTO RADIO</span>' : '<span style="color:#888;">OFF</span>';
+
+      content.innerHTML = `
+        <div style="display:flex; flex-wrap:wrap; gap:16px; align-items:center;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:11px; color:rgba(255,255,255,0.4); text-transform:uppercase;">Live:</span>
+            ${isLive}
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:11px; color:rgba(255,255,255,0.4); text-transform:uppercase;">Auto Radio:</span>
+            ${autoRadio}
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:11px; color:rgba(255,255,255,0.4); text-transform:uppercase;">Show:</span>
+            <span style="font-weight:600;">${config.current_show || 'Wild Gvng Radio'}</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:11px; color:rgba(255,255,255,0.4); text-transform:uppercase;">Host:</span>
+            <span style="font-weight:600;">${config.current_host || 'KAZTA'}</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:11px; color:rgba(255,255,255,0.4); text-transform:uppercase;">WhatsApp:</span>
+            <span style="font-weight:600;">${config.whatsapp || '+52 (871) 111-1111'}</span>
+          </div>
+        </div>
+      `;
+    } catch (e) {
+      content.innerHTML = '<span style="color:rgba(255,68,68,0.7);">Error al cargar estado</span>';
+    }
+  }
+
+  // ====== CONFIG ======
+  async function loadConfigForm() {
+    try {
+      const { data: config } = await supabase.from('radio_config').select('*').limit(1).single();
+      if (!config) return;
+      (document.getElementById('cfg-zeno-stream') as HTMLInputElement).value = config.zeno_stream_url || '';
+      (document.getElementById('cfg-zeno-embed') as HTMLInputElement).value = config.zeno_embed_url || '';
+      (document.getElementById('cfg-whatsapp') as HTMLInputElement).value = config.whatsapp || '';
+      (document.getElementById('cfg-show') as HTMLInputElement).value = config.current_show || '';
+      (document.getElementById('cfg-host') as HTMLInputElement).value = config.current_host || '';
+      (document.getElementById('cfg-spotify-playlist') as HTMLInputElement).value = config.auto_radio_spotify_playlist || '';
+      (document.getElementById('cfg-is-live') as HTMLInputElement).checked = !!config.is_live;
+      (document.getElementById('cfg-auto-radio') as HTMLInputElement).checked = !!config.auto_radio;
+    } catch (e) {
+      console.error('Error loading config form:', e);
+    }
+  }
+
+  document.getElementById('cfg-save-btn')?.addEventListener('click', async () => {
+    const msg = document.getElementById('cfg-save-msg');
+    msg.textContent = 'Guardando...';
+    const data = {
+      zeno_stream_url: (document.getElementById('cfg-zeno-stream') as HTMLInputElement).value,
+      zeno_embed_url: (document.getElementById('cfg-zeno-embed') as HTMLInputElement).value,
+      whatsapp: (document.getElementById('cfg-whatsapp') as HTMLInputElement).value,
+      current_show: (document.getElementById('cfg-show') as HTMLInputElement).value,
+      current_host: (document.getElementById('cfg-host') as HTMLInputElement).value,
+      auto_radio_spotify_playlist: (document.getElementById('cfg-spotify-playlist') as HTMLInputElement).value,
+      is_live: (document.getElementById('cfg-is-live') as HTMLInputElement).checked,
+      auto_radio: (document.getElementById('cfg-auto-radio') as HTMLInputElement).checked,
+      updated_at: new Date().toISOString(),
+    };
+    try {
+      const { error } = await supabase.from('radio_config').update(data).eq('id', 1);
+      if (error) throw error;
+      msg.textContent = '✓ Configuración guardada';
+      msg.style.color = 'rgba(0,255,136,0.7)';
+      loadStatus();
+    } catch (e) {
+      msg.textContent = '✗ Error al guardar: ' + (e.message || e);
+      msg.style.color = 'rgba(255,68,68,0.7)';
+    }
+    setTimeout(() => { msg.textContent = ''; }, 3000);
+  });
+
+  // ====== AUTO RADIO TRACKS ======
+  async function loadAutoTracks() {
+    const tbody = document.getElementById('auto-tracks-tbody');
+    try {
+      const { data, error } = await supabase.from('radio_auto_tracks').select('*').order('sort_order').order('created_at', { ascending: false });
+      if (error) throw error;
+      if (!data || data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:32px; color:rgba(255,255,255,0.2);">Sin tracks. Agrega el primero.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = data.map(t => `
+        <tr>
+          <td style="font-size:12px;">${t.sort_order || 0}</td>
+          <td style="font-weight:600;">${t.title || '—'}</td>
+          <td>${t.artist || '—'}</td>
+          <td style="font-size:11px; max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+            <a href="${t.spotify_track_url}" target="_blank" style="color:rgba(201,131,0,0.7);">${t.spotify_track_url.substring(0, 40)}...</a>
+          </td>
+          <td>${t.is_active ? '<span style="color:#00ff88;">✓</span>' : '<span style="color:#666;">✗</span>'}</td>
+          <td>
+            <button class="erp-btn erp-btn--ghost erp-btn--small" data-id="${t.id}" data-edit-track style="margin-right:4px;">✎</button>
+            <button class="erp-btn erp-btn--danger erp-btn--small" data-id="${t.id}" data-delete-track>✕</button>
+          </td>
+        </tr>
+      `).join('');
+
+      // Attach edit handlers
+      tbody.querySelectorAll('[data-edit-track]').forEach(btn => {
+        btn.addEventListener('click', () => openTrackModal(btn.getAttribute('data-id')));
+      });
+      tbody.querySelectorAll('[data-delete-track]').forEach(btn => {
+        btn.addEventListener('click', () => deleteTrack(btn.getAttribute('data-id')));
+      });
+    } catch (e) {
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:32px; color:rgba(255,68,68,0.5);">Error: ${e.message || e}</td></tr>`;
+    }
+  }
+
+  async function openTrackModal(id) {
+    const modal = document.getElementById('track-modal');
+    modal.style.display = 'flex';
+    document.getElementById('track-edit-id').value = id || '';
+
+    if (id) {
+      document.getElementById('track-modal-title').textContent = 'Editar Track';
+      const { data } = await supabase.from('radio_auto_tracks').select('*').eq('id', sanitizeId(id)).single();
+      if (data) {
+        (document.getElementById('track-spotify-url') as HTMLInputElement).value = data.spotify_track_url || '';
+        (document.getElementById('track-spotify-embed') as HTMLInputElement).value = data.spotify_embed_url || '';
+        (document.getElementById('track-title') as HTMLInputElement).value = data.title || '';
+        (document.getElementById('track-artist') as HTMLInputElement).value = data.artist || '';
+        (document.getElementById('track-cover') as HTMLInputElement).value = data.cover_url || '';
+        (document.getElementById('track-order') as HTMLInputElement).value = String(data.sort_order || 0);
+        (document.getElementById('track-active') as HTMLInputElement).checked = !!data.is_active;
+      }
+    } else {
+      document.getElementById('track-modal-title').textContent = 'Agregar Track';
+      (document.getElementById('track-spotify-url') as HTMLInputElement).value = '';
+      (document.getElementById('track-spotify-embed') as HTMLInputElement).value = '';
+      (document.getElementById('track-title') as HTMLInputElement).value = '';
+      (document.getElementById('track-artist') as HTMLInputElement).value = '';
+      (document.getElementById('track-cover') as HTMLInputElement).value = '';
+      (document.getElementById('track-order') as HTMLInputElement).value = '0';
+      (document.getElementById('track-active') as HTMLInputElement).checked = true;
+    }
+  }
+
+  document.getElementById('add-track-btn')?.addEventListener('click', () => openTrackModal(''));
+  document.getElementById('track-modal-close')?.addEventListener('click', () => {
+    document.getElementById('track-modal').style.display = 'none';
+  });
+
+  document.getElementById('track-save-btn')?.addEventListener('click', async () => {
+    const editId = (document.getElementById('track-edit-id') as HTMLInputElement).value;
+    const data = {
+      spotify_track_url: (document.getElementById('track-spotify-url') as HTMLInputElement).value,
+      spotify_embed_url: (document.getElementById('track-spotify-embed') as HTMLInputElement).value,
+      title: (document.getElementById('track-title') as HTMLInputElement).value,
+      artist: (document.getElementById('track-artist') as HTMLInputElement).value,
+      cover_url: (document.getElementById('track-cover') as HTMLInputElement).value,
+      sort_order: parseInt((document.getElementById('track-order') as HTMLInputElement).value) || 0,
+      is_active: (document.getElementById('track-active') as HTMLInputElement).checked,
+    };
+
+    if (!data.spotify_track_url || !data.spotify_embed_url) {
+      alert('La URL de Spotify y la Embed URL son requeridas.');
+      return;
+    }
+
+    try {
+      if (editId) {
+        const { error } = await supabase.from('radio_auto_tracks').update(data).eq('id', sanitizeId(editId));
+        if (error) throw error;
+      } else {
+        const { error } = await supabase.from('radio_auto_tracks').insert(data);
+        if (error) throw error;
+      }
+      document.getElementById('track-modal').style.display = 'none';
+      loadAutoTracks();
+    } catch (e) {
+      alert('Error: ' + (e.message || e));
+    }
+  });
+
+  async function deleteTrack(id) {
+    if (!confirm('¿Eliminar este track?')) return;
+    try {
+      const { error } = await supabase.from('radio_auto_tracks').delete().eq('id', sanitizeId(id));
+      if (error) throw error;
+      loadAutoTracks();
+    } catch (e) {
+      alert('Error: ' + (e.message || e));
+    }
+  }
+
+  // ====== EPISODES ======
+  async function loadEpisodes() {
+    const tbody = document.getElementById('episodes-tbody');
+    try {
+      const { data, error } = await supabase.from('radio_episodes').select('*').order('created_at', { ascending: false });
+      if (error) throw error;
+      if (!data || data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:32px; color:rgba(255,255,255,0.2);">Sin episodios. Sube el primero.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = data.map(ep => `
+        <tr>
+          <td style="font-weight:600;">${ep.title}</td>
+          <td>${ep.host || 'KAZTA'}</td>
+          <td style="font-size:12px;">${ep.duration || '—'}</td>
+          <td><span style="font-size:10px; text-transform:uppercase; background:rgba(255,255,255,0.05); padding:2px 8px; border-radius:4px;">${ep.category || 'mix'}</span></td>
+          <td>${ep.is_published ? '<span style="color:#00ff88;">✓ Publicado</span>' : '<span style="color:#888;">✗ Borrador</span>'}</td>
+          <td style="font-size:11px;">${ep.created_at ? new Date(ep.created_at).toLocaleDateString() : '—'}</td>
+          <td>
+            <button class="erp-btn erp-btn--ghost erp-btn--small" data-id="${ep.id}" data-toggle-publish style="margin-right:4px;">${ep.is_published ? 'Despublicar' : 'Publicar'}</button>
+            <button class="erp-btn erp-btn--danger erp-btn--small" data-id="${ep.id}" data-delete-episode>✕</button>
+          </td>
+        </tr>
+      `).join('');
+
+      tbody.querySelectorAll('[data-toggle-publish]').forEach(btn => {
+        btn.addEventListener('click', () => togglePublish(btn.getAttribute('data-id')));
+      });
+      tbody.querySelectorAll('[data-delete-episode]').forEach(btn => {
+        btn.addEventListener('click', () => deleteEpisode(btn.getAttribute('data-id')));
+      });
+    } catch (e) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:32px; color:rgba(255,68,68,0.5);">Error: ${e.message || e}</td></tr>`;
+    }
+  }
+
+  async function togglePublish(id) {
+    try {
+      const { data: ep } = await supabase.from('radio_episodes').select('is_published').eq('id', id).single();
+      const newVal = !ep?.is_published;
+      const { error } = await supabase.from('radio_episodes').update({
+        is_published: newVal,
+        published_at: newVal ? new Date().toISOString() : null,
+        updated_at: new Date().toISOString(),
+      }).eq('id', id);
+      if (error) throw error;
+      loadEpisodes();
+    } catch (e) {
+      alert('Error: ' + (e.message || e));
+    }
+  }
+
+  async function deleteEpisode(id) {
+    if (!confirm('¿Eliminar este episodio permanentemente?')) return;
+    try {
+      const { error } = await supabase.from('radio_episodes').delete().eq('id', id);
+      if (error) throw error;
+      loadEpisodes();
+    } catch (e) {
+      alert('Error: ' + (e.message || e));
+    }
+  }
+
+  // Episode upload via API
+  document.getElementById('episode-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const msg = document.getElementById('episode-upload-msg');
+    const submitBtn = document.getElementById('episode-submit') as HTMLButtonElement;
+    submitBtn.disabled = true;
+    msg.textContent = 'Subiendo...';
+
+    const audioFile = (document.getElementById('ep-audio') as HTMLInputElement).files?.[0];
+    const coverFile = (document.getElementById('ep-cover') as HTMLInputElement).files?.[0];
+
+    if (!audioFile) {
+      msg.textContent = 'Selecciona un archivo de audio';
+      submitBtn.disabled = false;
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('audio', audioFile);
+    if (coverFile) formData.append('cover', coverFile);
+    formData.append('title', (document.getElementById('ep-title') as HTMLInputElement).value);
+    formData.append('description', (document.getElementById('ep-description') as HTMLTextAreaElement).value);
+    formData.append('host', (document.getElementById('ep-host') as HTMLInputElement).value);
+    formData.append('duration', (document.getElementById('ep-duration') as HTMLInputElement).value);
+    formData.append('category', (document.getElementById('ep-category') as HTMLSelectElement).value);
+
+    try {
+      const res = await fetch('/api/upload-radio-episode', { method: 'POST', body: formData });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || 'Error al subir');
+      msg.textContent = '✓ Episodio subido correctamente';
+      msg.style.color = 'rgba(0,255,136,0.7)';
+      document.getElementById('episode-form')?.reset();
+      document.getElementById('episode-modal').style.display = 'none';
+      loadEpisodes();
+    } catch (err) {
+      msg.textContent = '✗ ' + (err.message || err);
+      msg.style.color = 'rgba(255,68,68,0.7)';
+    }
+    submitBtn.disabled = false;
+    setTimeout(() => { msg.textContent = ''; }, 3000);
+  });
+
+  document.getElementById('add-episode-btn')?.addEventListener('click', () => {
+    document.getElementById('episode-modal').style.display = 'flex';
+  });
+  document.getElementById('episode-modal-close')?.addEventListener('click', () => {
+    document.getElementById('episode-modal').style.display = 'none';
+  });
+
+  // ====== SCHEDULE ======
+  async function loadSchedule() {
+    const tbody = document.getElementById('schedule-tbody');
+    try {
+      const { data, error } = await supabase.from('radio_schedule').select('*').order('day_of_week').order('start_time');
+      if (error) throw error;
+      if (!data || data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:32px; color:rgba(255,255,255,0.2);">Sin programación.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = data.map(s => `
+        <tr>
+          <td>${DAY_NAMES[s.day_of_week] || s.day_of_week}</td>
+          <td style="font-size:12px;">${s.start_time?.substring(0,5) || '—'}</td>
+          <td style="font-size:12px;">${s.end_time?.substring(0,5) || '—'}</td>
+          <td style="font-weight:600;">${s.show_name}</td>
+          <td>${s.host || 'KAZTA'}</td>
+          <td>${s.is_active ? '<span style="color:#00ff88;">✓</span>' : '<span style="color:#666;">✗</span>'}</td>
+          <td>
+            <button class="erp-btn erp-btn--ghost erp-btn--small" data-id="${s.id}" data-edit-schedule style="margin-right:4px;">✎</button>
+            <button class="erp-btn erp-btn--danger erp-btn--small" data-id="${s.id}" data-delete-schedule>✕</button>
+          </td>
+        </tr>
+      `).join('');
+
+      tbody.querySelectorAll('[data-edit-schedule]').forEach(btn => {
+        btn.addEventListener('click', () => openScheduleModal(btn.getAttribute('data-id')));
+      });
+      tbody.querySelectorAll('[data-delete-schedule]').forEach(btn => {
+        btn.addEventListener('click', () => deleteSchedule(btn.getAttribute('data-id')));
+      });
+    } catch (e) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:32px; color:rgba(255,68,68,0.5);">Error: ${e.message || e}</td></tr>`;
+    }
+  }
+
+  async function openScheduleModal(id) {
+    const modal = document.getElementById('schedule-modal');
+    modal.style.display = 'flex';
+    document.getElementById('sched-edit-id').value = id || '';
+
+    if (id) {
+      document.getElementById('schedule-modal-title').textContent = 'Editar Show';
+      const { data } = await supabase.from('radio_schedule').select('*').eq('id', sanitizeId(id)).single();
+      if (data) {
+        (document.getElementById('sched-day') as HTMLSelectElement).value = String(data.day_of_week);
+        (document.getElementById('sched-start') as HTMLInputElement).value = data.start_time?.substring(0,5) || '20:00';
+        (document.getElementById('sched-end') as HTMLInputElement).value = data.end_time?.substring(0,5) || '22:00';
+        (document.getElementById('sched-show-name') as HTMLInputElement).value = data.show_name;
+        (document.getElementById('sched-host') as HTMLInputElement).value = data.host || 'KAZTA';
+        (document.getElementById('sched-desc') as HTMLTextAreaElement).value = data.description || '';
+        (document.getElementById('sched-active') as HTMLInputElement).checked = !!data.is_active;
+      }
+    } else {
+      document.getElementById('schedule-modal-title').textContent = 'Agregar Show';
+      (document.getElementById('sched-day') as HTMLSelectElement).value = '5';
+      (document.getElementById('sched-start') as HTMLInputElement).value = '20:00';
+      (document.getElementById('sched-end') as HTMLInputElement).value = '22:00';
+      (document.getElementById('sched-show-name') as HTMLInputElement).value = '';
+      (document.getElementById('sched-host') as HTMLInputElement).value = 'KAZTA';
+      (document.getElementById('sched-desc') as HTMLTextAreaElement).value = '';
+      (document.getElementById('sched-active') as HTMLInputElement).checked = true;
+    }
+  }
+
+  document.getElementById('add-schedule-btn')?.addEventListener('click', () => openScheduleModal(''));
+  document.getElementById('schedule-modal-close')?.addEventListener('click', () => {
+    document.getElementById('schedule-modal').style.display = 'none';
+  });
+
+  document.getElementById('schedule-save-btn')?.addEventListener('click', async () => {
+    const editId = (document.getElementById('sched-edit-id') as HTMLInputElement).value;
+    const data = {
+      day_of_week: parseInt((document.getElementById('sched-day') as HTMLSelectElement).value),
+      start_time: (document.getElementById('sched-start') as HTMLInputElement).value,
+      end_time: (document.getElementById('sched-end') as HTMLInputElement).value,
+      show_name: (document.getElementById('sched-show-name') as HTMLInputElement).value,
+      host: (document.getElementById('sched-host') as HTMLInputElement).value || 'KAZTA',
+      description: (document.getElementById('sched-desc') as HTMLTextAreaElement).value,
+      is_active: (document.getElementById('sched-active') as HTMLInputElement).checked,
+    };
+
+    if (!data.show_name) {
+      alert('El nombre del show es requerido.');
+      return;
+    }
+
+    try {
+      if (editId) {
+        const { error } = await supabase.from('radio_schedule').update(data).eq('id', sanitizeId(editId));
+        if (error) throw error;
+      } else {
+        const { error } = await supabase.from('radio_schedule').insert(data);
+        if (error) throw error;
+      }
+      document.getElementById('schedule-modal').style.display = 'none';
+      loadSchedule();
+    } catch (e) {
+      alert('Error: ' + (e.message || e));
+    }
+  });
+
+  async function deleteSchedule(id) {
+    if (!confirm('¿Eliminar este show de la programación?')) return;
+    try {
+      const { error } = await supabase.from('radio_schedule').delete().eq('id', sanitizeId(id));
+      if (error) throw error;
+      loadSchedule();
+    } catch (e) {
+      alert('Error: ' + (e.message || e));
+    }
+  }
+
+  // Close modals on overlay click
+  document.querySelectorAll('.modal-overlay').forEach(el => {
+    el.addEventListener('click', (e) => {
+      if (e.target === el) el.style.display = 'none';
+    });
+  });
+
+  // ====== INIT ======
+  loadStatus();
+  loadConfigForm();
+  loadAutoTracks();
+  loadEpisodes();
+  loadSchedule();
+</script>

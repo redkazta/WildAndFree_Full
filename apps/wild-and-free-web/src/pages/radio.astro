@@ -8,23 +8,17 @@ const config = {
   primary_color: tenant.primary_color,
   secondary_color: tenant.secondary_color
 };
-
-const recentEpisodes = [
-  { id: 1, title: "Sesión de Madrugada Vol. 4", host: "DJ Shadow", duration: "1:45:00", date: "Ayer", image: "https://images.unsplash.com/photo-1514525253361-bee871871771?w=500&q=80" },
-  { id: 2, title: "Especial de Trap Pesado", host: "La Jefa", duration: "2:00:00", date: "Hace 2 días", image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=500&q=80" },
-  { id: 3, title: "Entrevista Exclusiva: Viper X", host: "MC Mic", duration: "45:00", date: "Hace 4 días", image: "https://images.unsplash.com/photo-1615109398623-88346a601842?w=500&q=80" },
-];
 ---
 
 <Layout config={config}>
-  <div class="min-h-screen bg-black text-white font-mono selection:bg-wild-orange selection:text-black pb-20 relative overflow-hidden">
-    
+  <div id="radio-page-root" class="min-h-screen bg-black text-white font-mono selection:bg-wild-orange selection:text-black pb-20 relative overflow-hidden">
+
     <!-- Background Noise/Texture -->
     <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 pointer-events-none"></div>
     <div class="absolute inset-0 bg-gradient-to-br from-black via-black/90 to-tenant-secondary/20 pointer-events-none"></div>
 
     <div class="container mx-auto px-4 pt-16 relative z-10">
-      
+
       <!-- HEADER: ON AIR STATUS -->
       <div class="flex justify-between items-center border-b-2 border-white/10 pb-4 mb-8">
         <div>
@@ -32,34 +26,24 @@ const recentEpisodes = [
             FRECUENCIA <span class="text-tenant-primary">PIRATA</span>
           </h1>
           <p class="text-xs md:text-sm font-bold text-gray-400 uppercase tracking-[0.4em] mt-2">
-            TRANSMITIENDO DESDE EL UNDERGROUND // 111.1 FM
+            TRANSMITIENDO DESDE EL UNDERGROUND
           </p>
         </div>
-        <div class="hidden md:flex flex-col items-end">
-          <div class="flex items-center gap-2 px-4 py-2 bg-red-600/20 border border-red-600 rounded animate-pulse">
-            <div class="w-3 h-3 bg-red-600 rounded-full"></div>
-            <span class="text-red-500 font-black uppercase text-xs tracking-widest">EN VIVO AHORA</span>
-          </div>
-          <span class="text-label-sm text-gray-500 mt-2 font-mono">LISTENER COUNT: 1111</span>
+        <div id="live-status-header" class="hidden md:flex flex-col items-end">
+          <!-- Filled dynamically -->
         </div>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
+
         <!-- MAIN COLUMN: PLAYER & VISUALIZER (8 cols) -->
         <div class="lg:col-span-8 space-y-8">
-          
-          <!-- MAIN PLAYER CARD -->
-          <div class="relative bg-[#111] border border-white/10 rounded-wild-xl overflow-hidden group shadow-wild-glow">
-            <!-- Background Image -->
-            <div class="absolute inset-0">
-              <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1200&q=80" width="1200" height="800" class="w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform duration-[20s]" />
-              <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
-            </div>
 
+          <!-- MAIN PLAYER CARD -->
+          <div id="main-player" class="relative bg-[#111] border border-white/10 rounded-wild-xl overflow-hidden group shadow-wild-glow">
             <div class="relative p-8 min-h-[350px] flex flex-col justify-end">
               <!-- Equalizer Bars (Visual) -->
-              <div class="flex items-end gap-1 h-16 mb-6 opacity-80">
+              <div id="equalizer-bars" class="flex items-end gap-1 h-16 mb-6 opacity-80">
                 <div class="w-2 bg-tenant-primary animate-equalizer-1"></div>
                 <div class="w-2 bg-tenant-primary animate-equalizer-2"></div>
                 <div class="w-2 bg-tenant-primary animate-equalizer-3"></div>
@@ -70,58 +54,53 @@ const recentEpisodes = [
                 <div class="w-2 bg-tenant-primary animate-equalizer-3"></div>
               </div>
 
-              <h2 class="text-3xl md:text-4xl font-black text-white uppercase tracking-tight mb-2">
-                Sesión Nocturna: <br/> <span class="text-stroke-1 text-transparent bg-clip-text bg-white">Ritmos Prohibidos</span>
+              <!-- Live Embed Player (hidden by default) -->
+              <div id="live-embed-container" class="hidden mb-4">
+                <iframe id="zeno-embed" src="" width="100%" height="120" frameborder="0" allow="autoplay" style="border-radius:12px;"></iframe>
+              </div>
+
+              <!-- Spotify Auto Radio Embed (hidden by default) -->
+              <div id="spotify-embed-container" class="hidden mb-4">
+                <iframe id="spotify-embed" src="" width="100%" height="152" frameborder="0" allow="autoplay" style="border-radius:12px;"></iframe>
+              </div>
+
+              <!-- HTML5 Audio Player (hidden by default) -->
+              <div id="audio-player-container" class="hidden mb-4">
+                <audio id="episode-player" controls class="w-full" style="filter: invert(1); border-radius: 8px;"></audio>
+              </div>
+
+              <h2 id="player-title" class="text-3xl md:text-4xl font-black text-white uppercase tracking-tight mb-2">
+                Cargando...
               </h2>
-              <p class="text-gray-300 font-medium mb-6 max-w-xl text-sm">
-                Mezclando lo más sucio del trap con los clásicos del boom bap. Súbele al volumen y despierta a los vecinos.
+              <p id="player-description" class="text-gray-300 font-medium mb-6 max-w-xl text-sm">
+                Obteniendo información de la transmisión...
               </p>
 
               <div class="flex items-center gap-6">
-                <button onclick="window.dispatchEvent(new CustomEvent('play-radio'))" class="w-16 h-16 bg-tenant-primary text-black rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-tenant-glow">
+                <button id="player-play-btn" onclick="window.dispatchEvent(new CustomEvent('play-radio'))" class="w-16 h-16 bg-tenant-primary text-black rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-tenant-glow">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                 </button>
                 <div class="space-y-1">
                   <div class="text-label-sm font-black uppercase tracking-widest text-gray-500">Ahora Sonando</div>
-                  <div class="text-lg font-bold text-white marquee-container overflow-hidden w-64">
-                    <span class="marquee-content">MC Kalle - Barrio Fino (Remix) • DJ Wasted - Scratch Intro • </span>
+                  <div id="player-now-playing" class="text-lg font-bold text-white marquee-container overflow-hidden w-64">
+                    <span class="marquee-content">Cargando...</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- LATEST EPISODES SECTION -->
+          <!-- LATEST EPISODES / AUTO RADIO TRACKS SECTION -->
           <div>
             <div class="flex items-center justify-between mb-6">
-              <h3 class="text-2xl font-black uppercase tracking-tighter text-white">
+              <h3 id="episodes-section-title" class="text-2xl font-black uppercase tracking-tighter text-white">
                 <span class="text-tenant-primary">///</span> Últimos Episodios
               </h3>
-              <a href="#" class="text-label-sm font-black uppercase tracking-widest hover:text-tenant-primary transition-colors">Ver Archivo</a>
             </div>
 
-            <div class="space-y-4">
-              {recentEpisodes.map((ep) => (
-                <div class="group flex items-center gap-4 p-4 bg-white/5 border border-white/5 hover:border-tenant-primary/50 rounded-wild-lg transition-all cursor-pointer hover:bg-white/10">
-                  <div class="relative w-24 h-24 flex-shrink-0 overflow-hidden rounded-wild">
-                    <img src={ep.image} width="500" height="500" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" />
-                    <div class="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    </div>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <div class="flex items-center gap-2 mb-1">
-                      <span class="px-2 py-0.5 bg-white/10 rounded text-label-sm font-bold uppercase tracking-wider text-gray-400">{ep.date}</span>
-                      <span class="px-2 py-0.5 bg-white/10 rounded text-label-sm font-bold uppercase tracking-wider text-gray-400">{ep.duration}</span>
-                    </div>
-                    <h4 class="text-lg font-black text-white uppercase truncate group-hover:text-tenant-primary transition-colors">{ep.title}</h4>
-                    <p class="text-sm text-gray-500 font-medium">Host: {ep.host}</p>
-                  </div>
-                  <button class="w-10 h-10 border border-white/10 rounded-full flex items-center justify-center text-white/50 group-hover:text-white group-hover:border-white transition-all">
-                    â†“
-                  </button>
-                </div>
-              ))}
+            <div id="episodes-list" class="space-y-4">
+              <!-- Filled dynamically -->
+              <div class="text-center py-12 text-gray-500 font-mono text-sm">Cargando episodios...</div>
             </div>
           </div>
 
@@ -129,11 +108,11 @@ const recentEpisodes = [
 
         <!-- SIDEBAR: REQUEST LINE & CHAT (4 cols) -->
         <aside class="lg:col-span-4 space-y-8">
-          
+
           <!-- REQUEST LINE BOX -->
           <div class="bg-tenant-primary text-black p-8 rounded-wild-xl relative overflow-hidden shadow-tenant-glow transform hover:-rotate-1 transition-transform duration-300">
             <div class="absolute -right-10 -top-10 text-9xl text-black/10 font-black rotate-12">?</div>
-            
+
             <h3 class="text-3xl font-black uppercase leading-none mb-4 relative z-10">
               ¿Qué quieres escuchar?
             </h3>
@@ -142,17 +121,17 @@ const recentEpisodes = [
             </p>
 
             <div class="bg-black/10 backdrop-blur-sm p-4 rounded-wild border border-black/10 flex flex-col items-center gap-4 relative z-10">
-              <!-- QR Placeholder -->
+              <!-- QR -->
               <div class="bg-white p-2 rounded-wild shadow-lg">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://wa.me/525512345678" alt="Scan to Request" width="150" height="150" class="w-32 h-32 mix-blend-multiply" />
+                <img id="whatsapp-qr" src="" alt="Scan to Request" width="150" height="150" class="w-32 h-32 mix-blend-multiply" />
               </div>
-              
+
               <div class="text-center">
                 <p class="text-label-sm font-black uppercase tracking-widest mb-1">WhatsApp Directo</p>
-                <p class="text-2xl font-black tracking-tighter">+52 (55) 1111-1111</p>
+                <p id="whatsapp-number" class="text-2xl font-black tracking-tighter">Cargando...</p>
               </div>
             </div>
-            
+
             <div class="mt-6 flex items-center justify-center gap-2 text-label-sm font-bold uppercase tracking-widest opacity-60">
               <span class="w-2 h-2 bg-black rounded-full animate-pulse"></span>
               Línea Abierta
@@ -162,21 +141,11 @@ const recentEpisodes = [
           <!-- SCHEDULE WIDGET -->
           <div class="bg-[#111] border border-white/10 p-6 rounded-wild-lg">
             <h3 class="text-sm font-black text-gray-500 uppercase tracking-widest mb-6 border-b border-white/10 pb-2">
-              Próximos Shows
+              Programación
             </h3>
-            <ul class="space-y-6">
-              <li class="relative pl-6 border-l-2 border-tenant-primary">
-                <div class="absolute -left-[5px] top-0 w-2 h-2 bg-tenant-primary rounded-full"></div>
-                <span class="block text-xs font-mono text-tenant-primary mb-1">11:11 - 11:11</span>
-                <span class="block text-lg font-bold text-white uppercase leading-none">Batallas de Gallos</span>
-                <span class="text-xs text-gray-500">Live desde el Parque Morelos</span>
-              </li>
-              <li class="relative pl-6 border-l-2 border-gray-700">
-                <div class="absolute -left-[5px] top-0 w-2 h-2 bg-gray-700 rounded-full"></div>
-                <span class="block text-xs font-mono text-gray-500 mb-1">11:11 - 11:11</span>
-                <span class="block text-lg font-bold text-gray-400 uppercase leading-none">Zona de Niebla</span>
-                <span class="text-xs text-gray-600">Ambient & Lo-Fi Beats</span>
-              </li>
+            <ul id="schedule-list" class="space-y-6">
+              <!-- Filled dynamically -->
+              <li class="text-center text-gray-500 text-sm py-4 font-mono">Cargando programación...</li>
             </ul>
           </div>
 
@@ -199,7 +168,7 @@ const recentEpisodes = [
   .text-stroke-1 {
     -webkit-text-stroke: 1px currentColor;
   }
-  
+
   @keyframes equalizer {
     0% { height: 20%; }
     50% { height: 100%; }
@@ -212,4 +181,311 @@ const recentEpisodes = [
   .animate-equalizer-4 { animation: equalizer 1.0s infinite ease-in-out; }
   .animate-equalizer-5 { animation: equalizer 0.7s infinite ease-in-out; }
 
+  /* Live badge animation */
+  @keyframes live-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  .live-dot {
+    animation: live-pulse 1.5s ease-in-out infinite;
+  }
 </style>
+
+<script>
+  import { supabase } from '../lib/supabase';
+
+  const DAY_NAMES = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+
+  async function loadRadioPage() {
+    try {
+      // Fetch all data in parallel
+      const [configRes, episodesRes, scheduleRes, autoTracksRes] = await Promise.all([
+        supabase.from('radio_config').select('*').limit(1).single(),
+        supabase.from('radio_episodes').select('*').or('is_published.eq.true,is_live.eq.true').order('created_at', { ascending: false }).limit(10),
+        supabase.from('radio_schedule').select('*').eq('is_active', true).order('day_of_week').order('start_time'),
+        supabase.from('radio_auto_tracks').select('*').eq('is_active', true).order('sort_order').order('created_at', { ascending: false }),
+      ]);
+
+      const config = configRes.data;
+      const episodes = episodesRes.data || [];
+      const schedule = scheduleRes.data || [];
+      const autoTracks = autoTracksRes.data || [];
+
+      // Determine mode: live > auto_radio > episodes
+      const isLive = config?.is_live === true;
+      const isAutoRadio = config?.auto_radio === true;
+
+      // Update live status header
+      const liveHeader = document.getElementById('live-status-header');
+      if (liveHeader) {
+        if (isLive) {
+          liveHeader.innerHTML = `
+            <div class="flex items-center gap-2 px-4 py-2 bg-red-600/20 border border-red-600 rounded animate-pulse">
+              <div class="w-3 h-3 bg-red-600 rounded-full live-dot"></div>
+              <span class="text-red-500 font-black uppercase text-xs tracking-widest">EN VIVO AHORA</span>
+            </div>
+            <span class="text-label-sm text-gray-500 mt-2 font-mono">${config.current_show || 'Wild Gvng Radio'}</span>
+          `;
+        } else if (isAutoRadio) {
+          liveHeader.innerHTML = `
+            <div class="flex items-center gap-2 px-4 py-2 bg-green-600/20 border border-green-600 rounded animate-pulse">
+              <div class="w-3 h-3 bg-green-600 rounded-full live-dot"></div>
+              <span class="text-green-500 font-black uppercase text-xs tracking-widest">AUTO RADIO</span>
+            </div>
+            <span class="text-label-sm text-gray-500 mt-2 font-mono">Reproducción automática de Spotify</span>
+          `;
+        } else {
+          liveHeader.innerHTML = `
+            <div class="flex items-center gap-2 px-4 py-2 bg-gray-800/50 border border-gray-700 rounded">
+              <div class="w-3 h-3 bg-gray-500 rounded-full"></div>
+              <span class="text-gray-400 font-black uppercase text-xs tracking-widest">SÓLO GRABADO</span>
+            </div>
+            <span class="text-label-sm text-gray-500 mt-2 font-mono">Episodios disponibles</span>
+          `;
+        }
+      }
+
+      // Find live episode or latest published episode
+      const liveEpisode = episodes.find(ep => ep.is_live);
+      const latestEpisode = episodes.find(ep => ep.is_published && !ep.is_live);
+      const featured = liveEpisode || latestEpisode;
+
+      // Update player containers
+      const liveEmbedContainer = document.getElementById('live-embed-container');
+      const spotifyEmbedContainer = document.getElementById('spotify-embed-container');
+      const audioPlayerContainer = document.getElementById('audio-player-container');
+      const equalizerBars = document.getElementById('equalizer-bars');
+      const playerTitle = document.getElementById('player-title');
+      const playerDescription = document.getElementById('player-description');
+      const playerNowPlaying = document.getElementById('player-now-playing');
+      const episodesSectionTitle = document.getElementById('episodes-section-title');
+
+      // Hide all players first
+      liveEmbedContainer?.classList.add('hidden');
+      spotifyEmbedContainer?.classList.add('hidden');
+      audioPlayerContainer?.classList.add('hidden');
+
+      if (isLive) {
+        // MODE 1: LIVE - Show Zeno.FM embed
+        liveEmbedContainer?.classList.remove('hidden');
+
+        const embed = document.getElementById('zeno-embed') as HTMLIFrameElement;
+        if (embed) {
+          embed.src = config.zeno_embed_url || 'https://zeno.fm/embed/placeholder';
+        }
+
+        if (playerTitle) playerTitle.innerHTML = `${config.current_show || 'Wild Gvng Radio'} <span class="text-red-500 text-sm font-mono">🔴 LIVE</span>`;
+        if (playerDescription) playerDescription.textContent = `Transmitiendo en vivo con ${config.current_host || 'KAZTA'}`;
+        if (playerNowPlaying) playerNowPlaying.innerHTML = `<span class="marquee-content">🔴 EN VIVO • ${config.current_show || 'Wild Gvng Radio'} • </span>`;
+        if (episodesSectionTitle) episodesSectionTitle.innerHTML = `<span class="text-tenant-primary">///</span> Últimos Episodios`;
+      } else if (isAutoRadio) {
+        // MODE 2: AUTO RADIO - Show Spotify playlist embed or first track embed
+        spotifyEmbedContainer?.classList.remove('hidden');
+
+        // Prefer playlist embed, fall back to first track embed
+        let spotifySrc = '';
+        if (config.auto_radio_spotify_playlist) {
+          // Extract playlist ID or use as-is
+          spotifySrc = config.auto_radio_spotify_playlist.includes('spotify.com/embed')
+            ? config.auto_radio_spotify_playlist
+            : `https://open.spotify.com/embed/playlist/${config.auto_radio_spotify_playlist}`;
+        } else if (autoTracks.length > 0) {
+          spotifySrc = autoTracks[0].spotify_embed_url;
+        }
+
+        const spotifyEmbed = document.getElementById('spotify-embed') as HTMLIFrameElement;
+        if (spotifyEmbed && spotifySrc) {
+          spotifyEmbed.src = spotifySrc;
+        }
+
+        if (playerTitle) playerTitle.innerHTML = `AUTO RADIO <span class="text-green-500 text-sm font-mono">🎵 SPOTIFY</span>`;
+        if (playerDescription) playerDescription.textContent = `Reproduciendo automáticamente desde Spotify`;
+        if (playerNowPlaying) playerNowPlaying.innerHTML = `<span class="marquee-content">🎵 AUTO RADIO • Wild Gvng Playlist • </span>`;
+        if (episodesSectionTitle) episodesSectionTitle.innerHTML = `<span class="text-tenant-primary">///</span> Auto Radio Tracks`;
+
+        // Show auto tracks as the episodes list
+        const episodesList = document.getElementById('episodes-list');
+        if (episodesList && autoTracks.length > 0) {
+          episodesList.innerHTML = autoTracks.map(track => `
+            <div class="group flex items-center gap-4 p-4 bg-white/5 border border-white/5 hover:border-tenant-primary/50 rounded-wild-lg transition-all cursor-pointer hover:bg-white/10">
+              <div class="relative w-24 h-24 flex-shrink-0 overflow-hidden rounded-wild">
+                <img src="${track.cover_url || '/wg_logo.png'}" width="500" height="500" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" onerror="this.src='/wg_logo.png'" />
+                <div class="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+              </div>
+              <div class="flex-1 min-w-0">
+                <h4 class="text-lg font-black text-white uppercase truncate group-hover:text-tenant-primary transition-colors">${track.title || 'Auto Track'}</h4>
+                <p class="text-sm text-gray-500 font-medium">${track.artist || 'Spotify'}</p>
+              </div>
+              <a href="${track.spotify_track_url}" target="_blank" class="w-10 h-10 border border-white/10 rounded-full flex items-center justify-center text-white/50 hover:text-white hover:border-white transition-all">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+              </a>
+            </div>
+          `).join('');
+        } else if (episodesList && autoTracks.length === 0) {
+          episodesList.innerHTML = `
+            <div class="text-center py-12 text-gray-500 font-mono text-sm">
+              No hay tracks en Auto Radio. Agrega algunos desde el panel ERP.
+            </div>
+          `;
+        }
+      } else if (featured) {
+        // MODE 3: EPISODE - Show HTML5 player with latest episode
+        audioPlayerContainer?.classList.remove('hidden');
+
+        const audioPlayer = document.getElementById('episode-player') as HTMLAudioElement;
+        if (audioPlayer) {
+          audioPlayer.src = featured.audio_url;
+          audioPlayer.load();
+        }
+
+        if (playerTitle) playerTitle.innerHTML = featured.title;
+        if (playerDescription) playerDescription.textContent = featured.description || `Episodio de ${featured.host || 'KAZTA'}`;
+        if (playerNowPlaying) playerNowPlaying.innerHTML = `<span class="marquee-content">${featured.title} • ${featured.host || 'KAZTA'} • </span>`;
+        if (episodesSectionTitle) episodesSectionTitle.innerHTML = `<span class="text-tenant-primary">///</span> Últimos Episodios`;
+
+        // Update play button to toggle audio player
+        const playBtn = document.getElementById('player-play-btn');
+        if (playBtn) {
+          playBtn.onclick = () => {
+            if (audioPlayer?.paused) {
+              audioPlayer?.play().catch(e => console.log('Audio play failed', e));
+              window.dispatchEvent(new CustomEvent('play-radio'));
+            } else {
+              audioPlayer?.pause();
+            }
+          };
+        }
+
+        // Show episodes list
+        const episodesList = document.getElementById('episodes-list');
+        if (episodesList) {
+          const publishedEpisodes = episodes.filter(ep => ep.is_published && !ep.is_live);
+          if (publishedEpisodes.length === 0) {
+            episodesList.innerHTML = `
+              <div class="text-center py-12 text-gray-500 font-mono text-sm">
+                No hay episodios publicados todavía.
+              </div>
+            `;
+          } else {
+            episodesList.innerHTML = publishedEpisodes.slice(0, 8).map(ep => `
+              <div class="group flex items-center gap-4 p-4 bg-white/5 border border-white/5 hover:border-tenant-primary/50 rounded-wild-lg transition-all cursor-pointer hover:bg-white/10" data-episode-url="${ep.audio_url}" data-episode-title="${ep.title}" data-episode-host="${ep.host || 'KAZTA'}" data-episode-cover="${ep.cover_url || '/wg_logo.png'}">
+                <div class="relative w-24 h-24 flex-shrink-0 overflow-hidden rounded-wild">
+                  <img src="${ep.cover_url || '/wg_logo.png'}" width="500" height="500" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" onerror="this.src='/wg_logo.png'" />
+                  <div class="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity" onclick="event.stopPropagation();playEpisode(this)">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                  </div>
+                </div>
+                <div class="flex-1 min-w-0" onclick="playEpisode(this)">
+                  <div class="flex items-center gap-2 mb-1">
+                    ${ep.duration ? `<span class="px-2 py-0.5 bg-white/10 rounded text-label-sm font-bold uppercase tracking-wider text-gray-400">${ep.duration}</span>` : ''}
+                    ${ep.category ? `<span class="px-2 py-0.5 bg-white/10 rounded text-label-sm font-bold uppercase tracking-wider text-gray-400">${ep.category}</span>` : ''}
+                  </div>
+                  <h4 class="text-lg font-black text-white uppercase truncate group-hover:text-tenant-primary transition-colors">${ep.title}</h4>
+                  <p class="text-sm text-gray-500 font-medium">Host: ${ep.host || 'KAZTA'}</p>
+                </div>
+                <button class="w-10 h-10 border border-white/10 rounded-full flex items-center justify-center text-white/50 hover:text-white hover:border-white transition-all" onclick="event.stopPropagation();downloadEpisode('${ep.audio_url}', '${ep.title}')">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                </button>
+              </div>
+            `).join('');
+          }
+        }
+      } else {
+        // No content available
+        if (equalizerBars) equalizerBars.classList.add('opacity-20');
+        if (playerTitle) playerTitle.textContent = 'Sin transmisión';
+        if (playerDescription) playerDescription.textContent = 'No hay episodios disponibles todavía. Vuelve pronto.';
+        if (playerNowPlaying) playerNowPlaying.innerHTML = '<span class="marquee-content">Esperando contenido...</span>';
+        if (episodesSectionTitle) episodesSectionTitle.innerHTML = `<span class="text-tenant-primary">///</span> Últimos Episodios`;
+      }
+
+      // Update schedule
+      const scheduleList = document.getElementById('schedule-list');
+      if (scheduleList) {
+        if (schedule.length === 0) {
+          scheduleList.innerHTML = `<li class="text-center text-gray-500 text-sm py-4 font-mono">Próximamente...</li>`;
+        } else {
+          const today = new Date().getDay();
+          scheduleList.innerHTML = schedule.map(s => {
+            const isToday = s.day_of_week === today;
+            const borderClass = isToday ? 'border-tenant-primary' : 'border-gray-700';
+            const dotClass = isToday ? 'bg-tenant-primary' : 'bg-gray-700';
+            return `
+              <li class="relative pl-6 border-l-2 ${borderClass}">
+                <div class="absolute -left-[5px] top-0 w-2 h-2 ${dotClass} rounded-full"></div>
+                <span class="block text-xs font-mono ${isToday ? 'text-tenant-primary' : 'text-gray-500'} mb-1">${DAY_NAMES[s.day_of_week]} • ${s.start_time?.substring(0,5) || '--:--'} - ${s.end_time?.substring(0,5) || '--:--'}</span>
+                <span class="block text-lg font-bold ${isToday ? 'text-white' : 'text-gray-400'} uppercase leading-none">${s.show_name}</span>
+                ${s.host ? `<span class="text-xs text-gray-500">${s.host}</span>` : ''}
+                ${s.description ? `<span class="text-xs text-gray-600 block">${s.description}</span>` : ''}
+              </li>
+            `;
+          }).join('');
+        }
+      }
+
+      // Update WhatsApp
+      const whatsappNumber = document.getElementById('whatsapp-number');
+      const whatsappQr = document.getElementById('whatsapp-qr');
+      if (whatsappNumber) {
+        whatsappNumber.textContent = config?.whatsapp || '+52 (871) 111-1111';
+      }
+      if (whatsappQr) {
+        const waNumber = (config?.whatsapp || '+52 (871) 111-1111').replace(/[^0-9]/g, '');
+        whatsappQr.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://wa.me/${waNumber}`;
+        whatsappQr.alt = `WhatsApp: ${config?.whatsapp || '+52 (871) 111-1111'}`;
+      }
+
+    } catch (err) {
+      console.error('Error loading radio page:', err);
+      const playerTitle = document.getElementById('player-title');
+      if (playerTitle) playerTitle.textContent = 'Error al cargar';
+      const playerDesc = document.getElementById('player-description');
+      if (playerDesc) playerDesc.textContent = 'No se pudo conectar con el servidor. Intenta de nuevo más tarde.';
+    }
+  }
+
+  // Play a specific episode from the list
+  (window as any).playEpisode = function(el) {
+    const parent = el.closest('[data-episode-url]');
+    if (!parent) return;
+
+    const url = parent.dataset.episodeUrl;
+    const title = parent.dataset.episodeTitle;
+    const host = parent.dataset.episodeHost;
+
+    const audioPlayer = document.getElementById('episode-player') as HTMLAudioElement;
+    const liveEmbedContainer = document.getElementById('live-embed-container');
+    const spotifyEmbedContainer = document.getElementById('spotify-embed-container');
+    const audioPlayerContainer = document.getElementById('audio-player-container');
+    const playerTitle = document.getElementById('player-title');
+    const playerNowPlaying = document.getElementById('player-now-playing');
+
+    if (audioPlayer && url) {
+      liveEmbedContainer?.classList.add('hidden');
+      spotifyEmbedContainer?.classList.add('hidden');
+      audioPlayerContainer?.classList.remove('hidden');
+      audioPlayer.src = url;
+      audioPlayer.load();
+      audioPlayer.play().catch(e => console.log('Audio play failed', e));
+    }
+
+    if (playerTitle) playerTitle.textContent = title || 'Reproduciendo';
+    if (playerNowPlaying) playerNowPlaying.innerHTML = `<span class="marquee-content">${title || 'Reproduciendo'} • ${host || 'KAZTA'} • </span>`;
+
+    window.dispatchEvent(new CustomEvent('play-radio'));
+  };
+
+  // Download episode
+  (window as any).downloadEpisode = function(url: string, title: string) {
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${title || 'episode'}.mp3`;
+    a.target = '_blank';
+    a.click();
+  };
+
+  // Initialize
+  loadRadioPage();
+</script>

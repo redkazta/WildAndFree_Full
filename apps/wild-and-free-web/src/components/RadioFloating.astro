@@ -3,18 +3,18 @@
 <!-- Radio Floating Player (Global) -->
 <div id="radio-floating" transition:persist class="fixed bottom-6 left-6 z-[9999] w-[260px] sm:w-[300px]">
   <div id="radio-container" class="bg-black/95 backdrop-blur-md border border-[var(--primary)]/30 rounded-xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.5)] w-full flex flex-col group hover:border-[var(--primary)]/60 transition-all">
-    
+
     <!-- Player Header -->
     <div class="p-3 flex gap-3 items-center bg-gradient-to-r from-[#111] to-black">
         <div class="w-10 h-10 bg-zinc-900 rounded-lg overflow-hidden flex-shrink-0 relative border border-white/5">
-            <img id="radio-cover" src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=150&q=80" width="40" height="40" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
+            <img id="radio-cover" src="/wg_logo.png" width="40" height="40" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
             <div class="absolute inset-0 flex items-center justify-center bg-black/20">
-                <div class="w-2 h-2 bg-[var(--primary)] rounded-full animate-pulse shadow-[0_0_10px_var(--primary)]"></div>
+                <div id="radio-live-dot" class="w-2 h-2 bg-gray-500 rounded-full"></div>
             </div>
         </div>
         <div class="overflow-hidden flex-1 min-w-0">
-            <h4 id="radio-title" class="text-xs font-black text-white uppercase truncate tracking-wide group-hover:text-[var(--primary)] transition-colors">Wild & Free FM</h4>
-            <p id="radio-artist" class="text-[9px] text-gray-400 font-bold uppercase truncate tracking-wider">En Vivo • 24/7</p>
+            <h4 id="radio-title" class="text-xs font-black text-white uppercase truncate tracking-wide group-hover:text-[var(--primary)] transition-colors">Wild Gvng Radio</h4>
+            <p id="radio-artist" class="text-[9px] text-gray-400 font-bold uppercase truncate tracking-wider">Cargando...</p>
         </div>
         <button id="radio-toggle" class="w-8 h-8 bg-[var(--primary)] text-black rounded-full flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-[0_0_15px_rgba(201,131,0,0.3)]">
             <svg id="radio-play" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
@@ -27,7 +27,7 @@
         <button id="radio-fav-btn" class="p-1.5 text-gray-500 hover:text-[var(--primary)] transition-colors" title="Agregar a Favoritos">
             <svg id="radio-fav-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         </button>
-        
+
         <!-- Visualizer -->
         <div id="radio-eq" class="flex items-end gap-0.5 h-4 opacity-0 transition-opacity">
             <div class="w-0.5 bg-[var(--primary)] animate-[eq_1s_ease-in-out_infinite]"></div>
@@ -37,7 +37,7 @@
             <div class="w-0.5 bg-[var(--primary)] animate-[eq_0.9s_ease-in-out_infinite_0.4s]"></div>
         </div>
 
-        <button class="p-1.5 text-gray-500 hover:text-white transition-colors" title="Ver Detalles">
+        <button id="radio-info-btn" class="p-1.5 text-gray-500 hover:text-white transition-colors" title="Ver Radio">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
         </button>
     </div>
@@ -52,6 +52,7 @@
 </style>
 
 <script>
+    import { supabase } from '../lib/supabase';
     import { Favorites } from '../lib/favorites.js';
 
     const radioToggle = document.getElementById('radio-toggle');
@@ -60,15 +61,144 @@
     const radioEq = document.getElementById('radio-eq');
     const radioFavBtn = document.getElementById('radio-fav-btn');
     const radioFavIcon = document.getElementById('radio-fav-icon');
-    
+    const radioTitle = document.getElementById('radio-title');
+    const radioArtist = document.getElementById('radio-artist');
+    const radioCover = document.getElementById('radio-cover') as HTMLImageElement;
+    const radioLiveDot = document.getElementById('radio-live-dot');
+    const radioInfoBtn = document.getElementById('radio-info-btn');
+
     let isPlaying = false;
-    const RADIO_TRACK_ID = 'radio-wild-free-fm';
-    const RADIO_METADATA = {
-        id: RADIO_TRACK_ID,
-        title: 'Wild & Free FM',
-        artist: 'En Vivo • 24/7',
-        image: 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=150&q=80'
+    let audio: HTMLAudioElement | null = null;
+    let currentMode: 'live' | 'auto' | 'episode' | 'none' = 'none';
+    let currentMetadata: any = {
+        id: 'radio-wild-free-fm',
+        title: 'Wild Gvng Radio',
+        artist: 'Cargando...',
+        image: '/wg_logo.png'
     };
+
+    const RADIO_TRACK_ID = 'radio-wild-free-fm';
+
+    // Supabase query to load radio config
+    async function loadRadioConfig() {
+        try {
+            const [configRes, episodesRes, autoTracksRes] = await Promise.all([
+                supabase.from('radio_config').select('*').limit(1).single(),
+                supabase.from('radio_episodes').select('*').or('is_published.eq.true,is_live.eq.true').order('created_at', { ascending: false }).limit(5),
+                supabase.from('radio_auto_tracks').select('*').eq('is_active', true).order('sort_order').order('created_at', { ascending: false }).limit(1),
+            ]);
+
+            const config = configRes.data;
+            const episodes = episodesRes.data || [];
+            const autoTracks = autoTracksRes.data || [];
+
+            if (config?.is_live) {
+                // LIVE mode - use direct stream URL
+                currentMode = 'live';
+                const liveUrl = config.zeno_stream_url || 'https://stream.zeno.fm/placeholder';
+                initAudio(liveUrl, 'live');
+
+                currentMetadata = {
+                    id: RADIO_TRACK_ID,
+                    title: config.current_show || 'Wild Gvng Radio',
+                    artist: `🔴 EN VIVO • ${config.current_host || 'KAZTA'}`,
+                    image: '/wg_logo.png'
+                };
+
+                if (radioLiveDot) {
+                    radioLiveDot.className = 'w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_10px_#ff0000]';
+                }
+            } else if (config?.auto_radio && autoTracks.length > 0) {
+                // AUTO RADIO mode - show Spotify embed info
+                currentMode = 'auto';
+
+                const firstTrack = autoTracks[0];
+                currentMetadata = {
+                    id: RADIO_TRACK_ID,
+                    title: firstTrack.title || 'Auto Radio',
+                    artist: `🎵 AUTO RADIO • ${firstTrack.artist || 'Spotify'}`,
+                    image: firstTrack.cover_url || '/wg_logo.png'
+                };
+
+                if (radioLiveDot) {
+                    radioLiveDot.className = 'w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_#00ff88]';
+                }
+            } else {
+                // Not live, not auto - find latest published episode
+                currentMode = 'episode';
+                const latestEpisode = episodes.find(ep => ep.is_published && !ep.is_live);
+
+                if (latestEpisode) {
+                    initAudio(latestEpisode.audio_url, 'episode');
+
+                    currentMetadata = {
+                        id: latestEpisode.id || RADIO_TRACK_ID,
+                        title: latestEpisode.title,
+                        artist: latestEpisode.host || 'KAZTA',
+                        image: latestEpisode.cover_url || '/wg_logo.png'
+                    };
+                } else {
+                    currentMode = 'none';
+                    currentMetadata = {
+                        id: RADIO_TRACK_ID,
+                        title: 'Wild Gvng Radio',
+                        artist: 'Sin contenido disponible',
+                        image: '/wg_logo.png'
+                    };
+
+                    if (radioLiveDot) {
+                        radioLiveDot.className = 'w-2 h-2 bg-gray-500 rounded-full';
+                    }
+                }
+            }
+
+            // Update UI
+            if (radioTitle) radioTitle.textContent = currentMetadata.title;
+            if (radioArtist) radioArtist.textContent = currentMetadata.artist;
+            if (radioCover) {
+                radioCover.src = currentMetadata.image;
+                radioCover.onerror = () => { (radioCover as HTMLImageElement).src = '/wg_logo.png'; };
+            }
+
+        } catch (err) {
+            console.error('Error loading radio config:', err);
+            if (radioArtist) radioArtist.textContent = 'Error de conexión';
+
+            try {
+                const { data: fallbackConfig } = await supabase.from('radio_config').select('*').limit(1).single();
+                if (fallbackConfig?.zeno_stream_url) {
+                    initAudio(fallbackConfig.zeno_stream_url, 'live');
+                }
+            } catch {}
+        }
+    }
+
+    function initAudio(url: string, source: 'live' | 'episode' | 'auto') {
+        if (audio) {
+            audio.pause();
+            audio.src = '';
+        }
+
+        audio = new Audio(url);
+        // We track mode separately in currentMode, not through this param
+
+        audio.addEventListener('ended', () => {
+            if (source === 'episode') {
+                isPlaying = false;
+                radioPlay?.classList.remove('hidden');
+                radioPause?.classList.add('hidden');
+                radioEq?.classList.add('opacity-0');
+            }
+        });
+
+        audio.addEventListener('error', () => {
+            console.error('Audio playback error');
+        });
+
+        if (isPlaying) {
+            audio.play().catch(e => console.log('Audio play failed', e));
+        }
+    }
 
     // Favorites Logic
     const updateFavIcon = () => {
@@ -82,20 +212,17 @@
     };
 
     radioFavBtn?.addEventListener('click', async () => {
-        await Favorites.toggle(RADIO_METADATA);
+        await Favorites.toggle(currentMetadata);
         updateFavIcon();
     });
 
-    // Listen for updates from other components
     window.addEventListener('favorites-updated', updateFavIcon);
-    
-    // Initial check
-    // Wait a bit for auth to settle or use event
     setTimeout(updateFavIcon, 1000);
 
-
-    // Simulate audio player
-    const audio = new Audio('https://stream.zeno.fm/ez250525258uv'); // Example stream or placeholder
+    // Navigate to radio page
+    radioInfoBtn?.addEventListener('click', () => {
+        window.location.href = '/radio';
+    });
 
     // Listen for Spotify Play event to pause
     window.addEventListener('play-spotify-track', () => {
@@ -104,7 +231,7 @@
             radioPlay?.classList.remove('hidden');
             radioPause?.classList.add('hidden');
             radioEq?.classList.add('opacity-0');
-            audio.pause();
+            audio?.pause();
         }
     });
 
@@ -115,18 +242,26 @@
             radioPlay?.classList.remove('hidden');
             radioPause?.classList.add('hidden');
             radioEq?.classList.add('opacity-0');
-            audio.pause();
+            audio?.pause();
         }
     });
 
-    // Listen for external play request (e.g. from Radio page)
+    // Listen for external play request
     window.addEventListener('play-radio', () => {
         if (!isPlaying) {
             isPlaying = true;
             radioPlay?.classList.add('hidden');
             radioPause?.classList.remove('hidden');
             radioEq?.classList.remove('opacity-0');
-            audio.play().catch(e => console.log('Audio play failed', e));
+            if (audio) {
+                audio.play().catch(e => console.log('Audio play failed', e));
+            } else {
+                loadRadioConfig().then(() => {
+                    if (audio) {
+                        audio.play().catch(e => console.log('Audio play failed', e));
+                    }
+                });
+            }
         }
     });
 
@@ -134,39 +269,136 @@
     window.addEventListener('wild-play', (e: Event) => {
         const detail = (e as CustomEvent).detail;
         if (detail && detail.title && detail.artist && detail.image) {
-            // Update metadata
-            const radioTitle = document.getElementById('radio-title');
-            const radioArtist = document.getElementById('radio-artist');
-            const radioCover = document.getElementById('radio-cover') as HTMLImageElement;
+            currentMetadata = {
+                id: detail.id || RADIO_TRACK_ID,
+                title: detail.title,
+                artist: detail.artist,
+                image: detail.image
+            };
             if (radioTitle) radioTitle.textContent = detail.title;
             if (radioArtist) radioArtist.textContent = detail.artist;
-            if (radioCover) radioCover.src = detail.image;
-            // Auto-play if not playing
+            if (radioCover) {
+                radioCover.src = detail.image;
+                radioCover.onerror = () => { (radioCover as HTMLImageElement).src = '/wg_logo.png'; };
+            }
             if (!isPlaying) {
                 isPlaying = true;
                 radioPlay?.classList.add('hidden');
                 radioPause?.classList.remove('hidden');
                 radioEq?.classList.remove('opacity-0');
-                audio.play().catch(err => console.log('Audio play failed', err));
+                if (detail.audio_url) {
+                    initAudio(detail.audio_url, 'episode');
+                }
+                if (audio) {
+                    audio.play().catch(err => console.log('Audio play failed', err));
+                }
             }
         }
     });
 
     radioToggle?.addEventListener('click', () => {
         isPlaying = !isPlaying;
-        
+
         if (isPlaying) {
             radioPlay?.classList.add('hidden');
             radioPause?.classList.remove('hidden');
             radioEq?.classList.remove('opacity-0');
-            audio.play().catch(e => console.log('Audio play failed', e));
-            // Notify others
+            if (audio) {
+                audio.play().catch(e => console.log('Audio play failed', e));
+            } else {
+                loadRadioConfig().then(() => {
+                    if (audio) {
+                        audio.play().catch(e => console.log('Audio play failed', e));
+                    }
+                });
+            }
             window.dispatchEvent(new CustomEvent('play-radio'));
         } else {
             radioPlay?.classList.remove('hidden');
             radioPause?.classList.add('hidden');
             radioEq?.classList.add('opacity-0');
-            audio.pause();
+            audio?.pause();
         }
     });
+
+    // Pre-fetch on load (lazy)
+    setTimeout(() => {
+        supabase.from('radio_config').select('*').limit(1).single().then(({ data: config }) => {
+            if (config?.is_live) {
+                if (radioTitle) radioTitle.textContent = config.current_show || 'Wild Gvng Radio';
+                if (radioArtist) radioArtist.textContent = `🔴 EN VIVO • ${config.current_host || 'KAZTA'}`;
+                if (radioLiveDot) {
+                    radioLiveDot.className = 'w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_10px_#ff0000]';
+                }
+                currentMetadata = {
+                    id: RADIO_TRACK_ID,
+                    title: config.current_show || 'Wild Gvng Radio',
+                    artist: `🔴 EN VIVO • ${config.current_host || 'KAZTA'}`,
+                    image: '/wg_logo.png'
+                };
+
+                if (config.zeno_stream_url) {
+                    initAudio(config.zeno_stream_url, 'live');
+                }
+            } else if (config?.auto_radio) {
+                // Auto radio mode - load first track info
+                supabase.from('radio_auto_tracks')
+                    .select('*')
+                    .eq('is_active', true)
+                    .order('sort_order')
+                    .order('created_at', { ascending: false })
+                    .limit(1)
+                    .then(({ data: tracks }) => {
+                        const track = tracks?.[0];
+                        if (track) {
+                            if (radioTitle) radioTitle.textContent = track.title || 'Auto Radio';
+                            if (radioArtist) radioArtist.textContent = `🎵 AUTO RADIO • ${track.artist || 'Spotify'}`;
+                            if (radioCover) {
+                                radioCover.src = track.cover_url || '/wg_logo.png';
+                                radioCover.onerror = () => { (radioCover as HTMLImageElement).src = '/wg_logo.png'; };
+                            }
+                            if (radioLiveDot) {
+                                radioLiveDot.className = 'w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_#00ff88]';
+                            }
+                            currentMetadata = {
+                                id: RADIO_TRACK_ID,
+                                title: track.title || 'Auto Radio',
+                                artist: `🎵 AUTO RADIO • ${track.artist || 'Spotify'}`,
+                                image: track.cover_url || '/wg_logo.png'
+                            };
+                        }
+                    }).catch(() => {});
+            } else {
+                supabase.from('radio_episodes')
+                    .select('*')
+                    .eq('is_published', true)
+                    .eq('is_live', false)
+                    .order('created_at', { ascending: false })
+                    .limit(1)
+                    .single()
+                    .then(({ data: episode }) => {
+                        if (episode) {
+                            if (radioTitle) radioTitle.textContent = episode.title;
+                            if (radioArtist) radioArtist.textContent = episode.host || 'KAZTA';
+                            if (radioCover) {
+                                radioCover.src = episode.cover_url || '/wg_logo.png';
+                                radioCover.onerror = () => { (radioCover as HTMLImageElement).src = '/wg_logo.png'; };
+                            }
+                            if (radioLiveDot) {
+                                radioLiveDot.className = 'w-2 h-2 bg-gray-500 rounded-full';
+                            }
+                            currentMetadata = {
+                                id: episode.id || RADIO_TRACK_ID,
+                                title: episode.title,
+                                artist: episode.host || 'KAZTA',
+                                image: episode.cover_url || '/wg_logo.png'
+                            };
+                        }
+                    })
+                    .catch(() => {});
+            }
+        }).catch(() => {});
+
+        loadRadioConfig();
+    }, 500);
 </script>

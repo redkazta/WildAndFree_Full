@@ -14,6 +14,7 @@ import 'ui/screens/user_detail_screen.dart';
 import 'ui/screens/tags_screen.dart';
 import 'ui/screens/events_screen.dart';
 import 'ui/screens/versus_screen.dart';
+import 'ui/screens/radio_screen.dart';
 import 'ui/screens/settings_screen.dart';
 
 class WildErpApp extends StatelessWidget {
@@ -36,6 +37,7 @@ class WildErpApp extends StatelessWidget {
         '/tags': (_) => const TagsScreen(),
         '/events': (_) => const EventsScreen(),
         '/versus': (_) => const VersusScreen(),
+        '/radio': (_) => const RadioScreen(),
         '/settings': (_) => const SettingsScreen(),
       },
       onGenerateRoute: (settings) {

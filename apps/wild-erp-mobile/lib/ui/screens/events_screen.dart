@@ -120,11 +120,11 @@ class _EventsScreenState extends State<EventsScreen> {
               onPressed: () async {
                 if (!formKey.currentState!.validate()) return;
                 await EventsService.createEvent({
-                  'title': titleController.text.trim(),
+                  'name': titleController.text.trim(),
                   'description': descController.text.trim(),
-                  'type': selectedType,
+                  'event_type': selectedType,
                   'location': locationController.text.trim(),
-                  'start_date': DateTime.now().toIso8601String(),
+                  'event_date': DateTime.now().toIso8601String(),
                   'is_active': true,
                 });
                 if (context.mounted) {

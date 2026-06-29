@@ -14,6 +14,7 @@ dependencies:
   intl: ^0.19.0
   cupertino_icons: ^1.0.6
   url_launcher: ^6.2.0
+  file_picker: ^6.1.1
 
 dev_dependencies:
   flutter_test:
@@ -24,4 +25,5 @@ flutter:
   uses-material-design: true
   assets:
     - assets/wg_logo.png
+    - assets/wild_and_free.jpg
     - assets/wildgvng-logo.svg

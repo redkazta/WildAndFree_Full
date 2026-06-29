@@ -19,9 +19,9 @@ class ContentService {
       if (type != null) filters['type'] = type;
 
       final data = await SupabaseService.fetchCached(
-        table: 'content_items',
+        table: 'exclusive_content',
         cacheKey: 'content_${status ?? "all"}_${type ?? "all"}_$search',
-        select: '*, profiles:user_id(display_name)',
+        select: '*, profiles:user_id(nombre)',
         filters: filters.isNotEmpty ? filters : null,
         orderBy: 'created_at',
         ascending: false,
@@ -31,7 +31,7 @@ class ContentService {
 
       List<ContentItem> items = data.map((json) {
         final profile = json.remove('profiles') as Map<String, dynamic>?;
-        json['user_name'] = profile?['display_name'];
+        json['user_name'] = profile?['nombre'];
         return ContentItem.fromJson(json);
       }).toList();
 
@@ -53,13 +53,13 @@ class ContentService {
   static Future<ContentItem?> getContentItemById(String id) async {
     try {
       final data = await SupabaseService.fetchById(
-        table: 'content_items',
+        table: 'exclusive_content',
         id: id,
-        select: '*, profiles:user_id(display_name)',
+        select: '*, profiles:user_id(nombre)',
       );
       if (data == null) return null;
       final profile = data.remove('profiles') as Map<String, dynamic>?;
-      data['user_name'] = profile?['display_name'];
+      data['user_name'] = profile?['nombre'];
       return ContentItem.fromJson(data);
     } catch (e) {
       rethrow;
@@ -69,7 +69,7 @@ class ContentService {
   static Future<ContentItem> approveContent(String id) async {
     try {
       final data = await SupabaseService.update(
-        table: 'content_items',
+        table: 'exclusive_content',
         id: id,
         data: {
           'status': 'approved',
@@ -86,7 +86,7 @@ class ContentService {
       String id, String reason) async {
     try {
       final data = await SupabaseService.update(
-        table: 'content_items',
+        table: 'exclusive_content',
         id: id,
         data: {
           'status': 'rejected',
@@ -102,7 +102,7 @@ class ContentService {
 
   static Future<void> deleteContent(String id) async {
     try {
-      await SupabaseService.delete(table: 'content_items', id: id);
+      await SupabaseService.delete(table: 'exclusive_content', id: id);
     } catch (e) {
       rethrow;
     }

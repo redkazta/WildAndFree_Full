@@ -17,6 +17,7 @@ const modules = [
   { id: 'tags', label: 'Tags', icon: '🏷️', href: '/erp/tags' },
   { id: 'eventos', label: 'Eventos', icon: '🎤', href: '/erp/eventos' },
   { id: 'versus', label: 'Versus', icon: '⚔️', href: '/erp/versus' },
+  { id: 'radio', label: 'Radio', icon: '📻', href: '/erp/radio' },
   { id: 'correos', label: 'Correos', icon: '📧', href: '/erp/correos' },
   { id: 'configuracion', label: 'Config', icon: '⚙️', href: '/erp/configuracion' },
 ];
@@ -780,7 +781,8 @@ const modules = [
       'versus': 'versus.manage',
       'configuracion': 'config.view',
       'correos': 'config.manage',
-      'pedidos': 'orders.view'
+      'pedidos': 'orders.view',
+      'radio': 'content.view'
     };
 
     // Admin sees everything - skip permission filtering
