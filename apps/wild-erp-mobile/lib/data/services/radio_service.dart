@@ -355,32 +355,24 @@ class RadioService {
     required String userId,
   }) async {
     try {
-      // Upload audio file
-      final audioBytes = await _client.storage.from('radio-audio').uploadBinary(
+      // Upload audio file (Supabase Flutter v2: uploadBinary returns String path)
+      final audioPath = await _client.storage.from('radio-audio').uploadBinary(
         'episodes/${DateTime.now().millisecondsSinceEpoch}-${audioFilePath.split('/').last}',
         await _readFileBytes(audioFilePath),
         fileOptions: const FileOptions(contentType: 'audio/mpeg'),
       );
 
-      if (audioBytes.error != null) throw Exception(audioBytes.error!.message);
-
-      final audioUrl = _client.storage.from('radio-audio').getPublicUrl(
-        audioBytes.data!.path,
-      );
+      final audioUrl = _client.storage.from('radio-audio').getPublicUrl(audioPath);
 
       // Upload cover if provided
       String? coverUrl;
       if (coverFilePath != null) {
-        final coverBytes = await _client.storage.from('radio-audio').uploadBinary(
+        final coverPath = await _client.storage.from('radio-audio').uploadBinary(
           'covers/${DateTime.now().millisecondsSinceEpoch}-${coverFilePath.split('/').last}',
           await _readFileBytes(coverFilePath),
           fileOptions: const FileOptions(contentType: 'image/jpeg'),
         );
-        if (coverBytes.error == null) {
-          coverUrl = _client.storage.from('radio-audio').getPublicUrl(
-            coverBytes.data!.path,
-          );
-        }
+        coverUrl = _client.storage.from('radio-audio').getPublicUrl(coverPath);
       }
 
       // Create record
