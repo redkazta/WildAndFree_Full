@@ -20,6 +20,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.3
 
 flutter:
   uses-material-design: true
@@ -27,3 +28,11 @@ flutter:
     - assets/wg_logo.png
     - assets/wild_and_free.jpg
     - assets/wildgvng-logo.svg
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/wg_logo.png"
+  adaptive_icon_background: "#000000"
+  adaptive_icon_foreground: "assets/wg_logo.png"
+  min_sdk_android: 21
