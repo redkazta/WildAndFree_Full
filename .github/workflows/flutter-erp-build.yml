@@ -49,8 +49,11 @@ jobs:
       - name: Flutter version
         run: flutter --version
 
-      - name: Install dependencies
-        run: flutter pub get
+      - name: Clean and install dependencies
+        run: |
+          flutter clean
+          flutter pub cache clean --force
+          flutter pub get
 
       - name: Analyze
         run: flutter analyze --no-fatal-infos
