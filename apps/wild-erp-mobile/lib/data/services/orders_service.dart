@@ -17,7 +17,7 @@ class OrdersService {
       final data = await SupabaseService.fetchCached(
         table: 'store_orders',
         cacheKey: 'orders_${status ?? "all"}_$search',
-        select: '*, profiles:user_id(display_name, email)',
+        select: '*, profiles:user_id(nombre, username)',
         filters: status != null ? {'status': status} : null,
         orderBy: 'created_at',
         ascending: false,
@@ -27,8 +27,8 @@ class OrdersService {
 
       return data.map((json) {
         final profile = json.remove('profiles') as Map<String, dynamic>?;
-        json['user_name'] = profile?['display_name'];
-        json['user_email'] = profile?['email'];
+        json['user_name'] = profile?['nombre'];
+        json['user_email'] = profile?['username'];
         return Order.fromJson(json);
       }).toList();
     } catch (e) {
@@ -41,12 +41,12 @@ class OrdersService {
       final data = await SupabaseService.fetchById(
         table: 'store_orders',
         id: id,
-        select: '*, profiles:user_id(display_name, email)',
+        select: '*, profiles:user_id(nombre, username)',
       );
       if (data == null) return null;
       final profile = data.remove('profiles') as Map<String, dynamic>?;
-      data['user_name'] = profile?['display_name'];
-      data['user_email'] = profile?['email'];
+      data['user_name'] = profile?['nombre'];
+      data['user_email'] = profile?['username'];
       return Order.fromJson(data);
     } catch (e) {
       rethrow;

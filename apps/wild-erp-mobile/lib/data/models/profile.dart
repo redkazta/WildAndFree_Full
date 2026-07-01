@@ -1,6 +1,6 @@
 class Profile {
   final String id;
-  final String email;
+  final String? email;
   final String? displayName;
   final String? avatarUrl;
   final String role;
@@ -15,7 +15,7 @@ class Profile {
 
   Profile({
     required this.id,
-    required this.email,
+    this.email,
     this.displayName,
     this.avatarUrl,
     this.role = 'user',
@@ -32,7 +32,7 @@ class Profile {
   factory Profile.fromJson(Map<String, dynamic> json) {
     return Profile(
       id: json['id'] as String,
-      email: json['email'] as String? ?? '',
+      email: json['email'] as String? ?? json['username'] as String? ?? '',
       displayName: (json['display_name'] ?? json['nombre'] ?? json['username']) as String?,
       avatarUrl: json['avatar_url'] as String?,
       role: json['role'] as String? ?? 'user',
@@ -96,7 +96,7 @@ class Profile {
   }
 
   String get initials {
-    final name = displayName ?? email;
+    final name = displayName ?? email ?? '';
     if (name.isEmpty) return '?';
     final parts = name.split('@').first.split(' ');
     if (parts.length >= 2) {

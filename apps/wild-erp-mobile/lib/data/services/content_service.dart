@@ -21,7 +21,7 @@ class ContentService {
       final data = await SupabaseService.fetchCached(
         table: 'exclusive_content',
         cacheKey: 'content_${status ?? "all"}_${type ?? "all"}_$search',
-        select: '*, profiles:user_id(display_name, email)',
+        select: '*, profiles:user_id(nombre, username)',
         filters: filters.isNotEmpty ? filters : null,
         orderBy: 'created_at',
         ascending: false,
@@ -31,7 +31,7 @@ class ContentService {
 
       List<ContentItem> items = data.map((json) {
         final profile = json.remove('profiles') as Map<String, dynamic>?;
-        json['user_name'] = profile?['display_name'];
+        json['user_name'] = profile?['nombre'];
         return ContentItem.fromJson(json);
       }).toList();
 
@@ -55,11 +55,11 @@ class ContentService {
       final data = await SupabaseService.fetchById(
         table: 'exclusive_content',
         id: id,
-        select: '*, profiles:user_id(display_name, email)',
+        select: '*, profiles:user_id(nombre, username)',
       );
       if (data == null) return null;
       final profile = data.remove('profiles') as Map<String, dynamic>?;
-      data['user_name'] = profile?['display_name'];
+      data['user_name'] = profile?['nombre'];
       return ContentItem.fromJson(data);
     } catch (e) {
       rethrow;
