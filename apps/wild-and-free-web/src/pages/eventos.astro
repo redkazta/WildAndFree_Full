@@ -1,5 +1,6 @@
 ﻿---
 import Layout from '../layouts/Layout.astro';
+import { supabase } from '../lib/supabase';
 import tenantConfig from '../../../../packages/shared-types/tenant-config.json';
 
 const tenant = tenantConfig['wild-and-free'];
@@ -9,49 +10,84 @@ const config = {
   secondary_color: tenant.secondary_color
 };
 
-const events = [
-  { 
-    id: 'e1', 
-    titulo: 'WILD NIGHT CDMX', 
-    fecha: '15 MAR 2024',
-    hora: '21:00 HRS', 
-    lugar: 'FORO INDIE ROCKS', 
-    ciudad: 'CDMX',
-    imagen: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=800&q=80',
-    descripcion: 'NOVA K PRESENTA "SIN REGLAS" + INVITADOS ESPECIALES',
-    precio_min: 450,
-    status: 'disponible'
-  },
-  { 
-    id: 'e2', 
-    titulo: 'URBAN FEST GDL', 
-    fecha: '22 MAR 2024',
-    hora: '16:00 HRS', 
-    lugar: 'C3 STAGE', 
-    ciudad: 'GUADALAJARA',
-    imagen: 'https://images.unsplash.com/photo-1459749411177-042180ce673c?auto=format&fit=crop&w=800&q=80',
-    descripcion: 'EL FESTIVAL URBANO MÃS IMPORTANTE DE OCCIDENTE',
-    precio_min: 350,
-    status: 'proximo'
-  },
-  { 
-    id: 'e3', 
-    titulo: 'BEAT SESSIONS', 
-    fecha: '10 ABR 2024',
-    hora: '19:00 HRS', 
-    lugar: 'ESTUDIO 404', 
-    ciudad: 'CDMX',
-    imagen: 'https://images.unsplash.com/photo-1589578236639-5381345b6687?auto=format&fit=crop&w=800&q=80',
-    descripcion: 'MASTERCLASS DE PRODUCCIÓN CON SABLE + NETWORKING',
-    precio_min: 0,
-    status: 'sold_out'
+// Fetch events from Supabase, fallback to mock data
+let events = [];
+try {
+  const { data, error } = await supabase
+    .from('events')
+    .select('*')
+    .eq('is_active', true)
+    .order('event_date', { ascending: true });
+
+  if (!error && data && data.length > 0) {
+    events = data.map((e: any) => {
+      const d = new Date(e.event_date);
+      const months = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DEC'];
+      const fecha = `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+      const hora = `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')} HRS`;
+      const statusMap: Record<string, string> = { battle: 'disponible', concert: 'proximo', meet_greet: 'disponible', other: 'proximo' };
+      return {
+        id: e.id,
+        titulo: e.name,
+        fecha,
+        hora,
+        lugar: e.location || 'Por confirmar',
+        ciudad: e.location?.split(',').pop()?.trim() || 'Torreón',
+        imagen: e.image_url || 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=800&q=80',
+        descripcion: e.description || '',
+        precio_min: 0,
+        status: statusMap[e.event_type] || 'proximo'
+      };
+    });
+  } else {
+    throw new Error('No events or error');
   }
-];
+} catch (e) {
+  // Fallback mock data
+  events = [
+    {
+      id: 'e1',
+      titulo: 'WILD BATTLE VOL. 12',
+      fecha: '15 JUL 2026',
+      hora: '20:00 HRS',
+      lugar: 'FORO WILD GVNG',
+      ciudad: 'TORREÓN',
+      imagen: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=800&q=80',
+      descripcion: 'BATALLA DE FREESTYLE 1V1. 16 COMPETIDORES. PREMIO: $5,000 MXN + TOKENS.',
+      precio_min: 200,
+      status: 'disponible'
+    },
+    {
+      id: 'e2',
+      titulo: 'NOCHE UNDERGROUND',
+      fecha: '02 AGO 2026',
+      hora: '21:00 HRS',
+      lugar: 'SALÓN CARIBE',
+      ciudad: 'TORREÓN',
+      imagen: 'https://images.unsplash.com/photo-1459749411177-042180ce673c?auto=format&fit=crop&w=800&q=80',
+      descripcion: 'CONCIERTO CON ARTISTAS DE LA CREW. INVITADOS ESPECIALES DEL NORTE.',
+      precio_min: 350,
+      status: 'proximo'
+    },
+    {
+      id: 'e3',
+      titulo: 'MEET & GREET CREW',
+      fecha: '20 AGO 2026',
+      hora: '17:00 HRS',
+      lugar: 'CASA BOSQUE',
+      ciudad: 'TORREÓN',
+      imagen: 'https://images.unsplash.com/photo-1589578236639-5381345b6687?auto=format&fit=crop&w=800&q=80',
+      descripcion: 'CONOCE A LOS ARTISTAS DE WILD GVNG. FOTOS, AUTÓGRAFOS Y MERCH EXCLUSIVO.',
+      precio_min: 0,
+      status: 'disponible'
+    }
+  ];
+}
 ---
 
 <Layout config={config}>
   <div class="min-h-screen bg-black text-white pb-20 selection:bg-wild-orange selection:text-black">
-    
+
     <!-- Top Bar -->
     <div class="bg-gradient-to-r from-black via-[#111] to-black border-b border-white/10 py-3">
         <div class="container mx-auto px-4 max-w-wide flex justify-between items-center">
@@ -63,7 +99,7 @@ const events = [
     </div>
 
     <div class="container mx-auto px-4 py-8 max-w-wide space-y-24 relative z-10 animate-fade-in-up">
-      
+
       <!-- Header Brutalista -->
       <div class="border-b border-white/10 pb-8 mt-8 relative">
         <div class="absolute bottom-0 left-0 w-32 h-1 bg-wild-orange z-10"></div>
@@ -82,7 +118,7 @@ const events = [
       <div class="space-y-12">
         {events.map((event, index) => (
           <div class="group relative flex flex-col lg:flex-row bg-neutral-950 border border-white/10 rounded-wild-lg overflow-hidden hover:border-wild-orange transition-all duration-300 hover:shadow-wild-glow hover:-translate-y-1 animate-stagger" style={`animation-delay: ${index * 100}ms`}>
-            
+
             <!-- Caja de Fecha (Talón Izquierdo) -->
             <div class="lg:w-56 bg-white text-black p-8 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-dashed border-black/20 relative pattern-dots">
                <!-- Semi-círculos de perforación -->
@@ -140,7 +176,7 @@ const events = [
 
             <!-- Action / Barcode (Right Stub) -->
             <div class="lg:w-72 bg-[#111] border-t lg:border-t-0 lg:border-l border-dashed border-white/10 p-8 flex flex-col justify-between items-center relative">
-               
+
                <div class="w-full text-right mb-6">
                   <span class="block text-white/40 text-label-sm font-mono uppercase tracking-widest mb-1">General Admission</span>
                   <span class="block text-4xl font-black text-white">${event.precio_min}</span>
@@ -157,7 +193,7 @@ const events = [
                </div>
 
                <a href={`/evento/${event.id}`} class={`w-full py-4 px-6 font-black uppercase text-center text-xs tracking-[0.2em] rounded-wild-lg transition-all duration-300 transform active:scale-95 ${
-                  event.status === 'sold_out' 
+                  event.status === 'sold_out'
                   ? 'bg-white/5 text-gray-500 cursor-not-allowed border border-white/5'
                   : 'bg-white text-black hover:bg-wild-orange hover:text-white hover:shadow-lg hover:shadow-wild-orange/30'
                }`}>
@@ -176,7 +212,7 @@ const events = [
 <style is:global define:vars={{ streetAccent: tenant.primary_color }}>
   :root {
     --street-accent: var(--streetAccent);
-    
+
     /* Wild Palette Shared */
     --wild-orange: #FF5500;
     --wild-light-orange: #FF8C00;
