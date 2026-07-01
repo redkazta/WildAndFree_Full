@@ -55,7 +55,6 @@ jobs:
           flutter pub cache clean --force
           rm -f pubspec.lock
           flutter pub get
-          cd android && ./gradlew clean && cd ..
 
       - name: Analyze
         run: flutter analyze --no-fatal-infos
