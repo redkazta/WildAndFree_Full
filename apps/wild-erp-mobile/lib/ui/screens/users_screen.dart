@@ -152,7 +152,7 @@ class _UsersScreenState extends State<UsersScreen> {
                             children: [
                               Expanded(
                                 child: Text(
-                                  user.displayName ?? user.email,
+                                  user.displayName ?? user.email ?? '',
                                   style: const TextStyle(
                                     color: AppTheme.textPrimary,
                                     fontSize: 14,

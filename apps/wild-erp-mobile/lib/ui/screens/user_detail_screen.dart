@@ -83,7 +83,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        user.email,
+                        user.email ?? '',
                         style: const TextStyle(
                           color: AppTheme.textMuted,
                           fontSize: 13,

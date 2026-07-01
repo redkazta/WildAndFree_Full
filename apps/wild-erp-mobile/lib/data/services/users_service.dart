@@ -37,7 +37,7 @@ class UsersService {
         users = users
             .where((u) =>
                 (u.displayName?.toLowerCase().contains(q) ?? false) ||
-                u.email.toLowerCase().contains(q))
+                (u.email?.toLowerCase().contains(q) ?? false))
             .toList();
       }
 
