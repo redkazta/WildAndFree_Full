@@ -14,7 +14,7 @@ export interface Artist {
     partnean: number;
   };
   bio: string;
-  tracks: { title: string; duration: string }[];
+  tracks: { title: string; duration: string; spotify_url?: string }[];
   estilo: string;
   origen: string;
   redes?: Record<string, string>;
@@ -161,9 +161,30 @@ export async function getArtistsFromDB(): Promise<Artist[]> {
       }
     }
 
+    // Fetch tracks for all artists
+    const { data: tracksData } = await supabase
+      .from("artist_tracks")
+      .select("*")
+      .eq("is_published", true)
+      .order("track_number", { ascending: true });
+
+    // Group tracks by artist_id
+    const tracksByArtist: Record<string, any[]> = {};
+    if (tracksData) {
+      for (const t of tracksData) {
+        if (!tracksByArtist[t.artist_id]) tracksByArtist[t.artist_id] = [];
+        tracksByArtist[t.artist_id].push(t);
+      }
+    }
+
     return profiles.map((p: any) => {
       const artist = mapProfileToArtist(p);
       artist.stats.partnean = partnearCounts[p.id] || 0;
+      artist.tracks = (tracksByArtist[p.id] || []).map((t: any) => ({
+        title: t.title,
+        duration: t.duration,
+        spotify_url: t.spotify_url || undefined,
+      }));
       return artist;
     });
   } catch (err) {
