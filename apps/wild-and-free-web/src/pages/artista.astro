@@ -498,12 +498,6 @@ const artist = artists.find(a => a.slug === slug) || artists[0];
 </style>
 
 <script>
-  import { artistsData } from '../data/artists';
-
-  const url = new URL(window.location.href);
-  const slug = url.searchParams.get('') || '';
-  const artist = artistsData.find(a => a.slug === slug) || artistsData[0];
-
   // Partnear toggle
   const partnearBtn = document.getElementById('partnear-btn');
   let isPartnear = false;
@@ -514,11 +508,12 @@ const artist = artists.find(a => a.slug === slug) || artists[0];
     });
   }
 
-  // Share
+  // Share — reads slug from URL directly
   const shareBtn = document.getElementById('share-btn');
   if (shareBtn) {
     shareBtn.addEventListener('click', () => {
-      const shareUrl = `www.wildgvng.com.mx/artista?=${artist.slug}`;
+      const slug = new URL(window.location.href).searchParams.get('') || '';
+      const shareUrl = `www.wildgvng.com.mx/artista?=${slug}`;
       navigator.clipboard.writeText(shareUrl).then(() => {
         shareBtn.innerHTML = '<span>✅</span> ¡COPIADO!';
         setTimeout(() => {
