@@ -1,0 +1,527 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { artistsData } from '../data/artists';
+
+const config = {
+  name: "Wild Gvng - Artista",
+  primary_color: "#C98300",
+  secondary_color: "#8A0303"
+};
+
+// Get slug from query param: /artista?=young_kazta
+const url = new URL(Astro.request.url);
+const slug = url.searchParams.get('') || '';
+const artist = artistsData.find(a => a.slug === slug) || artistsData[0];
+---
+
+<Layout config={config}>
+  <div class="artist-page">
+
+    <!-- BANNER -->
+    <div class="banner">
+      <img src={artist.imagenes.banner} alt="" width="1600" height="400" />
+      <div class="banner-overlay"></div>
+    </div>
+
+    <!-- PROFILE HEADER -->
+    <div class="container">
+      <div class="profile-header">
+        <div class="profile-photo">
+          <img src={artist.imagenes.profile} alt={artist.nombre} width="200" height="200" />
+          <div class="photo-glow"></div>
+        </div>
+
+        <div class="profile-info">
+          <h1 class="profile-name">{artist.nombre}</h1>
+          <span class="profile-genre">{artist.estilo}</span>
+          <span class="profile-origin">📍 {artist.origen}</span>
+          <div class="profile-stats">
+            <div class="stat-item">
+              <span class="stat-value">{artist.stats.partnean}</span>
+              <span class="stat-label">Partnean</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">{artist.stats.oyentes}</span>
+              <span class="stat-label">Oyentes</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">{artist.tracks.length}</span>
+              <span class="stat-label">Tracks</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-actions">
+          <button class="action-btn action-partnear" id="partnear-btn">
+            <span>🔥</span> PARTNEAR
+          </button>
+          <button class="action-btn action-share" id="share-btn">
+            <span>🔗</span> COMPARTIR
+          </button>
+        </div>
+      </div>
+
+      <!-- BIO -->
+      <div class="bio-section">
+        <h2 class="section-title">SOBRE MÍ</h2>
+        <p class="bio-text">{artist.bio}</p>
+      </div>
+
+      <!-- MUSIC -->
+      <div class="music-section">
+        <h2 class="section-title">MÚSICA</h2>
+        <div class="tracks-grid">
+          {artist.tracks.map((track, i) => (
+            <div class="track-card">
+              <div class="track-number">{String(i + 1).padStart(2, '0')}</div>
+              <div class="track-info">
+                <span class="track-title">{track.title}</span>
+                <span class="track-duration">{track.duration}</span>
+              </div>
+              <button class="track-play">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- EVENTS (placeholder) -->
+      <div class="events-section">
+        <h2 class="section-title">PRÓXIMOS EVENTOS</h2>
+        <div class="event-card">
+          <div class="event-date">
+            <span class="event-day">15</span>
+            <span class="event-month">JUL</span>
+          </div>
+          <div class="event-info">
+            <span class="event-name">Freestyle Friday</span>
+            <span class="event-location">📍 Bosque Venustiano Carranza</span>
+          </div>
+          <a href="https://maps.google.com" target="_blank" class="event-map-btn">🗺️ MAPS</a>
+        </div>
+        <p class="events-empty">Más eventos próximamente...</p>
+      </div>
+
+      <!-- SOCIAL LINKS -->
+      <div class="social-section">
+        <h2 class="section-title">REDES SOCIALES</h2>
+        <div class="social-links">
+          {artist.redes && Object.entries(artist.redes).map(([platform, url]) => (
+            <a href={url} target="_blank" class="social-link">
+              {platform}
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <!-- SHARE URL -->
+      <div class="share-section">
+        <p class="share-text">Comparte el perfil de {artist.nombre}</p>
+        <div class="share-url-box">
+          <code>www.wildgvng.com.mx/artista?={artist.slug}</code>
+          <button class="copy-btn" onclick={`navigator.clipboard.writeText('www.wildgvng.com.mx/artista?=${artist.slug}'); this.textContent='¡COPIADO!'`}>
+            COPIAR
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .artist-page {
+    min-height: 100vh;
+    background: #000;
+  }
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* Banner */
+  .banner {
+    position: relative;
+    height: 300px;
+    overflow: hidden;
+  }
+  .banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .banner-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, #000 0%, transparent 60%);
+  }
+
+  /* Profile Header */
+  .profile-header {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    margin-top: -60px;
+    position: relative;
+    z-index: 10;
+    flex-wrap: wrap;
+  }
+  .profile-photo {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 3px solid rgba(201,131,0,0.4);
+    flex-shrink: 0;
+  }
+  .profile-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .photo-glow {
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    box-shadow: 0 0 40px rgba(201,131,0,0.3);
+  }
+  .profile-info {
+    flex: 1;
+    min-width: 200px;
+    padding-top: 8px;
+  }
+  .profile-name {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    margin: 0 0 4px;
+  }
+  .profile-genre {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #C98300;
+    font-family: monospace;
+    margin-bottom: 2px;
+  }
+  .profile-origin {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.35);
+  }
+  .profile-stats {
+    display: flex;
+    gap: 24px;
+    margin-top: 16px;
+  }
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+  }
+  .stat-value {
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: #fff;
+  }
+  .stat-label {
+    font-size: 0.55rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.3);
+  }
+
+  /* Actions */
+  .profile-actions {
+    display: flex;
+    gap: 8px;
+    padding-top: 8px;
+  }
+  .action-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-size: 0.6rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.04);
+    color: rgba(255,255,255,0.5);
+  }
+  .action-btn:hover {
+    border-color: rgba(201,131,0,0.4);
+    color: #C98300;
+    background: rgba(201,131,0,0.1);
+  }
+  .action-btn.active {
+    background: rgba(201,131,0,0.15);
+    border-color: rgba(201,131,0,0.5);
+    color: #C98300;
+  }
+
+  /* Sections */
+  .bio-section, .music-section, .events-section, .social-section, .share-section {
+    margin-top: 40px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .section-title {
+    font-size: 0.65rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: rgba(255,255,255,0.3);
+    font-family: monospace;
+    margin: 0 0 16px;
+  }
+  .bio-text {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  /* Tracks */
+  .tracks-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .track-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.04);
+    transition: all 0.2s;
+  }
+  .track-card:hover {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(201,131,0,0.2);
+  }
+  .track-number {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.2);
+    font-family: monospace;
+    width: 24px;
+  }
+  .track-info {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .track-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #fff;
+  }
+  .track-duration {
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.3);
+    font-family: monospace;
+  }
+  .track-play {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(201,131,0,0.15);
+    border: none;
+    color: #C98300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .track-play:hover {
+    background: #C98300;
+    color: #000;
+  }
+
+  /* Event */
+  .event-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+  .event-date {
+    text-align: center;
+    min-width: 50px;
+  }
+  .event-day {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #C98300;
+    line-height: 1;
+  }
+  .event-month {
+    font-size: 0.55rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.1em;
+  }
+  .event-info {
+    flex: 1;
+  }
+  .event-name {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #fff;
+  }
+  .event-location {
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.35);
+  }
+  .event-map-btn {
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .event-map-btn:hover {
+    border-color: rgba(201,131,0,0.4);
+    color: #C98300;
+  }
+  .events-empty {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.2);
+    margin-top: 12px;
+  }
+
+  /* Social */
+  .social-links {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .social-link {
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .social-link:hover {
+    border-color: rgba(201,131,0,0.4);
+    color: #C98300;
+  }
+
+  /* Share */
+  .share-section {
+    text-align: center;
+  }
+  .share-text {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.3);
+    margin: 0 0 12px;
+  }
+  .share-url-box {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .share-url-box code {
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.5);
+    font-family: monospace;
+  }
+  .copy-btn {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.55rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: rgba(201,131,0,0.15);
+    border: none;
+    color: #C98300;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .copy-btn:hover {
+    background: #C98300;
+    color: #000;
+  }
+
+  @media (max-width: 640px) {
+    .profile-header { flex-direction: column; align-items: center; text-align: center; }
+    .profile-stats { justify-content: center; }
+    .profile-actions { justify-content: center; }
+    .banner { height: 200px; }
+    .profile-photo { width: 120px; height: 120px; }
+    .profile-name { font-size: 1.5rem; }
+  }
+</style>
+
+<script>
+  import { artistsData } from '../data/artists';
+
+  const url = new URL(window.location.href);
+  const slug = url.searchParams.get('') || '';
+  const artist = artistsData.find(a => a.slug === slug) || artistsData[0];
+
+  // Partnear toggle
+  const partnearBtn = document.getElementById('partnear-btn');
+  let isPartnear = false;
+  if (partnearBtn) {
+    partnearBtn.addEventListener('click', () => {
+      isPartnear = !isPartnear;
+      partnearBtn.classList.toggle('active', isPartnear);
+    });
+  }
+
+  // Share
+  const shareBtn = document.getElementById('share-btn');
+  if (shareBtn) {
+    shareBtn.addEventListener('click', () => {
+      const url = `www.wildgvng.com.mx/artista?=${artist.slug}`;
+      navigator.clipboard.writeText(url).then(() => {
+        shareBtn.innerHTML = '<span>✅</span> ¡COPIADO!';
+        setTimeout(() => {
+          shareBtn.innerHTML = '<span>🔗</span> COMPARTIR';
+        }, 2000);
+      });
+    });
+  }
+</script>

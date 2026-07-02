@@ -20,13 +20,22 @@ export const ensureProfile = async (session) => {
     }
   }
 
+  // Role from registration
+  if (meta.role) payload.role = meta.role;
+
+  // Artist-specific fields
+  if (meta.stage_name) payload.stage_name = meta.stage_name;
+  if (meta.genres && Array.isArray(meta.genres)) payload.genres = meta.genres;
+  if (meta.social_links) payload.social_links = meta.social_links;
+
   // 1. Upsert profile
   const { error: profileError } = await supabase
     .from("profiles")
     .upsert(payload, { onConflict: "id" });
   if (profileError) return { ok: false, error: profileError };
 
-  // 2. Asignar rol 'fan' por defecto si no tiene ninguno
+  // 2. Asignar rol según el tipo de registro
+  const userRole = meta.role || "fan";
   const { data: existingRoles } = await supabase
     .from("user_roles")
     .select("role_id")
@@ -34,17 +43,17 @@ export const ensureProfile = async (session) => {
     .limit(1);
 
   if (!existingRoles || existingRoles.length === 0) {
-    const { data: fanRole } = await supabase
+    const { data: roleRecord } = await supabase
       .from("roles")
       .select("id")
-      .eq("internal_name", "fan")
+      .eq("internal_name", userRole)
       .single();
 
-    if (fanRole) {
+    if (roleRecord) {
       await supabase.from("user_roles").upsert(
         {
           user_id: userId,
-          role_id: fanRole.id,
+          role_id: roleRecord.id,
         },
         { onConflict: "user_id,role_id" },
       );
