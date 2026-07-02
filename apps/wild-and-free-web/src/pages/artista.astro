@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { artistsData } from '../data/artists';
+import { getArtistsFromDB } from '../data/artists';
+import type { Artist } from '../data/artists';
 
 const config = {
   name: "Wild Gvng - Artista",
@@ -11,7 +12,9 @@ const config = {
 // Get slug from query param: /artista?=young_kazta
 const url = new URL(Astro.request.url);
 const slug = url.searchParams.get('') || '';
-const artist = artistsData.find(a => a.slug === slug) || artistsData[0];
+
+const artists = await getArtistsFromDB();
+const artist = artists.find(a => a.slug === slug) || artists[0];
 ---
 
 <Layout config={config}>
@@ -515,8 +518,8 @@ const artist = artistsData.find(a => a.slug === slug) || artistsData[0];
   const shareBtn = document.getElementById('share-btn');
   if (shareBtn) {
     shareBtn.addEventListener('click', () => {
-      const url = `www.wildgvng.com.mx/artista?=${artist.slug}`;
-      navigator.clipboard.writeText(url).then(() => {
+      const shareUrl = `www.wildgvng.com.mx/artista?=${artist.slug}`;
+      navigator.clipboard.writeText(shareUrl).then(() => {
         shareBtn.innerHTML = '<span>✅</span> ¡COPIADO!';
         setTimeout(() => {
           shareBtn.innerHTML = '<span>🔗</span> COMPARTIR';

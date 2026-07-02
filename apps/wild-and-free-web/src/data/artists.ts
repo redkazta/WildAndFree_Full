@@ -1,5 +1,7 @@
+import { createClient } from "@supabase/supabase-js";
+
 export interface Artist {
-  id: number;
+  id: string;
   nombre: string;
   slug: string;
   imagenes: {
@@ -18,9 +20,10 @@ export interface Artist {
   redes?: Record<string, string>;
 }
 
-export const artistsData: Artist[] = [
+// Fallback mock data (used if Supabase is unreachable at build time)
+const mockArtists: Artist[] = [
   {
-    id: 1,
+    id: "66fd9133-87bc-43eb-9095-23b11f44de5c",
     nombre: "Young Kazta",
     slug: "young_kazta",
     imagenes: {
@@ -41,51 +44,9 @@ export const artistsData: Artist[] = [
     redes: { Instagram: "#", Spotify: "#", YouTube: "#" },
   },
   {
-    id: 2,
-    nombre: "Sombra V",
-    slug: "sombra_v",
-    imagenes: {
-      profile:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80",
-      banner:
-        "https://images.unsplash.com/photo-1514525253361-bee871871771?w=1600&q=80",
-    },
-    stats: { seguidores: "890", oyentes: "2.1K", partnean: 89 },
-    bio: "Lírica consciente sobre ritmos lo-fi. La voz de la melancolía del norte.",
-    tracks: [
-      { title: "Sueños Lo-Fi", duration: "3:45" },
-      { title: "Verso Silencioso", duration: "2:33" },
-      { title: "Pensamientos Profundos", duration: "4:01" },
-    ],
-    estilo: "Lo-Fi Consciente",
-    origen: "Torreón, Coahuila",
-    redes: { Instagram: "#", Spotify: "#" },
-  },
-  {
-    id: 3,
-    nombre: "Kira .MX",
-    slug: "kira_mx",
-    imagenes: {
-      profile:
-        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80",
-      banner:
-        "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=1600&q=80",
-    },
-    stats: { seguidores: "2.1K", oyentes: "5.8K", partnean: 203 },
-    bio: "Reina del drill melódico. Elegancia letal en cada barra.",
-    tracks: [
-      { title: "Flow de Reina", duration: "2:48" },
-      { title: "Princesa del Drill", duration: "3:15" },
-      { title: "Tormenta Melódica", duration: "3:32" },
-    ],
-    estilo: "Melodic Drill",
-    origen: "Torreón, Coahuila",
-    redes: { Instagram: "#", YouTube: "#", TikTok: "#" },
-  },
-  {
-    id: 4,
-    nombre: "Fantom",
-    slug: "fantom",
+    id: "2406328b-ad5b-4271-a923-36af6b9c5a29",
+    nombre: "MC Delta",
+    slug: "mc_delta",
     imagenes: {
       profile:
         "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&q=80",
@@ -93,41 +54,19 @@ export const artistsData: Artist[] = [
         "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=1600&q=80",
     },
     stats: { seguidores: "670", oyentes: "1.9K", partnean: 56 },
-    bio: "Flow vieja escuela con agresividad. El rey de las calles oscuras de la laguna.",
+    bio: "Voz del bajo mundo. Flow imparable. Torreón represent.",
     tracks: [
       { title: "Crucero Nocturno", duration: "3:08" },
       { title: "Reglas de la Vieja Escuela", duration: "2:55" },
-      { title: "Leyenda Callejera", duration: "3:41" },
     ],
     estilo: "Gangsta Rap",
     origen: "Torreón, Coahuila",
-    redes: { Spotify: "#", Instagram: "#" },
+    redes: { Instagram: "#", Spotify: "#" },
   },
   {
-    id: 5,
-    nombre: "Luna Roja",
-    slug: "luna_roja",
-    imagenes: {
-      profile:
-        "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80",
-      banner:
-        "https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=1600&q=80",
-    },
-    stats: { seguidores: "1.5K", oyentes: "4.2K", partnean: 178 },
-    bio: "Fusión de synthwave con reggaetón. Rompiendo esquemas en el desierto.",
-    tracks: [
-      { title: "Amor Sintético", duration: "3:20" },
-      { title: "Ritmo Retro", duration: "2:47" },
-      { title: "Futuro Pasado", duration: "3:55" },
-    ],
-    estilo: "Synth-Reggaetón",
-    origen: "Torreón, Coahuila",
-    redes: { Instagram: "#", SoundCloud: "#" },
-  },
-  {
-    id: 6,
-    nombre: "Sable",
-    slug: "sable",
+    id: "1a2eac9c-50e9-48d1-9026-54286147c149",
+    nombre: "Lil Fuego",
+    slug: "lil_fuego",
     imagenes: {
       profile:
         "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=800&q=80",
@@ -135,14 +74,111 @@ export const artistsData: Artist[] = [
         "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1600&q=80",
     },
     stats: { seguidores: "430", oyentes: "1.1K", partnean: 34 },
-    bio: "Rap underground puro. Sin filtros, sin compasión, sin excusas.",
+    bio: "Joven promesa del freestyle torreonense. Fuego puro en cada verso.",
     tracks: [
       { title: "Sin Cuartel", duration: "2:44" },
       { title: "Barro y Sangre", duration: "3:18" },
-      { title: "Último Aliento", duration: "3:02" },
     ],
-    estilo: "Underground Rap",
+    estilo: "Freestyle / Drill",
     origen: "Torreón, Coahuila",
-    redes: { Instagram: "#" },
+    redes: { Instagram: "#", TikTok: "#" },
   },
 ];
+
+function parseSocialLinks(raw: string | null): Record<string, string> {
+  if (!raw) return {};
+  try {
+    const parsed = JSON.parse(raw);
+    const result: Record<string, string> = {};
+    for (const [key, val] of Object.entries(parsed)) {
+      if (typeof val === "string" && val.startsWith("http")) {
+        result[key.charAt(0).toUpperCase() + key.slice(1)] = val;
+      }
+    }
+    return result;
+  } catch {
+    return {};
+  }
+}
+
+function mapProfileToArtist(profile: any): Artist {
+  const genres = profile.genres || [];
+  const estilo = genres.length > 0 ? genres.join(" / ") : "Urbano";
+  return {
+    id: profile.id,
+    nombre: profile.stage_name || profile.nombre || profile.username,
+    slug: profile.username || profile.id,
+    imagenes: {
+      profile: profile.avatar_url || mockArtists[0].imagenes.profile,
+      banner:
+        "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1600&q=80",
+    },
+    stats: { seguidores: "0", oyentes: "0", partnean: 0 },
+    bio: profile.bio || "",
+    tracks: [],
+    estilo,
+    origen: profile.ubicacion || "Torreón, Coahuila",
+    redes: parseSocialLinks(profile.social_links),
+  };
+}
+
+/**
+ * Fetches artists from Supabase at build time.
+ * Falls back to mock data if Supabase is unreachable.
+ */
+export async function getArtistsFromDB(): Promise<Artist[]> {
+  const url = import.meta.env.PUBLIC_SUPABASE_URL;
+  const key = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!url || !key) return mockArtists;
+
+  try {
+    const supabase = createClient(url, key);
+
+    // Fetch profiles with role = 'artist'
+    const { data: profiles, error } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("role", "artist")
+      .order("created_at", { ascending: true });
+
+    if (error || !profiles || profiles.length === 0) {
+      console.warn("[artists] Supabase fallback to mock data:", error?.message);
+      return mockArtists;
+    }
+
+    // Fetch partnear counts per artist
+    const artistIds = profiles.map((p: any) => p.id);
+    const { data: partnearData } = await supabase
+      .from("partnear")
+      .select("artist_id");
+
+    const partnearCounts: Record<string, number> = {};
+    if (partnearData) {
+      for (const row of partnearData) {
+        const aid = row.artist_id;
+        partnearCounts[aid] = (partnearCounts[aid] || 0) + 1;
+      }
+    }
+
+    return profiles.map((p: any) => {
+      const artist = mapProfileToArtist(p);
+      artist.stats.partnean = partnearCounts[p.id] || 0;
+      return artist;
+    });
+  } catch (err) {
+    console.warn("[artists] Network error, using mock data:", err);
+    return mockArtists;
+  }
+}
+
+/**
+ * Find a single artist by username/slug.
+ */
+export async function getArtistBySlug(slug: string): Promise<Artist | null> {
+  const artists = await getArtistsFromDB();
+  return artists.find((a) => a.slug === slug) || null;
+}
+
+// Re-export mock data for client-side scripts that reference it directly
+export const artistsData = mockArtists;

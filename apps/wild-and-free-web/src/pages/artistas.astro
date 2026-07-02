@@ -1,6 +1,7 @@
 ﻿---
 import Layout from '../layouts/Layout.astro';
-import { artistsData } from '../data/artists';
+import { getArtistsFromDB } from '../data/artists';
+import type { Artist } from '../data/artists';
 
 const config = {
   name: "Wild Gvng - Roster",
@@ -8,7 +9,13 @@ const config = {
   secondary_color: "#8A0303"
 };
 
-const genres = ['Todos', 'Trap', 'Freestyle', 'Drill', 'Lo-Fi', 'Reggaetón', 'Rap'];
+// Fetch artists from Supabase at build time
+const artists = await getArtistsFromDB();
+
+// Extract unique genres from all artists
+const allGenres = new Set<string>();
+artists.forEach(a => a.estilo.split(' / ').forEach(g => allGenres.add(g)));
+const genres = ['Todos', ...Array.from(allGenres).sort()];
 ---
 
 <Layout config={config}>
@@ -51,7 +58,7 @@ const genres = ['Todos', 'Trap', 'Freestyle', 'Drill', 'Lo-Fi', 'Reggaetón', 'R
           ))}
         </div>
         <div class="results-count">
-          <span id="artist-count">{artistsData.length}</span> artistas en el roster
+          <span id="artist-count">{artists.length}</span> artistas en el roster
         </div>
       </div>
     </section>
@@ -60,7 +67,7 @@ const genres = ['Todos', 'Trap', 'Freestyle', 'Drill', 'Lo-Fi', 'Reggaetón', 'R
     <section class="roster-grid-section">
       <div class="container">
         <div class="roster-grid" id="roster-grid">
-          {artistsData.map((artist, idx) => (
+          {artists.map((artist, idx) => (
             <a
               href={`/artista?=${artist.slug}`}
               class="artist-card"
@@ -90,7 +97,7 @@ const genres = ['Todos', 'Trap', 'Freestyle', 'Drill', 'Lo-Fi', 'Reggaetón', 'R
               <div class="card-action">
                 <button
                   class="partnear-btn"
-                  onclick={`event.preventDefault(); togglePartnear(${artist.id})`}
+                  onclick={`event.preventDefault(); togglePartnear('${artist.id}')`}
                   data-artist-id={artist.id}
                 >
                   <span class="partnear-icon">🔥</span>
@@ -542,24 +549,24 @@ const genres = ['Todos', 'Trap', 'Freestyle', 'Drill', 'Lo-Fi', 'Reggaetón', 'R
   }
 
   // Partnear toggle
-  const partnearState: Record<number, boolean> = {};
-  // @ts-ignore
-  window.togglePartnear = function(artistId: number) {
-    const btn = document.querySelector(`[data-artist-id="${artistId}"]`) as HTMLElement;
-    if (!btn) return;
+  const partnearState: Record<string, boolean> = {};
+// @ts-ignore
+window.togglePartnear = function(artistId: string) {
+  const btn = document.querySelector(`[data-artist-id="${artistId}"]`) as HTMLElement;
+  if (!btn) return;
 
-    partnearState[artistId] = !partnearState[artistId];
-    const countEl = btn.querySelector('.partnear-count');
-    const baseCount = artistsData.find(a => a.id === artistId)?.stats.partnean || 0;
+  partnearState[artistId] = !partnearState[artistId];
+  const countEl = btn.querySelector('.partnear-count');
+  const baseCount = parseInt(countEl?.textContent || '0');
 
-    if (partnearState[artistId]) {
-      btn.classList.add('active');
-      if (countEl) countEl.textContent = String(baseCount + 1);
-    } else {
-      btn.classList.remove('active');
-      if (countEl) countEl.textContent = String(baseCount);
-    }
+  if (partnearState[artistId]) {
+    btn.classList.add('active');
+    if (countEl) countEl.textContent = String(baseCount + 1);
+  } else {
+    btn.classList.remove('active');
+    if (countEl) countEl.textContent = String(Math.max(0, baseCount - 1));
   }
+}
 
-  import { artistsData } from '../data/artists';
+import { artistsData } from '../data/artists';
 </script>
