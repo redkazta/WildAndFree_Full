@@ -15,7 +15,6 @@ const slug = url.searchParams.get('') || '';
 const artists = await getArtistsFromDB();
 const artist = artists.find(a => a.slug === slug) || artists[0];
 
-// Social icon map
 const socialIcons: Record<string, string> = {
   instagram: '📸',
   spotify: '🎵',
@@ -29,26 +28,25 @@ const socialIcons: Record<string, string> = {
 <Layout config={config}>
   <div class="artist-page">
 
-    <!-- ═══ HERO BANNER ═══ -->
+    <!-- ═══ HERO ═══ -->
     <div class="hero">
-      <img src={artist.imagenes.banner} alt="" class="hero-img" />
-      <div class="hero-gradient"></div>
-      <div class="hero-noise"></div>
       <div class="hero-grid"></div>
+      <div class="hero-glow hero-glow-1"></div>
+      <div class="hero-glow hero-glow-2"></div>
+      <div class="hero-noise"></div>
     </div>
 
-    <!-- ═══ PROFILE CARD ═══ -->
-    <div class="container">
-      <div class="profile-card">
-        <!-- Avatar -->
-        <div class="avatar-wrapper">
-          <img src={artist.imagenes.profile} alt={artist.nombre} class="avatar-img" />
-          <div class="avatar-ring"></div>
-          <div class="avatar-glow"></div>
+    <!-- ═══ BLOG HEADER ═══ -->
+    <div class="blog-container">
+      <header class="blog-header">
+        <div class="avatar-column">
+          <div class="avatar-wrapper">
+            <img src={artist.imagenes.profile} alt={artist.nombre} class="avatar-img" />
+            <div class="avatar-ring"></div>
+            <div class="avatar-glow"></div>
+          </div>
         </div>
-
-        <!-- Info -->
-        <div class="profile-main">
+        <div class="info-column">
           <div class="name-row">
             <h1 class="artist-name">{artist.nombre}</h1>
             <span class="verified-badge">✓</span>
@@ -59,113 +57,187 @@ const socialIcons: Record<string, string> = {
             ))}
           </div>
           <span class="origin">📍 {artist.origen}</span>
-        </div>
 
-        <!-- Stats -->
-        <div class="stats-row">
-          <div class="stat">
-            <span class="stat-value">{artist.stats.partnean}</span>
-            <span class="stat-label">Partnean</span>
+          <!-- Stats inline -->
+          <div class="stats-row">
+            <div class="stat">
+              <span class="stat-value">{artist.stats.partnean}</span>
+              <span class="stat-label">Partnean</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+              <span class="stat-value">{artist.stats.oyentes}</span>
+              <span class="stat-label">Oyentes</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+              <span class="stat-value">{artist.tracks.length}</span>
+              <span class="stat-label">Tracks</span>
+            </div>
           </div>
-          <div class="stat-divider"></div>
-          <div class="stat">
-            <span class="stat-value">{artist.stats.oyentes}</span>
-            <span class="stat-label">Oyentes</span>
-          </div>
-          <div class="stat-divider"></div>
-          <div class="stat">
-            <span class="stat-value">{artist.tracks.length}</span>
-            <span class="stat-label">Tracks</span>
-          </div>
-        </div>
 
-        <!-- Actions -->
-        <div class="actions-row">
-          <button class="btn-action btn-partnear" id="partnear-btn">
-            <span class="btn-icon">🔥</span>
-            <span class="btn-text">PARTNEAR</span>
-          </button>
-          <button class="btn-action btn-share" id="share-btn">
-            <span class="btn-icon">🔗</span>
-            <span class="btn-text">COMPARTIR</span>
-          </button>
+          <!-- Actions -->
+          <div class="actions-row">
+            <button class="btn-action btn-partnear" id="partnear-btn">
+              <span class="btn-icon">🔥</span>
+              <span class="btn-text">PARTNEAR</span>
+            </button>
+            <button class="btn-action btn-share" id="share-btn">
+              <span class="btn-icon">🔗</span>
+              <span class="btn-text">COMPARTIR</span>
+            </button>
+          </div>
         </div>
-      </div>
+      </header>
 
       <!-- ═══ BIO ═══ -->
       {artist.bio && (
-        <div class="section">
+        <section class="content-block">
           <h2 class="section-label">SOBRE MÍ</h2>
           <p class="bio-text">{artist.bio}</p>
-        </div>
+        </section>
       )}
 
-      <!-- ═══ MUSIC ═══ -->
-      {artist.tracks.length > 0 && (
-        <div class="section">
-          <h2 class="section-label">MÚSICA</h2>
-          <div class="tracks-list">
-            {artist.tracks.map((track, i) => (
-              <div class="track-row">
-                <span class="track-num">{String(i + 1).padStart(2, '0')}</span>
-                <div class="track-info">
-                  <span class="track-title">{track.title}</span>
-                  <span class="track-dur">{track.duration}</span>
-                </div>
-                {track.spotify_url ? (
-                  <a href={track.spotify_url} target="_blank" rel="noopener" class="track-play" title="Escuchar en Spotify">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                  </a>
-                ) : (
-                  <button class="track-play" disabled>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                  </button>
-                )}
+      <!-- ═══ FEED ═══ -->
+      <section class="content-block feed-section">
+        <h2 class="section-label">FEED</h2>
+        <div class="feed-list">
+          <article class="feed-post">
+            <div class="post-header">
+              <img src={artist.imagenes.profile} alt={artist.nombre} class="post-avatar" />
+              <div class="post-meta">
+                <span class="post-author">{artist.nombre}</span>
+                <span class="post-date">Hace 2 horas</span>
               </div>
-            ))}
-          </div>
-        </div>
-      )}
+              <span class="post-type">📝 Texto</span>
+            </div>
+            <p class="post-body">Nuevo track en proceso 🔥 Estuvo brutal la sesión de grabación ayer. Pronto les llega.</p>
+            <div class="post-actions">
+              <button class="post-action">🔥 24</button>
+              <button class="post-action">💬 8</button>
+              <button class="post-action">↗️ Compartir</button>
+            </div>
+          </article>
 
-      <!-- ═══ EVENTS ═══ -->
-      <div class="section">
-        <h2 class="section-label">PRÓXIMOS EVENTOS</h2>
-        <div class="event-card">
-          <div class="event-date-box">
-            <span class="event-day">15</span>
-            <span class="event-month">JUL</span>
-          </div>
-          <div class="event-details">
-            <span class="event-name">Freestyle Friday</span>
-            <span class="event-loc">📍 Bosque Venustiano Carranza</span>
-          </div>
-          <a href="https://maps.google.com" target="_blank" class="event-maps">MAPS →</a>
-        </div>
-        <p class="events-empty">Más eventos próximamente...</p>
-      </div>
+          <article class="feed-post">
+            <div class="post-header">
+              <img src={artist.imagenes.profile} alt={artist.nombre} class="post-avatar" />
+              <div class="post-meta">
+                <span class="post-author">{artist.nombre}</span>
+                <span class="post-date">Hace 1 día</span>
+              </div>
+              <span class="post-type">📸 Foto</span>
+            </div>
+            <p class="post-body">Del bosque al escenario. Torreón siempreRepresentando 🏜️</p>
+            <div class="post-image">
+              <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=600&q=80" alt="Post image" loading="lazy" />
+            </div>
+            <div class="post-actions">
+              <button class="post-action">🔥 67</button>
+              <button class="post-action">💬 12</button>
+              <button class="post-action">↗️ Compartir</button>
+            </div>
+          </article>
 
-      <!-- ═══ SOCIAL LINKS ═══ -->
-      {artist.redes && Object.keys(artist.redes).length > 0 && (
-        <div class="section">
-          <h2 class="section-label">REDES</h2>
-          <div class="social-grid">
-            {Object.entries(artist.redes).map(([platform, link]) => (
-              <a href={link} target="_blank" rel="noopener" class="social-card">
-                <span class="social-icon">{socialIcons[platform.toLowerCase()] || '🔗'}</span>
-                <span class="social-name">{platform}</span>
-                <span class="social-arrow">→</span>
-              </a>
-            ))}
-          </div>
+          <article class="feed-post">
+            <div class="post-header">
+              <img src={artist.imagenes.profile} alt={artist.nombre} class="post-avatar" />
+              <div class="post-meta">
+                <span class="post-author">{artist.nombre}</span>
+                <span class="post-date">Hace 3 días</span>
+              </div>
+              <span class="post-type">🎵 Música</span>
+            </div>
+            <p class="post-body">"Noche de Arena" ya disponible en todas las plataformas 🎧 Link en bio.</p>
+            <div class="post-embed">
+              <div class="embed-placeholder">
+                <span class="embed-icon">🎵</span>
+                <span class="embed-text">Noche de Arena - {artist.nombre}</span>
+              </div>
+            </div>
+            <div class="post-actions">
+              <button class="post-action">🔥 112</button>
+              <button class="post-action">💬 31</button>
+              <button class="post-action">↗️ Compartir</button>
+            </div>
+          </article>
         </div>
-      )}
+      </section>
 
-      <!-- ═══ SHARE PROFILE ═══ -->
-      <div class="section share-section">
-        <p class="share-label">Comparte el perfil de {artist.nombre}</p>
-        <div class="share-box">
-          <code class="share-url">www.wildgvng.com.mx/artista?={artist.slug}</code>
-          <button class="share-copy" id="copy-url-btn">COPIAR</button>
+      <!-- ═══ CONTENT GRID ═══ -->
+      <div class="content-grid">
+
+        <!-- MUSIC COLUMN -->
+        <div class="content-col">
+          {artist.tracks.length > 0 && (
+            <section class="content-block">
+              <h2 class="section-label">MÚSICA</h2>
+              <div class="tracks-list">
+                {artist.tracks.map((track, i) => (
+                  <div class="track-row">
+                    <span class="track-num">{String(i + 1).padStart(2, '0')}</span>
+                    <div class="track-info">
+                      <span class="track-title">{track.title}</span>
+                      <span class="track-dur">{track.duration}</span>
+                    </div>
+                    {track.spotify_url ? (
+                      <a href={track.spotify_url} target="_blank" rel="noopener" class="track-play" title="Escuchar en Spotify">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                      </a>
+                    ) : (
+                      <button class="track-play" disabled>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          <!-- SOCIAL LINKS -->
+          {artist.redes && Object.keys(artist.redes).length > 0 && (
+            <section class="content-block">
+              <h2 class="section-label">REDES</h2>
+              <div class="social-list">
+                {Object.entries(artist.redes).map(([platform, link]) => (
+                  <a href={link} target="_blank" rel="noopener" class="social-row">
+                    <span class="social-icon">{socialIcons[platform.toLowerCase()] || '🔗'}</span>
+                    <span class="social-name">{platform}</span>
+                    <span class="social-arrow">→</span>
+                  </a>
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
+
+        <!-- EVENTS + SHARE COLUMN -->
+        <div class="content-col">
+          <section class="content-block">
+            <h2 class="section-label">PRÓXIMOS EVENTOS</h2>
+            <div class="event-card">
+              <div class="event-date-box">
+                <span class="event-day">15</span>
+                <span class="event-month">JUL</span>
+              </div>
+              <div class="event-details">
+                <span class="event-name">Freestyle Friday</span>
+                <span class="event-loc">📍 Bosque Venustiano Carranza</span>
+              </div>
+              <a href="https://maps.google.com" target="_blank" class="event-maps">MAPS →</a>
+            </div>
+            <p class="events-empty">Más eventos próximamente...</p>
+          </section>
+
+          <!-- SHARE -->
+          <section class="content-block">
+            <h2 class="section-label">COMPARTIR PERFIL</h2>
+            <div class="share-box">
+              <code class="share-url">www.wildgvng.com.mx/artista?={artist.slug}</code>
+              <button class="share-copy" id="copy-url-btn">COPIAR</button>
+            </div>
+          </section>
         </div>
       </div>
 
@@ -184,28 +256,46 @@ const socialIcons: Record<string, string> = {
     background: #0a0a0a;
     overflow-x: hidden;
   }
-  .container {
-    max-width: 860px;
+  .blog-container {
+    max-width: 1000px;
     margin: 0 auto;
-    padding: 0 20px 80px;
+    padding: 0 24px 80px;
   }
 
   /* ===== HERO ===== */
   .hero {
     position: relative;
-    height: 340px;
+    height: 200px;
     overflow: hidden;
   }
-  .hero-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: brightness(0.5) saturate(1.2);
-  }
-  .hero-gradient {
+  .hero-grid {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, #0a0a0a 0%, rgba(10,10,10,0.6) 40%, transparent 100%);
+    background:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    animation: pulse 4s ease-in-out infinite;
+  }
+  .hero-glow-1 {
+    top: 10%;
+    left: 30%;
+    width: 400px;
+    height: 400px;
+    background: rgba(201,131,0,0.08);
+  }
+  .hero-glow-2 {
+    bottom: 0;
+    right: 20%;
+    width: 300px;
+    height: 300px;
+    background: rgba(201,131,0,0.04);
+    animation-delay: 1s;
   }
   .hero-noise {
     position: absolute;
@@ -214,34 +304,31 @@ const socialIcons: Record<string, string> = {
     background: url('https://www.transparenttextures.com/patterns/stardust.png');
     mix-blend-mode: overlay;
   }
-  .hero-grid {
-    position: absolute;
-    inset: 0;
-    background:
-      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
-    background-size: 60px 60px;
-  }
 
-  /* ===== PROFILE CARD ===== */
-  .profile-card {
-    margin-top: -80px;
-    position: relative;
-    z-index: 20;
+  /* ===== BLOG HEADER ===== */
+  .blog-header {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+    gap: 40px;
+    align-items: flex-start;
+    margin-top: -60px;
+    position: relative;
+    z-index: 10;
+  }
+  .avatar-column {
+    flex-shrink: 0;
+  }
+  .info-column {
+    flex: 1;
+    padding-top: 8px;
   }
 
   /* Avatar */
   .avatar-wrapper {
     position: relative;
-    width: 160px;
-    height: 160px;
+    width: 180px;
+    height: 180px;
     border-radius: 24px;
     overflow: hidden;
-    flex-shrink: 0;
   }
   .avatar-img {
     width: 100%;
@@ -267,41 +354,37 @@ const socialIcons: Record<string, string> = {
   }
 
   /* Name */
-  .profile-main {
-    margin-top: 20px;
-  }
   .name-row {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
+    gap: 12px;
   }
   .artist-name {
-    font-size: 2.2rem;
+    font-size: 2.4rem;
     font-weight: 900;
     color: #fff;
     text-transform: uppercase;
     letter-spacing: -0.02em;
     margin: 0;
+    line-height: 1;
   }
   .verified-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     background: linear-gradient(135deg, #C98300, #f59e0b);
     color: #000;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: 900;
     flex-shrink: 0;
   }
   .genre-tags {
     display: flex;
     gap: 8px;
-    justify-content: center;
-    margin-top: 10px;
+    margin-top: 12px;
     flex-wrap: wrap;
   }
   .genre-tag {
@@ -319,7 +402,7 @@ const socialIcons: Record<string, string> = {
   .origin {
     display: block;
     margin-top: 8px;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     color: rgba(255,255,255,0.35);
   }
 
@@ -327,12 +410,13 @@ const socialIcons: Record<string, string> = {
   .stats-row {
     display: flex;
     align-items: center;
-    gap: 32px;
-    margin-top: 24px;
-    padding: 20px 32px;
-    border-radius: 16px;
+    gap: 24px;
+    margin-top: 20px;
+    padding: 16px 24px;
+    border-radius: 14px;
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(255,255,255,0.06);
+    width: fit-content;
   }
   .stat {
     display: flex;
@@ -341,7 +425,7 @@ const socialIcons: Record<string, string> = {
     gap: 2px;
   }
   .stat-value {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     font-weight: 900;
     color: #fff;
   }
@@ -354,7 +438,7 @@ const socialIcons: Record<string, string> = {
   }
   .stat-divider {
     width: 1px;
-    height: 32px;
+    height: 28px;
     background: rgba(255,255,255,0.08);
   }
 
@@ -362,15 +446,15 @@ const socialIcons: Record<string, string> = {
   .actions-row {
     display: flex;
     gap: 10px;
-    margin-top: 20px;
+    margin-top: 16px;
   }
   .btn-action {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 12px 24px;
-    border-radius: 14px;
-    font-size: 0.65rem;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-size: 0.6rem;
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 0.12em;
@@ -392,12 +476,12 @@ const socialIcons: Record<string, string> = {
     border-color: rgba(201,131,0,0.5);
     color: #C98300;
   }
-  .btn-icon { font-size: 1rem; }
+  .btn-icon { font-size: 0.9rem; }
 
-  /* ===== SECTIONS ===== */
-  .section {
-    margin-top: 48px;
-    padding-top: 32px;
+  /* ===== CONTENT BLOCKS ===== */
+  .content-block {
+    margin-top: 40px;
+    padding-top: 28px;
     border-top: 1px solid rgba(255,255,255,0.06);
   }
   .section-label {
@@ -407,15 +491,146 @@ const socialIcons: Record<string, string> = {
     letter-spacing: 0.25em;
     color: rgba(255,255,255,0.25);
     font-family: monospace;
-    margin: 0 0 20px;
+    margin: 0 0 16px;
   }
-
-  /* Bio */
   .bio-text {
-    font-size: 0.95rem;
+    font-size: 1rem;
     color: rgba(255,255,255,0.6);
     line-height: 1.8;
     margin: 0;
+  }
+
+  /* ===== FEED ===== */
+  .feed-section {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 32px;
+  }
+  .feed-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .feed-post {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 16px;
+    padding: 20px;
+    transition: border-color 0.2s;
+  }
+  .feed-post:hover {
+    border-color: rgba(201,131,0,0.15);
+  }
+  .post-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .post-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  .post-meta {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .post-author {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #fff;
+  }
+  .post-date {
+    font-size: 0.6rem;
+    color: rgba(255,255,255,0.3);
+    font-family: monospace;
+  }
+  .post-type {
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.04);
+    padding: 4px 10px;
+    border-radius: 100px;
+  }
+  .post-body {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.7;
+    margin: 0 0 14px;
+  }
+  .post-image {
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .post-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .post-embed {
+    margin-bottom: 14px;
+  }
+  .embed-placeholder {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    background: rgba(201,131,0,0.08);
+    border: 1px solid rgba(201,131,0,0.15);
+  }
+  .embed-icon {
+    font-size: 1.4rem;
+  }
+  .embed-text {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #C98300;
+  }
+  .post-actions {
+    display: flex;
+    gap: 8px;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    padding-top: 12px;
+  }
+  .post-action {
+    flex: 1;
+    padding: 8px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.04);
+    color: rgba(255,255,255,0.4);
+    font-size: 0.7rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    font-family: inherit;
+  }
+  .post-action:hover {
+    background: rgba(201,131,0,0.08);
+    border-color: rgba(201,131,0,0.2);
+    color: #C98300;
+  }
+  @media (max-width: 600px) {
+    .feed-post { padding: 16px; }
+    .post-actions { gap: 4px; }
+  }
+
+  /* ===== CONTENT GRID (2 cols on desktop) ===== */
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 40px;
+    margin-top: 40px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(255,255,255,0.06);
   }
 
   /* Tracks */
@@ -427,8 +642,8 @@ const socialIcons: Record<string, string> = {
   .track-row {
     display: flex;
     align-items: center;
-    gap: 16px;
-    padding: 14px 16px;
+    gap: 14px;
+    padding: 12px 14px;
     border-radius: 12px;
     background: rgba(255,255,255,0.02);
     border: 1px solid rgba(255,255,255,0.04);
@@ -439,11 +654,11 @@ const socialIcons: Record<string, string> = {
     border-color: rgba(201,131,0,0.15);
   }
   .track-num {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     font-weight: 700;
     color: rgba(255,255,255,0.15);
     font-family: monospace;
-    width: 24px;
+    width: 20px;
     text-align: center;
   }
   .track-info {
@@ -462,15 +677,15 @@ const socialIcons: Record<string, string> = {
     text-overflow: ellipsis;
   }
   .track-dur {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     color: rgba(255,255,255,0.25);
     font-family: monospace;
     flex-shrink: 0;
     margin-left: 12px;
   }
   .track-play {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     background: rgba(201,131,0,0.12);
     border: none;
@@ -493,29 +708,66 @@ const socialIcons: Record<string, string> = {
     cursor: not-allowed;
   }
 
+  /* Social */
+  .social-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .social-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.04);
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .social-row:hover {
+    border-color: rgba(201,131,0,0.3);
+    background: rgba(201,131,0,0.06);
+    transform: translateX(4px);
+  }
+  .social-icon { font-size: 1.1rem; }
+  .social-name {
+    flex: 1;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #fff;
+    text-transform: capitalize;
+  }
+  .social-arrow {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.2);
+    transition: color 0.2s;
+  }
+  .social-row:hover .social-arrow { color: #C98300; }
+
   /* Event */
   .event-card {
     display: flex;
     align-items: center;
     gap: 16px;
     padding: 16px 20px;
-    border-radius: 16px;
+    border-radius: 14px;
     background: rgba(255,255,255,0.02);
     border: 1px solid rgba(255,255,255,0.05);
   }
   .event-date-box {
     text-align: center;
-    min-width: 50px;
+    min-width: 48px;
   }
   .event-day {
     display: block;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     font-weight: 900;
     color: #C98300;
     line-height: 1;
   }
   .event-month {
-    font-size: 0.55rem;
+    font-size: 0.5rem;
     font-weight: 700;
     text-transform: uppercase;
     color: rgba(255,255,255,0.3);
@@ -524,18 +776,18 @@ const socialIcons: Record<string, string> = {
   .event-details { flex: 1; }
   .event-name {
     display: block;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 700;
     color: #fff;
   }
   .event-loc {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     color: rgba(255,255,255,0.3);
   }
   .event-maps {
-    padding: 8px 16px;
+    padding: 8px 14px;
     border-radius: 10px;
-    font-size: 0.6rem;
+    font-size: 0.55rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -551,73 +803,30 @@ const socialIcons: Record<string, string> = {
     color: #C98300;
   }
   .events-empty {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     color: rgba(255,255,255,0.15);
-    margin-top: 12px;
+    margin-top: 10px;
   }
-
-  /* Social */
-  .social-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 10px;
-  }
-  .social-card {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 18px;
-    border-radius: 14px;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.06);
-    text-decoration: none;
-    transition: all 0.2s;
-  }
-  .social-card:hover {
-    border-color: rgba(201,131,0,0.3);
-    background: rgba(201,131,0,0.06);
-    transform: translateY(-2px);
-  }
-  .social-icon { font-size: 1.2rem; }
-  .social-name {
-    flex: 1;
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #fff;
-    text-transform: capitalize;
-  }
-  .social-arrow {
-    font-size: 0.7rem;
-    color: rgba(255,255,255,0.2);
-    transition: color 0.2s;
-  }
-  .social-card:hover .social-arrow { color: #C98300; }
 
   /* Share */
-  .share-section { text-align: center; }
-  .share-label {
-    font-size: 0.7rem;
-    color: rgba(255,255,255,0.25);
-    margin: 0 0 14px;
-  }
   .share-box {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    padding: 12px 20px;
-    border-radius: 14px;
+    padding: 12px 18px;
+    border-radius: 12px;
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(255,255,255,0.06);
   }
   .share-url {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     color: rgba(255,255,255,0.4);
     font-family: monospace;
   }
   .share-copy {
-    padding: 8px 16px;
-    border-radius: 10px;
-    font-size: 0.55rem;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 0.5rem;
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -649,29 +858,96 @@ const socialIcons: Record<string, string> = {
   }
   .back-link:hover { color: #C98300; }
 
-  /* ===== RESPONSIVE ===== */
-  @media (max-width: 640px) {
-    .hero { height: 220px; }
-    .avatar-wrapper { width: 120px; height: 120px; }
-    .artist-name { font-size: 1.6rem; }
-    .stats-row { gap: 20px; padding: 16px 20px; }
-    .stat-value { font-size: 1.1rem; }
-    .actions-row { width: 100%; }
-    .btn-action { flex: 1; justify-content: center; }
-    .social-grid { grid-template-columns: 1fr; }
-    .event-card { flex-direction: column; text-align: center; }
-    .event-maps { width: 100%; text-align: center; }
+  /* ===== RESPONSIVE: TABLET ===== */
+  @media (max-width: 860px) {
+    .blog-header {
+      gap: 28px;
+    }
+    .avatar-wrapper {
+      width: 140px;
+      height: 140px;
+    }
+    .artist-name {
+      font-size: 1.8rem;
+    }
+    .content-grid {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+  }
+
+  /* ===== RESPONSIVE: MOBILE ===== */
+  @media (max-width: 600px) {
+    .blog-container {
+      padding: 0 16px 60px;
+    }
+    .hero {
+      height: 140px;
+    }
+    .blog-header {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0;
+      margin-top: -50px;
+    }
+    .avatar-wrapper {
+      width: 120px;
+      height: 120px;
+    }
+    .info-column {
+      padding-top: 16px;
+    }
+    .name-row {
+      justify-content: center;
+    }
+    .artist-name {
+      font-size: 1.5rem;
+    }
+    .genre-tags {
+      justify-content: center;
+    }
+    .stats-row {
+      gap: 16px;
+      padding: 12px 16px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .actions-row {
+      justify-content: center;
+      width: 100%;
+    }
+    .btn-action {
+      flex: 1;
+      justify-content: center;
+    }
+    .content-grid {
+      grid-template-columns: 1fr;
+    }
+    .event-card {
+      flex-direction: column;
+      text-align: center;
+    }
+    .event-maps {
+      width: 100%;
+      text-align: center;
+    }
+    .share-box {
+      flex-direction: column;
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+    }
   }
 
   /* ===== ANIMATIONS ===== */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
   }
 </style>
 
 <script>
-  // Partnear toggle
   const partnearBtn = document.getElementById('partnear-btn');
   let isPartnear = false;
   if (partnearBtn) {
@@ -683,7 +959,6 @@ const socialIcons: Record<string, string> = {
     });
   }
 
-  // Share URL
   const shareBtn = document.getElementById('share-btn');
   if (shareBtn) {
     shareBtn.addEventListener('click', () => {
@@ -701,7 +976,6 @@ const socialIcons: Record<string, string> = {
     });
   }
 
-  // Copy URL button
   const copyBtn = document.getElementById('copy-url-btn');
   if (copyBtn) {
     copyBtn.addEventListener('click', () => {

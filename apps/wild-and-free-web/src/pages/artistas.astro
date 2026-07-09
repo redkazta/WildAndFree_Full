@@ -264,8 +264,19 @@ const genres = ['Todos', ...Array.from(allGenres).sort()];
   }
 
   @media (max-width: 768px) {
-    .hero-title { font-size: 3.5rem; }
-    .title-roster { font-size: 1rem; }
+    .roster-hero { height: 35vh; min-height: 280px; }
+    .hero-title { font-size: 3rem; }
+    .title-roster { font-size: 0.8rem; letter-spacing: 0.2em; }
+    .hero-badge { padding: 6px 14px; }
+    .badge-text { font-size: 8px; }
+  }
+  @media (max-width: 480px) {
+    .roster-hero { height: 30vh; min-height: 220px; }
+    .hero-title { font-size: 2.4rem; }
+    .hero-subtitle { font-size: 0.65rem; }
+    .roster-grid-section { padding: 24px 0 60px; }
+    .join-card { padding: 32px 20px; }
+    .join-title { font-size: 1.4rem; }
   }
 
   /* ===== FILTERS ===== */

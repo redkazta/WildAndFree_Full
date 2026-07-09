@@ -6,7 +6,7 @@ export interface Artist {
   slug: string;
   imagenes: {
     profile: string;
-    banner: string;
+    banner?: string;
   };
   stats: {
     seguidores: string;
@@ -29,11 +29,9 @@ const mockArtists: Artist[] = [
     imagenes: {
       profile:
         "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80",
-      banner:
-        "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1600&q=80",
     },
     stats: { seguidores: "1.2K", oyentes: "3.4K", partnean: 142 },
-    bio: "CEO & Founder de Wild Gvng. Productor musical y freestyler nacido en Torreón. El desierto es su escenario.",
+    bio: "CEO & Founder de Wild Gvng. Productor musical y freestyler.",
     tracks: [
       { title: "Fuego del Desierto", duration: "3:24" },
       { title: "Noche de Arena", duration: "2:58" },
@@ -50,11 +48,9 @@ const mockArtists: Artist[] = [
     imagenes: {
       profile:
         "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&q=80",
-      banner:
-        "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=1600&q=80",
     },
     stats: { seguidores: "670", oyentes: "1.9K", partnean: 56 },
-    bio: "Voz del bajo mundo. Flow imparable. Torreón represent.",
+    bio: "Voz del bajo mundo. Flow imparable.",
     tracks: [
       { title: "Crucero Nocturno", duration: "3:08" },
       { title: "Reglas de la Vieja Escuela", duration: "2:55" },
@@ -70,11 +66,9 @@ const mockArtists: Artist[] = [
     imagenes: {
       profile:
         "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=800&q=80",
-      banner:
-        "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1600&q=80",
     },
     stats: { seguidores: "430", oyentes: "1.1K", partnean: 34 },
-    bio: "Joven promesa del freestyle torreonense. Fuego puro en cada verso.",
+    bio: "Joven promesa del freestyle torreonense.",
     tracks: [
       { title: "Sin Cuartel", duration: "2:44" },
       { title: "Barro y Sangre", duration: "3:18" },
@@ -110,8 +104,6 @@ function mapProfileToArtist(profile: any): Artist {
     slug: profile.username || profile.id,
     imagenes: {
       profile: profile.avatar_url || mockArtists[0].imagenes.profile,
-      banner:
-        "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1600&q=80",
     },
     stats: { seguidores: "0", oyentes: "0", partnean: 0 },
     bio: profile.bio || "",
