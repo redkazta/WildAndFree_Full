@@ -20,6 +20,20 @@ export interface Artist {
   redes?: Record<string, string>;
 }
 
+export interface ArtistPost {
+  id: string;
+  artist_id: string;
+  content: string;
+  post_type: string;
+  image_url: string | null;
+  embed_url: string | null;
+  embed_title: string | null;
+  likes_count: number;
+  comments_count: number;
+  is_pinned: boolean;
+  created_at: string;
+}
+
 // Fallback mock data (used if Supabase is unreachable at build time)
 const mockArtists: Artist[] = [
   {
@@ -193,5 +207,61 @@ export async function getArtistBySlug(slug: string): Promise<Artist | null> {
   return artists.find((a) => a.slug === slug) || null;
 }
 
+/**
+ * Fetch feed posts for a specific artist.
+ */
+export async function getArtistPosts(artistId: string): Promise<ArtistPost[]> {
+  const url = import.meta.env.PUBLIC_SUPABASE_URL;
+  const key = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!url || !key) return mockPosts.filter((p) => p.artist_id === artistId);
+
+  try {
+    const supabase = createClient(url, key);
+    const { data, error } = await supabase
+      .from('artist_posts')
+      .select('*')
+      .eq('artist_id', artistId)
+      .order('is_pinned', { ascending: false })
+      .order('created_at', { ascending: false });
+
+    if (error || !data || data.length === 0) {
+      console.warn('[artists] Posts fallback to mock:', error?.message);
+      return mockPosts.filter((p) => p.artist_id === artistId);
+    }
+    return data as ArtistPost[];
+  } catch (err) {
+    console.warn('[artists] Posts network error:', err);
+    return mockPosts.filter((p) => p.artist_id === artistId);
+  }
+}
+
 // Re-export mock data for client-side scripts that reference it directly
 export const artistsData = mockArtists;
+
+// Mock posts fallback
+const mockPosts: ArtistPost[] = [
+  {
+    id: 'mock-1', artist_id: '66fd9133-87bc-43eb-9095-23b11f44de5c',
+    content: 'Nuevo track en proceso 🔥 Pronto les llega.',
+    post_type: 'text', image_url: null, embed_url: null, embed_title: null,
+    likes_count: 24, comments_count: 8, is_pinned: false,
+    created_at: new Date(Date.now() - 7200000).toISOString(),
+  },
+  {
+    id: 'mock-2', artist_id: '2406328b-ad5b-4271-a923-36af6b9c5a29',
+    content: 'Crucero Nocturno ya está en Spotify 🚗💨',
+    post_type: 'music', image_url: null, embed_url: 'https://open.spotify.com/embed/track/example2',
+    embed_title: 'Crucero Nocturno - MC Delta',
+    likes_count: 78, comments_count: 19, is_pinned: false,
+    created_at: new Date(Date.now() - 14400000).toISOString(),
+  },
+  {
+    id: 'mock-3', artist_id: '1a2eac9c-50e9-48d1-9026-54286147c149',
+    content: 'Sin Cuartel es oficialmente fuera 🚀',
+    post_type: 'music', image_url: null, embed_url: 'https://open.spotify.com/embed/track/example4',
+    embed_title: 'Sin Cuartel - Lil Fuego',
+    likes_count: 92, comments_count: 21, is_pinned: false,
+    created_at: new Date(Date.now() - 21600000).toISOString(),
+  },
+];
