@@ -15,45 +15,27 @@ const slug = url.searchParams.get('id') || '';
 const artists = await getArtistsFromDB();
 const artist = artists.find(a => a.slug === slug) || artists[0];
 
-// Fetch artist posts
 let posts: ArtistPost[] = [];
 if (artist) {
   posts = await getArtistPosts(artist.id);
 }
 
-const socialIcons: Record<string, string> = {
-  instagram: '📸',
-  spotify: '🎵',
-  youtube: '▶️',
-  tiktok: '🎭',
-  twitter: '🐦',
-  soundcloud: '☁️',
-};
-
-const postTypeLabels: Record<string, string> = {
-  text: '📝 Texto',
-  photo: '📸 Foto',
-  music: '🎵 Música',
-  video: '🎬 Video',
-  event: '📅 Evento',
-};
-
 function timeAgo(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime();
   const mins = Math.floor(diff / 60000);
-  if (mins < 60) return `Hace ${mins}m`;
+  if (mins < 60) return `${mins}m`;
   const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `Hace ${hrs}h`;
+  if (hrs < 24) return `${hrs}h`;
   const days = Math.floor(hrs / 24);
-  if (days < 7) return `Hace ${days}d`;
-  return `Hace ${Math.floor(days / 7)}sem`;
+  if (days < 7) return `${days}d`;
+  return `${Math.floor(days / 7)}sem`;
 }
 ---
 
 <Layout config={config}>
   <div class="fb-page">
 
-    <!-- ═══ DARK TOP BAR ═══ -->
+    <!-- TOP BAR -->
     <div class="top-bar">
       <div class="top-bar-inner">
         <a href="/artistas" class="top-back">← ROSTER</a>
@@ -62,7 +44,7 @@ function timeAgo(dateStr: string): string {
       </div>
     </div>
 
-    <!-- ═══ PROFILE HEADER ═══ -->
+    <!-- PROFILE HEADER -->
     <div class="profile-header">
       <div class="profile-header-bg"></div>
       <div class="profile-header-inner">
@@ -81,29 +63,29 @@ function timeAgo(dateStr: string): string {
             ))}
           </div>
           <div class="profile-meta">
-            <span>📍 {artist.origen}</span>
+            <span>{artist.origen}</span>
             <span class="meta-dot">·</span>
-            <span>🔥 {artist.stats.partnean} Partnean</span>
+            <span>{artist.stats.partnean} Partnean</span>
             <span class="meta-dot">·</span>
-            <span>🎧 {artist.stats.oyentes} oyentes</span>
+            <span>{artist.stats.oyentes} oyentes</span>
           </div>
           <div class="profile-actions">
             <button class="fb-btn fb-btn-primary" id="partnear-btn">
-              <span>🔥</span> PARTNEAR
+              PARTNEAR
             </button>
             <button class="fb-btn fb-btn-secondary" id="share-btn">
-              <span>↗️</span> COMPARTIR
+              COMPARTIR
             </button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ═══ TWO COLUMN LAYOUT ═══ -->
+    <!-- TWO COLUMN LAYOUT -->
     <div class="fb-container">
       <div class="fb-grid">
 
-        <!-- ═══ LEFT COLUMN ═══ -->
+        <!-- LEFT: Profile Sidebar (25%) -->
         <div class="col-left">
 
           {artist.bio && (
@@ -125,13 +107,11 @@ function timeAgo(dateStr: string): string {
                       <span class="track-dur">{track.duration}</span>
                     </div>
                     {track.spotify_url ? (
-                      <a href={track.spotify_url} target="_blank" class="track-play" title="Escuchar">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                      <a href={track.spotify_url} target="_blank" class="track-play">
+                        ▶
                       </a>
                     ) : (
-                      <button class="track-play" disabled>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                      </button>
+                      <button class="track-play" disabled>▶</button>
                     )}
                   </div>
                 ))}
@@ -142,11 +122,10 @@ function timeAgo(dateStr: string): string {
           {artist.redes && Object.keys(artist.redes).length > 0 && (
             <section class="fb-card">
               <h3 class="card-title">REDES</h3>
-              <div class="social-grid">
+              <div class="social-list">
                 {Object.entries(artist.redes).map(([platform, link]) => (
-                  <a href={link} target="_blank" rel="noopener" class="social-chip">
-                    <span>{socialIcons[platform.toLowerCase()] || '🔗'}</span>
-                    <span>{platform}</span>
+                  <a href={link} target="_blank" rel="noopener" class="social-row">
+                    <span class="social-name">{platform}</span>
                     <span class="social-arrow">→</span>
                   </a>
                 ))}
@@ -155,7 +134,7 @@ function timeAgo(dateStr: string): string {
           )}
 
           <section class="fb-card">
-            <h3 class="card-title">COMPARTIR PERFIL</h3>
+            <h3 class="card-title">COMPARTIR</h3>
             <div class="share-row">
               <code class="share-url">wildgvng.com.mx/artista?id={artist.slug}</code>
               <button class="share-copy" id="copy-url-btn">COPIAR</button>
@@ -164,45 +143,8 @@ function timeAgo(dateStr: string): string {
 
         </div>
 
-        <!-- ═══ RIGHT COLUMN ═══ -->
+        <!-- RIGHT: Feed (75%) -->
         <div class="col-right">
-
-          <!-- Contact Card -->
-          <div class="fb-card sticky-card">
-            <div class="contact-header">
-              <h3 class="card-title" style="margin:0;border:none;padding:0">INFO</h3>
-            </div>
-            <div class="contact-stats">
-              <div class="cstat">
-                <span class="cstat-val">{artist.stats.partnean}</span>
-                <span class="cstat-label">Partnean</span>
-              </div>
-              <div class="cstat">
-                <span class="cstat-val">{artist.stats.oyentes}</span>
-                <span class="cstat-label">Oyentes</span>
-              </div>
-              <div class="cstat">
-                <span class="cstat-val">{artist.tracks.length}</span>
-                <span class="cstat-label">Tracks</span>
-              </div>
-            </div>
-            <div class="contact-rows">
-              <div class="crow">
-                <span class="crow-icon">📍</span>
-                <span class="crow-text">{artist.origen}</span>
-              </div>
-              <div class="crow">
-                <span class="crow-icon">🎵</span>
-                <span class="crow-text">{artist.estilo}</span>
-              </div>
-              <div class="crow">
-                <span class="crow-icon">🕐</span>
-                <span class="crow-text">Wild Ones desde 2018</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Feed -->
           <div class="fb-card feed-card">
             <h3 class="card-title">FEED</h3>
             {posts.length > 0 ? (
@@ -215,7 +157,7 @@ function timeAgo(dateStr: string): string {
                         <span class="fp-name">{artist.nombre}</span>
                         <span class="fp-time">{timeAgo(post.created_at)}</span>
                       </div>
-                      <span class="fp-type">{postTypeLabels[post.post_type] || post.post_type}</span>
+                      <span class="fp-type">{post.post_type}</span>
                     </div>
 
                     {post.content && (
@@ -243,40 +185,29 @@ function timeAgo(dateStr: string): string {
                     )}
 
                     {post.post_type === 'music' && !post.embed_url && post.embed_title && (
-                      <div class="fp-music-placeholder">
-                        <span>🎵</span>
+                      <div class="fp-music-ph">
                         <span>{post.embed_title}</span>
                       </div>
                     )}
 
                     {post.post_type === 'event' && post.embed_title && (
-                      <div class="fp-event-badge">
-                        <span class="event-badge-icon">📅</span>
-                        <span class="event-badge-text">{post.embed_title}</span>
+                      <div class="fp-event-ph">
+                        <span>{post.embed_title}</span>
                       </div>
                     )}
 
                     <div class="fp-actions">
-                      <button class="fp-action">
-                        <span>🔥</span> {post.likes_count}
-                      </button>
-                      <button class="fp-action">
-                        <span>💬</span> {post.comments_count}
-                      </button>
-                      <button class="fp-action">
-                        <span>↗️</span> Compartir
-                      </button>
+                      <button class="fp-action">{post.likes_count} fuego</button>
+                      <button class="fp-action">{post.comments_count} comments</button>
+                      <button class="fp-action">share</button>
                     </div>
                   </article>
                 ))}
               </div>
             ) : (
-              <div class="feed-empty">
-                <p>Sin posts aún</p>
-              </div>
+              <div class="feed-empty">Sin posts aún</div>
             )}
           </div>
-
         </div>
 
       </div>
@@ -286,7 +217,6 @@ function timeAgo(dateStr: string): string {
 </Layout>
 
 <style>
-  /* ===== RESET & BASE ===== */
   .fb-page {
     min-height: 100vh;
     background: #0a0a0a;
@@ -294,7 +224,7 @@ function timeAgo(dateStr: string): string {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
 
-  /* ===== TOP BAR ===== */
+  /* TOP BAR */
   .top-bar {
     position: sticky;
     top: 0;
@@ -327,10 +257,9 @@ function timeAgo(dateStr: string): string {
     font-family: monospace;
   }
 
-  /* ===== PROFILE HEADER ===== */
+  /* PROFILE HEADER */
   .profile-header {
     position: relative;
-    padding: 0 0 0;
   }
   .profile-header-bg {
     position: absolute;
@@ -428,16 +357,14 @@ function timeAgo(dateStr: string): string {
     flex-wrap: wrap;
     align-items: center;
   }
-  .meta-dot {
-    color: rgba(255,255,255,0.15);
-  }
+  .meta-dot { color: rgba(255,255,255,0.15); }
   .profile-actions {
     display: flex;
     gap: 8px;
     margin-top: 14px;
   }
 
-  /* ===== BUTTONS ===== */
+  /* BUTTONS */
   .fb-btn {
     display: inline-flex;
     align-items: center;
@@ -458,10 +385,7 @@ function timeAgo(dateStr: string): string {
     border: 1px solid rgba(201,131,0,0.3);
     color: #C98300;
   }
-  .fb-btn-primary:hover {
-    background: #C98300;
-    color: #000;
-  }
+  .fb-btn-primary:hover,
   .fb-btn-primary.active {
     background: #C98300;
     color: #000;
@@ -481,7 +405,7 @@ function timeAgo(dateStr: string): string {
     color: #C98300;
   }
 
-  /* ===== CONTAINER & GRID ===== */
+  /* CONTAINER & GRID */
   .fb-container {
     max-width: 940px;
     margin: 0 auto;
@@ -489,12 +413,12 @@ function timeAgo(dateStr: string): string {
   }
   .fb-grid {
     display: grid;
-    grid-template-columns: 55% 45%;
+    grid-template-columns: 25% 75%;
     gap: 20px;
     margin-top: 20px;
   }
 
-  /* ===== CARDS ===== */
+  /* CARDS */
   .fb-card {
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(255,255,255,0.06);
@@ -512,67 +436,13 @@ function timeAgo(dateStr: string): string {
     font-family: monospace;
   }
   .bio-text {
-    font-size: 0.9rem;
-    color: rgba(255,255,255,0.6);
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.55);
     line-height: 1.7;
     margin: 0;
   }
 
-  /* ===== STICKY CARD ===== */
-  .sticky-card {
-    position: sticky;
-    top: 60px;
-  }
-
-  /* ===== CONTACT STATS ===== */
-  .contact-stats {
-    display: flex;
-    gap: 0;
-    margin-bottom: 16px;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-    padding-bottom: 14px;
-  }
-  .cstat {
-    flex: 1;
-    text-align: center;
-  }
-  .cstat-val {
-    display: block;
-    font-size: 1.1rem;
-    font-weight: 800;
-    color: #fff;
-  }
-  .cstat-label {
-    display: block;
-    font-size: 0.55rem;
-    color: rgba(255,255,255,0.3);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-family: monospace;
-    margin-top: 2px;
-  }
-  .contact-rows {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .crow {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.8rem;
-    color: rgba(255,255,255,0.5);
-  }
-  .crow-icon {
-    font-size: 0.9rem;
-    width: 20px;
-    text-align: center;
-  }
-  .crow-text {
-    font-size: 0.8rem;
-  }
-
-  /* ===== TRACKS ===== */
+  /* TRACKS */
   .tracks {
     display: flex;
     flex-direction: column;
@@ -581,9 +451,9 @@ function timeAgo(dateStr: string): string {
   .track-item {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 10px 12px;
-    border-radius: 10px;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 8px;
     background: rgba(255,255,255,0.02);
     border: 1px solid rgba(255,255,255,0.04);
     transition: all 0.2s;
@@ -593,11 +463,11 @@ function timeAgo(dateStr: string): string {
     border-color: rgba(201,131,0,0.15);
   }
   .track-num {
-    font-size: 0.6rem;
+    font-size: 0.55rem;
     font-weight: 700;
     color: rgba(255,255,255,0.15);
     font-family: monospace;
-    width: 18px;
+    width: 16px;
     text-align: center;
   }
   .track-info {
@@ -608,7 +478,7 @@ function timeAgo(dateStr: string): string {
     min-width: 0;
   }
   .track-name {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 700;
     color: #fff;
     white-space: nowrap;
@@ -616,15 +486,15 @@ function timeAgo(dateStr: string): string {
     text-overflow: ellipsis;
   }
   .track-dur {
-    font-size: 0.55rem;
+    font-size: 0.5rem;
     color: rgba(255,255,255,0.25);
     font-family: monospace;
     flex-shrink: 0;
-    margin-left: 10px;
+    margin-left: 8px;
   }
   .track-play {
-    width: 32px;
-    height: 32px;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
     background: rgba(201,131,0,0.1);
     border: none;
@@ -636,76 +506,70 @@ function timeAgo(dateStr: string): string {
     transition: all 0.2s;
     flex-shrink: 0;
     text-decoration: none;
+    font-size: 0.5rem;
   }
   .track-play:hover {
     background: #C98300;
     color: #000;
-    transform: scale(1.1);
   }
   .track-play:disabled {
     opacity: 0.3;
     cursor: not-allowed;
   }
 
-  /* ===== SOCIAL ===== */
-  .social-grid {
+  /* SOCIAL */
+  .social-list {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
   }
-  .social-chip {
+  .social-row {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px 14px;
-    border-radius: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
     background: rgba(255,255,255,0.02);
     border: 1px solid rgba(255,255,255,0.04);
     text-decoration: none;
     transition: all 0.2s;
   }
-  .social-chip:hover {
+  .social-row:hover {
     border-color: rgba(201,131,0,0.25);
     background: rgba(201,131,0,0.05);
     transform: translateX(3px);
   }
-  .social-chip span:first-child {
-    font-size: 1rem;
-  }
-  .social-chip span:nth-child(2) {
+  .social-name {
     flex: 1;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 700;
     color: #fff;
     text-transform: capitalize;
   }
   .social-arrow {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     color: rgba(255,255,255,0.2);
   }
-  .social-chip:hover .social-arrow {
-    color: #C98300;
-  }
+  .social-row:hover .social-arrow { color: #C98300; }
 
-  /* ===== SHARE ===== */
+  /* SHARE */
   .share-row {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
   }
   .share-url {
     flex: 1;
-    font-size: 0.6rem;
-    color: rgba(255,255,255,0.35);
+    font-size: 0.55rem;
+    color: rgba(255,255,255,0.3);
     font-family: monospace;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
   .share-copy {
-    padding: 6px 14px;
-    border-radius: 8px;
-    font-size: 0.55rem;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 0.5rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -722,10 +586,8 @@ function timeAgo(dateStr: string): string {
     color: #000;
   }
 
-  /* ===== FEED ===== */
-  .feed-card {
-    margin-bottom: 0;
-  }
+  /* FEED */
+  .feed-card { margin-bottom: 0; }
   .feed-list {
     display: flex;
     flex-direction: column;
@@ -779,15 +641,16 @@ function timeAgo(dateStr: string): string {
   .fp-type {
     font-size: 0.5rem;
     font-weight: 700;
-    color: rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.25);
     background: rgba(255,255,255,0.04);
     padding: 3px 8px;
     border-radius: 100px;
+    text-transform: capitalize;
     flex-shrink: 0;
   }
   .fp-body {
     font-size: 0.85rem;
-    color: rgba(255,255,255,0.65);
+    color: rgba(255,255,255,0.6);
     line-height: 1.6;
     margin: 0 0 12px;
   }
@@ -801,37 +664,24 @@ function timeAgo(dateStr: string): string {
     height: auto;
     display: block;
   }
-  .fp-embed {
-    margin-bottom: 12px;
-  }
-  .fp-music-placeholder {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  .fp-embed { margin-bottom: 12px; }
+  .fp-music-ph {
     padding: 12px 16px;
     border-radius: 10px;
     background: rgba(201,131,0,0.06);
     border: 1px solid rgba(201,131,0,0.12);
     margin-bottom: 12px;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 700;
     color: #C98300;
   }
-  .fp-event-badge {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  .fp-event-ph {
     padding: 12px 16px;
     border-radius: 10px;
-    background: rgba(138,3,3,0.08);
-    border: 1px solid rgba(138,3,3,0.15);
+    background: rgba(138,3,3,0.06);
+    border: 1px solid rgba(138,3,3,0.12);
     margin-bottom: 12px;
-  }
-  .event-badge-icon {
-    font-size: 1.2rem;
-  }
-  .event-badge-text {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 700;
     color: #ff6b6b;
   }
@@ -844,20 +694,16 @@ function timeAgo(dateStr: string): string {
   .fp-action {
     flex: 1;
     padding: 6px;
-    border-radius: 8px;
+    border-radius: 6px;
     background: rgba(255,255,255,0.02);
     border: 1px solid rgba(255,255,255,0.03);
-    color: rgba(255,255,255,0.35);
-    font-size: 0.65rem;
+    color: rgba(255,255,255,0.3);
+    font-size: 0.6rem;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s;
     text-align: center;
     font-family: inherit;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
   }
   .fp-action:hover {
     background: rgba(201,131,0,0.06);
@@ -865,20 +711,17 @@ function timeAgo(dateStr: string): string {
     color: #C98300;
   }
 
-  /* ===== RESPONSIVE: TABLET ===== */
+  /* RESPONSIVE TABLET */
   @media (max-width: 860px) {
     .fb-grid {
       grid-template-columns: 1fr;
-    }
-    .sticky-card {
-      position: static;
     }
     .profile-header-inner {
       padding-top: 60px;
     }
   }
 
-  /* ===== RESPONSIVE: MOBILE ===== */
+  /* RESPONSIVE MOBILE */
   @media (max-width: 600px) {
     .profile-header-inner {
       flex-direction: column;
@@ -887,60 +730,34 @@ function timeAgo(dateStr: string): string {
       padding-top: 50px;
       gap: 16px;
     }
-    .avatar-img {
-      width: 120px;
-      height: 120px;
-    }
-    .profile-name-row {
-      justify-content: center;
-    }
-    .profile-name {
-      font-size: 1.5rem;
-    }
-    .profile-genres {
-      justify-content: center;
-    }
-    .profile-meta {
-      justify-content: center;
-    }
-    .profile-actions {
-      justify-content: center;
-    }
-    .fb-container {
-      padding: 0 12px 60px;
-    }
-    .fb-card {
-      padding: 16px;
-    }
+    .avatar-img { width: 120px; height: 120px; }
+    .profile-name-row { justify-content: center; }
+    .profile-name { font-size: 1.5rem; }
+    .profile-genres { justify-content: center; }
+    .profile-meta { justify-content: center; }
+    .profile-actions { justify-content: center; }
+    .fb-container { padding: 0 12px 60px; }
+    .fb-card { padding: 16px; }
     .share-row {
       flex-direction: column;
       align-items: stretch;
     }
-    .share-url {
-      text-align: center;
-    }
-    .share-copy {
-      width: 100%;
-      text-align: center;
-    }
+    .share-url { text-align: center; }
+    .share-copy { width: 100%; text-align: center; }
   }
 </style>
 
 <script>
-  // Partnear toggle
   const partnearBtn = document.getElementById('partnear-btn');
   let isPartnear = false;
   if (partnearBtn) {
     partnearBtn.addEventListener('click', () => {
       isPartnear = !isPartnear;
       partnearBtn.classList.toggle('active', isPartnear);
-      partnearBtn.innerHTML = isPartnear
-        ? '<span>🔥</span> PARTEANDO'
-        : '<span>🔥</span> PARTNEAR';
+      partnearBtn.textContent = isPartnear ? 'PARTEANDO' : 'PARTNEAR';
     });
   }
 
-  // Share toggle
   const shareBtn = document.getElementById('share-btn');
   if (shareBtn) {
     shareBtn.addEventListener('click', () => {
@@ -948,16 +765,15 @@ function timeAgo(dateStr: string): string {
       const url = `https://www.wildgvng.com.mx/artista?id=${slug}`;
       navigator.clipboard.writeText(url).then(() => {
         shareBtn.classList.add('active');
-        shareBtn.innerHTML = '<span>✅</span> ¡COPIADO!';
+        shareBtn.textContent = '¡COPIADO!';
         setTimeout(() => {
           shareBtn.classList.remove('active');
-          shareBtn.innerHTML = '<span>↗️</span> COMPARTIR';
+          shareBtn.textContent = 'COMPARTIR';
         }, 2000);
       });
     });
   }
 
-  // Copy URL button
   const copyBtn = document.getElementById('copy-url-btn');
   if (copyBtn) {
     copyBtn.addEventListener('click', () => {
