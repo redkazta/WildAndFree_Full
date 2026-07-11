@@ -71,16 +71,14 @@ function timeAgo(dateStr: string): string {
     <div class="ap-body">
       <div class="ap-grid">
 
-        <!-- LEFT (25%) -->
+        <!-- LEFT (22%) -->
         <aside class="ap-side">
-
           {artist.bio && (
             <div class="side-card">
               <h4 class="side-label">SOBRE MÍ</h4>
               <p class="side-bio">{artist.bio}</p>
             </div>
           )}
-
           {artist.tracks.length > 0 && (
             <div class="side-card">
               <h4 class="side-label">MÚSICA</h4>
@@ -102,7 +100,6 @@ function timeAgo(dateStr: string): string {
               </div>
             </div>
           )}
-
           {artist.redes && Object.keys(artist.redes).length > 0 && (
             <div class="side-card">
               <h4 class="side-label">REDES</h4>
@@ -116,7 +113,6 @@ function timeAgo(dateStr: string): string {
               </div>
             </div>
           )}
-
           <div class="side-card">
             <h4 class="side-label">COMPARTIR</h4>
             <div class="share-row">
@@ -124,16 +120,15 @@ function timeAgo(dateStr: string): string {
               <button class="share-cp" id="copy-url-btn">COPIAR</button>
             </div>
           </div>
-
         </aside>
 
-        <!-- RIGHT (75%) FEED -->
+        <!-- RIGHT (78%) FEED -->
         <div class="ap-feed">
           <h4 class="feed-label">FEED</h4>
           {posts.length > 0 ? (
             <div class="feed-list">
               {posts.map(post => (
-                <article class="fp">
+                <article class="fp" data-post-id={post.id}>
                   <div class="fp-top">
                     <img src={artist.imagenes.profile} alt="" class="fp-av" />
                     <div class="fp-who">
@@ -174,9 +169,27 @@ function timeAgo(dateStr: string): string {
                   )}
 
                   <div class="fp-acts">
-                    <button class="fp-a">{post.likes_count} fuego</button>
-                    <button class="fp-a">{post.comments_count} comments</button>
-                    <button class="fp-a">share</button>
+                    <button class="fp-a like-btn" data-count={post.likes_count}>
+                      <span class="like-icon">♡</span>
+                      <span class="like-count">{post.likes_count}</span>
+                    </button>
+                    <button class="fp-a comment-toggle-btn" data-count={post.comments_count}>
+                      <span>💬</span>
+                      <span class="comment-count">{post.comments_count}</span>
+                    </button>
+                    <button class="fp-a share-post-btn">share</button>
+                  </div>
+
+                  <!-- Comments section (hidden by default) -->
+                  <div class="comments-section hidden">
+                    <div class="comments-list"></div>
+                    <div class="comment-form">
+                      <input type="text" class="comment-input" placeholder="Escribe un comentario..." maxlength="500" />
+                      <button class="comment-send" disabled>→</button>
+                    </div>
+                    <p class="comment-login-hint hidden">
+                      <a href="/login">Inicia sesión</a> para comentar
+                    </p>
                   </div>
                 </article>
               ))}
@@ -189,421 +202,300 @@ function timeAgo(dateStr: string): string {
       </div>
     </div>
 
+    <!-- LOGIN PROMPT MODAL -->
+    <div id="login-modal" class="modal hidden">
+      <div class="modal-bg"></div>
+      <div class="modal-card">
+        <h3>Inicia sesión para interactuar</h3>
+        <p>Necesitas una cuenta para dar like, comentar y seguir a tus artistas favoritos.</p>
+        <div class="modal-actions">
+          <a href="/login" class="btn-p btn-gold">INICIAR SESIÓN</a>
+          <a href="/registro" class="btn-p btn-ghost">CREAR CUENTA</a>
+          <button class="btn-p btn-ghost" id="modal-close">CANCELAR</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 </Layout>
 
 <style>
-  /* RESET */
-  .ap {
-    min-height: 100vh;
-    background: #000;
-    color: #fff;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  }
+  .ap { min-height:100vh; background:#000; color:#fff; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; }
 
   /* HEADER */
-  .ap-header {
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-  }
-  .ap-header-inner {
-    max-width: 90%;
-    margin: 0 auto;
-    padding: 32px 0 20px;
-    display: flex;
-    gap: 20px;
-    align-items: flex-start;
-  }
-  .ap-avatar {
-    flex-shrink: 0;
-  }
-  .ap-avatar img {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #C98300;
-  }
-  .ap-info {
-    flex: 1;
-    min-width: 0;
-  }
-  .ap-name-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .ap-name {
-    font-size: 1.6rem;
-    font-weight: 800;
-    margin: 0;
-    line-height: 1.1;
-  }
-  .ap-verified {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: #C98300;
-    color: #000;
-    font-size: 0.6rem;
-    font-weight: 900;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-  .ap-genres {
-    display: flex;
-    gap: 6px;
-    margin-top: 6px;
-    flex-wrap: wrap;
-  }
-  .ap-chip {
-    padding: 2px 8px;
-    border-radius: 100px;
-    font-size: 0.5rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    background: rgba(201,131,0,0.12);
-    border: 1px solid rgba(201,131,0,0.2);
-    color: #C98300;
-    font-family: monospace;
-  }
-  .ap-meta {
-    display: flex;
-    gap: 6px;
-    margin-top: 8px;
-    font-size: 0.7rem;
-    color: rgba(255,255,255,0.35);
-    flex-wrap: wrap;
-    align-items: center;
-  }
-  .dot { color: rgba(255,255,255,0.12); }
-  .ap-actions {
-    display: flex;
-    gap: 6px;
-    margin-top: 12px;
-    flex-wrap: wrap;
-  }
+  .ap-header { border-bottom:1px solid rgba(255,255,255,0.06); }
+  .ap-header-inner { max-width:90%; margin:0 auto; padding:32px 0 20px; display:flex; gap:20px; align-items:flex-start; }
+  .ap-avatar { flex-shrink:0; }
+  .ap-avatar img { width:120px; height:120px; border-radius:50%; object-fit:cover; border:3px solid #C98300; }
+  .ap-info { flex:1; min-width:0; }
+  .ap-name-row { display:flex; align-items:center; gap:8px; }
+  .ap-name { font-size:1.6rem; font-weight:800; margin:0; line-height:1.1; }
+  .ap-verified { width:20px; height:20px; border-radius:50%; background:#C98300; color:#000; font-size:0.6rem; font-weight:900; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .ap-genres { display:flex; gap:6px; margin-top:6px; flex-wrap:wrap; }
+  .ap-chip { padding:2px 8px; border-radius:100px; font-size:0.5rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; background:rgba(201,131,0,0.12); border:1px solid rgba(201,131,0,0.2); color:#C98300; font-family:monospace; }
+  .ap-meta { display:flex; gap:6px; margin-top:8px; font-size:0.7rem; color:rgba(255,255,255,0.35); flex-wrap:wrap; align-items:center; }
+  .dot { color:rgba(255,255,255,0.12); }
+  .ap-actions { display:flex; gap:6px; margin-top:12px; flex-wrap:wrap; }
 
   /* BUTTONS */
-  .btn-p {
-    padding: 6px 14px;
-    border-radius: 6px;
-    font-size: 0.6rem;
-    font-weight: 700;
-    cursor: pointer;
-    font-family: inherit;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    text-decoration: none;
-    transition: all 0.15s;
-  }
-  .btn-gold {
-    background: #C98300;
-    border: none;
-    color: #000;
-  }
-  .btn-gold:hover { background: #e69500; }
-  .btn-gold.active { background: #e69500; }
-  .btn-ghost {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.1);
-    color: rgba(255,255,255,0.4);
-  }
-  .btn-ghost:hover {
-    border-color: rgba(201,131,0,0.3);
-    color: #C98300;
-  }
-  .btn-ghost.active {
-    background: rgba(201,131,0,0.1);
-    border-color: rgba(201,131,0,0.3);
-    color: #C98300;
-  }
+  .btn-p { padding:6px 14px; border-radius:6px; font-size:0.6rem; font-weight:700; cursor:pointer; font-family:inherit; text-transform:uppercase; letter-spacing:0.04em; text-decoration:none; transition:all 0.15s; }
+  .btn-gold { background:#C98300; border:none; color:#000; }
+  .btn-gold:hover { background:#e69500; }
+  .btn-ghost { background:transparent; border:1px solid rgba(255,255,255,0.1); color:rgba(255,255,255,0.4); }
+  .btn-ghost:hover { border-color:rgba(201,131,0,0.3); color:#C98300; }
 
-  /* BODY & GRID */
-  .ap-body {
-    max-width: 90%;
-    margin: 0 auto;
-    padding: 0 0 60px;
-  }
-  .ap-grid {
-    display: grid;
-    grid-template-columns: 22% 78%;
-    gap: 20px;
-    margin-top: 16px;
-  }
+  /* GRID */
+  .ap-body { max-width:90%; margin:0 auto; padding:0 0 60px; }
+  .ap-grid { display:grid; grid-template-columns:22% 78%; gap:20px; margin-top:16px; }
 
-  /* SIDE CARDS */
-  .side-card {
-    background: rgba(255,255,255,0.02);
-    border: 1px solid rgba(255,255,255,0.05);
-    border-radius: 10px;
-    padding: 14px;
-    margin-bottom: 10px;
-  }
-  .side-label {
-    font-size: 0.5rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: rgba(255,255,255,0.2);
-    margin: 0 0 10px;
-    font-family: monospace;
-  }
-  .side-bio {
-    font-size: 0.8rem;
-    color: rgba(255,255,255,0.5);
-    line-height: 1.6;
-    margin: 0;
-  }
-
-  /* TRACKS */
-  .side-tracks { display: flex; flex-direction: column; gap: 3px; }
-  .trk {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 7px 8px;
-    border-radius: 6px;
-    transition: background 0.15s;
-  }
-  .trk:hover { background: rgba(255,255,255,0.04); }
-  .trk-n {
-    font-size: 0.5rem;
-    color: rgba(255,255,255,0.12);
-    font-family: monospace;
-    width: 14px;
-    text-align: center;
-  }
-  .trk-info { flex: 1; display: flex; justify-content: space-between; min-width: 0; }
-  .trk-name {
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: #fff;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .trk-dur {
-    font-size: 0.45rem;
-    color: rgba(255,255,255,0.2);
-    font-family: monospace;
-    flex-shrink: 0;
-    margin-left: 6px;
-  }
-  .trk-go {
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: rgba(201,131,0,0.1);
-    border: none;
-    color: #C98300;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 0.45rem;
-    flex-shrink: 0;
-    text-decoration: none;
-    transition: all 0.15s;
-  }
-  .trk-go:hover { background: #C98300; color: #000; }
-  .trk-go:disabled { opacity: 0.25; cursor: not-allowed; }
-
-  /* SOCIAL */
-  .side-socials { display: flex; flex-direction: column; gap: 3px; }
-  .soc-row {
-    display: flex;
-    align-items: center;
-    padding: 7px 10px;
-    border-radius: 6px;
-    text-decoration: none;
-    transition: all 0.15s;
-  }
-  .soc-row:hover { background: rgba(255,255,255,0.04); }
-  .soc-name {
-    flex: 1;
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: #fff;
-    text-transform: capitalize;
-  }
-  .soc-arr { font-size: 0.6rem; color: rgba(255,255,255,0.15); }
-  .soc-row:hover .soc-arr { color: #C98300; }
-
-  /* SHARE */
-  .share-row { display: flex; align-items: center; gap: 8px; }
-  .share-url {
-    flex: 1;
-    font-size: 0.5rem;
-    color: rgba(255,255,255,0.25);
-    font-family: monospace;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .share-cp {
-    padding: 4px 10px;
-    border-radius: 5px;
-    font-size: 0.45rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    background: rgba(201,131,0,0.12);
-    border: none;
-    color: #C98300;
-    cursor: pointer;
-    font-family: inherit;
-    flex-shrink: 0;
-    transition: all 0.15s;
-  }
-  .share-cp:hover { background: #C98300; color: #000; }
+  /* SIDE */
+  .side-card { background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:10px; padding:14px; margin-bottom:10px; }
+  .side-label { font-size:0.5rem; font-weight:800; text-transform:uppercase; letter-spacing:0.15em; color:rgba(255,255,255,0.2); margin:0 0 10px; font-family:monospace; }
+  .side-bio { font-size:0.8rem; color:rgba(255,255,255,0.5); line-height:1.6; margin:0; }
+  .side-tracks { display:flex; flex-direction:column; gap:3px; }
+  .trk { display:flex; align-items:center; gap:8px; padding:7px 8px; border-radius:6px; transition:background 0.15s; }
+  .trk:hover { background:rgba(255,255,255,0.04); }
+  .trk-n { font-size:0.5rem; color:rgba(255,255,255,0.12); font-family:monospace; width:14px; text-align:center; }
+  .trk-info { flex:1; display:flex; justify-content:space-between; min-width:0; }
+  .trk-name { font-size:0.7rem; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .trk-dur { font-size:0.45rem; color:rgba(255,255,255,0.2); font-family:monospace; flex-shrink:0; margin-left:6px; }
+  .trk-go { width:22px; height:22px; border-radius:50%; background:rgba(201,131,0,0.1); border:none; color:#C98300; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:0.45rem; flex-shrink:0; text-decoration:none; transition:all 0.15s; }
+  .trk-go:hover { background:#C98300; color:#000; }
+  .trk-go:disabled { opacity:0.25; cursor:not-allowed; }
+  .side-socials { display:flex; flex-direction:column; gap:3px; }
+  .soc-row { display:flex; align-items:center; padding:7px 10px; border-radius:6px; text-decoration:none; transition:all 0.15s; }
+  .soc-row:hover { background:rgba(255,255,255,0.04); }
+  .soc-name { flex:1; font-size:0.7rem; font-weight:700; color:#fff; text-transform:capitalize; }
+  .soc-arr { font-size:0.6rem; color:rgba(255,255,255,0.15); }
+  .soc-row:hover .soc-arr { color:#C98300; }
+  .share-row { display:flex; align-items:center; gap:8px; }
+  .share-url { flex:1; font-size:0.5rem; color:rgba(255,255,255,0.25); font-family:monospace; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .share-cp { padding:4px 10px; border-radius:5px; font-size:0.45rem; font-weight:800; text-transform:uppercase; background:rgba(201,131,0,0.12); border:none; color:#C98300; cursor:pointer; font-family:inherit; flex-shrink:0; transition:all 0.15s; }
+  .share-cp:hover { background:#C98300; color:#000; }
 
   /* FEED */
-  .feed-label {
-    font-size: 0.5rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: rgba(255,255,255,0.2);
-    margin: 0 0 12px;
-    font-family: monospace;
-  }
-  .feed-list { display: flex; flex-direction: column; gap: 10px; }
-  .feed-empty {
-    text-align: center;
-    padding: 24px 0;
-    color: rgba(255,255,255,0.15);
-    font-size: 0.75rem;
-  }
-  .fp {
-    background: rgba(255,255,255,0.02);
-    border: 1px solid rgba(255,255,255,0.05);
-    border-radius: 10px;
-    padding: 14px;
-    transition: border-color 0.15s;
-  }
-  .fp:hover { border-color: rgba(201,131,0,0.12); }
-  .fp-top {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-  }
-  .fp-av {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    object-fit: cover;
-    flex-shrink: 0;
-  }
-  .fp-who { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-  .fp-name { font-size: 0.7rem; font-weight: 700; color: #fff; }
-  .fp-when {
-    font-size: 0.5rem;
-    color: rgba(255,255,255,0.2);
-    font-family: monospace;
-  }
-  .fp-tag {
-    font-size: 0.45rem;
-    font-weight: 700;
-    color: rgba(255,255,255,0.2);
-    background: rgba(255,255,255,0.04);
-    padding: 2px 7px;
-    border-radius: 100px;
-    text-transform: capitalize;
-    flex-shrink: 0;
-  }
-  .fp-txt {
-    font-size: 0.8rem;
-    color: rgba(255,255,255,0.55);
-    line-height: 1.5;
-    margin: 0 0 10px;
-  }
-  .fp-img {
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 10px;
-  }
-  .fp-img img { width: 100%; height: auto; display: block; }
-  .fp-embed { margin-bottom: 10px; }
-  .fp-ph {
-    padding: 10px 14px;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    font-size: 0.7rem;
-    font-weight: 700;
-  }
-  .fp-music {
-    background: rgba(201,131,0,0.08);
-    border: 1px solid rgba(201,131,0,0.12);
-    color: #C98300;
-  }
-  .fp-event {
-    background: rgba(138,3,3,0.06);
-    border: 1px solid rgba(138,3,3,0.12);
-    color: #ff6b6b;
-  }
-  .fp-acts {
-    display: flex;
-    gap: 4px;
-    border-top: 1px solid rgba(255,255,255,0.04);
-    padding-top: 8px;
-  }
-  .fp-a {
-    flex: 1;
-    padding: 5px;
-    border-radius: 5px;
-    background: transparent;
-    border: none;
-    color: rgba(255,255,255,0.25);
-    font-size: 0.55rem;
-    font-weight: 600;
-    cursor: pointer;
-    text-align: center;
-    font-family: inherit;
-    transition: color 0.15s;
-  }
-  .fp-a:hover { color: #C98300; }
+  .feed-label { font-size:0.5rem; font-weight:800; text-transform:uppercase; letter-spacing:0.15em; color:rgba(255,255,255,0.2); margin:0 0 12px; font-family:monospace; }
+  .feed-list { display:flex; flex-direction:column; gap:10px; }
+  .feed-empty { text-align:center; padding:24px 0; color:rgba(255,255,255,0.15); font-size:0.75rem; }
+  .fp { background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:10px; padding:14px; transition:border-color 0.15s; }
+  .fp:hover { border-color:rgba(201,131,0,0.12); }
+  .fp-top { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+  .fp-av { width:28px; height:28px; border-radius:50%; object-fit:cover; flex-shrink:0; }
+  .fp-who { flex:1; display:flex; flex-direction:column; min-width:0; }
+  .fp-name { font-size:0.7rem; font-weight:700; color:#fff; }
+  .fp-when { font-size:0.5rem; color:rgba(255,255,255,0.2); font-family:monospace; }
+  .fp-tag { font-size:0.45rem; font-weight:700; color:rgba(255,255,255,0.2); background:rgba(255,255,255,0.04); padding:2px 7px; border-radius:100px; text-transform:capitalize; flex-shrink:0; }
+  .fp-txt { font-size:0.8rem; color:rgba(255,255,255,0.55); line-height:1.5; margin:0 0 10px; }
+  .fp-img { border-radius:8px; overflow:hidden; margin-bottom:10px; }
+  .fp-img img { width:100%; height:auto; display:block; }
+  .fp-embed { margin-bottom:10px; }
+  .fp-ph { padding:10px 14px; border-radius:8px; margin-bottom:10px; font-size:0.7rem; font-weight:700; }
+  .fp-music { background:rgba(201,131,0,0.08); border:1px solid rgba(201,131,0,0.12); color:#C98300; }
+  .fp-event { background:rgba(138,3,3,0.06); border:1px solid rgba(138,3,3,0.12); color:#ff6b6b; }
+
+  /* ACTIONS */
+  .fp-acts { display:flex; gap:4px; border-top:1px solid rgba(255,255,255,0.04); padding-top:8px; }
+  .fp-a { flex:1; padding:5px; border-radius:5px; background:transparent; border:none; color:rgba(255,255,255,0.25); font-size:0.55rem; font-weight:600; cursor:pointer; text-align:center; font-family:inherit; transition:all 0.15s; display:flex; align-items:center; justify-content:center; gap:4px; }
+  .fp-a:hover { color:#C98300; }
+  .fp-a.liked { color:#C98300; }
+  .fp-a.liked .like-icon { color:#C98300; }
+  .like-icon { font-size:0.7rem; transition:transform 0.2s; }
+  .fp-a.liked .like-icon { transform:scale(1.2); }
+
+  /* COMMENTS */
+  .comments-section { margin-top:10px; padding-top:10px; border-top:1px solid rgba(255,255,255,0.04); }
+  .comments-section.hidden { display:none; }
+  .comments-list { display:flex; flex-direction:column; gap:8px; margin-bottom:10px; }
+  .comment-item { display:flex; gap:8px; }
+  .comment-item img { width:24px; height:24px; border-radius:50%; object-fit:cover; flex-shrink:0; }
+  .comment-body { flex:1; }
+  .comment-author { font-size:0.65rem; font-weight:700; color:#fff; }
+  .comment-text { font-size:0.7rem; color:rgba(255,255,255,0.5); margin-top:2px; }
+  .comment-time { font-size:0.45rem; color:rgba(255,255,255,0.15); font-family:monospace; margin-top:2px; }
+  .comment-form { display:flex; gap:6px; }
+  .comment-input { flex:1; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); border-radius:6px; padding:6px 10px; font-size:0.7rem; color:#fff; font-family:inherit; outline:none; }
+  .comment-input:focus { border-color:rgba(201,131,0,0.3); }
+  .comment-input::placeholder { color:rgba(255,255,255,0.2); }
+  .comment-send { padding:6px 10px; border-radius:6px; background:rgba(201,131,0,0.15); border:none; color:#C98300; font-size:0.7rem; font-weight:700; cursor:pointer; transition:all 0.15s; }
+  .comment-send:hover { background:#C98300; color:#000; }
+  .comment-send:disabled { opacity:0.3; cursor:not-allowed; }
+  .comment-login-hint { font-size:0.6rem; color:rgba(255,255,255,0.2); margin-top:6px; text-align:center; }
+  .comment-login-hint.hidden { display:none; }
+  .comment-login-hint a { color:#C98300; text-decoration:none; }
+
+  /* MODAL */
+  .modal { position:fixed; inset:0; z-index:10000; display:flex; align-items:center; justify-content:center; }
+  .modal.hidden { display:none; }
+  .modal-bg { position:absolute; inset:0; background:rgba(0,0,0,0.7); }
+  .modal-card { position:relative; background:#111; border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:24px; max-width:340px; width:90%; text-align:center; }
+  .modal-card h3 { font-size:1rem; font-weight:800; margin:0 0 8px; color:#fff; }
+  .modal-card p { font-size:0.75rem; color:rgba(255,255,255,0.4); line-height:1.5; margin:0 0 16px; }
+  .modal-actions { display:flex; flex-direction:column; gap:8px; }
 
   /* TABLET */
-  @media (max-width: 860px) {
-    .ap-grid { grid-template-columns: 1fr; }
-  }
+  @media (max-width:860px) { .ap-grid { grid-template-columns:1fr; } }
 
   /* MOBILE */
-  @media (max-width: 600px) {
-    .ap-header-inner {
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      padding: 16px 0 12px;
-    }
-    .ap-avatar img { width: 96px; height: 96px; }
-    .ap-name-row { justify-content: center; }
-    .ap-name { font-size: 1.3rem; }
-    .ap-genres { justify-content: center; }
-    .ap-meta { justify-content: center; }
-    .ap-actions { justify-content: center; }
-    .ap-body { padding: 0 0 40px; }
-    .side-card { padding: 12px; }
-    .share-row { flex-direction: column; align-items: stretch; }
-    .share-url { text-align: center; }
-    .share-cp { width: 100%; text-align: center; }
+  @media (max-width:600px) {
+    .ap-header-inner { flex-direction:column; align-items:center; text-align:center; padding:16px 0 12px; }
+    .ap-avatar img { width:96px; height:96px; }
+    .ap-name-row { justify-content:center; }
+    .ap-name { font-size:1.3rem; }
+    .ap-genres { justify-content:center; }
+    .ap-meta { justify-content:center; }
+    .ap-actions { justify-content:center; }
+    .ap-body { padding:0 0 40px; }
+    .side-card { padding:12px; }
+    .share-row { flex-direction:column; align-items:stretch; }
+    .share-url { text-align:center; }
+    .share-cp { width:100%; text-align:center; }
   }
 </style>
 
 <script>
+  import { supabase } from '../lib/supabase';
+
+  let currentUser: any = null;
+
+  // Check auth state
+  async function checkAuth() {
+    const { data: { session } } = await supabase.auth.getSession();
+    currentUser = session?.user || null;
+    updateUI();
+  }
+
+  function updateUI() {
+    document.querySelectorAll('.comment-input').forEach((input: Element) => {
+      const section = (input as HTMLElement).closest('.comments-section');
+      const hint = section?.querySelector('.comment-login-hint');
+      const sendBtn = section?.querySelector('.comment-send') as HTMLButtonElement;
+      if (hint) hint.classList.toggle('hidden', !!currentUser);
+      if (sendBtn) sendBtn.disabled = !currentUser;
+    });
+  }
+
+  function showLoginModal() {
+    document.getElementById('login-modal')?.classList.remove('hidden');
+  }
+
+  function hideLoginModal() {
+    document.getElementById('login-modal')?.classList.add('hidden');
+  }
+
+  // Modal close
+  document.getElementById('modal-close')?.addEventListener('click', hideLoginModal);
+  document.querySelector('.modal-bg')?.addEventListener('click', hideLoginModal);
+
+  // Like buttons
+  document.querySelectorAll('.like-btn').forEach((btn: Element) => {
+    btn.addEventListener('click', async () => {
+      if (!currentUser) { showLoginModal(); return; }
+      const article = (btn as HTMLElement).closest('.fp');
+      const postId = article?.getAttribute('data-post-id');
+      if (!postId) return;
+
+      const { data, error } = await supabase.rpc('toggle_artist_post_like', { p_post_id: postId });
+      if (error || !data || data.error) {
+        if (data?.error === 'not_authenticated') showLoginModal();
+        return;
+      }
+
+      const icon = btn.querySelector('.like-icon');
+      const count = btn.querySelector('.like-count');
+      if (icon) icon.textContent = data.liked ? '♥' : '♡';
+      if (count) count.textContent = data.count;
+      btn.classList.toggle('liked', data.liked);
+    });
+  });
+
+  // Comment toggle
+  document.querySelectorAll('.comment-toggle-btn').forEach((btn: Element) => {
+    btn.addEventListener('click', () => {
+      const article = (btn as HTMLElement).closest('.fp');
+      const section = article?.querySelector('.comments-section');
+      section?.classList.toggle('hidden');
+    });
+  });
+
+  // Comment send
+  document.querySelectorAll('.comment-send').forEach((btn: Element) => {
+    btn.addEventListener('click', async () => {
+      if (!currentUser) { showLoginModal(); return; }
+      const article = (btn as HTMLElement).closest('.fp');
+      const postId = article?.getAttribute('data-post-id');
+      const input = article?.querySelector('.comment-input') as HTMLInputElement;
+      if (!postId || !input || !input.value.trim()) return;
+
+      const content = input.value.trim();
+      input.value = '';
+      (btn as HTMLButtonElement).disabled = true;
+
+      const { data, error } = await supabase.rpc('add_artist_post_comment', {
+        p_post_id: postId,
+        p_content: content
+      });
+
+      if (error || !data || data.error) {
+        if (data?.error === 'not_authenticated') showLoginModal();
+        return;
+      }
+
+      // Update count
+      const countEl = article?.querySelector('.comment-count');
+      if (countEl) countEl.textContent = data.count;
+
+      // Add comment to list
+      const list = article?.querySelector('.comments-list');
+      if (list && currentUser) {
+        const div = document.createElement('div');
+        div.className = 'comment-item';
+        div.innerHTML = `
+          <div class="comment-body">
+            <span class="comment-author">Tú</span>
+            <p class="comment-text">${content}</p>
+            <span class="comment-time">ahora</span>
+          </div>
+        `;
+        list.appendChild(div);
+      }
+
+      (btn as HTMLButtonElement).disabled = false;
+    });
+  });
+
+  // Comment input - enable send on typing
+  document.querySelectorAll('.comment-input').forEach((input: Element) => {
+    input.addEventListener('input', () => {
+      const section = (input as HTMLElement).closest('.comments-section');
+      const sendBtn = section?.querySelector('.comment-send') as HTMLButtonElement;
+      if (sendBtn && currentUser) {
+        sendBtn.disabled = !(input as HTMLInputElement).value.trim();
+      }
+    });
+  });
+
+  // Share post
+  document.querySelectorAll('.share-post-btn').forEach((btn: Element) => {
+    btn.addEventListener('click', () => {
+      navigator.clipboard.writeText(window.location.href);
+      (btn as HTMLElement).textContent = 'copiado!';
+      setTimeout(() => { (btn as HTMLElement).textContent = 'share'; }, 1500);
+    });
+  });
+
+  // Partnear
   const partnearBtn = document.getElementById('partnear-btn');
   let isPartnear = false;
   if (partnearBtn) {
     partnearBtn.addEventListener('click', () => {
+      if (!currentUser) { showLoginModal(); return; }
       isPartnear = !isPartnear;
       partnearBtn.classList.toggle('active', isPartnear);
       partnearBtn.textContent = isPartnear ? 'PARTEANDO' : 'PARTNEAR';
     });
   }
 
+  // Share profile
   const shareBtn = document.getElementById('share-btn');
   if (shareBtn) {
     shareBtn.addEventListener('click', () => {
@@ -616,6 +508,7 @@ function timeAgo(dateStr: string): string {
     });
   }
 
+  // Copy URL
   const copyBtn = document.getElementById('copy-url-btn');
   if (copyBtn) {
     copyBtn.addEventListener('click', () => {
@@ -626,4 +519,8 @@ function timeAgo(dateStr: string): string {
       });
     });
   }
+
+  // Init
+  checkAuth();
+  supabase.auth.onAuthStateChange(() => checkAuth());
 </script>
