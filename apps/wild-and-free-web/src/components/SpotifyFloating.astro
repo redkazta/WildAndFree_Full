@@ -1,31 +1,56 @@
 ﻿---
 ---
 <!-- Spotify Floating Player (Global) -->
-<!-- Uses Spotify Embed Iframe for auth/playback handling -->
-<!-- Fallback to Mock if needed (handled by iframe src) -->
-<div id="spotify-floating" transition:persist class="fixed bottom-6 right-6 z-[9999] w-[260px] sm:w-[300px]">
-  <div id="spotify-container" class="bg-black/95 backdrop-blur-md border border-[var(--primary)]/30 rounded-xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.5)] w-full h-[80px] hover:border-[var(--primary)]/60 transition-all">
-    <iframe 
-        id="spotify-iframe"
-        style="border-radius:12px;border:none" 
-        src="https://open.spotify.com/embed/track/4cOdK2wGLETKBW3PvgPWqT?utm_source=generator&theme=0" 
-        width="100%" 
-        height="100%" 
-        allowfullscreen="" 
-        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
-        loading="lazy">
-    </iframe>
+<div id="spotify-floating" transition:persist class="fixed bottom-4 right-4 z-[9999]">
+  <!-- Collapsed: just the icon (mobile) -->
+  <button id="spotify-expand" class="md:hidden w-10 h-10 rounded-full bg-black/95 border border-[#1DB954]/40 flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.5)] hover:border-[#1DB954]/70 transition-all active:scale-95">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+  </button>
+
+  <!-- Full player -->
+  <div id="spotify-full" class="hidden md:block w-[260px] sm:w-[300px] h-[80px]">
+    <div class="bg-black/95 backdrop-blur-md border border-[#1DB954]/30 rounded-xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.5)] w-full h-full hover:border-[#1DB954]/60 transition-all">
+      <iframe 
+          id="spotify-iframe"
+          style="border-radius:12px;border:none" 
+          src="https://open.spotify.com/embed/track/4cOdK2wGLETKBW3PvgPWqT?utm_source=generator&theme=0" 
+          width="100%" 
+          height="100%" 
+          allowfullscreen="" 
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+          loading="lazy">
+      </iframe>
+    </div>
   </div>
 </div>
+
+<style>
+  /* Mobile: expanded state */
+  #spotify-floating.expanded #spotify-expand { display: none; }
+  #spotify-floating.expanded #spotify-full { display: block; width: 260px; height: 80px; }
+</style>
 
 <script>
     const spotifyIframe = document.getElementById('spotify-iframe') as HTMLIFrameElement;
     
+    // Mobile expand/collapse
+    const spotifyExpand = document.getElementById('spotify-expand');
+    const floating = document.getElementById('spotify-floating');
+    if (spotifyExpand && floating) {
+        spotifyExpand.addEventListener('click', () => {
+            floating.classList.toggle('expanded');
+        });
+        document.addEventListener('click', (e) => {
+            if (floating.classList.contains('expanded') && !floating.contains(e.target as Node)) {
+                floating.classList.remove('expanded');
+            }
+        });
+    }
+
     // Listen for external play events (from Search or elsewhere)
     window.addEventListener('play-spotify-track', (e: any) => {
         const trackId = e.detail?.id;
         if (trackId && spotifyIframe) {
-            // Update src to new track
             spotifyIframe.src = `https://open.spotify.com/embed/track/${trackId}?utm_source=generator&theme=0`;
         }
         

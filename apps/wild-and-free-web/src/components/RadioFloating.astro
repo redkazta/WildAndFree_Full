@@ -1,44 +1,46 @@
 ﻿---
 ---
 <!-- Radio Floating Player (Global) -->
-<div id="radio-floating" transition:persist class="fixed bottom-6 left-6 z-[9999] w-[260px] sm:w-[300px]">
-  <div id="radio-container" class="bg-black/95 backdrop-blur-md border border-[var(--primary)]/30 rounded-xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.5)] w-full flex flex-col group hover:border-[var(--primary)]/60 transition-all">
+<div id="radio-floating" transition:persist class="fixed bottom-4 left-4 z-[9999]">
+  <!-- Collapsed: just the icon (mobile) -->
+  <button id="radio-expand" class="md:hidden w-10 h-10 rounded-full bg-black/95 border border-[var(--primary)]/40 flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.5)] hover:border-[var(--primary)]/70 transition-all active:scale-95">
+    <img src="/wg_logo.png" width="24" height="24" class="w-6 h-6 rounded-full object-cover" />
+  </button>
 
+  <!-- Full player (always visible on desktop, toggle on mobile) -->
+  <div id="radio-full" class="hidden md:flex w-[260px] sm:w-[300px] flex-col bg-black/95 backdrop-blur-md border border-[var(--primary)]/30 rounded-xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.5)] group hover:border-[var(--primary)]/60 transition-all">
     <!-- Player Header -->
-    <div class="p-3 flex gap-3 items-center bg-gradient-to-r from-[#111] to-black">
-        <div class="w-10 h-10 bg-zinc-900 rounded-lg overflow-hidden flex-shrink-0 relative border border-white/5">
-            <img id="radio-cover" src="/wg_logo.png" width="40" height="40" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
+    <div class="p-2.5 flex gap-2.5 items-center bg-gradient-to-r from-[#111] to-black">
+        <div class="w-9 h-9 bg-zinc-900 rounded-lg overflow-hidden flex-shrink-0 relative border border-white/5">
+            <img id="radio-cover" src="/wg_logo.png" width="36" height="36" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
             <div class="absolute inset-0 flex items-center justify-center bg-black/20">
-                <div id="radio-live-dot" class="w-2 h-2 bg-gray-500 rounded-full"></div>
+                <div id="radio-live-dot" class="w-1.5 h-1.5 bg-gray-500 rounded-full"></div>
             </div>
         </div>
         <div class="overflow-hidden flex-1 min-w-0">
-            <h4 id="radio-title" class="text-xs font-black text-white uppercase truncate tracking-wide group-hover:text-[var(--primary)] transition-colors">Wild Gvng Radio</h4>
-            <p id="radio-artist" class="text-[9px] text-gray-400 font-bold uppercase truncate tracking-wider">Cargando...</p>
+            <h4 id="radio-title" class="text-[11px] font-black text-white uppercase truncate tracking-wide group-hover:text-[var(--primary)] transition-colors">Wild Gvng Radio</h4>
+            <p id="radio-artist" class="text-[8px] text-gray-400 font-bold uppercase truncate tracking-wider">Cargando...</p>
         </div>
-        <button id="radio-toggle" class="w-8 h-8 bg-[var(--primary)] text-black rounded-full flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-[0_0_15px_rgba(201,131,0,0.3)]">
-            <svg id="radio-play" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-            <svg id="radio-pause" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="hidden"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        <button id="radio-toggle" class="w-7 h-7 bg-[var(--primary)] text-black rounded-full flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-[0_0_12px_rgba(201,131,0,0.3)]">
+            <svg id="radio-play" width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <svg id="radio-pause" width="10" height="10" viewBox="0 0 24 24" fill="currentColor" class="hidden"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
         </button>
     </div>
 
     <!-- Controls -->
-    <div class="px-3 pb-2 flex items-center justify-between gap-2 border-t border-white/5 pt-2 bg-black/50">
-        <button id="radio-fav-btn" class="p-1.5 text-gray-500 hover:text-[var(--primary)] transition-colors" title="Agregar a Favoritos">
-            <svg id="radio-fav-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    <div class="px-2.5 pb-1.5 flex items-center justify-between gap-2 border-t border-white/5 pt-1.5 bg-black/50">
+        <button id="radio-fav-btn" class="p-1 text-gray-500 hover:text-[var(--primary)] transition-colors" title="Favoritos">
+            <svg id="radio-fav-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         </button>
-
-        <!-- Visualizer -->
-        <div id="radio-eq" class="flex items-end gap-0.5 h-4 opacity-0 transition-opacity">
+        <div id="radio-eq" class="flex items-end gap-0.5 h-3 opacity-0 transition-opacity">
             <div class="w-0.5 bg-[var(--primary)] animate-[eq_1s_ease-in-out_infinite]"></div>
             <div class="w-0.5 bg-[var(--primary)] animate-[eq_1.2s_ease-in-out_infinite_0.1s]"></div>
             <div class="w-0.5 bg-[var(--primary)] animate-[eq_0.8s_ease-in-out_infinite_0.2s]"></div>
             <div class="w-0.5 bg-[var(--primary)] animate-[eq_1.5s_ease-in-out_infinite_0.3s]"></div>
             <div class="w-0.5 bg-[var(--primary)] animate-[eq_0.9s_ease-in-out_infinite_0.4s]"></div>
         </div>
-
-        <button id="radio-info-btn" class="p-1.5 text-gray-500 hover:text-white transition-colors" title="Ver Radio">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        <button id="radio-info-btn" class="p-1 text-gray-500 hover:text-white transition-colors" title="Ver Radio">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
         </button>
     </div>
   </div>
@@ -49,11 +51,30 @@
         0%, 100% { height: 20%; }
         50% { height: 80%; }
     }
+    /* Mobile: expanded state */
+    #radio-floating.expanded #radio-expand { display: none; }
+    #radio-floating.expanded #radio-full { display: flex; }
 </style>
 
 <script>
     import { supabase } from '../lib/supabase';
     import { Favorites } from '../lib/favorites.js';
+
+    // Mobile expand/collapse
+    const radioExpand = document.getElementById('radio-expand');
+    const radioFull = document.getElementById('radio-full');
+    const floating = document.getElementById('radio-floating');
+    if (radioExpand && floating) {
+        radioExpand.addEventListener('click', () => {
+            floating.classList.toggle('expanded');
+        });
+        // Close when tapping outside
+        document.addEventListener('click', (e) => {
+            if (floating.classList.contains('expanded') && !floating.contains(e.target as Node)) {
+                floating.classList.remove('expanded');
+            }
+        });
+    }
 
     const radioToggle = document.getElementById('radio-toggle');
     const radioPlay = document.getElementById('radio-play');
@@ -79,326 +100,127 @@
 
     const RADIO_TRACK_ID = 'radio-wild-free-fm';
 
-    // Supabase query to load radio config
-    async function loadRadioConfig() {
+    function setPlaying(playing: boolean) {
+        isPlaying = playing;
+        if (radioPlay) radioPlay.classList.toggle('hidden', playing);
+        if (radioPause) radioPause.classList.toggle('hidden', !playing);
+        if (radioEq) radioEq.style.opacity = playing ? '1' : '0';
+        if (radioLiveDot) {
+            radioLiveDot.classList.toggle('bg-gray-500', !playing);
+            radioLiveDot.classList.toggle('bg-red-500', playing);
+            radioLiveDot.classList.toggle('animate-pulse', playing);
+        }
+    }
+
+    function updateMeta(meta: any) {
+        currentMetadata = { ...currentMetadata, ...meta };
+        if (radioTitle) radioTitle.textContent = meta.title || currentMetadata.title;
+        if (radioArtist) radioArtist.textContent = meta.artist || currentMetadata.artist;
+        if (radioCover && meta.image) radioCover.src = meta.image;
+    }
+
+    async function loadConfig() {
         try {
-            const [configRes, episodesRes, autoTracksRes] = await Promise.all([
-                supabase.from('radio_config').select('*').limit(1).single(),
-                supabase.from('radio_episodes').select('*').or('is_published.eq.true,is_live.eq.true').order('created_at', { ascending: false }).limit(5),
-                supabase.from('radio_auto_tracks').select('*').eq('is_active', true).order('sort_order').order('created_at', { ascending: false }).limit(1),
-            ]);
-
-            const config = configRes.data;
-            const episodes = episodesRes.data || [];
-            const autoTracks = autoTracksRes.data || [];
-
-            if (config?.is_live) {
-                // LIVE mode - use direct stream URL
-                currentMode = 'live';
-                const liveUrl = config.zeno_stream_url || 'https://stream.zeno.fm/placeholder';
-                initAudio(liveUrl, 'live');
-
-                currentMetadata = {
-                    id: RADIO_TRACK_ID,
-                    title: config.current_show || 'Wild Gvng Radio',
-                    artist: `🔴 EN VIVO • ${config.current_host || 'KAZTA'}`,
-                    image: '/wg_logo.png'
-                };
-
-                if (radioLiveDot) {
-                    radioLiveDot.className = 'w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_10px_#ff0000]';
-                }
-            } else if (config?.auto_radio && autoTracks.length > 0) {
-                // AUTO RADIO mode - show Spotify embed info
-                currentMode = 'auto';
-
-                const firstTrack = autoTracks[0];
-                currentMetadata = {
-                    id: RADIO_TRACK_ID,
-                    title: firstTrack.title || 'Auto Radio',
-                    artist: `🎵 AUTO RADIO • ${firstTrack.artist || 'Spotify'}`,
-                    image: firstTrack.cover_url || '/wg_logo.png'
-                };
-
-                if (radioLiveDot) {
-                    radioLiveDot.className = 'w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_#00ff88]';
-                }
-            } else {
-                // Not live, not auto - find latest published episode
-                currentMode = 'episode';
-                const latestEpisode = episodes.find(ep => ep.is_published && !ep.is_live);
-
-                if (latestEpisode) {
-                    initAudio(latestEpisode.audio_url, 'episode');
-
-                    currentMetadata = {
-                        id: latestEpisode.id || RADIO_TRACK_ID,
-                        title: latestEpisode.title,
-                        artist: latestEpisode.host || 'KAZTA',
-                        image: latestEpisode.cover_url || '/wg_logo.png'
-                    };
-                } else {
-                    currentMode = 'none';
-                    currentMetadata = {
-                        id: RADIO_TRACK_ID,
-                        title: 'Wild Gvng Radio',
-                        artist: 'Sin contenido disponible',
-                        image: '/wg_logo.png'
-                    };
-
-                    if (radioLiveDot) {
-                        radioLiveDot.className = 'w-2 h-2 bg-gray-500 rounded-full';
-                    }
+            const { data } = await supabase
+                .from('radio_config')
+                .select('*')
+                .eq('id', 'main')
+                .single();
+            if (data) {
+                if (data.live_url) currentMetadata.liveUrl = data.live_url;
+                if (data.auto_radio_url) currentMetadata.autoUrl = data.auto_radio_url;
+                if (!data.is_live && data.auto_radio_url) {
+                    currentMode = 'auto';
+                } else if (data.is_live) {
+                    currentMode = 'live';
                 }
             }
-
-            // Update UI
-            if (radioTitle) radioTitle.textContent = currentMetadata.title;
-            if (radioArtist) radioArtist.textContent = currentMetadata.artist;
-            if (radioCover) {
-                radioCover.src = currentMetadata.image;
-                radioCover.onerror = () => { (radioCover as HTMLImageElement).src = '/wg_logo.png'; };
-            }
-
-        } catch (err) {
-            console.error('Error loading radio config:', err);
-            if (radioArtist) radioArtist.textContent = 'Error de conexión';
-
-            try {
-                const { data: fallbackConfig } = await supabase.from('radio_config').select('*').limit(1).single();
-                if (fallbackConfig?.zeno_stream_url) {
-                    initAudio(fallbackConfig.zeno_stream_url, 'live');
-                }
-            } catch {}
+        } catch (e) {
+            console.warn('[Radio] Config load error:', e);
         }
     }
 
-    function initAudio(url: string, source: 'live' | 'episode' | 'auto') {
-        if (audio) {
-            audio.pause();
-            audio.src = '';
-        }
-
-        audio = new Audio(url);
-        // We track mode separately in currentMode, not through this param
-
-        audio.addEventListener('ended', () => {
-            if (source === 'episode') {
-                isPlaying = false;
-                radioPlay?.classList.remove('hidden');
-                radioPause?.classList.add('hidden');
-                radioEq?.classList.add('opacity-0');
+    async function loadFavorites() {
+        try {
+            const favs = await Favorites.get();
+            const isFav = favs.some((f: any) => f.track_id === RADIO_TRACK_ID);
+            if (radioFavIcon) {
+                radioFavIcon.setAttribute('fill', isFav ? 'var(--primary)' : 'none');
             }
-        });
-
-        audio.addEventListener('error', () => {
-            console.error('Audio playback error');
-        });
-
-        if (isPlaying) {
-            audio.play().catch(e => console.log('Audio play failed', e));
-        }
+            if (radioFavBtn) {
+                radioFavBtn.classList.toggle('text-[var(--primary)]', isFav);
+                radioFavBtn.classList.toggle('text-gray-500', !isFav);
+            }
+        } catch (e) {}
     }
 
-    // Favorites Logic
-    const updateFavIcon = () => {
-        if (Favorites.has(RADIO_TRACK_ID)) {
-            radioFavIcon?.setAttribute('fill', 'currentColor');
-            radioFavIcon?.classList.add('text-[var(--primary)]');
+    function playRadio() {
+        if (audio) { audio.pause(); audio = null; }
+
+        let src = '';
+        if (currentMode === 'live' && currentMetadata.liveUrl) {
+            src = currentMetadata.liveUrl;
+        } else if (currentMode === 'auto' && currentMetadata.autoUrl) {
+            src = currentMetadata.autoUrl;
         } else {
-            radioFavIcon?.setAttribute('fill', 'none');
-            radioFavIcon?.classList.remove('text-[var(--primary)]');
+            src = 'https://stream.zeno.fm/a3gxu5m2rxzuv';
         }
-    };
 
-    radioFavBtn?.addEventListener('click', async () => {
-        await Favorites.toggle(currentMetadata);
-        updateFavIcon();
-    });
+        audio = new Audio(src);
+        audio.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+        audio.onerror = () => setPlaying(false);
+        audio.onended = () => setPlaying(false);
 
-    window.addEventListener('favorites-updated', updateFavIcon);
-    setTimeout(updateFavIcon, 1000);
+        window.dispatchEvent(new CustomEvent('play-radio', { detail: currentMetadata }));
+        window.dispatchEvent(new CustomEvent('pause-spotify'));
+    }
 
-    // Navigate to radio page
-    radioInfoBtn?.addEventListener('click', () => {
-        window.location.href = '/radio';
-    });
+    function stopRadio() {
+        if (audio) { audio.pause(); audio = null; }
+        setPlaying(false);
+    }
 
-    // Listen for Spotify Play event to pause
-    window.addEventListener('play-spotify-track', () => {
-        if (isPlaying) {
-            isPlaying = false;
-            radioPlay?.classList.remove('hidden');
-            radioPause?.classList.add('hidden');
-            radioEq?.classList.add('opacity-0');
-            audio?.pause();
-        }
-    });
+    // Init
+    loadConfig().then(loadFavorites);
 
-    // Listen for internal pause request
-    window.addEventListener('pause-radio', () => {
-        if (isPlaying) {
-            isPlaying = false;
-            radioPlay?.classList.remove('hidden');
-            radioPause?.classList.add('hidden');
-            radioEq?.classList.add('opacity-0');
-            audio?.pause();
-        }
-    });
+    // Toggle play/pause
+    if (radioToggle) {
+        radioToggle.addEventListener('click', () => {
+            if (isPlaying) stopRadio();
+            else playRadio();
+        });
+    }
 
-    // Listen for external play request
-    window.addEventListener('play-radio', () => {
-        if (!isPlaying) {
-            isPlaying = true;
-            radioPlay?.classList.add('hidden');
-            radioPause?.classList.remove('hidden');
-            radioEq?.classList.remove('opacity-0');
-            if (audio) {
-                audio.play().catch(e => console.log('Audio play failed', e));
+    // Favorite toggle
+    if (radioFavBtn) {
+        radioFavBtn.addEventListener('click', async () => {
+            const favs = await Favorites.get();
+            const isFav = favs.some((f: any) => f.track_id === RADIO_TRACK_ID);
+            if (isFav) {
+                await Favorites.remove(RADIO_TRACK_ID);
             } else {
-                loadRadioConfig().then(() => {
-                    if (audio) {
-                        audio.play().catch(e => console.log('Audio play failed', e));
-                    }
+                await Favorites.add({
+                    track_id: RADIO_TRACK_ID,
+                    title: currentMetadata.title,
+                    artist: currentMetadata.artist,
+                    image: currentMetadata.image,
+                    type: 'radio'
                 });
             }
-        }
-    });
+            loadFavorites();
+        });
+    }
 
-    // Listen for artist radio request from artist profile page
-    window.addEventListener('wild-play', (e: Event) => {
-        const detail = (e as CustomEvent).detail;
-        if (detail && detail.title && detail.artist && detail.image) {
-            currentMetadata = {
-                id: detail.id || RADIO_TRACK_ID,
-                title: detail.title,
-                artist: detail.artist,
-                image: detail.image
-            };
-            if (radioTitle) radioTitle.textContent = detail.title;
-            if (radioArtist) radioArtist.textContent = detail.artist;
-            if (radioCover) {
-                radioCover.src = detail.image;
-                radioCover.onerror = () => { (radioCover as HTMLImageElement).src = '/wg_logo.png'; };
-            }
-            if (!isPlaying) {
-                isPlaying = true;
-                radioPlay?.classList.add('hidden');
-                radioPause?.classList.remove('hidden');
-                radioEq?.classList.remove('opacity-0');
-                if (detail.audio_url) {
-                    initAudio(detail.audio_url, 'episode');
-                }
-                if (audio) {
-                    audio.play().catch(err => console.log('Audio play failed', err));
-                }
-            }
-        }
-    });
+    // Info button -> go to radio page
+    if (radioInfoBtn) {
+        radioInfoBtn.addEventListener('click', () => {
+            window.location.href = '/radio';
+        });
+    }
 
-    radioToggle?.addEventListener('click', () => {
-        isPlaying = !isPlaying;
+    // Listen for external pause
+    window.addEventListener('pause-radio', () => stopRadio());
 
-        if (isPlaying) {
-            radioPlay?.classList.add('hidden');
-            radioPause?.classList.remove('hidden');
-            radioEq?.classList.remove('opacity-0');
-            if (audio) {
-                audio.play().catch(e => console.log('Audio play failed', e));
-            } else {
-                loadRadioConfig().then(() => {
-                    if (audio) {
-                        audio.play().catch(e => console.log('Audio play failed', e));
-                    }
-                });
-            }
-            window.dispatchEvent(new CustomEvent('play-radio'));
-        } else {
-            radioPlay?.classList.remove('hidden');
-            radioPause?.classList.add('hidden');
-            radioEq?.classList.add('opacity-0');
-            audio?.pause();
-        }
-    });
-
-    // Pre-fetch on load (lazy)
-    setTimeout(() => {
-        supabase.from('radio_config').select('*').limit(1).single().then(({ data: config }) => {
-            if (config?.is_live) {
-                if (radioTitle) radioTitle.textContent = config.current_show || 'Wild Gvng Radio';
-                if (radioArtist) radioArtist.textContent = `🔴 EN VIVO • ${config.current_host || 'KAZTA'}`;
-                if (radioLiveDot) {
-                    radioLiveDot.className = 'w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_10px_#ff0000]';
-                }
-                currentMetadata = {
-                    id: RADIO_TRACK_ID,
-                    title: config.current_show || 'Wild Gvng Radio',
-                    artist: `🔴 EN VIVO • ${config.current_host || 'KAZTA'}`,
-                    image: '/wg_logo.png'
-                };
-
-                if (config.zeno_stream_url) {
-                    initAudio(config.zeno_stream_url, 'live');
-                }
-            } else if (config?.auto_radio) {
-                // Auto radio mode - load first track info
-                supabase.from('radio_auto_tracks')
-                    .select('*')
-                    .eq('is_active', true)
-                    .order('sort_order')
-                    .order('created_at', { ascending: false })
-                    .limit(1)
-                    .then(({ data: tracks }) => {
-                        const track = tracks?.[0];
-                        if (track) {
-                            if (radioTitle) radioTitle.textContent = track.title || 'Auto Radio';
-                            if (radioArtist) radioArtist.textContent = `🎵 AUTO RADIO • ${track.artist || 'Spotify'}`;
-                            if (radioCover) {
-                                radioCover.src = track.cover_url || '/wg_logo.png';
-                                radioCover.onerror = () => { (radioCover as HTMLImageElement).src = '/wg_logo.png'; };
-                            }
-                            if (radioLiveDot) {
-                                radioLiveDot.className = 'w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_#00ff88]';
-                            }
-                            currentMetadata = {
-                                id: RADIO_TRACK_ID,
-                                title: track.title || 'Auto Radio',
-                                artist: `🎵 AUTO RADIO • ${track.artist || 'Spotify'}`,
-                                image: track.cover_url || '/wg_logo.png'
-                            };
-                        }
-                    }).catch(() => {});
-            } else {
-                supabase.from('radio_episodes')
-                    .select('*')
-                    .eq('is_published', true)
-                    .eq('is_live', false)
-                    .order('created_at', { ascending: false })
-                    .limit(1)
-                    .single()
-                    .then(({ data: episode }) => {
-                        if (episode) {
-                            if (radioTitle) radioTitle.textContent = episode.title;
-                            if (radioArtist) radioArtist.textContent = episode.host || 'KAZTA';
-                            if (radioCover) {
-                                radioCover.src = episode.cover_url || '/wg_logo.png';
-                                radioCover.onerror = () => { (radioCover as HTMLImageElement).src = '/wg_logo.png'; };
-                            }
-                            if (radioLiveDot) {
-                                radioLiveDot.className = 'w-2 h-2 bg-gray-500 rounded-full';
-                            }
-                            currentMetadata = {
-                                id: episode.id || RADIO_TRACK_ID,
-                                title: episode.title,
-                                artist: episode.host || 'KAZTA',
-                                image: episode.cover_url || '/wg_logo.png'
-                            };
-                        }
-                    })
-                    .catch(() => {});
-            }
-        }).catch(() => {});
-
-        loadRadioConfig();
-    }, 500);
+    // Listen for config updates
+    window.addEventListener('radio-config-updated', () => loadConfig());
 </script>
