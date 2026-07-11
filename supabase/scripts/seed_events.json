@@ -1,0 +1,6 @@
+[
+  {"name":"Wild Battle Vol. 12","description":"Batalla de freestyle 1v1. 16 competidores. Premio: 5000 MXN + tokens exclusivos.","event_type":"battle","event_date":"2026-07-15T20:00:00-06","location":"Foro Wild Gvng, Torreón, Coahuila","is_active":true},
+  {"name":"Noche Underground","description":"Concierto con artistas de la crew. Invitados especiales del norte.","event_type":"concert","event_date":"2026-08-02T21:00:00-06","location":"Salón Caribe, Torreón, Coahuila","is_active":true},
+  {"name":"Meet & Greet Crew","description":"Conoce a los artistas de Wild Gvng. Fotos, autógrafos y merch exclusivo.","event_type":"meet_greet","event_date":"2026-08-20T17:00:00-06","location":"Casa Bosque Venustiano Carranza, Torreón","is_active":true},
+  {"name":"Wild Battle Vol. 13","description":"Batalla de freestyle 2v2. Equipmentos de 3. Premio: 8000 MXN.","event_type":"battle","event_date":"2026-09-05T20:00:00-06","location":"Foro Wild Gvng, Torreón, Coahuila","is_active":true}
+]

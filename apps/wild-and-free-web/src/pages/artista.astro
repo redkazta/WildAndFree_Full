@@ -348,8 +348,8 @@ function timeAgo(dateStr: string): string {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    background: rgba(201, 131, 0, 0.12);
-    border: 1px solid rgba(201, 131, 0, 0.2);
+    background: var(--primary-soft);
+    border: 1px solid var(--primary-border);
     color: var(--primary);
     font-family: monospace;
   }
@@ -391,7 +391,7 @@ function timeAgo(dateStr: string): string {
     color: #000;
   }
   .btn-gold:hover {
-    background: #e69500;
+    background: var(--primary-hover);
   }
   .btn-ghost {
     background: transparent;
@@ -418,10 +418,10 @@ function timeAgo(dateStr: string): string {
 
   /* SIDEBAR */
   .side-card {
-    background: transparent;
+    background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 10px;
-    padding: 14px;
+    padding: 16px;
     margin-bottom: 10px;
   }
   .side-avatar-wrap {
@@ -434,7 +434,7 @@ function timeAgo(dateStr: string): string {
     height: 100px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid var(--border);
+    border: 2px solid var(--border-strong);
   }
   .side-name {
     font-size: 1rem;
@@ -457,8 +457,8 @@ function timeAgo(dateStr: string): string {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    background: rgba(201, 131, 0, 0.1);
-    border: 1px solid rgba(201, 131, 0, 0.15);
+    background: var(--primary-soft);
+    border: 1px solid var(--primary-border);
     color: var(--primary);
     font-family: monospace;
   }
@@ -525,7 +525,7 @@ function timeAgo(dateStr: string): string {
     width: 22px;
     height: 22px;
     border-radius: 50%;
-    background: rgba(201, 131, 0, 0.1);
+    background: var(--primary-soft);
     border: none;
     color: var(--primary);
     display: flex;
@@ -595,7 +595,7 @@ function timeAgo(dateStr: string): string {
     font-size: 0.45rem;
     font-weight: 800;
     text-transform: uppercase;
-    background: rgba(201, 131, 0, 0.12);
+    background: var(--primary-soft);
     border: none;
     color: var(--primary);
     cursor: pointer;
@@ -660,14 +660,14 @@ function timeAgo(dateStr: string): string {
     font-size: 0.75rem;
   }
   .fp {
-    background: transparent;
+    background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 10px;
-    padding: 14px;
+    padding: 16px;
     transition: border-color 0.15s;
   }
   .fp:hover {
-    border-color: rgba(201, 131, 0, 0.25);
+    border-color: var(--primary);
   }
   .fp-top {
     display: flex;
@@ -736,31 +736,31 @@ function timeAgo(dateStr: string): string {
     font-weight: 700;
   }
   .fp-music {
-    background: rgba(201, 131, 0, 0.08);
-    border: 1px solid rgba(201, 131, 0, 0.12);
+    background: var(--primary-soft);
+    border: 1px solid var(--primary-border);
     color: var(--primary);
   }
   .fp-event {
-    background: rgba(138, 3, 3, 0.06);
-    border: 1px solid rgba(138, 3, 3, 0.12);
-    color: #ff6b6b;
+    background: var(--secondary-soft);
+    border: 1px solid var(--secondary-border);
+    color: var(--event);
   }
 
   /* ACTIONS */
   .fp-acts {
     display: flex;
-    gap: 4px;
+    gap: 2px;
     border-top: 1px solid var(--border);
     padding-top: 8px;
   }
   .fp-a {
     flex: 1;
-    padding: 5px;
-    border-radius: 5px;
+    padding: 6px 4px;
+    border-radius: 6px;
     background: transparent;
-    border: none;
+    border: 1px solid transparent;
     color: var(--text-muted);
-    font-size: 0.55rem;
+    font-size: 0.6rem;
     font-weight: 600;
     cursor: pointer;
     text-align: center;
@@ -769,10 +769,12 @@ function timeAgo(dateStr: string): string {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 4px;
+    gap: 5px;
   }
   .fp-a:hover {
-    color: var(--primary);
+    color: var(--text);
+    border-color: var(--border);
+    background: var(--bg-hover);
   }
   .fp-a.liked {
     color: var(--primary);
@@ -781,10 +783,10 @@ function timeAgo(dateStr: string): string {
     color: var(--primary);
   }
   .fp-a.reposted {
-    color: #1da1f2;
+    color: var(--repost);
   }
   .fp-a.reposted .repost-icon {
-    color: #1da1f2;
+    color: var(--repost);
   }
   .like-icon {
     font-size: 0.7rem;
@@ -855,8 +857,8 @@ function timeAgo(dateStr: string): string {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 6px;
-    padding: 6px 10px;
-    font-size: 0.7rem;
+    padding: 8px 12px;
+    font-size: 0.75rem;
     color: var(--text);
     font-family: inherit;
     outline: none;
@@ -870,7 +872,7 @@ function timeAgo(dateStr: string): string {
   .comment-send {
     padding: 6px 10px;
     border-radius: 6px;
-    background: rgba(201, 131, 0, 0.15);
+    background: var(--primary-soft);
     border: none;
     color: var(--primary);
     font-size: 0.7rem;

@@ -1,0 +1,11 @@
+[
+  {"product_id":"454f18b3-e9b2-47f8-8134-ef25750a1989","size":"S","color":"Negro","stock":25,"sku":"WG-TSHIRT-S-BLK"},
+  {"product_id":"454f18b3-e9b2-47f8-8134-ef25750a1989","size":"M","color":"Negro","stock":30,"sku":"WG-TSHIRT-M-BLK"},
+  {"product_id":"454f18b3-e9b2-47f8-8134-ef25750a1989","size":"L","color":"Negro","stock":20,"sku":"WG-TSHIRT-L-BLK"},
+  {"product_id":"454f18b3-e9b2-47f8-8134-ef25750a1989","size":"XL","color":"Negro","stock":15,"sku":"WG-TSHIRT-XL-BLK"},
+  {"product_id":"867baf1d-e2e8-43ad-bd42-ed37e9f4a362","size":"Única","color":"Negro","stock":40,"sku":"WG-CAP-ONE-BLK"},
+  {"product_id":"867baf1d-e2e8-43ad-bd42-ed37e9f4a362","size":"Única","color":"Blanco","stock":20,"sku":"WG-CAP-ONE-WHT"},
+  {"product_id":"d7507671-541c-4314-bd7b-112fb5e49b1e","size":"M","color":"Negro","stock":15,"sku":"WG-HOODIE-M-BLK"},
+  {"product_id":"d7507671-541c-4314-bd7b-112fb5e49b1e","size":"L","color":"Negro","stock":18,"sku":"WG-HOODIE-L-BLK"},
+  {"product_id":"d7507671-541c-4314-bd7b-112fb5e49b1e","size":"XL","color":"Gris oscuro","stock":12,"sku":"WG-HOODIE-XL-DGR"}
+]

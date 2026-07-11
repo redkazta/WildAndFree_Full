@@ -1,0 +1,4 @@
+[
+  {"user_id":"85fce31c-2cc1-48d9-8bd2-5692daf74162","status":"delivered","shipping_type":"carrier","payment_method":"transfer","total":630,"shipping_address":"Calle Reforma 123, Torreón","notes":"1 playera M + 1 gorra"},
+  {"user_id":"95d4bbd6-c1eb-400c-9023-2ca28440df15","status":"processing","shipping_type":"pickup","payment_method":"cash","total":350,"notes":"Recoger en tienda"}
+]

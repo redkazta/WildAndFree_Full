@@ -1,0 +1,5 @@
+[
+  {"name":"Playera Wild Gvng Logo","description":"Playera negra bordada con el logo original de Wild Gvng. 100% algodón.","base_price":350,"category":"playeras","is_active":true},
+  {"name":"Gorra WG Snapback","description":"Gorra snapback negra con logo WG bordado. Ajustable.","base_price":280,"category":"gorras","is_active":true},
+  {"name":"Sudadera Wild Gvng Premium","description":"Sudadera con capucha, diseño exclusivo. Algodón franela.","base_price":650,"category":"sudaderas","is_active":true}
+]

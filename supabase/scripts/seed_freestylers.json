@@ -1,0 +1,6 @@
+[
+  {"name":"KAZTA","slug":"kazta","bio":"Fundador de Wild Gvng. Flow letal y punchlines certificados.","is_active":true},
+  {"name":"RALF DÍAZ","slug":"ralf-diaz","bio":"Co-fundador. Versátil, adapta su flow a cualquier beat.","is_active":true},
+  {"name":"Young Kazta","slug":"young-kazta","bio":"El más rápido del norte. Doble tempo letal.","is_active":true},
+  {"name":"MC Delta","slug":"mc-delta","bio":"Storyteller del trap norteño. Letras con profundidad.","is_active":true}
+]

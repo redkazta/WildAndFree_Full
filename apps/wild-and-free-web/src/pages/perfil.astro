@@ -201,7 +201,7 @@ import Layout from '../layouts/Layout.astro';
     border: none;
     color: #000;
   }
-  .btn-gold:hover { background: #e69500; }
+  .btn-gold:hover { background: var(--primary-hover); }
   .btn-ghost {
     background: transparent;
     border: 1px solid var(--border);
@@ -359,7 +359,7 @@ import Layout from '../layouts/Layout.astro';
     border-radius: 6px;
     background: transparent;
     border: 1px solid rgba(255, 80, 80, 0.2);
-    color: rgba(255, 80, 80, 0.7);
+    color: var(--event);
     font-size: 0.6rem;
     font-weight: 700;
     font-family: inherit;
@@ -375,7 +375,7 @@ import Layout from '../layouts/Layout.astro';
   .logout-btn:hover {
     background: rgba(255, 80, 80, 0.1);
     border-color: rgba(255, 80, 80, 0.4);
-    color: #ff5050;
+    color: var(--event);
   }
 
   /* Role tags */
@@ -388,8 +388,8 @@ import Layout from '../layouts/Layout.astro';
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    background: rgba(201, 131, 0, 0.1);
-    border: 1px solid rgba(201, 131, 0, 0.15);
+    background: var(--primary-soft);
+    border: 1px solid var(--primary-border);
     color: var(--primary);
     font-family: monospace;
     white-space: nowrap;
@@ -448,7 +448,7 @@ import Layout from '../layouts/Layout.astro';
     padding: 14px;
     transition: border-color 0.15s;
   }
-  .fp:hover { border-color: rgba(201, 131, 0, 0.25); }
+  .fp:hover { border-color: var(--primary); }
   .fp-top {
     display: flex;
     align-items: center;
@@ -514,14 +514,14 @@ import Layout from '../layouts/Layout.astro';
     font-weight: 700;
   }
   .fp-music {
-    background: rgba(201, 131, 0, 0.08);
-    border: 1px solid rgba(201, 131, 0, 0.12);
+    background: var(--primary-soft);
+    border: 1px solid var(--primary-border);
     color: var(--primary);
   }
   .fp-event {
-    background: rgba(138, 3, 3, 0.06);
-    border: 1px solid rgba(138, 3, 3, 0.12);
-    color: #ff6b6b;
+    background: var(--secondary-soft);
+    border: 1px solid var(--secondary-border);
+    color: var(--event);
   }
 
   /* ── ACTIONS ── */
@@ -552,8 +552,8 @@ import Layout from '../layouts/Layout.astro';
   .fp-a:hover { color: var(--primary); }
   .fp-a.liked { color: var(--primary); }
   .fp-a.liked .like-icon { color: var(--primary); }
-  .fp-a.reposted { color: #1da1f2; }
-  .fp-a.reposted .repost-icon { color: #1da1f2; }
+  .fp-a.reposted { color: var(--repost); }
+  .fp-a.reposted .repost-icon { color: var(--repost); }
   .like-icon {
     font-size: 0.7rem;
     transition: transform 0.2s;
@@ -626,7 +626,7 @@ import Layout from '../layouts/Layout.astro';
   .comment-send {
     padding: 6px 10px;
     border-radius: 6px;
-    background: rgba(201, 131, 0, 0.15);
+    background: var(--primary-soft);
     border: none;
     color: var(--primary);
     font-size: 0.7rem;

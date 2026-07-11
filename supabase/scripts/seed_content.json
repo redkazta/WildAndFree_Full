@@ -1,0 +1,7 @@
+[
+  {"user_id":"ec7ba40e-971a-4729-ad17-e83a0fdd42b5","title":"Behind the Scenes: Wild Battle Vol. 11","description":"Video exclusivo del backstage de la última batalla.","content_type":"video","file_url":"https://example.com/bts-wb11.mp4","token_price":50,"status":"published"},
+  {"user_id":"ec7ba40e-971a-4729-ad17-e83a0fdd42b5","title":"Freestyle Session #7 - KAZTA","description":"Sesión de freestyle en vivo desde el estudio.","content_type":"audio","file_url":"https://example.com/session-7.mp3","token_price":30,"status":"published"},
+  {"user_id":"cd2611f7-1ad1-4fff-8032-77f8ee616fbb","title":"Mix: Los Mejores Punchlines 2025","description":"Recopilación de los mejores punchlines del año.","content_type":"audio","file_url":"https://example.com/mix-punchlines.mp3","token_price":40,"status":"published"},
+  {"user_id":"66fd9133-87bc-43eb-9095-23b11f44de5c","title":"Studio Session: Young Kazta","description":"Colaboración exclusiva en estudio. Beat inédito.","content_type":"video","file_url":"https://example.com/yk-studio.mp4","token_price":75,"status":"published"},
+  {"user_id":"2406328b-ad5b-4271-a923-36af6b9c5a29","title":"Acoustic Freestyle - MC Delta","description":"Freestyle acústico sin beat. Pura letra.","content_type":"audio","file_url":"https://example.com/mcdelta-acoustic.mp3","token_price":25,"status":"pending"}
+]

@@ -26,6 +26,18 @@
       "languageVersion": "3.2"
     },
     {
+      "name": "archive",
+      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/archive-4.0.9",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "args",
+      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/args-2.7.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
       "name": "async",
       "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/async-2.13.1",
       "packageUri": "lib/",
@@ -40,6 +52,18 @@
     {
       "name": "characters",
       "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/characters-1.4.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "checked_yaml",
+      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/checked_yaml-2.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.8"
+    },
+    {
+      "name": "cli_util",
+      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/cli_util-0.4.2",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
@@ -62,6 +86,12 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "cross_file",
+      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/cross_file-0.3.5+3",
+      "packageUri": "lib/",
+      "languageVersion": "3.10"
+    },
+    {
       "name": "crypto",
       "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/crypto-3.0.7",
       "packageUri": "lib/",
@@ -80,18 +110,6 @@
       "languageVersion": "3.0"
     },
     {
-      "name": "device_info_plus",
-      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/device_info_plus-13.2.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.10"
-    },
-    {
-      "name": "device_info_plus_platform_interface",
-      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/device_info_plus_platform_interface-8.1.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.10"
-    },
-    {
       "name": "fake_async",
       "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/fake_async-1.3.3",
       "packageUri": "lib/",
@@ -104,16 +122,16 @@
       "languageVersion": "3.7"
     },
     {
-      "name": "ffi_leak_tracker",
-      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/ffi_leak_tracker-0.1.2",
-      "packageUri": "lib/",
-      "languageVersion": "3.10"
-    },
-    {
       "name": "file",
       "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/file-7.0.1",
       "packageUri": "lib/",
       "languageVersion": "3.0"
+    },
+    {
+      "name": "file_picker",
+      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/file_picker-8.3.7",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
     },
     {
       "name": "flutter",
@@ -122,10 +140,22 @@
       "languageVersion": "3.10"
     },
     {
-      "name": "flutter_lints",
-      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_lints-3.0.2",
+      "name": "flutter_launcher_icons",
+      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_launcher_icons-0.14.4",
       "packageUri": "lib/",
-      "languageVersion": "3.1"
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "flutter_lints",
+      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_lints-5.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "flutter_plugin_android_lifecycle",
+      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.35",
+      "packageUri": "lib/",
+      "languageVersion": "3.10"
     },
     {
       "name": "flutter_test",
@@ -141,13 +171,13 @@
     },
     {
       "name": "functions_client",
-      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/functions_client-2.6.1",
+      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/functions_client-2.6.3",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
     {
       "name": "gotrue",
-      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/gotrue-2.22.0",
+      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/gotrue-2.23.0",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
@@ -168,6 +198,12 @@
       "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/http_parser-4.1.2",
       "packageUri": "lib/",
       "languageVersion": "3.4"
+    },
+    {
+      "name": "image",
+      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/image-4.9.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "intl",
@@ -207,9 +243,9 @@
     },
     {
       "name": "lints",
-      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/lints-3.0.0",
+      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/lints-5.1.1",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.6"
     },
     {
       "name": "logging",
@@ -248,56 +284,8 @@
       "languageVersion": "2.12"
     },
     {
-      "name": "package_info_plus",
-      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/package_info_plus-10.2.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.10"
-    },
-    {
-      "name": "package_info_plus_platform_interface",
-      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/package_info_plus_platform_interface-4.1.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.10"
-    },
-    {
-      "name": "passkeys",
-      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/passkeys-2.20.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.4"
-    },
-    {
-      "name": "passkeys_android",
-      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/passkeys_android-2.12.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.0"
-    },
-    {
-      "name": "passkeys_darwin",
-      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/passkeys_darwin-0.4.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.0"
-    },
-    {
-      "name": "passkeys_doctor",
-      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/passkeys_doctor-1.4.1",
-      "packageUri": "lib/",
-      "languageVersion": "3.0"
-    },
-    {
       "name": "passkeys_platform_interface",
-      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/passkeys_platform_interface-2.6.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.0"
-    },
-    {
-      "name": "passkeys_web",
-      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/passkeys_web-2.9.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.4"
-    },
-    {
-      "name": "passkeys_windows",
-      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/passkeys_windows-0.1.1",
+      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/passkeys_platform_interface-2.7.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -326,6 +314,12 @@
       "languageVersion": "3.2"
     },
     {
+      "name": "petitparser",
+      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/petitparser-7.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.8"
+    },
+    {
       "name": "platform",
       "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/platform-3.1.6",
       "packageUri": "lib/",
@@ -344,8 +338,14 @@
       "languageVersion": "3.2"
     },
     {
+      "name": "posix",
+      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/posix-6.5.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "postgrest",
-      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/postgrest-2.7.2",
+      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/postgrest-2.7.3",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
@@ -357,7 +357,7 @@
     },
     {
       "name": "realtime_client",
-      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/realtime_client-2.8.0",
+      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/realtime_client-2.9.0",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
@@ -435,7 +435,7 @@
     },
     {
       "name": "storage_client",
-      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/storage_client-2.5.7",
+      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/storage_client-2.5.9",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
@@ -453,13 +453,13 @@
     },
     {
       "name": "supabase",
-      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/supabase-2.13.0",
+      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/supabase-2.13.2",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
     {
       "name": "supabase_flutter",
-      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/supabase_flutter-2.15.0",
+      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/supabase_flutter-2.15.2",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
@@ -480,12 +480,6 @@
       "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/typed_data-1.4.0",
       "packageUri": "lib/",
       "languageVersion": "3.5"
-    },
-    {
-      "name": "ua_client_hints",
-      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/ua_client_hints-1.7.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.3"
     },
     {
       "name": "url_launcher",
@@ -567,21 +561,27 @@
     },
     {
       "name": "win32",
-      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/win32-6.3.0",
+      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/win32-5.15.0",
       "packageUri": "lib/",
-      "languageVersion": "3.10"
-    },
-    {
-      "name": "win32_registry",
-      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/win32_registry-3.0.3",
-      "packageUri": "lib/",
-      "languageVersion": "3.10"
+      "languageVersion": "3.8"
     },
     {
       "name": "xdg_directories",
       "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/xdg_directories-1.1.0",
       "packageUri": "lib/",
       "languageVersion": "3.3"
+    },
+    {
+      "name": "xml",
+      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/xml-7.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.11"
+    },
+    {
+      "name": "yaml",
+      "rootUri": "file:///C:/Users/Kazta/AppData/Local/Pub/Cache/hosted/pub.dev/yaml-3.1.3",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
     },
     {
       "name": "yet_another_json_isolate",
