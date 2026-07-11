@@ -28,6 +28,9 @@
   /* Mobile: expanded state */
   #spotify-floating.expanded #spotify-expand { display: none; }
   #spotify-floating.expanded #spotify-full { display: block; width: 260px; height: 80px; }
+  @media (max-width: 768px) {
+    #spotify-floating.expanded #spotify-full { width: 200px !important; }
+  }
 </style>
 
 <script>
@@ -38,6 +41,8 @@
     const floating = document.getElementById('spotify-floating');
     if (spotifyExpand && floating) {
         spotifyExpand.addEventListener('click', () => {
+            // Close radio if open
+            document.getElementById('radio-floating')?.classList.remove('expanded');
             floating.classList.toggle('expanded');
         });
         document.addEventListener('click', (e) => {

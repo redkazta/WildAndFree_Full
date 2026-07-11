@@ -1,86 +1,80 @@
 ﻿---
 declare const Astro: any;
-
 const currentPath = Astro.url.pathname;
 
 const navItems = [
-  { href: '/artistas', label: 'Artistas' },
-  { href: '/versus', label: 'Versus' },
-  { href: '/musica', label: 'Música' },
-  { href: '/radio', label: 'Radio' },
-  { href: '/podcasts', label: 'Podcasts' },
-  { href: '/eventos', label: 'Eventos' },
-  { href: '/tienda', label: 'Tienda' },
-  { href: '/wild-and-free-league', label: 'WILD AND FREE' },
-  { href: '/honor-and-free', label: 'HONOR AND FREE' },
-  { href: '/ascension', label: 'ASCENSIÓN' },
-  { href: '/wild-writings', label: 'WILD WRITINGS' }
+  { href: '/artistas', label: 'Artistas', icon: 'M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z' },
+  { href: '/versus', label: 'Versus', icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z' },
+  { href: '/musica', label: 'Música', icon: 'M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z' },
+  { href: '/radio', label: 'Radio', icon: 'M3.24 6.15C2.51 6.43 2 7.17 2 8v12c0 1.1.89 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2H8.3l8.26-3.34-.37-.91L3.24 6.15z' },
+  { href: '/podcasts', label: 'Podcasts', icon: 'M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8 6c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm6 10H6v-1c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1z' },
+  { href: '/eventos', label: 'Eventos', icon: 'M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z' },
+  { href: '/tienda', label: 'Tienda', icon: 'M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z' },
+  { href: '/wild-and-free-league', label: 'WILD AND FREE', icon: '' },
+  { href: '/honor-and-free', label: 'HONOR AND FREE', icon: '' },
+  { href: '/ascension', label: 'ASCENSIÓN', icon: '' },
+  { href: '/wild-writings', label: 'WILD WRITINGS', icon: '' },
 ];
 
 const isActive = (href: string) => {
   if (currentPath === href) return true;
-  if (href === '/artistas' && currentPath.startsWith('/artista/')) return true;
-  if (href === '/eventos' && currentPath.startsWith('/evento/')) return true;
-  if (href === '/radio' && currentPath.startsWith('/radio')) return true;
+  if (href === '/artistas' && currentPath.startsWith('/artista')) return true;
   return false;
 };
 ---
 
-<aside class="fixed top-0 left-[-288px] w-72 h-screen bg-black border-r-2 border-white z-[2000] transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] flex flex-col shadow-[20px_0_50px_rgba(0,0,0,1)]" id="sidebar">
-  <div class="p-8 md:p-4 flex flex-col h-full relative">
-    <!-- Header Sidebar -->
-    <div class="flex items-center justify-between mb-12">
-      <div class="py-2 flex items-center gap-3">
-        <img src="/assets/wildgvng-logo.svg" alt="Wild Gvng Logo" class="w-12 h-12 md:w-14 md:h-14 object-contain" />
-        <span class="text-2xl font-black tracking-tighter italic"><span class="text-wild-orange">WILD</span> <span class="text-white">GVNG</span></span>
-      </div>
-      <button id="sidebar-close" class="p-2 text-white hover:text-wild-orange transition-all duration-300 group" aria-label="Cerrar menú">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="group-hover:rotate-90 transition-transform duration-300"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+<aside id="sidebar" class="fixed top-0 left-[-288px] w-72 h-screen bg-[var(--bg)] border-r border-[var(--border)] z-[2000] transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] flex flex-col" style="padding-bottom: 100px;">
+  <div class="px-5 pt-5 flex flex-col h-full">
+
+    <!-- Logo -->
+    <div class="flex items-center justify-between mb-8">
+      <a href="/" class="flex items-center gap-3">
+        <img src="/assets/wildgvng-logo.svg" alt="Wild Gvng" class="w-10 h-10 object-contain" />
+        <span class="text-xl font-black tracking-tighter"><span class="text-[var(--primary)]">WILD</span> <span class="text-white">GVNG</span></span>
+      </a>
+      <button id="sidebar-close" class="p-2 text-[var(--text-muted)] hover:text-[var(--primary)] transition-colors">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
 
-    <div class="space-y-12">
-      <!-- Nav Section -->
-      <div class="space-y-6">
-        <h4 class="text-[12px] font-black uppercase tracking-[0.4em] text-wild-orange border-l-4 border-wild-orange pl-4">Explorar</h4>
-        <nav class="flex flex-col gap-1">
-          {navItems.map(item => (
-                      <a
-                        href={item.href}
-                        class={`group flex items-center gap-4 py-4 md:py-3 px-4 md:px-3 text-xs font-black uppercase tracking-widest rounded-xl transition-all ${isActive(item.href) ? 'text-wild-orange bg-white/10' : 'text-white hover:text-wild-orange hover:bg-white/10'}`}
-                      >
-              <span class={`w-2 h-2 rounded-full transition-colors ${isActive(item.href) ? 'bg-wild-orange' : 'bg-white group-hover:bg-wild-orange'}`}></span>
-              {item.label}
-            </a>
-          ))}
-        </nav>
-      </div>
+    <!-- Nav -->
+    <nav class="flex flex-col gap-0.5">
+      {navItems.map(item => (
+        <a href={item.href}
+          class:list={[
+            'flex items-center gap-3 py-2.5 px-3 rounded-lg text-xs font-bold uppercase tracking-wider transition-all',
+            isActive(item.href)
+              ? 'text-[var(--primary)] bg-[var(--primary)]/10'
+              : 'text-[var(--text-secondary)] hover:text-white hover:bg-white/5'
+          ]}>
+          {item.icon && (
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="flex-shrink-0 opacity-60"><path d={item.icon}/></svg>
+          )}
+          {!item.icon && <span class="w-[18px] h-[18px] flex-shrink-0"></span>}
+          <span class="truncate">{item.label}</span>
+        </a>
+      ))}
+    </nav>
 
-      <!-- Account Section -->
-      <div class="space-y-6">
-        <h4 class="text-[12px] font-black uppercase tracking-[0.4em] text-white border-l-4 border-white pl-4">Cuenta</h4>
-        <nav class="flex flex-col gap-1">
-          <a href="/login" class="group flex items-center gap-4 py-4 px-4 text-xs font-black uppercase tracking-widest text-white hover:text-wild-orange hover:bg-white/10 rounded-xl transition-all">
-            <span class="w-2 h-2 rounded-full bg-white group-hover:bg-wild-orange transition-colors"></span>
-            Entrar
-          </a>
-          <a href="/perfil" class="group flex items-center gap-4 py-4 px-4 text-xs font-black uppercase tracking-widest text-white hover:text-wild-orange hover:bg-white/10 rounded-xl transition-all">
-            <span class="w-2 h-2 rounded-full bg-white group-hover:bg-wild-orange transition-colors"></span>
-            Mi Perfil
-          </a>
-        </nav>
-      </div>
-    </div>
+    <!-- Spacer -->
+    <div class="flex-1"></div>
 
-    <!-- Footer Sidebar -->
-    <div class="mt-auto pt-8 border-t-2 border-white space-y-6">
-      <div class="flex items-center gap-4">
-        <button class="location-btn w-full py-5 px-6 bg-black border-2 border-white text-[11px] font-black uppercase tracking-[0.2em] text-white hover:bg-wild-orange hover:text-black transition-all">
-          Ubicación: Torreón Coahuila
-        </button>
-      </div>
-      <div class="text-center">
-        <div class="text-[11px] font-black tracking-[0.4em] text-wild-orange">WILD GVNG © 2026</div>
+    <!-- Bottom -->
+    <div class="border-t border-[var(--border)] pt-4 pb-4 flex flex-col gap-2">
+      <a href="/login" class="flex items-center gap-3 py-2.5 px-3 rounded-lg text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] hover:text-white hover:bg-white/5 transition-all">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="flex-shrink-0 opacity-60"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+        Entrar
+      </a>
+      <a href="/perfil" class="flex items-center gap-3 py-2.5 px-3 rounded-lg text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] hover:text-white hover:bg-white/5 transition-all">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="flex-shrink-0 opacity-60"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Mi Perfil
+      </a>
+      <a href="/configuracion" class="flex items-center gap-3 py-2.5 px-3 rounded-lg text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] hover:text-white hover:bg-white/5 transition-all">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="flex-shrink-0 opacity-60"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Configuración
+      </a>
+      <div class="text-center pt-3">
+        <span class="text-[9px] font-bold tracking-[0.3em] text-[var(--text-muted)]">WILD GVNG © 2026</span>
       </div>
     </div>
   </div>

@@ -54,6 +54,9 @@
     /* Mobile: expanded state */
     #radio-floating.expanded #radio-expand { display: none; }
     #radio-floating.expanded #radio-full { display: flex; }
+    @media (max-width: 768px) {
+      #radio-full { width: 200px !important; }
+    }
 </style>
 
 <script>
@@ -66,6 +69,8 @@
     const floating = document.getElementById('radio-floating');
     if (radioExpand && floating) {
         radioExpand.addEventListener('click', () => {
+            // Close spotify if open
+            document.getElementById('spotify-floating')?.classList.remove('expanded');
             floating.classList.toggle('expanded');
         });
         // Close when tapping outside
