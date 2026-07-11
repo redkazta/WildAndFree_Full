@@ -7,348 +7,814 @@ import Layout from '../layouts/Layout.astro';
   primary_color: "#C98300",
   secondary_color: "#8A0303"
 }}>
-  <div class="config-container">
-    <div class="config-header">
-      <h1>Configuración</h1>
-      <p>Personaliza tu experiencia en Wild Gvng</p>
-    </div>
+  <div class="cfg">
+    <div class="cfg-inner">
 
-    <div class="config-sections">
-      <div class="config-section">
-        <h3>Perfil</h3>
-        <div class="config-item">
-          <div class="config-info">
-            <span class="config-label">Nombre de Usuario</span>
-            <span class="config-value">@usuario_wild</span>
-          </div>
-          <button class="config-action">Editar</button>
-        </div>
-        <div class="config-item">
-          <div class="config-info">
-            <span class="config-label">Correo Electrónico</span>
-            <span class="config-value">usuario@wildgvng.com</span>
-          </div>
-          <button class="config-action">Cambiar</button>
-        </div>
-        <div class="config-item">
-          <div class="config-info">
-            <span class="config-label">Contraseña</span>
-            <span class="config-value">••••••••</span>
-          </div>
-          <button class="config-action">Cambiar</button>
-        </div>
-      </div>
+      <!-- LEFT MENU -->
+      <aside class="cfg-side">
+        <h2 class="cfg-side-title">CONFIGURACIÓN</h2>
+        <nav class="cfg-nav">
+          <button class="cfg-nav-btn active" data-section="apariencia">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            Apariencia
+          </button>
+          <button class="cfg-nav-btn" data-section="cuenta">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Cuenta
+          </button>
+          <button class="cfg-nav-btn" data-section="notificaciones">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+            Notificaciones
+          </button>
+          <button class="cfg-nav-btn" data-section="privacidad">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            Privacidad
+          </button>
+          <button class="cfg-nav-btn" data-section="reproduccion">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Reproducción
+          </button>
+          <button class="cfg-nav-btn" data-section="idioma">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+            Idioma
+          </button>
+          <div class="cfg-nav-divider"></div>
+          <button class="cfg-nav-btn danger" data-section="peligro">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Zona de Peligro
+          </button>
+        </nav>
+      </aside>
 
-      <div class="config-section">
-        <h3>Preferencias</h3>
-        <div class="config-item">
-          <div class="config-info">
-            <span class="config-label">Idioma</span>
-            <span class="config-value">Español</span>
-          </div>
-          <button class="config-action">Cambiar</button>
-        </div>
-        <div class="config-item">
-          <div class="config-info">
-            <span class="config-label">Ubicación</span>
-            <span class="config-value">ðŸ‡²ðŸ‡½ México</span>
-          </div>
-          <button class="config-action">Cambiar</button>
-        </div>
-        <div class="config-item">
-          <div class="config-info">
-            <span class="config-label">Notificaciones</span>
-            <span class="config-value">Activadas</span>
-          </div>
-          <button class="config-action toggle active">Desactivar</button>
-        </div>
-      </div>
+      <!-- RIGHT CONTENT -->
+      <div class="cfg-content">
 
-      <div class="config-section">
-        <h3>Privacidad</h3>
-        <div class="config-item">
-          <div class="config-info">
-            <span class="config-label">Perfil Público</span>
-            <span class="config-value">Sí</span>
-          </div>
-          <button class="config-action toggle active">Desactivar</button>
-        </div>
-        <div class="config-item">
-          <div class="config-info">
-            <span class="config-label">Historial de Reproducción</span>
-            <span class="config-value">Guardado</span>
-          </div>
-          <button class="config-action toggle active">Desactivar</button>
-        </div>
-        <div class="config-item">
-          <div class="config-info">
-            <span class="config-label">Datos de Uso</span>
-            <span class="config-value">Compartidos</span>
-          </div>
-          <button class="config-action toggle">Activar</button>
-        </div>
-      </div>
+        <!-- APARIENCIA -->
+        <div class="cfg-section active" data-section="apariencia">
+          <h3 class="cfg-section-title">Apariencia</h3>
+          <p class="cfg-section-desc">Personaliza cómo se ve Wild Gvng para ti.</p>
 
-      <div class="config-section">
-        <h3>Membresía</h3>
-        <div class="config-item">
-          <div class="config-info">
-            <span class="config-label">Plan Actual</span>
-            <span class="config-value">Premium</span>
+          <div class="cfg-card">
+            <h4 class="cfg-card-label">TEMA</h4>
+            <div class="cfg-theme-grid">
+              <button class="cfg-theme-card active" data-theme-choice="dark">
+                <div class="cfg-theme-preview dark-preview">
+                  <div class="tp-bar"></div>
+                  <div class="tp-sides">
+                    <div class="tp-side"></div>
+                    <div class="tp-main"><div class="tp-line"></div><div class="tp-line short"></div></div>
+                  </div>
+                </div>
+                <span>Oscuro</span>
+              </button>
+              <button class="cfg-theme-card" data-theme-choice="light">
+                <div class="cfg-theme-preview light-preview">
+                  <div class="tp-bar"></div>
+                  <div class="tp-sides">
+                    <div class="tp-side"></div>
+                    <div class="tp-main"><div class="tp-line"></div><div class="tp-line short"></div></div>
+                  </div>
+                </div>
+                <span>Claro</span>
+              </button>
+            </div>
           </div>
-          <button class="config-action">Administrar</button>
-        </div>
-        <div class="config-item">
-          <div class="config-info">
-            <span class="config-label">Método de Pago</span>
-            <span class="config-value">**** **** **** 1234</span>
-          </div>
-          <button class="config-action">Cambiar</button>
-        </div>
-        <div class="config-item">
-          <div class="config-info">
-            <span class="config-label">Renovación</span>
-            <span class="config-value">15 de Febrero, 2024</span>
-          </div>
-          <button class="config-action">Ver</button>
-        </div>
-      </div>
 
-      <div class="config-section danger">
-        <h3>Zona de Peligro</h3>
-        <div class="config-item">
-          <div class="config-info">
-            <span class="config-label">Exportar Datos</span>
-            <span class="config-value">Descargar información de tu cuenta</span>
+          <div class="cfg-card">
+            <h4 class="cfg-card-label">FUENTE</h4>
+            <div class="cfg-row">
+              <span class="cfg-label">Tamaño de texto</span>
+              <select class="cfg-select">
+                <option>Pequeño</option>
+                <option selected>Mediano</option>
+                <option>Grande</option>
+              </select>
+            </div>
           </div>
-          <button class="config-action danger">Exportar</button>
-        </div>
-        <div class="config-item">
-          <div class="config-info">
-            <span class="config-label">Eliminar Cuenta</span>
-            <span class="config-value">Esta acción es permanente</span>
+
+          <div class="cfg-card">
+            <h4 class="cfg-card-label">ANIMACIONES</h4>
+            <div class="cfg-row">
+              <span class="cfg-label">Efectos de movimiento</span>
+              <button class="cfg-toggle active" data-cfg-toggle="animations">
+                <span class="cfg-toggle-dot"></span>
+              </button>
+            </div>
           </div>
-          <button class="config-action danger">Eliminar</button>
         </div>
+
+        <!-- CUENTA -->
+        <div class="cfg-section" data-section="cuenta">
+          <h3 class="cfg-section-title">Cuenta</h3>
+          <p class="cfg-section-desc">Administra tu información personal.</p>
+
+          <div class="cfg-card">
+            <h4 class="cfg-card-label">INFORMACIÓN PERSONAL</h4>
+            <div class="cfg-row">
+              <div class="cfg-field">
+                <span class="cfg-label">Nombre completo</span>
+                <span class="cfg-value" id="cfg-name">Cargando...</span>
+              </div>
+              <button class="cfg-btn-small">Editar</button>
+            </div>
+            <div class="cfg-row">
+              <div class="cfg-field">
+                <span class="cfg-label">Correo electrónico</span>
+                <span class="cfg-value" id="cfg-email">Cargando...</span>
+              </div>
+              <button class="cfg-btn-small">Cambiar</button>
+            </div>
+            <div class="cfg-row">
+              <div class="cfg-field">
+                <span class="cfg-label">Nombre de usuario</span>
+                <span class="cfg-value" id="cfg-username">@cargando</span>
+              </div>
+              <button class="cfg-btn-small">Editar</button>
+            </div>
+          </div>
+
+          <div class="cfg-card">
+            <h4 class="cfg-card-label">SEGURIDAD</h4>
+            <div class="cfg-row">
+              <div class="cfg-field">
+                <span class="cfg-label">Contraseña</span>
+                <span class="cfg-value">••••••••</span>
+              </div>
+              <button class="cfg-btn-small">Cambiar</button>
+            </div>
+            <div class="cfg-row">
+              <div class="cfg-field">
+                <span class="cfg-label">Autenticación en dos pasos</span>
+                <span class="cfg-value cfg-muted">Desactivada</span>
+              </div>
+              <button class="cfg-btn-small">Activar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- NOTIFICACIONES -->
+        <div class="cfg-section" data-section="notificaciones">
+          <h3 class="cfg-section-title">Notificaciones</h3>
+          <p class="cfg-section-desc">Controla qué notificaciones recibes.</p>
+
+          <div class="cfg-card">
+            <h4 class="cfg-card-label">NOTIFICACIONES PUSH</h4>
+            <div class="cfg-row">
+              <span class="cfg-label">Nuevos eventos</span>
+              <button class="cfg-toggle active" data-cfg-toggle="notif-events"><span class="cfg-toggle-dot"></span></button>
+            </div>
+            <div class="cfg-row">
+              <span class="cfg-label">Nuevos posts de artistas</span>
+              <button class="cfg-toggle active" data-cfg-toggle="notif-posts"><span class="cfg-toggle-dot"></span></button>
+            </div>
+            <div class="cfg-row">
+              <span class="cfg-label">Comentarios en tus posts</span>
+              <button class="cfg-toggle active" data-cfg-toggle="notif-comments"><span class="cfg-toggle-dot"></span></button>
+            </div>
+            <div class="cfg-row">
+              <span class="cfg-label">Nuevos seguidores</span>
+              <button class="cfg-toggle" data-cfg-toggle="notif-followers"><span class="cfg-toggle-dot"></span></button>
+            </div>
+          </div>
+
+          <div class="cfg-card">
+            <h4 class="cfg-card-label">CORREO ELECTRÓNICO</h4>
+            <div class="cfg-row">
+              <span class="cfg-label">Resumen semanal</span>
+              <button class="cfg-toggle" data-cfg-toggle="email-weekly"><span class="cfg-toggle-dot"></span></button>
+            </div>
+            <div class="cfg-row">
+              <span class="cfg-label">Ofertas de la tienda</span>
+              <button class="cfg-toggle" data-cfg-toggle="email-promos"><span class="cfg-toggle-dot"></span></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- PRIVACIDAD -->
+        <div class="cfg-section" data-section="privacidad">
+          <h3 class="cfg-section-title">Privacidad</h3>
+          <p class="cfg-section-desc">Controla quién puede ver tu información.</p>
+
+          <div class="cfg-card">
+            <h4 class="cfg-card-label">VISIBILIDAD</h4>
+            <div class="cfg-row">
+              <div class="cfg-field">
+                <span class="cfg-label">Perfil público</span>
+                <span class="cfg-value cfg-muted">Cualquiera puede ver tu perfil</span>
+              </div>
+              <button class="cfg-toggle active" data-cfg-toggle="pub-profile"><span class="cfg-toggle-dot"></span></button>
+            </div>
+            <div class="cfg-row">
+              <div class="cfg-field">
+                <span class="cfg-label">Mostrar en rankings</span>
+                <span class="cfg-value cfg-muted">Aparecer en listas de Wild Ones</span>
+              </div>
+              <button class="cfg-toggle active" data-cfg-toggle="show-ranking"><span class="cfg-toggle-dot"></span></button>
+            </div>
+          </div>
+
+          <div class="cfg-card">
+            <h4 class="cfg-card-label">DATOS</h4>
+            <div class="cfg-row">
+              <div class="cfg-field">
+                <span class="cfg-label">Historial de reproducción</span>
+                <span class="cfg-value cfg-muted">Guardar lo que escuchas</span>
+              </div>
+              <button class="cfg-toggle active" data-cfg-toggle="history"><span class="cfg-toggle-dot"></span></button>
+            </div>
+            <div class="cfg-row">
+              <div class="cfg-field">
+                <span class="cfg-label">Compartir datos de uso</span>
+                <span class="cfg-value cfg-muted">Ayudar a mejorar la plataforma</span>
+              </div>
+              <button class="cfg-toggle" data-cfg-toggle="share-data"><span class="cfg-toggle-dot"></span></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- REPRODUCCIÓN -->
+        <div class="cfg-section" data-section="reproduccion">
+          <h3 class="cfg-section-title">Reproducción</h3>
+          <p class="cfg-section-desc">Configura cómo se reproduce la música.</p>
+
+          <div class="cfg-card">
+            <h4 class="cfg-card-label">AUDIO</h4>
+            <div class="cfg-row">
+              <span class="cfg-label">Calidad de streaming</span>
+              <select class="cfg-select">
+                <option>Baja (128 kbps)</option>
+                <option selected>Media (256 kbps)</option>
+                <option>Alta (320 kbps)</option>
+              </select>
+            </div>
+            <div class="cfg-row">
+              <span class="cfg-label">Reproducción automática</span>
+              <button class="cfg-toggle active" data-cfg-toggle="autoplay"><span class="cfg-toggle-dot"></span></button>
+            </div>
+            <div class="cfg-row">
+              <span class="cfg-label">Crossfade entre canciones</span>
+              <button class="cfg-toggle" data-cfg-toggle="crossfade"><span class="cfg-toggle-dot"></span></button>
+            </div>
+          </div>
+
+          <div class="cfg-card">
+            <h4 class="cfg-card-label">RADIO</h4>
+            <div class="cfg-row">
+              <div class="cfg-field">
+                <span class="cfg-label">Auto Radio predeterminado</span>
+                <span class="cfg-value cfg-muted">La playlist de Spotify que se reproduce automáticamente</span>
+              </div>
+              <button class="cfg-btn-small">Configurar</button>
+            </div>
+            <div class="cfg-row">
+              <span class="cfg-label">Modo sin conexión</span>
+              <button class="cfg-toggle" data-cfg-toggle="offline"><span class="cfg-toggle-dot"></span></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- IDIOMA -->
+        <div class="cfg-section" data-section="idioma">
+          <h3 class="cfg-section-title">Idioma</h3>
+          <p class="cfg-section-desc">Selecciona el idioma de la plataforma.</p>
+
+          <div class="cfg-card">
+            <h4 class="cfg-card-label">IDIOMA DE LA INTERFAZ</h4>
+            <div class="cfg-lang-grid">
+              <button class="cfg-lang-btn active">
+                <span class="cfg-lang-flag">🇲🇽</span>
+                <span>Español</span>
+              </button>
+              <button class="cfg-lang-btn">
+                <span class="cfg-lang-flag">🇺🇸</span>
+                <span>English</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="cfg-card">
+            <h4 class="cfg-card-label">UBICACIÓN</h4>
+            <div class="cfg-row">
+              <span class="cfg-label">Zona</span>
+              <select class="cfg-select">
+                <option selected>Torreón</option>
+                <option>Gómez Palacio</option>
+                <option>Lerdo</option>
+                <option>Monterrey</option>
+                <option>Otro</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- ZONA DE PELIGRO -->
+        <div class="cfg-section" data-section="peligro">
+          <h3 class="cfg-section-title cfg-danger-title">Zona de Peligro</h3>
+          <p class="cfg-section-desc">Estas acciones son irreversibles.</p>
+
+          <div class="cfg-card cfg-danger-card">
+            <h4 class="cfg-card-label cfg-danger-label">DATOS</h4>
+            <div class="cfg-row">
+              <div class="cfg-field">
+                <span class="cfg-label">Exportar mis datos</span>
+                <span class="cfg-value cfg-muted">Descarga una copia de toda tu información</span>
+              </div>
+              <button class="cfg-btn-danger">Exportar</button>
+            </div>
+          </div>
+
+          <div class="cfg-card cfg-danger-card">
+            <h4 class="cfg-card-label cfg-danger-label">CUENTA</h4>
+            <div class="cfg-row">
+              <div class="cfg-field">
+                <span class="cfg-label">Cerrar sesión</span>
+                <span class="cfg-value cfg-muted">Salir de tu cuenta en este dispositivo</span>
+              </div>
+              <button class="cfg-btn-danger" id="cfg-logout">Salir</button>
+            </div>
+            <div class="cfg-row">
+              <div class="cfg-field">
+                <span class="cfg-label">Eliminar cuenta</span>
+                <span class="cfg-value cfg-muted">Esta acción es permanente e irreversible</span>
+              </div>
+              <button class="cfg-btn-danger cfg-btn-red">Eliminar</button>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
 </Layout>
 
 <style>
-  .config-container {
+  .cfg {
     min-height: 100vh;
-    padding: 80px 20px 40px;
-    background: linear-gradient(135deg, #000 0%, #111 50%, #000 100%);
-    position: relative;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
   }
-
-  .config-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-      radial-gradient(circle at 20% 80%, rgba(201, 131, 0, 0.05) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(138, 3, 3, 0.05) 0%, transparent 50%);
-    pointer-events: none;
-  }
-
-  .config-header {
-    max-width: 1200px;
-    margin: 0 auto 40px;
-    text-align: center;
-    position: relative;
-    z-index: 1;
-  }
-
-  .config-header h1 {
-    font-size: 48px;
-    font-weight: 900;
-    margin: 0 0 16px;
-    color: #fff;
-    font-family: 'Noto Sans JP', sans-serif;
-    letter-spacing: 0.02em;
-  }
-
-  .config-header p {
-    font-size: 18px;
-    color: rgba(255, 255, 255, 0.7);
-    font-family: 'Noto Sans JP', sans-serif;
-    margin: 0;
-  }
-
-  .config-sections {
-    max-width: 1200px;
+  .cfg-inner {
+    max-width: 95%;
     margin: 0 auto;
-    position: relative;
-    z-index: 1;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 24px;
+    padding: 24px 0 60px;
   }
 
-  .config-section {
-    background: rgba(17, 17, 17, 0.8);
-    border: 1px solid rgba(201, 131, 0, 0.2);
-    border-radius: 12px;
-    padding: 32px;
-    margin-bottom: 24px;
-    backdrop-filter: blur(10px);
+  /* ── SIDEBAR MENU ── */
+  .cfg-side {
+    position: sticky;
+    top: 100px;
+    align-self: start;
   }
-
-  .config-section h3 {
-    font-size: 24px;
-    font-weight: 700;
-    color: #fff;
-    font-family: 'Noto Sans JP', sans-serif;
-    margin: 0 0 24px;
-    letter-spacing: 0.02em;
+  .cfg-side-title {
+    font-size: 0.55rem;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    color: var(--text-muted);
+    margin: 0 0 16px 12px;
+    font-family: monospace;
   }
-
-  .config-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  }
-
-  .config-item:last-child {
-    border-bottom: none;
-  }
-
-  .config-info {
+  .cfg-nav {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 2px;
+  }
+  .cfg-nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: left;
+    width: 100%;
+  }
+  .cfg-nav-btn:hover {
+    background: var(--bg-hover);
+    color: var(--text);
+  }
+  .cfg-nav-btn.active {
+    background: var(--primary-soft);
+    color: var(--primary);
+  }
+  .cfg-nav-btn.danger {
+    color: var(--event);
+  }
+  .cfg-nav-btn.danger:hover {
+    background: rgba(255, 107, 107, 0.08);
+  }
+  .cfg-nav-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 8px 12px;
   }
 
-  .config-label {
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.6);
-    font-family: 'Noto Sans JP', sans-serif;
+  /* ── CONTENT ── */
+  .cfg-content {
+    min-width: 0;
+  }
+  .cfg-section {
+    display: none;
+  }
+  .cfg-section.active {
+    display: block;
+  }
+  .cfg-section-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin: 0 0 4px;
+    color: var(--text);
+  }
+  .cfg-section-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin: 0 0 24px;
+  }
+  .cfg-danger-title {
+    color: var(--event);
   }
 
-  .config-value {
-    font-size: 16px;
-    color: #fff;
-    font-family: 'Noto Sans JP', sans-serif;
-    font-weight: 500;
+  /* ── CARDS ── */
+  .cfg-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .cfg-danger-card {
+    border-color: var(--event);
+    border-color: rgba(255, 107, 107, 0.2);
+  }
+  .cfg-card-label {
+    font-size: 0.5rem;
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    margin: 0 0 12px;
+    font-family: monospace;
+  }
+  .cfg-danger-label {
+    color: var(--event);
   }
 
-  .config-action {
-    padding: 8px 16px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+  /* ── ROW ── */
+  .cfg-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    gap: 12px;
+  }
+  .cfg-row:last-child {
+    border-bottom: none;
+  }
+  .cfg-field {
+    flex: 1;
+    min-width: 0;
+  }
+  .cfg-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text);
+    display: block;
+  }
+  .cfg-value {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    display: block;
+    margin-top: 2px;
+  }
+  .cfg-muted {
+    color: var(--text-muted);
+  }
+
+  /* ── TOGGLE ── */
+  .cfg-toggle {
+    position: relative;
+    width: 40px;
+    height: 22px;
+    border-radius: 11px;
+    background: var(--border);
+    border: none;
+    cursor: pointer;
+    transition: background 0.25s;
+    flex-shrink: 0;
+  }
+  .cfg-toggle-dot {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    transition: all 0.25s;
+  }
+  .cfg-toggle.active {
+    background: var(--primary);
+  }
+  .cfg-toggle.active .cfg-toggle-dot {
+    transform: translateX(18px);
+    background: #000;
+  }
+
+  /* ── SELECT ── */
+  .cfg-select {
+    padding: 6px 10px;
     border-radius: 6px;
-    color: #fff;
-    font-size: 14px;
-    font-family: 'Noto Sans JP', sans-serif;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text);
+    font-size: 0.75rem;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    min-width: 140px;
+  }
+  .cfg-select:focus {
+    border-color: var(--primary);
+  }
+
+  /* ── SMALL BUTTON ── */
+  .cfg-btn-small {
+    padding: 5px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.65rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .cfg-btn-small:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  /* ── DANGER BUTTONS ── */
+  .cfg-btn-danger {
+    padding: 5px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 107, 107, 0.3);
+    background: transparent;
+    color: var(--event);
+    font-size: 0.65rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .cfg-btn-danger:hover {
+    background: rgba(255, 107, 107, 0.1);
+    border-color: var(--event);
+  }
+  .cfg-btn-red {
+    border-color: var(--event);
+    color: var(--event);
+  }
+
+  /* ── THEME GRID ── */
+  .cfg-theme-grid {
+    display: flex;
+    gap: 12px;
+  }
+  .cfg-theme-card {
+    flex: 1;
+    padding: 12px;
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    font-family: inherit;
+  }
+  .cfg-theme-card.active {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+  .cfg-theme-preview {
+    width: 100%;
+    height: 60px;
+    border-radius: 6px;
+    overflow: hidden;
+    padding: 6px;
+  }
+  .dark-preview {
+    background: #111;
+  }
+  .light-preview {
+    background: #f0f0f0;
+  }
+  .tp-bar {
+    height: 6px;
+    border-radius: 2px;
+    margin-bottom: 6px;
+  }
+  .dark-preview .tp-bar { background: #c98300; }
+  .light-preview .tp-bar { background: #b37400; }
+  .tp-sides {
+    display: flex;
+    gap: 4px;
+    height: 32px;
+  }
+  .tp-side {
+    width: 20%;
+    border-radius: 3px;
+  }
+  .dark-preview .tp-side { background: #1a1a1a; }
+  .light-preview .tp-side { background: #e0e0e0; }
+  .tp-main {
+    flex: 1;
+    border-radius: 3px;
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .dark-preview .tp-main { background: #0a0a0a; }
+  .light-preview .tp-main { background: #ffffff; }
+  .tp-line {
+    height: 4px;
+    border-radius: 2px;
+  }
+  .dark-preview .tp-line { background: #222; }
+  .light-preview .tp-line { background: #ddd; }
+  .tp-line.short { width: 60%; }
+
+  /* ── LANGUAGE GRID ── */
+  .cfg-lang-grid {
+    display: flex;
+    gap: 8px;
+  }
+  .cfg-lang-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    font-weight: 700;
+    font-family: inherit;
     cursor: pointer;
     transition: all 0.2s;
   }
-
-  .config-action:hover {
-    background: rgba(201, 131, 0, 0.1);
-    border-color: var(--primary-color);
+  .cfg-lang-btn.active {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+  .cfg-lang-flag {
+    font-size: 1.2rem;
   }
 
-  .config-action.toggle {
-    background: rgba(76, 175, 80, 0.1);
-    border-color: rgba(76, 175, 80, 0.3);
-    color: #4CAF50;
-  }
-
-  .config-action.toggle.active {
-    background: rgba(255, 68, 68, 0.1);
-    border-color: rgba(255, 68, 68, 0.3);
-    color: #ff4444;
-  }
-
-  .config-action.toggle:hover {
-    background: rgba(76, 175, 80, 0.2);
-    border-color: #4CAF50;
-  }
-
-  .config-action.toggle.active:hover {
-    background: rgba(255, 68, 68, 0.2);
-    border-color: #ff4444;
-  }
-
-  .config-action.danger {
-    background: rgba(255, 68, 68, 0.1);
-    border-color: rgba(255, 68, 68, 0.3);
-    color: #ff4444;
-  }
-
-  .config-action.danger:hover {
-    background: rgba(255, 68, 68, 0.2);
-    border-color: #ff4444;
-  }
-
-  .config-section.danger {
-    border-color: rgba(255, 68, 68, 0.2);
-    background: rgba(255, 68, 68, 0.05);
-  }
-
-  .config-section.danger h3 {
-    color: #ff4444;
-  }
-
+  /* ── MOBILE ── */
   @media (max-width: 768px) {
-    .config-header h1 {
-      font-size: 36px;
-    }
-
-    .config-section {
-      padding: 24px;
-    }
-
-    .config-item {
-      flex-direction: column;
+    .cfg-inner {
+      grid-template-columns: 1fr;
       gap: 16px;
-      align-items: flex-start;
+      max-width: 100%;
+      padding: 16px 4px 40px;
     }
-
-    .config-action {
-      width: 100%;
+    .cfg-side {
+      position: static;
+    }
+    .cfg-nav {
+      flex-direction: row;
+      overflow-x: auto;
+      gap: 4px;
+      padding-bottom: 4px;
+    }
+    .cfg-nav-btn {
+      white-space: nowrap;
+      padding: 8px 12px;
+      font-size: 0.65rem;
+    }
+    .cfg-nav-divider {
+      display: none;
+    }
+    .cfg-theme-grid {
+      flex-direction: column;
+    }
+    .cfg-row {
+      flex-wrap: wrap;
     }
   }
 </style>
 
 <script>
-  // Toggle functionality for configuration items
-  document.addEventListener('DOMContentLoaded', () => {
-    const toggleButtons = document.querySelectorAll('.config-action.toggle');
-    
-    toggleButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        if (button.classList.contains('active')) {
-          button.classList.remove('active');
-          button.textContent = button.textContent.replace('Desactivar', 'Activar');
-        } else {
-          button.classList.add('active');
-          button.textContent = button.textContent.replace('Activar', 'Desactivar');
-        }
-      });
-    });
-
-    // Regular action buttons
-    const actionButtons = document.querySelectorAll('.config-action:not(.toggle):not(.danger)');
-    actionButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        alert('Función de configuración - Próximamente');
-      });
-    });
-
-    // Danger action buttons
-    const dangerButtons = document.querySelectorAll('.config-action.danger');
-    dangerButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        if (confirm('¿Estás seguro de que quieres realizar esta acción?')) {
-          alert('Acción de configuración realizada');
-        }
-      });
+  // Section navigation
+  document.querySelectorAll('.cfg-nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.cfg-nav-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.cfg-section').forEach(s => s.classList.remove('active'));
+      btn.classList.add('active');
+      const section = btn.getAttribute('data-section');
+      document.querySelector(`.cfg-section[data-section="${section}"]`)?.classList.add('active');
     });
   });
+
+  // Toggle switches
+  document.querySelectorAll('.cfg-toggle').forEach(toggle => {
+    toggle.addEventListener('click', () => {
+      toggle.classList.toggle('active');
+    });
+  });
+
+  // Theme cards
+  document.querySelectorAll('.cfg-theme-card').forEach(card => {
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.cfg-theme-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      const theme = card.getAttribute('data-theme-choice');
+      if (theme === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('wg-theme', 'light');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem('wg-theme', 'dark');
+      }
+      // Sync sidebar toggle
+      const sidebarToggle = document.getElementById('theme-toggle');
+      const dot = document.getElementById('theme-toggle-dot');
+      if (dot) dot.style.transform = theme === 'light' ? 'translateX(20px)' : 'translateX(0)';
+    });
+  });
+
+  // Language buttons
+  document.querySelectorAll('.cfg-lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.cfg-lang-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  // Logout
+  document.getElementById('cfg-logout')?.addEventListener('click', async () => {
+    try {
+      const { createClient } = await import('@supabase/supabase-js');
+      const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
+      const supabaseKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+      if (supabaseUrl && supabaseKey) {
+        const supabase = createClient(supabaseUrl, supabaseKey);
+        await supabase.auth.signOut();
+      }
+    } catch {}
+    window.location.href = '/login';
+  });
+
+  // Load user info from Supabase
+  async function loadUserInfo() {
+    try {
+      const { createClient } = await import('@supabase/supabase-js');
+      const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
+      const supabaseKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+      if (!supabaseUrl || !supabaseKey) return;
+      const supabase = createClient(supabaseUrl, supabaseKey);
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) return;
+      const user = session.user;
+      const nameEl = document.getElementById('cfg-name');
+      const emailEl = document.getElementById('cfg-email');
+      const usernameEl = document.getElementById('cfg-username');
+      if (nameEl) nameEl.textContent = user.user_metadata?.full_name || user.email?.split('@')[0] || 'Wild One';
+      if (emailEl) emailEl.textContent = user.email || 'sin correo';
+      if (usernameEl) usernameEl.textContent = '@' + (user.user_metadata?.username || user.email?.split('@')[0] || 'wildone');
+    } catch {}
+  }
+  loadUserInfo();
+
+  // Sync theme toggle state on page load
+  function syncThemeUI() {
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    document.querySelectorAll('.cfg-theme-card').forEach(card => {
+      card.classList.toggle('active', card.getAttribute('data-theme-choice') === (isLight ? 'light' : 'dark'));
+    });
+  }
+  syncThemeUI();
 </script>

@@ -74,6 +74,34 @@ const isActive = (href: string) => {
 				--event: #ff6b6b;
 			}
 
+			/* Light Mode */
+			[data-theme="light"] {
+				--primary: #b37400;
+				--primary-hover: #c98300;
+				--primary-soft: rgba(179, 116, 0, 0.08);
+				--primary-border: rgba(179, 116, 0, 0.20);
+				--secondary: #8a0303;
+				--secondary-soft: rgba(138, 3, 3, 0.05);
+				--secondary-border: rgba(138, 3, 3, 0.12);
+				--bg: #f5f5f5;
+				--bg-card: rgba(0,0,0,0.03);
+				--bg-hover: rgba(0,0,0,0.05);
+				--border: rgba(0,0,0,0.12);
+				--border-strong: rgba(0,0,0,0.25);
+				--text: #111111;
+				--text-secondary: rgba(0,0,0,0.70);
+				--text-muted: rgba(0,0,0,0.40);
+				--repost: #0d8bd9;
+				--event: #d32f2f;
+			}
+			[data-theme="light"] body { background: var(--bg); color: var(--text); }
+			[data-theme="light"] header { background: #ffffff !important; border-color: var(--border) !important; }
+			[data-theme="light"] header a, [data-theme="light"] header span { color: var(--text) !important; }
+			[data-theme="light"] header .text-white { color: var(--text) !important; }
+			[data-theme="light"] ::-webkit-scrollbar-track { background: #f5f5f5; }
+			[data-theme="light"] ::-webkit-scrollbar-thumb { background: #ccc; }
+			[data-theme="light"] ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
 			html {
 				scroll-behavior: smooth;
 				background: #000;
@@ -434,6 +462,12 @@ const isActive = (href: string) => {
 		</main>
 
 		<script>
+			// Theme toggle
+			(function() {
+				const saved = localStorage.getItem('wg-theme');
+				if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
+			})();
+
 			import { initLayout } from '../lib/layout';
 			initLayout();
 			document.addEventListener('astro:after-swap', () => {
