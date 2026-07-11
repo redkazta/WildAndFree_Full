@@ -10,16 +10,16 @@
   <!-- Full player (always visible on desktop, toggle on mobile) -->
   <div id="radio-full" class="hidden md:flex w-[260px] sm:w-[300px] flex-col bg-black/95 backdrop-blur-md border border-[var(--primary)]/30 rounded-xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.5)] group hover:border-[var(--primary)]/60 transition-all">
     <!-- Player Header -->
-    <div class="p-2.5 flex gap-2.5 items-center bg-gradient-to-r from-[#111] to-black">
-        <div class="w-9 h-9 bg-zinc-900 rounded-lg overflow-hidden flex-shrink-0 relative border border-white/5">
+    <div class="p-2.5 flex gap-2.5 items-center" style="background: linear-gradient(to right, var(--bg-hover), var(--bg));">
+        <div class="w-9 h-9 bg-[var(--bg-card)] rounded-lg overflow-hidden flex-shrink-0 relative border border-[var(--border-faint)]">
             <img id="radio-cover" src="/wg_logo.png" width="36" height="36" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
-            <div class="absolute inset-0 flex items-center justify-center bg-black/20">
+            <div class="absolute inset-0 flex items-center justify-center bg-[var(--bg-card)]">
                 <div id="radio-live-dot" class="w-1.5 h-1.5 bg-gray-500 rounded-full"></div>
             </div>
         </div>
         <div class="overflow-hidden flex-1 min-w-0">
-            <h4 id="radio-title" class="text-[11px] font-black text-white uppercase truncate tracking-wide group-hover:text-[var(--primary)] transition-colors">Wild Gvng Radio</h4>
-            <p id="radio-artist" class="text-[8px] text-gray-400 font-bold uppercase truncate tracking-wider">Cargando...</p>
+            <h4 id="radio-title" class="text-[11px] font-black text-[var(--text)] uppercase truncate tracking-wide group-hover:text-[var(--primary)] transition-colors">Wild Gvng Radio</h4>
+            <p id="radio-artist" class="text-[8px] text-[var(--text-muted)] font-bold uppercase truncate tracking-wider">Cargando...</p>
         </div>
         <button id="radio-toggle" class="w-7 h-7 bg-[var(--primary)] text-black rounded-full flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-[0_0_12px_rgba(201,131,0,0.3)]">
             <svg id="radio-play" width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
@@ -28,8 +28,8 @@
     </div>
 
     <!-- Controls -->
-    <div class="px-2.5 pb-1.5 flex items-center justify-between gap-2 border-t border-white/5 pt-1.5 bg-black/50">
-        <button id="radio-fav-btn" class="p-1 text-gray-500 hover:text-[var(--primary)] transition-colors" title="Favoritos">
+    <div class="px-2.5 pb-1.5 flex items-center justify-between gap-2 border-t border-[var(--border-faint)] pt-1.5" style="background: var(--bg-card);">
+        <button id="radio-fav-btn" class="p-1 text-[var(--text-muted)] hover:text-[var(--primary)] transition-colors" title="Favoritos">
             <svg id="radio-fav-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         </button>
         <div id="radio-eq" class="flex items-end gap-0.5 h-3 opacity-0 transition-opacity">
@@ -39,7 +39,7 @@
             <div class="w-0.5 bg-[var(--primary)] animate-[eq_1.5s_ease-in-out_infinite_0.3s]"></div>
             <div class="w-0.5 bg-[var(--primary)] animate-[eq_0.9s_ease-in-out_infinite_0.4s]"></div>
         </div>
-        <button id="radio-info-btn" class="p-1 text-gray-500 hover:text-white transition-colors" title="Ver Radio">
+        <button id="radio-info-btn" class="p-1 text-[var(--text-muted)] hover:text-[var(--text)] transition-colors" title="Ver Radio">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
         </button>
     </div>
@@ -154,7 +154,7 @@
             }
             if (radioFavBtn) {
                 radioFavBtn.classList.toggle('text-[var(--primary)]', isFav);
-                radioFavBtn.classList.toggle('text-gray-500', !isFav);
+                radioFavBtn.classList.toggle('text-[var(--text-muted)]', !isFav);
             }
         } catch (e) {}
     }

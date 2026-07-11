@@ -30,7 +30,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
     </div>
   </div>
 
-  <h2 style="margin:24px 0 12px;font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.5);">Actividad Reciente</h2>
+  <h2 style="margin:24px 0 12px;font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);">Actividad Reciente</h2>
   <div class="erp-card">
     <div id="activityFeed" class="erp-loading">Cargando actividad...</div>
   </div>
@@ -65,12 +65,12 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
 
     const feed = document.getElementById('activityFeed');
     if (!logs || logs.length === 0) {
-      feed.innerHTML = '<p style="color:rgba(255,255,255,0.3);padding:20px;text-align:center;">Sin actividad reciente</p>';
+      feed.innerHTML = '<p style="color:var(--border-soft);padding:20px;text-align:center;">Sin actividad reciente</p>';
     } else {
       feed.innerHTML = logs.map(l => `
-        <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);">
-          <span style="font-size:11px;color:rgba(255,255,255,0.3);min-width:120px;">${new Date(l.created_at).toLocaleDateString('es-MX')}</span>
-          <span style="font-size:13px;color:rgba(255,255,255,0.7);">${l.action}</span>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--bg-card);">
+          <span style="font-size:11px;color:var(--border-soft);min-width:120px;">${new Date(l.created_at).toLocaleDateString('es-MX')}</span>
+          <span style="font-size:13px;color:var(--text-secondary);">${l.action}</span>
         </div>
       `).join('');
     }

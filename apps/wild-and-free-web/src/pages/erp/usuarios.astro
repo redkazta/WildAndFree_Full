@@ -25,7 +25,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
 
   <!-- Pending Artist Verifications -->
   <div id="verificationsSection" style="display:none;margin-bottom:24px;">
-    <h2 style="margin-bottom:12px;font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.5);">Verificaciones de Artista Pendientes</h2>
+    <h2 style="margin-bottom:12px;font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);">Verificaciones de Artista Pendientes</h2>
     <div class="erp-card" style="overflow-x:auto;">
       <table class="erp-table">
         <thead>
@@ -51,7 +51,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
         type="text"
         id="searchInput"
         placeholder="Buscar por username o nombre..."
-        style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:8px 14px;color:#fff;font-size:13px;outline:none;min-width:240px;"
+        style="background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:8px 14px;color:#fff;font-size:13px;outline:none;min-width:240px;"
       />
       <select id="roleFilter" class="erp-btn erp-btn--ghost" style="padding:8px 12px;font-size:12px;">
         <option value="all">Todos</option>
@@ -62,7 +62,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
         <option value="guest">Guest</option>
       </select>
     </div>
-    <span style="font-size:11px;color:rgba(255,255,255,0.3);" id="userCount">-</span>
+    <span style="font-size:11px;color:var(--border-soft);" id="userCount">-</span>
   </div>
 
   <!-- Users Table -->
@@ -88,7 +88,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
   <!-- User Detail Modal -->
   <div id="detailModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;display:none;place-items:center;">
     <div class="erp-card" style="width:90%;max-width:560px;max-height:85vh;overflow-y:auto;position:relative;">
-      <button onclick="closeModal('detailModal')" style="position:absolute;top:16px;right:16px;background:none;border:none;color:rgba(255,255,255,0.4);font-size:18px;cursor:pointer;">✕</button>
+      <button onclick="closeModal('detailModal')" style="position:absolute;top:16px;right:16px;background:none;border:none;color:var(--text-muted);font-size:18px;cursor:pointer;">✕</button>
       <h3 style="font-size:16px;font-weight:800;margin-bottom:16px;color:#C98300;">Detalle del Usuario</h3>
       <div id="detailContent" style="font-size:13px;"></div>
     </div>
@@ -97,9 +97,9 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
   <!-- Role Management Modal -->
   <div id="roleModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;display:none;place-items:center;">
     <div class="erp-card" style="width:90%;max-width:440px;max-height:85vh;overflow-y:auto;position:relative;">
-      <button onclick="closeModal('roleModal')" style="position:absolute;top:16px;right:16px;background:none;border:none;color:rgba(255,255,255,0.4);font-size:18px;cursor:pointer;">✕</button>
+      <button onclick="closeModal('roleModal')" style="position:absolute;top:16px;right:16px;background:none;border:none;color:var(--text-muted);font-size:18px;cursor:pointer;">✕</button>
       <h3 style="font-size:16px;font-weight:800;margin-bottom:4px;color:#C98300;">Gestionar Roles</h3>
-      <p id="roleModalUser" style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:16px;"></p>
+      <p id="roleModalUser" style="font-size:12px;color:var(--text-muted);margin-bottom:16px;"></p>
       <div id="roleCheckboxes" style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;"></div>
       <div style="display:flex;gap:8px;justify-content:flex-end;">
         <button class="erp-btn erp-btn--ghost" onclick="closeModal('roleModal')">Cancelar</button>
@@ -111,9 +111,9 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
   <!-- Tag Management Modal -->
   <div id="tagModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;display:none;place-items:center;">
     <div class="erp-card" style="width:90%;max-width:440px;max-height:85vh;overflow-y:auto;position:relative;">
-      <button onclick="closeModal('tagModal')" style="position:absolute;top:16px;right:16px;background:none;border:none;color:rgba(255,255,255,0.4);font-size:18px;cursor:pointer;">✕</button>
+      <button onclick="closeModal('tagModal')" style="position:absolute;top:16px;right:16px;background:none;border:none;color:var(--text-muted);font-size:18px;cursor:pointer;">✕</button>
       <h3 style="font-size:16px;font-weight:800;margin-bottom:4px;color:#C98300;">Gestionar Tags</h3>
-      <p id="tagModalUser" style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:16px;"></p>
+      <p id="tagModalUser" style="font-size:12px;color:var(--text-muted);margin-bottom:16px;"></p>
       <div id="tagCheckboxes" style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;"></div>
       <div style="display:flex;gap:8px;justify-content:flex-end;">
         <button class="erp-btn erp-btn--ghost" onclick="closeModal('tagModal')">Cancelar</button>
@@ -125,19 +125,19 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
   <!-- Edit Profile Modal -->
   <div id="editModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;display:none;place-items:center;">
     <div class="erp-card" style="width:90%;max-width:440px;max-height:85vh;overflow-y:auto;position:relative;">
-      <button onclick="closeModal('editModal')" style="position:absolute;top:16px;right:16px;background:none;border:none;color:rgba(255,255,255,0.4);font-size:18px;cursor:pointer;">✕</button>
+      <button onclick="closeModal('editModal')" style="position:absolute;top:16px;right:16px;background:none;border:none;color:var(--text-muted);font-size:18px;cursor:pointer;">✕</button>
       <h3 style="font-size:16px;font-weight:800;margin-bottom:16px;color:#C98300;">Editar Perfil</h3>
       <div style="display:flex;flex-direction:column;gap:12px;">
-        <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.4);">Username</label>
-        <input id="editUsername" type="text" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:8px 14px;color:#fff;font-size:13px;outline:none;" />
-        <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.4);">Nombre</label>
-        <input id="editNombre" type="text" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:8px 14px;color:#fff;font-size:13px;outline:none;" />
-        <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.4);">Phone</label>
-        <input id="editPhone" type="text" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:8px 14px;color:#fff;font-size:13px;outline:none;" />
-        <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.4);">Ubicación</label>
-        <input id="editUbicacion" type="text" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:8px 14px;color:#fff;font-size:13px;outline:none;" />
-        <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.4);">Avatar URL</label>
-        <input id="editAvatar" type="text" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:8px 14px;color:#fff;font-size:13px;outline:none;" />
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);">Username</label>
+        <input id="editUsername" type="text" style="background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:8px 14px;color:#fff;font-size:13px;outline:none;" />
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);">Nombre</label>
+        <input id="editNombre" type="text" style="background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:8px 14px;color:#fff;font-size:13px;outline:none;" />
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);">Phone</label>
+        <input id="editPhone" type="text" style="background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:8px 14px;color:#fff;font-size:13px;outline:none;" />
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);">Ubicación</label>
+        <input id="editUbicacion" type="text" style="background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:8px 14px;color:#fff;font-size:13px;outline:none;" />
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);">Avatar URL</label>
+        <input id="editAvatar" type="text" style="background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:8px 14px;color:#fff;font-size:13px;outline:none;" />
       </div>
       <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:20px;">
         <button class="erp-btn erp-btn--ghost" onclick="closeModal('editModal')">Cancelar</button>
@@ -155,7 +155,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
   #detailModal.active, #roleModal.active, #tagModal.active, #editModal.active {
     display: grid;
   }
-  #searchInput::placeholder { color: rgba(255,255,255,0.25); }
+  #searchInput::placeholder { color: var(--border-soft); }
   #searchInput:focus { border-color: #C98300; }
   .checkbox-row {
     display: flex;
@@ -163,12 +163,12 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
     gap: 10px;
     padding: 8px 12px;
     border-radius: 8px;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.06);
+    background: var(--bg-card);
+    border: 1px solid var(--border-faint);
     cursor: pointer;
     transition: background 0.15s;
   }
-  .checkbox-row:hover { background: rgba(255,255,255,0.06); }
+  .checkbox-row:hover { background: var(--border-faint); }
   .checkbox-row input[type="checkbox"] {
     accent-color: #C98300;
     width: 16px;
@@ -177,7 +177,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
   }
   .checkbox-row label {
     font-size: 13px;
-    color: rgba(255,255,255,0.8);
+    color: var(--text);
     cursor: pointer;
     user-select: none;
     margin: 0;
@@ -187,7 +187,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
     height: 32px;
     border-radius: 50%;
     object-fit: cover;
-    background: rgba(255,255,255,0.05);
+    background: var(--bg-card);
   }
   .tag-pill {
     display: inline-block;
@@ -200,9 +200,9 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
     margin: 1px 2px;
   }
   .action-btn {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.08);
-    color: rgba(255,255,255,0.6);
+    background: var(--bg-card);
+    border: 1px solid var(--bg-hover);
+    color: var(--text-secondary);
     padding: 4px 8px;
     border-radius: 6px;
     font-size: 11px;
@@ -210,22 +210,22 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
     cursor: pointer;
     transition: all 0.15s;
   }
-  .action-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .action-btn:hover { background: var(--border-muted); color: #fff; }
   .detail-field {
     display: flex;
     justify-content: space-between;
     padding: 8px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
+    border-bottom: 1px solid var(--bg-card);
   }
   .detail-label {
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: rgba(255,255,255,0.4);
+    color: var(--text-muted);
   }
   .detail-value {
-    color: rgba(255,255,255,0.8);
+    color: var(--text);
     text-align: right;
     max-width: 60%;
     word-break: break-word;
@@ -242,7 +242,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
   const canVerify = perms.includes('*') || perms.includes('users.verify_artist');
 
   if (!canView) {
-    document.querySelector('.erp-content')!.innerHTML = '<div class="erp-card" style="text-align:center;padding:60px;"><p style="color:rgba(255,255,255,0.3);">No tienes permiso para ver usuarios.</p></div>';
+    document.querySelector('.erp-content')!.innerHTML = '<div class="erp-card" style="text-align:center;padding:60px;"><p style="color:var(--border-soft);">No tienes permiso para ver usuarios.</p></div>';
     throw new Error('Permission denied');
   }
 
@@ -370,7 +370,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
         <td style="font-weight:700;">${esc(p.username || '-')}</td>
         <td>${esc(p.nombre || '-')}</td>
         <td><img class="avatar-sm" src="${esc(p.avatar_url || '')}" alt="" onerror="this.style.display='none'" /></td>
-        <td style="font-size:11px;color:rgba(255,255,255,0.4);">${formatDate(p.created_at)}</td>
+        <td style="font-size:11px;color:var(--text-muted);">${formatDate(p.created_at)}</td>
         <td>
           <div style="display:flex;gap:6px;">
             ${canVerify ? `<button class="erp-btn erp-btn--primary" style="padding:4px 10px;font-size:10px;" onclick="approveVerification('${p.id}')">Aprobar</button>` : ''}
@@ -420,7 +420,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
 
     const tbody = document.getElementById('usersBody')!;
     if (filtered.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:rgba(255,255,255,0.3);padding:40px;">Sin resultados</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--border-soft);padding:40px;">Sin resultados</td></tr>';
       return;
     }
 
@@ -428,13 +428,13 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
       const tags = userTagsMap[p.id] || [];
       const tagsHtml = tags.length > 0
         ? tags.map((t: any) => `<span class="tag-pill">${esc(t.tag_name)}</span>`).join('')
-        : '<span style="color:rgba(255,255,255,0.2);font-size:11px;">-</span>';
+        : '<span style="color:var(--border-soft);font-size:11px;">-</span>';
 
       const verifiedBadge = p.is_verified_artist
         ? '<span class="erp-status erp-status--approved">Verificado</span>'
         : p.verification_status === 'pending'
           ? '<span class="erp-status erp-status--pending">Pendiente</span>'
-          : '<span style="color:rgba(255,255,255,0.2);font-size:11px;">No</span>';
+          : '<span style="color:var(--border-soft);font-size:11px;">No</span>';
 
       return `
         <tr>
@@ -443,7 +443,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
           <td><img class="avatar-sm" src="${esc(p.avatar_url || '')}" alt="" onerror="this.style.display='none'" /></td>
           <td>${verifiedBadge}</td>
           <td style="max-width:180px;">${tagsHtml}</td>
-          <td style="font-size:11px;color:rgba(255,255,255,0.4);">${formatDate(p.created_at)}</td>
+          <td style="font-size:11px;color:var(--text-muted);">${formatDate(p.created_at)}</td>
           <td>
             <div style="display:flex;gap:4px;flex-wrap:wrap;">
               <button class="action-btn" title="Ver detalles" onclick="viewDetail('${p.id}')">👁</button>
@@ -467,19 +467,19 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
 
     const rolesHtml = roles.length > 0
       ? roles.map((r: any) => `<span class="tag-pill" style="background:rgba(0,191,255,0.12);color:#00bfff;">${esc(r.role_name)}</span>`).join(' ')
-      : '<span style="color:rgba(255,255,255,0.3);">Sin roles</span>';
+      : '<span style="color:var(--border-soft);">Sin roles</span>';
 
     const tagsHtml = tags.length > 0
       ? tags.map((t: any) => `<span class="tag-pill">${esc(t.tag_name)}</span>`).join(' ')
-      : '<span style="color:rgba(255,255,255,0.3);">Sin tags</span>';
+      : '<span style="color:var(--border-soft);">Sin tags</span>';
 
     const content = document.getElementById('detailContent')!;
     content.innerHTML = `
       <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
-        <img src="${esc(p.avatar_url || '')}" alt="" style="width:64px;height:64px;border-radius:50%;object-fit:cover;background:rgba(255,255,255,0.05);" onerror="this.style.display='none'" />
+        <img src="${esc(p.avatar_url || '')}" alt="" style="width:64px;height:64px;border-radius:50%;object-fit:cover;background:var(--bg-card);" onerror="this.style.display='none'" />
         <div>
           <div style="font-size:18px;font-weight:800;color:#fff;">${esc(p.username || '-')}</div>
-          <div style="font-size:13px;color:rgba(255,255,255,0.5);">${esc(p.nombre || '-')}</div>
+          <div style="font-size:13px;color:var(--text-muted);">${esc(p.nombre || '-')}</div>
         </div>
       </div>
 
@@ -551,7 +551,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
       return `
         <div class="checkbox-row" onclick="this.querySelector('input').click()">
           <input type="checkbox" id="role_${role.id}" value="${role.id}" ${checked} onclick="event.stopPropagation()" />
-          <label for="role_${role.id}">${esc(role.name)} <span style="color:rgba(255,255,255,0.3);font-size:11px;">(${esc(role.internal_name || '')})</span></label>
+          <label for="role_${role.id}">${esc(role.name)} <span style="color:var(--border-soft);font-size:11px;">(${esc(role.internal_name || '')})</span></label>
         </div>
       `;
     }).join('');

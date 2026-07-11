@@ -61,7 +61,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
   <!-- Crew Posts Section -->
   <div class="erp-card" style="margin-bottom:24px;">
     <h3 class="erp-card-title" style="margin-bottom:16px;">📋 Posts del Crew - Pendientes de Aprobación</h3>
-    <div id="crewPostsBody" style="color:rgba(255,255,255,0.3);text-align:center;padding:40px;">Cargando posts del crew...</div>
+    <div id="crewPostsBody" style="color:var(--border-soft);text-align:center;padding:40px;">Cargando posts del crew...</div>
   </div>
 
   <!-- Reject Modal -->
@@ -69,8 +69,8 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
     <div class="content-modal-backdrop" onclick="closeRejectModal()"></div>
     <div class="content-modal-panel">
       <h3 style="font-size:16px;font-weight:800;margin-bottom:16px;color:#ff4444;">Rechazar Contenido</h3>
-      <p style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:12px;">Motivo del rechazo:</p>
-      <textarea id="rejectReason" class="erp-input" rows="4" placeholder="Describe el motivo del rechazo..." style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px;color:#fff;font-size:13px;resize:vertical;font-family:inherit;"></textarea>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">Motivo del rechazo:</p>
+      <textarea id="rejectReason" class="erp-input" rows="4" placeholder="Describe el motivo del rechazo..." style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:#fff;font-size:13px;resize:vertical;font-family:inherit;"></textarea>
       <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px;">
         <button class="erp-btn erp-btn--ghost" onclick="closeRejectModal()">Cancelar</button>
         <button class="erp-btn erp-btn--danger" id="confirmRejectBtn">Rechazar</button>
@@ -86,7 +86,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
         <h3 id="detailTitle" style="font-size:16px;font-weight:800;color:#fff;"></h3>
         <button class="erp-btn erp-btn--ghost" onclick="closeDetailModal()" style="padding:4px 10px;">✕</button>
       </div>
-      <div id="detailContent" style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.7;"></div>
+      <div id="detailContent" style="font-size:13px;color:var(--text-secondary);line-height:1.7;"></div>
     </div>
   </div>
 
@@ -97,44 +97,44 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
       <h3 style="font-size:16px;font-weight:800;margin-bottom:16px;color:#C98300;">Nuevo Contenido Exclusivo</h3>
       <div style="display:grid;gap:12px;">
         <div>
-          <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Título *</label>
-          <input id="newTitle" class="erp-input" type="text" placeholder="Título del contenido" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px;color:#fff;font-size:13px;" />
+          <label style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Título *</label>
+          <input id="newTitle" class="erp-input" type="text" placeholder="Título del contenido" style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:#fff;font-size:13px;" />
         </div>
         <div>
-          <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Descripción</label>
-          <textarea id="newDescription" class="erp-input" rows="3" placeholder="Descripción del contenido" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px;color:#fff;font-size:13px;resize:vertical;font-family:inherit;"></textarea>
+          <label style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Descripción</label>
+          <textarea id="newDescription" class="erp-input" rows="3" placeholder="Descripción del contenido" style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:#fff;font-size:13px;resize:vertical;font-family:inherit;"></textarea>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
           <div>
-            <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Tipo *</label>
-            <select id="newType" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px;color:#fff;font-size:13px;">
+            <label style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Tipo *</label>
+            <select id="newType" style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:#fff;font-size:13px;">
               <option value="video">Video</option>
               <option value="audio">Audio</option>
               <option value="download">Download</option>
             </select>
           </div>
           <div>
-            <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Artista ID</label>
-            <input id="newArtistId" class="erp-input" type="text" placeholder="UUID del artista" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px;color:#fff;font-size:13px;" />
+            <label style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Artista ID</label>
+            <input id="newArtistId" class="erp-input" type="text" placeholder="UUID del artista" style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:#fff;font-size:13px;" />
           </div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
           <div>
-            <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Precio Tokens</label>
-            <input id="newTokenPrice" class="erp-input" type="number" min="0" placeholder="0" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px;color:#fff;font-size:13px;" />
+            <label style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Precio Tokens</label>
+            <input id="newTokenPrice" class="erp-input" type="number" min="0" placeholder="0" style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:#fff;font-size:13px;" />
           </div>
           <div>
-            <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Precio Real (MXN)</label>
-            <input id="newRealPrice" class="erp-input" type="number" min="0" step="0.01" placeholder="0.00" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px;color:#fff;font-size:13px;" />
+            <label style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Precio Real (MXN)</label>
+            <input id="newRealPrice" class="erp-input" type="number" min="0" step="0.01" placeholder="0.00" style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:#fff;font-size:13px;" />
           </div>
         </div>
         <div>
-          <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">URL del Archivo</label>
-          <input id="newFileUrl" class="erp-input" type="url" placeholder="https://..." style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px;color:#fff;font-size:13px;" />
+          <label style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">URL del Archivo</label>
+          <input id="newFileUrl" class="erp-input" type="url" placeholder="https://..." style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:#fff;font-size:13px;" />
         </div>
         <div>
-          <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">URL de Preview</label>
-          <input id="newPreviewUrl" class="erp-input" type="url" placeholder="https://..." style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px;color:#fff;font-size:13px;" />
+          <label style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">URL de Preview</label>
+          <input id="newPreviewUrl" class="erp-input" type="url" placeholder="https://..." style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:#fff;font-size:13px;" />
         </div>
       </div>
       <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px;">
@@ -163,7 +163,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
   .content-modal-panel {
     position: relative;
     background: #1a1a1a;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid var(--border-muted);
     border-radius: 12px;
     padding: 24px;
     width: 90%;
@@ -180,7 +180,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: rgba(255,255,255,0.4);
+    color: var(--text-muted);
     margin-bottom: 2px;
   }
   .detail-value {
@@ -200,7 +200,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
   const canCreate = perms.includes('content.create') || perms.includes('content.create_crew');
 
   if (!canView) {
-    document.querySelector('.erp-content')!.innerHTML = '<div class="erp-card" style="text-align:center;padding:60px;"><p style="color:rgba(255,255,255,0.3);">No tienes permiso para ver contenido.</p></div>';
+    document.querySelector('.erp-content')!.innerHTML = '<div class="erp-card" style="text-align:center;padding:60px;"><p style="color:var(--border-soft);">No tienes permiso para ver contenido.</p></div>';
     throw new Error('Permission denied');
   }
 
@@ -224,7 +224,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
     const { data: items } = await query;
     const tbody = document.getElementById('contentBody');
     if (!items?.length) {
-      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:rgba(255,255,255,0.3);padding:40px;">Sin contenido</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--border-soft);padding:40px;">Sin contenido</td></tr>';
       updateStats(items || []);
       return;
     }
@@ -240,7 +240,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
         <td style="font-weight:700;color:#C98300;">${c.token_price ?? 0} 🪙</td>
         <td style="font-weight:700;">$${(c.real_price_mxn ?? 0).toFixed(2)}</td>
         <td><span class="erp-status erp-status--${c.status}">${c.status}</span></td>
-        <td style="font-size:11px;color:rgba(255,255,255,0.4);">${new Date(c.created_at).toLocaleDateString('es-MX')}</td>
+        <td style="font-size:11px;color:var(--text-muted);">${new Date(c.created_at).toLocaleDateString('es-MX')}</td>
         <td>
           <div style="display:flex;gap:4px;flex-wrap:wrap;">
             <button class="erp-btn erp-btn--ghost" style="padding:4px 8px;font-size:10px;" onclick="showDetail('${c.id}')">Ver</button>
@@ -273,15 +273,15 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
 
     const container = document.getElementById('crewPostsBody');
     if (!posts?.length) {
-      container.innerHTML = '<div style="text-align:center;color:rgba(255,255,255,0.3);padding:40px;">No hay posts pendientes del crew</div>';
+      container.innerHTML = '<div style="text-align:center;color:var(--border-soft);padding:40px;">No hay posts pendientes del crew</div>';
       return;
     }
 
     container.innerHTML = posts.map(p => `
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.04);">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--bg-card);">
         <div>
           <div style="font-weight:700;font-size:13px;color:#fff;">${p.title || p.content?.slice(0, 60) || 'Sin contenido'}</div>
-          <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px;">Por ${p.profiles?.nombre || p.profiles?.username || 'Desconocido'} · ${new Date(p.created_at).toLocaleDateString('es-MX')}</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Por ${p.profiles?.nombre || p.profiles?.username || 'Desconocido'} · ${new Date(p.created_at).toLocaleDateString('es-MX')}</div>
         </div>
         <div style="display:flex;gap:6px;">
           ${canApprove ? `<button class="erp-btn erp-btn--primary" style="padding:4px 10px;font-size:11px;" onclick="approveCrewPost('${p.id}')">Aprobar</button>` : ''}

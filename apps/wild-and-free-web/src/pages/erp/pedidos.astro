@@ -44,7 +44,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
   const canManage = perms.includes('*') || perms.includes('orders.manage');
 
   if (!canView) {
-    document.querySelector('.erp-content')!.innerHTML = '<div class="erp-card" style="text-align:center;padding:60px;"><p style="color:rgba(255,255,255,0.3);">No tienes permiso para ver pedidos.</p></div>';
+    document.querySelector('.erp-content')!.innerHTML = '<div class="erp-card" style="text-align:center;padding:60px;"><p style="color:var(--border-soft);">No tienes permiso para ver pedidos.</p></div>';
     throw new Error('Permission denied');
   }
 
@@ -59,7 +59,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
     const { data: orders } = await query;
     const tbody = document.getElementById('ordersBody');
     if (!orders?.length) {
-      tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:rgba(255,255,255,0.3);padding:40px;">Sin pedidos</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--border-soft);padding:40px;">Sin pedidos</td></tr>';
       return;
     }
 
@@ -72,7 +72,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
         <td>${o.payment_method || '-'}</td>
         <td>${o.shipping_type || '-'}</td>
         <td><span class="erp-status erp-status--${o.status}">${o.status}</span></td>
-        <td style="font-size:11px;color:rgba(255,255,255,0.4);">${new Date(o.created_at).toLocaleDateString('es-MX')}</td>
+        <td style="font-size:11px;color:var(--text-muted);">${new Date(o.created_at).toLocaleDateString('es-MX')}</td>
         <td>
           ${canManage ? `<select class="erp-btn erp-btn--ghost" style="padding:4px 8px;font-size:11px;" onchange="updateOrderStatus('${o.id}', this.value)">
             <option value="pending" ${o.status==='pending'?'selected':''}>Pendiente</option>
