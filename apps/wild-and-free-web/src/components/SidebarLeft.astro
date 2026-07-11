@@ -117,14 +117,28 @@ const isActive = (href: string) => {
 
     toggle.addEventListener('click', () => {
       const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      const newTheme = isLight ? 'dark' : 'light';
       if (isLight) {
         document.documentElement.removeAttribute('data-theme');
-        localStorage.setItem('wg-theme', 'dark');
       } else {
         document.documentElement.setAttribute('data-theme', 'light');
-        localStorage.setItem('wg-theme', 'light');
       }
+      localStorage.setItem('wg-theme', newTheme);
       updateIcons();
+      // Sync to Supabase if logged in
+      (async () => {
+        try {
+          const { createClient } = await import('@supabase/supabase-js');
+          const url = import.meta.env.PUBLIC_SUPABASE_URL;
+          const key = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+          if (!url || !key) return;
+          const sb = createClient(url, key);
+          const { data: { session } } = await sb.auth.getSession();
+          if (session?.user) {
+            await sb.from('user_settings').upsert({ user_id: session.user.id, theme: newTheme }, { onConflict: 'user_id' });
+          }
+        } catch (e) { /* silent */ }
+      })();
     });
   }
 
