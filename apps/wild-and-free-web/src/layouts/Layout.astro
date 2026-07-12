@@ -480,11 +480,17 @@ const isActive = (href: string) => {
 		</main>
 
 		<script>
-			// Theme toggle
-			(function() {
+			// Theme - apply immediately + on every navigation
+			function applyTheme() {
 				const saved = localStorage.getItem('wg-theme');
-				if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
-			})();
+				if (saved === 'light') {
+					document.documentElement.setAttribute('data-theme', 'light');
+				} else {
+					document.documentElement.removeAttribute('data-theme');
+				}
+			}
+			applyTheme();
+			document.addEventListener('astro:after-swap', applyTheme);
 
 			import { initLayout } from '../lib/layout';
 			initLayout();
