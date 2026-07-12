@@ -18,6 +18,8 @@ export interface Artist {
   estilo: string;
   origen: string;
   redes?: Record<string, string>;
+  tags?: { name: string; color: string; animation: string }[];
+  role?: string;
 }
 
 export interface ArtistPost {
@@ -207,6 +209,26 @@ export async function getArtistsFromDB(): Promise<Artist[]> {
       }
     }
 
+    // Fetch tags for all artists
+    const artistIdsWithProfiles = profiles.map((p: any) => p.id);
+    const { data: allUserTags } = await supabase
+      .from('user_has_tags')
+      .select('user_id, tags(name, color, animation)')
+      .in('user_id', artistIdsWithProfiles);
+
+    const tagsByUser: Record<string, { name: string; color: string; animation: string }[]> = {};
+    if (allUserTags) {
+      for (const ut of allUserTags) {
+        if (!ut.tags) continue;
+        if (!tagsByUser[ut.user_id]) tagsByUser[ut.user_id] = [];
+        tagsByUser[ut.user_id].push({
+          name: ut.tags.name,
+          color: ut.tags.color || '#C98300',
+          animation: ut.tags.animation || 'none',
+        });
+      }
+    }
+
     return profiles.map((p: any) => {
       const artist = mapProfileToArtist(p);
       artist.stats.partnean = partnearCounts[p.id] || 0;
@@ -215,6 +237,7 @@ export async function getArtistsFromDB(): Promise<Artist[]> {
         duration: t.duration,
         spotify_url: t.spotify_url || undefined,
       }));
+      artist.tags = tagsByUser[p.id] || [];
       return artist;
     });
   } catch (err) {

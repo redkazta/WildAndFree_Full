@@ -97,6 +97,13 @@ const genres = ['Todos', ...Array.from(allGenres).sort()];
                 <h3 class="card-name">{artist.nombre}</h3>
                 <span class="card-genre">{artist.estilo}</span>
                 <span class="card-origin">📍 {artist.origen}</span>
+                {artist.tags && artist.tags.length > 0 && (
+                  <div class="card-tags">
+                    {artist.tags.slice(0, 3).map(tag => (
+                      <span class="card-tag" style={`background:${tag.color}22;border-color:${tag.color}66;color:${tag.color}`}>{tag.name}</span>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <!-- Partnear Button -->
@@ -432,6 +439,22 @@ const genres = ['Todos', ...Array.from(allGenres).sort()];
     font-size: 0.65rem;
     color: var(--border-soft);
     margin-top: 2px;
+  }
+  .card-tags {
+    display: flex;
+    gap: 4px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+  }
+  .card-tag {
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-size: 0.5rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border: 1px solid;
+    font-family: monospace;
   }
 
   /* Partnear */

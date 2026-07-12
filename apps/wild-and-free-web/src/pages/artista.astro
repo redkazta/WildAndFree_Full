@@ -62,6 +62,13 @@ function timeAgo(dateStr: string): string {
             <span class="dot">·</span>
             <span>{artist.stats.oyentes} oyentes</span>
           </div>
+          {artist.tags && artist.tags.length > 0 && (
+            <div class="ap-tags">
+              {artist.tags.map(tag => (
+                <span class="ap-tag" style={`background:${tag.color}22;border-color:${tag.color}66;color:${tag.color}`}>{tag.name}</span>
+              ))}
+            </div>
+          )}
           <div class="ap-actions">
             <button class="btn-p btn-gold" id="partnear-btn">PARTNEAR</button>
             <button class="btn-p btn-ghost" id="share-btn">COMPARTIR</button>
@@ -398,6 +405,25 @@ function timeAgo(dateStr: string): string {
     color: var(--text-muted);
     flex-wrap: wrap;
     align-items: center;
+  }
+  .ap-tags {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .ap-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 0.55rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border: 1px solid;
+    font-family: monospace;
+    white-space: nowrap;
   }
   .dot {
     color: var(--border);
