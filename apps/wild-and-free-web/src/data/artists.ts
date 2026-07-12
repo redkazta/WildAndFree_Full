@@ -141,11 +141,36 @@ export async function getArtistsFromDB(): Promise<Artist[]> {
   try {
     const supabase = createClient(url, key);
 
-    // Fetch profiles with role = 'artist'
+    // Get artist role id
+    const { data: artistRole } = await supabase
+      .from("roles")
+      .select("id")
+      .or("name.eq.artist,internal_name.eq.artist")
+      .single();
+
+    const artistRoleId = artistRole?.id;
+
+    // Get user IDs with artist role
+    let artistIds: string[] = [];
+    if (artistRoleId) {
+      const { data: userRoleRows } = await supabase
+        .from("user_roles")
+        .select("user_id")
+        .eq("role_id", artistRoleId);
+      if (userRoleRows) artistIds = userRoleRows.map(r => r.user_id);
+    }
+
+    // Fallback to mock if no artist IDs found
+    if (artistIds.length === 0) {
+      console.warn("[artists] No artist IDs found, using mock data");
+      return mockArtists;
+    }
+
+    // Fetch profiles for those IDs
     const { data: profiles, error } = await supabase
       .from("profiles")
       .select("*")
-      .eq("role", "artist")
+      .in("id", artistIds)
       .order("created_at", { ascending: true });
 
     if (error || !profiles || profiles.length === 0) {
