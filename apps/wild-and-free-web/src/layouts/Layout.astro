@@ -505,14 +505,24 @@ const isActive = (href: string) => {
 			}
 
 			/* ── FLOAT: flotación sutil ── */
-			.tag-anim-float {
-				animation: tagFloat 3s ease-in-out infinite;
-			}
-			@keyframes tagFloat {
-				0%, 100% { transform: translateY(0); }
-				50% { transform: translateY(-3px); }
-			}
-		</style>
+							.tag-anim-float {
+								animation: tagFloat 3s ease-in-out infinite;
+						}
+						@keyframes tagFloat {
+							0%, 100% { transform: translateY(0); }
+							50% { transform: translateY(-3px); }
+						}
+
+						/* ── LIGHT MODE: darkened tag colors ── */
+						[data-theme="light"] .tag-badge {
+							color: color-mix(in srgb, var(--tag-c, var(--primary)) 85%, #000000);
+							border-color: color-mix(in srgb, var(--tag-c, var(--primary)) 70%, #000000);
+							background: color-mix(in srgb, var(--tag-c, var(--primary)) 10%, transparent);
+						}
+						[data-theme="light"] .tag-badge-dot {
+							background: color-mix(in srgb, var(--tag-c, var(--primary)) 85%, #000000);
+						}
+					</style>
 	</head>
 	<body class="selection:bg-wild-orange/50 selection:text-[var(--text)] overflow-x-hidden" style={`--primary: ${config.primary_color}; --secondary: ${config.secondary_color}; --wild-orange: ${config.primary_color}; --wild-red: ${config.secondary_color}; --tenant-primary: ${config.primary_color}; --tenant-secondary: ${config.secondary_color}; --tenant-glow: ${config.primary_color}33;`}>
 		<header class="fixed top-0 left-0 right-0 z-[1000] border-b-2 border-[var(--border)] shadow-2xl transition-all duration-500 wg-header" style="background: var(--bg);">
