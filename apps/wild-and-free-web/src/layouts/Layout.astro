@@ -142,87 +142,6 @@ const isActive = (href: string) => {
 				color: var(--text);
 			}
 
-			/* ═══════════════════════════════════════════════
-			   THEME OVERRIDES — using html + attribute selectors
-			   to get HIGHER SPECIFICITY than Tailwind classes.
-			   With important:true in tailwind, Tailwind gets
-			   specificity (0,1,0)+!important.
-			   Our selectors get (0,1,1)+!important → WIN.
-			   ═══════════════════════════════════════════════ */
-
-			/* ── DARK MODE TEXT: ALL pure white ── */
-			html:not([data-theme="light"]) [class*="text-white"] { color: #ffffff !important; }
-			html:not([data-theme="light"]) [class*="text-gray"] { color: #ffffff !important; }
-			html:not([data-theme="light"]) [class*="text-slate"] { color: #ffffff !important; }
-			html:not([data-theme="light"]) [class*="text-zinc"] { color: #ffffff !important; }
-			html:not([data-theme="light"]) [class*="text-neutral"] { color: #ffffff !important; }
-			html:not([data-theme="light"]) [class*="text-stone"] { color: #ffffff !important; }
-
-			/* ── DARK MODE BORDERS: ALL pure white ── */
-			html:not([data-theme="light"]) [class*="border-white"] {
-				border-color: #ffffff !important;
-				border-top-color: #ffffff !important;
-				border-bottom-color: #ffffff !important;
-				border-left-color: #ffffff !important;
-				border-right-color: #ffffff !important;
-			}
-			html:not([data-theme="light"]) [class*="hover:border-white"] {
-				border-color: #ffffff !important;
-			}
-
-			/* ── LIGHT MODE TEXT: ALL pure black ── */
-			html[data-theme="light"] [class*="text-white"] { color: #000000 !important; }
-			html[data-theme="light"] [class*="text-gray"] { color: #000000 !important; }
-			html[data-theme="light"] [class*="text-slate"] { color: #000000 !important; }
-			html[data-theme="light"] [class*="text-zinc"] { color: #000000 !important; }
-			html[data-theme="light"] [class*="text-neutral"] { color: #000000 !important; }
-			html[data-theme="light"] [class*="text-stone"] { color: #000000 !important; }
-
-			/* ── LIGHT MODE BORDERS: ALL subtle dark ── */
-			html[data-theme="light"] [class*="border-white"] {
-				border-color: var(--border) !important;
-				border-top-color: var(--border) !important;
-				border-bottom-color: var(--border) !important;
-				border-left-color: var(--border) !important;
-				border-right-color: var(--border) !important;
-			}
-			html[data-theme="light"] [class*="hover:border-white"] {
-				border-color: var(--border) !important;
-			}
-
-			/* ── LIGHT MODE BACKGROUNDS ── */
-			html[data-theme="light"] .bg-black { background: #ffffff !important; }
-			html[data-theme="light"] [class*="bg-black/"] { background: rgba(0,0,0,0.85) !important; }
-			html[data-theme="light"] [class*="bg-white/"] { background: var(--bg-card) !important; }
-			html[data-theme="light"] [class*="hover:bg-white/"] { background: var(--bg-hover) !important; }
-			html[data-theme="light"] .bg-\[\#111\] { background: var(--bg-card) !important; }
-			html[data-theme="light"] .bg-\[\#0a0a0a\] { background: var(--bg-card) !important; }
-			html[data-theme="light"] .bg-\[\#000\] { background: var(--bg-card) !important; }
-
-			/* ── LIGHT MODE STRUCTURAL ── */
-			html[data-theme="light"] header { background: #ffffff !important; border-color: var(--border) !important; }
-			html[data-theme="light"] aside { background: var(--bg) !important; }
-			html[data-theme="light"] main { background: var(--bg) !important; }
-			html[data-theme="light"] .popover { background: #ffffff !important; border-color: var(--border) !important; }
-			html[data-theme="light"] .popover::before { background: #ffffff !important; border-left-color: var(--border) !important; border-top-color: var(--border) !important; }
-			html[data-theme="light"] input, html[data-theme="light"] textarea, html[data-theme="light"] select { background: var(--bg) !important; border-color: var(--border) !important; color: var(--text) !important; }
-			html[data-theme="light"] input::placeholder, html[data-theme="light"] textarea::placeholder { color: var(--text-muted) !important; }
-			html[data-theme="light"] body { background: #ffffff !important; color: #000000 !important; }
-			html[data-theme="light"] ::-webkit-scrollbar-track { background: #ffffff; }
-			html[data-theme="light"] ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); }
-			html[data-theme="light"] ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
-
-			/* ── FLATTEN ALL BACKGROUNDS — NO gradients, NO patterns ── */
-			html [class*="bg-gradient"] { background: var(--bg) !important; background-image: none !important; }
-			html [class*="bg-\[url"] { background: var(--bg) !important; background-image: none !important; }
-			html [class*="bg-\[linear"] { background: var(--bg) !important; background-image: none !important; }
-			html [class*="bg-\[radial"] { background: var(--bg) !important; background-image: none !important; }
-			html [class*="backdrop-blur"] { backdrop-filter: none !important; }
-			html [class*="blur-"] { filter: none !important; }
-			html [class*="text-transparent"] { -webkit-text-fill-color: initial !important; background: none !important; background-clip: initial !important; }
-			.bg-\[\#111\] { background: var(--bg) !important; }
-			.bg-\[\#0a0a0a\] { background: var(--bg) !important; }
-			.bg-\[\#000\] { background: var(--bg) !important; }
 
 			::placeholder {
 				color: var(--text-muted);
@@ -553,6 +472,9 @@ const isActive = (href: string) => {
 			document.addEventListener('astro:after-swap', () => {
 				import('../lib/layout').then(({ initLayout }) => initLayout());
 			});
+		</script>
+		<script>
+			(function(){function n(){var e="light"===document.documentElement.getAttribute("data-theme"),t=e?"#000000":"#ffffff",o=e?"#ffffff":"#000000",r=e?"rgba(0,0,0,0.15)":"#ffffff",n=e?"rgba(0,0,0,0.03)":"rgba(255,255,255,0.06)",a=e?"rgba(0,0,0,0.06)":"rgba(255,255,255,0.10)";return`.text-white\\/10,.text-white\\/20,.text-white\\/30,.text-white\\/40,.text-white\\/50,.text-white\\/60,.text-white\\/70,.text-white\\/80,.text-white\\/90,.text-white,.text-gray-300,.text-gray-400,.text-gray-500,.text-gray-600,.text-slate-300,.text-slate-400,.text-slate-500,.text-zinc-300,.text-zinc-400,.text-zinc-500,.text-neutral-300,.text-neutral-400,.text-neutral-500,.text-stone-300,.text-stone-400,.text-stone-500{color:${t}!important}.hover\\:text-white\\/40:hover,.hover\\:text-white\\/60:hover,.hover\\:text-white\\/80:hover,.hover\\:text-white:hover,.hover\\:text-white\\/20:hover,.hover\\:text-gray-300:hover,.hover\\:text-gray-400:hover{color:${t}!important}.border-white\\/5,.border-white\\/10,.border-white\\/15,.border-white\\/20,.border-white\\/30,.border-white{border-color:${r}!important}.border-t-white\\/5,.border-t-white\\/10,.border-t-white\\/20{border-top-color:${r}!important}.border-b-white\\/5,.border-b-white\\/10{border-bottom-color:${r}!important}.border-r-white\\/10{border-right-color:${r}!important}.border-l-white\\/10{border-left-color:${r}!important}.hover\\:border-white\\/10:hover,.hover\\:border-white\\/20:hover,.hover\\:border-white\\/30:hover,.hover\\:border-white\\/50:hover{border-color:${r}!important}.bg-black,.bg-black\\/80,.bg-black\\/90,.bg-black\\/95,.bg-\\[\\#111\\],.bg-\\[\\#0a0a0a\\],.bg-\\[\\#000\\]{background:${o}!important}.bg-white\\/5,.bg-white\\/10,.bg-white\\/\\[0\\.02\\],.bg-white\\/\\[0\\.03\\],.bg-white\\/\\[0\\.05\\],.bg-white\\/\\[0\\.10\\]{background:${n}!important}.hover\\:bg-white\\/5:hover,.hover\\:bg-white\\/10:hover{background:${a}!important}[class*="bg-gradient"]{background:${o}!important;background-image:none!important}[class*="bg-\\[url"]{background:${o}!important;background-image:none!important}[class*="bg-\\[linear"]{background:${o}!important;background-image:none!important}[class*="bg-\\[radial"]{background:${o}!important;background-image:none!important}[class*="backdrop-blur"]{backdrop-filter:none!important}[class*="blur-"]{filter:none!important}[class*="text-transparent"]{-webkit-text-fill-color:initial!important;background:none!important;background-clip:initial!important}.text-black,.text-black\\/80,.text-black\\/60{color:${t}!important}`}function t(){var e=document.getElementById("wg-theme-dynamic");e||(e=document.createElement("style"),e.id="wg-theme-dynamic",document.body.appendChild(e)),e.textContent=n()}t(),window.addEventListener("wg-theme-change",t)})();
 		</script>
 		<Analytics />
 	</body>

@@ -131,6 +131,7 @@ const isActive = (href: string) => {
 				const current = getTheme();
 				const newTheme = current === 'light' ? 'dark' : 'light';
 				applyTheme(newTheme);
+				window.dispatchEvent(new Event('wg-theme-change'));
 				// Sync to Supabase if logged in
 				(async () => {
 					try {
