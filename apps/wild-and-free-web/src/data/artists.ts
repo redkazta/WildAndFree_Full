@@ -179,7 +179,6 @@ export async function getArtistsFromDB(): Promise<Artist[]> {
     }
 
     // Fetch partnear counts per artist
-    const artistIds = profiles.map((p: any) => p.id);
     const { data: partnearData } = await supabase
       .from("partnear")
       .select("artist_id");
