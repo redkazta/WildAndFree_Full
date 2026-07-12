@@ -475,89 +475,84 @@ const isActive = (href: string) => {
 		</script>
 		<script is:inline>
 			// ============================================================
-			// DYNAMIC THEME CSS INJECTION
-			// Injects CSS at the END of <head> to guarantee it wins the
-			// cascade against Tailwind (both have !important, ours is last).
+			// THEME: Apply colors by walking the DOM and setting inline
+			// styles. Inline styles have HIGHEST CSS priority.
 			// ============================================================
 			(function() {
-				function buildCSS() {
-					var isLight = document.documentElement.getAttribute('data-theme') === 'light';
-					var T = isLight ? '#000000' : '#ffffff';
-					var B = isLight ? '#ffffff' : '#000000';
-					var BR = isLight ? 'rgba(0,0,0,0.20)' : '#ffffff';
-					var BC = isLight ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.06)';
-					var BH = isLight ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.10)';
+				var THEME_KEY = 'wg-theme';
+				var STYLE_ID = 'wg-theme-dynamic';
+				var DEBOUNCE = null;
 
-					var rules = [];
-
-					// TEXT: all white/gray variants -> pure color
-					rules.push('.text-white\\/10,.text-white\\/20,.text-white\\/30,.text-white\\/40,.text-white\\/50,.text-white\\/60,.text-white\\/70,.text-white\\/80,.text-white\\/90,.text-white{color:' + T + '!important}');
-					rules.push('.text-gray-300,.text-gray-400,.text-gray-500,.text-gray-600{color:' + T + '!important}');
-					rules.push('.text-slate-300,.text-slate-400,.text-slate-500{color:' + T + '!important}');
-					rules.push('.text-zinc-300,.text-zinc-400,.text-zinc-500{color:' + T + '!important}');
-					rules.push('.text-neutral-300,.text-neutral-400,.text-neutral-500{color:' + T + '!important}');
-					rules.push('.text-stone-300,.text-stone-400,.text-stone-500{color:' + T + '!important}');
-
-					// HOVER text
-					rules.push('.hover\\:text-white\\/40:hover,.hover\\:text-white\\/60:hover,.hover\\:text-white\\/80:hover,.hover\\:text-white:hover{color:' + T + '!important}');
-
-					// BORDERS: all white/ variants -> pure border color
-					rules.push('.border-white\\/5,.border-white\\/10,.border-white\\/15,.border-white\\/20,.border-white\\/30,.border-white{border-color:' + BR + '!important}');
-					rules.push('.border-t-white\\/5,.border-t-white\\/10,.border-t-white\\/20{border-top-color:' + BR + '!important}');
-					rules.push('.border-b-white\\/5,.border-b-white\\/10{border-bottom-color:' + BR + '!important}');
-					rules.push('.border-r-white\\/10{border-right-color:' + BR + '!important}');
-					rules.push('.border-l-white\\/10{border-left-color:' + BR + '!important}');
-					rules.push('.hover\\:border-white\\/10:hover,.hover\\:border-white\\/20:hover,.hover\\:border-white\\/30:hover{border-color:' + BR + '!important}');
-
-					// BACKGROUNDS
-					rules.push('.bg-black,.bg-black\\/80,.bg-black\\/90,.bg-black\\/95{background:' + B + '!important}');
-					rules.push('.bg-\\[\\#111\\],.bg-\\[\\#0a0a0a\\],.bg-\\[\\#000\\]{background:' + B + '!important}');
-					rules.push('.bg-white\\/5,.bg-white\\/10{background:' + BC + '!important}');
-					rules.push('.bg-white\\/\\[0\\.02\\],.bg-white\\/\\[0\\.03\\],.bg-white\\/\\[0\\.05\\],.bg-white\\/\\[0\\.10\\]{background:' + BC + '!important}');
-					rules.push('.hover\\:bg-white\\/5:hover,.hover\\:bg-white\\/10:hover{background:' + BH + '!important}');
-
-					// FLATTEN: kill all gradients, patterns, blurs
-					rules.push('[class*="bg-gradient"]{background:' + B + '!important;background-image:none!important}');
-					rules.push('[class*="backdrop-blur"]{backdrop-filter:none!important}');
-					rules.push('[class*="blur-"]{filter:none!important}');
-
-					// MISC
-					rules.push('.text-black,.text-black\\/80,.text-black\\/60{color:' + T + '!important}');
-
-					return rules.join('');
+				function getTheme() {
+					return document.documentElement.getAttribute('data-theme') || localStorage.getItem(THEME_KEY) || 'dark';
 				}
 
-				function inject() {
-					var el = document.getElementById('wg-theme-dynamic');
-					if (!el) {
-						el = document.createElement('style');
-						el.id = 'wg-theme-dynamic';
-						document.head.appendChild(el);
-					}
-					el.textContent = buildCSS();
+				function isLight() { return getTheme() === 'light'; }
 
-					// Extra reinforcement: set inline styles on key elements
-					var isLight = document.documentElement.getAttribute('data-theme') === 'light';
-					var T = isLight ? '#000000' : '#ffffff';
-					var B = isLight ? '#ffffff' : '#000000';
+				function apply() {
+					var light = isLight();
+					var T = light ? '#000000' : '#ffffff';
+					var B = light ? '#ffffff' : '#000000';
+					var BR = light ? 'rgba(0,0,0,0.20)' : '#ffffff';
+					var BC = light ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.06)';
+					var BH = light ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.10)';
+
+					// 1. Inject CSS overrides as a fallback for hover states
+					var el = document.getElementById(STYLE_ID);
+					if (!el) { el = document.createElement('style'); el.id = STYLE_ID; document.head.appendChild(el); }
+					el.textContent = [
+						'.text-white{color:'+T+'!important}',
+						'.text-white\\/10,.text-white\\/20,.text-white\\/30,.text-white\\/40,.text-white\\/50,.text-white\\/60,.text-white\\/70,.text-white\\/80,.text-white\\/90{color:'+T+'!important}',
+						'.text-gray-300,.text-gray-400,.text-gray-500,.text-gray-600,.text-slate-300,.text-slate-400,.text-slate-500,.text-zinc-300,.text-zinc-400,.text-zinc-500,.text-neutral-300,.text-neutral-400,.text-neutral-500,.text-stone-300,.text-stone-400,.text-stone-500{color:'+T+'!important}',
+						'.border-white,.border-white\\/5,.border-white\\/10,.border-white\\/15,.border-white\\/20,.border-white\\/30{border-color:'+BR+'!important}',
+						'.border-t-white\\/5,.border-t-white\\/10,.border-t-white\\/20{border-top-color:'+BR+'!important}',
+						'.border-b-white\\/5,.border-b-white\\/10{border-bottom-color:'+BR+'!important}',
+						'.border-r-white\\/10{border-right-color:'+BR+'!important}',
+						'.border-l-white\\/10{border-left-color:'+BR+'!important}',
+						'.bg-black,.bg-black\\/40,.bg-black\\/80,.bg-black\\/90,.bg-black\\/95,.bg-\\[\\#111\\],.bg-\\[\\#0a0a0a\\],.bg-\\[\\#000\\]{background:'+B+'!important}',
+						'.bg-white\\/5,.bg-white\\/10,.bg-white\\/\\[0\\.02\\],.bg-white\\/\\[0\\.03\\],.bg-white\\/\\[0\\.05\\],.bg-white\\/\\[0\\.10\\]{background:'+BC+'!important}',
+						'[class*="bg-gradient"]{background:'+B+'!important;background-image:none!important}',
+						'[class*="backdrop-blur"]{backdrop-filter:none!important}',
+						'[class*="blur-"]{filter:none!important}',
+						'h1,h2,h3,h4,h5,h6,p,span,a,li,button,label,div{color:'+T+'!important}'
+					].join('');
+
+					// 2. Direct inline styles on body (ultimate fallback)
+					try { document.body.style.cssText += ';background:'+B+'!important;color:'+T+'!important'; } catch(e) {}
+
+					// 3. Walk DOM and set inline color/bg on all elements with Tailwind color classes
 					try {
-						document.body.style.setProperty('background-color', B, 'important');
-						document.body.style.setProperty('color', T, 'important');
+						var all = document.querySelectorAll('[class*="text-white"], [class*="text-gray"], [class*="text-slate"], [class*="text-zinc"], [class*="text-neutral"], [class*="text-stone"], [class*="text-black"]');
+						for (var i = 0; i < all.length; i++) {
+							all[i].style.setProperty('color', T, 'important');
+						}
+						var borders = document.querySelectorAll('[class*="border-white"]');
+						for (var j = 0; j < borders.length; j++) {
+							borders[j].style.setProperty('border-color', BR, 'important');
+						}
+						var bgs = document.querySelectorAll('[class*="bg-black"], [class*="bg-\\[\\#"]');
+						for (var k = 0; k < bgs.length; k++) {
+							bgs[k].style.setProperty('background-color', B, 'important');
+							bgs[k].style.setProperty('background-image', 'none', 'important');
+						}
 					} catch(e) {}
 				}
 
-				// Run on load
+				// Initial apply
 				if (document.readyState === 'loading') {
-					document.addEventListener('DOMContentLoaded', inject);
+					document.addEventListener('DOMContentLoaded', apply);
 				} else {
-					inject();
+					apply();
 				}
 
-				// Run on theme toggle
-				window.addEventListener('wg-theme-change', inject);
+				// Theme toggle
+				window.addEventListener('wg-theme-change', apply);
 
-				// Run on Astro client-side navigation
-				document.addEventListener('astro:after-swap', inject);
+				// Astro navigation
+				document.addEventListener('astro:after-swap', function() {
+					clearTimeout(DEBOUNCE);
+					DEBOUNCE = setTimeout(apply, 50);
+				});
 			})();
 		</script>
 		<Analytics />
