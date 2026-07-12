@@ -758,11 +758,78 @@ import Layout from '../layouts/Layout.astro';
     // Load tags
     loadUserTags(profile);
 
+    // Check if user is artist and load artist-specific data
+    const { role: userRole } = await getRole();
+    if (userRole === 'artist') {
+      // Load artist posts
+      loadArtistPosts(profile.id);
+      // Load artist stats
+      loadArtistStats(profile.id);
+      // Add artist public link
+      const bioCard = document.getElementById('bio-card');
+      if (bioCard) {
+        const link = document.createElement('a');
+        link.href = `/artista?id=${profile.nombre?.toLowerCase().replace(/\s/g, '_') || profile.id}`;
+        link.className = 'btn-p btn-ghost';
+        link.style.cssText = 'display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:0.55rem;';
+        link.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Ver Perfil Público';
+        bioCard.appendChild(link);
+      }
+    }
+
     // Load posts
     loadMyPosts(profile.id);
     loadLikedPosts();
     loadRepostedPosts();
   };
+
+  /* ── ARTIST-SPECIFIC ── */
+  async function loadArtistPosts(artistId: string) {
+    try {
+      const { data: posts } = await supabase
+        .from('artist_posts')
+        .select('*')
+        .eq('artist_id', artistId)
+        .order('created_at', { ascending: false })
+        .limit(10);
+      if (posts?.length) {
+        const list = document.getElementById('my-posts-list');
+        if (list) {
+          list.innerHTML = posts.map(p => `
+            <div class="feed-item">
+              <p class="feed-item-text">${p.content || ''}</p>
+              ${p.image_url ? `<img src="${p.image_url}" class="feed-item-img" />` : ''}
+              <div class="feed-item-meta">
+                <span>❤️ ${p.likes_count || 0}</span>
+                <span>💬 ${p.comments_count || 0}</span>
+                <span>📌 ${p.post_type}</span>
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+    } catch(e) {}
+  }
+
+  async function loadArtistStats(artistId: string) {
+    try {
+      const { count: partnearCount } = await supabase
+        .from('partnear')
+        .select('*', { count: 'exact', head: true })
+        .eq('artist_id', artistId);
+      const el = document.getElementById('stat-partnean');
+      if (el) el.textContent = String(partnearCount ?? 0);
+    } catch(e) {}
+
+    try {
+      const { count: postCount } = await supabase
+        .from('artist_posts')
+        .select('*', { count: 'exact', head: true })
+        .eq('artist_id', artistId);
+      const el = document.getElementById('stat-posts');
+      if (el) el.textContent = String(postCount ?? 0);
+    } catch(e) {}
+  }
 
   /* ── TAGS ── */
   async function loadUserTags(profile: any) {
