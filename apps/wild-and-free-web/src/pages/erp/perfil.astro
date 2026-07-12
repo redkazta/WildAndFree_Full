@@ -134,7 +134,27 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
     const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val || '-'; };
 
     set('pf-email', user.email);
-    set('pf-role', user.role || 'user');
+    set('pf-email', user.email);
+
+    // Get role directly from user_roles + roles
+    try {
+      const { data: myRoles } = await supabase
+        .from('user_roles')
+        .select('role_id')
+        .eq('user_id', user.id);
+      if (myRoles?.length) {
+        const ids = [...new Set(myRoles.map(r => r.role_id).filter(Boolean))];
+        const { data: roleNames } = await supabase
+          .from('roles')
+          .select('name, internal_name')
+          .in('id', ids);
+        if (roleNames?.length) {
+          const names = roleNames.map(r => r.name || r.internal_name).filter(Boolean);
+          set('pf-role', names.join(', ').toUpperCase());
+        }
+      }
+    } catch(e) {}
+
     set('pf-created', new Date(user.created_at).toLocaleDateString('es-MX'));
     set('pf-last', user.last_sign_in_at ? new Date(user.last_sign_in_at).toLocaleString('es-MX') : 'Nunca');
     set('pf-avatar', (user.email?.[0] || 'U').toUpperCase());
