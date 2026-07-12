@@ -1,0 +1,170 @@
+---
+import Layout from '../layouts/Layout.astro';
+import tenantConfig from '../../../../packages/shared-types/tenant-config.json';
+
+const tenant = tenantConfig['wild-and-free'];
+const config = {
+  name: "Wild Gvng - Wild Writings",
+  primary_color: tenant.primary_color,
+  secondary_color: tenant.secondary_color
+};
+
+const batallas = [
+  {
+    id: 1,
+    titulo: "Kazta vs Sable — Final Liga Escrita 2024",
+    fecha: "15.03.2024",
+    round: "3 Rondas · Sin Límite",
+    descripcion: "La final más esperada del año. Dos titanes de la pluma se enfrentaron en una guerra de metáforas que duró más de 2 horas.",
+    imagen: "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800&h=400&fit=crop",
+    ganador: "KAZTA"
+  },
+  {
+    id: 2,
+    titulo: "Ralf Díaz vs Jaque Mate — Semifinal",
+    fecha: "08.03.2024",
+    round: "4 Rondas · Temática Libre",
+    descripcion: "Una batalla que demostró que la vieja escuela sigue teniendo punchlines que retumban.",
+    imagen: "https://images.unsplash.com/photo-1517976487492-5750f3195933?w=800&h=400&fit=crop",
+    ganador: "RALF DÍAZ"
+  },
+  {
+    id: 3,
+    titulo: "Rookie Wars — Nuevas Plumas",
+    fecha: "01.03.2024",
+    round: "2 Rondas · Modalidad Relámpago",
+    descripcion: "El torneo que descubrió a los nuevos talentos de la escena escrita en la Comarca Lagunera.",
+    imagen: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&h=400&fit=crop",
+    ganador: "MC NOVA"
+  }
+];
+
+const reglas = [
+  { titulo: "Sin Límite de Tiempo", desc: "La batalla escrita no tiene cronómetro. La calidad vale más que la velocidad." },
+  { titulo: "Métrica y Rima", desc: "Se evalúa estructura, flow escrito, multisilábicas y creatividad en las barras." },
+  { titulo: "Sin Censura", desc: "Contenido explícito permitido. Esto es la calle, no un salón de clases." },
+  { titulo: "Jurado Calificado", desc: "3 jueces con trayectoria en la escena del freestyle y la escritura." },
+  { titulo: "Publicación Oficial", desc: "Todas las batallas se publican en THE WILD TIMES para que la raza vote." },
+];
+
+const modalidades = [
+  { nombre: "Relámpago", rondas: 2, tiempo: "Ilimitado", desc: "Estilo rápido, puro punchline." },
+  { nombre: "Clásica", rondas: 3, tiempo: "Ilimitado", desc: "Estructura tradicional, desarrollo de temas." },
+  { nombre: "Temática", rondas: 4, tiempo: "Ilimitado", desc: "Cada round con una temática sorteada en vivo." },
+  { nombre: "Guerra", rondas: 5, tiempo: "Ilimitado", desc: "La modalidad más demandante. Resistencia pura." },
+];
+---
+
+<Layout config={config}>
+  <div class="min-h-screen bg-[var(--bg)] text-[var(--text)] font-sans">
+
+    <!-- HERO HEADER -->
+    <section class="relative border-b border-[var(--border)] py-16 md:py-24 px-4 md:px-8">
+      <div class="max-w-[1200px] mx-auto text-center space-y-6">
+        <span class="inline-block border border-[var(--primary)] text-[var(--primary)] text-[10px] font-black uppercase tracking-[0.3em] px-4 py-1.5 rounded-full">Liga Oficial</span>
+        <h1 class="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-[0.9]">
+          WILD <span class="text-[var(--primary)]">WRITINGS</span>
+        </h1>
+        <p class="text-sm md:text-base text-[var(--text-secondary)] max-w-2xl mx-auto font-medium leading-relaxed">
+          La liga de batallas escritas más cruda de la Comarca Lagunera. Donde la pluma pesa más que la voz.
+        </p>
+        <div class="flex justify-center gap-4 pt-4">
+          <a href="/the-wild-times" class="px-6 py-3 bg-[var(--primary)] text-[var(--bg)] text-xs font-black uppercase tracking-wider rounded-full hover:bg-[var(--primary-hover)] transition-colors">Ver THE WILD TIMES</a>
+          <a href="#reglas" class="px-6 py-3 border border-[var(--border)] text-[var(--text)] text-xs font-black uppercase tracking-wider rounded-full hover:border-[var(--primary)] hover:text-[var(--primary)] transition-colors">Reglas</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ÚLTIMAS BATALLAS -->
+    <section class="py-16 px-4 md:px-8 border-b border-[var(--border)]">
+      <div class="max-w-[1200px] mx-auto">
+        <h2 class="text-xs font-black uppercase tracking-[0.3em] text-[var(--text-muted)] mb-8 border-b border-[var(--border)] pb-3">🏆 Últimas Batallas</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {batallas.map(b => (
+            <article class="group border border-[var(--border)] rounded-xl overflow-hidden hover:border-[var(--primary)] transition-colors bg-[var(--bg)]">
+              <div class="relative h-48 overflow-hidden">
+                <img src={b.imagen} alt={b.titulo} class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" loading="lazy" />
+                <div class="absolute top-3 left-3 bg-[var(--primary)] text-[var(--bg)] text-[10px] font-black uppercase px-3 py-1 rounded-full">{b.round}</div>
+              </div>
+              <div class="p-5 space-y-3">
+                <span class="text-[9px] font-black uppercase tracking-wider text-[var(--text-muted)]">{b.fecha}</span>
+                <h3 class="text-lg font-black uppercase leading-tight group-hover:text-[var(--primary)] transition-colors">{b.titulo}</h3>
+                <p class="text-xs text-[var(--text-secondary)] leading-relaxed">{b.descripcion}</p>
+                <div class="flex items-center justify-between pt-2 border-t border-[var(--border-faint)]">
+                  <span class="text-[10px] font-black text-[var(--text-muted)] uppercase">GANADOR</span>
+                  <span class="text-sm font-black text-[var(--primary)]">🏅 {b.ganador}</span>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- REGLAS -->
+    <section id="reglas" class="py-16 px-4 md:px-8 border-b border-[var(--border)]">
+      <div class="max-w-[1200px] mx-auto">
+        <h2 class="text-xs font-black uppercase tracking-[0.3em] text-[var(--text-muted)] mb-8 border-b border-[var(--border)] pb-3">📜 Reglas de la Liga</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {reglas.map((r, i) => (
+            <div class="border border-[var(--border)] rounded-xl p-5 hover:border-[var(--primary)] transition-colors space-y-2">
+              <div class="flex items-center gap-3">
+                <span class="w-8 h-8 bg-[var(--primary-soft)] text-[var(--primary)] font-black text-sm flex items-center justify-center rounded-lg flex-shrink-0">{i + 1}</span>
+                <h4 class="text-sm font-black uppercase tracking-wider">{r.titulo}</h4>
+              </div>
+              <p class="text-xs text-[var(--text-secondary)] leading-relaxed pl-11">{r.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- MODALIDADES -->
+    <section class="py-16 px-4 md:px-8 border-b border-[var(--border)]">
+      <div class="max-w-[1200px] mx-auto">
+        <h2 class="text-xs font-black uppercase tracking-[0.3em] text-[var(--text-muted)] mb-8 border-b border-[var(--border)] pb-3">⚔️ Modalidades</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead>
+              <tr class="border-b border-[var(--border)] text-[10px] font-black uppercase tracking-wider text-[var(--text-muted)]">
+                <th class="py-3 pr-4">Modalidad</th>
+                <th class="py-3 pr-4">Rondas</th>
+                <th class="py-3 pr-4">Tiempo</th>
+                <th class="py-3">Descripción</th>
+              </tr>
+            </thead>
+            <tbody>
+              {modalidades.map(m => (
+                <tr class="border-b border-[var(--border-faint)] hover:bg-[var(--bg-card)] transition-colors">
+                  <td class="py-4 pr-4">
+                    <span class="text-sm font-black uppercase text-[var(--primary)]">{m.nombre}</span>
+                  </td>
+                  <td class="py-4 pr-4"><span class="text-sm font-bold">{m.rondas}</span></td>
+                  <td class="py-4 pr-4"><span class="text-xs text-[var(--text-secondary)]">{m.tiempo}</span></td>
+                  <td class="py-4"><span class="text-xs text-[var(--text-secondary)]">{m.desc}</span></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-16 px-4 md:px-8">
+      <div class="max-w-[800px] mx-auto text-center space-y-6">
+        <h2 class="text-3xl md:text-5xl font-black uppercase tracking-tighter leading-none">¿Tienes lo que se necesita?</h2>
+        <p class="text-sm text-[var(--text-secondary)] max-w-lg mx-auto">Inscripciones abiertas para la siguiente temporada. Mándanos tu mejor barra escrita y demuestra que mereces un lugar.</p>
+        <div class="flex flex-col sm:flex-row justify-center gap-3 pt-4">
+          <a href="/registro" class="px-8 py-4 bg-[var(--primary)] text-[var(--bg)] text-xs font-black uppercase tracking-wider rounded-full hover:bg-[var(--primary-hover)] transition-colors">Inscribirse</a>
+          <a href="/the-wild-times" class="px-8 py-4 border border-[var(--border)] text-[var(--text)] text-xs font-black uppercase tracking-wider rounded-full hover:border-[var(--primary)] transition-colors">Seguir la Liga</a>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</Layout>
+
+<style>
+  table { border-collapse: collapse; }
+</style>
