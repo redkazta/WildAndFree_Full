@@ -384,14 +384,14 @@ const isActive = (href: string) => {
 								</a>
 							</div>
 
-				<nav class="hidden lg:flex items-center gap-0.5 xl:gap-1 flex-1 justify-center">
+				<nav class="hidden lg:flex items-center gap-0 flex-1 justify-center overflow-x-auto">
 					{navItems.map(item => (
 						<a
 							href={item.href}
-							class={`px-2 xl:px-3 py-2 text-[9px] xl:text-[10px] font-black uppercase tracking-[0.15em] rounded-full transition-all duration-300 whitespace-nowrap ${isActive(item.href) ? 'text-[var(--primary)] bg-[var(--primary-soft)]' : 'text-[var(--text)] hover:text-[var(--primary)] hover:bg-[var(--bg-hover)]'}`}
+							class={`px-1.5 xl:px-2 py-1.5 text-[8px] xl:text-[9px] font-black uppercase tracking-[0.12em] rounded-full transition-all duration-300 whitespace-nowrap flex-shrink-0 ${isActive(item.href) ? 'text-[var(--primary)] bg-[var(--primary-soft)]' : 'text-[var(--text)] hover:text-[var(--primary)] hover:bg-[var(--bg-hover)]'}`}
 						>
-							<span class="flex items-center gap-1.5">
-								<svg class="w-3.5 h-3.5 xl:w-4 xl:h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+							<span class="flex items-center gap-1">
+								<svg class="w-3 h-3 xl:w-3.5 xl:h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
 									{item.iconPaths.map(path => <path d={path} />)}
 								</svg>
 								{item.label}
@@ -400,9 +400,9 @@ const isActive = (href: string) => {
 					))}
 				</nav>
 
-				<div class="flex items-center gap-2 xl:gap-4 flex-shrink-0 wg-right-section">
-										<!-- Header Action Icons -->
-										<div class="hidden sm:flex items-center gap-0.5 xl:gap-1 border-r-2 border-[var(--border)] pr-2 xl:pr-4 wg-actions-desktop">
+				<div class="flex items-center gap-1 xl:gap-2 flex-shrink-0 wg-right-section">
+															<!-- Header Action Icons -->
+															<div class="hidden sm:flex items-center gap-0 xl:gap-0.5 border-r border-[var(--border)] pr-1 xl:pr-2 wg-actions-desktop">
 						<div class="relative group/pop">
 							<button class="popover-trigger p-2.5 text-[var(--text)] hover:text-[var(--primary)] hover:bg-[var(--bg-hover)] rounded-lg transition-all" data-target="location-popover">
 								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
