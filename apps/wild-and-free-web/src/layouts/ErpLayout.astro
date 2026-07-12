@@ -340,11 +340,16 @@ const modules = [
     }
 
     .erp-user-role {
-      font-size: 10px;
-      font-weight: 500;
-      color: var(--text-muted);
+      font-size: 8px;
+      font-weight: 700;
+      color: var(--primary);
       text-transform: uppercase;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.15em;
+      background: var(--primary-soft);
+      padding: 2px 8px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-top: 2px;
     }
 
     .erp-nav-item--exit:hover {
@@ -825,22 +830,25 @@ const modules = [
 
     // Show user badge with role
     const badge = document.getElementById('erpUserBadge');
-    if (badge) badge.textContent = role.toUpperCase();
+    if (badge) {
+      const roleName = role.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+      badge.textContent = roleName;
+    }
 
     const userName = document.getElementById('erpUserName');
-    if (userName) userName.textContent = session.user.email?.split('@')[0] || 'Admin';
-
     const userAvatar = document.getElementById('erpUserAvatar');
-    if (userAvatar) {
-      userAvatar.textContent = (session.user.email?.[0] || 'A').toUpperCase();
-      // Load avatar from profiles
-      supabase.from('profiles').select('avatar_url').eq('id', session.user.id).single().then(({ data }) => {
-        if (data?.avatar_url) {
+    if (userAvatar) userAvatar.textContent = (session.user.email?.[0] || 'A').toUpperCase();
+
+    // Load profile name + avatar
+    supabase.from('profiles').select('nombre,username,avatar_url').eq('id', session.user.id).single().then(({ data }) => {
+      if (data) {
+        if (userName) userName.textContent = data.nombre || data.username || session.user.email?.split('@')[0] || 'Usuario';
+        if (data.avatar_url && userAvatar) {
           userAvatar.style.backgroundImage = `url(${data.avatar_url})`;
           userAvatar.textContent = '';
         }
-      }).catch(() => {});
-    }
+      }
+    }).catch(() => {});
 
     // Hide nav items based on permissions
     const permMap: Record<string, string> = {
