@@ -167,24 +167,25 @@ import Layout from '../layouts/Layout.astro';
     </div>
 
   </div>
-</Layout>
 
-<!-- Image Preview Dialog -->
-<dialog id="img-preview-dialog" class="img-dialog">
-  <div class="img-dialog-content">
-    <div class="img-dialog-header">
-      <span class="img-dialog-title">Previsualizar Imagen</span>
-      <button class="img-dialog-close" id="img-dialog-cancel">✕</button>
+  <!-- Image Preview Dialog -->
+  <dialog id="img-preview-dialog" class="img-dialog">
+    <div class="img-dialog-content">
+      <div class="img-dialog-header">
+        <span class="img-dialog-title">Previsualizar Imagen</span>
+        <button class="img-dialog-close" id="img-dialog-cancel">✕</button>
+      </div>
+      <div class="img-dialog-body">
+        <img id="img-preview-img" src="" alt="Preview" class="img-preview-img" />
+      </div>
+      <div class="img-dialog-footer">
+        <button class="dash-btn" id="img-dialog-cancel-btn">Cancelar</button>
+        <button class="dash-submit" id="img-dialog-confirm">Confirmar y Subir</button>
+      </div>
     </div>
-    <div class="img-dialog-body">
-      <img id="img-preview-img" src="" alt="Preview" class="img-preview-img" />
-    </div>
-    <div class="img-dialog-footer">
-      <button class="dash-btn" id="img-dialog-cancel-btn">Cancelar</button>
-      <button class="dash-submit" id="img-dialog-confirm">Confirmar y Subir</button>
-    </div>
-  </div>
-</dialog>
+  </dialog>
+
+</Layout>
 
 <style>
   /* ============================================
