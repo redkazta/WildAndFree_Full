@@ -65,7 +65,7 @@ function timeAgo(dateStr: string): string {
           {artist.tags && artist.tags.length > 0 && (
             <div class="ap-tags">
               {artist.tags.map(tag => (
-                <span class="ap-tag" style={`background:${tag.color}22;border-color:${tag.color}66;color:${tag.color}`}>{tag.name}</span>
+                <span class={`tag-badge tag-sm ${tag.animation && tag.animation !== 'none' ? `tag-anim-${tag.animation}` : ''}`} style={`--tag-c: ${tag.color}`}><span class="tag-badge-dot"></span>{tag.name}</span>
               ))}
             </div>
           )}

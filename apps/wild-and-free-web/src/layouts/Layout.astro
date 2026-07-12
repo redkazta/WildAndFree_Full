@@ -367,6 +367,90 @@ const isActive = (href: string) => {
 					display: none !important;
 				}
 			}
+
+			/* ── TAG BADGE SYSTEM ── */
+			.tag-badge {
+				display: inline-flex;
+				align-items: center;
+				gap: 5px;
+				padding: 4px 12px;
+				border-radius: 100px;
+				font-weight: 800;
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+				font-family: 'JetBrains Mono', monospace;
+				white-space: nowrap;
+				border: 1.5px solid var(--tag-c, var(--primary));
+				background: color-mix(in srgb, var(--tag-c, var(--primary)) 12%, transparent);
+				color: var(--tag-c, var(--primary));
+				position: relative;
+				overflow: hidden;
+				transition: transform 0.2s, box-shadow 0.3s;
+			}
+			.tag-badge:hover {
+				transform: scale(1.05);
+			}
+			.tag-badge-dot {
+				width: 6px;
+				height: 6px;
+				border-radius: 50%;
+				background: var(--tag-c, var(--primary));
+				flex-shrink: 0;
+			}
+			.tag-sm { font-size: 0.45rem; padding: 2px 8px; }
+			.tag-sm .tag-badge-dot { width: 4px; height: 4px; }
+			.tag-md { font-size: 0.55rem; }
+			.tag-lg { font-size: 0.65rem; padding: 5px 14px; }
+			.tag-lg .tag-badge-dot { width: 7px; height: 7px; }
+
+			/* Glow */
+			.tag-anim-glow {
+				animation: tagGlow 2s ease-in-out infinite;
+			}
+			@keyframes tagGlow {
+				0%, 100% { box-shadow: 0 0 4px color-mix(in srgb, var(--tag-c) 30%, transparent); }
+				50% { box-shadow: 0 0 16px color-mix(in srgb, var(--tag-c) 60%, transparent), 0 0 32px color-mix(in srgb, var(--tag-c) 20%, transparent); }
+			}
+
+			/* Pulse */
+			.tag-anim-pulse {
+				animation: tagPulse 2.5s ease-in-out infinite;
+			}
+			@keyframes tagPulse {
+				0%, 100% { transform: scale(1); }
+				50% { transform: scale(1.06); }
+			}
+
+			/* Shake */
+			.tag-anim-shake {
+				animation: tagShake 3s ease-in-out infinite;
+			}
+			@keyframes tagShake {
+				0%, 100% { transform: translateX(0); }
+				10% { transform: translateX(-2px); }
+				20% { transform: translateX(2px); }
+				30% { transform: translateX(-1px); }
+				40% { transform: translateX(0); }
+			}
+
+			/* Shimmer */
+			.tag-anim-shimmer {
+				overflow: hidden;
+			}
+			.tag-anim-shimmer::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: -100%;
+				width: 50%;
+				height: 100%;
+				background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+				animation: tagShimmer 2.5s ease-in-out infinite;
+			}
+			@keyframes tagShimmer {
+				0% { left: -100%; }
+				100% { left: 200%; }
+			}
 		</style>
 	</head>
 	<body class="selection:bg-wild-orange/50 selection:text-[var(--text)] overflow-x-hidden" style={`--primary: ${config.primary_color}; --secondary: ${config.secondary_color}; --wild-orange: ${config.primary_color}; --wild-red: ${config.secondary_color}; --tenant-primary: ${config.primary_color}; --tenant-secondary: ${config.secondary_color}; --tenant-glow: ${config.primary_color}33;`}>

@@ -1064,7 +1064,7 @@ import Layout from '../layouts/Layout.astro';
         if (!rawName) return;
         // Skip if already added as role
         if (allTags.some((t) => t.name === rawName.toUpperCase())) return;
-        allTags.push({ name: rawName.toUpperCase(), color: tag.color || '#C98300', isRole: false });
+        allTags.push({ name: rawName.toUpperCase(), color: tag.color || '#C98300', animation: tag.animation || 'none', isRole: false });
       });
 
       if (allTags.length === 0) {
@@ -1093,14 +1093,15 @@ import Layout from '../layouts/Layout.astro';
     return colors[role?.toLowerCase()] || '#C98300';
   }
 
-  function renderTag(container: HTMLElement, tag: { name: string; color: string; isRole?: boolean }) {
+  function renderTag(container: HTMLElement, tag: { name: string; color: string; animation?: string; isRole?: boolean }) {
     const el = document.createElement('span');
-    el.className = 'role-tag';
-    el.textContent = tag.name;
-    // Apply tag color from DB
-    el.style.background = `${tag.color}22`;
-    el.style.borderColor = `${tag.color}66`;
-    el.style.color = tag.color;
+    const animClass = tag.animation && tag.animation !== 'none' ? `tag-anim-${tag.animation}` : '';
+    el.className = `tag-badge tag-md ${animClass}`.trim();
+    el.style.setProperty('--tag-c', tag.color);
+    const dot = document.createElement('span');
+    dot.className = 'tag-badge-dot';
+    el.appendChild(dot);
+    el.appendChild(document.createTextNode(tag.name));
     container.appendChild(el);
   }
 

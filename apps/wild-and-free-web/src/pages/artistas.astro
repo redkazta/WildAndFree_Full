@@ -100,7 +100,7 @@ const genres = ['Todos', ...Array.from(allGenres).sort()];
                 {artist.tags && artist.tags.length > 0 && (
                   <div class="card-tags">
                     {artist.tags.slice(0, 3).map(tag => (
-                      <span class="card-tag" style={`background:${tag.color}22;border-color:${tag.color}66;color:${tag.color}`}>{tag.name}</span>
+                      <span class={`tag-badge tag-sm ${tag.animation && tag.animation !== 'none' ? `tag-anim-${tag.animation}` : ''}`} style={`--tag-c: ${tag.color}`}><span class="tag-badge-dot"></span>{tag.name}</span>
                     ))}
                   </div>
                 )}
