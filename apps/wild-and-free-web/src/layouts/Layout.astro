@@ -385,10 +385,18 @@ const isActive = (href: string) => {
 				color: var(--tag-c, var(--primary));
 				position: relative;
 				overflow: hidden;
-				transition: transform 0.2s, box-shadow 0.3s;
+				transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+				cursor: default;
 			}
 			.tag-badge:hover {
-				transform: scale(1.05);
+				transform: scale(1.08) translateY(-2px);
+				box-shadow: 0 0 20px color-mix(in srgb, var(--tag-c) 40%, transparent), 0 4px 12px color-mix(in srgb, var(--tag-c) 20%, transparent);
+				background: color-mix(in srgb, var(--tag-c) 22%, transparent);
+				border-color: var(--tag-c);
+			}
+			.tag-badge:active {
+				transform: scale(1.02);
+				transition-duration: 0.1s;
 			}
 			.tag-badge-dot {
 				width: 6px;
@@ -396,60 +404,113 @@ const isActive = (href: string) => {
 				border-radius: 50%;
 				background: var(--tag-c, var(--primary));
 				flex-shrink: 0;
+				animation: dotPulse 2s ease-in-out infinite;
 			}
+			@keyframes dotPulse {
+				0%, 100% { opacity: 1; transform: scale(1); }
+				50% { opacity: 0.6; transform: scale(0.8); }
+			}
+			/* Sizes */
 			.tag-sm { font-size: 0.45rem; padding: 2px 8px; }
 			.tag-sm .tag-badge-dot { width: 4px; height: 4px; }
 			.tag-md { font-size: 0.55rem; }
 			.tag-lg { font-size: 0.65rem; padding: 5px 14px; }
 			.tag-lg .tag-badge-dot { width: 7px; height: 7px; }
 
-			/* Glow */
+			/* ── GLOW: resplandor pulsante que respira ── */
 			.tag-anim-glow {
-				animation: tagGlow 2s ease-in-out infinite;
+				animation: tagGlow 2.5s ease-in-out infinite;
+			}
+			.tag-anim-glow:hover {
+				animation: tagGlowHover 1s ease-in-out infinite;
 			}
 			@keyframes tagGlow {
-				0%, 100% { box-shadow: 0 0 4px color-mix(in srgb, var(--tag-c) 30%, transparent); }
-				50% { box-shadow: 0 0 16px color-mix(in srgb, var(--tag-c) 60%, transparent), 0 0 32px color-mix(in srgb, var(--tag-c) 20%, transparent); }
+				0%, 100% { box-shadow: 0 0 6px color-mix(in srgb, var(--tag-c) 25%, transparent); }
+				50% { box-shadow: 0 0 20px color-mix(in srgb, var(--tag-c) 50%, transparent), 0 0 40px color-mix(in srgb, var(--tag-c) 15%, transparent); }
+			}
+			@keyframes tagGlowHover {
+				0%, 100% { box-shadow: 0 0 15px color-mix(in srgb, var(--tag-c) 50%, transparent), 0 0 30px color-mix(in srgb, var(--tag-c) 25%, transparent); }
+				50% { box-shadow: 0 0 30px color-mix(in srgb, var(--tag-c) 70%, transparent), 0 0 60px color-mix(in srgb, var(--tag-c) 30%, transparent); }
 			}
 
-			/* Pulse */
+			/* ── PULSE: escala orgánica suave ── */
 			.tag-anim-pulse {
-				animation: tagPulse 2.5s ease-in-out infinite;
+				animation: tagPulse 3s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+			}
+			.tag-anim-pulse:hover {
+				animation: tagPulseHover 0.6s ease-in-out infinite;
 			}
 			@keyframes tagPulse {
 				0%, 100% { transform: scale(1); }
-				50% { transform: scale(1.06); }
+				50% { transform: scale(1.04); }
+			}
+			@keyframes tagPulseHover {
+				0%, 100% { transform: scale(1.08) translateY(-2px); }
+				50% { transform: scale(1.12) translateY(-3px); }
 			}
 
-			/* Shake */
+			/* ── SHAKE: vibración dinámica ── */
 			.tag-anim-shake {
-				animation: tagShake 3s ease-in-out infinite;
+				animation: tagShake 4s ease-in-out infinite;
+			}
+			.tag-anim-shake:hover {
+				animation: tagShakeHover 0.5s ease-in-out infinite;
 			}
 			@keyframes tagShake {
-				0%, 100% { transform: translateX(0); }
-				10% { transform: translateX(-2px); }
-				20% { transform: translateX(2px); }
-				30% { transform: translateX(-1px); }
-				40% { transform: translateX(0); }
+				0%, 80%, 100% { transform: translateX(0) rotate(0); }
+				85% { transform: translateX(-1.5px) rotate(-1deg); }
+				90% { transform: translateX(1.5px) rotate(1deg); }
+				95% { transform: translateX(-1px) rotate(-0.5deg); }
+			}
+			@keyframes tagShakeHover {
+				0%, 100% { transform: translateX(-2px) rotate(-1deg); }
+				25% { transform: translateX(2px) rotate(1deg); }
+				50% { transform: translateX(-1.5px) rotate(-0.5deg); }
+				75% { transform: translateX(1.5px) rotate(0.5deg); }
 			}
 
-			/* Shimmer */
+			/* ── SHIMMER: destello de luz diagonal ── */
 			.tag-anim-shimmer {
 				overflow: hidden;
 			}
 			.tag-anim-shimmer::before {
 				content: '';
 				position: absolute;
-				top: 0;
+				top: -50%;
 				left: -100%;
-				width: 50%;
-				height: 100%;
-				background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
-				animation: tagShimmer 2.5s ease-in-out infinite;
+				width: 60%;
+				height: 200%;
+				background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.3) 50%, transparent 60%);
+				animation: tagShimmer 3s ease-in-out infinite;
+			}
+			.tag-anim-shimmer:hover::before {
+				animation: tagShimmerFast 1s ease-in-out infinite;
 			}
 			@keyframes tagShimmer {
 				0% { left: -100%; }
 				100% { left: 200%; }
+			}
+			@keyframes tagShimmerFast {
+				0% { left: -100%; }
+				100% { left: 200%; }
+			}
+
+			/* ── BORDER GLOW: borde que respira ── */
+			.tag-anim-border-glow {
+				animation: borderGlow 3s ease-in-out infinite;
+			}
+			@keyframes borderGlow {
+				0%, 100% { border-color: color-mix(in srgb, var(--tag-c) 40%, transparent); }
+				50% { border-color: var(--tag-c); }
+			}
+
+			/* ── FLOAT: flotación sutil ── */
+			.tag-anim-float {
+				animation: tagFloat 3s ease-in-out infinite;
+			}
+			@keyframes tagFloat {
+				0%, 100% { transform: translateY(0); }
+				50% { transform: translateY(-3px); }
 			}
 		</style>
 	</head>
