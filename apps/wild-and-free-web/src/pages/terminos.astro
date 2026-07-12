@@ -74,7 +74,7 @@ import Layout from '../layouts/Layout.astro';
   .terms-container {
     min-height: 100vh;
     padding: 120px 20px 80px;
-    background: #000;
+    background: var(--bg);
     position: relative;
     overflow: hidden;
   }
@@ -105,8 +105,8 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .terms-content {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--bg-card);
+    border: 1px solid var(--bg-card);
     border-radius: 32px;
     padding: 60px;
     backdrop-filter: blur(20px);

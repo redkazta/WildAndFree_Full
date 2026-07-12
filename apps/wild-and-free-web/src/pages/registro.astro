@@ -380,7 +380,7 @@ import Layout from '../layouts/Layout.astro';
     align-items: center;
     justify-content: center;
     padding: 80px 20px;
-    background: #000;
+    background: var(--bg);
     position: relative;
     overflow-x: hidden;
   }
@@ -406,7 +406,7 @@ import Layout from '../layouts/Layout.astro';
     text-align: center;
     font-size: 2.5rem;
     font-weight: 900;
-    color: #fff;
+    color: var(--text);
     letter-spacing: -0.05em;
     text-transform: uppercase;
     margin: 24px 0 8px;
@@ -493,7 +493,7 @@ import Layout from '../layouts/Layout.astro';
     left: 50%;
     transform: translateX(-50%);
     background: linear-gradient(135deg, #facc15, #f59e0b);
-    color: #000;
+    color: var(--bg);
     font-size: 0.55rem;
     font-weight: 900;
     letter-spacing: 0.2em;
@@ -504,7 +504,7 @@ import Layout from '../layouts/Layout.astro';
   .role-name {
     font-size: 1.5rem;
     font-weight: 900;
-    color: #fff;
+    color: var(--text);
     letter-spacing: 0.1em;
     margin: 0 0 4px;
   }
@@ -548,13 +548,13 @@ import Layout from '../layouts/Layout.astro';
     transition: all 0.3s;
   }
   .role-wildones .role-cta { background: rgba(201,131,0,0.15); color: #C98300; }
-  .role-wildones:hover .role-cta { background: #C98300; color: #000; }
+  .role-wildones:hover .role-cta { background: #C98300; color: var(--bg); }
 
   .role-cta-premium { background: rgba(250,204,21,0.15); color: #facc15; }
-  .role-staff:hover .role-cta-premium { background: linear-gradient(135deg, #facc15, #f59e0b); color: #000; }
+  .role-staff:hover .role-cta-premium { background: linear-gradient(135deg, #facc15, #f59e0b); color: var(--bg); }
 
   .role-artista .role-cta { background: rgba(239,68,68,0.15); color: #ef4444; }
-  .role-artista:hover .role-cta { background: #ef4444; color: #fff; }
+  .role-artista:hover .role-cta { background: #ef4444; color: var(--text); }
 
   /* ===== FORM STEP ===== */
   .form-wrapper {
@@ -595,7 +595,7 @@ import Layout from '../layouts/Layout.astro';
   .role-badge-lg {
     display: inline-block;
     background: linear-gradient(135deg, #facc15, #f59e0b);
-    color: #000;
+    color: var(--bg);
     font-size: 0.55rem;
     font-weight: 900;
     letter-spacing: 0.2em;
@@ -606,7 +606,7 @@ import Layout from '../layouts/Layout.astro';
   .form-title {
     font-size: 1.75rem;
     font-weight: 900;
-    color: #fff;
+    color: var(--text);
     letter-spacing: -0.02em;
     margin: 0 0 4px;
   }
@@ -636,7 +636,7 @@ import Layout from '../layouts/Layout.astro';
     background: var(--bg-card);
     border: 1px solid var(--bg-hover);
     border-radius: 14px;
-    color: #fff;
+    color: var(--text);
     font-size: 0.85rem;
     font-weight: 600;
     transition: all 0.2s;
@@ -676,7 +676,7 @@ import Layout from '../layouts/Layout.astro';
   }
   .genre-chip:hover span {
     border-color: var(--border-soft);
-    color: #fff;
+    color: var(--text);
   }
 
   /* ===== STAFF OPTION CARDS ===== */
@@ -715,7 +715,7 @@ import Layout from '../layouts/Layout.astro';
     color: var(--text-muted);
     transition: color 0.2s;
   }
-  .checkbox-label:hover { color: #fff; }
+  .checkbox-label:hover { color: var(--text); }
   .check-box {
     width: 18px;
     height: 18px;
@@ -755,7 +755,7 @@ import Layout from '../layouts/Layout.astro';
   }
   .submit-wildones {
     background: #C98300;
-    color: #000;
+    color: var(--bg);
   }
   .submit-wildones:hover {
     background: #e69500;
@@ -764,7 +764,7 @@ import Layout from '../layouts/Layout.astro';
   }
   .submit-artista {
     background: #ef4444;
-    color: #fff;
+    color: var(--text);
   }
   .submit-artista:hover {
     background: #dc2626;
@@ -773,7 +773,7 @@ import Layout from '../layouts/Layout.astro';
   }
   .submit-staff {
     background: linear-gradient(135deg, #facc15, #f59e0b);
-    color: #000;
+    color: var(--bg);
   }
   .submit-staff:hover {
     transform: translateY(-2px);
