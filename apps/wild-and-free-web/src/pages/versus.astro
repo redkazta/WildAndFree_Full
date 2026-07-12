@@ -258,11 +258,10 @@ const config = {
 ---
 
 <Layout config={config}>
-  <div id="page-container" class="min-h-screen bg-neutral-950 text-[var(--text)] font-sans overflow-x-hidden relative selection:bg-wild-orange selection:text-black pb-48">
+  <div id="page-container" class="min-h-screen bg-[var(--bg)] text-[var(--text)] font-sans overflow-x-hidden relative selection:bg-wild-orange selection:text-black pb-48">
     
-    <!-- ARCADE BACKGROUND -->
-    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 pointer-events-none z-0"></div>
-    <div class="absolute inset-0 bg-gradient-to-b from-black via-black/90 to-black pointer-events-none z-0"></div>
+      <!-- BACKGROUND (flat) -->
+      <div class="absolute inset-0 bg-[var(--bg)] pointer-events-none z-0"></div>
     
     <!-- TOP BAR -->
     <div class="relative z-50 bg-[var(--bg)] backdrop-blur-md border-b border-[var(--border)] py-3">
@@ -280,7 +279,7 @@ const config = {
       
       <!-- HEADER & MODE SELECTOR -->
       <div class="text-center animate-fade-in-down mb-10 w-full max-w-4xl flex flex-col items-center gap-6">
-          <h1 class="text-display-lg font-black italic uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-tenant-primary to-white drop-shadow-[0_0_30px_var(--border-soft)] arcade-title">
+          <h1 class="text-display-lg font-black italic uppercase tracking-tighter text-[var(--text)] arcade-title">
               VERSUS
           </h1>
           
@@ -323,7 +322,7 @@ const config = {
               <!-- FIGHT BUTTON -->
               <button id="fight-btn" class="group relative px-12 py-4 bg-white text-black font-black uppercase tracking-[0.2em] italic rounded-wild-lg overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-wild-glow hover:shadow-tenant-glow z-10">
                   <span class="relative z-10 text-xl">FIGHT!</span>
-                  <div class="absolute inset-0 bg-gradient-to-r from-[var(--primary)] via-white to-[var(--primary)] opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <div class="absolute inset-0 bg-[var(--primary-soft)] opacity-0 group-hover:opacity-100 transition-opacity"></div>
               </button>
 
               <!-- INFO DISPLAY (BATTLE COMPUTER) -->
@@ -363,14 +362,14 @@ const config = {
       <div id="battle-overlay" class="fixed inset-0 z-[200] bg-[var(--bg)] backdrop-blur-xl hidden flex-col items-center justify-center">
           <div class="relative w-full max-w-4xl h-[60vh] flex items-center justify-center">
               <!-- BACKGROUND FX -->
-              <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 animate-pulse"></div>
+              <div class="absolute inset-0 bg-[var(--bg)] animate-pulse"></div>
               
               <!-- CLASH ANIMATION CONTAINER -->
               <div id="clash-container" class="relative w-full h-full flex items-center justify-center overflow-hidden">
-                  <div id="team-alpha-clash" class="absolute left-0 top-0 bottom-0 w-1/2 bg-gradient-to-r from-black to-[var(--primary)] transform -translate-x-full transition-transform duration-1000 flex items-center justify-end pr-10">
+                  <div id="team-alpha-clash" class="absolute left-0 top-0 bottom-0 w-1/2 bg-[var(--primary-soft)] transform -translate-x-full transition-transform duration-1000 flex items-center justify-end pr-10">
                       <h2 class="text-6xl md:text-9xl font-black italic text-[var(--text)] uppercase tracking-tighter mix-blend-overlay opacity-50">ALPHA</h2>
                   </div>
-                  <div id="team-omega-clash" class="absolute right-0 top-0 bottom-0 w-1/2 bg-gradient-to-l from-black to-red-600 transform translate-x-full transition-transform duration-1000 flex items-center justify-start pl-10">
+                  <div id="team-omega-clash" class="absolute right-0 top-0 bottom-0 w-1/2 bg-[var(--secondary-soft)] transform translate-x-full transition-transform duration-1000 flex items-center justify-start pl-10">
                       <h2 class="text-6xl md:text-9xl font-black italic text-[var(--text)] uppercase tracking-tighter mix-blend-overlay opacity-50">OMEGA</h2>
                   </div>
                   
@@ -554,9 +553,9 @@ const config = {
         
         // Use the same square size and style as the dock tokens
         contentDiv.innerHTML = `
-            <div class="w-full h-full relative group overflow-hidden bg-zinc-900 animate-fade-in">
+            <div class="w-full h-full relative group overflow-hidden bg-[var(--bg)] animate-fade-in">
                 <img src="${artist.imagenes.profile}" width="200" height="200" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+                <div class="absolute inset-0 bg-[var(--bg)] opacity-60"></div>
                 <div class="absolute bottom-0 left-0 right-0 p-1 text-center bg-[var(--bg)]/60 backdrop-blur-sm">
                     <span class="text-[7px] font-black text-[var(--text)] uppercase tracking-tighter leading-none block truncate">${artist.nombre}</span>
                 </div>
@@ -652,7 +651,7 @@ const config = {
         // Square slots matching dock token size: w-20 h-20 md:w-24 md:h-24
         slot.className = `team-slot group/slot relative w-20 h-20 md:w-24 md:h-24 bg-[var(--bg)]/50 border-2 border-[var(--border)] rounded-wild-lg flex items-center justify-center cursor-pointer transition-all hover:border-tenant-primary/50 overflow-hidden`;
         slot.innerHTML = `
-            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 pointer-events-none"></div>
+            <div class="absolute inset-0  pointer-events-none"></div>
             <div class="absolute inset-0 border border-[var(--border-faint)] rounded-wild-lg pointer-events-none"></div>
             
             <!-- Holographic Corner Accents -->
