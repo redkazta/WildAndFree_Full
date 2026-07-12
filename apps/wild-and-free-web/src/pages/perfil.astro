@@ -80,77 +80,79 @@ import Layout from '../layouts/Layout.astro';
             </div>
           </aside>
 
-          <!-- RIGHT FEED (75%) -->
+          <!-- RIGHT DASHBOARD (75%) -->
           <div class="pf-feed">
 
-            <!-- Composer (only for artists) -->
-            <div id="post-composer" class="pf-composer hidden">
-              <div class="composer-header">
-                <div class="composer-avatar" id="composer-avatar-small"></div>
-                <span class="composer-label">Nuevo Post</span>
-              </div>
-              <textarea id="composer-text" class="composer-textarea" placeholder="¿Qué estás tramando?" rows="3"></textarea>
-              <div class="composer-toolbar">
-                <div class="composer-types">
-                  <button class="composer-type-btn active" data-type="text">📝 Texto</button>
-                  <button class="composer-type-btn" data-type="photo">📷 Foto</button>
-                  <button class="composer-type-btn" data-type="music">🎵 Música</button>
-                  <button class="composer-type-btn" data-type="event">📅 Evento</button>
+            <!-- Artist Dashboard Actions -->
+            <div id="artist-dashboard" class="hidden">
+              <div class="dash-grid">
+                <!-- Publicar nuevo post -->
+                <div class="dash-card" id="composer-card">
+                  <div class="dash-card-header">✍️ Nuevo Post</div>
+                  <textarea id="composer-text" rows="3" class="dash-textarea" placeholder="¿Qué estás tramando? (texto + foto opcional)"></textarea>
+                  <div class="dash-toolbar">
+                    <div class="dash-types">
+                      <button class="dash-type-btn active" data-type="text">📝 Texto</button>
+                      <button class="dash-type-btn" data-type="photo">📷 Foto</button>
+                      <button class="dash-type-btn" data-type="music">🎵 Música</button>
+                    </div>
+                    <div class="dash-actions">
+                      <input type="file" id="composer-file" accept="image/png,image/jpeg,image/webp" style="display:none" />
+                      <button id="composer-file-btn" class="dash-btn">📎 Imagen</button>
+                      <button id="composer-submit" class="dash-submit">Publicar → Aprobación</button>
+                    </div>
+                  </div>
+                  <div id="composer-msg" class="dash-msg"></div>
+                  <div id="composer-preview" class="hidden dash-preview"></div>
                 </div>
-                <div class="composer-actions">
-                  <input type="file" id="composer-file" accept="image/png,image/jpeg,image/webp" style="display:none;" />
-                  <button id="composer-file-btn" class="composer-btn" title="Subir imagen">📎</button>
-                  <button id="composer-embed-input" class="composer-btn" title="URL Embed">🔗</button>
-                  <button id="composer-submit" class="composer-btn composer-submit">Publicar</button>
+
+                <!-- Ver mi feed público -->
+                <a href="/artista?" id="dash-public-link" class="dash-card dash-link">
+                  <div class="dash-card-header">👤 Ver mi Perfil Público</div>
+                  <span class="dash-desc">Cómo te ve la raza en /artistas</span>
+                  <span class="dash-arrow">→</span>
+                </a>
+
+                <!-- Editar perfil -->
+                <div class="dash-card">
+                  <div class="dash-card-header">📋 Editar Perfil</div>
+                  <div class="dash-form">
+                    <input id="edit-name" class="dash-input" placeholder="Nombre" />
+                    <input id="edit-bio" class="dash-input" placeholder="Bio" />
+                    <button id="edit-save" class="dash-submit" style="margin-top:4px;">Guardar Cambios</button>
+                    <span id="edit-msg" class="dash-msg"></span>
+                  </div>
+                </div>
+
+                <!-- Links Sociales -->
+                <div class="dash-card">
+                  <div class="dash-card-header">🔗 Redes Sociales</div>
+                  <div class="dash-form">
+                    <input id="edit-instagram" class="dash-input" placeholder="Instagram URL" />
+                    <input id="edit-spotify" class="dash-input" placeholder="Spotify URL" />
+                    <input id="edit-youtube" class="dash-input" placeholder="YouTube URL" />
+                    <button id="edit-social-save" class="dash-submit" style="margin-top:4px;">Guardar Redes</button>
+                    <span id="edit-social-msg" class="dash-msg"></span>
+                  </div>
+                </div>
+
+                <!-- Sección de navegación secundaria -->
+                <div class="dash-card dash-nav-card">
+                  <div class="dash-card-header">📂 Mi Actividad</div>
+                  <div class="dash-nav-links">
+                    <a href="#" class="dash-nav-item" data-nav="feed">📰 Ver mi Feed</a>
+                    <a href="#" class="dash-nav-item" data-nav="likes">❤️ Ver mis Me Gusta</a>
+                    <a href="#" class="dash-nav-item" data-nav="reposts">🔄 Ver mis Reposts</a>
+                    <a href="/configuracion" class="dash-nav-item">⚙️ Configuración</a>
+                  </div>
                 </div>
               </div>
-              <div id="composer-preview" class="composer-preview hidden"></div>
-              <div id="composer-msg" class="composer-msg"></div>
             </div>
 
-            <!-- Tabs -->
-            <div class="feed-tabs">
-              <button class="feed-tab active" data-tab="posts">MIS POSTS</button>
-              <button class="feed-tab" data-tab="likes">ME GUSTA</button>
-              <button class="feed-tab" data-tab="reposts">REPOSTS</button>
-            </div>
-
-            <!-- MIS POSTS Tab -->
-            <div class="feed-tab-content active" data-tab-content="posts">
-              <!-- Post Composer (solo para artistas) -->
-              <div id="post-composer" class="pf-composer hidden">
-                <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-                  <span id="composer-name" style="font-size:12px;font-weight:700;"></span>
-                  <span style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;">Publicar</span>
-                </div>
-                <textarea id="composer-text" rows="3" class="composer-input" placeholder="¿Qué estás tramando?"></textarea>
-                <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
-                  <button class="cp-btn active" data-type="text">📝 Texto</button>
-                  <button class="cp-btn" data-type="photo">📷 Foto</button>
-                  <button class="cp-btn" data-type="music">🎵 Música</button>
-                  <div style="flex:1"></div>
-                  <input type="file" id="composer-file" accept="image/png,image/jpeg,image/webp" style="display:none" />
-                  <button id="composer-file-btn" class="cp-action">📎 Imagen</button>
-                  <button id="composer-submit" class="cp-submit">Publicar</button>
-                </div>
-                <div id="composer-msg" style="font-size:10px;color:var(--text-muted);margin-top:6px;"></div>
-                <div id="composer-preview" class="hidden" style="margin-top:8px;"></div>
-              </div>
-              <div class="feed-list" id="my-posts-list">
-                <p class="feed-empty" id="my-posts-empty">Cargando posts...</p>
-              </div>
-            </div>
-
-            <!-- ME GUSTA Tab -->
-            <div class="feed-tab-content" data-tab-content="likes">
-              <div class="feed-list" id="liked-posts-list"></div>
-              <p class="feed-empty" id="liked-posts-empty">Cargando likes...</p>
-            </div>
-
-            <!-- REPOSTS Tab -->
-            <div class="feed-tab-content" data-tab-content="reposts">
-              <div class="feed-list" id="reposted-posts-list"></div>
-              <p class="feed-empty" id="reposted-posts-empty">Cargando reposts...</p>
+            <!-- View containers (feed, likes, reposts) - opened via nav -->
+            <div id="view-container" class="hidden">
+              <button id="view-back" class="dash-back">← Volver al Dashboard</button>
+              <div id="view-content"></div>
             </div>
 
           </div>
@@ -176,12 +178,11 @@ import Layout from '../layouts/Layout.astro';
      --text-muted: var(--border-soft)
      ============================================ */
 
-  .pf {
-    min-height: 100vh;
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  }
+  .pf { min-height:100vh; background:var(--bg); color:var(--text); font-family:'Outfit',sans-serif; }
+  .pf-body { max-width:1200px; margin:0 auto; padding:24px 16px; }
+  .pf-grid { display:flex; gap:24px; align-items:flex-start; }
+  .pf-side { width:28%; flex-shrink:0; display:flex; flex-direction:column; gap:12px; }
+  .pf-feed { flex:1; min-width:0; }
 
   /* ── UNAUTH STATE ── */
   .unauth {
@@ -195,6 +196,39 @@ import Layout from '../layouts/Layout.astro';
     padding: 40px 20px;
   }
   .unauth.hidden { display: none; }
+
+  /* ── DASHBOARD ── */
+  #artist-dashboard.hidden, #view-container.hidden { display:none; }
+  .dash-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .dash-card { background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:16px; display:flex; flex-direction:column; gap:10px; }
+  .dash-link { text-decoration:none; color:var(--text); position:relative; cursor:pointer; }
+  .dash-link:hover { border-color:var(--primary); }
+  .dash-card-header { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; }
+  .dash-desc { font-size:11px; color:var(--text-muted); }
+  .dash-arrow { position:absolute; top:16px; right:16px; font-size:18px; color:var(--primary); }
+  .dash-textarea { width:100%; background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:10px; color:var(--text); font-size:13px; font-family:inherit; resize:vertical; outline:none; }
+  .dash-textarea:focus { border-color:var(--primary); }
+  .dash-toolbar { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; }
+  .dash-types { display:flex; gap:4px; flex-wrap:wrap; }
+  .dash-type-btn { padding:3px 10px; font-size:9px; font-weight:700; text-transform:uppercase; border:1px solid var(--border); border-radius:20px; background:none; color:var(--text-muted); cursor:pointer; }
+  .dash-type-btn:hover { color:var(--text); }
+  .dash-type-btn.active { background:var(--primary); color:var(--bg); border-color:var(--primary); }
+  .dash-actions { display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+  .dash-btn { padding:4px 10px; font-size:10px; font-weight:600; border:1px solid var(--border); border-radius:6px; background:none; color:var(--text-muted); cursor:pointer; }
+  .dash-btn:hover { color:var(--text); }
+  .dash-submit { padding:5px 14px; font-size:9px; font-weight:700; text-transform:uppercase; border:none; border-radius:6px; background:var(--primary); color:var(--bg); cursor:pointer; white-space:nowrap; }
+  .dash-submit:hover { background:var(--primary-hover); }
+  .dash-msg { font-size:10px; color:var(--text-muted); min-height:16px; }
+  .dash-preview img { max-height:120px; border-radius:6px; }
+  .dash-form { display:flex; flex-direction:column; gap:6px; }
+  .dash-input { width:100%; background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:6px 10px; color:var(--text); font-size:12px; font-family:inherit; outline:none; }
+  .dash-input:focus { border-color:var(--primary); }
+  .dash-nav-card { grid-column:1/-1; }
+  .dash-nav-links { display:flex; gap:4px; flex-wrap:wrap; }
+  .dash-nav-item { padding:6px 14px; border:1px solid var(--border); border-radius:8px; text-decoration:none; color:var(--text); font-size:11px; font-weight:600; }
+  .dash-nav-item:hover { border-color:var(--primary); color:var(--primary); }
+  .dash-back { background:none; border:1px solid var(--border); border-radius:8px; padding:6px 14px; color:var(--text); font-size:11px; cursor:pointer; margin-bottom:12px; }
+  .dash-back:hover { border-color:var(--primary); }
   .unauth-icon {
     width: 80px;
     height: 80px;
@@ -831,30 +865,33 @@ import Layout from '../layouts/Layout.astro';
     // Load tags
     loadUserTags(profile);
 
-    // Check if user is artist and load artist-specific data
+    // Check if user is artist and show dashboard
     const { role: userRole } = await getRole();
     if (userRole === 'artist') {
-      // Show composer
-      const composer = document.getElementById('post-composer');
-      if (composer) {
-        composer.classList.remove('hidden');
-        const nameEl = document.getElementById('composer-name');
-        if (nameEl) nameEl.textContent = profile.nombre || 'Artista';
+      const dashboard = document.getElementById('artist-dashboard');
+      if (dashboard) {
+        dashboard.classList.remove('hidden');
+        // Set public link
+        const slug = profile.username || profile.nombre?.toLowerCase().replace(/\s/g, '_') || profile.id;
+        const link = document.getElementById('dash-public-link');
+        if (link) link.href = `/artista?id=${slug}`;
+        // Load profile fields
+        const nEl = document.getElementById('edit-name');
+        const bEl = document.getElementById('edit-bio');
+        if (nEl) nEl.value = profile.nombre || '';
+        if (bEl) bEl.value = profile.bio || '';
+        const insta = document.getElementById('edit-instagram');
+        const spot = document.getElementById('edit-spotify');
+        const yt = document.getElementById('edit-youtube');
+        if (insta) insta.value = profile.instagram_url || '';
+        if (spot) spot.value = profile.spotify_url || '';
+        if (yt) yt.value = profile.youtube_url || '';
       }
-      // Load artist posts
-      loadArtistPosts(profile.id);
-      // Load artist stats
-      loadArtistStats(profile.id);
-      // Add artist public link
-      const bioCard = document.getElementById('bio-card');
-      if (bioCard) {
-        const link = document.createElement('a');
-        link.href = `/artista?id=${profile.nombre?.toLowerCase().replace(/\s/g, '_') || profile.id}`;
-        link.className = 'btn-p btn-ghost';
-        link.style.cssText = 'display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:0.55rem;';
-        link.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Ver Perfil Público';
-        bioCard.appendChild(link);
-      }
+    }
+
+    // Fan / other roles: show a simpler version
+    if (userRole !== 'artist') {
+      // Remove the dash-card from composer and show simple info
     }
 
     // Load posts
@@ -1355,9 +1392,9 @@ import Layout from '../layouts/Layout.astro';
 
   /* ── ARTIST COMPOSER ── */
   // Post type toggle
-  document.querySelectorAll('.cp-btn').forEach(btn => {
+  document.querySelectorAll('.dash-type-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.cp-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.dash-type-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
     });
   });
@@ -1371,7 +1408,7 @@ import Layout from '../layouts/Layout.astro';
     const file = e.target?.files?.[0];
     const preview = document.getElementById('composer-preview');
     if (file && preview) {
-      preview.innerHTML = `<img src="${URL.createObjectURL(file)}" style="max-height:150px;border-radius:8px;" />`;
+      preview.innerHTML = `<img src="${URL.createObjectURL(file)}" style="max-height:120px;border-radius:6px;" />`;
       preview.classList.remove('hidden');
     }
   });
@@ -1381,7 +1418,7 @@ import Layout from '../layouts/Layout.astro';
     const text = (document.getElementById('composer-text') as HTMLTextAreaElement)?.value?.trim();
     if (!text) return;
     const msg = document.getElementById('composer-msg');
-    const activeType = document.querySelector('.cp-btn.active')?.getAttribute('data-type') || 'text';
+    const activeType = document.querySelector('.dash-type-btn.active')?.getAttribute('data-type') || 'text';
     const fileInput = document.getElementById('composer-file') as HTMLInputElement;
     const file = fileInput?.files?.[0];
     const submitBtn = document.getElementById('composer-submit') as HTMLButtonElement;
@@ -1415,13 +1452,11 @@ import Layout from '../layouts/Layout.astro';
         is_pinned: false
       });
 
-      if (msg) msg.textContent = '✅ Publicado';
+      if (msg) msg.textContent = '✅ Publicado. Pendiente de aprobación';
       (document.getElementById('composer-text') as HTMLTextAreaElement)!.value = '';
       const preview = document.getElementById('composer-preview');
       if (preview) { preview.innerHTML = ''; preview.classList.add('hidden'); }
       if (fileInput) fileInput.value = '';
-      // Refresh posts
-      if (currentUser?.id) loadArtistPosts(currentUser.id);
     } catch (e: any) {
       if (msg) msg.textContent = '✗ Error: ' + (e.message || e);
     }
@@ -1435,8 +1470,70 @@ import Layout from '../layouts/Layout.astro';
       const postId = target.getAttribute('data-id');
       if (!postId || !confirm('¿Eliminar esta publicación?')) return;
       await supabase.from('artist_posts').delete().eq('id', postId);
-      if (currentUser?.id) loadArtistPosts(currentUser.id);
+      target.closest('.feed-item')?.remove();
     }
+  });
+
+  // Dashboard navigation (feed, likes, reposts)
+  document.querySelectorAll('.dash-nav-item').forEach(item => {
+    item.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const nav = item.getAttribute('data-nav');
+      if (!nav) return;
+      document.getElementById('artist-dashboard')?.classList.add('hidden');
+      document.getElementById('view-container')?.classList.remove('hidden');
+      const vc = document.getElementById('view-content');
+      if (!vc) return;
+
+      if (nav === 'feed') {
+        const posts = await loadArtistPosts(currentUser?.id);
+        vc.innerHTML = posts?.length
+          ? posts.map(p => `
+            <div class="feed-item" data-post-id="${p.id}">
+              <p>${p.content || ''}</p>
+              ${p.image_url ? `<img src="${p.image_url}" style="max-height:200px;border-radius:8px;margin-top:8px;" />` : ''}
+              <div style="display:flex;gap:12px;margin-top:6px;font-size:11px;">
+                <span>❤️ ${p.likes_count || 0}</span>
+                <span>💬 ${p.comments_count || 0}</span>
+                <span style="color:var(--text-muted)">${p.post_type}</span>
+                <button class="delete-post-btn" data-id="${p.id}" style="margin-left:auto;background:none;border:none;color:var(--danger);cursor:pointer;">🗑️</button>
+              </div>
+            </div>
+          `).join('') : '<p style="color:var(--text-muted);text-align:center;padding:40px;">No tienes publicaciones aún.</p>';
+      } else {
+        vc.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:40px;">Próximamente.</p>';
+      }
+    });
+  });
+
+  document.getElementById('view-back')?.addEventListener('click', () => {
+    document.getElementById('view-container')?.classList.add('hidden');
+    document.getElementById('artist-dashboard')?.classList.remove('hidden');
+  });
+
+  // Save profile
+  document.getElementById('edit-save')?.addEventListener('click', async () => {
+    const nombre = (document.getElementById('edit-name') as HTMLInputElement)?.value?.trim();
+    const bio = (document.getElementById('edit-bio') as HTMLInputElement)?.value?.trim();
+    if (!nombre) return;
+    await supabase.from('profiles').upsert({ id: currentUser.id, nombre, bio }, { onConflict: 'id' });
+    const m = document.getElementById('edit-msg');
+    if (m) m.textContent = '✅ Guardado';
+    const nEl = document.getElementById('profile-name');
+    if (nEl) nEl.textContent = nombre;
+  });
+
+  // Save social links
+  document.getElementById('edit-social-save')?.addEventListener('click', async () => {
+    const get = (id: string) => (document.getElementById(id) as HTMLInputElement)?.value?.trim() || null;
+    await supabase.from('profiles').upsert({
+      id: currentUser.id,
+      instagram_url: get('edit-instagram'),
+      spotify_url: get('edit-spotify'),
+      youtube_url: get('edit-youtube')
+    }, { onConflict: 'id' });
+    const m = document.getElementById('edit-social-msg');
+    if (m) m.textContent = '✅ Redes guardadas';
   });
   const run = () => { initProfile().catch(e => console.error('Profile init error:', e)); };
 
