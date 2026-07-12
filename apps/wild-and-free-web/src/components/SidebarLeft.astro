@@ -97,46 +97,57 @@ const isActive = (href: string) => {
   </div>
 </aside>
 
-<script>
-  // Theme toggle logic
-  function initTheme() {
-    const toggle = document.getElementById('theme-toggle');
-    const dot = document.getElementById('theme-toggle-dot');
-    const iconDark = document.getElementById('theme-icon-dark');
-    const iconLight = document.getElementById('theme-icon-light');
-    if (!toggle || !dot) return;
+	<script>
+		// Theme toggle logic — fully self-contained, no library needed
+		function initTheme() {
+			const toggle = document.getElementById('theme-toggle');
+			const dot = document.getElementById('theme-toggle-dot');
+			const iconDark = document.getElementById('theme-icon-dark');
+			const iconLight = document.getElementById('theme-icon-light');
+			if (!toggle || !dot) return;
 
-    function updateIcons() {
-      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-      if (iconDark) iconDark.style.display = isLight ? 'none' : 'block';
-      if (iconLight) iconLight.style.display = isLight ? 'block' : 'none';
-      dot.style.transform = isLight ? 'translateX(20px)' : 'translateX(0)';
-    }
+			function getTheme() {
+				return document.documentElement.getAttribute('data-theme') || localStorage.getItem('wg-theme') || 'dark';
+			}
 
-    updateIcons();
+			function updateIcons() {
+				const isLight = getTheme() === 'light';
+				if (iconDark) iconDark.style.display = isLight ? 'none' : 'block';
+				if (iconLight) iconLight.style.display = isLight ? 'block' : 'none';
+				dot.style.transform = isLight ? 'translateX(20px)' : 'translateX(0)';
+			}
 
-    toggle.addEventListener('click', () => {
-      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-      const newTheme = isLight ? 'dark' : 'light';
-      document.dispatchEvent(new CustomEvent('set-theme', { detail: newTheme }));
-      updateIcons();
-      // Sync to Supabase if logged in
-      (async () => {
-        try {
-          const { createClient } = await import('@supabase/supabase-js');
-          const url = import.meta.env.PUBLIC_SUPABASE_URL;
-          const key = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
-          if (!url || !key) return;
-          const sb = createClient(url, key);
-          const { data: { session } } = await sb.auth.getSession();
-          if (session?.user) {
-            await sb.from('user_settings').upsert({ user_id: session.user.id, theme: newTheme }, { onConflict: 'user_id' });
-          }
-        } catch (e) { /* silent */ }
-      })();
-    });
-  }
+			function applyTheme(theme) {
+				document.documentElement.classList.add('theme-transition');
+				document.documentElement.setAttribute('data-theme', theme);
+				localStorage.setItem('wg-theme', theme);
+				updateIcons();
+				setTimeout(() => document.documentElement.classList.remove('theme-transition'), 350);
+			}
 
-  initTheme();
-  document.addEventListener('astro:after-swap', initTheme);
-</script>
+			updateIcons();
+
+			toggle.addEventListener('click', () => {
+				const current = getTheme();
+				const newTheme = current === 'light' ? 'dark' : 'light';
+				applyTheme(newTheme);
+				// Sync to Supabase if logged in
+				(async () => {
+					try {
+						const { createClient } = await import('@supabase/supabase-js');
+						const url = import.meta.env.PUBLIC_SUPABASE_URL;
+						const key = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+						if (!url || !key) return;
+						const sb = createClient(url, key);
+						const { data: { session } } = await sb.auth.getSession();
+						if (session?.user) {
+							await sb.from('user_settings').upsert({ user_id: session.user.id, theme: newTheme }, { onConflict: 'user_id' });
+						}
+					} catch (e) { /* silent */ }
+				})();
+			});
+		}
+
+		initTheme();
+		document.addEventListener('astro:after-swap', initTheme);
+	</script>
