@@ -44,11 +44,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
           <div style="display:flex;flex-direction:column;align-items:center;gap:16px;padding:24px 0;">
             <div id="pf-avatar" style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-hover));display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:700;color:#fff;overflow:hidden;background-size:cover;background-position:center;"></div>
             <div style="font-size:12px;font-weight:600;" id="pf-display-name">-</div>
-            <label class="erp-btn" style="cursor:pointer;font-size:10px;">
-              📷 Subir Avatar
-              <input type="file" id="pf-avatar-input" accept="image/png,image/jpeg,image/webp" style="display:none;" />
-            </label>
-            <div id="pf-avatar-msg" style="font-size:10px;color:var(--text-muted);"></div>
+            <button class="erp-btn" id="pf-avatar-edit-btn" style="font-size:10px;cursor:pointer;">📷 Editar Avatar</button>
           </div>
         </div>
       </div>
@@ -111,6 +107,33 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
     </div>
 
   </div>
+
+  <!-- Avatar Edit Dialog -->
+  <dialog id="erp-avatar-dialog" style="background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:0;max-width:400px;width:90vw;box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+    <div style="display:flex;flex-direction:column;">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--border);">
+        <span style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Editar Avatar</span>
+        <button id="erp-dialog-close" style="background:none;border:none;color:var(--text);cursor:pointer;font-size:16px;padding:4px;">✕</button>
+      </div>
+      <div style="padding:18px;display:flex;flex-direction:column;align-items:center;gap:16px;">
+        <div id="erp-dialog-current" style="width:100px;height:100px;border-radius:50%;border:2px solid var(--border);overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--bg-card);">
+          <img id="erp-dialog-current-img" src="" alt="" style="width:100%;height:100%;object-fit:cover;display:none;" />
+          <span id="erp-dialog-initials" style="font-size:2rem;font-weight:800;color:var(--primary);">U</span>
+        </div>
+        <div id="erp-dialog-preview-wrap" style="display:none;">
+          <img id="erp-dialog-preview-img" src="" alt="Preview" style="width:100px;height:100px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);" />
+          <div style="font-size:10px;color:var(--text-muted);text-align:center;margin-top:4px;">Nueva foto</div>
+        </div>
+        <input type="file" id="erp-dialog-file" accept="image/png,image/jpeg,image/webp" style="display:none;" />
+        <button id="erp-dialog-upload-btn" class="erp-btn" style="font-size:10px;cursor:pointer;">📷 Subir foto</button>
+        <div id="erp-dialog-msg" style="font-size:10px;color:var(--text-muted);"></div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;padding:12px 18px;border-top:1px solid var(--border);">
+        <button id="erp-dialog-cancel" class="erp-btn">Cancelar</button>
+        <button id="erp-dialog-confirm" class="erp-btn erp-btn--primary" style="display:none;">Confirmar</button>
+      </div>
+    </div>
+  </dialog>
 
   <!-- Logout Overlay -->
   <div id="logout-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:var(--bg);opacity:0;transition:opacity 0.4s ease;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;">
@@ -193,49 +216,92 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
       }
     } catch(e) {}
 
-    // Avatar upload
-    const fileInput = document.getElementById('pf-avatar-input');
-    if (fileInput) {
-      fileInput.addEventListener('change', async () => {
-        const file = fileInput.files?.[0];
-        if (!file) return;
-        const msg = document.getElementById('pf-avatar-msg');
-        if (msg) msg.textContent = 'Subiendo...';
-        try {
-          const ext = file.name.split('.').pop() || 'png';
-          const path = `${user.id}/avatar.${ext}`;
-          const { error: uploadError } = await supabase.storage
-            .from('avatars')
-            .upload(path, file, { upsert: true });
-          if (uploadError) throw uploadError;
-          const { data: { publicUrl } } = supabase.storage
-            .from('avatars')
-            .getPublicUrl(path);
-          // Save to profiles
-          await supabase.from('profiles').upsert({
-            id: user.id,
-            avatar_url: publicUrl
-          }, { onConflict: 'id' });
-          // Update display
-          const av = document.getElementById('pf-avatar');
-          if (av) {
-            av.style.backgroundImage = `url(${publicUrl})`;
-            av.textContent = '';
-          }
-          if (msg) msg.textContent = '✅ Avatar actualizado';
-          // Sync sidebar avatar immediately
-          dispatchEvent(new CustomEvent('avatar-updated', { detail: publicUrl }));
-          // Also update sidebar directly
-          const sidebarAv = document.getElementById('erpUserAvatar');
-          if (sidebarAv) {
-            sidebarAv.style.backgroundImage = `url(${publicUrl})`;
-            sidebarAv.textContent = '';
-          }
-        } catch (e) {
-          if (msg) msg.textContent = '✗ Error: ' + (e.message || e);
-        }
-      });
+    // Avatar edit button opens dialog
+    var pendingAvatarFile = null;
+
+    function loadErpAvatarDialog() {
+      var curImg = document.getElementById('erp-dialog-current-img');
+      var initials = document.getElementById('erp-dialog-initials');
+      var previewWrap = document.getElementById('erp-dialog-preview-wrap');
+      var confirmBtn = document.getElementById('erp-dialog-confirm');
+      var msg = document.getElementById('erp-dialog-msg');
+      var fileInput = document.getElementById('erp-dialog-file');
+      if (fileInput) fileInput.value = '';
+      pendingAvatarFile = null;
+      if (previewWrap) previewWrap.style.display = 'none';
+      if (confirmBtn) confirmBtn.style.display = 'none';
+      if (msg) msg.textContent = '';
+      if (profileData.avatar_url && curImg) {
+        curImg.src = profileData.avatar_url;
+        curImg.style.display = 'block';
+        if (initials) initials.style.display = 'none';
+      } else if (initials) {
+        initials.textContent = (profileData.nombre || user.email || 'U')[0].toUpperCase();
+        initials.style.display = 'block';
+        if (curImg) curImg.style.display = 'none';
+      }
     }
+
+    document.getElementById('pf-avatar-edit-btn')?.addEventListener('click', function() {
+      loadErpAvatarDialog();
+      var dialog = document.getElementById('erp-avatar-dialog');
+      if (dialog) dialog.showModal();
+    });
+
+    document.getElementById('erp-dialog-upload-btn')?.addEventListener('click', function() {
+      var fileInput = document.getElementById('erp-dialog-file');
+      if (fileInput) { fileInput.value = ''; fileInput.click(); }
+    });
+
+    document.getElementById('erp-dialog-file')?.addEventListener('change', function(e) {
+      var file = e.target.files && e.target.files[0];
+      if (!file) return;
+      pendingAvatarFile = file;
+      var previewWrap = document.getElementById('erp-dialog-preview-wrap');
+      var previewImg = document.getElementById('erp-dialog-preview-img');
+      var confirmBtn = document.getElementById('erp-dialog-confirm');
+      if (previewImg) previewImg.src = URL.createObjectURL(file);
+      if (previewWrap) previewWrap.style.display = 'block';
+      if (confirmBtn) confirmBtn.style.display = 'inline-flex';
+    });
+
+    document.getElementById('erp-dialog-confirm')?.addEventListener('click', async function() {
+      if (!pendingAvatarFile) return;
+      var msg = document.getElementById('erp-dialog-msg');
+      var confirmBtn = document.getElementById('erp-dialog-confirm');
+      if (confirmBtn) confirmBtn.disabled = true;
+      if (msg) msg.textContent = 'Subiendo...';
+      try {
+        var ext = pendingAvatarFile.name.split('.').pop() || 'png';
+        var path = user.id + '/avatar.' + ext;
+        var { error: uploadError } = await supabase.storage
+          .from('avatars')
+          .upload(path, pendingAvatarFile, { upsert: true });
+        if (uploadError) throw uploadError;
+        var { data: { publicUrl } } = supabase.storage
+          .from('avatars')
+          .getPublicUrl(path);
+        await supabase.from('profiles').upsert({ id: user.id, avatar_url: publicUrl }, { onConflict: 'id' });
+        var av = document.getElementById('pf-avatar');
+        if (av) { av.style.backgroundImage = 'url(' + publicUrl + ')'; av.textContent = ''; }
+        if (msg) msg.textContent = 'Avatar actualizado';
+        dispatchEvent(new CustomEvent('avatar-updated', { detail: publicUrl }));
+        var sidebarAv = document.getElementById('erpUserAvatar');
+        if (sidebarAv) { sidebarAv.style.backgroundImage = 'url(' + publicUrl + ')'; sidebarAv.textContent = ''; }
+        setTimeout(function() { var d = document.getElementById('erp-avatar-dialog'); if (d) d.close(); }, 800);
+      } catch (e) {
+        if (msg) msg.textContent = 'Error: ' + (e.message || e);
+      }
+      if (confirmBtn) confirmBtn.disabled = false;
+      pendingAvatarFile = null;
+    });
+
+    document.getElementById('erp-dialog-close')?.addEventListener('click', function() {
+      var d = document.getElementById('erp-avatar-dialog'); if (d) d.close();
+    });
+    document.getElementById('erp-dialog-cancel')?.addEventListener('click', function() {
+      var d = document.getElementById('erp-avatar-dialog'); if (d) d.close();
+    });
 
     // Theme toggle
     const themeCheck = document.getElementById('pf-theme-input');
@@ -265,6 +331,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
 </script>
 
 <style>
+  #erp-avatar-dialog::backdrop { background:rgba(0,0,0,0.7); }
   @keyframes spin {
     to { transform: rotate(360deg); }
   }

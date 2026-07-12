@@ -39,7 +39,11 @@ function timeAgo(dateStr: string): string {
     <div class="ap-header">
       <div class="ap-header-inner">
         <div class="ap-avatar">
-          <img src={artist.imagenes.profile} alt={artist.nombre} />
+          {artist.imagenes.profile ? (
+            <img src={artist.imagenes.profile} alt={artist.nombre} />
+          ) : (
+            <div class="ap-avatar-initials">{artist.nombre.substring(0, 2).toUpperCase()}</div>
+          )}
         </div>
         <div class="ap-info">
           <div class="ap-name-row">
@@ -75,7 +79,11 @@ function timeAgo(dateStr: string): string {
           <!-- Avatar -->
           <div class="side-card">
             <div class="side-avatar-wrap">
-              <img src={artist.imagenes.profile} alt={artist.nombre} class="side-avatar" />
+              {artist.imagenes.profile ? (
+                <img src={artist.imagenes.profile} alt={artist.nombre} class="side-avatar" />
+              ) : (
+                <div class="side-avatar side-avatar-initials">{artist.nombre.substring(0, 2).toUpperCase()}</div>
+              )}
             </div>
             <h2 class="side-name">{artist.nombre}</h2>
             <div class="side-genres">
@@ -158,7 +166,11 @@ function timeAgo(dateStr: string): string {
                 {posts.map(post => (
                   <article class="fp" data-post-id={post.id}>
                     <div class="fp-top">
-                      <img src={artist.imagenes.profile} alt="" class="fp-av" />
+                      {artist.imagenes.profile ? (
+                        <img src={artist.imagenes.profile} alt="" class="fp-av" />
+                      ) : (
+                        <div class="fp-av fp-av-initials" style="background:var(--primary);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:0.5rem;font-weight:800;">{artist.nombre.substring(0, 2).toUpperCase()}</div>
+                      )}
                       <div class="fp-who">
                         <span class="fp-name">{artist.nombre}</span>
                         <span class="fp-when">{timeAgo(post.created_at)}</span>
@@ -306,6 +318,31 @@ function timeAgo(dateStr: string): string {
     border-radius: 50%;
     object-fit: cover;
     border: 3px solid var(--primary);
+  }
+  .ap-avatar-initials {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--primary);
+    background: var(--bg-card);
+    border: 3px solid var(--primary);
+  }
+  .side-avatar-initials {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--primary);
+    background: var(--bg-card);
   }
   .ap-info {
     flex: 1;

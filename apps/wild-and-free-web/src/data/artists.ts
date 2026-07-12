@@ -117,7 +117,7 @@ function mapProfileToArtist(profile: any): Artist {
     nombre: profile.stage_name || profile.nombre || profile.username,
     slug: profile.username || profile.id,
     imagenes: {
-      profile: profile.avatar_url || mockArtists[0].imagenes.profile,
+      profile: profile.avatar_url || '',
     },
     stats: { seguidores: "0", oyentes: "0", partnean: 0 },
     bio: profile.bio || "",

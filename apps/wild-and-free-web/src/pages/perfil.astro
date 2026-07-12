@@ -40,6 +40,7 @@ import Layout from '../layouts/Layout.astro';
                 <button class="avatar-edit-btn" id="avatar-edit-btn" title="Cambiar foto">
                   <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/></svg>
                 </button>
+                <div id="avatar-msg" style="font-size:11px;color:var(--text-muted);text-align:center;"></div>
               </div>
               <h2 class="side-name" id="profile-name">Cargando...</h2>
               <p class="side-username" id="profile-username">@usuario</p>
@@ -168,7 +169,34 @@ import Layout from '../layouts/Layout.astro';
 
   </div>
 
-  <!-- Image Preview Dialog -->
+  <!-- Avatar Edit Dialog -->
+  <dialog id="avatar-edit-dialog" class="img-dialog">
+    <div class="img-dialog-content">
+      <div class="img-dialog-header">
+        <span class="img-dialog-title">Editar Avatar</span>
+        <button class="img-dialog-close" id="avatar-dialog-close">✕</button>
+      </div>
+      <div class="img-dialog-body" style="flex-direction:column;align-items:center;gap:16px;">
+        <div id="avatar-dialog-current" style="width:120px;height:120px;border-radius:50%;border:2px solid var(--border);overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--bg-card);">
+          <img id="avatar-dialog-current-img" src="" alt="" style="width:100%;height:100%;object-fit:cover;display:none;" />
+          <span id="avatar-dialog-initials" style="font-size:2rem;font-weight:800;color:var(--primary);">WG</span>
+        </div>
+        <div id="avatar-dialog-preview-wrap" style="display:none;">
+          <img id="avatar-dialog-preview-img" src="" alt="Preview" style="width:120px;height:120px;border-radius:50%;object-fit:cover;border:2px solid var(--primary);" />
+          <div style="font-size:10px;color:var(--text-muted);text-align:center;margin-top:4px;">Nueva foto</div>
+        </div>
+        <input type="file" id="avatar-dialog-file" accept="image/png,image/jpeg,image/webp" style="display:none;" />
+        <button id="avatar-dialog-upload-btn" class="dash-btn" style="padding:6px 16px;">📷 Subir foto</button>
+        <div id="avatar-dialog-msg" style="font-size:10px;color:var(--text-muted);"></div>
+      </div>
+      <div class="img-dialog-footer">
+        <button class="dash-btn" id="avatar-dialog-cancel">Cancelar</button>
+        <button class="dash-submit" id="avatar-dialog-confirm" style="display:none;">Confirmar</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Composer Image Preview Dialog -->
   <dialog id="img-preview-dialog" class="img-dialog">
     <div class="img-dialog-content">
       <div class="img-dialog-header">
@@ -259,6 +287,7 @@ import Layout from '../layouts/Layout.astro';
     padding:0; max-width:500px; width:90vw; box-shadow:0 20px 60px rgba(0,0,0,0.5);
   }
   .img-dialog::backdrop { background:rgba(0,0,0,0.7); }
+  #avatar-edit-dialog::backdrop { background:rgba(0,0,0,0.7); }
   .img-dialog-content { display:flex; flex-direction:column; }
   .img-dialog-header {
     display:flex; justify-content:space-between; align-items:center;
@@ -938,6 +967,15 @@ import Layout from '../layouts/Layout.astro';
       // Remove the dash-card from composer and show simple info
     }
 
+    // If no avatar, open dialog immediately
+    if (!currentProfile.avatar_url) {
+      setTimeout(function() {
+        loadAvatarDialog();
+        var dialog = document.getElementById('avatar-edit-dialog');
+        if (dialog) dialog.showModal();
+      }, 600);
+    }
+
     // Load posts
     loadMyPosts(profile.id);
     loadLikedPosts();
@@ -1380,59 +1418,145 @@ import Layout from '../layouts/Layout.astro';
     window.location.href = '/';
   });
 
-  /* ── AVATAR UPLOAD ── */
-  const createAvatarInput = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.style.display = 'none';
-    input.id = 'avatar-upload-input';
-    return input;
-  };
+  /* ── AVATAR EDIT DIALOG ── */
+  var pendingAvatarFile: File | null = null;
 
-  let avatarInput = document.getElementById('avatar-upload-input') as HTMLInputElement | null;
-  if (!avatarInput) {
-    avatarInput = createAvatarInput();
-    document.body.appendChild(avatarInput);
+  // Load current avatar into dialog
+  function loadAvatarDialog() {
+    var curImg = document.getElementById('avatar-dialog-current-img');
+    var initials = document.getElementById('avatar-dialog-initials');
+    var previewWrap = document.getElementById('avatar-dialog-preview-wrap');
+    var confirmBtn = document.getElementById('avatar-dialog-confirm');
+    var msg = document.getElementById('avatar-dialog-msg');
+    var fileInput = document.getElementById('avatar-dialog-file') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
+    pendingAvatarFile = null;
+    if (previewWrap) previewWrap.style.display = 'none';
+    if (confirmBtn) confirmBtn.style.display = 'none';
+    if (msg) msg.textContent = '';
+    if (currentProfile?.avatar_url && curImg) {
+      curImg.src = currentProfile.avatar_url;
+      curImg.style.display = 'block';
+      if (initials) initials.style.display = 'none';
+    } else if (initials) {
+      initials.textContent = currentProfile?.nombre?.substring(0, 2).toUpperCase() || 'WG';
+      initials.style.display = 'block';
+      if (curImg) curImg.style.display = 'none';
+    }
   }
 
-  document.getElementById('avatar-edit-btn')?.addEventListener('click', () => {
-    avatarInput?.click();
+  document.getElementById('avatar-edit-btn')?.addEventListener('click', function() {
+    loadAvatarDialog();
+    var dialog = document.getElementById('avatar-edit-dialog');
+    if (dialog) dialog.showModal();
   });
 
-  avatarInput.addEventListener('change', async () => {
-    const file = avatarInput?.files?.[0];
+  document.getElementById('avatar-dialog-upload-btn')?.addEventListener('click', function() {
+    var fileInput = document.getElementById('avatar-dialog-file') as HTMLInputElement;
+    if (fileInput) { fileInput.value = ''; fileInput.click(); }
+  });
+
+  document.getElementById('avatar-dialog-file')?.addEventListener('change', function(e) {
+    var file = (e.target as HTMLInputElement).files && (e.target as HTMLInputElement).files[0];
     if (!file) return;
-
-    const formData = new FormData();
-    formData.append('avatar', file);
-
-    try {
-      const res = await fetch('/api/upload-avatar', {
-        method: 'POST',
-        body: formData,
-      });
-      const result = await res.json();
-
-      if (res.ok && result.avatar_url) {
-        if (currentProfile) currentProfile.avatar_url = result.avatar_url;
-
-        const img = document.getElementById('profile-avatar-img');
-        if (img instanceof HTMLImageElement) {
-          img.src = result.avatar_url;
-          img.classList.remove('hidden');
-          const placeholder = document.getElementById('avatar-placeholder');
-          if (placeholder) placeholder.classList.add('hidden');
-        }
-      } else {
-        console.error('Avatar upload failed:', result.error);
-      }
-    } catch (err) {
-      console.error('Avatar upload error:', err);
-    }
-
-    avatarInput!.value = '';
+    pendingAvatarFile = file;
+    var previewWrap = document.getElementById('avatar-dialog-preview-wrap');
+    var previewImg = document.getElementById('avatar-dialog-preview-img');
+    var confirmBtn = document.getElementById('avatar-dialog-confirm');
+    if (previewImg) previewImg.src = URL.createObjectURL(file);
+    if (previewWrap) previewWrap.style.display = 'block';
+    if (confirmBtn) confirmBtn.style.display = 'inline-flex';
   });
+
+  document.getElementById('avatar-dialog-confirm')?.addEventListener('click', async function() {
+    if (!pendingAvatarFile) return;
+    var msg = document.getElementById('avatar-dialog-msg');
+    var confirmBtn = document.getElementById('avatar-dialog-confirm');
+    if (confirmBtn) confirmBtn.disabled = true;
+    if (msg) msg.textContent = 'Subiendo...';
+    try {
+      var ext = pendingAvatarFile.name.split('.').pop() || 'png';
+      var { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) throw new Error('No autenticado');
+      var path = session.user.id + '/avatar.' + ext;
+      var { error: uploadErr } = await supabase.storage
+        .from('avatars')
+        .upload(path, pendingAvatarFile, { upsert: true });
+      if (uploadErr) throw uploadErr;
+      var { data: { publicUrl } } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(path);
+      await supabase.from('profiles').upsert({ id: session.user.id, avatar_url: publicUrl }, { onConflict: 'id' });
+      if (currentProfile) currentProfile.avatar_url = publicUrl;
+      var avatarImg = document.getElementById('profile-avatar-img');
+      if (avatarImg instanceof HTMLImageElement) {
+        avatarImg.src = publicUrl;
+        avatarImg.classList.remove('hidden');
+        var placeholder = document.getElementById('avatar-placeholder');
+        if (placeholder) placeholder.classList.add('hidden');
+      }
+      if (msg) msg.textContent = 'Avatar actualizado';
+      dispatchEvent(new CustomEvent('avatar-updated', { detail: publicUrl }));
+      var sidebarAv = document.getElementById('erpUserAvatar');
+      if (sidebarAv) { sidebarAv.style.backgroundImage = 'url(' + publicUrl + ')'; sidebarAv.textContent = ''; }
+      setTimeout(function() { var d = document.getElementById('avatar-edit-dialog'); if (d) d.close(); }, 800);
+    } catch (e) {
+      if (msg) msg.textContent = 'Error: ' + ((e as Error).message || e);
+    }
+    if (confirmBtn) confirmBtn.disabled = false;
+    pendingAvatarFile = null;
+  });
+
+  document.getElementById('avatar-dialog-close')?.addEventListener('click', function() {
+    var d = document.getElementById('avatar-edit-dialog'); if (d) d.close();
+  });
+  document.getElementById('avatar-dialog-cancel')?.addEventListener('click', function() {
+    var d = document.getElementById('avatar-edit-dialog'); if (d) d.close();
+  });
+
+  /* ── COMPOSER IMAGE PREVIEW DIALOG ── */
+  var pendingComposerFile: File | null = null;
+
+  // Composer file picker
+  document.getElementById('composer-file-btn')?.addEventListener('click', function() {
+    var composerFile = document.getElementById('composer-file') as HTMLInputElement;
+    if (composerFile) { composerFile.value = ''; composerFile.click(); }
+  });
+
+  document.getElementById('composer-file')?.addEventListener('change', function(e) {
+    var file = (e.target as HTMLInputElement).files && (e.target as HTMLInputElement).files[0];
+    if (!file) return;
+    pendingComposerFile = file;
+    var img = document.getElementById('img-preview-img');
+    var dialog = document.getElementById('img-preview-dialog');
+    if (img) img.src = URL.createObjectURL(file);
+    if (dialog) dialog.showModal();
+  });
+
+  document.getElementById('img-dialog-confirm')?.addEventListener('click', function() {
+    var dialog = document.getElementById('img-preview-dialog');
+    if (dialog) dialog.close();
+    if (pendingComposerFile) {
+      var preview = document.getElementById('composer-preview');
+      if (preview) {
+        preview.innerHTML = '<img src="' + URL.createObjectURL(pendingComposerFile) + '" style="max-height:120px;border-radius:6px;" />';
+        preview.classList.remove('hidden');
+      }
+      pendingComposerFile = null;
+    }
+  });
+
+  function cancelComposerPreview() {
+    var dialog = document.getElementById('img-preview-dialog');
+    if (dialog) dialog.close();
+    pendingComposerFile = null;
+    var composerInput = document.getElementById('composer-file') as HTMLInputElement;
+    if (composerInput) composerInput.value = '';
+    var preview = document.getElementById('composer-preview');
+    if (preview) preview.classList.add('hidden');
+  }
+  document.getElementById('img-dialog-cancel')?.addEventListener('click', cancelComposerPreview);
+  document.getElementById('img-dialog-cancel-btn')?.addEventListener('click', cancelComposerPreview);
 
   /* ── ARTIST COMPOSER ── */
   // Post type toggle
@@ -1443,57 +1567,13 @@ import Layout from '../layouts/Layout.astro';
     });
   });
 
-  // File button - open file picker
-  document.getElementById('composer-file-btn')?.addEventListener('click', () => {
-    document.getElementById('composer-file')?.click();
-  });
-
-  // When file selected: show preview dialog
-  var pendingFile = null;
-
-  document.getElementById('composer-file')?.addEventListener('change', function(e) {
-    var file = e.target?.files?.[0];
-    if (!file) return;
-    pendingFile = file;
-    var img = document.getElementById('img-preview-img');
-    if (img) {
-      img.src = URL.createObjectURL(file);
-      var dialog = document.getElementById('img-preview-dialog');
-      if (dialog) dialog.showModal();
-    }
-  });
-
-  // Dialog confirm
-  document.getElementById('img-dialog-confirm')?.addEventListener('click', function() {
-    var dialog = document.getElementById('img-preview-dialog');
-    if (dialog) dialog.close();
-    // Show preview inline
-    var preview = document.getElementById('composer-preview');
-    if (preview && pendingFile) {
-      preview.innerHTML = '<img src="' + URL.createObjectURL(pendingFile) + '" style="max-height:120px;border-radius:6px;" />';
-      preview.classList.remove('hidden');
-    }
-  });
-
-  // Dialog cancel
-  function cancelPreview() {
-    var dialog = document.getElementById('img-preview-dialog');
-    if (dialog) dialog.close();
-    pendingFile = null;
-    document.getElementById('composer-file').value = '';
-    var preview = document.getElementById('composer-preview');
-    if (preview) preview.classList.add('hidden');
-  };
-  document.getElementById('img-dialog-cancel')?.addEventListener('click', cancelPreview);
-  document.getElementById('img-dialog-cancel-btn')?.addEventListener('click', cancelPreview);
-
   // Submit post
   document.getElementById('composer-submit')?.addEventListener('click', async () => {
     const text = (document.getElementById('composer-text') as HTMLTextAreaElement)?.value?.trim();
     if (!text) return;
     const msg = document.getElementById('composer-msg');
     const activeType = document.querySelector('.dash-type-btn.active')?.getAttribute('data-type') || 'text';
-    const file = pendingFile;
+    const file = pendingComposerFile;
     const submitBtn = document.getElementById('composer-submit') as HTMLButtonElement;
     if (submitBtn) submitBtn.disabled = true;
     if (msg) { msg.textContent = 'Publicando...'; msg.style.color = 'var(--text-muted)'; }
@@ -1529,7 +1609,7 @@ import Layout from '../layouts/Layout.astro';
       (document.getElementById('composer-text') as HTMLTextAreaElement)!.value = '';
       const preview = document.getElementById('composer-preview');
       if (preview) { preview.innerHTML = ''; preview.classList.add('hidden'); }
-      pendingFile = null;
+      pendingComposerFile = null;
       (document.getElementById('composer-file') as HTMLInputElement).value = '';
       // Auto-hide message
       setTimeout(() => { if (msg) msg.textContent = ''; }, 3500);

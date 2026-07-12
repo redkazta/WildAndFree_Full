@@ -76,13 +76,19 @@ const genres = ['Todos', ...Array.from(allGenres).sort()];
             >
               <!-- Photo -->
               <div class="card-photo">
-                <img
-                  src={artist.imagenes.profile}
-                  alt={artist.nombre}
-                  width="400"
-                  height="400"
-                  loading="lazy"
-                />
+                {artist.imagenes.profile ? (
+                  <img
+                    src={artist.imagenes.profile}
+                    alt={artist.nombre}
+                    width="400"
+                    height="400"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div class="card-initials">
+                    {artist.nombre.substring(0, 2).toUpperCase()}
+                  </div>
+                )}
                 <div class="card-glow"></div>
               </div>
 
@@ -374,6 +380,18 @@ const genres = ['Todos', ...Array.from(allGenres).sort()];
   }
   .artist-card:hover .card-photo img {
     transform: scale(1.05);
+  }
+  .card-initials {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--primary);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
   }
   .card-glow {
     position: absolute;
