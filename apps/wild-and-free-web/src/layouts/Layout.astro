@@ -51,9 +51,12 @@ const isActive = (href: string) => {
 		<script is:inline>
 			// Theme init: set data-theme BEFORE paint to prevent FOUC
 			(function() {
-				var saved = localStorage.getItem('wg-theme');
-				var theme = saved || 'dark';
-				document.documentElement.setAttribute('data-theme', theme);
+				try {
+					var saved = localStorage.getItem('wg-theme');
+					document.documentElement.setAttribute('data-theme', saved === 'light' ? 'light' : 'dark');
+				} catch(e) {
+					document.documentElement.setAttribute('data-theme', 'dark');
+				}
 			})();
 		</script>
 		<ClientRouter />
@@ -473,88 +476,8 @@ const isActive = (href: string) => {
 				import('../lib/layout').then(({ initLayout }) => initLayout());
 			});
 		</script>
-		<script is:inline>
-			// ============================================================
-			// THEME: Apply colors by walking the DOM and setting inline
-			// styles. Inline styles have HIGHEST CSS priority.
-			// ============================================================
-			(function() {
-				var THEME_KEY = 'wg-theme';
-				var STYLE_ID = 'wg-theme-dynamic';
-				var DEBOUNCE = null;
-
-				function getTheme() {
-					return document.documentElement.getAttribute('data-theme') || localStorage.getItem(THEME_KEY) || 'dark';
-				}
-
-				function isLight() { return getTheme() === 'light'; }
-
-				function apply() {
-					var light = isLight();
-					var T = light ? '#000000' : '#ffffff';
-					var B = light ? '#ffffff' : '#000000';
-					var BR = light ? 'rgba(0,0,0,0.20)' : '#ffffff';
-					var BC = light ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.06)';
-					var BH = light ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.10)';
-
-					// 1. Inject CSS overrides as a fallback for hover states
-					var el = document.getElementById(STYLE_ID);
-					if (!el) { el = document.createElement('style'); el.id = STYLE_ID; document.head.appendChild(el); }
-					el.textContent = [
-						'.text-[var(--text)]{color:'+T+'!important}',
-						'.text-[var(--text)]\\/10,.text-[var(--text)]\\/20,.text-[var(--text)]\\/30,.text-[var(--text)]\\/40,.text-[var(--text)]\\/50,.text-[var(--text)]\\/60,.text-[var(--text)]\\/70,.text-[var(--text)]\\/80,.text-[var(--text)]\\/90{color:'+T+'!important}',
-						'.text-[var(--text-secondary)],.text-[var(--text-muted)],.text-[var(--text-muted)],.text-[var(--text-muted)],.text-[var(--text-secondary)],.text-[var(--text-muted)],.text-[var(--text-muted)],.text-[var(--text-secondary)],.text-[var(--text-muted)],.text-[var(--text-muted)],.text-[var(--text-secondary)],.text-[var(--text-muted)],.text-[var(--text-muted)],.text-[var(--text-secondary)],.text-[var(--text-muted)],.text-[var(--text-muted)]{color:'+T+'!important}',
-						'.border-[var(--border)],.border-[var(--border)]\\/5,.border-[var(--border)]\\/10,.border-[var(--border)]\\/15,.border-[var(--border)]\\/20,.border-[var(--border)]\\/30{border-color:'+BR+'!important}',
-						'.border-t-white\\/5,.border-t-white\\/10,.border-t-white\\/20{border-top-color:'+BR+'!important}',
-						'.border-b-white\\/5,.border-b-white\\/10{border-bottom-color:'+BR+'!important}',
-						'.border-r-white\\/10{border-right-color:'+BR+'!important}',
-						'.border-l-white\\/10{border-left-color:'+BR+'!important}',
-						'.bg-[var(--bg)],.bg-[var(--bg)]\\/40,.bg-[var(--bg)]\\/80,.bg-[var(--bg)]\\/90,.bg-[var(--bg)]\\/95,.bg-\\[\\#111\\],.bg-\\[\\#0a0a0a\\],.bg-\\[\\#000\\]{background:'+B+'!important}',
-						'.bg-white\\/5,.bg-white\\/10,.bg-white\\/\\[0\\.02\\],.bg-white\\/\\[0\\.03\\],.bg-white\\/\\[0\\.05\\],.bg-white\\/\\[0\\.10\\]{background:'+BC+'!important}',
-						'[class*="bg-gradient"]{background:'+B+'!important;background-image:none!important}',
-						'[class*="backdrop-blur"]{backdrop-filter:none!important}',
-						'[class*="blur-"]{filter:none!important}',
-						'h1,h2,h3,h4,h5,h6,p,span,a,li,button,label,div{color:'+T+'!important}'
-					].join('');
-
-					// 2. Direct inline styles on body (ultimate fallback)
-					try { document.body.style.cssText += ';background:'+B+'!important;color:'+T+'!important'; } catch(e) {}
-
-					// 3. Walk DOM and set inline color/bg on all elements with Tailwind color classes
-					try {
-						var all = document.querySelectorAll('[class*="text-[var(--text)]"], [class*="text-gray"], [class*="text-slate"], [class*="text-zinc"], [class*="text-neutral"], [class*="text-stone"], [class*="text-black"]');
-						for (var i = 0; i < all.length; i++) {
-							all[i].style.setProperty('color', T, 'important');
-						}
-						var borders = document.querySelectorAll('[class*="border-[var(--border)]"]');
-						for (var j = 0; j < borders.length; j++) {
-							borders[j].style.setProperty('border-color', BR, 'important');
-						}
-						var bgs = document.querySelectorAll('[class*="bg-[var(--bg)]"], [class*="bg-\\[\\#"]');
-						for (var k = 0; k < bgs.length; k++) {
-							bgs[k].style.setProperty('background-color', B, 'important');
-							bgs[k].style.setProperty('background-image', 'none', 'important');
-						}
-					} catch(e) {}
-				}
-
-				// Initial apply
-				if (document.readyState === 'loading') {
-					document.addEventListener('DOMContentLoaded', apply);
-				} else {
-					apply();
-				}
-
-				// Theme toggle
-				window.addEventListener('wg-theme-change', apply);
-
-				// Astro navigation
-				document.addEventListener('astro:after-swap', function() {
-					clearTimeout(DEBOUNCE);
-					DEBOUNCE = setTimeout(apply, 50);
-				});
-			})();
-		</script>
+		<Analytics />
+	</body>
 		<Analytics />
 	</body>
 </html>
