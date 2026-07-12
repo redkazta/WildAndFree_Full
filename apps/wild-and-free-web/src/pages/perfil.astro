@@ -187,6 +187,7 @@ import Layout from '../layouts/Layout.astro';
         </div>
         <input type="file" id="avatar-dialog-file" accept="image/png,image/jpeg,image/webp" style="display:none;" />
         <button id="avatar-dialog-upload-btn" class="dash-btn" style="padding:6px 16px;">📷 Subir foto</button>
+        <textarea id="avatar-dialog-caption" placeholder="Escribe un pie de foto..." rows="2" style="width:100%;max-width:280px;padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg-card);color:var(--text);font-size:0.65rem;font-family:monospace;resize:none;margin-top:4px;display:none;"></textarea>
         <div id="avatar-dialog-msg" style="font-size:10px;color:var(--text-muted);"></div>
       </div>
       <div class="img-dialog-footer">
@@ -1485,6 +1486,8 @@ import Layout from '../layouts/Layout.astro';
     var confirmBtn = document.getElementById('avatar-dialog-confirm');
     if (previewImg) previewImg.src = URL.createObjectURL(file);
     if (previewWrap) previewWrap.style.display = 'block';
+    var captionInput = document.getElementById('avatar-dialog-caption') as HTMLTextAreaElement;
+    if (captionInput) captionInput.style.display = 'block';
     if (confirmBtn) confirmBtn.style.display = 'inline-flex';
   });
 
@@ -1514,6 +1517,19 @@ import Layout from '../layouts/Layout.astro';
         avatarImg.classList.remove('hidden');
         var placeholder = document.getElementById('avatar-placeholder');
         if (placeholder) placeholder.classList.add('hidden');
+      }
+      var captionEl = document.getElementById('avatar-dialog-caption') as HTMLTextAreaElement;
+      var captionText = captionEl ? captionEl.value.trim() : '';
+      if (captionText) {
+        await supabase.from('artist_posts').insert({
+          artist_id: session.user.id,
+          content: captionText,
+          post_type: 'photo',
+          image_url: publicUrl,
+          likes_count: 0,
+          comments_count: 0,
+          is_pinned: false
+        });
       }
       if (msg) msg.textContent = 'Avatar actualizado';
       dispatchEvent(new CustomEvent('avatar-updated', { detail: publicUrl }));
