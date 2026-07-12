@@ -896,24 +896,18 @@ import Layout from '../layouts/Layout.astro';
     }
 
     function applySettings(settings: Record<string, any>) {
-      // Theme
-      if (settings.theme === 'light') {
-        document.documentElement.setAttribute('data-theme', 'light');
-      } else {
-        document.documentElement.removeAttribute('data-theme');
+      // Theme - use astro-themes
+      if (settings.theme === 'light' || settings.theme === 'dark') {
+        document.documentElement.classList.add('theme-transition');
+        document.dispatchEvent(new CustomEvent('set-theme', { detail: settings.theme }));
+        setTimeout(() => document.documentElement.classList.remove('theme-transition'), 400);
       }
-      localStorage.setItem('wg-theme', settings.theme || 'dark');
 
-      // Sync theme cards
+      // Sync theme cards based on current theme
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
       document.querySelectorAll('.cfg-theme-card').forEach(card => {
-        card.classList.toggle('active', card.getAttribute('data-theme-choice') === (settings.theme || 'dark'));
+        card.classList.toggle('active', card.getAttribute('data-theme-choice') === currentTheme);
       });
-
-      // Sync sidebar theme toggle
-      const sidebarDot = document.getElementById('theme-toggle-dot');
-      if (sidebarDot) {
-        sidebarDot.style.transform = settings.theme === 'light' ? 'translateX(20px)' : 'translateX(0)';
-      }
 
       // Font size
       document.documentElement.style.fontSize = settings.font_size === 'small' ? '14px' : settings.font_size === 'large' ? '18px' : '16px';
@@ -1052,7 +1046,10 @@ import Layout from '../layouts/Layout.astro';
           card.classList.add('active');
           const theme = card.getAttribute('data-theme-choice')!;
           saveSetting('theme', theme);
-          applySettings(userSettings);
+          // Use astro-themes event
+          document.documentElement.classList.add('theme-transition');
+          document.dispatchEvent(new CustomEvent('set-theme', { detail: theme }));
+          setTimeout(() => document.documentElement.classList.remove('theme-transition'), 400);
         });
       });
 

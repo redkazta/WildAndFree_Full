@@ -16,6 +16,7 @@
     "@supabase/supabase-js": "^2.91.1",
     "@vercel/analytics": "^2.0.1",
     "astro": "^5.16.11",
+    "astro-themes": "^0.2.7",
     "clsx": "^2.1.1",
     "lottie-web": "^5.12.2",
     "lucide-astro": "^0.556.0",

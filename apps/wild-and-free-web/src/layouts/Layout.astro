@@ -1,10 +1,10 @@
 ﻿---
 import SidebarLeft from '../components/SidebarLeft.astro';
-// import Player from '../components/Player.astro';
 import RadioFloating from '../components/RadioFloating.astro';
 import SpotifyFloating from '../components/SpotifyFloating.astro';
 import { ClientRouter } from 'astro:transitions';
 import Analytics from '@vercel/analytics/astro';
+import Themes from 'astro-themes';
 
 export type Props = {
   config: {
@@ -49,10 +49,19 @@ const isActive = (href: string) => {
 		<meta name="generator" content={Astro.generator} />
 		<title>{config.name}</title>
 		<slot name="head" />
+		<Themes defaultTheme="dark" />
 		<ClientRouter />
 
 		<style is:global>
 			@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;500;600;700;800;900&display=swap');
+
+			/* ── SMOOTH THEME TRANSITION ── */
+			html.theme-transition,
+			html.theme-transition *,
+			html.theme-transition *::before,
+			html.theme-transition *::after {
+				transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+			}
 
 			:root {
 				--primary: #c98300;
@@ -480,18 +489,6 @@ const isActive = (href: string) => {
 		</main>
 
 		<script>
-			// Theme - apply immediately + on every navigation
-			function applyTheme() {
-				const saved = localStorage.getItem('wg-theme');
-				if (saved === 'light') {
-					document.documentElement.setAttribute('data-theme', 'light');
-				} else {
-					document.documentElement.removeAttribute('data-theme');
-				}
-			}
-			applyTheme();
-			document.addEventListener('astro:after-swap', applyTheme);
-
 			import { initLayout } from '../lib/layout';
 			initLayout();
 			document.addEventListener('astro:after-swap', () => {

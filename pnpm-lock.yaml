@@ -25,6 +25,9 @@ importers:
       astro:
         specifier: ^5.16.11
         version: 5.16.11(@types/node@22.19.7)(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.55.2)(terser@5.46.0)(typescript@5.9.3)(yaml@2.8.2)
+      astro-themes:
+        specifier: ^0.2.7
+        version: 0.2.7(astro@5.16.11(@types/node@22.19.7)(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.55.2)(terser@5.46.0)(typescript@5.9.3)(yaml@2.8.2))
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -1996,6 +1999,11 @@ packages:
 
   asap@2.0.6:
     resolution: {integrity: sha512-BSHWgDSAiKs50o2Re8ppvp3seVHXSRM44cdSsT9FfNEUUZLOGWVCsiWaRPWM1Znn+mqZ1OfVZ3z3DWEzSp7hRA==}
+
+  astro-themes@0.2.7:
+    resolution: {integrity: sha512-HJAQx0QRCMd3Jn4nzYSYAYC1PwGjCVz0DPX7/+8kMZ3/ut2MWgVDSc4k9WTzlcp1ftBfjnqxZhf/vYlu0aJ8ag==}
+    peerDependencies:
+      astro: '*'
 
   astro@5.16.11:
     resolution: {integrity: sha512-Z7kvkTTT5n6Hn5lCm6T3WU6pkxx84Hn25dtQ6dR7ATrBGq9eVa8EuB/h1S8xvaoVyCMZnIESu99Z9RJfdLRLDA==}
@@ -7006,6 +7014,10 @@ snapshots:
   array-timsort@1.0.3: {}
 
   asap@2.0.6: {}
+
+  astro-themes@0.2.7(astro@5.16.11(@types/node@22.19.7)(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.55.2)(terser@5.46.0)(typescript@5.9.3)(yaml@2.8.2)):
+    dependencies:
+      astro: 5.16.11(@types/node@22.19.7)(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.55.2)(terser@5.46.0)(typescript@5.9.3)(yaml@2.8.2)
 
   astro@5.16.11(@types/node@22.19.7)(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.55.2)(terser@5.46.0)(typescript@5.9.3)(yaml@2.8.2):
     dependencies:
