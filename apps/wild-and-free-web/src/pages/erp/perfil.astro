@@ -3,50 +3,105 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
 ---
 
 <ErpLayout title="Mi Perfil" activeModule="configuracion">
-  <div class="erp-grid" style="max-width: 700px;">
-    
-    <!-- Account Info -->
-    <div class="erp-card">
-      <div class="erp-card-title">Información de la Cuenta</div>
-      <div style="display:grid;gap:16px;padding:16px 0;">
-        <div>
-          <label class="field-label">Email</label>
-          <div id="perfil-email" class="erp-stat" style="font-size:14px;font-weight:600;">-</div>
+  <div style="max-width:1000px;">
+
+    <!-- Tabs Navigation -->
+    <div id="perfil-tabs" class="erp-grid" style="grid-template-columns:1fr;gap:0;margin-bottom:24px;">
+      <div style="display:flex;gap:0;border-bottom:2px solid var(--border);overflow-x:auto;">
+        <button class="tab-btn active" data-tab="account" style="border-bottom:3px solid var(--primary);">👤 Cuenta</button>
+        <button class="tab-btn" data-tab="profile" style="border-bottom:3px solid transparent;">📋 Perfil</button>
+        <button class="tab-btn" data-tab="preferences" style="border-bottom:3px solid transparent;">⚙️ Preferencias</button>
+        <button class="tab-btn" data-tab="danger" style="border-bottom:3px solid transparent;">⚠️ Seguridad</button>
+      </div>
+    </div>
+
+    <!-- Tab: Cuenta -->
+    <div class="tab-content active" id="tab-account">
+      <div class="erp-grid" style="grid-template-columns:1fr 1fr;">
+        <div class="erp-card">
+          <div class="erp-card-title">Información General</div>
+          <div style="display:grid;gap:12px;padding:16px 0;">
+            <div>
+              <span class="field-label">Email</span>
+              <div class="field-value" id="pf-email">-</div>
+            </div>
+            <div>
+              <span class="field-label">Rol</span>
+              <div class="field-value" id="pf-role">-</div>
+            </div>
+            <div>
+              <span class="field-label">Miembro desde</span>
+              <div class="field-value" id="pf-created">-</div>
+            </div>
+            <div>
+              <span class="field-label">Último acceso</span>
+              <div class="field-value" id="pf-last">-</div>
+            </div>
+          </div>
         </div>
-        <div>
-          <label class="field-label">Rol</label>
-          <div id="perfil-role" class="erp-stat" style="font-size:14px;">-</div>
-        </div>
-        <div>
-          <label class="field-label">Miembro desde</label>
-          <div id="perfil-created" class="erp-stat" style="font-size:14px;">-</div>
+        <div class="erp-card">
+          <div class="erp-card-title">Avatar</div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:16px;padding:24px 0;">
+            <div id="pf-avatar" style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-hover));display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:700;color:#fff;"></div>
+            <div style="font-size:12px;font-weight:600;" id="pf-display-name">-</div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Theme Settings -->
-    <div class="erp-card">
-      <div class="erp-card-title">Preferencias</div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 0;">
-        <div>
-          <div style="font-size:13px;font-weight:600;">Tema Oscuro / Claro</div>
-          <div style="font-size:11px;color:var(--text-muted);">Cambia la apariencia del panel</div>
-        </div>
-        <div class="toggle-switch">
-          <label class="toggle-label" id="perfil-theme-toggle">
-            <input type="checkbox" id="perfil-theme-input" />
-            <span class="toggle-slider"></span>
-          </label>
+    <!-- Tab: Perfil -->
+    <div class="tab-content" id="tab-profile" style="display:none;">
+      <div class="erp-card">
+        <div class="erp-card-title">Datos del Perfil</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:16px 0;">
+          <div>
+            <span class="field-label">Nombre</span>
+            <div class="field-value" id="pf-nombre">-</div>
+          </div>
+          <div>
+            <span class="field-label">Username</span>
+            <div class="field-value" id="pf-username">-</div>
+          </div>
+          <div style="grid-column:1/-1;">
+            <span class="field-label">Bio</span>
+            <div class="field-value" id="pf-bio" style="font-style:italic;">-</div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Cerrar Sesión -->
-    <div class="erp-card" style="border-color:var(--danger);">
-      <div class="erp-card-title" style="color:var(--danger);">Zona de Peligro</div>
-      <div style="padding:12px 0;display:flex;justify-content:space-between;align-items:center;">
-        <span style="font-size:12px;">¿Quieres cerrar sesión?</span>
-        <button id="perfil-logout" class="erp-btn erp-btn--danger">Cerrar Sesión</button>
+    <!-- Tab: Preferencias -->
+    <div class="tab-content" id="tab-preferences" style="display:none;">
+      <div class="erp-card">
+        <div class="erp-card-title">Apariencia</div>
+        <div style="display:grid;gap:16px;padding:16px 0;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <div style="font-size:13px;font-weight:600;">Tema Oscuro / Claro</div>
+              <div style="font-size:11px;color:var(--text-muted);">Cambia entre modo claro y oscuro</div>
+            </div>
+            <div class="toggle-switch">
+              <label class="toggle-label">
+                <input type="checkbox" id="pf-theme-input" />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: Seguridad -->
+    <div class="tab-content" id="tab-danger" style="display:none;">
+      <div class="erp-card" style="border-color:var(--danger);">
+        <div class="erp-card-title" style="color:var(--danger);">Zona de Peligro</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:16px 0;">
+          <div>
+            <div style="font-size:13px;font-weight:600;">Cerrar Sesión</div>
+            <div style="font-size:11px;color:var(--text-muted);">Termina tu sesión actual</div>
+          </div>
+          <button id="pf-logout" class="erp-btn erp-btn--danger">Cerrar Sesión</button>
+        </div>
       </div>
     </div>
 
@@ -56,16 +111,48 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
 <script>
   import { supabase } from '../../lib/supabase';
 
-  async function loadProfile() {
+  // Tab switching
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.style.borderBottomColor = 'transparent';
+        b.classList.remove('active');
+      });
+      btn.style.borderBottomColor = 'var(--primary)';
+      btn.classList.add('active');
+      document.querySelectorAll('.tab-content').forEach(tc => tc.style.display = 'none');
+      const tab = document.getElementById('tab-' + btn.dataset.tab);
+      if (tab) tab.style.display = 'block';
+    });
+  });
+
+  async function loadData() {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session?.user) return;
 
-    document.getElementById('perfil-email').textContent = session.user.email || '-';
-    document.getElementById('perfil-role').textContent = session.user.role || 'user';
-    document.getElementById('perfil-created').textContent = new Date(session.user.created_at).toLocaleDateString('es-MX');
+    const user = session.user;
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val || '-'; };
 
-    // Theme toggle sync
-    const themeCheck = document.getElementById('perfil-theme-input');
+    set('pf-email', user.email);
+    set('pf-role', user.role || 'user');
+    set('pf-created', new Date(user.created_at).toLocaleDateString('es-MX'));
+    set('pf-last', user.last_sign_in_at ? new Date(user.last_sign_in_at).toLocaleString('es-MX') : 'Nunca');
+    set('pf-avatar', (user.email?.[0] || 'U').toUpperCase());
+    set('pf-display-name', user.email?.split('@')[0] || 'Usuario');
+
+    // Profile
+    try {
+      const { data } = await supabase.from('profiles').select('nombre,username,bio').eq('id', user.id).single();
+      if (data) {
+        set('pf-nombre', data.nombre);
+        set('pf-username', data.username);
+        set('pf-bio', data.bio);
+        if (data.nombre) set('pf-display-name', data.nombre);
+      }
+    } catch(e) {}
+
+    // Theme toggle
+    const themeCheck = document.getElementById('pf-theme-input');
     if (themeCheck) {
       const current = document.documentElement.getAttribute('data-theme') || localStorage.getItem('wg-theme') || 'dark';
       themeCheck.checked = current === 'light';
@@ -78,15 +165,30 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
   }
 
   // Logout
-  document.getElementById('perfil-logout')?.addEventListener('click', async () => {
+  document.getElementById('pf-logout')?.addEventListener('click', async () => {
     await supabase.auth.signOut();
     window.location.href = '/';
   });
 
-  loadProfile();
+  loadData();
 </script>
 
 <style>
+  .tab-btn {
+    padding: 12px 24px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--primary); }
   .field-label {
     display: block;
     font-size: 10px;
@@ -95,5 +197,9 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
     letter-spacing: 0.1em;
     color: var(--text-muted);
     margin-bottom: 4px;
+  }
+  .field-value {
+    font-size: 14px;
+    font-weight: 600;
   }
 </style>

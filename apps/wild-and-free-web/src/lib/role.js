@@ -79,14 +79,14 @@ const getRoleFromUserRoles = async (userId) => {
 
     const { data: rolesRows, error: rolesError } = await supabase
       .from('roles')
-      .select('name')
+      .select('name, internal_name')
       .in('id', roleIds)
 
     if (rolesError || !Array.isArray(rolesRows) || rolesRows.length === 0) {
       return null
     }
 
-    const names = rolesRows.map((row) => row?.name).filter(Boolean)
+    const names = rolesRows.map((row) => row?.name || row?.internal_name).filter(Boolean)
     const picked = pickHighestRole(names)
     return picked
   } catch {
@@ -114,7 +114,7 @@ export const getRole = async () => {
       .eq('id', userId)
       .single()
     if (!profileError) {
-      const profileRole = normalizeRole(profileData?.role || profileData?.rol)
+      const profileRole = normalizeRole(profileData?.role || profileData?.rol || profileData?.user_role)
       if (profileRole) return { role: profileRole, session, error: null }
     }
   } catch {}
