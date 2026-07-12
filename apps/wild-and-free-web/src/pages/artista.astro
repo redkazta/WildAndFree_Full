@@ -320,15 +320,15 @@ function timeAgo(dateStr: string): string {
     flex-shrink: 0;
   }
   .ap-avatar img {
-    width: 120px;
-    height: 120px;
+    width: 96px;
+    height: 96px;
     border-radius: 50%;
     object-fit: cover;
     border: 3px solid var(--primary);
   }
   .ap-avatar-initials {
-    width: 120px;
-    height: 120px;
+    width: 96px;
+    height: 96px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -361,7 +361,7 @@ function timeAgo(dateStr: string): string {
     gap: 8px;
   }
   .ap-name {
-    font-size: 1.6rem;
+    font-size: 1.92rem;
     font-weight: 800;
     margin: 0;
     line-height: 1.1;
@@ -401,7 +401,7 @@ function timeAgo(dateStr: string): string {
     display: flex;
     gap: 6px;
     margin-top: 8px;
-    font-size: 0.7rem;
+    font-size: 0.84rem;
     color: var(--text-muted);
     flex-wrap: wrap;
     align-items: center;
@@ -493,14 +493,14 @@ function timeAgo(dateStr: string): string {
     margin-bottom: 12px;
   }
   .side-avatar {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid var(--border-strong);
   }
   .side-name {
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: 800;
     margin: 0 0 8px;
     text-align: center;
@@ -526,7 +526,7 @@ function timeAgo(dateStr: string): string {
     font-family: monospace;
   }
   .side-label {
-    font-size: 0.5rem;
+    font-size: 0.6rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.15em;
@@ -535,7 +535,7 @@ function timeAgo(dateStr: string): string {
     font-family: monospace;
   }
   .side-bio {
-    font-size: 0.8rem;
+    font-size: 0.96rem;
     color: var(--text-secondary);
     line-height: 1.6;
     margin: 0;
@@ -570,7 +570,7 @@ function timeAgo(dateStr: string): string {
     min-width: 0;
   }
   .trk-name {
-    font-size: 0.7rem;
+    font-size: 0.84rem;
     font-weight: 700;
     color: var(--text);
     white-space: nowrap;
@@ -685,7 +685,7 @@ function timeAgo(dateStr: string): string {
     border: none;
     border-bottom: 2px solid transparent;
     color: var(--text-muted);
-    font-size: 0.6rem;
+    font-size: 0.72rem;
     font-weight: 700;
     font-family: monospace;
     text-transform: uppercase;
@@ -720,7 +720,7 @@ function timeAgo(dateStr: string): string {
     text-align: center;
     padding: 24px 0;
     color: var(--text-muted);
-    font-size: 0.75rem;
+    font-size: 0.9rem;
   }
   .fp {
     background: var(--bg-card);
@@ -752,12 +752,12 @@ function timeAgo(dateStr: string): string {
     min-width: 0;
   }
   .fp-name {
-    font-size: 0.7rem;
+    font-size: 0.84rem;
     font-weight: 700;
     color: var(--text);
   }
   .fp-when {
-    font-size: 0.5rem;
+    font-size: 0.6rem;
     color: var(--text-muted);
     font-family: monospace;
   }
@@ -773,7 +773,7 @@ function timeAgo(dateStr: string): string {
     flex-shrink: 0;
   }
   .fp-txt {
-    font-size: 0.8rem;
+    font-size: 0.96rem;
     color: var(--text-secondary);
     line-height: 1.5;
     margin: 0 0 10px;
@@ -823,7 +823,7 @@ function timeAgo(dateStr: string): string {
     background: transparent;
     border: 1px solid transparent;
     color: var(--text-muted);
-    font-size: 0.6rem;
+    font-size: 0.72rem;
     font-weight: 600;
     cursor: pointer;
     text-align: center;
@@ -852,14 +852,14 @@ function timeAgo(dateStr: string): string {
     color: var(--repost);
   }
   .like-icon {
-    font-size: 0.7rem;
+    font-size: 0.84rem;
     transition: transform 0.2s;
   }
   .fp-a.liked .like-icon {
     transform: scale(1.2);
   }
   .repost-icon {
-    font-size: 0.7rem;
+    font-size: 0.84rem;
     transition: transform 0.2s;
   }
   .fp-a.reposted .repost-icon {
@@ -896,12 +896,12 @@ function timeAgo(dateStr: string): string {
     flex: 1;
   }
   .comment-author {
-    font-size: 0.65rem;
+    font-size: 0.78rem;
     font-weight: 700;
     color: var(--text);
   }
   .comment-text {
-    font-size: 0.7rem;
+    font-size: 0.84rem;
     color: var(--text-secondary);
     margin-top: 2px;
   }
@@ -1129,9 +1129,70 @@ function timeAgo(dateStr: string): string {
     currentUser = session?.user || null;
     updateUI();
     if (currentUser) {
-      loadLikedPosts();
-      loadRepostedPosts();
+      markLikedPosts();
+      markRepostedPosts();
     }
+  }
+
+  // Mark posts that the user already liked
+  async function markLikedPosts() {
+    if (!currentUser) return;
+    const artistId = new URL(window.location.href).searchParams.get('id') || '';
+    const { data } = await supabase.rpc('get_user_artist_post_likes', { p_artist_id: artistId });
+    if (!data || data.error || !Array.isArray(data)) return;
+    data.forEach((postId: string) => {
+      const article = document.querySelector(`.fp[data-post-id="${postId}"]`);
+      if (!article) return;
+      const btn = article.querySelector('.like-btn');
+      if (!btn) return;
+      btn.classList.add('liked');
+      const icon = btn.querySelector('.like-icon');
+      if (icon) icon.textContent = '♥';
+    });
+  }
+
+  // Mark posts that the user already reposted
+  async function markRepostedPosts() {
+    if (!currentUser) return;
+    const artistId = new URL(window.location.href).searchParams.get('id') || '';
+    const { data } = await supabase.rpc('get_user_artist_post_reposts', { p_artist_id: artistId });
+    if (!data || data.error || !Array.isArray(data)) return;
+    data.forEach((postId: string) => {
+      const article = document.querySelector(`.fp[data-post-id="${postId}"]`);
+      if (!article) return;
+      const btn = article.querySelector('.repost-btn');
+      if (!btn) return;
+      btn.classList.add('reposted');
+    });
+  }
+
+  // Load comments for a post from DB
+  async function loadPostComments(postId: string, listEl: HTMLElement) {
+    const { data, error } = await supabase.rpc('get_artist_post_comments', { p_post_id: postId });
+    if (error || !data || !Array.isArray(data)) return;
+    listEl.innerHTML = '';
+    data.forEach((c: any) => {
+      const div = document.createElement('div');
+      div.className = 'comment-item';
+      div.innerHTML = `
+        <div class="comment-body">
+          <a href="/perfil?user=${c.author_username}" class="comment-author" style="text-decoration:none;color:var(--text);">${c.author_name}</a>
+          <p class="comment-text">${c.content}</p>
+          <span class="comment-time">${timeAgoFn(c.created_at)}</span>
+        </div>
+      `;
+      listEl.appendChild(div);
+    });
+  }
+  function timeAgoFn(dateStr: string): string {
+    const diff = Date.now() - new Date(dateStr).getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 60) return `${mins}m`;
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return `${hrs}h`;
+    const days = Math.floor(hrs / 24);
+    if (days < 7) return `${days}d`;
+    return `${Math.floor(days / 7)}sem`;
   }
 
   function updateUI() {
@@ -1226,10 +1287,17 @@ function timeAgo(dateStr: string): string {
 
   // Comment toggle
   document.querySelectorAll('.comment-toggle-btn').forEach((btn: Element) => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', async () => {
       const article = (btn as HTMLElement).closest('.fp');
-      const section = article?.querySelector('.comments-section');
-      section?.classList.toggle('hidden');
+      const section = article?.querySelector('.comments-section') as HTMLElement;
+      if (!section) return;
+      const wasHidden = section.classList.contains('hidden');
+      section.classList.toggle('hidden');
+      if (wasHidden && article) {
+        const postId = article.getAttribute('data-post-id');
+        const list = section.querySelector('.comments-list') as HTMLElement;
+        if (postId && list) await loadPostComments(postId, list);
+      }
     });
   });
 
@@ -1263,11 +1331,13 @@ function timeAgo(dateStr: string): string {
       // Add comment to list
       const list = article?.querySelector('.comments-list');
       if (list && currentUser) {
+        const { data: profile } = await supabase.from('profiles').select('nombre,username,stage_name,avatar_url').eq('id', currentUser.id).single();
+        const authorName = profile?.stage_name || profile?.nombre || profile?.username || 'Tú';
         const div = document.createElement('div');
         div.className = 'comment-item';
         div.innerHTML = `
           <div class="comment-body">
-            <span class="comment-author">Tú</span>
+            <a href="/perfil?user=${profile?.username || ''}" class="comment-author" style="text-decoration:none;color:var(--text);">${authorName}</a>
             <p class="comment-text">${content}</p>
             <span class="comment-time">ahora</span>
           </div>
@@ -1464,10 +1534,17 @@ function timeAgo(dateStr: string): string {
     });
 
     container.querySelectorAll('.comment-toggle-btn').forEach((btn: Element) => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', async () => {
         const article = (btn as HTMLElement).closest('.fp');
-        const section = article?.querySelector('.comments-section');
-        section?.classList.toggle('hidden');
+        const section = article?.querySelector('.comments-section') as HTMLElement;
+        if (!section) return;
+        const wasHidden = section.classList.contains('hidden');
+        section.classList.toggle('hidden');
+        if (wasHidden && article) {
+          const postId = article.getAttribute('data-post-id');
+          const list = section.querySelector('.comments-list') as HTMLElement;
+          if (postId && list) await loadPostComments(postId, list);
+        }
       });
     });
 
@@ -1498,11 +1575,13 @@ function timeAgo(dateStr: string): string {
 
         const list = article?.querySelector('.comments-list');
         if (list && currentUser) {
+          const { data: profile } = await supabase.from('profiles').select('nombre,username,stage_name,avatar_url').eq('id', currentUser.id).single();
+          const authorName = profile?.stage_name || profile?.nombre || profile?.username || 'Tú';
           const div = document.createElement('div');
           div.className = 'comment-item';
           div.innerHTML = `
             <div class="comment-body">
-              <span class="comment-author">Tú</span>
+              <a href="/perfil?user=${profile?.username || ''}" class="comment-author" style="text-decoration:none;color:var(--text);">${authorName}</a>
               <p class="comment-text">${content}</p>
               <span class="comment-time">ahora</span>
             </div>
