@@ -26,9 +26,9 @@ import Layout from '../../layouts/Layout.astro';
       <section class="mb-12">
         <h2 class="text-2xl font-bold mb-6">Usuarios con Tags</h2>
         <div class="overflow-x-auto">
-          <table class="w-full bg-gray-900 rounded-lg">
+          <table class="w-full bg-[var(--bg-card)] rounded-lg">
             <thead>
-              <tr class="border-b border-gray-700">
+              <tr class="border-b border-[var(--border)]">
                 <th class="text-left p-4">Usuario</th>
                 <th class="text-left p-4">Rol</th>
                 <th class="text-left p-4">Tags</th>
@@ -45,14 +45,14 @@ import Layout from '../../layouts/Layout.astro';
       <!-- Formulario para crear nuevo tag -->
       <section class="mb-12">
         <h2 class="text-2xl font-bold mb-6">Crear Nuevo Tag</h2>
-        <form id="create-tag-form" class="bg-gray-900 p-6 rounded-lg">
+        <form id="create-tag-form" class="bg-[var(--bg-card)] p-6 rounded-lg">
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div>
               <label class="block text-sm font-medium mb-2">Nombre del Tag</label>
               <input 
                 type="text" 
                 id="tag-name" 
-                class="w-full p-2 bg-gray-800 border border-gray-600 rounded focus:outline-none focus:border-wild-orange"
+                class="w-full p-2 bg-[var(--bg-card)] border border-[var(--border-muted)] rounded focus:outline-none focus:border-wild-orange"
                 required
               />
             </div>
@@ -61,7 +61,7 @@ import Layout from '../../layouts/Layout.astro';
               <input 
                 type="color" 
                 id="tag-color" 
-                class="w-full h-10 bg-gray-800 border border-gray-600 rounded"
+                class="w-full h-10 bg-[var(--bg-card)] border border-[var(--border-muted)] rounded"
                 value="#C98300"
               />
             </div>
@@ -69,7 +69,7 @@ import Layout from '../../layouts/Layout.astro';
               <label class="block text-sm font-medium mb-2">Animación</label>
               <select 
                 id="tag-animation" 
-                class="w-full p-2 bg-gray-800 border border-gray-600 rounded focus:outline-none focus:border-wild-orange"
+                class="w-full p-2 bg-[var(--bg-card)] border border-[var(--border-muted)] rounded focus:outline-none focus:border-wild-orange"
               >
                 <option value="none">Ninguna</option>
                 <option value="pulse">Pulso</option>
@@ -162,7 +162,7 @@ import Layout from '../../layouts/Layout.astro';
     }
 
     container.innerHTML = allTagsData.map(tag => `
-      <div class="bg-gray-900 p-4 rounded-lg border border-gray-700">
+      <div class="bg-[var(--bg-card)] p-4 rounded-lg border border-[var(--border)]">
         <div class="flex items-center justify-between mb-2">
           <h3 class="font-bold" style="color: ${tag.color}">${tag.name}</h3>
           <button 
@@ -244,11 +244,11 @@ import Layout from '../../layouts/Layout.astro';
     const modal = document.createElement('div');
     modal.className = 'fixed inset-0 bg-[var(--bg)] flex items-center justify-center z-50';
     modal.innerHTML = `
-      <div class="bg-gray-900 p-6 rounded-lg max-w-md w-full mx-4">
+      <div class="bg-[var(--bg-card)] p-6 rounded-lg max-w-md w-full mx-4">
         <h3 class="text-xl font-bold mb-4">Asignar Tag a @${username}</h3>
         <div class="mb-4">
           <label class="block text-sm font-medium mb-2">Seleccionar Tag</label>
-          <select id="assign-tag-select" class="w-full p-2 bg-gray-800 border border-gray-600 rounded">
+          <select id="assign-tag-select" class="w-full p-2 bg-[var(--bg-card)] border border-[var(--border-muted)] rounded">
             ${tagOptions}
           </select>
         </div>
@@ -261,7 +261,7 @@ import Layout from '../../layouts/Layout.astro';
           </button>
           <button 
             onclick="this.closest('.fixed').remove()" 
-            class="flex-1 bg-gray-700 hover:bg-gray-600 text-[var(--text)] font-bold py-2 px-4 rounded"
+            class="flex-1 bg-[var(--bg-card)] hover:bg-[var(--bg-card)] text-[var(--text)] font-bold py-2 px-4 rounded"
           >
             Cancelar
           </button>

@@ -116,7 +116,7 @@ try {
                     </a>
                     {categories.map(cat => (
                         <a href={`#${cat.id}`} class="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-[var(--bg-card)] text-[var(--text-muted)] hover:text-[var(--text)] transition-all group">
-                            <span class="w-1.5 h-1.5 bg-gray-700 rounded-full group-hover:bg-[var(--wild-orange)] group-hover:scale-150 transition-all"></span>
+                            <span class="w-1.5 h-1.5 bg-[var(--bg-card)] rounded-full group-hover:bg-[var(--wild-orange)] group-hover:scale-150 transition-all"></span>
                             <span class="text-sm font-medium">{cat.name}</span>
                         </a>
                     ))}
@@ -129,7 +129,7 @@ try {
                 <div class="space-y-2">
                     {['Menos de $500', '$500 - $1500', '$1500+'].map((label, _i) => (
                         <label class="flex items-center gap-3 cursor-pointer group hover:bg-[var(--bg-card)] p-2 rounded-lg transition-colors">
-                            <div class="relative flex items-center justify-center w-4 h-4 border border-gray-600 rounded bg-transparent group-hover:border-[var(--wild-orange)] transition-colors">
+                            <div class="relative flex items-center justify-center w-4 h-4 border border-[var(--border-muted)] rounded bg-transparent group-hover:border-[var(--wild-orange)] transition-colors">
                                 <input type="checkbox" class="peer appearance-none w-full h-full cursor-pointer absolute inset-0 z-10" />
                                 <div class="w-2.5 h-2.5 bg-[var(--wild-orange)] rounded-sm opacity-0 peer-checked:opacity-100 transition-opacity"></div>
                             </div>

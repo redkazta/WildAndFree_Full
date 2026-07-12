@@ -158,7 +158,7 @@ const studioShots = [
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12">
             {podcasts.map((pod) => (
                 <div class="group flex flex-col md:flex-row gap-6 items-start p-4 rounded-2xl hover:bg-[var(--bg-card)] transition-all cursor-pointer border border-transparent hover:border-[var(--border)]">
-                    <div class="relative w-full md:w-48 aspect-square flex-shrink-0 overflow-hidden rounded-xl bg-gray-900">
+                    <div class="relative w-full md:w-48 aspect-square flex-shrink-0 overflow-hidden rounded-xl bg-[var(--bg-card)]">
                         <img src={pod.image} width="192" height="192" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 grayscale group-hover:grayscale-0" />
                         <div class="absolute inset-0 flex items-center justify-center bg-[var(--bg)] opacity-0 group-hover:opacity-100 transition-opacity">
                             <button 
@@ -173,7 +173,7 @@ const studioShots = [
                     <div class="flex-1 min-w-0 py-2">
                         <div class="flex items-center gap-3 mb-2">
                             <span class="text-[10px] font-black text-[var(--primary)] uppercase tracking-widest">{pod.date}</span>
-                            <span class="w-1 h-1 bg-gray-500 rounded-full"></span>
+                            <span class="w-1 h-1 bg-[var(--text-muted)] rounded-full"></span>
                             <span class="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest">{pod.tags[0]}</span>
                         </div>
                         <h3 class="text-2xl font-black uppercase leading-none mb-3 group-hover:text-[var(--primary)] transition-colors line-clamp-2">
@@ -183,7 +183,7 @@ const studioShots = [
                             {pod.description}
                         </p>
                         <div class="flex items-center gap-2">
-                            <div class="w-6 h-6 rounded-full bg-gray-800 border border-[var(--border-strong)]"></div>
+                            <div class="w-6 h-6 rounded-full bg-[var(--bg-card)] border border-[var(--border-strong)]"></div>
                             <span class="text-[10px] font-black text-[var(--text-secondary)] uppercase tracking-wider">Host: {pod.host}</span>
                         </div>
                     </div>
