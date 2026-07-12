@@ -357,7 +357,7 @@ const isActive = (href: string) => {
 			}
 		</style>
 	</head>
-	<body class="selection:bg-wild-orange/50 selection:text-white overflow-x-hidden" style={`--primary: ${config.primary_color}; --secondary: ${config.secondary_color}; --wild-orange: ${config.primary_color}; --wild-red: ${config.secondary_color}; --tenant-primary: ${config.primary_color}; --tenant-secondary: ${config.secondary_color}; --tenant-glow: ${config.primary_color}33;`}>
+	<body class="selection:bg-wild-orange/50 selection:text-[var(--text)] overflow-x-hidden" style={`--primary: ${config.primary_color}; --secondary: ${config.secondary_color}; --wild-orange: ${config.primary_color}; --wild-red: ${config.secondary_color}; --tenant-primary: ${config.primary_color}; --tenant-secondary: ${config.secondary_color}; --tenant-glow: ${config.primary_color}33;`}>
 		<header class="fixed top-0 left-0 right-0 z-[1000] border-b-2 border-[var(--border)] shadow-2xl transition-all duration-500 wg-header" style="background: var(--bg);">
 						<div class="w-full mx-auto px-4 md:px-8 h-20 flex items-center justify-between gap-2">
 							<div class="flex items-center gap-2 md:gap-4 flex-shrink-0">
@@ -422,11 +422,11 @@ const isActive = (href: string) => {
 														<div id="wishlist-popover" class="popover">
 								<div class="popover-header">
 									<span class="popover-title">Favoritos</span>
-									<span class="text-[9px] text-gray-400 font-mono">WISHLIST</span>
+									<span class="text-[9px] text-[var(--text-muted)] font-mono">WISHLIST</span>
 								</div>
 								<div class="auth-popover-content popover-content"></div>
 								<div class="unauth-popover-msg popover-content">
-									<p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider text-center py-8"><a href="/login" class="text-[var(--primary)] hover:underline">Inicia sesión</a> para guardar tus favoritos</p>
+									<p class="text-[10px] text-[var(--text-muted)] font-bold uppercase tracking-wider text-center py-8"><a href="/login" class="text-[var(--primary)] hover:underline">Inicia sesión</a> para guardar tus favoritos</p>
 								</div>
 							</div>
 						</div>
@@ -501,15 +501,15 @@ const isActive = (href: string) => {
 					var el = document.getElementById(STYLE_ID);
 					if (!el) { el = document.createElement('style'); el.id = STYLE_ID; document.head.appendChild(el); }
 					el.textContent = [
-						'.text-white{color:'+T+'!important}',
-						'.text-white\\/10,.text-white\\/20,.text-white\\/30,.text-white\\/40,.text-white\\/50,.text-white\\/60,.text-white\\/70,.text-white\\/80,.text-white\\/90{color:'+T+'!important}',
-						'.text-gray-300,.text-gray-400,.text-gray-500,.text-gray-600,.text-slate-300,.text-slate-400,.text-slate-500,.text-zinc-300,.text-zinc-400,.text-zinc-500,.text-neutral-300,.text-neutral-400,.text-neutral-500,.text-stone-300,.text-stone-400,.text-stone-500{color:'+T+'!important}',
-						'.border-white,.border-white\\/5,.border-white\\/10,.border-white\\/15,.border-white\\/20,.border-white\\/30{border-color:'+BR+'!important}',
+						'.text-[var(--text)]{color:'+T+'!important}',
+						'.text-[var(--text)]\\/10,.text-[var(--text)]\\/20,.text-[var(--text)]\\/30,.text-[var(--text)]\\/40,.text-[var(--text)]\\/50,.text-[var(--text)]\\/60,.text-[var(--text)]\\/70,.text-[var(--text)]\\/80,.text-[var(--text)]\\/90{color:'+T+'!important}',
+						'.text-[var(--text-secondary)],.text-[var(--text-muted)],.text-[var(--text-muted)],.text-[var(--text-muted)],.text-[var(--text-secondary)],.text-[var(--text-muted)],.text-[var(--text-muted)],.text-[var(--text-secondary)],.text-[var(--text-muted)],.text-[var(--text-muted)],.text-[var(--text-secondary)],.text-[var(--text-muted)],.text-[var(--text-muted)],.text-[var(--text-secondary)],.text-[var(--text-muted)],.text-[var(--text-muted)]{color:'+T+'!important}',
+						'.border-[var(--border)],.border-[var(--border)]\\/5,.border-[var(--border)]\\/10,.border-[var(--border)]\\/15,.border-[var(--border)]\\/20,.border-[var(--border)]\\/30{border-color:'+BR+'!important}',
 						'.border-t-white\\/5,.border-t-white\\/10,.border-t-white\\/20{border-top-color:'+BR+'!important}',
 						'.border-b-white\\/5,.border-b-white\\/10{border-bottom-color:'+BR+'!important}',
 						'.border-r-white\\/10{border-right-color:'+BR+'!important}',
 						'.border-l-white\\/10{border-left-color:'+BR+'!important}',
-						'.bg-black,.bg-black\\/40,.bg-black\\/80,.bg-black\\/90,.bg-black\\/95,.bg-\\[\\#111\\],.bg-\\[\\#0a0a0a\\],.bg-\\[\\#000\\]{background:'+B+'!important}',
+						'.bg-[var(--bg)],.bg-[var(--bg)]\\/40,.bg-[var(--bg)]\\/80,.bg-[var(--bg)]\\/90,.bg-[var(--bg)]\\/95,.bg-\\[\\#111\\],.bg-\\[\\#0a0a0a\\],.bg-\\[\\#000\\]{background:'+B+'!important}',
 						'.bg-white\\/5,.bg-white\\/10,.bg-white\\/\\[0\\.02\\],.bg-white\\/\\[0\\.03\\],.bg-white\\/\\[0\\.05\\],.bg-white\\/\\[0\\.10\\]{background:'+BC+'!important}',
 						'[class*="bg-gradient"]{background:'+B+'!important;background-image:none!important}',
 						'[class*="backdrop-blur"]{backdrop-filter:none!important}',
@@ -522,15 +522,15 @@ const isActive = (href: string) => {
 
 					// 3. Walk DOM and set inline color/bg on all elements with Tailwind color classes
 					try {
-						var all = document.querySelectorAll('[class*="text-white"], [class*="text-gray"], [class*="text-slate"], [class*="text-zinc"], [class*="text-neutral"], [class*="text-stone"], [class*="text-black"]');
+						var all = document.querySelectorAll('[class*="text-[var(--text)]"], [class*="text-gray"], [class*="text-slate"], [class*="text-zinc"], [class*="text-neutral"], [class*="text-stone"], [class*="text-black"]');
 						for (var i = 0; i < all.length; i++) {
 							all[i].style.setProperty('color', T, 'important');
 						}
-						var borders = document.querySelectorAll('[class*="border-white"]');
+						var borders = document.querySelectorAll('[class*="border-[var(--border)]"]');
 						for (var j = 0; j < borders.length; j++) {
 							borders[j].style.setProperty('border-color', BR, 'important');
 						}
-						var bgs = document.querySelectorAll('[class*="bg-black"], [class*="bg-\\[\\#"]');
+						var bgs = document.querySelectorAll('[class*="bg-[var(--bg)]"], [class*="bg-\\[\\#"]');
 						for (var k = 0; k < bgs.length; k++) {
 							bgs[k].style.setProperty('background-color', B, 'important');
 							bgs[k].style.setProperty('background-image', 'none', 'important');

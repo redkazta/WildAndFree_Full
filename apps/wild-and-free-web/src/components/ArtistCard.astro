@@ -15,7 +15,7 @@ export type Props = {
 const { artist } = Astro.props;
 ---
 
-<a href={`/artista/${artist.id}`} class="block group relative aspect-[3/4] overflow-hidden rounded-wild-lg bg-[#111] border border-white/10 hover:border-wild-orange/50 transition-all duration-wild-slow shadow-2xl">
+<a href={`/artista/${artist.id}`} class="block group relative aspect-[3/4] overflow-hidden rounded-wild-lg bg-[var(--bg)] border border-[var(--border)] hover:border-wild-orange/50 transition-all duration-wild-slow shadow-2xl">
 	<img
 		src={artist.image_url}
 		alt={artist.name}
@@ -24,14 +24,14 @@ const { artist } = Astro.props;
 		height="533"
 		class="w-full h-[120%] object-cover grayscale group-hover:grayscale-0 transition-all duration-wild-slower group-hover:scale-110 absolute -top-[10%]"
 	/>
-	<div class="absolute inset-0 bg-black/80 group-hover:bg-black/40 transition-opacity duration-wild-slow"></div>
+	<div class="absolute inset-0 bg-[var(--bg)] group-hover:bg-[var(--bg)] transition-opacity duration-wild-slow"></div>
 	<div class="absolute inset-x-0 bottom-0 p-8 space-y-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-wild-slow">
 		<p class="text-label-sm font-black uppercase tracking-widest text-wild-orange">Artista // {artist.role}</p>
-		<h3 class="text-3xl font-black uppercase tracking-tighter text-white drop-shadow-md">{artist.name}</h3>
+		<h3 class="text-3xl font-black uppercase tracking-tighter text-[var(--text)] drop-shadow-md">{artist.name}</h3>
 		{artist.stats && (
 			<div class="flex items-center gap-4 pt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-wild-slow delay-100">
-				<span class="text-label-sm font-black text-white/60 uppercase tracking-widest">{artist.stats.seguidores} seguidores</span>
-				<span class="text-label-sm font-black text-white/60 uppercase tracking-widest">{artist.stats.oyentes} oyentes</span>
+				<span class="text-label-sm font-black text-[var(--text-muted)] uppercase tracking-widest">{artist.stats.seguidores} seguidores</span>
+				<span class="text-label-sm font-black text-[var(--text-muted)] uppercase tracking-widest">{artist.stats.oyentes} oyentes</span>
 			</div>
 		)}
 	</div>

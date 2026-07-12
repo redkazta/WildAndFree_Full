@@ -3,12 +3,12 @@
 <!-- Radio Floating Player (Global) -->
 <div id="radio-floating" transition:persist class="fixed bottom-4 left-4 z-[9999]">
   <!-- Collapsed: just the icon (mobile) -->
-  <button id="radio-expand" class="md:hidden w-10 h-10 rounded-full bg-black/95 border border-[var(--primary)]/40 flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.5)] hover:border-[var(--primary)]/70 transition-all active:scale-95">
+  <button id="radio-expand" class="md:hidden w-10 h-10 rounded-full bg-[var(--bg)] border border-[var(--primary)]/40 flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.5)] hover:border-[var(--primary)]/70 transition-all active:scale-95">
     <img src="/wg_logo.png" width="24" height="24" class="w-6 h-6 rounded-full object-cover" />
   </button>
 
   <!-- Full player (always visible on desktop, toggle on mobile) -->
-  <div id="radio-full" class="hidden md:flex w-[260px] sm:w-[300px] flex-col bg-black/95 backdrop-blur-md border border-[var(--primary)]/30 rounded-xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.5)] group hover:border-[var(--primary)]/60 transition-all">
+  <div id="radio-full" class="hidden md:flex w-[260px] sm:w-[300px] flex-col bg-[var(--bg)] border border-[var(--primary)]/30 rounded-xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.5)] group hover:border-[var(--primary)]/60 transition-all">
     <!-- Player Header -->
 	    <div class="p-2.5 flex gap-2.5 items-center bg-[var(--bg)]">
         <div class="w-9 h-9 bg-[var(--bg-card)] rounded-lg overflow-hidden flex-shrink-0 relative border border-[var(--border-faint)]">

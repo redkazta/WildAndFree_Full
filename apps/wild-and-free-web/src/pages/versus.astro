@@ -258,20 +258,20 @@ const config = {
 ---
 
 <Layout config={config}>
-  <div id="page-container" class="min-h-screen bg-neutral-950 text-white font-sans overflow-x-hidden relative selection:bg-wild-orange selection:text-black pb-48">
+  <div id="page-container" class="min-h-screen bg-neutral-950 text-[var(--text)] font-sans overflow-x-hidden relative selection:bg-wild-orange selection:text-black pb-48">
     
     <!-- ARCADE BACKGROUND -->
     <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 pointer-events-none z-0"></div>
     <div class="absolute inset-0 bg-gradient-to-b from-black via-black/90 to-black pointer-events-none z-0"></div>
     
     <!-- TOP BAR -->
-    <div class="relative z-50 bg-black/90 backdrop-blur-md border-b border-white/10 py-3">
+    <div class="relative z-50 bg-[var(--bg)] backdrop-blur-md border-b border-[var(--border)] py-3">
         <div class="container mx-auto px-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <div class="w-2 h-2 bg-[var(--primary)] animate-pulse rounded-full shadow-[0_0_10px_var(--primary)]"></div>
-                <span class="text-label-sm font-black uppercase tracking-widest text-white arcade-font">VERSUS MODE // SYSTEM V2.0</span>
+                <span class="text-label-sm font-black uppercase tracking-widest text-[var(--text)] arcade-font">VERSUS MODE // SYSTEM V2.0</span>
             </div>
-            <div class="text-label-sm font-mono text-gray-500 font-bold uppercase hidden md:block">BATTLE ARENA ONLINE</div>
+            <div class="text-label-sm font-mono text-[var(--text-muted)] font-bold uppercase hidden md:block">BATTLE ARENA ONLINE</div>
         </div>
     </div>
 
@@ -286,10 +286,10 @@ const config = {
           
           <!-- MODE SELECTOR (Compact) -->
           <div class="flex flex-col md:flex-row items-center gap-4">
-              <div class="flex gap-2 p-1 bg-white/5 rounded-full border border-white/10 backdrop-blur-sm shadow-wild-glow">
-                  <button class="mode-btn px-6 py-2 rounded-full text-label-sm font-black uppercase tracking-widest transition-all hover:bg-white/10 text-gray-500 active" data-mode="1v1">1 VS 1</button>
-                  <button class="mode-btn px-6 py-2 rounded-full text-label-sm font-black uppercase tracking-widest transition-all hover:bg-white/10 text-gray-500" data-mode="2v2">2 VS 2</button>
-                  <button class="mode-btn px-6 py-2 rounded-full text-label-sm font-black uppercase tracking-widest transition-all hover:bg-white/10 text-gray-500" data-mode="3v3">3 VS 3</button>
+              <div class="flex gap-2 p-1 bg-[var(--bg-card)] rounded-full border border-[var(--border)] backdrop-blur-sm shadow-wild-glow">
+                  <button class="mode-btn px-6 py-2 rounded-full text-label-sm font-black uppercase tracking-widest transition-all hover:bg-[var(--bg-card)] text-[var(--text-muted)] active" data-mode="1v1">1 VS 1</button>
+                  <button class="mode-btn px-6 py-2 rounded-full text-label-sm font-black uppercase tracking-widest transition-all hover:bg-[var(--bg-card)] text-[var(--text-muted)]" data-mode="2v2">2 VS 2</button>
+                  <button class="mode-btn px-6 py-2 rounded-full text-label-sm font-black uppercase tracking-widest transition-all hover:bg-[var(--bg-card)] text-[var(--text-muted)]" data-mode="3v3">3 VS 3</button>
               </div>
               
               <button id="auto-fill-btn" class="px-4 py-2 bg-tenant-primary/10 border border-tenant-primary/30 text-tenant-primary rounded-full text-label-sm font-black uppercase tracking-widest hover:bg-tenant-primary hover:text-black transition-all flex items-center gap-2 group">
@@ -304,7 +304,7 @@ const config = {
           
           <!-- LEFT: TEAM ALPHA -->
           <div class="flex flex-col items-center gap-6 order-2 md:order-1">
-              <div class="text-2xl font-black text-white/10 uppercase tracking-tighter italic border-b-2 border-[var(--primary)] px-8 pb-1 transform -skew-x-12">TEAM ALPHA</div>
+              <div class="text-2xl font-black text-[var(--text)]/10 uppercase tracking-tighter italic border-b-2 border-[var(--primary)] px-8 pb-1 transform -skew-x-12">TEAM ALPHA</div>
               <div id="team-alpha-slots" class="flex flex-col gap-4">
                   <!-- Slots injected via JS -->
               </div>
@@ -315,8 +315,8 @@ const config = {
               <!-- VS CIRCLE -->
               <div class="relative group cursor-default z-10">
                   <div class="absolute inset-0 bg-[var(--primary)] rounded-full blur-[50px] opacity-20 group-hover:opacity-40 transition-opacity animate-pulse"></div>
-                  <div class="w-32 h-32 md:w-40 md:h-40 bg-black border-4 border-[var(--primary)] rounded-full flex items-center justify-center relative z-10 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
-                      <span class="text-6xl md:text-7xl font-black italic text-white tracking-tighter transform -rotate-12 drop-shadow-[4px_4px_0px_var(--primary)]">VS</span>
+                  <div class="w-32 h-32 md:w-40 md:h-40 bg-[var(--bg)] border-4 border-[var(--primary)] rounded-full flex items-center justify-center relative z-10 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+                      <span class="text-6xl md:text-7xl font-black italic text-[var(--text)] tracking-tighter transform -rotate-12 drop-shadow-[4px_4px_0px_var(--primary)]">VS</span>
                   </div>
               </div>
 
@@ -329,15 +329,15 @@ const config = {
               <!-- INFO DISPLAY (BATTLE COMPUTER) -->
               <div id="center-info" class="w-full max-w-[200px] h-32 flex flex-col justify-center items-center text-center opacity-50 transition-opacity z-10">
                   <div class="flex flex-col items-center gap-2">
-                      <svg class="w-6 h-6 text-white/20 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
-                      <p class="text-label-sm font-mono uppercase tracking-widest text-gray-500">Selecciona un artista<br>para ver análisis</p>
+                      <svg class="w-6 h-6 text-[var(--text-faint)] animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
+                      <p class="text-label-sm font-mono uppercase tracking-widest text-[var(--text-muted)]">Selecciona un artista<br>para ver análisis</p>
                   </div>
               </div>
           </div>
 
           <!-- RIGHT: TEAM OMEGA -->
           <div class="flex flex-col items-center gap-6 order-3">
-              <div class="text-2xl font-black text-white/10 uppercase tracking-tighter italic border-b-2 border-red-600 px-8 pb-1 transform skew-x-12">TEAM OMEGA</div>
+              <div class="text-2xl font-black text-[var(--text)]/10 uppercase tracking-tighter italic border-b-2 border-red-600 px-8 pb-1 transform skew-x-12">TEAM OMEGA</div>
               <div id="team-omega-slots" class="flex flex-col gap-4">
                   <!-- Slots injected via JS -->
               </div>
@@ -346,10 +346,10 @@ const config = {
       </div>
 
       <!-- BRACKETS SECTION (Moved down) -->
-      <div class="mt-24 w-full max-w-5xl border-t border-white/5 pt-12">
+      <div class="mt-24 w-full max-w-5xl border-t border-[var(--border-faint)] pt-12">
           <div class="flex items-center justify-between mb-8">
-              <h3 class="text-xl font-black uppercase tracking-widest text-white/40">Torneo Generado</h3>
-              <button id="regenerate-brackets" class="text-label-sm font-bold text-tenant-primary uppercase tracking-widest hover:text-white transition-colors flex items-center gap-2">
+              <h3 class="text-xl font-black uppercase tracking-widest text-[var(--text-faint)]">Torneo Generado</h3>
+              <button id="regenerate-brackets" class="text-label-sm font-bold text-tenant-primary uppercase tracking-widest hover:text-[var(--text)] transition-colors flex items-center gap-2">
                   <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                   Recalcular
               </button>
@@ -360,7 +360,7 @@ const config = {
       </div>
 
       <!-- BATTLE OVERLAY (Hidden by default) -->
-      <div id="battle-overlay" class="fixed inset-0 z-[200] bg-black/90 backdrop-blur-xl hidden flex-col items-center justify-center">
+      <div id="battle-overlay" class="fixed inset-0 z-[200] bg-[var(--bg)] backdrop-blur-xl hidden flex-col items-center justify-center">
           <div class="relative w-full max-w-4xl h-[60vh] flex items-center justify-center">
               <!-- BACKGROUND FX -->
               <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 animate-pulse"></div>
@@ -368,20 +368,20 @@ const config = {
               <!-- CLASH ANIMATION CONTAINER -->
               <div id="clash-container" class="relative w-full h-full flex items-center justify-center overflow-hidden">
                   <div id="team-alpha-clash" class="absolute left-0 top-0 bottom-0 w-1/2 bg-gradient-to-r from-black to-[var(--primary)] transform -translate-x-full transition-transform duration-1000 flex items-center justify-end pr-10">
-                      <h2 class="text-6xl md:text-9xl font-black italic text-white uppercase tracking-tighter mix-blend-overlay opacity-50">ALPHA</h2>
+                      <h2 class="text-6xl md:text-9xl font-black italic text-[var(--text)] uppercase tracking-tighter mix-blend-overlay opacity-50">ALPHA</h2>
                   </div>
                   <div id="team-omega-clash" class="absolute right-0 top-0 bottom-0 w-1/2 bg-gradient-to-l from-black to-red-600 transform translate-x-full transition-transform duration-1000 flex items-center justify-start pl-10">
-                      <h2 class="text-6xl md:text-9xl font-black italic text-white uppercase tracking-tighter mix-blend-overlay opacity-50">OMEGA</h2>
+                      <h2 class="text-6xl md:text-9xl font-black italic text-[var(--text)] uppercase tracking-tighter mix-blend-overlay opacity-50">OMEGA</h2>
                   </div>
                   
                   <!-- VS FLASH -->
-                  <div id="vs-flash" class="absolute z-10 text-9xl font-black text-white italic scale-0 transition-transform duration-300 drop-shadow-[0_0_50px_white]">VS</div>
+                  <div id="vs-flash" class="absolute z-10 text-9xl font-black text-[var(--text)] italic scale-0 transition-transform duration-300 drop-shadow-[0_0_50px_white]">VS</div>
               </div>
 
               <!-- WINNER REVEAL -->
               <div id="winner-reveal" class="absolute inset-0 flex flex-col items-center justify-center hidden">
                   <h3 class="text-2xl font-black text-[var(--primary)] uppercase tracking-[1em] mb-4 animate-fade-in-down">VICTORIA PARA</h3>
-                  <h1 id="winner-name" class="text-6xl md:text-9xl font-black italic text-white uppercase tracking-tighter drop-shadow-[0_0_30px_var(--primary)] scale-150 animate-bounce-in">TEAM ALPHA</h1>
+                  <h1 id="winner-name" class="text-6xl md:text-9xl font-black italic text-[var(--text)] uppercase tracking-tighter drop-shadow-[0_0_30px_var(--primary)] scale-150 animate-bounce-in">TEAM ALPHA</h1>
                   <button id="close-overlay" class="mt-12 px-8 py-3 bg-white text-black font-black uppercase tracking-widest hover:bg-[var(--primary)] transition-colors animate-fade-in-up">
                       VOLVER A LA ARENA
                   </button>
@@ -392,16 +392,16 @@ const config = {
     </div>
 
     <!-- ARTIST PICKER DOCK (Floating Bottom) -->
-    <div id="artist-dock" class="fixed bottom-0 left-0 right-0 z-[100] bg-black/90 backdrop-blur-xl border-t border-white/10 p-4 transform transition-transform duration-500 shadow-[0_-20px_50px_rgba(0,0,0,0.5)]">
+    <div id="artist-dock" class="fixed bottom-0 left-0 right-0 z-[100] bg-[var(--bg)] backdrop-blur-xl border-t border-[var(--border)] p-4 transform transition-transform duration-500 shadow-[0_-20px_50px_rgba(0,0,0,0.5)]">
         <div class="container mx-auto">
             <div class="flex items-center justify-between mb-3 px-2">
                 <div class="flex items-center gap-3">
                     <div class="w-1.5 h-1.5 bg-[var(--primary)] rounded-full animate-ping"></div>
-                    <h3 class="text-label-sm font-black text-white uppercase tracking-[0.3em] arcade-font">Crew Disponible</h3>
+                    <h3 class="text-label-sm font-black text-[var(--text)] uppercase tracking-[0.3em] arcade-font">Crew Disponible</h3>
                 </div>
                 <div class="flex items-center gap-4">
-                    <span class="text-label-sm font-bold text-white/30 uppercase tracking-[0.2em] hidden md:block">Arrastra artistas a los slots de combate</span>
-                    <button id="toggle-dock" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-all border border-white/10">
+                    <span class="text-label-sm font-bold text-[var(--text)]/30 uppercase tracking-[0.2em] hidden md:block">Arrastra artistas a los slots de combate</span>
+                    <button id="toggle-dock" class="w-8 h-8 rounded-full bg-[var(--bg-card)] flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--bg-card)] transition-all border border-[var(--border)]">
                         <svg id="dock-icon" class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
                 </div>
@@ -410,7 +410,7 @@ const config = {
             <div id="dock-content" class="flex gap-4 overflow-x-auto pb-4 pt-2 px-2 custom-scrollbar mask-fade-edges justify-center md:justify-start">
                  {artists.map((artist: any) => (
                      <div 
-                       class="artist-token flex-shrink-0 w-20 h-20 md:w-24 md:h-24 relative group cursor-grab active:cursor-grabbing border-2 border-white/5 hover:border-tenant-primary hover:scale-110 transition-all duration-300 overflow-hidden bg-[#111] rounded-wild-lg shadow-2xl"
+                       class="artist-token flex-shrink-0 w-20 h-20 md:w-24 md:h-24 relative group cursor-grab active:cursor-grabbing border-2 border-[var(--border-faint)] hover:border-tenant-primary hover:scale-110 transition-all duration-300 overflow-hidden bg-[var(--bg)] rounded-wild-lg shadow-2xl"
                        draggable="true"
                        data-id={artist.id}
                        data-name={artist.nombre}
@@ -419,7 +419,7 @@ const config = {
                      >
                          <img src={artist.imagenes.profile} class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" loading="lazy" width="96" height="96" />
                          <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center p-2">
-                             <span class="text-[7px] font-black text-white uppercase text-center leading-none truncate w-full tracking-tighter">{artist.nombre}</span>
+                             <span class="text-[7px] font-black text-[var(--text)] uppercase text-center leading-none truncate w-full tracking-tighter">{artist.nombre}</span>
                          </div>
                          <div class="absolute top-1 right-1 w-2 h-2 bg-[var(--primary)] rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-[0_0_10px_var(--primary)]"></div>
                      </div>
@@ -465,38 +465,38 @@ const config = {
         const tec = stats.technique;
         
         centerInfo.innerHTML = `
-            <div class="animate-fade-in-up w-full bg-black/80 backdrop-blur-md p-3 rounded-xl border border-white/10 shadow-2xl relative overflow-hidden">
+            <div class="animate-fade-in-up w-full bg-[var(--bg)] backdrop-blur-md p-3 rounded-xl border border-[var(--border)] shadow-2xl relative overflow-hidden">
                 <div class="absolute inset-0 bg-[var(--primary)]/5"></div>
                 
-                <h4 class="text-sm font-black italic uppercase text-white tracking-tighter leading-none mb-1 truncate">${name}</h4>
+                <h4 class="text-sm font-black italic uppercase text-[var(--text)] tracking-tighter leading-none mb-1 truncate">${name}</h4>
                 <p class="text-[8px] font-bold text-[var(--primary)] uppercase tracking-[0.2em] mb-2 truncate">${role}</p>
                 
                 <div class="flex flex-col gap-1 w-full">
                     <!-- POWER -->
                     <div class="flex items-center gap-1">
-                        <span class="text-[6px] font-black text-gray-400 w-6">PWR</span>
-                        <div class="flex-1 h-1 bg-white/10 rounded-full overflow-hidden">
+                        <span class="text-[6px] font-black text-[var(--text-muted)] w-6">PWR</span>
+                        <div class="flex-1 h-1 bg-[var(--bg-card)] rounded-full overflow-hidden">
                             <div class="h-full bg-gradient-to-r from-wild-orange to-red-600 w-0 animate-fill-bar" style="width: ${pwr}%"></div>
                         </div>
-                        <span class="text-[6px] font-mono text-white">${pwr}</span>
+                        <span class="text-[6px] font-mono text-[var(--text)]">${pwr}</span>
                     </div>
                     
                     <!-- SPEED -->
                     <div class="flex items-center gap-1">
-                        <span class="text-[6px] font-black text-gray-400 w-6">SPD</span>
-                        <div class="flex-1 h-1 bg-white/10 rounded-full overflow-hidden">
+                        <span class="text-[6px] font-black text-[var(--text-muted)] w-6">SPD</span>
+                        <div class="flex-1 h-1 bg-[var(--bg-card)] rounded-full overflow-hidden">
                             <div class="h-full bg-gradient-to-r from-blue-400 to-cyan-500 w-0 animate-fill-bar" style="width: ${spd}%"></div>
                         </div>
-                        <span class="text-[6px] font-mono text-white">${spd}</span>
+                        <span class="text-[6px] font-mono text-[var(--text)]">${spd}</span>
                     </div>
 
                     <!-- TECH -->
                     <div class="flex items-center gap-1">
-                        <span class="text-[6px] font-black text-gray-400 w-6">TEC</span>
-                        <div class="flex-1 h-1 bg-white/10 rounded-full overflow-hidden">
+                        <span class="text-[6px] font-black text-[var(--text-muted)] w-6">TEC</span>
+                        <div class="flex-1 h-1 bg-[var(--bg-card)] rounded-full overflow-hidden">
                             <div class="h-full bg-gradient-to-r from-purple-500 to-pink-500 w-0 animate-fill-bar" style="width: ${tec}%"></div>
                         </div>
-                        <span class="text-[6px] font-mono text-white">${tec}</span>
+                        <span class="text-[6px] font-mono text-[var(--text)]">${tec}</span>
                     </div>
                 </div>
             </div>
@@ -557,10 +557,10 @@ const config = {
             <div class="w-full h-full relative group overflow-hidden bg-zinc-900 animate-fade-in">
                 <img src="${artist.imagenes.profile}" width="200" height="200" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
-                <div class="absolute bottom-0 left-0 right-0 p-1 text-center bg-black/60 backdrop-blur-sm">
-                    <span class="text-[7px] font-black text-white uppercase tracking-tighter leading-none block truncate">${artist.nombre}</span>
+                <div class="absolute bottom-0 left-0 right-0 p-1 text-center bg-[var(--bg)]/60 backdrop-blur-sm">
+                    <span class="text-[7px] font-black text-[var(--text)] uppercase tracking-tighter leading-none block truncate">${artist.nombre}</span>
                 </div>
-                <button class="remove-btn absolute top-1 right-1 w-4 h-4 bg-red-600 rounded-full text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:scale-110">
+                <button class="remove-btn absolute top-1 right-1 w-4 h-4 bg-red-600 rounded-full text-[var(--text)] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:scale-110">
                     <svg class="w-2 h-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
@@ -616,10 +616,10 @@ const config = {
         btn.addEventListener('click', () => {
             modeBtns.forEach(b => {
                 b.classList.remove('active', 'bg-[var(--primary)]', 'text-black');
-                b.classList.add('text-gray-500');
+                b.classList.add('text-[var(--text-muted)]');
             });
             btn.classList.add('active', 'bg-[var(--primary)]', 'text-black');
-            btn.classList.remove('text-gray-500');
+            btn.classList.remove('text-[var(--text-muted)]');
             
             const mode = btn.getAttribute('data-mode');
             initSlots(mode);
@@ -650,20 +650,20 @@ const config = {
     function createSlotElement(index, team) {
         const slot = document.createElement('div');
         // Square slots matching dock token size: w-20 h-20 md:w-24 md:h-24
-        slot.className = `team-slot group/slot relative w-20 h-20 md:w-24 md:h-24 bg-[#111]/50 border-2 border-white/10 rounded-wild-lg flex items-center justify-center cursor-pointer transition-all hover:border-tenant-primary/50 overflow-hidden`;
+        slot.className = `team-slot group/slot relative w-20 h-20 md:w-24 md:h-24 bg-[var(--bg)]/50 border-2 border-[var(--border)] rounded-wild-lg flex items-center justify-center cursor-pointer transition-all hover:border-tenant-primary/50 overflow-hidden`;
         slot.innerHTML = `
             <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 pointer-events-none"></div>
-            <div class="absolute inset-0 border border-white/5 rounded-wild-lg pointer-events-none"></div>
+            <div class="absolute inset-0 border border-[var(--border-faint)] rounded-wild-lg pointer-events-none"></div>
             
             <!-- Holographic Corner Accents -->
-            <div class="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-white/20 rounded-tl-sm group-hover/slot:border-[var(--primary)] transition-colors"></div>
-            <div class="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-white/20 rounded-tr-sm group-hover/slot:border-[var(--primary)] transition-colors"></div>
-            <div class="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-white/20 rounded-bl-sm group-hover/slot:border-[var(--primary)] transition-colors"></div>
-            <div class="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-white/20 rounded-br-sm group-hover/slot:border-[var(--primary)] transition-colors"></div>
+            <div class="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-[var(--border-strong)] rounded-tl-sm group-hover/slot:border-[var(--primary)] transition-colors"></div>
+            <div class="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-[var(--border-strong)] rounded-tr-sm group-hover/slot:border-[var(--primary)] transition-colors"></div>
+            <div class="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-[var(--border-strong)] rounded-bl-sm group-hover/slot:border-[var(--primary)] transition-colors"></div>
+            <div class="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-[var(--border-strong)] rounded-br-sm group-hover/slot:border-[var(--primary)] transition-colors"></div>
 
             <div class="flex flex-col items-center gap-1 opacity-50 group-hover/slot:opacity-100 transition-opacity placeholder-content">
-                <svg class="w-4 h-4 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4"></path></svg>
-                <span class="text-[6px] font-black text-white/30 uppercase tracking-widest pointer-events-none select-none">${team} ${index}</span>
+                <svg class="w-4 h-4 text-[var(--text)]/30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4"></path></svg>
+                <span class="text-[6px] font-black text-[var(--text)]/30 uppercase tracking-widest pointer-events-none select-none">${team} ${index}</span>
             </div>
             
             <div class="slot-content absolute inset-0 hidden w-full h-full z-20"></div>
@@ -704,20 +704,20 @@ const config = {
 
     function createMatchHtml(teamA, teamB, index, mode) {
         return `
-            <div class="match-card bg-[#111]/40 border border-white/5 rounded-wild-lg overflow-hidden backdrop-blur-sm hover:border-tenant-primary/30 transition-all duration-500 animate-fade-in" style="animation-delay: ${index * 0.1}s">
-                <div class="bg-white/5 px-3 py-1.5 flex justify-between items-center border-b border-white/5">
+            <div class="match-card bg-[var(--bg)]/40 border border-[var(--border-faint)] rounded-wild-lg overflow-hidden backdrop-blur-sm hover:border-tenant-primary/30 transition-all duration-500 animate-fade-in" style="animation-delay: ${index * 0.1}s">
+                <div class="bg-[var(--bg-card)] px-3 py-1.5 flex justify-between items-center border-b border-[var(--border-faint)]">
                     <span class="text-label-sm font-black text-tenant-primary tracking-widest uppercase">MATCH #${index}</span>
-                    <span class="text-label-sm font-bold text-gray-500 uppercase">${mode}</span>
+                    <span class="text-label-sm font-bold text-[var(--text-muted)] uppercase">${mode}</span>
                 </div>
                 <div class="p-3 flex items-center justify-between gap-2 relative">
-                    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-black rounded-full border border-white/10 flex items-center justify-center text-label-sm text-white font-bold z-10">VS</div>
+                    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-[var(--bg)] rounded-full border border-[var(--border)] flex items-center justify-center text-label-sm text-[var(--text)] font-bold z-10">VS</div>
                     
                     <!-- Team A -->
                     <div class="flex-1 flex flex-col items-center gap-1">
                         <div class="flex -space-x-2">
                              ${teamA.map(a => `<img src="${a.imagenes.profile}" width="24" height="24" class="w-6 h-6 rounded-full border border-black grayscale object-cover" />`).join('')}
                         </div>
-                        <span class="text-label-sm font-bold text-gray-400 uppercase truncate max-w-[60px]">${teamA[0].nombre}</span>
+                        <span class="text-label-sm font-bold text-[var(--text-muted)] uppercase truncate max-w-[60px]">${teamA[0].nombre}</span>
                     </div>
 
                     <!-- Team B -->
@@ -725,7 +725,7 @@ const config = {
                         <div class="flex -space-x-2">
                              ${teamB.map(a => `<img src="${a.imagenes.profile}" width="24" height="24" class="w-6 h-6 rounded-full border border-black grayscale object-cover" />`).join('')}
                         </div>
-                        <span class="text-label-sm font-bold text-gray-400 uppercase truncate max-w-[60px]">${teamB[0].nombre}</span>
+                        <span class="text-label-sm font-bold text-[var(--text-muted)] uppercase truncate max-w-[60px]">${teamB[0].nombre}</span>
                     </div>
                 </div>
             </div>

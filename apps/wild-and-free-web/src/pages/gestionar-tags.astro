@@ -44,12 +44,12 @@ const assignedTagIds = userTags?.map(ut => ut.tag_id) || [];
       <div class="max-w-4xl mx-auto">
         <div class="mb-8">
           <h1 class="text-3xl font-bold mb-2">GESTIONAR TAGS</h1>
-          <p class="text-white/60">Personaliza tu perfil con tags que reflejen tu identidad en la comunidad</p>
+          <p class="text-[var(--text-muted)]">Personaliza tu perfil con tags que reflejen tu identidad en la comunidad</p>
         </div>
 
         <div class="grid md:grid-cols-2 gap-8">
           <!-- Tags Asignados -->
-          <div class="bg-white/5 rounded-lg p-6 border border-white/10">
+          <div class="bg-[var(--bg-card)] rounded-lg p-6 border border-[var(--border)]">
             <h2 class="text-xl font-bold mb-4">TUS TAGS ACTUALES</h2>
             <div id="assigned-tags" class="flex flex-wrap gap-2 mb-6">
               {userTags?.map((tag: any) => (
@@ -67,13 +67,13 @@ const assignedTagIds = userTags?.map(ut => ut.tag_id) || [];
                 </span>
               ))}
               {(!userTags || userTags.length === 0) && (
-                <p class="text-white/60 text-sm">No tienes tags asignados</p>
+                <p class="text-[var(--text-muted)] text-sm">No tienes tags asignados</p>
               )}
             </div>
           </div>
 
           <!-- Tags Disponibles -->
-          <div class="bg-white/5 rounded-lg p-6 border border-white/10">
+          <div class="bg-[var(--bg-card)] rounded-lg p-6 border border-[var(--border)]">
             <h2 class="text-xl font-bold mb-4">TAGS DISPONIBLES</h2>
             <div id="available-tags" class="flex flex-wrap gap-2">
               {allTags?.map((tag: any) => {
@@ -82,7 +82,7 @@ const assignedTagIds = userTags?.map(ut => ut.tag_id) || [];
                 return (
                   <button
                     class={`role-tag text-sm transition-all hover:scale-105 ${
-                      isAssigned ? 'opacity-50 cursor-not-allowed' : 'hover:bg-white/10'
+                      isAssigned ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[var(--bg-card)]'
                     }`}
                     style={`background: linear-gradient(135deg, ${tag.color}40 0%, ${tag.color}10 100%); border-color: ${tag.color}; box-shadow: 0 0 10px -2px ${tag.color};`}
                     onclick={isAssigned ? '' : `addTag(${tag.id})`}
@@ -98,7 +98,7 @@ const assignedTagIds = userTags?.map(ut => ut.tag_id) || [];
         </div>
 
         <div class="mt-8 text-center">
-          <a href="/perfil" class="inline-block bg-wild-orange hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-bold transition-colors">
+          <a href="/perfil" class="inline-block bg-wild-orange hover:bg-orange-600 text-[var(--text)] px-6 py-3 rounded-lg font-bold transition-colors">
             VOLVER AL PERFIL
           </a>
         </div>

@@ -11,43 +11,43 @@ const config = {
 ---
 
 <Layout config={config}>
-  <div class="min-h-screen bg-[#050505] text-white pb-20 pt-10">
+  <div class="min-h-screen bg-[#050505] text-[var(--text)] pb-20 pt-10">
     <div class="container mx-auto px-4 max-w-4xl">
       <h1 class="text-3xl md:text-5xl font-black uppercase mb-8 text-center">Finalizar Compra</h1>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <!-- Lista de Productos -->
         <div class="md:col-span-2 space-y-6">
-          <div id="checkout-items" class="bg-[#111] p-6 rounded-lg border border-white/10 space-y-4 min-h-[200px]">
-            <p class="text-center text-gray-500 py-10">Cargando tu carrito...</p>
+          <div id="checkout-items" class="bg-[var(--bg)] p-6 rounded-lg border border-[var(--border)] space-y-4 min-h-[200px]">
+            <p class="text-center text-[var(--text-muted)] py-10">Cargando tu carrito...</p>
           </div>
         </div>
 
         <!-- Resumen de Orden -->
         <div class="md:col-span-1">
-          <div class="bg-[#111] p-6 rounded-lg border border-white/10 sticky top-24">
-            <h3 class="text-xl font-black uppercase mb-6 border-b border-white/10 pb-4">Resumen</h3>
+          <div class="bg-[var(--bg)] p-6 rounded-lg border border-[var(--border)] sticky top-24">
+            <h3 class="text-xl font-black uppercase mb-6 border-b border-[var(--border)] pb-4">Resumen</h3>
             
             <div class="space-y-3 mb-6 text-sm">
-              <div class="flex justify-between text-gray-400">
+              <div class="flex justify-between text-[var(--text-muted)]">
                 <span>Subtotal</span>
                 <span id="checkout-subtotal">$0.00</span>
               </div>
-              <div class="flex justify-between text-gray-400">
+              <div class="flex justify-between text-[var(--text-muted)]">
                 <span>Envío</span>
                 <span class="text-[var(--primary)]">GRATIS</span>
               </div>
-              <div class="flex justify-between text-white font-bold text-lg pt-4 border-t border-white/10">
+              <div class="flex justify-between text-[var(--text)] font-bold text-lg pt-4 border-t border-[var(--border)]">
                 <span>Total</span>
                 <span id="checkout-total">$0.00</span>
               </div>
             </div>
 
-            <button id="pay-btn" class="w-full py-4 bg-[var(--primary)] text-black font-black uppercase tracking-widest rounded-xl hover:bg-white transition-all shadow-lg mb-4">
+            <button id="pay-btn" class="w-full py-4 bg-[var(--primary)] text-black font-black uppercase tracking-widest rounded-xl hover:bg-[var(--bg-hover)] transition-all shadow-lg mb-4">
               Pagar Ahora
             </button>
             
-            <a href="/tienda" class="block text-center text-xs text-gray-500 hover:text-white uppercase font-bold tracking-wider">
+            <a href="/tienda" class="block text-center text-xs text-[var(--text-muted)] hover:text-[var(--text)] uppercase font-bold tracking-wider">
               Seguir Comprando
             </a>
           </div>
@@ -76,7 +76,7 @@ const config = {
     if (cart.length === 0) {
       container.innerHTML = `
         <div class="text-center py-10">
-          <p class="text-gray-400 mb-4">Tu carrito está vacío.</p>
+          <p class="text-[var(--text-muted)] mb-4">Tu carrito está vacío.</p>
           <a href="/tienda" class="inline-block px-6 py-3 bg-white text-black font-black uppercase tracking-widest rounded-lg hover:bg-[var(--primary)] transition-colors">Ir a la Tienda</a>
         </div>
       `;
@@ -86,18 +86,18 @@ const config = {
     }
 
     const itemsHtml = cart.map(item => `
-      <div class="flex gap-4 items-center bg-[#181818] p-4 rounded border border-white/5">
+      <div class="flex gap-4 items-center bg-[#181818] p-4 rounded border border-[var(--border-faint)]">
         <div class="w-20 h-20 bg-[#222] flex-shrink-0 overflow-hidden">
           <img src="${item.image}" width="80" height="80" class="w-full h-full object-cover" />
         </div>
         <div class="flex-1 min-w-0">
-          <h4 class="font-bold text-white uppercase text-sm truncate">${item.name}</h4>
-          <p class="text-xs text-gray-500 mb-2">Precio: $${item.price}</p>
+          <h4 class="font-bold text-[var(--text)] uppercase text-sm truncate">${item.name}</h4>
+          <p class="text-xs text-[var(--text-muted)] mb-2">Precio: $${item.price}</p>
           <div class="flex items-center gap-3">
-             <div class="flex items-center border border-white/20 rounded">
-                <button class="px-2 py-1 text-gray-400 hover:text-white qty-btn" data-id="${item.id}" data-action="decrease">-</button>
+             <div class="flex items-center border border-[var(--border-strong)] rounded">
+                <button class="px-2 py-1 text-[var(--text-muted)] hover:text-[var(--text)] qty-btn" data-id="${item.id}" data-action="decrease">-</button>
                 <span class="px-2 text-sm font-bold">${item.quantity}</span>
-                <button class="px-2 py-1 text-gray-400 hover:text-white qty-btn" data-id="${item.id}" data-action="increase">+</button>
+                <button class="px-2 py-1 text-[var(--text-muted)] hover:text-[var(--text)] qty-btn" data-id="${item.id}" data-action="increase">+</button>
              </div>
              <button class="text-xs text-red-500 hover:text-red-400 font-bold uppercase ml-auto remove-btn" data-id="${item.id}">Eliminar</button>
           </div>

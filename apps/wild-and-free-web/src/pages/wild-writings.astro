@@ -53,7 +53,7 @@ const articles = [
 ---
 
 <Layout config={config}>
-  <div class="min-h-screen bg-[#050505] pb-20 px-4 md:px-8 relative overflow-hidden font-mono text-white">
+  <div class="min-h-screen bg-[#050505] pb-20 px-4 md:px-8 relative overflow-hidden font-mono text-[var(--text)]">
     
     <!-- Texture Overlay -->
     <div class="fixed inset-0 pointer-events-none opacity-10 z-0" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 20px 20px;"></div>
@@ -61,18 +61,18 @@ const articles = [
     <div class="max-w-[1200px] mx-auto relative z-10 animate-fade-in-up">
       
       <!-- Masthead -->
-      <header class="border-b-4 border-white mb-12 pb-4 text-center">
-        <div class="flex justify-between items-end border-b-2 border-white pb-2 mb-2">
-           <span class="text-xs font-bold uppercase tracking-widest text-white/60">VOL. 24</span>
-           <span class="text-xs font-bold uppercase tracking-widest text-white/60">EST. 2024</span>
+      <header class="border-b-4 border-[var(--border)] mb-12 pb-4 text-center">
+        <div class="flex justify-between items-end border-b-2 border-[var(--border)] pb-2 mb-2">
+           <span class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)]">VOL. 24</span>
+           <span class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)]">EST. 2024</span>
            <span class="text-xs font-bold uppercase tracking-widest text-[var(--street-accent)]">PRECIO: GRATIS</span>
         </div>
-        <h1 class="text-6xl md:text-9xl font-black tracking-tighter uppercase leading-none transform scale-y-110 text-white hover:text-[var(--street-accent)] transition-colors duration-500" style="text-shadow: 4px 4px 0px var(--street-accent);">
+        <h1 class="text-6xl md:text-9xl font-black tracking-tighter uppercase leading-none transform scale-y-110 text-[var(--text)] hover:text-[var(--street-accent)] transition-colors duration-500" style="text-shadow: 4px 4px 0px var(--street-accent);">
           THE WILD TIMES
         </h1>
-        <div class="flex justify-center items-center gap-4 mt-2 border-t-2 border-white pt-2">
+        <div class="flex justify-center items-center gap-4 mt-2 border-t-2 border-[var(--border)] pt-2">
            <span class="bg-[var(--street-accent)] text-black px-2 py-1 text-sm font-bold uppercase">FANZINE OFICIAL</span>
-           <span class="font-bold uppercase tracking-widest text-sm text-white/80">VOZ DE LA CALLE • TINTA Y SANGRE</span>
+           <span class="font-bold uppercase tracking-widest text-sm text-[var(--text-secondary)]">VOZ DE LA CALLE • TINTA Y SANGRE</span>
         </div>
       </header>
 
@@ -80,25 +80,25 @@ const articles = [
       <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
         
         <!-- Main Lead Article (Left Col) -->
-        <article class="md:col-span-8 border-r-0 md:border-r-2 border-white pr-0 md:pr-8 space-y-6">
-           <div class="relative group cursor-pointer overflow-hidden border-2 border-white">
+        <article class="md:col-span-8 border-r-0 md:border-r-2 border-[var(--border)] pr-0 md:pr-8 space-y-6">
+           <div class="relative group cursor-pointer overflow-hidden border-2 border-[var(--border)]">
               <div class="absolute inset-0 bg-[var(--street-accent)] translate-x-2 translate-y-2 group-hover:translate-x-1 group-hover:translate-y-1 transition-transform"></div>
               <img src={articles[0].image} width="800" height="400" loading="lazy" decoding="async" class="relative w-full h-[400px] object-cover grayscale contrast-125 hover:grayscale-0 transition-all duration-500 z-10" />
-              <div class="absolute top-4 left-4 z-20 bg-black border-2 border-white px-3 py-1 -rotate-2 shadow-[2px_2px_0px_var(--street-accent)]">
-                 <span class="font-black text-xs uppercase text-white">{articles[0].type}</span>
+              <div class="absolute top-4 left-4 z-20 bg-[var(--bg)] border-2 border-[var(--border)] px-3 py-1 -rotate-2 shadow-[2px_2px_0px_var(--street-accent)]">
+                 <span class="font-black text-xs uppercase text-[var(--text)]">{articles[0].type}</span>
               </div>
            </div>
            
            <div class="space-y-4">
-              <h2 class="text-5xl font-black uppercase leading-[0.9] tracking-tighter hover:text-[var(--street-accent)] transition-colors cursor-pointer text-white">
+              <h2 class="text-5xl font-black uppercase leading-[0.9] tracking-tighter hover:text-[var(--street-accent)] transition-colors cursor-pointer text-[var(--text)]">
                  {articles[0].title}
               </h2>
-              <div class="flex items-center gap-4 text-sm font-bold border-y border-white py-2 text-white/60">
+              <div class="flex items-center gap-4 text-sm font-bold border-y border-[var(--border)] py-2 text-[var(--text-muted)]">
                  <span>POR {articles[0].author}</span>
                  <span>///</span>
                  <span>{articles[0].date}</span>
               </div>
-              <p class="text-lg leading-relaxed font-serif text-white/80">
+              <p class="text-lg leading-relaxed font-serif text-[var(--text-secondary)]">
                  <span class="text-4xl float-left mr-2 font-black text-[var(--street-accent)]">E</span>{articles[0].content}
               </p>
               <button class="bg-white text-black px-6 py-2 font-bold uppercase hover:bg-[var(--street-accent)] hover:text-black border-2 border-transparent hover:border-black transition-colors shadow-[4px_4px_0px_var(--street-accent)]">
@@ -111,11 +111,11 @@ const articles = [
         <aside class="md:col-span-4 space-y-12">
            
            <!-- Poetry Corner -->
-           <div class="bg-[#111] border-2 border-white p-6 shadow-[8px_8px_0px_var(--street-accent)] rotate-1 hover:rotate-0 transition-transform duration-300">
+           <div class="bg-[var(--bg)] border-2 border-[var(--border)] p-6 shadow-[8px_8px_0px_var(--street-accent)] rotate-1 hover:rotate-0 transition-transform duration-300">
               <h3 class="text-2xl font-black uppercase mb-4 border-b-2 border-black pb-2 bg-[var(--street-accent)] inline-block px-2 transform -skew-x-12 text-black">
                  {articles[2].title}
               </h3>
-              <p class="font-serif italic text-lg leading-relaxed mb-4 text-white/90">
+              <p class="font-serif italic text-lg leading-relaxed mb-4 text-[var(--text)]">
                  "{articles[2].content}"
               </p>
               <div class="text-right font-bold text-sm text-[var(--street-accent)]">"” {articles[2].author}</div>
@@ -123,24 +123,24 @@ const articles = [
 
            <!-- Opinion Piece -->
            <div class="space-y-4 group">
-              <div class="relative overflow-hidden border-2 border-white h-48">
+              <div class="relative overflow-hidden border-2 border-[var(--border)] h-48">
                  <img src={articles[1].image} width="400" height="192" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale contrast-150 group-hover:grayscale-0 transition-all duration-500" />
                  <div class="absolute inset-0 bg-[var(--street-accent)] mix-blend-multiply opacity-50 group-hover:opacity-20 transition-opacity"></div>
               </div>
-              <h3 class="text-3xl font-black uppercase leading-none hover:text-[var(--street-accent)] cursor-pointer text-white transition-colors">
+              <h3 class="text-3xl font-black uppercase leading-none hover:text-[var(--street-accent)] cursor-pointer text-[var(--text)] transition-colors">
                  {articles[1].title}
               </h3>
-              <p class="text-sm font-bold leading-tight text-white/70">
+              <p class="text-sm font-bold leading-tight text-[var(--text-secondary)]">
                  {articles[1].content}
               </p>
            </div>
 
            <!-- Ad / Wanted -->
-           <div class="border-4 border-white border-dashed p-4 text-center space-y-4 bg-[#1a1a1a] transform -rotate-1 hover:rotate-0 transition-transform">
+           <div class="border-4 border-[var(--border)] border-dashed p-4 text-center space-y-4 bg-[#1a1a1a] transform -rotate-1 hover:rotate-0 transition-transform">
               <h4 class="text-4xl font-black uppercase text-[var(--street-accent)]">WANTED</h4>
-              <p class="font-bold text-sm text-white">BUSCAMOS ESCRITORES, POETAS Y CRÍTICOS.</p>
+              <p class="font-bold text-sm text-[var(--text)]">BUSCAMOS ESCRITORES, POETAS Y CRÍTICOS.</p>
               <div class="w-full h-px bg-white/20"></div>
-              <p class="font-mono text-xs text-white/60">ENVÍA TU PORTAFOLIO A:<br/><span class="text-white">WRITE@WILDGVNG.COM</span></p>
+              <p class="font-mono text-xs text-[var(--text-muted)]">ENVÍA TU PORTAFOLIO A:<br/><span class="text-[var(--text)]">WRITE@WILDGVNG.COM</span></p>
            </div>
 
         </aside>
@@ -148,23 +148,23 @@ const articles = [
       </div>
 
       <!-- Bottom Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 pt-12 border-t-4 border-white">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 pt-12 border-t-4 border-[var(--border)]">
          {articles.slice(3).map(article => (
             <div class="space-y-4 group">
-               <div class="border-2 border-white p-1 overflow-hidden">
+               <div class="border-2 border-[var(--border)] p-1 overflow-hidden">
                   <img src={article.image} width="400" height="192" loading="lazy" decoding="async" class="w-full h-48 object-cover grayscale group-hover:grayscale-0 transition-all duration-500 hover:scale-105" />
                </div>
-               <h4 class="text-2xl font-black uppercase leading-none text-white group-hover:text-[var(--street-accent)] transition-colors">{article.title}</h4>
-               <p class="text-sm font-serif text-white/70">{article.content}</p>
+               <h4 class="text-2xl font-black uppercase leading-none text-[var(--text)] group-hover:text-[var(--street-accent)] transition-colors">{article.title}</h4>
+               <p class="text-sm font-serif text-[var(--text-secondary)]">{article.content}</p>
             </div>
          ))}
          
-         <div class="col-span-1 md:col-span-2 bg-[#111] border-2 border-white text-white p-8 flex flex-col justify-center items-center text-center space-y-4 relative overflow-hidden group">
+         <div class="col-span-1 md:col-span-2 bg-[var(--bg)] border-2 border-[var(--border)] text-[var(--text)] p-8 flex flex-col justify-center items-center text-center space-y-4 relative overflow-hidden group">
             <div class="absolute inset-0 bg-[var(--street-accent)] opacity-0 group-hover:opacity-5 transition-opacity pointer-events-none"></div>
             <h3 class="text-4xl font-black uppercase text-[var(--street-accent)] animate-pulse">SUSCRÍBETE AL CAOS</h3>
-            <p class="max-w-md text-sm text-gray-400">RECIBE LA EDICIÓN IMPRESA Y ACCESO ANTICIPADO A BATALLAS.</p>
-            <div class="flex w-full max-w-sm border-2 border-white bg-black">
-               <input type="email" placeholder="TU EMAIL" class="flex-1 bg-transparent px-4 py-2 outline-none text-white placeholder-gray-600 font-mono" />
+            <p class="max-w-md text-sm text-[var(--text-muted)]">RECIBE LA EDICIÓN IMPRESA Y ACCESO ANTICIPADO A BATALLAS.</p>
+            <div class="flex w-full max-w-sm border-2 border-[var(--border)] bg-[var(--bg)]">
+               <input type="email" placeholder="TU EMAIL" class="flex-1 bg-transparent px-4 py-2 outline-none text-[var(--text)] placeholder-gray-600 font-mono" />
                <button class="bg-white text-black px-6 py-2 font-bold uppercase hover:bg-[var(--street-accent)] hover:border-l-2 hover:border-black transition-colors">ENVIAR</button>
             </div>
          </div>

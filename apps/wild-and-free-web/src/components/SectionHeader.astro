@@ -14,11 +14,11 @@ const { title, subtitle, label } = Astro.props;
       {label}
     </span>
   )}
-  <h2 class="text-display-md font-black uppercase tracking-tighter text-white relative inline-block">
+  <h2 class="text-display-md font-black uppercase tracking-tighter text-[var(--text)] relative inline-block">
     {title}
   </h2>
   {subtitle && (
-    <p class="text-label font-bold text-gray-500 uppercase max-w-content mx-auto">
+    <p class="text-label font-bold text-[var(--text-muted)] uppercase max-w-content mx-auto">
       {subtitle}
     </p>
   )}
