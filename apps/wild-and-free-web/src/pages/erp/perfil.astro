@@ -42,8 +42,13 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
         <div class="erp-card">
           <div class="erp-card-title">Avatar</div>
           <div style="display:flex;flex-direction:column;align-items:center;gap:16px;padding:24px 0;">
-            <div id="pf-avatar" style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-hover));display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:700;color:#fff;"></div>
+            <div id="pf-avatar" style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-hover));display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:700;color:#fff;overflow:hidden;background-size:cover;background-position:center;"></div>
             <div style="font-size:12px;font-weight:600;" id="pf-display-name">-</div>
+            <label class="erp-btn" style="cursor:pointer;font-size:10px;">
+              📷 Subir Avatar
+              <input type="file" id="pf-avatar-input" accept="image/png,image/jpeg,image/webp" style="display:none;" />
+            </label>
+            <div id="pf-avatar-msg" style="font-size:10px;color:var(--text-muted);"></div>
           </div>
         </div>
       </div>
@@ -160,16 +165,63 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
     set('pf-avatar', (user.email?.[0] || 'U').toUpperCase());
     set('pf-display-name', user.email?.split('@')[0] || 'Usuario');
 
-    // Profile
+    // Load profile + avatar
     try {
-      const { data } = await supabase.from('profiles').select('nombre,username,bio').eq('id', user.id).single();
-      if (data) {
-        set('pf-nombre', data.nombre);
-        set('pf-username', data.username);
-        set('pf-bio', data.bio);
-        if (data.nombre) set('pf-display-name', data.nombre);
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('nombre,username,bio,avatar_url')
+        .eq('id', user.id)
+        .single();
+      if (profileData) {
+        set('pf-nombre', profileData.nombre);
+        set('pf-username', profileData.username);
+        set('pf-bio', profileData.bio);
+        if (profileData.nombre) set('pf-display-name', profileData.nombre);
+        if (profileData.avatar_url) {
+          const av = document.getElementById('pf-avatar');
+          if (av) {
+            av.style.backgroundImage = `url(${profileData.avatar_url})`;
+            av.textContent = '';
+          }
+        }
       }
     } catch(e) {}
+
+    // Avatar upload
+    const fileInput = document.getElementById('pf-avatar-input');
+    if (fileInput) {
+      fileInput.addEventListener('change', async () => {
+        const file = fileInput.files?.[0];
+        if (!file) return;
+        const msg = document.getElementById('pf-avatar-msg');
+        if (msg) msg.textContent = 'Subiendo...';
+        try {
+          const ext = file.name.split('.').pop() || 'png';
+          const path = `${user.id}/avatar.${ext}`;
+          const { error: uploadError } = await supabase.storage
+            .from('avatars')
+            .upload(path, file, { upsert: true });
+          if (uploadError) throw uploadError;
+          const { data: { publicUrl } } = supabase.storage
+            .from('avatars')
+            .getPublicUrl(path);
+          // Save to profiles
+          await supabase.from('profiles').upsert({
+            id: user.id,
+            avatar_url: publicUrl
+          }, { onConflict: 'id' });
+          // Update display
+          const av = document.getElementById('pf-avatar');
+          if (av) {
+            av.style.backgroundImage = `url(${publicUrl})`;
+            av.textContent = '';
+          }
+          if (msg) msg.textContent = '✅ Avatar actualizado';
+        } catch (e) {
+          if (msg) msg.textContent = '✗ Error al subir: ' + (e.message || e);
+        }
+      });
+    }
 
     // Theme toggle
     const themeCheck = document.getElementById('pf-theme-input');

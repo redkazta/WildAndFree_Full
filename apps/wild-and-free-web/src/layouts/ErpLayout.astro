@@ -79,7 +79,7 @@ const modules = [
         <span class="erp-nav-label">Tema</span>
       </button>
       <a href="/erp/perfil" class="erp-user-section" style="text-decoration:none;position:relative;">
-        <div class="erp-user-avatar" id="erpUserAvatar" style="cursor:pointer;">A</div>
+        <div class="erp-user-avatar" id="erpUserAvatar" style="cursor:pointer;overflow:hidden;background-size:cover;background-position:center;">A</div>
         <div class="erp-user-info">
           <span class="erp-user-name" id="erpUserName">Admin</span>
           <span class="erp-user-role" id="erpUserBadge">Cargando...</span>
@@ -831,7 +831,16 @@ const modules = [
     if (userName) userName.textContent = session.user.email?.split('@')[0] || 'Admin';
 
     const userAvatar = document.getElementById('erpUserAvatar');
-    if (userAvatar) userAvatar.textContent = (session.user.email?.[0] || 'A').toUpperCase();
+    if (userAvatar) {
+      userAvatar.textContent = (session.user.email?.[0] || 'A').toUpperCase();
+      // Load avatar from profiles
+      supabase.from('profiles').select('avatar_url').eq('id', session.user.id).single().then(({ data }) => {
+        if (data?.avatar_url) {
+          userAvatar.style.backgroundImage = `url(${data.avatar_url})`;
+          userAvatar.textContent = '';
+        }
+      }).catch(() => {});
+    }
 
     // Hide nav items based on permissions
     const permMap: Record<string, string> = {
