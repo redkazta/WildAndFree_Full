@@ -83,6 +83,31 @@ import Layout from '../layouts/Layout.astro';
           <!-- RIGHT FEED (75%) -->
           <div class="pf-feed">
 
+            <!-- Composer (only for artists) -->
+            <div id="post-composer" class="pf-composer hidden">
+              <div class="composer-header">
+                <div class="composer-avatar" id="composer-avatar-small"></div>
+                <span class="composer-label">Nuevo Post</span>
+              </div>
+              <textarea id="composer-text" class="composer-textarea" placeholder="¿Qué estás tramando?" rows="3"></textarea>
+              <div class="composer-toolbar">
+                <div class="composer-types">
+                  <button class="composer-type-btn active" data-type="text">📝 Texto</button>
+                  <button class="composer-type-btn" data-type="photo">📷 Foto</button>
+                  <button class="composer-type-btn" data-type="music">🎵 Música</button>
+                  <button class="composer-type-btn" data-type="event">📅 Evento</button>
+                </div>
+                <div class="composer-actions">
+                  <input type="file" id="composer-file" accept="image/png,image/jpeg,image/webp" style="display:none;" />
+                  <button id="composer-file-btn" class="composer-btn" title="Subir imagen">📎</button>
+                  <button id="composer-embed-input" class="composer-btn" title="URL Embed">🔗</button>
+                  <button id="composer-submit" class="composer-btn composer-submit">Publicar</button>
+                </div>
+              </div>
+              <div id="composer-preview" class="composer-preview hidden"></div>
+              <div id="composer-msg" class="composer-msg"></div>
+            </div>
+
             <!-- Tabs -->
             <div class="feed-tabs">
               <button class="feed-tab active" data-tab="posts">MIS POSTS</button>
@@ -92,6 +117,25 @@ import Layout from '../layouts/Layout.astro';
 
             <!-- MIS POSTS Tab -->
             <div class="feed-tab-content active" data-tab-content="posts">
+              <!-- Post Composer (solo para artistas) -->
+              <div id="post-composer" class="pf-composer hidden">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                  <span id="composer-name" style="font-size:12px;font-weight:700;"></span>
+                  <span style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;">Publicar</span>
+                </div>
+                <textarea id="composer-text" rows="3" class="composer-input" placeholder="¿Qué estás tramando?"></textarea>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
+                  <button class="cp-btn active" data-type="text">📝 Texto</button>
+                  <button class="cp-btn" data-type="photo">📷 Foto</button>
+                  <button class="cp-btn" data-type="music">🎵 Música</button>
+                  <div style="flex:1"></div>
+                  <input type="file" id="composer-file" accept="image/png,image/jpeg,image/webp" style="display:none" />
+                  <button id="composer-file-btn" class="cp-action">📎 Imagen</button>
+                  <button id="composer-submit" class="cp-submit">Publicar</button>
+                </div>
+                <div id="composer-msg" style="font-size:10px;color:var(--text-muted);margin-top:6px;"></div>
+                <div id="composer-preview" class="hidden" style="margin-top:8px;"></div>
+              </div>
               <div class="feed-list" id="my-posts-list">
                 <p class="feed-empty" id="my-posts-empty">Cargando posts...</p>
               </div>
@@ -428,6 +472,35 @@ import Layout from '../layouts/Layout.astro';
   .feed-tab-content { display: none; }
   .feed-tab-content.active { display: block; }
 
+  /* ── COMPOSER ── */
+  .pf-composer { border:1px solid var(--border); border-radius:12px; padding:14px; margin-bottom:16px; background:var(--bg-card); }
+  .pf-composer.hidden { display:none; }
+  .composer-input {
+    width:100%; background:var(--bg); border:1px solid var(--border); border-radius:8px;
+    padding:10px 12px; color:var(--text); font-size:14px; font-family:inherit;
+    resize:vertical; outline:none;
+  }
+  .composer-input:focus { border-color:var(--primary); }
+  .cp-btn {
+    padding:3px 10px; font-size:10px; font-weight:700; text-transform:uppercase;
+    border:1px solid var(--border); border-radius:20px; background:none;
+    color:var(--text-muted); cursor:pointer; transition:all 0.15s; letter-spacing:0.05em;
+  }
+  .cp-btn:hover { color:var(--text); border-color:var(--text); }
+  .cp-btn.active { background:var(--primary); color:var(--bg); border-color:var(--primary); }
+  .cp-action {
+    padding:3px 10px; font-size:10px; font-weight:600;
+    border:1px solid var(--border); border-radius:6px; background:none;
+    color:var(--text-muted); cursor:pointer;
+  }
+  .cp-action:hover { color:var(--text); }
+  .cp-submit {
+    padding:3px 16px; font-size:10px; font-weight:700; text-transform:uppercase;
+    border:none; border-radius:6px; background:var(--primary); color:var(--bg);
+    cursor:pointer;
+  }
+  .cp-submit:hover { background:var(--primary-hover); }
+
   /* ── FEED / POSTS ── */
   .feed-list {
     display: flex;
@@ -761,6 +834,13 @@ import Layout from '../layouts/Layout.astro';
     // Check if user is artist and load artist-specific data
     const { role: userRole } = await getRole();
     if (userRole === 'artist') {
+      // Show composer
+      const composer = document.getElementById('post-composer');
+      if (composer) {
+        composer.classList.remove('hidden');
+        const nameEl = document.getElementById('composer-name');
+        if (nameEl) nameEl.textContent = profile.nombre || 'Artista';
+      }
       // Load artist posts
       loadArtistPosts(profile.id);
       // Load artist stats
@@ -796,13 +876,17 @@ import Layout from '../layouts/Layout.astro';
         const list = document.getElementById('my-posts-list');
         if (list) {
           list.innerHTML = posts.map(p => `
-            <div class="feed-item">
+            <div class="feed-item" data-post-id="${p.id}">
               <p class="feed-item-text">${p.content || ''}</p>
-              ${p.image_url ? `<img src="${p.image_url}" class="feed-item-img" />` : ''}
-              <div class="feed-item-meta">
-                <span>❤️ ${p.likes_count || 0}</span>
-                <span>💬 ${p.comments_count || 0}</span>
-                <span>📌 ${p.post_type}</span>
+              ${p.image_url ? `<img src="${p.image_url}" class="feed-item-img" style="max-height:200px;border-radius:8px;object-fit:cover;" />` : ''}
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <div class="feed-item-meta">
+                  <span>❤️ ${p.likes_count || 0}</span>
+                  <span>💬 ${p.comments_count || 0}</span>
+                  <span class="feed-item-type">${p.post_type || 'text'}</span>
+                  <span style="font-size:10px;color:var(--text-faint);">${new Date(p.created_at).toLocaleDateString('es-MX')}</span>
+                </div>
+                <button class="delete-post-btn" data-id="${p.id}" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:11px;opacity:0.5;hover:opacity:1;">🗑️</button>
               </div>
             </div>
           `).join('');
@@ -1269,7 +1353,91 @@ import Layout from '../layouts/Layout.astro';
     avatarInput!.value = '';
   });
 
-  /* ── RUN ── */
+  /* ── ARTIST COMPOSER ── */
+  // Post type toggle
+  document.querySelectorAll('.cp-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.cp-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  // File button
+  document.getElementById('composer-file-btn')?.addEventListener('click', () => {
+    document.getElementById('composer-file')?.click();
+  });
+
+  document.getElementById('composer-file')?.addEventListener('change', (e: any) => {
+    const file = e.target?.files?.[0];
+    const preview = document.getElementById('composer-preview');
+    if (file && preview) {
+      preview.innerHTML = `<img src="${URL.createObjectURL(file)}" style="max-height:150px;border-radius:8px;" />`;
+      preview.classList.remove('hidden');
+    }
+  });
+
+  // Submit post
+  document.getElementById('composer-submit')?.addEventListener('click', async () => {
+    const text = (document.getElementById('composer-text') as HTMLTextAreaElement)?.value?.trim();
+    if (!text) return;
+    const msg = document.getElementById('composer-msg');
+    const activeType = document.querySelector('.cp-btn.active')?.getAttribute('data-type') || 'text';
+    const fileInput = document.getElementById('composer-file') as HTMLInputElement;
+    const file = fileInput?.files?.[0];
+    const submitBtn = document.getElementById('composer-submit') as HTMLButtonElement;
+    if (submitBtn) submitBtn.disabled = true;
+    if (msg) msg.textContent = 'Publicando...';
+
+    try {
+      let imageUrl: string | null = null;
+      if (file) {
+        const ext = file.name.split('.').pop() || 'png';
+        const { data: { session } } = await supabase.auth.getSession();
+        const path = `${session?.user?.id}/${Date.now()}.${ext}`;
+        const { error: uploadErr } = await supabase.storage
+          .from('artist_posts')
+          .upload(path, file, { upsert: true });
+        if (!uploadErr) {
+          const { data: { publicUrl } } = supabase.storage
+            .from('artist_posts')
+            .getPublicUrl(path);
+          imageUrl = publicUrl;
+        }
+      }
+
+      await supabase.from('artist_posts').insert({
+        artist_id: currentUser.id,
+        content: text,
+        post_type: activeType,
+        image_url: imageUrl,
+        likes_count: 0,
+        comments_count: 0,
+        is_pinned: false
+      });
+
+      if (msg) msg.textContent = '✅ Publicado';
+      (document.getElementById('composer-text') as HTMLTextAreaElement)!.value = '';
+      const preview = document.getElementById('composer-preview');
+      if (preview) { preview.innerHTML = ''; preview.classList.add('hidden'); }
+      if (fileInput) fileInput.value = '';
+      // Refresh posts
+      if (currentUser?.id) loadArtistPosts(currentUser.id);
+    } catch (e: any) {
+      if (msg) msg.textContent = '✗ Error: ' + (e.message || e);
+    }
+    if (submitBtn) submitBtn.disabled = false;
+  });
+
+  // Delete post
+  document.addEventListener('click', async (e) => {
+    const target = e.target as HTMLElement;
+    if (target.classList.contains('delete-post-btn')) {
+      const postId = target.getAttribute('data-id');
+      if (!postId || !confirm('¿Eliminar esta publicación?')) return;
+      await supabase.from('artist_posts').delete().eq('id', postId);
+      if (currentUser?.id) loadArtistPosts(currentUser.id);
+    }
+  });
   const run = () => { initProfile().catch(e => console.error('Profile init error:', e)); };
 
   if (document.readyState === 'loading') {
