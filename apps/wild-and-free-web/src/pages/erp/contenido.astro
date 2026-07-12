@@ -70,7 +70,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
     <div class="content-modal-panel">
       <h3 style="font-size:16px;font-weight:800;margin-bottom:16px;color:#ff4444;">Rechazar Contenido</h3>
       <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">Motivo del rechazo:</p>
-      <textarea id="rejectReason" class="erp-input" rows="4" placeholder="Describe el motivo del rechazo..." style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:#fff;font-size:13px;resize:vertical;font-family:inherit;"></textarea>
+      <textarea id="rejectReason" class="erp-input" rows="4" placeholder="Describe el motivo del rechazo..." style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:var(--text);font-size:13px;resize:vertical;font-family:inherit;"></textarea>
       <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px;">
         <button class="erp-btn erp-btn--ghost" onclick="closeRejectModal()">Cancelar</button>
         <button class="erp-btn erp-btn--danger" id="confirmRejectBtn">Rechazar</button>
@@ -83,7 +83,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
     <div class="content-modal-backdrop" onclick="closeDetailModal()"></div>
     <div class="content-modal-panel" style="max-width:640px;">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;">
-        <h3 id="detailTitle" style="font-size:16px;font-weight:800;color:#fff;"></h3>
+        <h3 id="detailTitle" style="font-size:16px;font-weight:800;color:var(--text);"></h3>
         <button class="erp-btn erp-btn--ghost" onclick="closeDetailModal()" style="padding:4px 10px;">✕</button>
       </div>
       <div id="detailContent" style="font-size:13px;color:var(--text-secondary);line-height:1.7;"></div>
@@ -94,20 +94,20 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
   <div id="newModal" class="content-modal" style="display:none;">
     <div class="content-modal-backdrop" onclick="closeNewModal()"></div>
     <div class="content-modal-panel" style="max-width:600px;">
-      <h3 style="font-size:16px;font-weight:800;margin-bottom:16px;color:#C98300;">Nuevo Contenido Exclusivo</h3>
+      <h3 style="font-size:16px;font-weight:800;margin-bottom:16px;color:var(--primary);">Nuevo Contenido Exclusivo</h3>
       <div style="display:grid;gap:12px;">
         <div>
           <label style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Título *</label>
-          <input id="newTitle" class="erp-input" type="text" placeholder="Título del contenido" style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:#fff;font-size:13px;" />
+          <input id="newTitle" class="erp-input" type="text" placeholder="Título del contenido" style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:var(--text);font-size:13px;" />
         </div>
         <div>
           <label style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Descripción</label>
-          <textarea id="newDescription" class="erp-input" rows="3" placeholder="Descripción del contenido" style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:#fff;font-size:13px;resize:vertical;font-family:inherit;"></textarea>
+          <textarea id="newDescription" class="erp-input" rows="3" placeholder="Descripción del contenido" style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:var(--text);font-size:13px;resize:vertical;font-family:inherit;"></textarea>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
           <div>
             <label style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Tipo *</label>
-            <select id="newType" style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:#fff;font-size:13px;">
+            <select id="newType" style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:var(--text);font-size:13px;">
               <option value="video">Video</option>
               <option value="audio">Audio</option>
               <option value="download">Download</option>
@@ -115,26 +115,26 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
           </div>
           <div>
             <label style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Artista ID</label>
-            <input id="newArtistId" class="erp-input" type="text" placeholder="UUID del artista" style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:#fff;font-size:13px;" />
+            <input id="newArtistId" class="erp-input" type="text" placeholder="UUID del artista" style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:var(--text);font-size:13px;" />
           </div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
           <div>
             <label style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Precio Tokens</label>
-            <input id="newTokenPrice" class="erp-input" type="number" min="0" placeholder="0" style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:#fff;font-size:13px;" />
+            <input id="newTokenPrice" class="erp-input" type="number" min="0" placeholder="0" style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:var(--text);font-size:13px;" />
           </div>
           <div>
             <label style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Precio Real (MXN)</label>
-            <input id="newRealPrice" class="erp-input" type="number" min="0" step="0.01" placeholder="0.00" style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:#fff;font-size:13px;" />
+            <input id="newRealPrice" class="erp-input" type="number" min="0" step="0.01" placeholder="0.00" style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:var(--text);font-size:13px;" />
           </div>
         </div>
         <div>
           <label style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">URL del Archivo</label>
-          <input id="newFileUrl" class="erp-input" type="url" placeholder="https://..." style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:#fff;font-size:13px;" />
+          <input id="newFileUrl" class="erp-input" type="url" placeholder="https://..." style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:var(--text);font-size:13px;" />
         </div>
         <div>
           <label style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">URL de Preview</label>
-          <input id="newPreviewUrl" class="erp-input" type="url" placeholder="https://..." style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:#fff;font-size:13px;" />
+          <input id="newPreviewUrl" class="erp-input" type="url" placeholder="https://..." style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:var(--text);font-size:13px;" />
         </div>
       </div>
       <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px;">
@@ -237,7 +237,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
         <td style="font-weight:700;">${c.title || 'Sin título'}</td>
         <td>${c.profiles?.nombre || c.profiles?.username || 'N/A'}</td>
         <td><span style="font-size:14px;">${typeIcon[c.content_type] || '📄'}</span> ${c.content_type || '-'}</td>
-        <td style="font-weight:700;color:#C98300;">${c.token_price ?? 0} 🪙</td>
+        <td style="font-weight:700;color:var(--primary);">${c.token_price ?? 0} 🪙</td>
         <td style="font-weight:700;">$${(c.real_price_mxn ?? 0).toFixed(2)}</td>
         <td><span class="erp-status erp-status--${c.status}">${c.status}</span></td>
         <td style="font-size:11px;color:var(--text-muted);">${new Date(c.created_at).toLocaleDateString('es-MX')}</td>
@@ -280,7 +280,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
     container.innerHTML = posts.map(p => `
       <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--bg-card);">
         <div>
-          <div style="font-weight:700;font-size:13px;color:#fff;">${p.title || p.content?.slice(0, 60) || 'Sin contenido'}</div>
+          <div style="font-weight:700;font-size:13px;color:var(--text);">${p.title || p.content?.slice(0, 60) || 'Sin contenido'}</div>
           <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Por ${p.profiles?.nombre || p.profiles?.username || 'Desconocido'} · ${new Date(p.created_at).toLocaleDateString('es-MX')}</div>
         </div>
         <div style="display:flex;gap:6px;">
@@ -364,7 +364,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
         </div>
         <div>
           <div class="detail-label">Precio Tokens</div>
-          <div class="detail-value" style="color:#C98300;font-weight:700;">${item.token_price ?? 0} 🪙</div>
+          <div class="detail-value" style="color:var(--primary);font-weight:700;">${item.token_price ?? 0} 🪙</div>
         </div>
         <div>
           <div class="detail-label">Precio Real (MXN)</div>
@@ -372,11 +372,11 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
         </div>
         <div>
           <div class="detail-label">URL del Archivo</div>
-          <div class="detail-value" style="word-break:break-all;"><a href="${item.file_url || '#'}" target="_blank" style="color:#C98300;text-decoration:none;">${item.file_url || 'No disponible'}</a></div>
+          <div class="detail-value" style="word-break:break-all;"><a href="${item.file_url || '#'}" target="_blank" style="color:var(--primary);text-decoration:none;">${item.file_url || 'No disponible'}</a></div>
         </div>
         <div>
           <div class="detail-label">URL de Preview</div>
-          <div class="detail-value" style="word-break:break-all;"><a href="${item.preview_url || '#'}" target="_blank" style="color:#C98300;text-decoration:none;">${item.preview_url || 'No disponible'}</a></div>
+          <div class="detail-value" style="word-break:break-all;"><a href="${item.preview_url || '#'}" target="_blank" style="color:var(--primary);text-decoration:none;">${item.preview_url || 'No disponible'}</a></div>
         </div>
         <div>
           <div class="detail-label">Motivo de Rechazo</div>

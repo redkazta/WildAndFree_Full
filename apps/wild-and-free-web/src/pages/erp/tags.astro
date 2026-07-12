@@ -16,11 +16,11 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
         <div>
           <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);margin-bottom:6px;">Nombre</label>
-          <input type="text" id="categoryName" style="width:100%;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:6px;color:#fff;font-size:13px;" />
+          <input type="text" id="categoryName" style="width:100%;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:6px;color:var(--text);font-size:13px;" />
         </div>
         <div>
           <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);margin-bottom:6px;">Descripción</label>
-          <input type="text" id="categoryDescription" style="width:100%;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:6px;color:#fff;font-size:13px;" />
+          <input type="text" id="categoryDescription" style="width:100%;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:6px;color:var(--text);font-size:13px;" />
         </div>
       </div>
       <div style="display:flex;gap:8px;">
@@ -59,18 +59,18 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;">
         <div>
           <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);margin-bottom:6px;">Nombre</label>
-          <input type="text" id="tagName" style="width:100%;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:6px;color:#fff;font-size:13px;" />
+          <input type="text" id="tagName" style="width:100%;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:6px;color:var(--text);font-size:13px;" />
         </div>
         <div>
           <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);margin-bottom:6px;">Color</label>
           <div style="display:flex;gap:8px;align-items:center;">
             <input type="color" id="tagColor" value="#C98300" style="width:40px;height:36px;border:none;border-radius:6px;cursor:pointer;background:transparent;" />
-            <input type="text" id="tagColorHex" value="#C98300" style="flex:1;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:6px;color:#fff;font-size:13px;" />
+            <input type="text" id="tagColorHex" value="#C98300" style="flex:1;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:6px;color:var(--text);font-size:13px;" />
           </div>
         </div>
         <div>
           <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);margin-bottom:6px;">Animación</label>
-          <select id="tagAnimation" style="width:100%;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:6px;color:#fff;font-size:13px;">
+          <select id="tagAnimation" style="width:100%;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:6px;color:var(--text);font-size:13px;">
             <option value="none">Ninguna</option>
             <option value="pulse">Pulse</option>
             <option value="glow">Glow</option>
@@ -82,22 +82,22 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;">
         <div>
           <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);margin-bottom:6px;">Categoría</label>
-          <select id="tagCategory" style="width:100%;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:6px;color:#fff;font-size:13px;">
+          <select id="tagCategory" style="width:100%;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:6px;color:var(--text);font-size:13px;">
             <option value="">Sin categoría</option>
           </select>
         </div>
         <div>
           <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);margin-bottom:6px;">Token Price</label>
-          <input type="number" id="tagTokenPrice" value="0" min="0" style="width:100%;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:6px;color:#fff;font-size:13px;" />
+          <input type="number" id="tagTokenPrice" value="0" min="0" style="width:100%;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:6px;color:var(--text);font-size:13px;" />
         </div>
         <div>
           <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);margin-bottom:6px;">Achievement Key</label>
-          <input type="text" id="tagAchievementKey" placeholder="ej: first_post" style="width:100%;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:6px;color:#fff;font-size:13px;" />
+          <input type="text" id="tagAchievementKey" placeholder="ej: first_post" style="width:100%;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:6px;color:var(--text);font-size:13px;" />
         </div>
       </div>
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
         <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:var(--text-secondary);">
-          <input type="checkbox" id="tagPurchasable" style="accent-color:#C98300;" />
+          <input type="checkbox" id="tagPurchasable" style="accent-color:var(--primary);" />
           Comprable en tienda
         </label>
       </div>
@@ -135,7 +135,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
 
     <!-- Search user -->
     <div style="display:flex;gap:12px;margin-bottom:16px;">
-      <input type="text" id="userSearch" placeholder="Buscar usuario por username..." style="flex:1;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:6px;color:#fff;font-size:13px;" />
+      <input type="text" id="userSearch" placeholder="Buscar usuario por username..." style="flex:1;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:6px;color:var(--text);font-size:13px;" />
       <button class="erp-btn erp-btn--primary" onclick="searchUser()">Buscar</button>
     </div>
 
@@ -159,7 +159,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
       <div>
         <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);margin-bottom:8px;">Asignar Nuevo Tag</div>
         <div style="display:flex;gap:8px;">
-          <select id="userTagSelect" style="flex:1;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:6px;color:#fff;font-size:13px;">
+          <select id="userTagSelect" style="flex:1;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:6px;color:var(--text);font-size:13px;">
             <option value="">Seleccionar tag...</option>
           </select>
           <button class="erp-btn erp-btn--primary" onclick="assignTagToUser()">Asignar</button>

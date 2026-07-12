@@ -6,8 +6,8 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
   <!-- Toolbar -->
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-      <input type="text" id="searchInput" placeholder="Buscar por nombre..." style="background:var(--bg-card);border:1px solid var(--bg-hover);border-radius:8px;padding:8px 14px;color:#fff;font-size:13px;outline:none;min-width:200px;" />
-      <select id="categoryFilter" style="background:var(--bg-card);border:1px solid var(--bg-hover);border-radius:8px;padding:8px 14px;color:#fff;font-size:13px;outline:none;">
+      <input type="text" id="searchInput" placeholder="Buscar por nombre..." style="background:var(--bg-card);border:1px solid var(--bg-hover);border-radius:8px;padding:8px 14px;color:var(--text);font-size:13px;outline:none;min-width:200px;" />
+      <select id="categoryFilter" style="background:var(--bg-card);border:1px solid var(--bg-hover);border-radius:8px;padding:8px 14px;color:var(--text);font-size:13px;outline:none;">
         <option value="all">Todas las categorías</option>
       </select>
     </div>
@@ -67,25 +67,25 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
         <input type="hidden" id="formProductId" />
         <div>
           <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:6px;">Nombre *</label>
-          <input type="text" id="formName" required style="width:100%;background:var(--bg-card);border:1px solid var(--bg-hover);border-radius:8px;padding:10px 14px;color:#fff;font-size:13px;outline:none;" />
+          <input type="text" id="formName" required style="width:100%;background:var(--bg-card);border:1px solid var(--bg-hover);border-radius:8px;padding:10px 14px;color:var(--text);font-size:13px;outline:none;" />
         </div>
         <div>
           <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:6px;">Descripción</label>
-          <textarea id="formDescription" rows="3" style="width:100%;background:var(--bg-card);border:1px solid var(--bg-hover);border-radius:8px;padding:10px 14px;color:#fff;font-size:13px;outline:none;resize:vertical;"></textarea>
+          <textarea id="formDescription" rows="3" style="width:100%;background:var(--bg-card);border:1px solid var(--bg-hover);border-radius:8px;padding:10px 14px;color:var(--text);font-size:13px;outline:none;resize:vertical;"></textarea>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
           <div>
             <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:6px;">Precio Base *</label>
-            <input type="number" id="formPrice" step="0.01" min="0" required style="width:100%;background:var(--bg-card);border:1px solid var(--bg-hover);border-radius:8px;padding:10px 14px;color:#fff;font-size:13px;outline:none;" />
+            <input type="number" id="formPrice" step="0.01" min="0" required style="width:100%;background:var(--bg-card);border:1px solid var(--bg-hover);border-radius:8px;padding:10px 14px;color:var(--text);font-size:13px;outline:none;" />
           </div>
           <div>
             <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:6px;">Categoría</label>
-            <input type="text" id="formCategory" placeholder="Ej:/playeras" style="width:100%;background:var(--bg-card);border:1px solid var(--bg-hover);border-radius:8px;padding:10px 14px;color:#fff;font-size:13px;outline:none;" />
+            <input type="text" id="formCategory" placeholder="Ej:/playeras" style="width:100%;background:var(--bg-card);border:1px solid var(--bg-hover);border-radius:8px;padding:10px 14px;color:var(--text);font-size:13px;outline:none;" />
           </div>
         </div>
         <div>
           <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:6px;">URL de Imagen</label>
-          <input type="url" id="formImageUrl" placeholder="https://..." style="width:100%;background:var(--bg-card);border:1px solid var(--bg-hover);border-radius:8px;padding:10px 14px;color:#fff;font-size:13px;outline:none;" />
+          <input type="url" id="formImageUrl" placeholder="https://..." style="width:100%;background:var(--bg-card);border:1px solid var(--bg-hover);border-radius:8px;padding:10px 14px;color:var(--text);font-size:13px;outline:none;" />
         </div>
         <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px;">
           <button type="button" class="erp-btn erp-btn--ghost" id="cancelFormBtn">Cancelar</button>
@@ -109,21 +109,21 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
           <div>
             <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:6px;">Talla</label>
-            <input type="text" id="vFormSize" placeholder="Ej: M, L, XL" style="width:100%;background:var(--bg-card);border:1px solid var(--bg-hover);border-radius:8px;padding:10px 14px;color:#fff;font-size:13px;outline:none;" />
+            <input type="text" id="vFormSize" placeholder="Ej: M, L, XL" style="width:100%;background:var(--bg-card);border:1px solid var(--bg-hover);border-radius:8px;padding:10px 14px;color:var(--text);font-size:13px;outline:none;" />
           </div>
           <div>
             <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:6px;">Color</label>
-            <input type="text" id="vFormColor" placeholder="Ej: Negro, Blanco" style="width:100%;background:var(--bg-card);border:1px solid var(--bg-hover);border-radius:8px;padding:10px 14px;color:#fff;font-size:13px;outline:none;" />
+            <input type="text" id="vFormColor" placeholder="Ej: Negro, Blanco" style="width:100%;background:var(--bg-card);border:1px solid var(--bg-hover);border-radius:8px;padding:10px 14px;color:var(--text);font-size:13px;outline:none;" />
           </div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
           <div>
             <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:6px;">Stock *</label>
-            <input type="number" id="vFormStock" min="0" required style="width:100%;background:var(--bg-card);border:1px solid var(--bg-hover);border-radius:8px;padding:10px 14px;color:#fff;font-size:13px;outline:none;" />
+            <input type="number" id="vFormStock" min="0" required style="width:100%;background:var(--bg-card);border:1px solid var(--bg-hover);border-radius:8px;padding:10px 14px;color:var(--text);font-size:13px;outline:none;" />
           </div>
           <div>
             <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:6px;">SKU</label>
-            <input type="text" id="vFormSku" placeholder="Ej: WGP-NB-M" style="width:100%;background:var(--bg-card);border:1px solid var(--bg-hover);border-radius:8px;padding:10px 14px;color:#fff;font-size:13px;outline:none;" />
+            <input type="text" id="vFormSku" placeholder="Ej: WGP-NB-M" style="width:100%;background:var(--bg-card);border:1px solid var(--bg-hover);border-radius:8px;padding:10px 14px;color:var(--text);font-size:13px;outline:none;" />
           </div>
         </div>
         <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px;">
@@ -135,7 +135,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
   </div>
 
   <!-- Toast -->
-  <div id="toast" style="position:fixed;bottom:24px;right:24px;z-index:200;display:none;background:#1a1a1a;border:1px solid var(--border-muted);border-radius:10px;padding:12px 20px;font-size:13px;font-weight:600;color:#fff;box-shadow:0 8px 32px rgba(0,0,0,0.5);transition:opacity 0.3s;"></div>
+  <div id="toast" style="position:fixed;bottom:24px;right:24px;z-index:200;display:none;background:#1a1a1a;border:1px solid var(--border-muted);border-radius:10px;padding:12px 20px;font-size:13px;font-weight:600;color:var(--text);box-shadow:0 8px 32px rgba(0,0,0,0.5);transition:opacity 0.3s;"></div>
 </ErpLayout>
 
 <style>
