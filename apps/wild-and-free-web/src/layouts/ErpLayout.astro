@@ -78,13 +78,13 @@ const modules = [
         <span class="erp-nav-icon">🌓</span>
         <span class="erp-nav-label">Tema</span>
       </button>
-      <div class="erp-user-section">
-        <div class="erp-user-avatar" id="erpUserAvatar">A</div>
+      <a href="/erp/perfil" class="erp-user-section" style="text-decoration:none;position:relative;">
+        <div class="erp-user-avatar" id="erpUserAvatar" style="cursor:pointer;">A</div>
         <div class="erp-user-info">
           <span class="erp-user-name" id="erpUserName">Admin</span>
           <span class="erp-user-role" id="erpUserBadge">Cargando...</span>
         </div>
-      </div>
+      </a>
       <a href="/" class="erp-nav-item erp-nav-item--exit">
         <span class="erp-nav-icon">🚪</span>
         <span class="erp-nav-label">Salir</span>
@@ -366,9 +366,8 @@ const modules = [
       align-items: center;
       gap: 16px;
       padding: 16px 28px;
-      background: rgba(5,5,5,0.8);
-      border-bottom: 1px solid var(--bg-card);
-      backdrop-filter: blur(20px);
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
       z-index: 40;

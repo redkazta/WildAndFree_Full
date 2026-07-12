@@ -1,0 +1,99 @@
+---
+import ErpLayout from '../../layouts/ErpLayout.astro';
+---
+
+<ErpLayout title="Mi Perfil" activeModule="configuracion">
+  <div class="erp-grid" style="max-width: 700px;">
+    
+    <!-- Account Info -->
+    <div class="erp-card">
+      <div class="erp-card-title">Información de la Cuenta</div>
+      <div style="display:grid;gap:16px;padding:16px 0;">
+        <div>
+          <label class="field-label">Email</label>
+          <div id="perfil-email" class="erp-stat" style="font-size:14px;font-weight:600;">-</div>
+        </div>
+        <div>
+          <label class="field-label">Rol</label>
+          <div id="perfil-role" class="erp-stat" style="font-size:14px;">-</div>
+        </div>
+        <div>
+          <label class="field-label">Miembro desde</label>
+          <div id="perfil-created" class="erp-stat" style="font-size:14px;">-</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Theme Settings -->
+    <div class="erp-card">
+      <div class="erp-card-title">Preferencias</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 0;">
+        <div>
+          <div style="font-size:13px;font-weight:600;">Tema Oscuro / Claro</div>
+          <div style="font-size:11px;color:var(--text-muted);">Cambia la apariencia del panel</div>
+        </div>
+        <div class="toggle-switch">
+          <label class="toggle-label" id="perfil-theme-toggle">
+            <input type="checkbox" id="perfil-theme-input" />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cerrar Sesión -->
+    <div class="erp-card" style="border-color:var(--danger);">
+      <div class="erp-card-title" style="color:var(--danger);">Zona de Peligro</div>
+      <div style="padding:12px 0;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:12px;">¿Quieres cerrar sesión?</span>
+        <button id="perfil-logout" class="erp-btn erp-btn--danger">Cerrar Sesión</button>
+      </div>
+    </div>
+
+  </div>
+</ErpLayout>
+
+<script>
+  import { supabase } from '../../lib/supabase';
+
+  async function loadProfile() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session?.user) return;
+
+    document.getElementById('perfil-email').textContent = session.user.email || '-';
+    document.getElementById('perfil-role').textContent = session.user.role || 'user';
+    document.getElementById('perfil-created').textContent = new Date(session.user.created_at).toLocaleDateString('es-MX');
+
+    // Theme toggle sync
+    const themeCheck = document.getElementById('perfil-theme-input');
+    if (themeCheck) {
+      const current = document.documentElement.getAttribute('data-theme') || localStorage.getItem('wg-theme') || 'dark';
+      themeCheck.checked = current === 'light';
+      themeCheck.addEventListener('change', () => {
+        const next = themeCheck.checked ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('wg-theme', next);
+      });
+    }
+  }
+
+  // Logout
+  document.getElementById('perfil-logout')?.addEventListener('click', async () => {
+    await supabase.auth.signOut();
+    window.location.href = '/';
+  });
+
+  loadProfile();
+</script>
+
+<style>
+  .field-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+</style>
