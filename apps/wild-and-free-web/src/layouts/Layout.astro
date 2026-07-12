@@ -535,6 +535,15 @@ const isActive = (href: string) => {
 						document.head.appendChild(el);
 					}
 					el.textContent = buildCSS();
+
+					// Extra reinforcement: set inline styles on key elements
+					var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+					var T = isLight ? '#000000' : '#ffffff';
+					var B = isLight ? '#ffffff' : '#000000';
+					try {
+						document.body.style.setProperty('background-color', B, 'important');
+						document.body.style.setProperty('color', T, 'important');
+					} catch(e) {}
 				}
 
 				// Run on load
