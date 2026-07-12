@@ -184,6 +184,15 @@ const isActive = (href: string) => {
 			[data-theme="light"] input, [data-theme="light"] textarea, [data-theme="light"] select { background: var(--bg) !important; border-color: var(--border) !important; color: var(--text) !important; }
 			[data-theme="light"] input::placeholder, [data-theme="light"] textarea::placeholder { color: var(--text-muted) !important; }
 
+			/* ── BOTH MODES: Flatten ALL backgrounds — no gradients, no patterns ── */
+			.bg-\[\#111\], .bg-\[\#0a0a0a\], .bg-\[\#000\] { background: var(--bg) !important; }
+			.bg-black\/95 { background: var(--bg) !important; }
+			[class*="bg-gradient"] { background: var(--bg) !important; }
+			[class*="bg-\[url"] { background: var(--bg) !important; }
+			[class*="bg-\[linear-gradient"] { background: var(--bg) !important; }
+			[class*="bg-\[radial-gradient"] { background: var(--bg) !important; }
+			[class*="backdrop-blur"] { backdrop-filter: none !important; }
+
 			/* ── DARK MODE: Ensure pure white borders ── */
 			.border-white\/10 { border-color: #ffffff !important; }
 			.border-white\/5 { border-color: #ffffff !important; }

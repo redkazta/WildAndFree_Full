@@ -3,12 +3,7 @@
 
 <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
 		<!-- Animated Geometric Background Pattern -->
-		<div class="absolute inset-0 z-0">
-			<div class="absolute inset-0 bg-black"></div>
-			<div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:80px_80px]"></div>
-			<div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-wild-orange/10 blur-[150px] rounded-full animate-pulse"></div>
-			<div class="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-wild-orange/5 blur-[150px] rounded-full animate-pulse delay-1000"></div>
-		</div>
+		<div class="absolute inset-0 z-0 bg-[var(--bg)]"></div>
 
 	<div class="relative z-10 max-w-[1400px] mx-auto px-6 w-full grid lg:grid-cols-2 gap-8 lg:gap-24 items-center">
 		<!-- Left Column - Content -->
@@ -65,9 +60,7 @@
 		<!-- Right Column - Logo Visual -->
 		<div class="hidden lg:flex items-center justify-center order-1 lg:order-2">
 			<div class="relative">
-				<div class="absolute inset-0 bg-wild-orange/20 blur-[100px] rounded-full scale-150"></div>
-
-				<div class="relative w-[400px] h-[400px] xl:w-[480px] xl:h-[480px] rounded-wild-lg border border-white/10 bg-white/[0.02] backdrop-blur-xl flex items-center justify-center p-10 overflow-hidden group">
+				<div class="relative w-[400px] h-[400px] xl:w-[480px] xl:h-[480px] rounded-wild-lg border border-white/10 bg-[var(--bg-card)] flex items-center justify-center p-10 overflow-hidden group">
 					<div class="absolute inset-4 rounded-wild-lg border border-wild-orange/10 group-hover:border-wild-orange/30 transition-all duration-700"></div>
 
 					<div class="absolute top-0 left-0 w-12 h-[2px] bg-gradient-to-r from-wild-orange to-transparent"></div>
