@@ -33,6 +33,16 @@ const modules = [
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script is:inline>
+    (function() {
+      try {
+        var saved = localStorage.getItem('wg-theme');
+        document.documentElement.setAttribute('data-theme', saved === 'light' ? 'light' : 'dark');
+      } catch(e) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
 </head>
 <body class="erp-body">
   <!-- Sidebar -->
@@ -64,6 +74,10 @@ const modules = [
     </nav>
 
     <div class="erp-sidebar-footer">
+      <button class="erp-nav-item" id="erp-theme-toggle" style="width:100%;text-align:left;background:none;border:none;cursor:pointer;font-family:inherit;">
+        <span class="erp-nav-icon">🌓</span>
+        <span class="erp-nav-label">Tema</span>
+      </button>
       <div class="erp-user-section">
         <div class="erp-user-avatar" id="erpUserAvatar">A</div>
         <div class="erp-user-info">
@@ -123,6 +137,24 @@ const modules = [
       --success: #00ff88;
       --warning: #ffc800;
       --info: #00bfff;
+    }
+
+    [data-theme="light"] {
+      --primary: #b37400;
+      --primary-hover: #c98300;
+      --primary-soft: rgba(179,116,0,0.08);
+      --bg: #ffffff;
+      --bg-card: rgba(0,0,0,0.03);
+      --bg-hover: rgba(0,0,0,0.06);
+      --border: rgba(0,0,0,0.10);
+      --border-faint: rgba(0,0,0,0.04);
+      --text: #000000;
+      --text-secondary: #000000;
+      --text-muted: #000000;
+      --danger: #cc0000;
+      --success: #008844;
+      --warning: #cc8800;
+      --info: #0088cc;
     }
 
     .erp-body {
@@ -840,6 +872,16 @@ const modules = [
         sidebar?.classList.remove('erp-sidebar--open');
       });
     });
+    // Theme toggle for ERP
+    const themeBtn = document.getElementById('erp-theme-toggle');
+    if (themeBtn) {
+      themeBtn.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('wg-theme', next);
+      });
+    }
   </script>
   <Analytics />
 </body>
