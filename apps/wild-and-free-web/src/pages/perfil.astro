@@ -1041,48 +1041,67 @@ import Layout from '../layouts/Layout.astro';
     roleTagsContainer.innerHTML = '';
 
     try {
-      const { role: resolvedRole } = await getRole();
-      const roleRaw = (resolvedRole || profile.role || currentUser?.user_metadata?.role || 'fan');
-
-      const resolvedUserId = profile.id || currentUser.id;
-      const gatewayData = await getUserTags(resolvedUserId) as any;
-      const gatewayTags = Array.isArray(gatewayData?.tags)
-        ? gatewayData.tags
-        : Array.isArray(gatewayData?.data?.tags)
-          ? gatewayData.data.tags
-          : [];
-
-      const allTags: { name: string; isRole: boolean }[] = [];
-
-      if (roleRaw) {
-        allTags.push({ name: roleRaw.toUpperCase(), isRole: true });
+      const resolvedUserId = profile.id || currentUser?.id;
+      if (!resolvedUserId) {
+        renderTag(roleTagsContainer, { name: 'FAN', color: '#C98300' });
+        return;
       }
 
+      const gatewayData = await getUserTags(resolvedUserId) as any;
+      const role = gatewayData?.role || null;
+      const gatewayTags = Array.isArray(gatewayData?.tags) ? gatewayData.tags : [];
+
+      const allTags: { name: string; color: string; isRole: boolean }[] = [];
+
+      // Role from user_roles table
+      if (role) {
+        allTags.push({ name: role.toUpperCase(), color: getRoleColor(role), isRole: true });
+      }
+
+      // Tags from user_has_tags table
       gatewayTags.forEach((tag: any) => {
-        const rawName = (tag.tag_name || tag.name || '').trim();
+        const rawName = (tag.name || '').trim();
         if (!rawName) return;
-        allTags.push({ name: rawName.toUpperCase(), isRole: false });
+        // Skip if already added as role
+        if (allTags.some((t) => t.name === rawName.toUpperCase())) return;
+        allTags.push({ name: rawName.toUpperCase(), color: tag.color || '#C98300', isRole: false });
       });
 
       if (allTags.length === 0) {
-        allTags.push({ name: 'FAN', isRole: true });
+        allTags.push({ name: 'FAN', color: '#C98300', isRole: true });
       }
 
       allTags.sort((a, b) => (a.isRole === b.isRole ? 0 : a.isRole ? -1 : 1));
 
-      allTags.forEach(tag => {
-        const el = document.createElement('span');
-        el.className = 'role-tag';
-        el.textContent = tag.name;
-        roleTagsContainer.appendChild(el);
-      });
+      allTags.forEach(tag => renderTag(roleTagsContainer, tag));
     } catch (err) {
       console.error('Error loading tags:', err);
-      const el = document.createElement('span');
-      el.className = 'role-tag';
-      el.textContent = 'FAN';
-      roleTagsContainer.appendChild(el);
+      renderTag(roleTagsContainer, { name: 'FAN', color: '#C98300' });
     }
+  }
+
+  function getRoleColor(role: string): string {
+    const colors: Record<string, string> = {
+      owner: '#FFD700',
+      admin: '#FF4444',
+      staff_manager: '#FF69B4',
+      staff: '#FF69B4',
+      staff_marketing: '#FF69B4',
+      artist: '#00FF88',
+      fan: '#C98300',
+    };
+    return colors[role?.toLowerCase()] || '#C98300';
+  }
+
+  function renderTag(container: HTMLElement, tag: { name: string; color: string; isRole?: boolean }) {
+    const el = document.createElement('span');
+    el.className = 'role-tag';
+    el.textContent = tag.name;
+    // Apply tag color from DB
+    el.style.background = `${tag.color}22`;
+    el.style.borderColor = `${tag.color}66`;
+    el.style.color = tag.color;
+    container.appendChild(el);
   }
 
   /* ── POSTS ── */
