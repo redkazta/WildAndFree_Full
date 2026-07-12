@@ -111,6 +111,12 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
     </div>
 
   </div>
+
+  <!-- Logout Overlay -->
+  <div id="logout-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:var(--bg);opacity:0;transition:opacity 0.4s ease;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;">
+    <div style="width:40px;height:40px;border:3px solid var(--border);border-top:3px solid var(--primary);border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+    <span style="font-size:13px;font-weight:600;color:var(--text-secondary);">Cerrando sesión...</span>
+  </div>
 </ErpLayout>
 
 <script>
@@ -217,8 +223,16 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
             av.textContent = '';
           }
           if (msg) msg.textContent = '✅ Avatar actualizado';
+          // Sync sidebar avatar immediately
+          dispatchEvent(new CustomEvent('avatar-updated', { detail: publicUrl }));
+          // Also update sidebar directly
+          const sidebarAv = document.getElementById('erpUserAvatar');
+          if (sidebarAv) {
+            sidebarAv.style.backgroundImage = `url(${publicUrl})`;
+            sidebarAv.textContent = '';
+          }
         } catch (e) {
-          if (msg) msg.textContent = '✗ Error al subir: ' + (e.message || e);
+          if (msg) msg.textContent = '✗ Error: ' + (e.message || e);
         }
       });
     }
@@ -238,14 +252,22 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
 
   // Logout
   document.getElementById('pf-logout')?.addEventListener('click', async () => {
+    const overlay = document.getElementById('logout-overlay');
+    if (overlay) {
+      overlay.style.display = 'flex';
+      requestAnimationFrame(() => overlay.style.opacity = '1');
+    }
     await supabase.auth.signOut();
-    window.location.href = '/';
+    setTimeout(() => window.location.href = '/', 500);
   });
 
   loadData();
 </script>
 
 <style>
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
   .tab-btn {
     padding: 12px 24px;
     font-size: 11px;
