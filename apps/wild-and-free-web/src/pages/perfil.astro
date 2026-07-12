@@ -1449,37 +1449,40 @@ import Layout from '../layouts/Layout.astro';
   });
 
   // When file selected: show preview dialog
-  const pendingUpload = { file: null as File | null, resolve: null as ((confirm: boolean) => void) | null };
+  var pendingFile = null;
 
-  document.getElementById('composer-file')?.addEventListener('change', (e: any) => {
-    const file = e.target?.files?.[0];
+  document.getElementById('composer-file')?.addEventListener('change', function(e) {
+    var file = e.target?.files?.[0];
     if (!file) return;
-    pendingUpload.file = file;
-    const img = document.getElementById('img-preview-img') as HTMLImageElement;
+    pendingFile = file;
+    var img = document.getElementById('img-preview-img');
     if (img) {
       img.src = URL.createObjectURL(file);
-      const dialog = document.getElementById('img-preview-dialog') as HTMLDialogElement;
+      var dialog = document.getElementById('img-preview-dialog');
       if (dialog) dialog.showModal();
     }
   });
 
   // Dialog confirm
-  document.getElementById('img-dialog-confirm')?.addEventListener('click', () => {
-    (document.getElementById('img-preview-dialog') as HTMLDialogElement)?.close();
+  document.getElementById('img-dialog-confirm')?.addEventListener('click', function() {
+    var dialog = document.getElementById('img-preview-dialog');
+    if (dialog) dialog.close();
     // Show preview inline
-    const preview = document.getElementById('composer-preview');
-    if (preview && pendingUpload.file) {
-      preview.innerHTML = `<img src="${URL.createObjectURL(pendingUpload.file)}" style="max-height:120px;border-radius:6px;" />`;
+    var preview = document.getElementById('composer-preview');
+    if (preview && pendingFile) {
+      preview.innerHTML = '<img src="' + URL.createObjectURL(pendingFile) + '" style="max-height:120px;border-radius:6px;" />';
       preview.classList.remove('hidden');
     }
   });
 
   // Dialog cancel
-  const cancelPreview = () => {
-    (document.getElementById('img-preview-dialog') as HTMLDialogElement)?.close();
-    pendingUpload.file = null;
-    (document.getElementById('composer-file') as HTMLInputElement).value = '';
-    document.getElementById('composer-preview')?.classList.add('hidden');
+  function cancelPreview() {
+    var dialog = document.getElementById('img-preview-dialog');
+    if (dialog) dialog.close();
+    pendingFile = null;
+    document.getElementById('composer-file').value = '';
+    var preview = document.getElementById('composer-preview');
+    if (preview) preview.classList.add('hidden');
   };
   document.getElementById('img-dialog-cancel')?.addEventListener('click', cancelPreview);
   document.getElementById('img-dialog-cancel-btn')?.addEventListener('click', cancelPreview);
@@ -1490,7 +1493,7 @@ import Layout from '../layouts/Layout.astro';
     if (!text) return;
     const msg = document.getElementById('composer-msg');
     const activeType = document.querySelector('.dash-type-btn.active')?.getAttribute('data-type') || 'text';
-    const file = pendingUpload.file;
+    const file = pendingFile;
     const submitBtn = document.getElementById('composer-submit') as HTMLButtonElement;
     if (submitBtn) submitBtn.disabled = true;
     if (msg) { msg.textContent = 'Publicando...'; msg.style.color = 'var(--text-muted)'; }
@@ -1526,7 +1529,7 @@ import Layout from '../layouts/Layout.astro';
       (document.getElementById('composer-text') as HTMLTextAreaElement)!.value = '';
       const preview = document.getElementById('composer-preview');
       if (preview) { preview.innerHTML = ''; preview.classList.add('hidden'); }
-      pendingUpload.file = null;
+      pendingFile = null;
       (document.getElementById('composer-file') as HTMLInputElement).value = '';
       // Auto-hide message
       setTimeout(() => { if (msg) msg.textContent = ''; }, 3500);
