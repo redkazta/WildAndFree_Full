@@ -28,6 +28,17 @@ try {
     .order('created_at', { ascending: false });
 
   if (!error && data && data.length > 0) {
+    // Fetch stock per product
+    let productStock: Record<string, number> = {};
+    const { data: stockData } = await supabase
+      .from('product_variants')
+      .select('product_id, stock');
+    if (stockData) {
+      for (const s of stockData) {
+        productStock[s.product_id] = (productStock[s.product_id] || 0) + s.stock;
+      }
+    }
+
     products = data.map((p: any) => ({
       id: p.id,
       name: p.name,
@@ -36,16 +47,17 @@ try {
       category: (p.category || 'otros').toLowerCase(),
       inStock: p.is_active !== false,
       description: p.description || '',
-      slug: p.slug || ''
+      slug: p.slug || '',
+      stock: productStock[p.id] || 0
     }));
   } else {
     throw new Error('No products');
   }
 } catch (_e) {
   products = [
-      { id: 'p1', name: 'Playera Wild Gvng Logo', price: 350, image: '', category: 'playeras', inStock: true, description: 'Playera negra bordada con el logo original de Wild Gvng.', slug: 'playera_wild_gvng_logo' },
-      { id: 'p2', name: 'Gorra WG Snapback', price: 280, image: '', category: 'gorras', inStock: true, description: 'Gorra snapback negra con logo WG bordado.', slug: 'gorra_wg_snapback' },
-      { id: 'p3', name: 'Sudadera Wild Gvng Premium', price: 650, image: '', category: 'sudaderas', inStock: true, description: 'Sudadera con capucha, diseño exclusivo.', slug: 'sudadera_wild_gvng_premium' }
+      { id: 'p1', name: 'Playera Wild Gvng Logo', price: 350, image: '', category: 'playeras', inStock: true, description: 'Playera negra bordada con el logo original de Wild Gvng.', slug: 'playera_wild_gvng_logo', stock: 10 },
+      { id: 'p2', name: 'Gorra WG Snapback', price: 280, image: '', category: 'gorras', inStock: true, description: 'Gorra snapback negra con logo WG bordado.', slug: 'gorra_wg_snapback', stock: 10 },
+      { id: 'p3', name: 'Sudadera Wild Gvng Premium', price: 650, image: '', category: 'sudaderas', inStock: true, description: 'Sudadera con capucha, diseño exclusivo.', slug: 'sudadera_wild_gvng_premium', stock: 10 }
     ];
 }
 ---
@@ -163,7 +175,15 @@ try {
                            data-price={product.price}
                            data-category={product.category}>
                         <div class="absolute top-3 left-3 z-20 pointer-events-none">
-                          {product.inStock && <span class="bg-[var(--primary)] text-[var(--bg)] text-[9px] font-black px-2 py-1 uppercase tracking-widest rounded-sm">New</span>}
+                          {!product.inStock && (
+                            <span class="bg-[var(--secondary)] text-white text-[9px] font-black px-2 py-1 uppercase tracking-widest rounded-sm">Agotado</span>
+                          )}
+                          {product.inStock && product.stock !== undefined && product.stock <= 5 && product.stock > 0 && (
+                            <span class="bg-[var(--primary)] text-[var(--bg)] text-[9px] font-black px-2 py-1 uppercase tracking-widest rounded-sm">Últimas {product.stock}</span>
+                          )}
+                          {product.inStock && (product.stock === undefined || product.stock > 5) && (
+                            <span class="bg-[var(--primary)]/20 text-[var(--primary)] text-[9px] font-black px-2 py-1 uppercase tracking-widest rounded-sm">Nuevo</span>
+                          )}
                         </div>
                         <button onclick="event.preventDefault();event.stopPropagation()" class="absolute top-3 right-3 z-30 w-8 h-8 rounded-full bg-[var(--bg)]/80 border border-[var(--border)] flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--wild-crimson)] hover:border-[var(--wild-crimson)] transition-all toggle-wishlist-btn"
                           data-product={JSON.stringify(product)} title="Wishlist">
@@ -205,6 +225,17 @@ try {
                 </section>
               );
             })}
+          </div>
+
+          <!-- RECENTLY VIEWED -->
+          <div id="recently-viewed-section" class="hidden mb-12">
+            <div class="flex items-center gap-4 mb-6">
+              <span class="w-2 h-8 bg-[var(--primary)] rounded-sm"></span>
+              <h2 class="text-2xl font-black uppercase tracking-tight text-[var(--text)]">Vistos Recientemente</h2>
+              <div class="h-[1px] flex-1 bg-[var(--border-faint)]"></div>
+            </div>
+            <div id="recently-viewed-grid" class="grid grid-cols-2 md:grid-cols-4 gap-5">
+            </div>
           </div>
 
           <div id="empty-state" class="hidden text-center py-20">
@@ -347,7 +378,31 @@ try {
     });
   });
 
-  const initShop = async () => { if (!cartStore.initialized) await cartStore.init(); syncButtons(); };
+  // Recently viewed
+  function loadRecentlyViewed() {
+    const section = document.getElementById('recently-viewed-section');
+    const grid = document.getElementById('recently-viewed-grid');
+    if (!section || !grid) return;
+    try {
+      const viewed = JSON.parse(localStorage.getItem('wild_recently_viewed') || '[]');
+      if (viewed.length === 0) return;
+      section.classList.remove('hidden');
+      grid.innerHTML = viewed.map(p => `
+        <a href="/tienda/${p.slug || p.id}" class="group bg-[var(--bg)] rounded-xl overflow-hidden border border-[var(--border-faint)] hover:border-[var(--primary)]/40 transition-all block">
+          <div class="aspect-square bg-[var(--bg-card)] overflow-hidden flex items-center justify-center">
+            ${p.image ? `<img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" />`
+            : `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><text x="12" y="16" text-anchor="middle" font-size="10" font-weight="900" fill="var(--text-muted)" stroke="none">?</text></svg>`}
+          </div>
+          <div class="p-3">
+            <p class="text-xs font-bold line-clamp-1">${p.name}</p>
+            <p class="text-sm font-black text-[var(--primary)] mt-1">$${p.price}</p>
+          </div>
+        </a>
+      `).join('');
+    } catch(e) {}
+  }
+
+  const initShop = async () => { if (!cartStore.initialized) await cartStore.init(); syncButtons(); loadRecentlyViewed(); };
   initShop();
   document.addEventListener('astro:page-load', initShop);
 </script>

@@ -362,43 +362,25 @@ const config = {
       const { data: { session } } = await supabase.auth.getSession();
       const userId = session?.user?.id || null;
 
-      const { error } = await supabase.from('store_orders').insert({
+      const { data: newOrder, error: orderError } = await supabase.from('store_orders').insert({
         user_id: userId,
-        total_amount: total,
+        total: total,
         shipping_address: `${shipping.name} | ${shipping.phone} | ${shipping.address}, ${shipping.colonia}, ${shipping.city}, ${shipping.state} ${shipping.zip} | Ref: ${shipping.references}`,
         payment_method: paymentMethod,
-        status: 'pending'
-      });
+        status: 'pending',
+        shipping_type: 'estandar'
+      }).select('id').single();
 
-      if (!error) {
-        // Save order items
+      if (!orderError && newOrder) {
         const orderItems = cart.map(item => ({
-          product_id: String(item.id),
+          order_id: newOrder.id,
+          variant_id: item.variant_id || null,
           quantity: item.quantity,
           unit_price: item.price
         }));
-        // Only insert if we have an order id from the insert
+        await supabase.from('store_order_items').insert(orderItems);
       }
     } catch (e) { console.log('Order save skipped (no DB connection)'); }
-
-    // Save order items with variant info
-    if (cart.length > 0) {
-      const orderItems = cart.map(item => ({
-        product_id: String(item.id),
-        variant_id: item.variant_id || null,
-        variant_size: item.size || null,
-        variant_color: item.color || null,
-        quantity: item.quantity,
-        unit_price: item.price
-      }));
-      // Try to save order items if supabase is connected
-      try {
-        const { supabase } = await import('../lib/supabase');
-        await supabase.from('store_order_items').insert(
-          orderItems.map(oi => ({ ...oi, order_id: orderId }))
-        );
-      } catch (_e) {}
-    }
 
     // Clear cart
     for (const item of [...cart]) {
