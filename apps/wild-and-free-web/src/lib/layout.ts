@@ -303,7 +303,7 @@ const updateAuthUI = async () => {
               <span class="text-[8px] font-bold text-[var(--text-muted)] uppercase tracking-wider">${roleDisplay}</span>
             </div>
           </a>
-          <div class="popover w-64">
+          <div class="popover w-64" style="left:auto;right:0;transform:translateY(10px) scale(0.95);">
             <div class="popover-header">
               <span class="popover-title">Mi Cuenta</span>
               <span class="text-[9px] text-[var(--primary)] font-mono">${roleDisplay}</span>
