@@ -157,14 +157,14 @@ try {
                   </div>
                   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                     {categoryProducts.map((product) => (
-                      <div class="product-card bg-[var(--bg)] rounded-xl overflow-hidden border border-[var(--border-faint)] hover:border-[var(--primary)]/40 transition-all duration-300 group flex flex-col h-full"
+                      <a href={`/tienda/producto?id=${product.id}`} class="product-card bg-[var(--bg)] rounded-xl overflow-hidden border border-[var(--border-faint)] hover:border-[var(--primary)]/40 transition-all duration-300 group flex flex-col h-full block"
                            data-name={product.name.toLowerCase()}
                            data-price={product.price}
                            data-category={product.category}>
                         <div class="absolute top-3 left-3 z-20 pointer-events-none">
                           {product.inStock && <span class="bg-[var(--primary)] text-[var(--bg)] text-[9px] font-black px-2 py-1 uppercase tracking-widest rounded-sm">New</span>}
                         </div>
-                        <button class="absolute top-3 right-3 z-30 w-8 h-8 rounded-full bg-[var(--bg)]/80 border border-[var(--border)] flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--wild-crimson)] hover:border-[var(--wild-crimson)] transition-all toggle-wishlist-btn"
+                        <button onclick="event.preventDefault();event.stopPropagation()" class="absolute top-3 right-3 z-30 w-8 h-8 rounded-full bg-[var(--bg)]/80 border border-[var(--border)] flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--wild-crimson)] hover:border-[var(--wild-crimson)] transition-all toggle-wishlist-btn"
                           data-product={JSON.stringify(product)} title="Wishlist">
                           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                         </button>
@@ -188,6 +188,7 @@ try {
                           <div class="mt-auto pt-3 border-t border-[var(--border-faint)] flex items-center justify-between">
                             <span class="text-lg font-black text-[var(--text)]">${product.price}</span>
                             <button
+                              onclick="event.preventDefault();event.stopPropagation()"
                               class={`w-10 h-10 rounded-lg flex items-center justify-center transition-all add-to-cart-btn ${product.inStock ? 'bg-[var(--border)] text-[var(--bg)] hover:bg-[var(--primary)]' : 'bg-[var(--bg-card)] text-[var(--text-muted)] cursor-not-allowed border border-[var(--border-faint)]'}`}
                               disabled={!product.inStock}
                               data-product={product.inStock ? JSON.stringify(product) : undefined}
@@ -197,7 +198,7 @@ try {
                             </button>
                           </div>
                         </div>
-                      </div>
+                      </a>
                     ))}
                   </div>
                 </section>
