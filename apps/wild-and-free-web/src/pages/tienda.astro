@@ -9,35 +9,16 @@ const config = {
   primary_color: tenant.primary_color,
   secondary_color: tenant.secondary_color,
   accent_color: tenant.accent_color || "#00FF9D",
-  discount_color: "#FFFFFF"
 };
 
 const categories = [
-  { id: 'playeras', name: 'Playeras' },
-  { id: 'gorras', name: 'Gorras' },
-  { id: 'sudaderas', name: 'Sudaderas' },
-  { id: 'accesorios', name: 'Accesorios' },
-  { id: 'otros', name: 'Otros' }
+  { id: 'playeras', name: 'Playeras', slug: 'playeras' },
+  { id: 'gorras', name: 'Gorras', slug: 'gorras' },
+  { id: 'sudaderas', name: 'Sudaderas', slug: 'sudaderas' },
+  { id: 'accesorios', name: 'Accesorios', slug: 'accesorios' },
+  { id: 'otros', name: 'Otros', slug: 'otros' }
 ];
 
-const carouselOffers = [
-  {
-    id: 101,
-    title: "COLECCIÓN DE VERANO",
-    subtitle: "HASTA 30% DE DESCUENTO",
-    image: "https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=800&h=400&fit=crop",
-    cta: "VER OFERTAS"
-  },
-  {
-    id: 102,
-    title: "NUEVOS LANZAMIENTOS",
-    subtitle: "EDICIÓN LIMITADA VINILO",
-    image: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=800&h=400&fit=crop",
-    cta: "COMPRAR AHORA"
-  }
-];
-
-// Fetch products from Supabase store_products table
 let products: any[] = [];
 try {
   const { data, error } = await supabase
@@ -51,309 +32,196 @@ try {
       id: p.id,
       name: p.name,
       price: Number(p.base_price),
-      rating: 4.7,
-      reviews: Math.floor(Math.random() * 100) + 10,
       image: p.image_url || 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500&h=500&fit=crop',
-      category: p.category || 'Ropa Urbana',
-      inStock: true,
+      category: (p.category || 'otros').toLowerCase(),
+      inStock: p.is_active !== false,
       description: p.description || ''
     }));
   } else {
-    throw new Error('No products or error');
+    throw new Error('No products');
   }
-} catch (e) {
-  // Fallback mock products
+} catch (_e) {
   products = [
-    { id: 'p1', name: 'Playera Wild Gvng Logo', price: 350, rating: 4.8, reviews: 89, image: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500&h=500&fit=crop', category: 'Ropa Urbana', inStock: true, description: 'Playera negra bordada con el logo original de Wild Gvng. 100% algodón.' },
-    { id: 'p2', name: 'Gorra WG Snapback', price: 280, rating: 4.5, reviews: 56, image: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=500&h=500&fit=crop', category: 'Accesorios', inStock: true, description: 'Gorra snapback negra con logo WG bordado. Ajustable.' },
-    { id: 'p3', name: 'Sudadera Wild Gvng Premium', price: 650, rating: 4.9, reviews: 124, image: 'https://images.unsplash.com/photo-1509942774463-acf339cf87d5?w=500&h=500&fit=crop', category: 'Ropa Urbana', inStock: true, description: 'Sudadera con capucha, diseño exclusivo. Algodón franela.' }
+    { id: 'p1', name: 'Playera Wild Gvng Logo', price: 350, image: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500&h=500&fit=crop', category: 'playeras', inStock: true, description: 'Playera negra bordada con el logo original de Wild Gvng.' },
+    { id: 'p2', name: 'Gorra WG Snapback', price: 280, image: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=500&h=500&fit=crop', category: 'gorras', inStock: true, description: 'Gorra snapback negra con logo WG bordado.' },
+    { id: 'p3', name: 'Sudadera Wild Gvng Premium', price: 650, image: 'https://images.unsplash.com/photo-1509942774463-acf339cf87d5?w=500&h=500&fit=crop', category: 'sudaderas', inStock: true, description: 'Sudadera con capucha, diseño exclusivo.' }
   ];
 }
-
-
 ---
 
 <Layout config={config}>
-  <div class="min-h-screen bg-[var(--bg)] text-[var(--text)] pb-20 selection:bg-[var(--wild-orange)] selection:text-black">
+  <div class="min-h-screen bg-[var(--bg)] text-[var(--text)] pb-20 selection:bg-[var(--primary)] selection:text-[var(--bg)]">
 
-    <!-- Top Bar Promocional -->
-    <div class="bg-[var(--primary)] text-[var(--text)] text-[10px] md:text-xs font-black text-center py-2 uppercase tracking-[0.2em] animate-gradient-x shadow-lg shadow-[var(--wild-crimson)]/20 sticky top-0 z-40">
+    <!-- Top Bar -->
+    <div class="bg-[var(--primary)] text-[var(--bg)] text-[10px] md:text-xs font-black text-center py-2 uppercase tracking-[0.2em]">
       Envío gratis en pedidos superiores a $999 • Devoluciones sin costo
     </div>
 
-    <div class="container-fluid px-4 md:px-8 py-8 w-full max-w-[1920px] mx-auto">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 relative">
+    <!-- Hero Compacto: Ofertas -->
+    <section class="border-b border-[var(--border-faint)]">
+      <div class="max-w-[1400px] mx-auto px-4 md:px-8 py-8 md:py-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Oferta 1 -->
+          <a href="#playeras" class="group relative overflow-hidden rounded-2xl border border-[var(--border-faint)] hover:border-[var(--primary)]/40 transition-all block h-[200px] md:h-[240px]">
+            <img src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=800&h=400&fit=crop" width="800" height="240" loading="lazy" class="w-full h-full object-cover opacity-50 group-hover:opacity-70 group-hover:scale-105 transition-all duration-700" />
+            <div class="absolute inset-0 bg-gradient-to-r from-[var(--bg)]/90 to-transparent flex flex-col justify-center p-6 md:p-10">
+              <span class="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--primary)] mb-2">Oferta</span>
+              <h2 class="text-2xl md:text-4xl font-black text-[var(--text)] uppercase leading-[0.9] mb-2">Colección<br/>de Verano</h2>
+              <p class="text-sm font-bold text-[var(--text-muted)]">Hasta 30% de descuento en playeras</p>
+            </div>
+          </a>
+          <!-- Oferta 2 -->
+          <a href="#sudaderas" class="group relative overflow-hidden rounded-2xl border border-[var(--border-faint)] hover:border-[var(--primary)]/40 transition-all block h-[200px] md:h-[240px]">
+            <img src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=800&h=400&fit=crop" width="800" height="240" loading="lazy" class="w-full h-full object-cover opacity-50 group-hover:opacity-70 group-hover:scale-105 transition-all duration-700" />
+            <div class="absolute inset-0 bg-gradient-to-r from-[var(--bg)]/90 to-transparent flex flex-col justify-center p-6 md:p-10">
+              <span class="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--primary)] mb-2">Nuevo</span>
+              <h2 class="text-2xl md:text-4xl font-black text-[var(--text)] uppercase leading-[0.9] mb-2">Sudaderas<br/>Premium</h2>
+              <p class="text-sm font-bold text-[var(--text-muted)]">Edición limitada, diseño exclusivo</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
 
-        <!-- Sidebar Sticky Independiente -->
-        <aside class="hidden lg:block lg:col-span-2 xl:col-span-2">
-            <div class="sticky top-20 h-[calc(100vh-6rem)] overflow-y-auto pr-2 space-y-8 scrollbar-hide">
+    <div class="max-w-[1400px] mx-auto px-4 md:px-8 py-8 md:py-12">
 
-              <!-- Búsqueda -->
-              <div class="space-y-2">
-                <h3 class="font-black uppercase text-xs text-[var(--text-muted)] tracking-widest mb-4">Buscar</h3>
-                <div class="relative group">
-                  <div class="absolute inset-0 bg-[var(--primary)] rounded-lg opacity-20 group-hover:opacity-100 transition-opacity blur-sm"></div>
-                  <div class="relative bg-[var(--bg)] rounded-lg border border-[var(--border)] flex items-center p-1">
-                      <input
-                        type="text"
-                        placeholder="Buscar..."
-                        class="w-full bg-transparent border-none text-xs text-[var(--text)] placeholder:text-[var(--text-muted)] focus:ring-0 px-3 py-2"
-                      />
-                      <button class="p-2 text-[var(--text-muted)] hover:text-[var(--wild-orange)] transition-colors">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                      </button>
-                  </div>
-                </div>
+      <!-- Búsqueda + Filtros -->
+      <div class="flex flex-col md:flex-row gap-4 mb-10">
+        <div class="relative flex-1">
+          <input type="text" id="search-input" placeholder="Buscar productos..."
+            class="w-full bg-[var(--bg)] rounded-xl border border-[var(--border)] text-sm text-[var(--text)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--primary)] px-5 py-3 transition-colors" />
+        </div>
+        <div class="flex gap-2 flex-wrap">
+          <button data-filter="all" class="category-btn active px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider border border-[var(--border)] bg-[var(--bg-card)] text-[var(--text)] hover:border-[var(--primary)] transition-all">Todos</button>
+          {categories.map(cat => (
+            <button data-filter={cat.slug} class="category-btn px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider border border-[var(--border-faint)] text-[var(--text-muted)] hover:border-[var(--primary)] hover:text-[var(--text)] transition-all">{cat.name}</button>
+          ))}
+        </div>
+      </div>
+
+      <!-- Filtros de Precio -->
+      <div class="flex gap-3 mb-10 flex-wrap">
+        <span class="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider self-center">Precio:</span>
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" data-price="0-500" class="price-filter accent-[var(--primary)] w-4 h-4" />
+          <span class="text-xs text-[var(--text-muted)]">&lt;$500</span>
+        </label>
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" data-price="500-1500" class="price-filter accent-[var(--primary)] w-4 h-4" />
+          <span class="text-xs text-[var(--text-muted)]">$500-$1,500</span>
+        </label>
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" data-price="1500-99999" class="price-filter accent-[var(--primary)] w-4 h-4" />
+          <span class="text-xs text-[var(--text-muted)]">$1,500+</span>
+        </label>
+      </div>
+
+      <!-- Productos por Categoría -->
+      <div id="products-container">
+        {categories.map(category => {
+          const categoryProducts = products.filter(p => p.category === category.slug);
+          if (categoryProducts.length === 0) return null;
+          return (
+            <section data-category-section={category.slug} class="scroll-mt-32 mb-14">
+              <div class="flex items-center gap-4 mb-6">
+                <span class="w-2 h-8 bg-[var(--primary)] rounded-sm"></span>
+                <h2 class="text-2xl font-black uppercase tracking-tight text-[var(--text)]">{category.name}</h2>
+                <div class="h-[1px] flex-1 bg-[var(--border-faint)]"></div>
+                <span class="text-xs text-[var(--text-muted)]">{categoryProducts.length} productos</span>
               </div>
-
-              <!-- Navegación por Categorías -->
-              <div class="space-y-4">
-                 <h3 class="font-black uppercase text-xs text-[var(--text-muted)] tracking-widest">Explorar</h3>
-                 <nav class="flex flex-col space-y-1">
-                    <a href="#offers" class="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-[var(--bg-card)] text-[var(--text-secondary)] hover:text-[var(--text)] transition-all group">
-                        <span class="w-1.5 h-1.5 bg-[var(--wild-orange)] rounded-full group-hover:scale-150 transition-transform"></span>
-                        <span class="text-sm font-bold uppercase tracking-wider">Ofertas</span>
-                    </a>
-                    {categories.map(cat => (
-                        <a href={`#${cat.id}`} class="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-[var(--bg-card)] text-[var(--text-muted)] hover:text-[var(--text)] transition-all group">
-                            <span class="w-1.5 h-1.5 bg-[var(--bg-card)] rounded-full group-hover:bg-[var(--wild-orange)] group-hover:scale-150 transition-all"></span>
-                            <span class="text-sm font-medium">{cat.name}</span>
-                        </a>
-                    ))}
-                 </nav>
-              </div>
-
-              <!-- Filtros -->
-              <div class="space-y-4">
-                <h3 class="font-black uppercase text-xs text-[var(--text-muted)] tracking-widest">Filtros</h3>
-                <div class="space-y-2">
-                    {['Menos de $500', '$500 - $1500', '$1500+'].map((label, _i) => (
-                        <label class="flex items-center gap-3 cursor-pointer group hover:bg-[var(--bg-card)] p-2 rounded-lg transition-colors">
-                            <div class="relative flex items-center justify-center w-4 h-4 border border-[var(--border-muted)] rounded bg-transparent group-hover:border-[var(--wild-orange)] transition-colors">
-                                <input type="checkbox" class="peer appearance-none w-full h-full cursor-pointer absolute inset-0 z-10" />
-                                <div class="w-2.5 h-2.5 bg-[var(--wild-orange)] rounded-sm opacity-0 peer-checked:opacity-100 transition-opacity"></div>
-                            </div>
-                            <span class="text-xs text-[var(--text-muted)] group-hover:text-[var(--text)] transition-colors">{label}</span>
-                        </label>
-                    ))}
-                </div>
-              </div>
-
-              <!-- Banner Lateral -->
-              <div class="relative overflow-hidden bg-[var(--bg)] border border-[var(--wild-orange)]/30 text-[var(--text)] p-6 rounded-xl text-center space-y-3 group">
-                <div class="absolute inset-0 bg-[var(--bg)] opacity-50 group-hover:opacity-100 transition-opacity duration-700"></div>
-                <div class="relative z-10">
-                    <p class="font-black text-2xl text-[var(--wild-orange)] uppercase italic tracking-tighter drop-shadow-md">WILD CLUB</p>
-                    <p class="text-[10px] text-[var(--text-muted)] font-medium leading-relaxed">Únete y obtén <span class="text-[var(--text)] font-bold">10% OFF</span> en tu primera compra.</p>
-                    <button class="mt-2 w-full bg-white text-black font-black py-2 text-[10px] uppercase tracking-[0.2em] hover:bg-[var(--wild-orange)] hover:text-[var(--text)] transition-all">
-                    Suscribirse
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                {categoryProducts.map((product) => (
+                  <div class="product-card bg-[var(--bg)] rounded-xl overflow-hidden border border-[var(--border-faint)] hover:border-[var(--primary)]/40 transition-all duration-300 group flex flex-col h-full"
+                       data-name={product.name.toLowerCase()}
+                       data-price={product.price}
+                       data-category={product.category}>
+                    <div class="absolute top-3 left-3 z-20 pointer-events-none">
+                      {product.inStock && (
+                        <span class="bg-[var(--primary)] text-[var(--bg)] text-[9px] font-black px-2 py-1 uppercase tracking-widest rounded-sm">New</span>
+                      )}
+                    </div>
+                    <button class="absolute top-3 right-3 z-30 w-8 h-8 rounded-full bg-[var(--bg)]/80 border border-[var(--border)] flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--wild-crimson)] hover:border-[var(--wild-crimson)] transition-all toggle-wishlist-btn"
+                      data-product={JSON.stringify(product)} title="Wishlist">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                     </button>
-                </div>
-              </div>
-
-          </div>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="col-span-1 lg:col-span-10 xl:col-span-10 space-y-20">
-
-          <!-- Hero Carousel (Ofertas) -->
-          <section id="offers" class="scroll-mt-32 relative h-[400px] md:h-[550px] rounded-3xl overflow-hidden group border border-[var(--border)] shadow-2xl shadow-black/50 mx-auto w-full">
-            <div class="absolute inset-0 flex transition-transform duration-500 ease-out" id="hero-slider">
-              {carouselOffers.map(offer => (
-                <div class="min-w-full h-full relative">
-                  <img src={offer.image} width="800" height="550" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000 ease-in-out scale-105 hover:scale-100" />
-                  <div class="absolute inset-0 bg-[var(--bg)] flex flex-col justify-center p-8 md:p-16">
-                    <div class="border-l-4 border-[var(--wild-orange)] pl-6 md:pl-8">
-                        <h2 class="text-4xl md:text-7xl font-black text-[var(--text)] uppercase leading-[0.9] mb-4 drop-shadow-xl" style="text-shadow: 4px 4px 0px rgba(0,0,0,0.8);">{offer.title}</h2>
-                        <p class="text-xl md:text-3xl font-bold text-[var(--wild-light-orange)] uppercase mb-8 tracking-wide drop-shadow-md">{offer.subtitle}</p>
-                        <button class="w-fit bg-white text-black px-8 py-4 font-black uppercase tracking-[0.2em] hover:bg-[var(--wild-orange)] hover:text-[var(--text)] transition-all duration-300 text-xs md:text-sm shadow-[6px_6px_0px_var(--wild-blood)] hover:shadow-[0px_0px_0px_transparent] hover:translate-x-[2px] hover:translate-y-[2px]">
-                        {offer.cta}
+                    <div class="relative aspect-[4/5] bg-[var(--bg-card)] overflow-hidden">
+                      <img src={product.image} width="400" height="500" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" />
+                      {!product.inStock && (
+                        <div class="absolute inset-0 bg-[var(--bg)]/80 flex items-center justify-center z-20">
+                          <span class="text-[var(--text)] text-sm font-black uppercase tracking-[0.2em] border-2 border-[var(--text)] px-3 py-1 -rotate-12">Agotado</span>
+                        </div>
+                      )}
+                    </div>
+                    <div class="p-4 flex flex-col flex-grow">
+                      <h3 class="font-bold text-sm text-[var(--text)] leading-tight line-clamp-2 mb-3">{product.name}</h3>
+                      <div class="mt-auto pt-3 border-t border-[var(--border-faint)] flex items-center justify-between">
+                        <span class="text-lg font-black text-[var(--text)]">${product.price}</span>
+                        <button
+                          class={`w-10 h-10 rounded-lg flex items-center justify-center transition-all add-to-cart-btn ${
+                            product.inStock
+                              ? 'bg-[var(--border)] text-[var(--bg)] hover:bg-[var(--primary)]'
+                              : 'bg-[var(--bg-card)] text-[var(--text-muted)] cursor-not-allowed border border-[var(--border-faint)]'
+                          }`}
+                          disabled={!product.inStock}
+                          data-product={product.inStock ? JSON.stringify(product) : undefined}
+                          title="Agregar al Carrito">
+                          <span class="btn-text">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                          </span>
+                          <span class="btn-spinner hidden animate-spin absolute">
+                            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                          </span>
                         </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-            <!-- Controles simples -->
-            <div class="absolute bottom-8 right-8 flex gap-2">
-                <button class="bg-[var(--bg)]/50  text-[var(--text)] p-3 rounded-full hover:bg-[var(--wild-orange)] hover:text-[var(--text)] transition-all border border-[var(--border)]">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                </button>
-                <button class="bg-[var(--bg)]/50  text-[var(--text)] p-3 rounded-full hover:bg-[var(--wild-orange)] hover:text-[var(--text)] transition-all border border-[var(--border)]">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </button>
-            </div>
-          </section>
+                ))}
+              </div>
+            </section>
+          );
+        })}
+      </div>
 
-          <!-- Secciones por Categoría -->
-          {categories.map(category => {
-            const categoryProducts = products.filter(p => p.category === category.name);
-            if (categoryProducts.length === 0) return null;
-
-            return (
-              <section id={category.id} class="scroll-mt-32">
-                <div class="flex items-center gap-4 mb-8">
-                    <h2 class="text-3xl md:text-4xl font-black uppercase tracking-tight text-[var(--text)] flex items-center gap-4">
-                        <span class="w-2 h-8 bg-[var(--wild-orange)] rounded-sm"></span>
-                        {category.name}
-                    </h2>
-                    <div class="h-[1px] flex-1 bg-[var(--border-faint)]"></div>
-                    <a href={`#${category.id}`} class="text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)] hover:text-[var(--wild-orange)] transition-colors">Ver todos</a>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {categoryProducts.map((product, _idx) => (
-                    <div class="bg-[var(--bg)] rounded-xl overflow-hidden border border-[var(--border-faint)] hover:border-[var(--wild-crimson)]/40 transition-all duration-300 group flex flex-col h-full hover:-translate-y-2 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] relative">
-
-                      <!-- Etiquetas (New/Sale) -->
-                      <div class="absolute top-3 left-3 z-20 flex flex-col gap-2 items-start pointer-events-none">
-                         {product.isNew && (
-                            <span class="bg-[var(--wild-accent)] text-black text-[9px] font-black px-2 py-1 uppercase tracking-widest rounded-sm shadow-lg">New</span>
-                         )}
-                         {product.originalPrice && (
-                            <span class="bg-[var(--wild-crimson)] text-[var(--text)] text-[9px] font-black px-2 py-1 uppercase tracking-widest rounded-sm shadow-lg">
-                                -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
-                            </span>
-                         )}
-                      </div>
-
-                      <!-- Wishlist Button (Absolute Top Right) -->
-                      <button
-                        class="absolute top-3 right-3 z-30 w-8 h-8 rounded-full bg-[var(--bg)]/50  border border-[var(--border)] flex items-center justify-center text-[var(--text)] hover:bg-[var(--wild-crimson)] hover:border-[var(--wild-crimson)] transition-all toggle-wishlist-btn group/wish"
-                        data-product={JSON.stringify(product)}
-                        title="Agregar a Wishlist"
-                      >
-                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover/wish:scale-110 transition-transform"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                      </button>
-
-                      <div class="relative aspect-[4/5] bg-[var(--bg-card)] overflow-hidden">
-                        <img src={product.image} width="400" height="500" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out" />
-
-                        {!product.inStock && (
-                          <div class="absolute inset-0 bg-[var(--bg)] flex items-center justify-center z-20">
-                            <span class="text-[var(--wild-crimson)] text-sm font-black uppercase tracking-[0.2em] border-2 border-[var(--wild-crimson)] px-3 py-1 -rotate-12">Agotado</span>
-                          </div>
-                        )}
-                      </div>
-
-                      <div class="p-4 flex flex-col flex-grow bg-[var(--bg)]">
-                        <div class="mb-2">
-                            <h3 class="font-bold text-sm text-[var(--text)] leading-tight line-clamp-2 group-hover:text-[var(--wild-orange)] transition-colors">{product.name}</h3>
-                        </div>
-
-                        <div class="mt-auto pt-3 border-t border-[var(--border-faint)] flex items-center justify-between">
-                            <div class="flex flex-col">
-                                <span class="text-[10px] text-[var(--text-muted)] uppercase tracking-wider">Precio</span>
-                                <div class="flex items-baseline gap-2">
-                                    <span class="text-base font-black text-[var(--text)]">${product.price}</span>
-                                    {product.originalPrice && <span class="text-[10px] text-[var(--text-muted)] line-through font-bold">${product.originalPrice}</span>}
-                                </div>
-                            </div>
-
-                            <button
-                                class={`w-10 h-10 rounded-lg flex items-center justify-center transition-all add-to-cart-btn relative group/btn ${
-                                product.inStock
-                                ? 'bg-white text-black hover:bg-[var(--wild-orange)] hover:text-[var(--text)]'
-                                : 'bg-[var(--bg-card)] text-[var(--text-muted)] cursor-not-allowed border border-[var(--border-faint)]'
-                                }`}
-                                disabled={!product.inStock}
-                                data-product={product.inStock ? JSON.stringify(product) : undefined}
-                                title="Agregar al Carrito"
-                            >
-                                <span class="btn-text">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-                                </span>
-                                <span class="btn-spinner hidden animate-spin absolute">
-                                    <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                                </span>
-                            </button>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            );
-          })}
-
-        </main>
+      <!-- Empty State -->
+      <div id="empty-state" class="hidden text-center py-20">
+        <p class="text-xl font-black text-[var(--text-muted)] uppercase tracking-wider">No se encontraron productos</p>
+        <p class="text-sm text-[var(--text-muted)] mt-2">Intenta con otra búsqueda o categoría</p>
       </div>
     </div>
   </div>
 </Layout>
 
-<style is:global define:vars={{ streetPrimary: tenant.primary_color, streetAccent: tenant.accent_color }}>
-  :root {
-    --street-primary: var(--streetPrimary);
-    --street-accent: var(--streetAccent);
-    --wild-orange: #FF5500;
-    --wild-light-orange: #FF8C00;
-    --wild-blood: #8A0303;
-    --wild-crimson: #DC143C;
-    --wild-accent: #00FF9D;
-  }
+<style is:global>
+  :root { --wild-crimson: #DC143C; }
+  [data-theme="light"] { --wild-crimson: #B91C1C; }
 
-  .scrollbar-hide::-webkit-scrollbar { display: none; }
-  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-
-  @keyframes gradient-x {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
+  .category-btn.active {
+    border-color: var(--primary) !important;
+    color: var(--text) !important;
+    background: var(--bg-card) !important;
   }
-  .animate-gradient-x {
-      background-size: 200% 200%;
-      animation: gradient-x 6s ease infinite;
-  }
-
-  /* Wishlist Animation Keyframes */
-  @keyframes heart-burst {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.5); }
-      100% { transform: scale(1); }
-  }
-  .heart-burst {
-      animation: heart-burst 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  }
-
-  @keyframes float-up-fade {
-      0% { transform: translateY(0) scale(1); opacity: 1; }
-      100% { transform: translateY(-40px) scale(1.2); opacity: 0; }
-  }
-  .float-heart {
-      position: fixed;
-      pointer-events: none;
-      z-index: 100;
-      color: var(--wild-crimson);
-      animation: float-up-fade 1s ease-out forwards;
-  }
+  .product-card.hidden-card { display: none; }
+  .section-hidden { display: none; }
 </style>
 
-<!-- Confirmation Modal (Cart) -->
-<dialog id="cart-confirm-dialog" class="bg-transparent p-0 backdrop:bg-[var(--bg)] backdrop: open:animate-fade-in z-50 rounded-xl shadow-2xl">
-  <div class="bg-[var(--bg)] border border-[var(--wild-orange)]/30 text-[var(--text)] p-6 rounded-xl max-w-sm w-full mx-auto relative overflow-hidden shadow-[0_0_50px_rgba(255,85,0,0.15)]">
-     <div class="absolute top-0 left-0 w-full h-1 bg-[var(--primary)]"></div>
-     <div class="text-center mb-6 relative z-10">
-        <h3 class="text-xl font-black uppercase tracking-tight">¡Agregado al Carrito!</h3>
-        <p class="text-[var(--wild-light-orange)] text-sm mt-2 font-medium" id="modal-product-name">Producto</p>
-     </div>
-     <div class="flex gap-3 relative z-10">
-        <button id="modal-keep-shopping" class="flex-1 py-3 border border-[var(--border)] rounded-lg font-bold text-[10px] uppercase tracking-widest hover:bg-[var(--bg-card)] hover:text-[var(--text)] transition-all">
-            Seguir Comprando
-        </button>
-        <button id="modal-go-cart" class="flex-1 py-3 bg-[var(--primary)] text-[var(--text)] rounded-lg font-bold text-[10px] uppercase tracking-widest hover:brightness-110 transition-all">
-            Ir al Carrito
-        </button>
-     </div>
+<!-- Cart Confirmation Modal -->
+<dialog id="cart-confirm-dialog" class="bg-transparent p-0 backdrop:bg-[var(--bg)]/80 z-50 rounded-xl">
+  <div class="bg-[var(--bg)] border border-[var(--border)] text-[var(--text)] p-6 rounded-xl max-w-sm w-full mx-auto relative">
+    <div class="text-center mb-6">
+      <h3 class="text-xl font-black uppercase tracking-tight">¡Agregado!</h3>
+      <p class="text-[var(--text-muted)] text-sm mt-2" id="modal-product-name">Producto</p>
+    </div>
+    <div class="flex gap-3">
+      <button id="modal-keep-shopping" class="flex-1 py-3 border border-[var(--border)] rounded-lg font-bold text-[10px] uppercase tracking-widest hover:bg-[var(--bg-card)] transition-all">Seguir</button>
+      <button id="modal-go-cart" class="flex-1 py-3 bg-[var(--primary)] text-[var(--bg)] rounded-lg font-bold text-[10px] uppercase tracking-widest hover:brightness-110 transition-all">Ir al Carrito</button>
+    </div>
   </div>
 </dialog>
 
-<!-- Wishlist Notification Toast -->
-<div id="wishlist-toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-[var(--bg-card)] border border-[var(--wild-crimson)] text-[var(--text)] px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 translate-y-24 opacity-0 transition-all duration-300 z-50">
-    <div class="bg-[var(--wild-crimson)]/20 p-1.5 rounded-full text-[var(--wild-crimson)]">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-    </div>
-    <span class="text-xs font-bold uppercase tracking-wider" id="wishlist-toast-message">Agregado a Wishlist</span>
+<!-- Wishlist Toast -->
+<div id="wishlist-toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-[var(--bg)] border border-[var(--wild-crimson)] text-[var(--text)] px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 translate-y-24 opacity-0 transition-all duration-300 z-50">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--wild-crimson)" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+  <span class="text-xs font-bold uppercase tracking-wider" id="wishlist-toast-message">Agregado a tu lista</span>
 </div>
 
 <script>
@@ -365,160 +233,137 @@ try {
   const modalGoCart = document.getElementById('modal-go-cart');
   const wishlistToast = document.getElementById('wishlist-toast');
   const wishlistToastMsg = document.getElementById('wishlist-toast-message');
+  const searchInput = document.getElementById('search-input') as HTMLInputElement;
+  const emptyState = document.getElementById('empty-state');
 
-  // Modal Handlers
-  if (modalKeepShopping) modalKeepShopping.addEventListener('click', () => dialog.close());
-  if (modalGoCart) modalGoCart.addEventListener('click', () => {
-      dialog.close();
-      window.location.href = '/checkout';
-  });
-  dialog.addEventListener('click', (e) => {
+  // Modal
+  if (modalKeepShopping) modalKeepShopping.addEventListener('click', () => dialog?.close());
+  if (modalGoCart) modalGoCart.addEventListener('click', () => { dialog?.close(); window.location.href = '/checkout'; });
+  dialog?.addEventListener('click', (e) => {
     const rect = dialog.getBoundingClientRect();
-    if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) {
-      dialog.close();
-    }
+    if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) dialog.close();
   });
 
-  // Wishlist Animation & Toast
+  // Wishlist Toast
   const showWishlistToast = (added: boolean) => {
-      if (!wishlistToast || !wishlistToastMsg) return;
-
-      wishlistToastMsg.textContent = added ? 'Agregado a tu lista' : 'Eliminado de tu lista';
-      wishlistToast.classList.remove('translate-y-24', 'opacity-0');
-
-      setTimeout(() => {
-          wishlistToast.classList.add('translate-y-24', 'opacity-0');
-      }, 2500);
+    if (!wishlistToast || !wishlistToastMsg) return;
+    wishlistToastMsg.textContent = added ? 'Agregado a tu lista' : 'Eliminado de tu lista';
+    wishlistToast.classList.remove('translate-y-24', 'opacity-0');
+    setTimeout(() => wishlistToast.classList.add('translate-y-24', 'opacity-0'), 2500);
   };
 
-  const createFloatingHeart = (x: number, y: number) => {
-      const heart = document.createElement('div');
-      heart.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;
-      heart.className = 'float-heart';
-      heart.style.left = `${x}px`;
-      heart.style.top = `${y}px`;
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 1000);
-  };
+  // Filter
+  function filterProducts() {
+    const query = searchInput?.value.toLowerCase().trim() || '';
+    const activeCategory = document.querySelector('.category-btn.active')?.getAttribute('data-filter') || 'all';
+    const checkedPrices = [...document.querySelectorAll('.price-filter:checked')].map(el => (el as HTMLInputElement).dataset.price);
+    let visibleCount = 0;
 
-  const initShop = async () => {
-    if (!cartStore.initialized) await cartStore.init();
+    document.querySelectorAll('.product-card').forEach((card) => {
+      const c = card as HTMLElement;
+      const name = c.dataset.name || '';
+      const price = Number(c.dataset.price);
+      const category = c.dataset.category || '';
+      let show = true;
+      if (query && !name.includes(query)) show = false;
+      if (activeCategory !== 'all' && category !== activeCategory) show = false;
+      if (checkedPrices.length > 0) {
+        const inRange = checkedPrices.some(r => { const [min, max] = r.split('-').map(Number); return price >= min && price <= max; });
+        if (!inRange) show = false;
+      }
+      c.classList.toggle('hidden-card', !show);
+      if (show) visibleCount++;
+    });
 
-    const updateWishlistIcon = (btn: Element, isActive: boolean) => {
-        const icon = btn.querySelector('svg');
-        if (icon) {
-            if (isActive) {
-                icon.style.fill = 'currentColor';
-                icon.style.color = '#DC143C'; // wild-crimson
-                btn.classList.add('bg-white', 'text-[#DC143C]', 'border-[#DC143C]');
-                btn.classList.remove('bg-[var(--bg)]/50', 'text-[var(--text)]', 'border-[var(--border)]');
-            } else {
-                icon.style.fill = 'none';
-                icon.style.color = 'currentColor';
-                btn.classList.remove('bg-white', 'text-[#DC143C]', 'border-[#DC143C]');
-                btn.classList.add('bg-[var(--bg)]/50', 'text-[var(--text)]', 'border-[var(--border)]');
-            }
-        }
-    };
+    document.querySelectorAll('[data-category-section]').forEach(section => {
+      const cards = section.querySelectorAll('.product-card:not(.hidden-card)');
+      (section as HTMLElement).classList.toggle('section-hidden', cards.length === 0);
+    });
+    if (emptyState) emptyState.classList.toggle('hidden', visibleCount > 0);
+  }
 
-    const updateCartButtonState = (btn: Element, isInCart: boolean) => {
-        if (btn.hasAttribute('disabled')) return;
-        const icon = btn.querySelector('svg');
-        if (isInCart) {
-             btn.classList.add('bg-[var(--wild-orange)]', 'text-[var(--text)]');
-             btn.classList.remove('bg-white', 'text-black');
-             if(icon) icon.innerHTML = '<polyline points="20 6 9 17 4 12"></polyline>'; // checkmark
-        } else {
-             btn.classList.remove('bg-[var(--wild-orange)]', 'text-[var(--text)]');
-             btn.classList.add('bg-white', 'text-black');
-             if(icon) icon.innerHTML = '<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path>'; // bag
-        }
-    };
+  if (searchInput) searchInput.addEventListener('input', filterProducts);
 
-    const syncButtons = () => {
-        document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
-            const productData = (btn as HTMLElement).dataset.product;
-            if (productData) {
-                try {
-                    const product = JSON.parse(productData);
-                    const isInCart = cartStore.isInCart(product.id);
-                    updateCartButtonState(btn, isInCart);
-                } catch(e) {}
-            }
-        });
+  document.querySelectorAll('.category-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      filterProducts();
+    });
+  });
 
-        document.querySelectorAll('.toggle-wishlist-btn').forEach(btn => {
-            const productData = (btn as HTMLElement).dataset.product;
-            if (productData) {
-                try {
-                    const product = JSON.parse(productData);
-                    const isInWishlist = cartStore.isInWishlist(product.id);
-                    updateWishlistIcon(btn, isInWishlist);
-                } catch(e) {}
-            }
-        });
-    };
+  document.querySelectorAll('.price-filter').forEach(cb => {
+    cb.addEventListener('change', filterProducts);
+  });
 
-    // Listeners
+  // Cart sync
+  const syncButtons = () => {
     document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
-        btn.addEventListener('click', async (e) => {
-            const button = e.currentTarget as HTMLButtonElement;
-            const productData = button.dataset.product;
-            if (!productData) return;
-
-            const product = JSON.parse(productData);
-            const spinner = button.querySelector('.btn-spinner');
-            const text = button.querySelector('.btn-text');
-
-            if (spinner) spinner.classList.remove('hidden');
-            if (text) text.classList.add('opacity-0');
-
-            // Simulate network delay
-            await new Promise(resolve => setTimeout(resolve, 600));
-
-            cartStore.addToCart(product);
-
-            if (spinner) spinner.classList.add('hidden');
-            if (text) text.classList.remove('opacity-0');
-
-            syncButtons();
-
-            // Show confirmation
-            if (modalProductName) modalProductName.textContent = product.name;
-            dialog.showModal();
-        });
+      const pd = (btn as HTMLElement).dataset.product;
+      if (pd) {
+        try {
+          const product = JSON.parse(pd);
+          const inCart = cartStore.isInCart(product.id);
+          const icon = btn.querySelector('svg');
+          if (inCart) {
+            btn.classList.add('bg-[var(--primary)]', 'text-[var(--bg)]');
+            btn.classList.remove('bg-[var(--border)]', 'text-[var(--bg)]');
+            if (icon) icon.innerHTML = '<polyline points="20 6 9 17 4 12"></polyline>';
+          } else {
+            btn.classList.remove('bg-[var(--primary)]');
+            btn.classList.add('bg-[var(--border)]', 'text-[var(--bg)]');
+            if (icon) icon.innerHTML = '<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path>';
+          }
+        } catch(_e) {}
+      }
     });
-
-    document.querySelectorAll('.toggle-wishlist-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const button = e.currentTarget as HTMLElement;
-            const productData = button.dataset.product;
-            if (!productData) return;
-
-            const product = JSON.parse(productData);
-            const wasInWishlist = cartStore.isInWishlist(product.id);
-
-            cartStore.toggleWishlist(product);
-
-            if (wasInWishlist) {
-                showWishlistToast(false);
-            } else {
-                // Trigger Animation
-                const rect = button.getBoundingClientRect();
-                createFloatingHeart(rect.left + rect.width/2, rect.top);
-                button.classList.add('heart-burst');
-                setTimeout(() => button.classList.remove('heart-burst'), 400);
-                showWishlistToast(true);
-            }
-            syncButtons();
-        });
-    });
-
-    syncButtons();
   };
 
+  document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      const button = e.currentTarget as HTMLButtonElement;
+      const pd = button.dataset.product;
+      if (!pd) return;
+      const product = JSON.parse(pd);
+      const spinner = button.querySelector('.btn-spinner');
+      const text = button.querySelector('.btn-text');
+      if (spinner) spinner.classList.remove('hidden');
+      if (text) text.classList.add('opacity-0');
+      await new Promise(r => setTimeout(r, 400));
+      cartStore.addToCart(product);
+      if (spinner) spinner.classList.add('hidden');
+      if (text) text.classList.remove('opacity-0');
+      syncButtons();
+      if (modalProductName) modalProductName.textContent = product.name;
+      dialog?.showModal();
+    });
+  });
+
+  document.querySelectorAll('.toggle-wishlist-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const button = e.currentTarget as HTMLElement;
+      const pd = button.dataset.product;
+      if (!pd) return;
+      const product = JSON.parse(pd);
+      const was = cartStore.isInWishlist(product.id);
+      cartStore.toggleWishlist(product);
+      const icon = button.querySelector('svg');
+      if (!was) {
+        if (icon) icon.style.fill = 'currentColor';
+        button.classList.add('text-[var(--wild-crimson)]');
+        button.classList.remove('text-[var(--text-muted)]');
+        showWishlistToast(true);
+      } else {
+        if (icon) icon.style.fill = 'none';
+        button.classList.remove('text-[var(--wild-crimson)]');
+        button.classList.add('text-[var(--text-muted)]');
+        showWishlistToast(false);
+      }
+    });
+  });
+
+  const initShop = async () => { if (!cartStore.initialized) await cartStore.init(); syncButtons(); };
   initShop();
-  // Re-run on View Transitions
   document.addEventListener('astro:page-load', initShop);
 </script>

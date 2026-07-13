@@ -58,7 +58,7 @@ import Layout from '../layouts/Layout.astro';
           </label>
         </div>
 
-        <button type="submit" class="w-full py-5 bg-white text-black text-xs font-black uppercase tracking-[0.3em] rounded-2xl hover:bg-wild-orange hover:text-[var(--text)] transition-all transform hover:-translate-y-1 shadow-2xl shadow-white/5 hover:shadow-wild-orange/20">
+        <button type="submit" class="w-full py-5 bg-[var(--primary)] text-[var(--bg)] text-xs font-black uppercase tracking-[0.3em] rounded-2xl hover:brightness-110 transition-all transform hover:-translate-y-1 shadow-2xl">
           Iniciar Sesión
         </button>
       </form>
@@ -162,7 +162,7 @@ import Layout from '../layouts/Layout.astro';
     align-items: center;
     justify-content: center;
     padding: 40px 20px;
-    background: linear-gradient(135deg, #000 0%, #111 50%, #000 100%);
+    background: var(--bg);
     position: relative;
   }
 
@@ -180,7 +180,7 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .login-card {
-    background: rgba(17, 17, 17, 0.9);
+    background: var(--bg-card);
     border: 1px solid rgba(201, 131, 0, 0.3);
     border-radius: 16px;
     padding: 48px;
