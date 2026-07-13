@@ -134,7 +134,9 @@ const uniqueSizesJson = JSON.stringify(uniqueSizes);
                       const isFirst = ci === 0;
                       const colorHex = color === 'Negro' ? '#000000' : color === 'Blanco' ? '#ffffff' : color === 'Gris oscuro' ? '#444444' : '#888888';
                       const borderCls = color === 'Blanco' ? 'border-[var(--border)]' : 'border-transparent';
-                      return `<button class="color-btn w-10 h-10 rounded-full border-2 ${isFirst ? 'ring-2 ring-[var(--primary)]' : ''} ${borderCls} transition-all hover:scale-110" data-color="${color}" style="background:${colorHex}" title="${color}"></button>`;
+                      return (
+                        <button class={`color-btn w-10 h-10 rounded-full border-2 ${isFirst ? 'ring-2 ring-[var(--primary)]' : ''} ${borderCls} transition-all hover:scale-110`} data-color={color} style={{background: colorHex}} title={color}></button>
+                      );
                     })}
                   </div>
                 </div>
@@ -145,7 +147,9 @@ const uniqueSizesJson = JSON.stringify(uniqueSizes);
                   <div class="flex gap-2 flex-wrap" id="size-options">
                     {uniqueSizes.map((size: string, si: number) => {
                       const isFirst = si === 0;
-                      return `<button class="size-btn px-5 py-2.5 rounded-lg border text-xs font-black uppercase tracking-wider transition-all ${isFirst ? 'bg-[var(--primary)] text-[var(--bg)] border-[var(--primary)]' : 'border-[var(--border)] text-[var(--text)] hover:border-[var(--primary)] hover:text-[var(--primary)]'}" data-size="${size}">${size}</button>`;
+                      return (
+                        <button class={`size-btn px-5 py-2.5 rounded-lg border text-xs font-black uppercase tracking-wider transition-all ${isFirst ? 'bg-[var(--primary)] text-[var(--bg)] border-[var(--primary)]' : 'border-[var(--border)] text-[var(--text)] hover:border-[var(--primary)] hover:text-[var(--primary)]'}`} data-size={size}>{size}</button>
+                      );
                     })}
                   </div>
                 </div>
