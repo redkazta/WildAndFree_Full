@@ -5,10 +5,15 @@ import { cartStore, CartEvents } from "./cart.js";
 
 interface CartItem {
   id: string;
-  name: string;
+  cart_key?: string;
+  name?: string;
   price: number;
   quantity: number;
-  image: string;
+  image?: string;
+  variant_id?: string;
+  size?: string | null;
+  color?: string | null;
+  sku?: string | null;
 }
 
 interface WishlistItem {
@@ -125,13 +130,14 @@ const updateCartUI = (detail: CartDetail) => {
             <img src="${item.image}" width="48" height="48" class="w-full h-full object-cover" />
           </div>
           <div class="flex-1 min-w-0">
-            <h4 class="text-[10px] font-black uppercase text-white truncate group-hover:text-[var(--primary)] transition-colors">${item.name}</h4>
+            <h4 class="text-[10px] font-black uppercase text-[var(--text)] truncate group-hover:text-[var(--primary)] transition-colors">${item.name || 'Producto'}</h4>
+            ${item.size || item.color ? `<p class="text-[8px] text-[var(--text-muted)] font-bold uppercase tracking-wider mt-0.5">${item.size || ''}${item.size && item.color ? ' / ' : ''}${item.color || ''}</p>` : ''}
             <div class="flex justify-between items-center mt-1">
-              <p class="text-[9px] text-gray-500 font-bold uppercase tracking-wider">x${item.quantity}</p>
-              <p class="text-[10px] font-black text-white">$${(item.price * item.quantity).toFixed(2)}</p>
+              <p class="text-[9px] text-[var(--text-muted)] font-bold uppercase tracking-wider">x${item.quantity}</p>
+              <p class="text-[10px] font-black text-[var(--text)]">$${(item.price * item.quantity).toFixed(2)}</p>
             </div>
           </div>
-          <button class="w-6 h-6 flex items-center justify-center text-gray-500 hover:text-red-500 transition-colors remove-cart-btn opacity-0 group-hover:opacity-100" data-id="${item.id}">
+          <button class="w-6 h-6 flex items-center justify-center text-[var(--text-muted)] hover:text-red-500 transition-colors remove-cart-btn opacity-0 group-hover:opacity-100" data-key="${item.cart_key || item.id}">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
           </button>
         </div>
@@ -161,8 +167,8 @@ const updateCartUI = (detail: CartDetail) => {
         btn.addEventListener("click", (e) => {
           e.stopPropagation();
           const target = e.currentTarget as HTMLElement;
-          if (target && target.dataset.id) {
-            cartStore.removeFromCart(target.dataset.id);
+          if (target && target.dataset.key) {
+            cartStore.removeFromCart(target.dataset.key);
           }
         });
       });
@@ -289,11 +295,11 @@ const updateAuthUI = async () => {
 
       authContainer.innerHTML = `
         <div class="relative group/pop">
-          <a href="/perfil" class="flex items-center gap-3 px-4 py-2 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 hover:border-[var(--primary)]/50 transition-all cursor-pointer group">
+          <a href="/perfil" class="flex items-center gap-3 px-4 py-2 bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl hover:bg-[var(--bg-hover)] hover:border-[var(--primary)]/50 transition-all cursor-pointer group">
             ${avatarHtml}
             <div class="hidden md:flex flex-col">
-              <span class="text-[10px] font-black uppercase tracking-widest text-white group-hover:text-[var(--primary)] transition-colors leading-none mb-0.5">${displayName}</span>
-              <span class="text-[8px] font-bold text-gray-500 uppercase tracking-wider">${roleDisplay}</span>
+              <span class="text-[10px] font-black uppercase tracking-widest text-[var(--text)] group-hover:text-[var(--primary)] transition-colors leading-none mb-0.5">${displayName}</span>
+              <span class="text-[8px] font-bold text-[var(--text-muted)] uppercase tracking-wider">${roleDisplay}</span>
             </div>
           </a>
           <div class="popover w-64">
@@ -302,19 +308,19 @@ const updateAuthUI = async () => {
               <span class="text-[9px] text-[var(--primary)] font-mono">${roleDisplay}</span>
             </div>
             <div class="popover-content space-y-2">
-              <a href="/perfil" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 group transition-colors">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400 group-hover:text-white"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                <span class="text-[10px] font-bold uppercase tracking-widest text-gray-300 group-hover:text-white">Mi Perfil</span>
+              <a href="/perfil" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[var(--bg-hover)] group transition-colors">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-[var(--text-muted)] group-hover:text-[var(--text)]"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <span class="text-[10px] font-bold uppercase tracking-widest text-[var(--text-secondary)] group-hover:text-[var(--text)]">Mi Perfil</span>
               </a>
-              <a href="/pedidos" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 group transition-colors">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400 group-hover:text-white"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
-                <span class="text-[10px] font-bold uppercase tracking-widest text-gray-300 group-hover:text-white">Mis Pedidos</span>
+              <a href="/pedidos" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[var(--bg-hover)] group transition-colors">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-[var(--text-muted)] group-hover:text-[var(--text)]"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+                <span class="text-[10px] font-bold uppercase tracking-widest text-[var(--text-secondary)] group-hover:text-[var(--text)]">Mis Pedidos</span>
               </a>
-              <a href="/configuracion" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 group transition-colors">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-gray-400 group-hover:text-white"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                <span class="text-[10px] font-bold uppercase tracking-widest text-gray-300 group-hover:text-white">Configuración</span>
+              <a href="/configuracion" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[var(--bg-hover)] group transition-colors">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-[var(--text-muted)] group-hover:text-[var(--text)]"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                <span class="text-[10px] font-bold uppercase tracking-widest text-[var(--text-secondary)] group-hover:text-[var(--text)]">Configuración</span>
               </a>
-              <div class="h-px bg-white/10 my-2"></div>
+              <div class="h-px bg-[var(--border)] my-2"></div>
               <button id="logout-btn" class="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-red-500/10 group transition-colors text-left">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-red-500"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
                 <span class="text-[10px] font-black uppercase tracking-widest text-red-500 group-hover:text-red-400">Cerrar Sesión</span>

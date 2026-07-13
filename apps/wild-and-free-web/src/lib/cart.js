@@ -92,10 +92,15 @@ class CartStore {
     if (!this.user) return;
     const { data, error } = await supabase.from('cart_items').select('*');
     if (!error && data) {
-      // Transformar estructura DB a estructura local si es necesario
-      // DB: { product_id, quantity }
-      // Local: { id: product_id, quantity, ... }
-      this.cart = data.map(item => ({ id: item.product_id, quantity: item.quantity }));
+      this.cart = data.map(item => ({
+        id: item.product_id,
+        cart_key: item.variant_id ? `${item.product_id}_${item.variant_id}` : String(item.product_id),
+        variant_id: item.variant_id,
+        size: item.variant_size || null,
+        color: item.variant_color || null,
+        sku: item.variant_sku || null,
+        quantity: item.quantity
+      }));
       this.notifyListeners();
     }
   }
@@ -112,51 +117,84 @@ class CartStore {
   // --- Actions ---
 
   async addToCart(product, quantity = 1) {
+    // Generate a unique cart key: product_id + variant_id (or just product_id if no variant)
+    const cartKey = product.variant_id ? `${product.id}_${product.variant_id}` : String(product.id);
+    
     if (this.user) {
       // Optimistic UI
-      const existingItem = this.cart.find(item => item.id == product.id);
+      const existingItem = this.cart.find(item => item.cart_key == cartKey);
       if (existingItem) {
         existingItem.quantity += quantity;
       } else {
-        this.cart.push({ id: product.id, quantity, ...product });
+        this.cart.push({ 
+          id: product.id, 
+          cart_key: cartKey,
+          variant_id: product.variant_id || null,
+          size: product.size || null,
+          color: product.color || null,
+          sku: product.sku || null,
+          quantity, 
+          ...product 
+        });
       }
       this.notifyListeners();
 
       // DB Sync
-      const { error } = await supabase.from('cart_items').upsert({
+      var payload = {
         user_id: this.user.id,
         product_id: String(product.id),
         quantity: existingItem ? existingItem.quantity : quantity
-      }, { onConflict: 'user_id, product_id' });
+      };
+      if (product.variant_id) {
+        payload.variant_id = product.variant_id;
+        payload.variant_size = product.size || null;
+        payload.variant_color = product.color || null;
+        payload.variant_sku = product.sku || null;
+      }
+
+      const { error } = await supabase.from('cart_items').upsert(payload, { 
+        onConflict: product.variant_id ? 'user_id, product_id, variant_id' : 'user_id, product_id' 
+      });
 
       if (error) {
         console.error('Error adding to cart:', error);
-        // Revertir optimistic UI si falla (opcional, por ahora simple log)
-        await this.loadUserCart(); // Recargar estado real
+        await this.loadUserCart();
       }
 
     } else {
       // Guest
       const currentCart = this.getGuestCart();
-      const existingItem = currentCart.find(item => item.id == product.id);
+      const existingItem = currentCart.find(item => item.cart_key == cartKey);
       if (existingItem) {
         existingItem.quantity += quantity;
       } else {
-        currentCart.push({ id: product.id, quantity, ...product });
+        currentCart.push({ 
+          id: product.id, 
+          cart_key: cartKey,
+          variant_id: product.variant_id || null,
+          size: product.size || null,
+          color: product.color || null,
+          sku: product.sku || null,
+          quantity, 
+          ...product 
+        });
       }
       this.saveGuestCart(currentCart);
     }
   }
 
-  async removeFromCart(productId) {
+  async removeFromCart(cartKey) {
     if (this.user) {
       // Optimistic
-      this.cart = this.cart.filter(item => item.id != productId);
+      const item = this.cart.find(i => i.cart_key == cartKey || i.id == cartKey);
+      this.cart = this.cart.filter(i => i.cart_key != cartKey && i.id != cartKey);
       this.notifyListeners();
 
-      await supabase.from('cart_items').delete().match({ user_id: this.user.id, product_id: String(productId) });
+      var match = { user_id: this.user.id, product_id: String(item?.id || cartKey) };
+      if (item?.variant_id) match.variant_id = item.variant_id;
+      await supabase.from('cart_items').delete().match(match);
     } else {
-      const currentCart = this.getGuestCart().filter(item => item.id != productId);
+      const currentCart = this.getGuestCart().filter(i => i.cart_key != cartKey && i.id != cartKey);
       this.saveGuestCart(currentCart);
     }
   }
@@ -195,25 +233,33 @@ class CartStore {
 
     if (guestCart.length > 0) {
       console.log('Syncing guest cart to user...', guestCart);
-      // Para cada item, upsert en DB
-      // Nota: Esto podría optimizarse con un bulk insert si Supabase lo soporta bien con onConflict
       for (const item of guestCart) {
-        // Primero obtenemos si ya existe para sumar cantidad
+        var matchFilter = { user_id: this.user.id, product_id: String(item.id) };
+        if (item.variant_id) matchFilter.variant_id = item.variant_id;
+
         const { data: existing } = await supabase.from('cart_items')
           .select('quantity')
-          .eq('user_id', this.user.id)
-          .eq('product_id', String(item.id))
+          .match(matchFilter)
           .single();
         
         const newQuantity = existing ? existing.quantity + item.quantity : item.quantity;
 
-        await supabase.from('cart_items').upsert({
+        var syncPayload = {
           user_id: this.user.id,
           product_id: String(item.id),
           quantity: newQuantity
-        }, { onConflict: 'user_id, product_id' });
+        };
+        if (item.variant_id) {
+          syncPayload.variant_id = item.variant_id;
+          syncPayload.variant_size = item.size || null;
+          syncPayload.variant_color = item.color || null;
+          syncPayload.variant_sku = item.sku || null;
+        }
+
+        await supabase.from('cart_items').upsert(syncPayload, { 
+          onConflict: item.variant_id ? 'user_id, product_id, variant_id' : 'user_id, product_id' 
+        });
       }
-      // Limpiar guest cart tras sync exitoso
       localStorage.removeItem(GUEST_CART_KEY);
     }
 

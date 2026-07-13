@@ -24,6 +24,7 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params;
 let product: any = null;
+let variants: any[] = [];
 let relatedProducts: any[] = [];
 
 if (slug) {
@@ -38,6 +39,23 @@ if (slug) {
       image: data.image_url || '', category: data.category || 'otros',
       description: data.description || '', inStock: data.is_active !== false
     };
+
+    // Fetch variants
+    const { data: vData } = await supabase
+      .from('product_variants')
+      .select('*')
+      .eq('product_id', data.id)
+      .order('color', { ascending: true })
+      .order('size', { ascending: true });
+
+    if (vData && vData.length > 0) {
+      variants = vData.map((v: any) => ({
+        id: v.id, size: v.size, color: v.color,
+        stock: v.stock, sku: v.sku, image_url: v.image_url || ''
+      }));
+    }
+
+    // Related products
     const { data: related } = await supabase
       .from('store_products')
       .select('*')
@@ -52,6 +70,17 @@ if (slug) {
     }
   }
 }
+
+// Extract unique sizes and colors maintaining order
+const uniqueSizes = [...new Set(variants.map((v: any) => v.size))];
+const uniqueColors = [...new Set(variants.map((v: any) => v.color))];
+const hasVariants = variants.length > 0;
+const firstVariant = variants[0] || null;
+
+// Serialized for client-side use
+const variantsJson = JSON.stringify(variants);
+const uniqueColorsJson = JSON.stringify(uniqueColors);
+const uniqueSizesJson = JSON.stringify(uniqueSizes);
 ---
 
 <Layout config={config}>
@@ -67,8 +96,9 @@ if (slug) {
     </div>
 
     {product ? (
-      <div class="max-w-6xl mx-auto px-4 md:px-8 py-8">
+      <div class="max-w-6xl mx-auto px-4 md:px-8 py-8" id="product-page" data-variants={variantsJson} data-colors={uniqueColorsJson} data-sizes={uniqueSizesJson}>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+          <!-- IMAGE -->
           <div class="relative aspect-square bg-[var(--bg-card)] rounded-2xl border border-[var(--border-faint)] overflow-hidden flex items-center justify-center">
             {product.image ? (
               <img src={product.image} alt={product.name} class="w-full h-full object-cover" />
@@ -84,13 +114,54 @@ if (slug) {
               </div>
             )}
           </div>
-          <div class="flex flex-col gap-6">
+
+          <!-- INFO -->
+          <div class="flex flex-col gap-6" id="product-info">
             <div>
               <p class="text-xs font-bold uppercase tracking-widest text-[var(--primary)] mb-2">{product.category}</p>
               <h1 class="text-3xl md:text-4xl font-black uppercase leading-tight">{product.name}</h1>
             </div>
             <p class="text-3xl font-black text-[var(--primary)]">${product.price}</p>
             {product.description && <p class="text-sm text-[var(--text-secondary)] leading-relaxed">{product.description}</p>}
+
+            {hasVariants && (
+              <>
+                <!-- COLOR SELECTOR -->
+                <div>
+                  <label class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)] mb-3 block">Color: <span id="selected-color" class="text-[var(--text)]">{uniqueColors[0]}</span></label>
+                  <div class="flex gap-2 flex-wrap" id="color-options">
+                    {uniqueColors.map((color: string, ci: number) => {
+                      const isFirst = ci === 0;
+                      const colorHex = color === 'Negro' ? '#000000' : color === 'Blanco' ? '#ffffff' : color === 'Gris oscuro' ? '#444444' : '#888888';
+                      const borderCls = color === 'Blanco' ? 'border-[var(--border)]' : 'border-transparent';
+                      return `<button class="color-btn w-10 h-10 rounded-full border-2 ${isFirst ? 'ring-2 ring-[var(--primary)]' : ''} ${borderCls} transition-all hover:scale-110" data-color="${color}" style="background:${colorHex}" title="${color}"></button>`;
+                    })}
+                  </div>
+                </div>
+
+                <!-- SIZE SELECTOR -->
+                <div>
+                  <label class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)] mb-3 block">Talla: <span id="selected-size" class="text-[var(--text)]">{uniqueSizes[0]}</span></label>
+                  <div class="flex gap-2 flex-wrap" id="size-options">
+                    {uniqueSizes.map((size: string, si: number) => {
+                      const isFirst = si === 0;
+                      return `<button class="size-btn px-5 py-2.5 rounded-lg border text-xs font-black uppercase tracking-wider transition-all ${isFirst ? 'bg-[var(--primary)] text-[var(--bg)] border-[var(--primary)]' : 'border-[var(--border)] text-[var(--text)] hover:border-[var(--primary)] hover:text-[var(--primary)]'}" data-size="${size}">${size}</button>`;
+                    })}
+                  </div>
+                </div>
+              </>
+            )}
+
+            <!-- STOCK & SKU -->
+            {firstVariant && (
+              <div class="flex items-center gap-4 text-[10px] font-bold uppercase tracking-wider">
+                <span class="text-[var(--text-muted)]">SKU: <span id="variant-sku" class="text-[var(--text)]">{firstVariant.sku}</span></span>
+                <span class="text-[var(--border)]">|</span>
+                <span class="text-[var(--text-muted)]">Stock: <span id="variant-stock" class="text-[var(--primary)]">{firstVariant.stock} uds.</span></span>
+              </div>
+            )}
+
+            <!-- QUANTITY -->
             <div>
               <label class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)] mb-2 block">Cantidad</label>
               <div class="flex items-center gap-3">
@@ -99,9 +170,11 @@ if (slug) {
                 <button id="qty-plus" class="w-10 h-10 rounded-lg border border-[var(--border)] flex items-center justify-center text-[var(--text)] hover:bg-[var(--bg-card)] transition-colors font-bold text-lg">+</button>
               </div>
             </div>
+
+            <!-- ACTIONS -->
             <div class="flex gap-3 mt-2">
               <button id="add-to-cart-main"
-                class={`flex-1 py-4 rounded-xl font-black text-xs uppercase tracking-[0.15em] transition-all ${product.inStock ? 'bg-[var(--primary)] text-[var(--bg)] hover:brightness-110' : 'bg-[var(--bg-card)] text-[var(--text-muted)] cursor-not-allowed border border-[var(--border-faint)]'}`}
+                class="flex-1 py-4 rounded-xl font-black text-xs uppercase tracking-[0.15em] transition-all bg-[var(--primary)] text-[var(--bg)] hover:brightness-110"
                 disabled={!product.inStock}
                 data-product={JSON.stringify(product)}>
                 {product.inStock ? 'Agregar al Carrito' : 'Agotado'}
@@ -112,6 +185,8 @@ if (slug) {
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
               </button>
             </div>
+
+            <!-- SHIPPING INFO -->
             <div class="border border-[var(--border-faint)] rounded-xl p-4 space-y-2 text-xs text-[var(--text-muted)]">
               <div class="flex items-center gap-2">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
@@ -124,6 +199,7 @@ if (slug) {
             </div>
           </div>
         </div>
+
         {relatedProducts.length > 0 && (
           <section class="mt-16">
             <div class="flex items-center gap-4 mb-6">
@@ -165,34 +241,133 @@ if (slug) {
   <span class="text-xs font-bold uppercase tracking-wider" id="wishlist-toast-message">Agregado a tu lista</span>
 </div>
 
+<style>
+  .color-btn { position: relative; cursor: pointer; }
+  .color-btn:hover::after { content: ''; position: absolute; inset: -3px; border-radius: 50%; border: 2px solid var(--primary); }
+</style>
+
 <script>
   import { cartStore } from '../../lib/cart.js';
-  let qty = 1;
-  const qtyValue = document.getElementById('qty-value');
-  document.getElementById('qty-minus')?.addEventListener('click', () => { if (qty > 1) { qty--; if (qtyValue) qtyValue.textContent = String(qty); }});
-  document.getElementById('qty-plus')?.addEventListener('click', () => { if (qty < 10) { qty++; if (qtyValue) qtyValue.textContent = String(qty); }});
-  document.getElementById('add-to-cart-main')?.addEventListener('click', async () => {
-    const btn = document.getElementById('add-to-cart-main');
-    const pd = (btn as HTMLElement)?.dataset.product;
-    if (!pd) return;
-    await cartStore.addToCart(JSON.parse(pd), qty);
-    window.location.href = '/checkout';
-  });
-  document.getElementById('toggle-wishlist-main')?.addEventListener('click', async () => {
-    const btn = document.getElementById('toggle-wishlist-main')!;
-    const pd = btn.dataset.product;
-    if (!pd) return;
-    const product = JSON.parse(pd);
-    const was = cartStore.isInWishlist(product.id);
-    await cartStore.toggleWishlist(product);
-    const toast = document.getElementById('wishlist-toast');
-    const msg = document.getElementById('wishlist-toast-message');
-    const icon = btn.querySelector('svg');
-    if (!was) { if (icon) icon.style.fill = 'currentColor'; btn.classList.add('text-[#DC143C]'); if (msg) msg.textContent = 'Agregado a tu lista'; }
-    else { if (icon) icon.style.fill = 'none'; btn.classList.remove('text-[#DC143C]'); if (msg) msg.textContent = 'Eliminado de tu lista'; }
-    toast?.classList.remove('translate-y-24', 'opacity-0');
-    setTimeout(() => toast?.classList.add('translate-y-24', 'opacity-0'), 2500);
-  });
-  const initDetail = async () => { if (!cartStore.initialized) await cartStore.init(); };
-  initDetail();
+
+  (function() {
+    const pageEl = document.getElementById('product-page');
+    const product = JSON.parse(document.getElementById('add-to-cart-main')?.dataset.product || '{}');
+    const allVariants = JSON.parse(pageEl?.dataset.variants || '[]');
+    const colors = JSON.parse(pageEl?.dataset.colors || '[]');
+    const sizes = JSON.parse(pageEl?.dataset.sizes || '[]');
+
+    if (!allVariants.length) return; // no variants, just use basic cart
+
+    let qty = 1;
+    let selectedColor = colors[0];
+    let selectedSize = sizes[0];
+
+    function getVariant(color, size) {
+      return allVariants.find(v => v.color === color && v.size === size) || null;
+    }
+
+    let currentVariant = getVariant(selectedColor, selectedSize);
+
+    function updateVariantDisplay() {
+      currentVariant = getVariant(selectedColor, selectedSize);
+      if (currentVariant) {
+        const skuEl = document.getElementById('variant-sku');
+        const stockEl = document.getElementById('variant-stock');
+        if (skuEl) skuEl.textContent = currentVariant.sku;
+        if (stockEl) stockEl.textContent = currentVariant.stock + ' uds.';
+      }
+    }
+
+    function updateSizeAvailability() {
+      document.querySelectorAll('.size-btn').forEach(btn => {
+        const size = btn.dataset.size;
+        const v = getVariant(selectedColor, size);
+        if (!v || v.stock <= 0) {
+          btn.disabled = true;
+          btn.classList.add('opacity-30', 'cursor-not-allowed', 'line-through');
+        } else {
+          btn.disabled = false;
+          btn.classList.remove('opacity-30', 'cursor-not-allowed', 'line-through');
+        }
+      });
+    }
+
+    // Color buttons
+    document.querySelectorAll('.color-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('ring-2', 'ring-[var(--primary)]'));
+        this.classList.add('ring-2', 'ring-[var(--primary)]');
+        selectedColor = this.dataset.color;
+        const selEl = document.getElementById('selected-color');
+        if (selEl) selEl.textContent = selectedColor;
+        updateVariantDisplay();
+        updateSizeAvailability();
+      });
+    });
+
+    // Size buttons
+    document.querySelectorAll('.size-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        if (this.disabled) return;
+        document.querySelectorAll('.size-btn').forEach(b => {
+          b.className = b.className.replace(/bg-\[var\(--primary\)\] text-\[var\(--bg\)\] border-\[var\(--primary\)\]/, '');
+          b.classList.add('border-[var(--border)]', 'text-[var(--text)]');
+          b.classList.remove('bg-[var(--primary)]', 'text-[var(--bg)]', 'border-[var(--primary)]');
+        });
+        this.classList.add('bg-[var(--primary)]', 'text-[var(--bg)]', 'border-[var(--primary)]');
+        this.classList.remove('border-[var(--border)]', 'text-[var(--text)]');
+        selectedSize = this.dataset.size;
+        const selEl = document.getElementById('selected-size');
+        if (selEl) selEl.textContent = selectedSize;
+        updateVariantDisplay();
+      });
+    });
+
+    // Quantity
+    const qtyValue = document.getElementById('qty-value');
+    document.getElementById('qty-minus')?.addEventListener('click', function() {
+      if (qty > 1) { qty--; if (qtyValue) qtyValue.textContent = String(qty); }
+    });
+    document.getElementById('qty-plus')?.addEventListener('click', function() {
+      const max = currentVariant?.stock || 10;
+      if (qty < max) { qty++; if (qtyValue) qtyValue.textContent = String(qty); }
+    });
+
+    // Add to cart with variant info
+    document.getElementById('add-to-cart-main')?.addEventListener('click', async function() {
+      if (!currentVariant) currentVariant = allVariants[0];
+      if (!currentVariant || currentVariant.stock <= 0) return;
+
+      const item = {
+        ...product,
+        variant_id: currentVariant.id,
+        size: selectedSize,
+        color: selectedColor,
+        sku: currentVariant.sku
+      };
+      await cartStore.addToCart(item, qty);
+      window.location.href = '/checkout';
+    });
+
+    // Wishlist
+    document.getElementById('toggle-wishlist-main')?.addEventListener('click', async function() {
+      const was = cartStore.isInWishlist(product.id);
+      await cartStore.toggleWishlist(product);
+      const toast = document.getElementById('wishlist-toast');
+      const msg = document.getElementById('wishlist-toast-message');
+      const icon = this.querySelector('svg');
+      if (!was) { if (icon) icon.style.fill = 'currentColor'; this.classList.add('text-[#DC143C]'); if (msg) msg.textContent = 'Agregado a tu lista'; }
+      else { if (icon) icon.style.fill = 'none'; this.classList.remove('text-[#DC143C]'); if (msg) msg.textContent = 'Eliminado de tu lista'; }
+      toast?.classList.remove('translate-y-24', 'opacity-0');
+      setTimeout(() => toast?.classList.add('translate-y-24', 'opacity-0'), 2500);
+    });
+
+    // Init
+    const initDetail = async () => {
+      if (!cartStore.initialized) await cartStore.init();
+      updateVariantDisplay();
+      updateSizeAvailability();
+    };
+    initDetail();
+  })();
 </script>
