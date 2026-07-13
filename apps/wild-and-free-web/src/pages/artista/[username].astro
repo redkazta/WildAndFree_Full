@@ -1,0 +1,395 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getArtistsFromDB, getArtistPosts } from '../../data/artists';
+import type { Artist, ArtistPost } from '../../data/artists';
+
+export async function getStaticPaths() {
+  const artists = await getArtistsFromDB();
+  return artists.map((a: Artist) => ({
+    params: { username: a.slug },
+    props: { artist: a, posts: [] as ArtistPost[] },
+  }));
+}
+
+const { username } = Astro.params;
+const artists = await getArtistsFromDB();
+const artist = artists.find((a: Artist) => a.slug === username) || artists[0];
+
+let posts: ArtistPost[] = [];
+if (artist) {
+  posts = await getArtistPosts(artist.id);
+}
+
+function timeAgo(dateStr: string): string {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 60) return `${mins}m`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h`;
+  const days = Math.floor(hrs / 24);
+  if (days < 7) return `${days}d`;
+  return `${Math.floor(days / 7)}sem`;
+}
+---
+
+<Layout config={{ name: `Wild Gvng - ${artist.nombre}`, primary_color: "#C98300", secondary_color: "#8A0303" }}>
+  <div class="ap">
+
+    <!-- PROFILE HEADER -->
+    <div class="ap-header">
+      <div class="ap-header-inner">
+        <div class="ap-avatar">
+          {artist.imagenes.profile ? (
+            <img src={artist.imagenes.profile} alt={artist.nombre} />
+          ) : (
+            <div class="ap-avatar-initials">{artist.nombre.substring(0, 2).toUpperCase()}</div>
+          )}
+        </div>
+        <div class="ap-info">
+          <div class="ap-name-row">
+            <h1 class="ap-name">{artist.nombre}</h1>
+            <span class="ap-verified">✓</span>
+          </div>
+          <div class="ap-genres">
+            {artist.estilo.split(' / ').map((g: string) => (
+              <span class="ap-chip">{g}</span>
+            ))}
+          </div>
+          <div class="ap-meta">
+            <span>{artist.origen}</span>
+            <span class="dot">·</span>
+            <span>{artist.stats.partnean} Partnean</span>
+            <span class="dot">·</span>
+            <span>{artist.stats.oyentes} oyentes</span>
+          </div>
+          {artist.tags && artist.tags.length > 0 && (
+            <div class="ap-tags">
+              {artist.tags.map((tag: any) => (
+                <span class={`tag-badge tag-sm ${tag.animation && tag.animation !== 'none' ? `tag-anim-${tag.animation}` : ''}`} style={`--tag-c: ${tag.color}`}><span class="tag-badge-dot"></span>{tag.name}</span>
+              ))}
+            </div>
+          )}
+          <div class="ap-actions">
+            <button class="btn-p btn-gold" id="partnear-btn">PARTNEAR</button>
+            <button class="btn-p btn-ghost" id="share-btn">COMPARTIR</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TWO COLUMNS -->
+    <div class="ap-body">
+      <div class="ap-grid">
+
+        <!-- LEFT (25%) SIDEBAR -->
+        <aside class="ap-side">
+          <div class="side-card">
+            <div class="side-avatar-wrap">
+              {artist.imagenes.profile ? (
+                <img src={artist.imagenes.profile} alt={artist.nombre} class="side-avatar" />
+              ) : (
+                <div class="side-avatar side-avatar-initials">{artist.nombre.substring(0, 2).toUpperCase()}</div>
+              )}
+            </div>
+            <h2 class="side-name">{artist.nombre}</h2>
+            <div class="side-genres">
+              {artist.estilo.split(' / ').map((g: string) => (
+                <span class="side-chip">{g}</span>
+              ))}
+            </div>
+            <div class="side-bio">{artist.bio}</div>
+
+            {artist.tags && artist.tags.length > 0 && (
+              <div class="side-tags">
+                {artist.tags.map((tag: any) => (
+                  <span class={`tag-badge ${tag.animation && tag.animation !== 'none' ? `tag-anim-${tag.animation}` : ''}`} style={`--tag-c: ${tag.color}`}><span class="tag-badge-dot"></span>{tag.name}</span>
+                ))}
+              </div>
+            )}
+
+            <div class="side-stats">
+              <div class="side-stat"><span class="num">{artist.stats.partnean}</span> Partnean</div>
+              <div class="side-stat"><span class="num">{artist.stats.seguidores}</span> Seguidores</div>
+              <div class="side-stat"><span class="num">{artist.stats.oyentes}</span> Oyentes</div>
+              <div class="side-stat"><span class="num">{artist.tracks.length}</span> Tracks</div>
+            </div>
+
+            {artist.redes && Object.keys(artist.redes).length > 0 && (
+              <div class="side-links">
+                {Object.entries(artist.redes).map(([name, url]: [string, string]) => (
+                  <a href={url} target="_blank" class="side-link">{name}</a>
+                ))}
+              </div>
+            )}
+          </div>
+        </aside>
+
+        <!-- RIGHT (75%) FEED -->
+        <main class="ap-feed">
+
+          <!-- TABS -->
+          <div class="feed-tabs">
+            <button class="feed-tab active" data-tab="feed">Feed</button>
+            <button class="feed-tab" data-tab="music">Música</button>
+          </div>
+
+          <!-- Feed Tab -->
+          <div class="feed-content active" id="tab-feed">
+            {posts.length === 0 && artist.tracks.length === 0 ? (
+              <div class="feed-empty">
+                <div class="empty-icon">📝</div>
+                <p class="empty-title">Aún no hay publicaciones</p>
+                <p class="empty-sub">Este artista no ha compartido contenido aún.</p>
+              </div>
+            ) : (
+              <>
+                {posts.map(p => (
+                  <article class="feed-post" key={p.id}>
+                    <div class="post-header">
+                      <div class="post-avatar-sm">
+                        {artist.imagenes.profile ? (
+                          <img src={artist.imagenes.profile} alt={artist.nombre} />
+                        ) : (
+                          <span>{artist.nombre.substring(0, 2).toUpperCase()}</span>
+                        )}
+                      </div>
+                      <div class="post-author">
+                        <strong>{artist.nombre}</strong>
+                        <span class="post-time">{timeAgo(p.created_at)}</span>
+                      </div>
+                    </div>
+                    <div class="post-body">
+                      <p>{p.content}</p>
+                      {p.image_url && (
+                        <div class="post-img-wrap">
+                          <img src={p.image_url} alt="" loading="lazy" />
+                        </div>
+                      )}
+                      {p.embed_url && (
+                        <div class="post-embed">
+                          <div class="embed-placeholder">
+                            <span class="embed-icon">🎵</span>
+                            <span class="embed-title">{p.embed_title || 'Escuchar'}</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div class="post-actions-bar">
+                      <button class="post-action like-btn" data-post-id={p.id}>
+                        <span class="action-icon">❤️</span>
+                        <span class="action-count">{p.likes_count}</span>
+                      </button>
+                      <button class="post-action comment-btn" data-post-id={p.id}>
+                        <span class="action-icon">💬</span>
+                        <span class="action-count">{p.comments_count}</span>
+                      </button>
+                      <button class="post-action repost-btn" data-post-id={p.id}>
+                        <span class="action-icon">🔄</span>
+                        <span class="action-count">0</span>
+                      </button>
+                      <button class="post-action share-btn" data-post-id={p.id}>
+                        <span class="action-icon">📤</span>
+                      </button>
+                    </div>
+                  </article>
+                ))}
+                {artist.tracks.map(t => (
+                  <article class="feed-post" key={t.title}>
+                    <div class="post-header">
+                      <div class="post-avatar-sm">
+                        {artist.imagenes.profile ? (
+                          <img src={artist.imagenes.profile} alt={artist.nombre} />
+                        ) : (
+                          <span>{artist.nombre.substring(0, 2).toUpperCase()}</span>
+                        )}
+                      </div>
+                      <div class="post-author">
+                        <strong>{artist.nombre}</strong>
+                        <span class="post-time">Track</span>
+                      </div>
+                    </div>
+                    <div class="post-body">
+                      <p>Nuevo track: <strong>{t.title}</strong></p>
+                      <div class="post-embed">
+                        <div class="embed-placeholder">
+                          <span class="embed-icon">🎵</span>
+                          <span class="embed-title">{t.title} · {t.duration}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </>
+            )}
+          </div>
+
+          <!-- Music Tab -->
+          <div class="feed-content" id="tab-music">
+            {artist.tracks.length === 0 ? (
+              <div class="feed-empty">
+                <div class="empty-icon">🎵</div>
+                <p class="empty-title">Sin tracks</p>
+                <p class="empty-sub">Este artista no ha subido música aún.</p>
+              </div>
+            ) : (
+              <div class="music-list">
+                {artist.tracks.map(t => (
+                  <div class="music-item">
+                    <div class="music-cover">
+                      <span>🎵</span>
+                    </div>
+                    <div class="music-info">
+                      <strong>{t.title}</strong>
+                      <span>{t.duration}</span>
+                    </div>
+                    {t.spotify_url && (
+                      <a href={t.spotify_url} target="_blank" class="music-play">▶</a>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+        </main>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .ap { min-height: 100vh; background: var(--bg); }
+  .ap-header {
+    background: linear-gradient(135deg, rgba(201,131,0,0.12), rgba(0,0,0,0.4));
+    border-bottom: 1px solid var(--border);
+    padding: 48px 24px 32px;
+  }
+  .ap-header-inner { max-width: 1200px; margin: 0 auto; display: flex; gap: 28px; align-items: center; }
+  .ap-avatar { width: 100px; height: 100px; border-radius: 50%; overflow: hidden; border: 3px solid var(--primary); flex-shrink: 0; }
+  .ap-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .ap-avatar-initials { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--bg-card); font-size: 1.8rem; font-weight: 900; color: var(--primary); }
+  .ap-info { display: flex; flex-direction: column; gap: 6px; }
+  .ap-name-row { display: flex; align-items: center; gap: 8px; }
+  .ap-name { font-size: 1.8rem; font-weight: 900; color: var(--text); margin: 0; text-transform: uppercase; }
+  .ap-verified { color: var(--primary); font-size: 1.2rem; }
+  .ap-genres { display: flex; gap: 6px; flex-wrap: wrap; }
+  .ap-chip { padding: 3px 10px; border-radius: 100px; font-size: 0.55rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; background: var(--primary-soft); color: var(--primary); border: 1px solid var(--primary-border); }
+  .ap-meta { font-size: 0.65rem; color: var(--text-secondary); display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .dot { color: var(--text-muted); }
+  .ap-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+  .ap-actions { display: flex; gap: 8px; margin-top: 4px; }
+  .btn-p { padding: 8px 20px; border-radius: 100px; font-size: 0.6rem; font-weight: 900; letter-spacing: 0.15em; text-transform: uppercase; border: none; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+  .btn-gold { background: var(--primary); color: var(--bg); }
+  .btn-gold:hover { background: var(--primary-hover); }
+  .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text); }
+  .btn-ghost:hover { border-color: var(--primary); color: var(--primary); }
+
+  .ap-body { max-width: 1200px; margin: 0 auto; padding: 0 24px 60px; margin-top: -20px; position: relative; z-index: 2; }
+  .ap-grid { display: grid; grid-template-columns: 1fr 2.5fr; gap: 24px; align-items: start; }
+
+  .ap-side { position: sticky; top: 90px; }
+  .side-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 24px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
+  .side-avatar-wrap { width: 120px; height: 120px; border-radius: 50%; overflow: hidden; border: 3px solid var(--primary); }
+  .side-avatar { width: 100%; height: 100%; object-fit: cover; }
+  .side-avatar-initials { display: flex; align-items: center; justify-content: center; background: var(--bg-card); font-size: 2rem; font-weight: 900; color: var(--primary); }
+  .side-name { font-size: 1.2rem; font-weight: 900; color: var(--text); text-transform: uppercase; margin: 0; }
+  .side-genres { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; }
+  .side-chip { padding: 2px 8px; border-radius: 100px; font-size: 0.5rem; font-weight: 700; text-transform: uppercase; background: var(--primary-soft); color: var(--primary); }
+  .side-bio { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.5; }
+  .side-tags { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; }
+  .side-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-top: 8px; }
+  .side-stat { background: var(--bg); border: 1px solid var(--border-faint); border-radius: 10px; padding: 10px; font-size: 0.55rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); }
+  .side-stat .num { font-size: 1rem; font-weight: 900; color: var(--text); display: block; }
+  .side-links { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+  .side-link { font-size: 0.55rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; padding: 4px 10px; border-radius: 100px; background: var(--bg); border: 1px solid var(--border-faint); color: var(--text); text-decoration: none; }
+  .side-link:hover { border-color: var(--primary); color: var(--primary); }
+
+  .ap-feed { display: flex; flex-direction: column; gap: 16px; }
+  .feed-tabs { display: flex; gap: 4px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 4px; }
+  .feed-tab { flex: 1; padding: 10px; border: none; background: transparent; color: var(--text-muted); font-size: 0.6rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.12em; border-radius: 10px; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+  .feed-tab.active { background: var(--bg); color: var(--text); }
+  .feed-content { display: none; flex-direction: column; gap: 12px; }
+  .feed-content.active { display: flex; }
+
+  .feed-empty { text-align: center; padding: 40px 20px; border: 1px solid var(--border); border-radius: 16px; background: var(--bg-card); }
+  .empty-icon { font-size: 2rem; margin-bottom: 8px; }
+  .empty-title { font-size: 0.85rem; font-weight: 900; color: var(--text); margin: 0; }
+  .empty-sub { font-size: 0.7rem; color: var(--text-muted); margin: 4px 0 0; }
+
+  .feed-post { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
+  .post-header { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; }
+  .post-avatar-sm { width: 36px; height: 36px; border-radius: 50%; overflow: hidden; border: 2px solid var(--primary); flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: var(--bg-card); font-weight: 900; font-size: 0.65rem; color: var(--primary); }
+  .post-avatar-sm img { width: 100%; height: 100%; object-fit: cover; }
+  .post-author { display: flex; flex-direction: column; }
+  .post-author strong { font-size: 0.75rem; color: var(--text); }
+  .post-time { font-size: 0.55rem; color: var(--text-muted); }
+  .post-body p { font-size: 0.85rem; color: var(--text); line-height: 1.6; margin: 0 0 12px; }
+  .post-img-wrap { border-radius: 12px; overflow: hidden; margin-bottom: 8px; }
+  .post-img-wrap img { width: 100%; height: auto; max-height: 400px; object-fit: cover; }
+  .post-embed { border: 1px solid var(--border-faint); border-radius: 12px; overflow: hidden; }
+  .embed-placeholder { display: flex; align-items: center; gap: 12px; padding: 16px; background: var(--bg); }
+  .embed-icon { font-size: 1.4rem; }
+  .embed-title { font-weight: 700; font-size: 0.75rem; color: var(--text); }
+
+  .post-actions-bar { display: flex; gap: 16px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-faint); }
+  .post-action { display: flex; align-items: center; gap: 4px; background: none; border: 1px solid var(--border-faint); border-radius: 8px; padding: 6px 10px; font-size: 0.6rem; font-weight: 700; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; font-family: inherit; }
+  .post-action:hover { border-color: var(--border); color: var(--text); background: var(--bg-hover); }
+  .action-icon { font-size: 0.8rem; }
+  .action-count { font-size: 0.6rem; }
+
+  .music-list { display: flex; flex-direction: column; gap: 6px; }
+  .music-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--bg-card); border: 1px solid var(--border-faint); border-radius: 12px; }
+  .music-cover { width: 40px; height: 40px; border-radius: 8px; background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+  .music-info { flex: 1; }
+  .music-info strong { display: block; font-size: 0.75rem; color: var(--text); }
+  .music-info span { font-size: 0.6rem; color: var(--text-muted); }
+  .music-play { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; text-decoration: none; }
+
+  @media (max-width: 768px) {
+    .ap-grid { grid-template-columns: 1fr; }
+    .ap-side { position: static; }
+    .ap-header-inner { flex-direction: column; text-align: center; }
+    .ap-actions { justify-content: center; }
+    .ap-body { margin-top: 0; }
+    .ap-header { padding: 24px 16px; }
+  }
+</style>
+
+<script>
+  (function() {
+    // Tabs
+    document.querySelectorAll('.feed-tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.feed-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.feed-content').forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+        const target = document.getElementById('tab-' + this.dataset.tab);
+        if (target) target.classList.add('active');
+      });
+    });
+
+    // Partnear button
+    const partnearBtn = document.getElementById('partnear-btn');
+    if (partnearBtn) {
+      partnearBtn.addEventListener('click', () => {
+        const active = partnearBtn.classList.toggle('active');
+        partnearBtn.textContent = active ? 'PARTNEANDO' : 'PARTNEAR';
+        partnearBtn.classList.toggle('btn-gold', !active);
+        partnearBtn.classList.toggle('btn-ghost', active);
+      });
+    }
+
+    // Share
+    document.getElementById('share-btn')?.addEventListener('click', () => {
+      if (navigator.share) {
+        navigator.share({ url: window.location.href, title: document.title });
+      } else {
+        navigator.clipboard?.writeText(window.location.href);
+        const btn = document.getElementById('share-btn');
+        const orig = btn?.textContent;
+        if (btn) btn.textContent = 'COPIADO';
+        setTimeout(() => { if (btn) btn.textContent = orig; }, 2000);
+      }
+    });
+  })();
+</script>

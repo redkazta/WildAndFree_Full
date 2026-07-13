@@ -69,7 +69,7 @@ const genres = ['Todos', ...Array.from(allGenres).sort()];
         <div class="roster-grid" id="roster-grid">
           {artists.map((artist, idx) => (
             <a
-              href={`/artista?id=${artist.slug}`}
+              href={`/artista/${artist.slug}`}
               class="artist-card"
               data-genre={artist.estilo.toLowerCase()}
               style={`animation-delay: ${idx * 0.08}s`}

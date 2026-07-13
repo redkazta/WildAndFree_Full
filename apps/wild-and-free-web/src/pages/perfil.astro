@@ -948,7 +948,7 @@ import Layout from '../layouts/Layout.astro';
         // Set public link
         const slug = profile.username || profile.nombre?.toLowerCase().replace(/\s/g, '_') || profile.id;
         const link = document.getElementById('dash-public-link');
-        if (link) link.href = `/artista?id=${slug}`;
+        if (link) link.href = `/artista/${slug}`;
         // Load profile fields
         const nEl = document.getElementById('edit-name');
         const bEl = document.getElementById('edit-bio');
