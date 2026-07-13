@@ -227,44 +227,45 @@ const updateCartUI = (detail: CartDetail) => {
 
 // --- Auth & Session Logic ---
 const updateAuthUI = async () => {
-  const authContainer = document.querySelector(".auth-actions-container");
-  const {
-    data: { session },
-    error: sessionError,
-  } = await supabase.auth.getSession();
-  const { role } = await getRole();
-  (window as any).__wildRole = role;
-  (window as any).requireRole = requireRole;
-  document.documentElement.setAttribute("data-role", role || "");
+  try {
+    const authContainer = document.querySelector(".auth-actions-container");
+    const {
+      data: { session },
+      error: sessionError,
+    } = await supabase.auth.getSession();
+    const { role } = await getRole();
+    (window as any).__wildRole = role;
+    (window as any).requireRole = requireRole;
+    document.documentElement.setAttribute("data-role", role || "");
 
-  if (session) {
-    // Try to fetch profile; if RLS blocks it, first ensure the profile exists.
-    let profile: any = null;
-    const { data: profileData, error: profileError } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", session.user.id)
-      .single();
-
-    if (profileError) {
-      await ensureProfile(session);
-      // Retry once
-      const retry = await supabase
+    if (session) {
+      // Try to fetch profile; if RLS blocks it, first ensure the profile exists.
+      let profile: any = null;
+      const { data: profileData, error: profileError } = await supabase
         .from("profiles")
         .select("*")
         .eq("id", session.user.id)
         .single();
-      profile = retry.data;
-    } else {
-      profile = profileData;
-    }
 
-    if (authContainer) {
-      // Build display name: use nombre, or fall back to email prefix, else "Usuario"
-      const displayName =
-        profile?.nombre?.split(" ")[0] ||
-        session.user.email?.split("@")[0] ||
-        "Usuario";
+      if (profileError) {
+        await ensureProfile(session);
+        // Retry once
+        const retry = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", session.user.id)
+          .single();
+        profile = retry.data;
+      } else {
+        profile = profileData;
+      }
+
+      if (authContainer) {
+        // Build display name: use nombre, or fall back to email prefix, else "Usuario"
+        const displayName =
+          profile?.nombre?.split(" ")[0] ||
+          session.user.email?.split("@")[0] ||
+          "Usuario";
       // Build initials from display name
       const initials = (profile?.nombre || session.user.email || "WG")
         .substring(0, 2)
@@ -351,6 +352,10 @@ const updateAuthUI = async () => {
     document
       .querySelectorAll(".auth-popover-content")
       .forEach((el) => el.classList.add("hidden"));
+  }
+
+  } catch (err) {
+    console.error('[layout] updateAuthUI error:', err);
   }
 
   document.body.setAttribute("data-auth-loaded", "true");
