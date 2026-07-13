@@ -372,7 +372,7 @@ const uniqueSizesJson = JSON.stringify(uniqueSizes);
         }
         await cartStore.addToCart(item, qty);
         
-        // Show toast, then go to checkout
+        // Show toast confirmation, stay on page
         var toast = document.getElementById('cart-toast');
         var msg = document.getElementById('cart-toast-message');
         if (msg) msg.textContent = item.name + ' agregado al carrito';
@@ -380,10 +380,7 @@ const uniqueSizesJson = JSON.stringify(uniqueSizes);
           toast.classList.remove('translate-y-24', 'opacity-0');
           setTimeout(function() {
             toast.classList.add('translate-y-24', 'opacity-0');
-            window.location.href = '/checkout';
-          }, 1200);
-        } else {
-          window.location.href = '/checkout';
+          }, 2500);
         }
       } catch (err) {
         console.error('[product] add-to-cart error:', err);
