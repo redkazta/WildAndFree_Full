@@ -21,33 +21,44 @@ class CartStore {
     if (this.initialized) return;
     
     // Escuchar cambios de auth
-    const { data: { subscription: _subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      const prevUser = this.user;
-      this.user = session?.user || null;
+    try {
+      const { data: { subscription: _subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+        try {
+          const prevUser = this.user;
+          this.user = session?.user || null;
 
-      if (event === 'SIGNED_IN' && this.user && !prevUser) {
-        // Usuario acaba de iniciar sesión -> Sincronizar
-        await this.syncGuestToUser();
-        await this.loadUserCart();
-        await this.loadUserWishlist();
-      } else if (event === 'SIGNED_OUT') {
-        // Usuario cerró sesión -> Limpiar estado local (volver a guest vacío o mantener lo que tenía antes de loguearse?)
-        // El usuario pidió: "si hacen log out solo podrán ver lo que tuvieron de invitados"
-        // Interpretación: Mostrar lo que haya en localStorage (que debería estar vacío si se limpió al hacer merge)
-        this.cart = this.getGuestCart();
-        this.wishlist = this.getGuestWishlist();
-        this.notifyListeners();
-      }
-    });
+          if (event === 'SIGNED_IN' && this.user && !prevUser) {
+            await this.syncGuestToUser();
+            await this.loadUserCart();
+            await this.loadUserWishlist();
+          } else if (event === 'SIGNED_OUT') {
+            this.cart = this.getGuestCart();
+            this.wishlist = this.getGuestWishlist();
+            this.notifyListeners();
+          }
+        } catch (e) {
+          console.warn('[cart] auth change handler error:', e);
+        }
+      });
+    } catch (e) {
+      console.warn('[cart] failed to setup auth listener:', e);
+    }
 
     // Carga inicial
-    const { data: { session } } = await supabase.auth.getSession();
-    this.user = session?.user || null;
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      this.user = session?.user || null;
 
-    if (this.user) {
-      await this.loadUserCart();
-      await this.loadUserWishlist();
-    } else {
+      if (this.user) {
+        await this.loadUserCart();
+        await this.loadUserWishlist();
+      } else {
+        this.cart = this.getGuestCart();
+        this.wishlist = this.getGuestWishlist();
+      }
+    } catch (e) {
+      console.warn('[cart] failed to get session, using guest cart:', e);
+      // Fallback to guest cart if supabase is unavailable
       this.cart = this.getGuestCart();
       this.wishlist = this.getGuestWishlist();
     }
