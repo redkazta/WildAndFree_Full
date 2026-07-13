@@ -156,7 +156,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
     display: grid;
   }
   #searchInput::placeholder { color: var(--border-soft); }
-  #searchInput:focus { border-color: #C98300; }
+  #searchInput:focus { border-color: var(--primary); }
   .checkbox-row {
     display: flex;
     align-items: center;
@@ -170,7 +170,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
   }
   .checkbox-row:hover { background: var(--border-faint); }
   .checkbox-row input[type="checkbox"] {
-    accent-color: #C98300;
+    accent-color: var(--primary);
     width: 16px;
     height: 16px;
     cursor: pointer;
@@ -196,7 +196,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
     padding: 2px 8px;
     border-radius: 10px;
     background: rgba(201,131,0,0.15);
-    color: #C98300;
+    color: var(--primary);
     margin: 1px 2px;
   }
   .action-btn {

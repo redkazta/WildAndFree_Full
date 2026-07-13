@@ -142,7 +142,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
 <style>
   .filter-btn.active {
     background: rgba(201,131,0,0.2);
-    color: #C98300;
+    color: var(--primary);
   }
   .expand-btn {
     cursor: pointer;
@@ -153,8 +153,8 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
     transition: transform 0.2s, color 0.2s;
     padding: 2px 6px;
   }
-  .expand-btn:hover { color: #C98300; }
-  .expand-btn.open { transform: rotate(90deg); color: #C98300; }
+  .expand-btn:hover { color: var(--primary); }
+  .expand-btn.open { transform: rotate(90deg); color: var(--primary); }
   .variant-row td {
     background: rgba(255,255,255,0.015) !important;
     padding: 6px 12px 6px 42px !important;
@@ -191,7 +191,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
     outline: none;
   }
   .stock-input:focus {
-    border-color: #C98300;
+    border-color: var(--primary);
   }
   .action-group {
     display: flex;

@@ -48,19 +48,19 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
   const templates: Record<string, { subject: string; html: string }> = {
     bienvenida: {
       subject: 'Bienvenido a Wild Gvng 🐺',
-      html: '<div style="font-family:system-ui;background:#0a0a0a;color:#ffffff;padding:40px;text-align:center;"><h1 style="color:#C98300;font-size:28px;">WILD GVNG</h1><p style="color:#cccccc;margin:20px 0;">Tu cuenta fue creada exitosamente.</p><p style="color:#888888;font-size:14px;">Bienvenido a la crew.</p></div>'
+      html: '<div style="font-family:system-ui;background:var(--bg);color:var(--text);padding:40px;text-align:center;"><h1 style="color:var(--primary);font-size:28px;">WILD GVNG</h1><p style="color:var(--text-secondary);margin:20px 0;">Tu cuenta fue creada exitosamente.</p><p style="color:var(--text-muted);font-size:14px;">Bienvenido a la crew.</p></div>'
     },
     pedido: {
       subject: 'Tu pedido fue confirmado ✅',
-      html: '<div style="font-family:system-ui;background:#0a0a0a;color:#ffffff;padding:40px;text-align:center;"><h1 style="color:#C98300;font-size:24px;">Pedido Confirmado</h1><p style="color:#cccccc;margin:20px 0;">Tu pedido está siendo procesado.</p><p style="color:#888888;font-size:14px;">Te notificaremos cuando sea enviado.</p></div>'
+      html: '<div style="font-family:system-ui;background:var(--bg);color:var(--text);padding:40px;text-align:center;"><h1 style="color:var(--primary);font-size:24px;">Pedido Confirmado</h1><p style="color:var(--text-secondary);margin:20px 0;">Tu pedido está siendo procesado.</p><p style="color:var(--text-muted);font-size:14px;">Te notificaremos cuando sea enviado.</p></div>'
     },
     contenido: {
       subject: 'Tu contenido fue publicado 🎬',
-      html: '<div style="font-family:system-ui;background:#0a0a0a;color:#ffffff;padding:40px;text-align:center;"><h1 style="color:#C98300;font-size:24px;">Contenido Publicado</h1><p style="color:#cccccc;margin:20px 0;">Tu contenido fue aprobado y ya está visible.</p></div>'
+      html: '<div style="font-family:system-ui;background:var(--bg);color:var(--text);padding:40px;text-align:center;"><h1 style="color:var(--primary);font-size:24px;">Contenido Publicado</h1><p style="color:var(--text-secondary);margin:20px 0;">Tu contenido fue aprobado y ya está visible.</p></div>'
     },
     verificacion: {
       subject: 'Verificación de artista',
-      html: '<div style="font-family:system-ui;background:#0a0a0a;color:#ffffff;padding:40px;text-align:center;"><h1 style="color:#C98300;font-size:24px;">Solicitud de Verificación</h1><p style="color:#cccccc;margin:20px 0;">Tu solicitud está siendo revisada.</p><p style="color:#888888;font-size:14px;">Te contactaremos pronto.</p></div>'
+      html: '<div style="font-family:system-ui;background:var(--bg);color:var(--text);padding:40px;text-align:center;"><h1 style="color:var(--primary);font-size:24px;">Solicitud de Verificación</h1><p style="color:var(--text-secondary);margin:20px 0;">Tu solicitud está siendo revisada.</p><p style="color:var(--text-muted);font-size:14px;">Te contactaremos pronto.</p></div>'
     },
   };
 

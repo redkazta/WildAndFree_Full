@@ -172,7 +172,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
   }
   .tab-btn.active {
     background: rgba(201,131,0,0.15);
-    color: #C98300;
+    color: var(--primary);
   }
   .stat-slider-row {
     display: flex;
@@ -189,7 +189,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
     color: var(--text-muted);
   }
   .stat-slider-row label span {
-    color: #C98300;
+    color: var(--primary);
     font-weight: 800;
   }
   .stat-slider-row input[type="range"] {
@@ -205,14 +205,14 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    background: #C98300;
+    background: var(--primary);
     cursor: pointer;
   }
   .stat-slider-row input[type="range"]::-moz-range-thumb {
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    background: #C98300;
+    background: var(--primary);
     cursor: pointer;
     border: none;
   }
@@ -265,12 +265,12 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
     width: 14px;
     left: 3px;
     bottom: 3px;
-    background: #ffffff;
+    background: var(--bg);
     border-radius: 50%;
     transition: 0.2s;
   }
   .toggle-switch input:checked + .toggle-slider {
-    background: #C98300;
+    background: var(--primary);
   }
   .toggle-switch input:checked + .toggle-slider::before {
     transform: translateX(16px);
@@ -282,7 +282,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
   .vs-badge {
     font-size: 11px;
     font-weight: 900;
-    color: #C98300;
+    color: var(--primary);
     background: rgba(201,131,0,0.12);
     padding: 2px 8px;
     border-radius: 4px;

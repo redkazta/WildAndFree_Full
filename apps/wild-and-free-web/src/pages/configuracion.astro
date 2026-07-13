@@ -638,15 +638,15 @@ import Layout from '../layouts/Layout.astro';
       background: var(--bg);
     }
     .light-preview {
-      background: #f0f0f0;
+      background: var(--bg-card);
     }
     .tp-bar {
       height: 6px;
       border-radius: 2px;
       margin-bottom: 6px;
     }
-    .dark-preview .tp-bar { background: #c98300; }
-    .light-preview .tp-bar { background: #b37400; }
+    .dark-preview .tp-bar { background: var(--primary); }
+    .light-preview .tp-bar { background: var(--primary-hover); }
     .tp-sides {
       display: flex;
       gap: 4px;
@@ -656,8 +656,8 @@ import Layout from '../layouts/Layout.astro';
       width: 20%;
       border-radius: 3px;
     }
-    .dark-preview .tp-side { background: #1a1a1a; }
-    .light-preview .tp-side { background: #e0e0e0; }
+    .dark-preview .tp-side { background: var(--bg-card); }
+    .light-preview .tp-side { background: var(--bg-card); }
     .tp-main {
       flex: 1;
       border-radius: 3px;
@@ -667,13 +667,13 @@ import Layout from '../layouts/Layout.astro';
       gap: 3px;
     }
     .dark-preview .tp-main { background: var(--bg); }
-    .light-preview .tp-main { background: #ffffff; }
+    .light-preview .tp-main { background: var(--bg); }
     .tp-line {
       height: 4px;
       border-radius: 2px;
     }
-    .dark-preview .tp-line { background: #222; }
-    .light-preview .tp-line { background: #ddd; }
+    .dark-preview .tp-line { background: var(--border-muted); }
+    .light-preview .tp-line { background: var(--border-muted); }
     .tp-line.short { width: 60%; }
 
     /* ── LANGUAGE GRID ── */

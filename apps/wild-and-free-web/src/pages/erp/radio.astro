@@ -45,11 +45,11 @@ const tenant = tenantConfig['wild-and-free'];
       </div>
       <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; align-items: center;">
         <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-secondary); cursor: pointer;">
-          <input type="checkbox" id="cfg-is-live" style="accent-color: #C98300;" />
+          <input type="checkbox" id="cfg-is-live" style="accent-color: var(--primary);" />
           <span>EN VIVO (override)</span>
         </label>
         <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-secondary); cursor: pointer;">
-          <input type="checkbox" id="cfg-auto-radio" style="accent-color: #C98300;" />
+          <input type="checkbox" id="cfg-auto-radio" style="accent-color: var(--primary);" />
           <span>Auto Radio (Spotify)</span>
         </label>
         <button id="cfg-save-btn" class="erp-btn erp-btn--primary">Guardar Configuración</button>
@@ -292,8 +292,8 @@ const tenant = tenantConfig['wild-and-free'];
       const { data: config } = await supabase.from('radio_config').select('*').limit(1).single();
       if (!config) { content.innerHTML = '<span style="color:var(--border-soft);">Sin configuración</span>'; return; }
 
-      const isLive = config.is_live ? '<span style="color:#ff4444; font-weight:700;">🔴 EN VIVO</span>' : '<span style="color:#888;">OFFLINE</span>';
-      const autoRadio = config.auto_radio ? '<span style="color:#00ff88; font-weight:700;">🎵 AUTO RADIO</span>' : '<span style="color:#888;">OFF</span>';
+      const isLive = config.is_live ? '<span style="color:#ff4444; font-weight:700;">🔴 EN VIVO</span>' : '<span style="color:var(--text-muted);">OFFLINE</span>';
+      const autoRadio = config.auto_radio ? '<span style="color:#00ff88; font-weight:700;">🎵 AUTO RADIO</span>' : '<span style="color:var(--text-muted);">OFF</span>';
 
       content.innerHTML = `
         <div style="display:flex; flex-wrap:wrap; gap:16px; align-items:center;">
@@ -387,7 +387,7 @@ const tenant = tenantConfig['wild-and-free'];
           <td style="font-size:11px; max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
             <a href="${t.spotify_track_url}" target="_blank" style="color:rgba(201,131,0,0.7);">${t.spotify_track_url.substring(0, 40)}...</a>
           </td>
-          <td>${t.is_active ? '<span style="color:#00ff88;">✓</span>' : '<span style="color:#666;">✗</span>'}</td>
+          <td>${t.is_active ? '<span style="color:#00ff88;">✓</span>' : '<span style="color:var(--text-muted);">✗</span>'}</td>
           <td>
             <button class="erp-btn erp-btn--ghost erp-btn--small" data-id="${t.id}" data-edit-track style="margin-right:4px;">✎</button>
             <button class="erp-btn erp-btn--danger erp-btn--small" data-id="${t.id}" data-delete-track>✕</button>
@@ -500,7 +500,7 @@ const tenant = tenantConfig['wild-and-free'];
           <td>${ep.host || 'KAZTA'}</td>
           <td style="font-size:12px;">${ep.duration || '—'}</td>
           <td><span style="font-size:10px; text-transform:uppercase; background:var(--bg-card); padding:2px 8px; border-radius:4px;">${ep.category || 'mix'}</span></td>
-          <td>${ep.is_published ? '<span style="color:#00ff88;">✓ Publicado</span>' : '<span style="color:#888;">✗ Borrador</span>'}</td>
+          <td>${ep.is_published ? '<span style="color:#00ff88;">✓ Publicado</span>' : '<span style="color:var(--text-muted);">✗ Borrador</span>'}</td>
           <td style="font-size:11px;">${ep.created_at ? new Date(ep.created_at).toLocaleDateString() : '—'}</td>
           <td>
             <button class="erp-btn erp-btn--ghost erp-btn--small" data-id="${ep.id}" data-toggle-publish style="margin-right:4px;">${ep.is_published ? 'Despublicar' : 'Publicar'}</button>
@@ -614,7 +614,7 @@ const tenant = tenantConfig['wild-and-free'];
           <td style="font-size:12px;">${s.end_time?.substring(0,5) || '—'}</td>
           <td style="font-weight:600;">${s.show_name}</td>
           <td>${s.host || 'KAZTA'}</td>
-          <td>${s.is_active ? '<span style="color:#00ff88;">✓</span>' : '<span style="color:#666;">✗</span>'}</td>
+          <td>${s.is_active ? '<span style="color:#00ff88;">✓</span>' : '<span style="color:var(--text-muted);">✗</span>'}</td>
           <td>
             <button class="erp-btn erp-btn--ghost erp-btn--small" data-id="${s.id}" data-edit-schedule style="margin-right:4px;">✎</button>
             <button class="erp-btn erp-btn--danger erp-btn--small" data-id="${s.id}" data-delete-schedule>✕</button>
