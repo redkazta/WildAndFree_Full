@@ -345,36 +345,47 @@ try {
 
   document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
     btn.addEventListener('click', async (e) => {
-      const button = e.currentTarget as HTMLButtonElement;
-      const pd = button.dataset.product;
-      if (!pd) return;
-      const product = JSON.parse(pd);
-      const spinner = button.querySelector('.btn-spinner');
-      const text = button.querySelector('.btn-text');
-      if (spinner) spinner.classList.remove('hidden');
-      if (text) text.classList.add('opacity-0');
-      await new Promise(r => setTimeout(r, 400));
-      cartStore.addToCart(product);
-      if (spinner) spinner.classList.add('hidden');
-      if (text) text.classList.remove('opacity-0');
-      syncButtons();
-      if (modalProductName) modalProductName.textContent = product.name;
-      dialog?.showModal();
+      try {
+        const button = e.currentTarget as HTMLButtonElement;
+        const pd = button.dataset.product;
+        console.log('[tienda] add-to-cart click', { pd: pd?.substring(0, 50) });
+        if (!pd) { console.warn('[tienda] no product data'); return; }
+        const product = JSON.parse(pd);
+        console.log('[tienda] parsed product', { id: product.id, name: product.name, price: product.price });
+        const spinner = button.querySelector('.btn-spinner');
+        const text = button.querySelector('.btn-text');
+        if (spinner) spinner.classList.remove('hidden');
+        if (text) text.classList.add('opacity-0');
+        await new Promise(r => setTimeout(r, 400));
+        await cartStore.addToCart(product);
+          console.log('[tienda] addToCart done, cart now:', cartStore.cart.length, 'items');
+        if (spinner) spinner.classList.add('hidden');
+        if (text) text.classList.remove('opacity-0');
+        syncButtons();
+        if (modalProductName) modalProductName.textContent = product.name;
+        dialog?.showModal();
+      } catch (err) {
+        console.error('[tienda] add-to-cart error:', err);
+      }
     });
   });
 
   document.querySelectorAll('.toggle-wishlist-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const button = e.currentTarget as HTMLElement;
-      const pd = button.dataset.product;
-      if (!pd) return;
-      const product = JSON.parse(pd);
-      const was = cartStore.isInWishlist(product.id);
-      cartStore.toggleWishlist(product);
-      const icon = button.querySelector('svg');
-      if (!was) { if (icon) icon.style.fill = 'currentColor'; button.classList.add('text-[var(--wild-crimson)]'); button.classList.remove('text-[var(--text-muted)]'); showWishlistToast(true); }
-      else { if (icon) icon.style.fill = 'none'; button.classList.remove('text-[var(--wild-crimson)]'); button.classList.add('text-[var(--text-muted)]'); showWishlistToast(false); }
+      try {
+        e.preventDefault();
+        const button = e.currentTarget as HTMLElement;
+        const pd = button.dataset.product;
+        if (!pd) return;
+        const product = JSON.parse(pd);
+        const was = cartStore.isInWishlist(product.id);
+        cartStore.toggleWishlist(product);
+        const icon = button.querySelector('svg');
+        if (!was) { if (icon) icon.style.fill = 'currentColor'; button.classList.add('text-[var(--wild-crimson)]'); button.classList.remove('text-[var(--text-muted)]'); showWishlistToast(true); }
+        else { if (icon) icon.style.fill = 'none'; button.classList.remove('text-[var(--wild-crimson)]'); button.classList.add('text-[var(--text-muted)]'); showWishlistToast(false); }
+      } catch (err) {
+        console.error('[tienda] wishlist error:', err);
+      }
     });
   });
 
