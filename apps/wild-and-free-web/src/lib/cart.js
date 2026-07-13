@@ -68,7 +68,7 @@ class CartStore {
           cart_key: item.cart_key || (item.variant_id ? item.id + '_' + item.variant_id : String(item.id)),
           name: item.name || 'Producto',
           price: Number(item.price) || 0,
-          image: item.image || '',
+          image: (item.image && item.image !== '') ? item.image : '',
           variant_id: item.variant_id || null,
           size: item.size || null,
           color: item.color || null,
@@ -142,24 +142,32 @@ class CartStore {
   // --- Actions ---
 
   async addToCart(product, quantity = 1) {
-    // Generate a unique cart key: product_id + variant_id (or just product_id if no variant)
-    const cartKey = product.variant_id ? `${product.id}_${product.variant_id}` : String(product.id);
+    // Build a clean cart item with all required fields explicitly
+    var name = product.name || 'Producto';
+    var price = Number(product.price) || 0;
+    var image = product.image || '';
+    var cartKey = product.variant_id ? product.id + '_' + product.variant_id : String(product.id);
     
     if (this.user) {
       // Optimistic UI
-      const existingItem = this.cart.find(item => item.cart_key == cartKey);
+      var existingItem = this.cart.find(function(i) { return i.cart_key == cartKey; });
       if (existingItem) {
         existingItem.quantity += quantity;
+        existingItem.name = name;
+        existingItem.price = price;
+        existingItem.image = image;
       } else {
-        this.cart.push({ 
-          id: product.id, 
+        this.cart.push({
+          id: product.id,
           cart_key: cartKey,
+          name: name,
+          price: price,
+          image: image,
           variant_id: product.variant_id || null,
           size: product.size || null,
           color: product.color || null,
           sku: product.sku || null,
-          quantity, 
-          ...product 
+          quantity: quantity
         });
       }
       this.notifyListeners();
@@ -169,9 +177,9 @@ class CartStore {
         user_id: this.user.id,
         product_id: String(product.id),
         quantity: existingItem ? existingItem.quantity : quantity,
-        product_name: product.name || null,
-        product_price: product.price || null,
-        product_image: product.image || null
+        product_name: name,
+        product_price: price,
+        product_image: image
       };
       if (product.variant_id) {
         payload.variant_id = product.variant_id;
@@ -180,7 +188,7 @@ class CartStore {
         payload.variant_sku = product.sku || null;
       }
 
-      const { error } = await supabase.from('cart_items').upsert(payload, { 
+      var { error } = await supabase.from('cart_items').upsert(payload, { 
         onConflict: product.variant_id ? 'user_id, product_id, variant_id' : 'user_id, product_id' 
       });
 
@@ -191,20 +199,25 @@ class CartStore {
 
     } else {
       // Guest
-      const currentCart = this.getGuestCart();
-      const existingItem = currentCart.find(item => item.cart_key == cartKey);
+      var currentCart = this.getGuestCart();
+      var existingItem = currentCart.find(function(i) { return i.cart_key == cartKey; });
       if (existingItem) {
         existingItem.quantity += quantity;
+        existingItem.name = name;
+        existingItem.price = price;
+        existingItem.image = image;
       } else {
-        currentCart.push({ 
-          id: product.id, 
+        currentCart.push({
+          id: product.id,
           cart_key: cartKey,
+          name: name,
+          price: price,
+          image: image,
           variant_id: product.variant_id || null,
           size: product.size || null,
           color: product.color || null,
           sku: product.sku || null,
-          quantity, 
-          ...product 
+          quantity: quantity
         });
       }
       this.saveGuestCart(currentCart);
@@ -235,7 +248,7 @@ class CartStore {
         this.wishlist = this.wishlist.filter(item => item.id != product.id);
         await supabase.from('wishlist_items').delete().match({ user_id: this.user.id, product_id: String(product.id) });
       } else {
-        this.wishlist.push({ id: product.id, ...product });
+        this.wishlist.push({ id: product.id, name: product.name || 'Producto', price: Number(product.price) || 0, image: (product.image && product.image !== '') ? product.image : '' });
         await supabase.from('wishlist_items').insert({ user_id: this.user.id, product_id: String(product.id) });
       }
     } else {
@@ -243,7 +256,7 @@ class CartStore {
       if (exists) {
         currentList = currentList.filter(item => item.id != product.id);
       } else {
-        currentList.push({ id: product.id, ...product });
+        currentList.push({ id: product.id, name: product.name || 'Producto', price: Number(product.price) || 0, image: (product.image && product.image !== '') ? product.image : '' });
       }
       this.saveGuestWishlist(currentList);
     }
