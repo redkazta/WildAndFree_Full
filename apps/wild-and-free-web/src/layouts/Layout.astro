@@ -160,13 +160,10 @@ const isActive = (href: string) => {
 				opacity: 1;
 			}
 
-			/* FOUC Prevention: hide auth UI until session resolves */
+			/* Auth container always visible, async replacement happens after load */
 			.auth-actions-container {
-				opacity: 0;
-				transition: opacity 0.3s ease;
-			}
-			body[data-auth-loaded="true"] .auth-actions-container {
 				opacity: 1;
+				transition: none;
 			}
 
 			/* Custom Scrollbar */

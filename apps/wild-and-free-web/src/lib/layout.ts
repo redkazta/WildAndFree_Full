@@ -357,8 +357,6 @@ const updateAuthUI = async () => {
   } catch (err) {
     console.error('[layout] updateAuthUI error:', err);
   }
-
-  document.body.setAttribute("data-auth-loaded", "true");
 };
 
 // --- Popover Logic ---
