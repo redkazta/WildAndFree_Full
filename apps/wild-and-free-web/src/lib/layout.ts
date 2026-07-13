@@ -405,14 +405,17 @@ const initPopovers = () => {
 const init = async () => {
   initPopovers();
   await updateAuthUI();
-  cartStore.init();
 
+  // Register listeners BEFORE cartStore.init() to avoid losing the first event
   window.addEventListener(CartEvents.UPDATED, (e: Event) =>
     updateCartUI((e as CustomEvent).detail),
   );
   window.addEventListener(CartEvents.WISHLIST_UPDATED, (e: Event) =>
     updateCartUI((e as CustomEvent).detail),
   );
+
+  // Now init cart (awaited so updateCartUI below gets real data)
+  await cartStore.init();
 
   updateCartUI({
     cart: cartStore.cart,
