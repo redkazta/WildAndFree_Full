@@ -32,7 +32,7 @@ try {
       id: p.id,
       name: p.name,
       price: Number(p.base_price),
-      image: p.image_url || 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500&h=500&fit=crop',
+      image: p.image_url || '',
       category: (p.category || 'otros').toLowerCase(),
       inStock: p.is_active !== false,
       description: p.description || ''
@@ -42,9 +42,9 @@ try {
   }
 } catch (_e) {
   products = [
-    { id: 'p1', name: 'Playera Wild Gvng Logo', price: 350, image: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500&h=500&fit=crop', category: 'playeras', inStock: true, description: 'Playera negra bordada con el logo original de Wild Gvng.' },
-    { id: 'p2', name: 'Gorra WG Snapback', price: 280, image: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=500&h=500&fit=crop', category: 'gorras', inStock: true, description: 'Gorra snapback negra con logo WG bordado.' },
-    { id: 'p3', name: 'Sudadera Wild Gvng Premium', price: 650, image: 'https://images.unsplash.com/photo-1509942774463-acf339cf87d5?w=500&h=500&fit=crop', category: 'sudaderas', inStock: true, description: 'Sudadera con capucha, diseño exclusivo.' }
+    { id: 'p1', name: 'Playera Wild Gvng Logo', price: 350, image: '', category: 'playeras', inStock: true, description: 'Playera negra bordada con el logo original de Wild Gvng.' },
+    { id: 'p2', name: 'Gorra WG Snapback', price: 280, image: '', category: 'gorras', inStock: true, description: 'Gorra snapback negra con logo WG bordado.' },
+    { id: 'p3', name: 'Sudadera Wild Gvng Premium', price: 650, image: '', category: 'sudaderas', inStock: true, description: 'Sudadera con capucha, diseño exclusivo.' }
   ];
 }
 ---
@@ -52,140 +52,165 @@ try {
 <Layout config={config}>
   <div class="min-h-screen bg-[var(--bg)] text-[var(--text)] pb-20 selection:bg-[var(--primary)] selection:text-[var(--bg)]">
 
-    <!-- Top Bar -->
-    <div class="bg-[var(--primary)] text-[var(--bg)] text-[10px] md:text-xs font-black text-center py-2 uppercase tracking-[0.2em]">
+    <!-- Top Bar Promocional -->
+    <div class="bg-[var(--primary)] text-[var(--bg)] text-[10px] md:text-xs font-black text-center py-2 uppercase tracking-[0.2em] sticky top-0 z-40">
       Envío gratis en pedidos superiores a $999 • Devoluciones sin costo
     </div>
 
-    <!-- Hero Compacto: Ofertas -->
-    <section class="border-b border-[var(--border-faint)]">
-      <div class="max-w-[1400px] mx-auto px-4 md:px-8 py-8 md:py-12">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- Oferta 1 -->
-          <a href="#playeras" class="group relative overflow-hidden rounded-2xl border border-[var(--border-faint)] hover:border-[var(--primary)]/40 transition-all block h-[200px] md:h-[240px]">
-            <img src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=800&h=400&fit=crop" width="800" height="240" loading="lazy" class="w-full h-full object-cover opacity-50 group-hover:opacity-70 group-hover:scale-105 transition-all duration-700" />
-            <div class="absolute inset-0 bg-gradient-to-r from-[var(--bg)]/90 to-transparent flex flex-col justify-center p-6 md:p-10">
-              <span class="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--primary)] mb-2">Oferta</span>
-              <h2 class="text-2xl md:text-4xl font-black text-[var(--text)] uppercase leading-[0.9] mb-2">Colección<br/>de Verano</h2>
-              <p class="text-sm font-bold text-[var(--text-muted)]">Hasta 30% de descuento en playeras</p>
+    <div class="max-w-[1920px] mx-auto px-4 md:px-8 py-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+        <!-- Sidebar Filtros -->
+        <aside class="hidden lg:block lg:col-span-2">
+          <div class="sticky top-20 space-y-8">
+
+            <!-- Búsqueda -->
+            <div>
+              <h3 class="font-black uppercase text-[10px] text-[var(--text-muted)] tracking-widest mb-3">Buscar</h3>
+              <input type="text" id="search-input" placeholder="Buscar..."
+                class="w-full bg-[var(--bg)] rounded-lg border border-[var(--border)] text-xs text-[var(--text)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--primary)] px-3 py-2.5 transition-colors" />
             </div>
-          </a>
-          <!-- Oferta 2 -->
-          <a href="#sudaderas" class="group relative overflow-hidden rounded-2xl border border-[var(--border-faint)] hover:border-[var(--primary)]/40 transition-all block h-[200px] md:h-[240px]">
-            <img src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=800&h=400&fit=crop" width="800" height="240" loading="lazy" class="w-full h-full object-cover opacity-50 group-hover:opacity-70 group-hover:scale-105 transition-all duration-700" />
-            <div class="absolute inset-0 bg-gradient-to-r from-[var(--bg)]/90 to-transparent flex flex-col justify-center p-6 md:p-10">
-              <span class="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--primary)] mb-2">Nuevo</span>
-              <h2 class="text-2xl md:text-4xl font-black text-[var(--text)] uppercase leading-[0.9] mb-2">Sudaderas<br/>Premium</h2>
-              <p class="text-sm font-bold text-[var(--text-muted)]">Edición limitada, diseño exclusivo</p>
-            </div>
-          </a>
-        </div>
-      </div>
-    </section>
 
-    <div class="max-w-[1400px] mx-auto px-4 md:px-8 py-8 md:py-12">
-
-      <!-- Búsqueda + Filtros -->
-      <div class="flex flex-col md:flex-row gap-4 mb-10">
-        <div class="relative flex-1">
-          <input type="text" id="search-input" placeholder="Buscar productos..."
-            class="w-full bg-[var(--bg)] rounded-xl border border-[var(--border)] text-sm text-[var(--text)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--primary)] px-5 py-3 transition-colors" />
-        </div>
-        <div class="flex gap-2 flex-wrap">
-          <button data-filter="all" class="category-btn active px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider border border-[var(--border)] bg-[var(--bg-card)] text-[var(--text)] hover:border-[var(--primary)] transition-all">Todos</button>
-          {categories.map(cat => (
-            <button data-filter={cat.slug} class="category-btn px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider border border-[var(--border-faint)] text-[var(--text-muted)] hover:border-[var(--primary)] hover:text-[var(--text)] transition-all">{cat.name}</button>
-          ))}
-        </div>
-      </div>
-
-      <!-- Filtros de Precio -->
-      <div class="flex gap-3 mb-10 flex-wrap">
-        <span class="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider self-center">Precio:</span>
-        <label class="flex items-center gap-2 cursor-pointer">
-          <input type="checkbox" data-price="0-500" class="price-filter accent-[var(--primary)] w-4 h-4" />
-          <span class="text-xs text-[var(--text-muted)]">&lt;$500</span>
-        </label>
-        <label class="flex items-center gap-2 cursor-pointer">
-          <input type="checkbox" data-price="500-1500" class="price-filter accent-[var(--primary)] w-4 h-4" />
-          <span class="text-xs text-[var(--text-muted)]">$500-$1,500</span>
-        </label>
-        <label class="flex items-center gap-2 cursor-pointer">
-          <input type="checkbox" data-price="1500-99999" class="price-filter accent-[var(--primary)] w-4 h-4" />
-          <span class="text-xs text-[var(--text-muted)]">$1,500+</span>
-        </label>
-      </div>
-
-      <!-- Productos por Categoría -->
-      <div id="products-container">
-        {categories.map(category => {
-          const categoryProducts = products.filter(p => p.category === category.slug);
-          if (categoryProducts.length === 0) return null;
-          return (
-            <section data-category-section={category.slug} class="scroll-mt-32 mb-14">
-              <div class="flex items-center gap-4 mb-6">
-                <span class="w-2 h-8 bg-[var(--primary)] rounded-sm"></span>
-                <h2 class="text-2xl font-black uppercase tracking-tight text-[var(--text)]">{category.name}</h2>
-                <div class="h-[1px] flex-1 bg-[var(--border-faint)]"></div>
-                <span class="text-xs text-[var(--text-muted)]">{categoryProducts.length} productos</span>
-              </div>
-              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                {categoryProducts.map((product) => (
-                  <div class="product-card bg-[var(--bg)] rounded-xl overflow-hidden border border-[var(--border-faint)] hover:border-[var(--primary)]/40 transition-all duration-300 group flex flex-col h-full"
-                       data-name={product.name.toLowerCase()}
-                       data-price={product.price}
-                       data-category={product.category}>
-                    <div class="absolute top-3 left-3 z-20 pointer-events-none">
-                      {product.inStock && (
-                        <span class="bg-[var(--primary)] text-[var(--bg)] text-[9px] font-black px-2 py-1 uppercase tracking-widest rounded-sm">New</span>
-                      )}
-                    </div>
-                    <button class="absolute top-3 right-3 z-30 w-8 h-8 rounded-full bg-[var(--bg)]/80 border border-[var(--border)] flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--wild-crimson)] hover:border-[var(--wild-crimson)] transition-all toggle-wishlist-btn"
-                      data-product={JSON.stringify(product)} title="Wishlist">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                    </button>
-                    <div class="relative aspect-[4/5] bg-[var(--bg-card)] overflow-hidden">
-                      <img src={product.image} width="400" height="500" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" />
-                      {!product.inStock && (
-                        <div class="absolute inset-0 bg-[var(--bg)]/80 flex items-center justify-center z-20">
-                          <span class="text-[var(--text)] text-sm font-black uppercase tracking-[0.2em] border-2 border-[var(--text)] px-3 py-1 -rotate-12">Agotado</span>
-                        </div>
-                      )}
-                    </div>
-                    <div class="p-4 flex flex-col flex-grow">
-                      <h3 class="font-bold text-sm text-[var(--text)] leading-tight line-clamp-2 mb-3">{product.name}</h3>
-                      <div class="mt-auto pt-3 border-t border-[var(--border-faint)] flex items-center justify-between">
-                        <span class="text-lg font-black text-[var(--text)]">${product.price}</span>
-                        <button
-                          class={`w-10 h-10 rounded-lg flex items-center justify-center transition-all add-to-cart-btn ${
-                            product.inStock
-                              ? 'bg-[var(--border)] text-[var(--bg)] hover:bg-[var(--primary)]'
-                              : 'bg-[var(--bg-card)] text-[var(--text-muted)] cursor-not-allowed border border-[var(--border-faint)]'
-                          }`}
-                          disabled={!product.inStock}
-                          data-product={product.inStock ? JSON.stringify(product) : undefined}
-                          title="Agregar al Carrito">
-                          <span class="btn-text">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-                          </span>
-                          <span class="btn-spinner hidden animate-spin absolute">
-                            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                          </span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+            <!-- Categorías -->
+            <div>
+              <h3 class="font-black uppercase text-[10px] text-[var(--text-muted)] tracking-widest mb-3">Explorar</h3>
+              <nav class="flex flex-col space-y-1">
+                <button data-filter="all" class="category-btn active text-left flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-[var(--bg-card)] text-[var(--text)] transition-all group">
+                  <span class="w-1.5 h-1.5 bg-[var(--primary)] rounded-full group-hover:scale-150 transition-transform"></span>
+                  <span class="text-xs font-bold uppercase tracking-wider">Todos</span>
+                </button>
+                {categories.map(cat => (
+                  <button data-filter={cat.slug} class="category-btn text-left flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-[var(--bg-card)] text-[var(--text-muted)] hover:text-[var(--text)] transition-all group">
+                    <span class="w-1.5 h-1.5 bg-[var(--bg-card)] rounded-full group-hover:bg-[var(--primary)] group-hover:scale-150 transition-all"></span>
+                    <span class="text-xs font-medium">{cat.name}</span>
+                  </button>
                 ))}
-              </div>
-            </section>
-          );
-        })}
-      </div>
+              </nav>
+            </div>
 
-      <!-- Empty State -->
-      <div id="empty-state" class="hidden text-center py-20">
-        <p class="text-xl font-black text-[var(--text-muted)] uppercase tracking-wider">No se encontraron productos</p>
-        <p class="text-sm text-[var(--text-muted)] mt-2">Intenta con otra búsqueda o categoría</p>
+            <!-- Filtros de Precio -->
+            <div>
+              <h3 class="font-black uppercase text-[10px] text-[var(--text-muted)] tracking-widest mb-3">Precio</h3>
+              <div class="space-y-2">
+                <label class="flex items-center gap-3 cursor-pointer group hover:bg-[var(--bg-card)] p-2 rounded-lg transition-colors">
+                  <input type="checkbox" data-price="0-500" class="price-filter accent-[var(--primary)] w-4 h-4" />
+                  <span class="text-xs text-[var(--text-muted)] group-hover:text-[var(--text)] transition-colors">Menos de $500</span>
+                </label>
+                <label class="flex items-center gap-3 cursor-pointer group hover:bg-[var(--bg-card)] p-2 rounded-lg transition-colors">
+                  <input type="checkbox" data-price="500-1500" class="price-filter accent-[var(--primary)] w-4 h-4" />
+                  <span class="text-xs text-[var(--text-muted)] group-hover:text-[var(--text)] transition-colors">$500 - $1,500</span>
+                </label>
+                <label class="flex items-center gap-3 cursor-pointer group hover:bg-[var(--bg-card)] p-2 rounded-lg transition-colors">
+                  <input type="checkbox" data-price="1500-99999" class="price-filter accent-[var(--primary)] w-4 h-4" />
+                  <span class="text-xs text-[var(--text-muted)] group-hover:text-[var(--text)] transition-colors">$1,500+</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Banner Lateral -->
+            <div class="border border-[var(--primary)]/30 p-5 rounded-xl text-center space-y-2">
+              <p class="font-black text-xl text-[var(--primary)] uppercase italic tracking-tighter">WILD CLUB</p>
+              <p class="text-[10px] text-[var(--text-muted)] font-medium">Únete y obtén <span class="text-[var(--text)] font-bold">10% OFF</span> en tu primera compra.</p>
+              <button class="mt-2 w-full bg-[var(--border)] text-[var(--bg)] font-black py-2 text-[10px] uppercase tracking-[0.2em] hover:bg-[var(--primary)] hover:text-[var(--bg)] transition-all rounded-lg">
+                Suscribirse
+              </button>
+            </div>
+
+          </div>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="col-span-1 lg:col-span-10 space-y-12">
+
+          <!-- Hero Ofertas -->
+          <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <a href="#playeras" class="group relative overflow-hidden rounded-2xl border border-[var(--border-faint)] hover:border-[var(--primary)]/40 transition-all block h-[200px] md:h-[240px]">
+              <img src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=800&h=400&fit=crop" width="800" height="240" loading="lazy" class="w-full h-full object-cover opacity-50 group-hover:opacity-70 group-hover:scale-105 transition-all duration-700" />
+              <div class="absolute inset-0 bg-gradient-to-r from-[var(--bg)]/90 to-transparent flex flex-col justify-center p-6 md:p-10">
+                <span class="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--primary)] mb-2">Oferta</span>
+                <h2 class="text-2xl md:text-4xl font-black text-[var(--text)] uppercase leading-[0.9] mb-2">Colección<br/>de Verano</h2>
+                <p class="text-sm font-bold text-[var(--text-muted)]">Hasta 30% de descuento en playeras</p>
+              </div>
+            </a>
+            <a href="#sudaderas" class="group relative overflow-hidden rounded-2xl border border-[var(--border-faint)] hover:border-[var(--primary)]/40 transition-all block h-[200px] md:h-[240px]">
+              <img src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=800&h=400&fit=crop" width="800" height="240" loading="lazy" class="w-full h-full object-cover opacity-50 group-hover:opacity-70 group-hover:scale-105 transition-all duration-700" />
+              <div class="absolute inset-0 bg-gradient-to-r from-[var(--bg)]/90 to-transparent flex flex-col justify-center p-6 md:p-10">
+                <span class="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--primary)] mb-2">Nuevo</span>
+                <h2 class="text-2xl md:text-4xl font-black text-[var(--text)] uppercase leading-[0.9] mb-2">Sudaderas<br/>Premium</h2>
+                <p class="text-sm font-bold text-[var(--text-muted)]">Edición limitada, diseño exclusivo</p>
+              </div>
+            </a>
+          </section>
+
+          <!-- Productos por Categoría -->
+          <div id="products-container">
+            {categories.map(category => {
+              const categoryProducts = products.filter(p => p.category === category.slug);
+              if (categoryProducts.length === 0) return null;
+              return (
+                <section data-category-section={category.slug} class="scroll-mt-32 mb-12">
+                  <div class="flex items-center gap-4 mb-6">
+                    <span class="w-2 h-8 bg-[var(--primary)] rounded-sm"></span>
+                    <h2 class="text-2xl font-black uppercase tracking-tight text-[var(--text)]">{category.name}</h2>
+                    <div class="h-[1px] flex-1 bg-[var(--border-faint)]"></div>
+                    <span class="text-xs text-[var(--text-muted)]">{categoryProducts.length} productos</span>
+                  </div>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                    {categoryProducts.map((product) => (
+                      <div class="product-card bg-[var(--bg)] rounded-xl overflow-hidden border border-[var(--border-faint)] hover:border-[var(--primary)]/40 transition-all duration-300 group flex flex-col h-full"
+                           data-name={product.name.toLowerCase()}
+                           data-price={product.price}
+                           data-category={product.category}>
+                        <div class="absolute top-3 left-3 z-20 pointer-events-none">
+                          {product.inStock && <span class="bg-[var(--primary)] text-[var(--bg)] text-[9px] font-black px-2 py-1 uppercase tracking-widest rounded-sm">New</span>}
+                        </div>
+                        <button class="absolute top-3 right-3 z-30 w-8 h-8 rounded-full bg-[var(--bg)]/80 border border-[var(--border)] flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--wild-crimson)] hover:border-[var(--wild-crimson)] transition-all toggle-wishlist-btn"
+                          data-product={JSON.stringify(product)} title="Wishlist">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                        </button>
+                        <div class="relative aspect-[4/5] bg-[var(--bg-card)] overflow-hidden">
+                          {product.image ? (
+                            <img src={product.image} width="400" height="500" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
+                              onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
+                          ) : null}
+                          <div class={`${product.image ? 'hidden' : 'flex'} absolute inset-0 items-center justify-center flex-col gap-2`}>
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+                            <span class="text-[10px] font-bold text-[var(--text-muted)] uppercase">Sin imagen</span>
+                          </div>
+                          {!product.inStock && (
+                            <div class="absolute inset-0 bg-[var(--bg)]/80 flex items-center justify-center z-20">
+                              <span class="text-[var(--text)] text-sm font-black uppercase tracking-[0.2em] border-2 border-[var(--text)] px-3 py-1 -rotate-12">Agotado</span>
+                            </div>
+                          )}
+                        </div>
+                        <div class="p-4 flex flex-col flex-grow">
+                          <h3 class="font-bold text-sm text-[var(--text)] leading-tight line-clamp-2 mb-3">{product.name}</h3>
+                          <div class="mt-auto pt-3 border-t border-[var(--border-faint)] flex items-center justify-between">
+                            <span class="text-lg font-black text-[var(--text)]">${product.price}</span>
+                            <button
+                              class={`w-10 h-10 rounded-lg flex items-center justify-center transition-all add-to-cart-btn ${product.inStock ? 'bg-[var(--border)] text-[var(--bg)] hover:bg-[var(--primary)]' : 'bg-[var(--bg-card)] text-[var(--text-muted)] cursor-not-allowed border border-[var(--border-faint)]'}`}
+                              disabled={!product.inStock}
+                              data-product={product.inStock ? JSON.stringify(product) : undefined}
+                              title="Agregar al Carrito">
+                              <span class="btn-text"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg></span>
+                              <span class="btn-spinner hidden animate-spin absolute"><svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg></span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              );
+            })}
+          </div>
+
+          <div id="empty-state" class="hidden text-center py-20">
+            <p class="text-xl font-black text-[var(--text-muted)] uppercase tracking-wider">No se encontraron productos</p>
+            <p class="text-sm text-[var(--text-muted)] mt-2">Intenta con otra búsqueda o categoría</p>
+          </div>
+
+        </main>
       </div>
     </div>
   </div>
@@ -194,17 +219,12 @@ try {
 <style is:global>
   :root { --wild-crimson: #DC143C; }
   [data-theme="light"] { --wild-crimson: #B91C1C; }
-
-  .category-btn.active {
-    border-color: var(--primary) !important;
-    color: var(--text) !important;
-    background: var(--bg-card) !important;
-  }
+  .category-btn.active { background: var(--bg-card); color: var(--text); }
+  .category-btn.active span:first-child { background: var(--primary); }
   .product-card.hidden-card { display: none; }
   .section-hidden { display: none; }
 </style>
 
-<!-- Cart Confirmation Modal -->
 <dialog id="cart-confirm-dialog" class="bg-transparent p-0 backdrop:bg-[var(--bg)]/80 z-50 rounded-xl">
   <div class="bg-[var(--bg)] border border-[var(--border)] text-[var(--text)] p-6 rounded-xl max-w-sm w-full mx-auto relative">
     <div class="text-center mb-6">
@@ -218,7 +238,6 @@ try {
   </div>
 </dialog>
 
-<!-- Wishlist Toast -->
 <div id="wishlist-toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-[var(--bg)] border border-[var(--wild-crimson)] text-[var(--text)] px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 translate-y-24 opacity-0 transition-all duration-300 z-50">
   <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--wild-crimson)" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
   <span class="text-xs font-bold uppercase tracking-wider" id="wishlist-toast-message">Agregado a tu lista</span>
@@ -226,7 +245,6 @@ try {
 
 <script>
   import { cartStore } from '../lib/cart.js';
-
   const dialog = document.getElementById('cart-confirm-dialog') as HTMLDialogElement;
   const modalProductName = document.getElementById('modal-product-name');
   const modalKeepShopping = document.getElementById('modal-keep-shopping');
@@ -236,15 +254,13 @@ try {
   const searchInput = document.getElementById('search-input') as HTMLInputElement;
   const emptyState = document.getElementById('empty-state');
 
-  // Modal
   if (modalKeepShopping) modalKeepShopping.addEventListener('click', () => dialog?.close());
   if (modalGoCart) modalGoCart.addEventListener('click', () => { dialog?.close(); window.location.href = '/checkout'; });
   dialog?.addEventListener('click', (e) => {
-    const rect = dialog.getBoundingClientRect();
-    if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) dialog.close();
+    const r = dialog.getBoundingClientRect();
+    if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) dialog.close();
   });
 
-  // Wishlist Toast
   const showWishlistToast = (added: boolean) => {
     if (!wishlistToast || !wishlistToastMsg) return;
     wishlistToastMsg.textContent = added ? 'Agregado a tu lista' : 'Eliminado de tu lista';
@@ -252,70 +268,45 @@ try {
     setTimeout(() => wishlistToast.classList.add('translate-y-24', 'opacity-0'), 2500);
   };
 
-  // Filter
   function filterProducts() {
     const query = searchInput?.value.toLowerCase().trim() || '';
     const activeCategory = document.querySelector('.category-btn.active')?.getAttribute('data-filter') || 'all';
     const checkedPrices = [...document.querySelectorAll('.price-filter:checked')].map(el => (el as HTMLInputElement).dataset.price);
     let visibleCount = 0;
-
     document.querySelectorAll('.product-card').forEach((card) => {
       const c = card as HTMLElement;
-      const name = c.dataset.name || '';
-      const price = Number(c.dataset.price);
-      const category = c.dataset.category || '';
       let show = true;
-      if (query && !name.includes(query)) show = false;
-      if (activeCategory !== 'all' && category !== activeCategory) show = false;
+      if (query && !(c.dataset.name || '').includes(query)) show = false;
+      if (activeCategory !== 'all' && c.dataset.category !== activeCategory) show = false;
       if (checkedPrices.length > 0) {
-        const inRange = checkedPrices.some(r => { const [min, max] = r.split('-').map(Number); return price >= min && price <= max; });
-        if (!inRange) show = false;
+        const price = Number(c.dataset.price);
+        if (!checkedPrices.some(r => { const [min, max] = r.split('-').map(Number); return price >= min && price <= max; })) show = false;
       }
       c.classList.toggle('hidden-card', !show);
       if (show) visibleCount++;
     });
-
-    document.querySelectorAll('[data-category-section]').forEach(section => {
-      const cards = section.querySelectorAll('.product-card:not(.hidden-card)');
-      (section as HTMLElement).classList.toggle('section-hidden', cards.length === 0);
+    document.querySelectorAll('[data-category-section]').forEach(s => {
+      (s as HTMLElement).classList.toggle('section-hidden', s.querySelectorAll('.product-card:not(.hidden-card)').length === 0);
     });
-    if (emptyState) emptyState.classList.toggle('hidden', visibleCount > 0);
+    emptyState?.classList.toggle('hidden', visibleCount > 0);
   }
 
   if (searchInput) searchInput.addEventListener('input', filterProducts);
-
   document.querySelectorAll('.category-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      filterProducts();
-    });
+    btn.addEventListener('click', () => { document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); filterProducts(); });
   });
+  document.querySelectorAll('.price-filter').forEach(cb => cb.addEventListener('change', filterProducts));
 
-  document.querySelectorAll('.price-filter').forEach(cb => {
-    cb.addEventListener('change', filterProducts);
-  });
-
-  // Cart sync
   const syncButtons = () => {
     document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
       const pd = (btn as HTMLElement).dataset.product;
-      if (pd) {
-        try {
-          const product = JSON.parse(pd);
-          const inCart = cartStore.isInCart(product.id);
-          const icon = btn.querySelector('svg');
-          if (inCart) {
-            btn.classList.add('bg-[var(--primary)]', 'text-[var(--bg)]');
-            btn.classList.remove('bg-[var(--border)]', 'text-[var(--bg)]');
-            if (icon) icon.innerHTML = '<polyline points="20 6 9 17 4 12"></polyline>';
-          } else {
-            btn.classList.remove('bg-[var(--primary)]');
-            btn.classList.add('bg-[var(--border)]', 'text-[var(--bg)]');
-            if (icon) icon.innerHTML = '<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path>';
-          }
-        } catch(_e) {}
-      }
+      if (!pd) return;
+      try {
+        const inCart = cartStore.isInCart(JSON.parse(pd).id);
+        const icon = btn.querySelector('svg');
+        if (inCart) { btn.classList.add('bg-[var(--primary)]', 'text-[var(--bg)]'); btn.classList.remove('bg-[var(--border)]'); if (icon) icon.innerHTML = '<polyline points="20 6 9 17 4 12"></polyline>'; }
+        else { btn.classList.remove('bg-[var(--primary)]'); btn.classList.add('bg-[var(--border)]', 'text-[var(--bg)]'); if (icon) icon.innerHTML = '<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path>'; }
+      } catch(_e) {}
     });
   };
 
@@ -349,17 +340,8 @@ try {
       const was = cartStore.isInWishlist(product.id);
       cartStore.toggleWishlist(product);
       const icon = button.querySelector('svg');
-      if (!was) {
-        if (icon) icon.style.fill = 'currentColor';
-        button.classList.add('text-[var(--wild-crimson)]');
-        button.classList.remove('text-[var(--text-muted)]');
-        showWishlistToast(true);
-      } else {
-        if (icon) icon.style.fill = 'none';
-        button.classList.remove('text-[var(--wild-crimson)]');
-        button.classList.add('text-[var(--text-muted)]');
-        showWishlistToast(false);
-      }
+      if (!was) { if (icon) icon.style.fill = 'currentColor'; button.classList.add('text-[var(--wild-crimson)]'); button.classList.remove('text-[var(--text-muted)]'); showWishlistToast(true); }
+      else { if (icon) icon.style.fill = 'none'; button.classList.remove('text-[var(--wild-crimson)]'); button.classList.add('text-[var(--text-muted)]'); showWishlistToast(false); }
     });
   });
 

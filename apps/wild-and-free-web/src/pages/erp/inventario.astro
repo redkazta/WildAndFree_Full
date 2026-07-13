@@ -40,6 +40,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
       <thead>
         <tr>
           <th style="width:30px;"></th>
+          <th style="width:44px;"></th>
           <th>Nombre</th>
           <th>Categoría</th>
           <th>Precio Base</th>
@@ -50,7 +51,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
         </tr>
       </thead>
       <tbody id="productsBody">
-        <tr><td colspan="8" class="erp-loading">Cargando productos...</td></tr>
+        <tr><td colspan="9" class="erp-loading">Cargando productos...</td></tr>
       </tbody>
     </table>
   </div>
@@ -372,7 +373,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
 
     if (error) {
       console.error('Error loading products:', error);
-      productsBody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#ff4444;padding:40px;">Error al cargar productos</td></tr>';
+      productsBody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#ff4444;padding:40px;">Error al cargar productos</td></tr>';
       return;
     }
 
@@ -411,7 +412,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
     }
 
     if (!filtered.length) {
-      productsBody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--border-soft);padding:40px;">Sin productos encontrados</td></tr>';
+      productsBody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--border-soft);padding:40px;">Sin productos encontrados</td></tr>';
       return;
     }
 
@@ -432,11 +433,14 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
               <button class="action-btn action-btn--danger" onclick="deleteProduct('${p.id}')" title="Eliminar">✕</button>
             </div>` : '';
 
+      const imgHtml = p.image_url ? `<img src="${p.image_url}" style="width:36px;height:36px;border-radius:6px;object-fit:cover;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div style="display:none;width:36px;height:36px;border-radius:6px;background:var(--bg-card);border:1px solid var(--border-muted);align-items:center;justify-content:center;font-size:14px;color:var(--text-muted);">?</div>` : `<div style="width:36px;height:36px;border-radius:6px;background:var(--bg-card);border:1px solid var(--border-muted);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-muted);">?</div>`;
+
       let html = `
         <tr data-product-id="${p.id}">
           <td>
             <button class="expand-btn ${isExpanded ? 'open' : ''}" onclick="toggleVariants('${p.id}')">▶</button>
           </td>
+          <td>${imgHtml}</td>
           <td style="font-weight:700;">${p.name}</td>
           <td>${p.category || '-'}</td>
           <td style="font-weight:700;">$${Number(p.base_price).toFixed(2)}</td>
@@ -447,8 +451,8 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
         </tr>`;
 
       if (isExpanded && p.product_variants?.length) {
-        html += `<tr class="variant-row"><td colspan="8">
-          <table class="variant-table">
+        html += `<tr class="variant-row"><td colspan="9">
+                  <table class="variant-table">
             <thead>
               <tr>
                 <th>Talla</th>
@@ -480,9 +484,9 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
           </table>
         </td></tr>`;
       } else if (isExpanded) {
-        html += `<tr class="variant-row"><td colspan="8" style="text-align:center;color:var(--border-soft);padding:16px;font-size:12px;">
-          Sin variantes — haz clic en <strong>+</strong> para agregar una
-        </td></tr>`;
+        html += `<tr class="variant-row"><td colspan="9" style="text-align:center;color:var(--border-soft);padding:16px;font-size:12px;">
+                  Sin variantes — haz clic en <strong>+</strong> para agregar una
+                </td></tr>`;
       }
 
       return html;
