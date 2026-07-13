@@ -61,7 +61,21 @@ class CartStore {
   getGuestCart() {
     if (typeof localStorage === 'undefined') return [];
     try {
-      return JSON.parse(localStorage.getItem(GUEST_CART_KEY) || '[]');
+      var raw = JSON.parse(localStorage.getItem(GUEST_CART_KEY) || '[]');
+      return raw.map(function(item) {
+        return {
+          id: item.id,
+          cart_key: item.cart_key || (item.variant_id ? item.id + '_' + item.variant_id : String(item.id)),
+          name: item.name || 'Producto',
+          price: Number(item.price) || 0,
+          image: item.image || '',
+          variant_id: item.variant_id || null,
+          size: item.size || null,
+          color: item.color || null,
+          sku: item.sku || null,
+          quantity: item.quantity || 1
+        };
+      });
     } catch { return []; }
   }
 
@@ -75,7 +89,15 @@ class CartStore {
   getGuestWishlist() {
     if (typeof localStorage === 'undefined') return [];
     try {
-      return JSON.parse(localStorage.getItem(GUEST_WISHLIST_KEY) || '[]');
+      var raw = JSON.parse(localStorage.getItem(GUEST_WISHLIST_KEY) || '[]');
+      return raw.map(function(item) {
+        return {
+          id: item.id,
+          name: item.name || 'Producto',
+          price: Number(item.price) || 0,
+          image: item.image || ''
+        };
+      });
     } catch { return []; }
   }
 
@@ -95,6 +117,9 @@ class CartStore {
       this.cart = data.map(item => ({
         id: item.product_id,
         cart_key: item.variant_id ? `${item.product_id}_${item.variant_id}` : String(item.product_id),
+        name: item.product_name || 'Producto',
+        price: Number(item.product_price) || 0,
+        image: item.product_image || '',
         variant_id: item.variant_id,
         size: item.variant_size || null,
         color: item.variant_color || null,
@@ -143,7 +168,10 @@ class CartStore {
       var payload = {
         user_id: this.user.id,
         product_id: String(product.id),
-        quantity: existingItem ? existingItem.quantity : quantity
+        quantity: existingItem ? existingItem.quantity : quantity,
+        product_name: product.name || null,
+        product_price: product.price || null,
+        product_image: product.image || null
       };
       if (product.variant_id) {
         payload.variant_id = product.variant_id;
@@ -249,6 +277,9 @@ class CartStore {
           product_id: String(item.id),
           quantity: newQuantity
         };
+        syncPayload.product_name = item.name || null;
+        syncPayload.product_price = item.price || null;
+        syncPayload.product_image = item.image || null;
         if (item.variant_id) {
           syncPayload.variant_id = item.variant_id;
           syncPayload.variant_size = item.size || null;
