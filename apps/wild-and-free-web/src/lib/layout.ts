@@ -120,13 +120,13 @@ const updateCartUI = (detail: CartDetail) => {
   if (cartContent) {
     if (cart.length === 0) {
       cartContent.innerHTML =
-        '<p class="text-[10px] text-center text-gray-500 font-bold uppercase tracking-widest py-8">Tu carrito está vacío</p>';
+        '<p class="text-[10px] text-center text-[var(--text-muted)] font-bold uppercase tracking-widest py-8">Tu carrito está vacío</p>';
     } else {
       const itemsHtml = cart
         .map(
           (item) => `
-        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors group relative">
-          <div class="w-12 h-12 rounded-md overflow-hidden bg-white/5 flex-shrink-0">
+        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-[var(--bg-hover)] transition-colors group relative">
+                  <div class="w-12 h-12 rounded-md overflow-hidden bg-[var(--bg-card)] flex-shrink-0">
             <img src="${item.image}" width="48" height="48" class="w-full h-full object-cover" />
           </div>
           <div class="flex-1 min-w-0">
@@ -154,12 +154,12 @@ const updateCartUI = (detail: CartDetail) => {
         <div class="space-y-1 max-h-[300px] overflow-y-auto pr-1 custom-scrollbar">
           ${itemsHtml}
         </div>
-        <div class="border-t border-white/10 pt-4 mt-2 space-y-4">
+        <div class="border-t border-[var(--border)] pt-4 mt-2 space-y-4">
           <div class="flex justify-between items-center px-2">
-            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Total</span>
+            <span class="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest">Total</span>
             <span class="text-sm font-black text-[var(--primary)]">$${total.toFixed(2)}</span>
           </div>
-          <a href="/checkout" class="block w-full py-3 bg-white text-black text-center text-[10px] font-black uppercase tracking-[0.2em] rounded-xl hover:bg-[var(--primary)] hover:text-black transition-all shadow-lg transform hover:-translate-y-0.5">Finalizar Compra</a>
+          <a href="/checkout" class="block w-full py-3 bg-[var(--text)] text-[var(--bg)] text-center text-[10px] font-black uppercase tracking-[0.2em] rounded-xl hover:bg-[var(--primary)] hover:text-[var(--bg)] transition-all shadow-lg transform hover:-translate-y-0.5">Finalizar Compra</a>
         </div>
       `;
 
@@ -181,20 +181,20 @@ const updateCartUI = (detail: CartDetail) => {
   if (wishlistContent) {
     if (wishlist.length === 0) {
       wishlistContent.innerHTML =
-        '<p class="text-[10px] text-center text-gray-500 font-bold uppercase tracking-widest py-8">Tu lista está vacía</p>';
+        '<p class="text-[10px] text-center text-[var(--text-muted)] font-bold uppercase tracking-widest py-8">Tu lista está vacía</p>';
     } else {
       const itemsHtml = wishlist
         .map(
           (item) => `
-        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors group relative">
-          <div class="w-10 h-10 rounded-md overflow-hidden bg-white/5 flex-shrink-0">
+        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-[var(--bg-hover)] transition-colors group relative">
+          <div class="w-10 h-10 rounded-md overflow-hidden bg-[var(--bg-card)] flex-shrink-0">
             <img src="${item.image}" width="40" height="40" class="w-full h-full object-cover" />
           </div>
           <div class="flex-1 min-w-0">
-            <h4 class="text-[10px] font-black uppercase text-white truncate group-hover:text-[var(--primary)] transition-colors">${item.name}</h4>
-            <p class="text-[10px] font-bold text-gray-400 mt-0.5">$${item.price}</p>
+            <h4 class="text-[10px] font-black uppercase text-[var(--text)] truncate group-hover:text-[var(--primary)] transition-colors">${item.name}</h4>
+            <p class="text-[10px] font-bold text-[var(--text-muted)] mt-0.5">$${item.price}</p>
           </div>
-          <button class="w-8 h-8 rounded-full bg-[var(--primary)] text-black flex items-center justify-center transform scale-0 group-hover:scale-100 transition-all duration-300 add-from-wishlist-btn shadow-[0_0_10px_var(--primary)] hover:bg-white" data-id="${item.id}">
+          <button class="w-8 h-8 rounded-full bg-[var(--primary)] text-[var(--bg)] flex items-center justify-center transform scale-0 group-hover:scale-100 transition-all duration-300 add-from-wishlist-btn shadow-[0_0_10px_var(--primary)] hover:brightness-110" data-id="${item.id}">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12h14"/></svg>
           </button>
         </div>
@@ -206,7 +206,7 @@ const updateCartUI = (detail: CartDetail) => {
         <div class="space-y-1 max-h-[300px] overflow-y-auto pr-1 custom-scrollbar">
           ${itemsHtml}
         </div>
-        <a href="/perfil" class="block w-full py-2 bg-white/5 border border-white/10 text-white text-center text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-[var(--primary)] hover:text-black hover:border-[var(--primary)] transition-all mt-3">Ver Todos</a>
+        <a href="/perfil" class="block w-full py-2 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text)] text-center text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-[var(--primary)] hover:text-[var(--bg)] hover:border-[var(--primary)] transition-all mt-3">Ver Todos</a>
       `;
 
       wishlistContent
@@ -286,11 +286,11 @@ const updateAuthUI = async () => {
       const avatarHtml = profile?.avatar_url
         ? `<img src="${profile.avatar_url}" alt="" class="w-8 h-8 rounded-full object-cover" />`
         : `<div class="relative w-8 h-8 rounded-full bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] flex items-center justify-center shadow-[0_0_10px_rgba(201,131,0,0.3)] group-hover:shadow-[0_0_15px_var(--primary)] transition-all">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white">
-              <circle cx="12" cy="8" r="4"/>
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-            </svg>
-            <span class="absolute -top-1 -right-1 w-4 h-4 bg-wild-orange rounded-full flex items-center justify-center text-[8px] font-black text-black">?</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-[var(--text)]">
+                      <circle cx="12" cy="8" r="4"/>
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    </svg>
+                    <span class="absolute -top-1 -right-1 w-4 h-4 bg-[var(--primary)] rounded-full flex items-center justify-center text-[8px] font-black text-[var(--bg)]">?</span>
           </div>`;
 
       authContainer.innerHTML = `
