@@ -36,6 +36,8 @@ class CartStore {
             this.wishlist = this.getGuestWishlist();
             this.notifyListeners();
           }
+          // Notify layout to refresh auth UI (session may have been restored)
+          window.dispatchEvent(new CustomEvent('wg:auth-changed', { detail: { event: event, hasSession: !!session } }));
         } catch (e) {
           console.warn('[cart] auth change handler error:', e);
         }

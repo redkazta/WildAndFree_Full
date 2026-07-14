@@ -250,6 +250,9 @@ const updateAuthUI = async () => {
         </div>`;
       }
 
+      // Yield to browser to render the shimmer before fetching profile
+      await new Promise(function(resolve) { requestAnimationFrame(resolve); });
+
       // Try to fetch profile; if RLS blocks it, first ensure the profile exists.
       let profile: any = null;
       const { data: profileData, error: profileError } = await supabase
@@ -425,6 +428,12 @@ const init = async () => {
 
   // Now init cart (awaited so updateCartUI below gets real data)
   await cartStore.init();
+
+  // Re-run auth UI after cart init (session may have resolved by now)
+  await updateAuthUI();
+
+  // Listen for delayed auth changes (Supabase session restore is async)
+  window.addEventListener('wg:auth-changed', function() { updateAuthUI(); });
 
   updateCartUI({
     cart: cartStore.cart,
