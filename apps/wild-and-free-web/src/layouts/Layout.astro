@@ -189,11 +189,39 @@ const isActive = (href: string) => {
 					--fs-3xl: 1.75rem;
 				}
 
-				/* Auth container always visible, async replacement happens after load */
-			.auth-actions-container {
-				opacity: 1;
-				transition: none;
-			}
+				/* Auth container: reserve space to prevent layout shift on profile load */
+				.auth-actions-container {
+					min-width: 80px;
+					display: flex;
+					align-items: center;
+					justify-content: flex-end;
+				}
+
+				/* Shimmer loading animation */
+				@keyframes shimmer {
+					0% { background-position: -200px 0; }
+					100% { background-position: calc(200px + 100%) 0; }
+				}
+				.skeleton {
+					background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-hover) 50%, var(--bg-card) 75%);
+					background-size: 200px 100%;
+					animation: shimmer 1.5s ease-in-out infinite;
+					border-radius: 12px;
+				}
+				.skeleton-circle {
+					width: 32px;
+					height: 32px;
+					border-radius: 50%;
+				}
+				.skeleton-text {
+					height: 14px;
+					width: 70px;
+					margin-bottom: 4px;
+				}
+				.skeleton-text-sm {
+					height: 10px;
+					width: 50px;
+				}
 
 			/* Custom Scrollbar */
 			::-webkit-scrollbar {

@@ -239,6 +239,17 @@ const updateAuthUI = async () => {
     document.documentElement.setAttribute("data-role", role || "");
 
     if (session) {
+      // Show shimmer immediately while profile loads
+      if (authContainer) {
+        authContainer.innerHTML = `<div class="flex items-center gap-3 px-4 py-2">
+          <div class="skeleton skeleton-circle"></div>
+          <div class="hidden md:flex flex-col gap-1">
+            <div class="skeleton skeleton-text"></div>
+            <div class="skeleton skeleton-text-sm"></div>
+          </div>
+        </div>`;
+      }
+
       // Try to fetch profile; if RLS blocks it, first ensure the profile exists.
       let profile: any = null;
       const { data: profileData, error: profileError } = await supabase

@@ -3,11 +3,14 @@ import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
 import Footer from '../components/Footer.astro';
 
+import tenantConfig from '../../../../packages/shared-types/tenant-config.json';
+
+const tenant = tenantConfig['wild-and-free'];
 const config = {
   id: 'wild-and-free',
   name: 'Wild Gvng',
-  primary_color: 'rgb(201, 131, 0)',
-  secondary_color: 'rgb(138, 3, 3)',
+  primary_color: tenant.primary_color,
+  secondary_color: tenant.secondary_color,
   modules: { wallet: true, events: true },
 };
 ---
