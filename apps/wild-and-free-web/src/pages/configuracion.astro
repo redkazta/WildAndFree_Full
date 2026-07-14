@@ -896,10 +896,11 @@ import Layout from '../layouts/Layout.astro';
     }
 
     function applySettings(settings: Record<string, any>) {
-      // Theme - use astro-themes
+      // Theme - use same mechanism as SidebarLeft
       if (settings.theme === 'light' || settings.theme === 'dark') {
         document.documentElement.classList.add('theme-transition');
-        document.dispatchEvent(new CustomEvent('set-theme', { detail: settings.theme }));
+        document.documentElement.setAttribute('data-theme', settings.theme);
+        localStorage.setItem('wg-theme', settings.theme);
         setTimeout(() => document.documentElement.classList.remove('theme-transition'), 400);
       }
 
@@ -1046,9 +1047,9 @@ import Layout from '../layouts/Layout.astro';
           card.classList.add('active');
           const theme = card.getAttribute('data-theme-choice')!;
           saveSetting('theme', theme);
-          // Use astro-themes event
           document.documentElement.classList.add('theme-transition');
-          document.dispatchEvent(new CustomEvent('set-theme', { detail: theme }));
+          document.documentElement.setAttribute('data-theme', theme);
+          localStorage.setItem('wg-theme', theme);
           setTimeout(() => document.documentElement.classList.remove('theme-transition'), 400);
         });
       });
