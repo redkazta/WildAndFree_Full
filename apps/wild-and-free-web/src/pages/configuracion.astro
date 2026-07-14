@@ -910,8 +910,8 @@ import Layout from '../layouts/Layout.astro';
         card.classList.toggle('active', card.getAttribute('data-theme-choice') === currentTheme);
       });
 
-      // Font size
-      document.documentElement.style.fontSize = settings.font_size === 'small' ? '14px' : settings.font_size === 'large' ? '18px' : '16px';
+      // Font size via CSS variable tokens (no zoom, no layout breaking)
+      document.documentElement.setAttribute('data-font-size', settings.font_size || 'medium');
 
       // Animations
       if (!settings.animations) {

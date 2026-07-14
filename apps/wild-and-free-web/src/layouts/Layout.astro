@@ -160,7 +160,36 @@ const isActive = (href: string) => {
 				opacity: 1;
 			}
 
-			/* Auth container always visible, async replacement happens after load */
+				/* Font scaling: CSS variable tokens scaled by data-font-size */
+				:root {
+					--fs-xs: 0.625rem;
+					--fs-sm: 0.75rem;
+					--fs-base: 0.875rem;
+					--fs-lg: 1rem;
+					--fs-xl: 1.25rem;
+					--fs-2xl: 1.5rem;
+					--fs-3xl: 2rem;
+				}
+				[data-font-size="large"] {
+					--fs-xs: 0.75rem;
+					--fs-sm: 0.875rem;
+					--fs-base: 1rem;
+					--fs-lg: 1.125rem;
+					--fs-xl: 1.375rem;
+					--fs-2xl: 1.75rem;
+					--fs-3xl: 2.25rem;
+				}
+				[data-font-size="small"] {
+					--fs-xs: 0.5rem;
+					--fs-sm: 0.625rem;
+					--fs-base: 0.75rem;
+					--fs-lg: 0.875rem;
+					--fs-xl: 1.125rem;
+					--fs-2xl: 1.25rem;
+					--fs-3xl: 1.75rem;
+				}
+
+				/* Auth container always visible, async replacement happens after load */
 			.auth-actions-container {
 				opacity: 1;
 				transition: none;
