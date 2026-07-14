@@ -360,6 +360,10 @@ const updateAuthUI = async () => {
       .querySelectorAll(".auth-popover-content")
       .forEach((el) => el.classList.remove("hidden"));
   } else {
+    // Replace skeleton with login button (no session = guest)
+    if (authContainer) {
+      authContainer.innerHTML = `<a href="/login" class="px-5 py-2 bg-[var(--text)] text-[var(--bg)] text-[10px] xl:text-[11px] font-black uppercase tracking-[0.15em] rounded-full hover:bg-[var(--primary)] transition-all shadow-lg">Entrar</a>`;
+    }
     document
       .querySelectorAll(".unauth-popover-msg")
       .forEach((el) => el.classList.remove("hidden"));
