@@ -188,38 +188,96 @@ const isActive = (href: string) => {
 					--fs-3xl: 1.75rem;
 				}
 
-				/* Auth container: reserve space to prevent layout shift on profile load */
+				/* Auth container: FIXED dimensions, no layout shift ever */
 				.auth-actions-container {
-					min-width: 80px;
+					min-width: 170px;
+					min-height: 48px;
 					display: flex;
 					align-items: center;
 					justify-content: flex-end;
+					flex-shrink: 0;
+				}
+				.auth-actions-container > * {
+					flex-shrink: 0;
 				}
 
-				/* Shimmer loading animation */
-				@keyframes shimmer {
-					0% { background-position: -200px 0; }
-					100% { background-position: calc(200px + 100%) 0; }
+				/* Auth skeleton placeholder matches final profile EXACTLY */
+				.auth-skeleton {
+					display: flex;
+					align-items: center;
+					gap: 12px;
+					padding: 8px 16px;
+					min-width: 170px;
+					box-sizing: border-box;
 				}
-				.skeleton {
-					background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-hover) 50%, var(--bg-card) 75%);
-					background-size: 200px 100%;
-					animation: shimmer 1.5s ease-in-out infinite;
-					border-radius: 12px;
-				}
-				.skeleton-circle {
+				.auth-skeleton .sk-circle {
 					width: 32px;
 					height: 32px;
 					border-radius: 50%;
+					flex-shrink: 0;
 				}
-				.skeleton-text {
-					height: 14px;
-					width: 70px;
-					margin-bottom: 4px;
+				.auth-skeleton .sk-lines {
+					display: flex;
+					flex-direction: column;
+					gap: 4px;
+					flex: 1;
 				}
-				.skeleton-text-sm {
-					height: 10px;
-					width: 50px;
+				.auth-skeleton .sk-line {
+					height: 12px;
+					width: 100%;
+					min-width: 80px;
+					border-radius: 6px;
+				}
+				.auth-skeleton .sk-line-sm {
+					height: 8px;
+					width: 65%;
+					min-width: 50px;
+					border-radius: 6px;
+				}
+				.sk-shimmer {
+					background: var(--bg-card);
+					position: relative;
+					overflow: hidden;
+				}
+				.sk-shimmer::after {
+					content: '';
+					position: absolute;
+					inset: 0;
+					background: linear-gradient(90deg, transparent 0%, var(--bg-hover) 50%, transparent 100%);
+					animation: sk-shimmer 1.5s ease-in-out infinite;
+				}
+				@keyframes sk-shimmer {
+					0% { transform: translateX(-100%); }
+					100% { transform: translateX(100%); }
+				}
+
+				/* Auth profile chip: same dimensions as skeleton */
+				.auth-profile {
+					display: flex;
+					align-items: center;
+					gap: 12px;
+					padding: 8px 16px;
+					min-width: 170px;
+					box-sizing: border-box;
+					background: var(--bg-card);
+					border: 1px solid var(--border);
+					border-radius: 16px;
+					text-decoration: none;
+					transition: border-color 0.2s;
+				}
+				.auth-profile:hover {
+					border-color: var(--primary);
+					background: var(--bg-hover);
+				}
+
+				/* Auth login button: wrapped in same-sized container */
+				.auth-login-wrap {
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					min-width: 170px;
+					min-height: 48px;
+					box-sizing: border-box;
 				}
 
 			/* Custom Scrollbar */
@@ -670,11 +728,11 @@ const isActive = (href: string) => {
 					</div>
 
 					<div class="auth-actions-container">
-																	<div class="flex items-center gap-3 px-4 py-2" id="auth-placeholder">
-																		<div class="skeleton skeleton-circle"></div>
-																		<div class="hidden md:flex flex-col gap-1">
-																			<div class="skeleton skeleton-text"></div>
-																			<div class="skeleton skeleton-text-sm"></div>
+																	<div class="auth-skeleton">
+																		<div class="sk-circle sk-shimmer"></div>
+																		<div class="sk-lines">
+																			<div class="sk-line sk-shimmer"></div>
+																			<div class="sk-line-sm sk-shimmer"></div>
 																		</div>
 																	</div>
 																</div>

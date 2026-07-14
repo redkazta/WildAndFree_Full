@@ -241,11 +241,11 @@ const updateAuthUI = async () => {
     if (session) {
       // Show shimmer immediately while profile loads
       if (authContainer) {
-        authContainer.innerHTML = `<div class="flex items-center gap-3 px-4 py-2">
-          <div class="skeleton skeleton-circle"></div>
-          <div class="hidden md:flex flex-col gap-1">
-            <div class="skeleton skeleton-text"></div>
-            <div class="skeleton skeleton-text-sm"></div>
+        authContainer.innerHTML = `<div class="auth-skeleton">
+          <div class="sk-circle sk-shimmer"></div>
+          <div class="sk-lines">
+            <div class="sk-line sk-shimmer"></div>
+            <div class="sk-line-sm sk-shimmer"></div>
           </div>
         </div>`;
       }
@@ -310,7 +310,7 @@ const updateAuthUI = async () => {
 
       authContainer.innerHTML = `
         <div class="relative group/pop">
-          <a href="/perfil" class="flex items-center gap-3 px-4 py-2 bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl hover:bg-[var(--bg-hover)] hover:border-[var(--primary)]/50 transition-all cursor-pointer group">
+          <a href="/perfil" class="auth-profile group">
             ${avatarHtml}
             <div class="hidden md:flex flex-col">
               <span class="text-[10px] font-black uppercase tracking-widest text-[var(--text)] group-hover:text-[var(--primary)] transition-colors leading-none mb-0.5">${displayName}</span>
@@ -362,7 +362,7 @@ const updateAuthUI = async () => {
   } else {
     // Replace skeleton with login button (no session = guest)
     if (authContainer) {
-      authContainer.innerHTML = `<a href="/login" class="px-5 py-2 bg-[var(--text)] text-[var(--bg)] text-[10px] xl:text-[11px] font-black uppercase tracking-[0.15em] rounded-full hover:bg-[var(--primary)] transition-all shadow-lg">Entrar</a>`;
+      authContainer.innerHTML = `<div class="auth-login-wrap"><a href="/login" class="px-5 py-2 bg-[var(--text)] text-[var(--bg)] text-[10px] xl:text-[11px] font-black uppercase tracking-[0.15em] rounded-full hover:bg-[var(--primary)] transition-all shadow-lg">Entrar</a></div>`;
     }
     document
       .querySelectorAll(".unauth-popover-msg")
