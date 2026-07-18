@@ -147,7 +147,12 @@ class CartStore {
     if (!this.user) return;
     const { data, error } = await supabase.from('wishlist_items').select('*');
     if (!error && data) {
-      this.wishlist = data.map(item => ({ id: item.product_id }));
+      this.wishlist = data.map(item => ({
+        id: item.product_id,
+        name: item.product_name || 'Producto',
+        price: Number(item.product_price) || 0,
+        image: item.product_image || ''
+      }));
       this.notifyListeners(CartEvents.WISHLIST_UPDATED);
     }
   }
@@ -201,8 +206,8 @@ class CartStore {
         payload.variant_sku = product.sku || null;
       }
 
-      var { error } = await supabase.from('cart_items').upsert(payload, { 
-        onConflict: product.variant_id ? 'user_id, product_id, variant_id' : 'user_id, product_id' 
+      const { error } = await supabase.from('cart_items').upsert(payload, { 
+        onConflict: 'user_id, product_id, variant_id' 
       });
 
       if (error) {
@@ -262,7 +267,13 @@ class CartStore {
         await supabase.from('wishlist_items').delete().match({ user_id: this.user.id, product_id: String(product.id) });
       } else {
         this.wishlist.push({ id: product.id, name: product.name || 'Producto', price: Number(product.price) || 0, image: (product.image && product.image !== '') ? product.image : '' });
-        await supabase.from('wishlist_items').insert({ user_id: this.user.id, product_id: String(product.id) });
+        await supabase.from('wishlist_items').upsert({
+          user_id: this.user.id,
+          product_id: String(product.id),
+          product_name: product.name || 'Producto',
+          product_price: Number(product.price) || 0,
+          product_image: (product.image && product.image !== '') ? product.image : null
+        }, { onConflict: 'user_id, product_id' });
       }
     } else {
       let currentList = this.getGuestWishlist();
@@ -314,7 +325,7 @@ class CartStore {
         }
 
         await supabase.from('cart_items').upsert(syncPayload, { 
-          onConflict: item.variant_id ? 'user_id, product_id, variant_id' : 'user_id, product_id' 
+          onConflict: 'user_id, product_id, variant_id' 
         });
       }
       localStorage.removeItem(GUEST_CART_KEY);
@@ -322,12 +333,15 @@ class CartStore {
 
     if (guestWishlist.length > 0) {
       console.log('Syncing guest wishlist...');
-      const wishlistPayload = guestWishlist.map(item => ({
-        user_id: this.user.id,
-        product_id: String(item.id)
-      }));
-      // Ignore duplicates on insert
-      await supabase.from('wishlist_items').upsert(wishlistPayload, { onConflict: 'user_id, product_id', ignoreDuplicates: true });
+      for (const item of guestWishlist) {
+        await supabase.from('wishlist_items').upsert({
+          user_id: this.user.id,
+          product_id: String(item.id),
+          product_name: item.name || 'Producto',
+          product_price: Number(item.price) || 0,
+          product_image: item.image || null
+        }, { onConflict: 'user_id, product_id' });
+      }
       localStorage.removeItem(GUEST_WISHLIST_KEY);
     }
   }
