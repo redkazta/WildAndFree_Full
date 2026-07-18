@@ -250,31 +250,36 @@ const updateAuthUI = async () => {
         </div>`;
       }
 
-      // Yield to browser to render the shimmer before fetching profile
-      await new Promise(function(resolve) { requestAnimationFrame(resolve); });
-
-      // Try to fetch profile; if RLS blocks it, first ensure the profile exists.
+      // Try to fetch profile; if fails, fall back to login button
       let profile: any = null;
-      const { data: profileData, error: profileError } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", session.user.id)
-        .single();
-
-      if (profileError) {
-        await ensureProfile(session);
-        // Retry once
-        const retry = await supabase
+      try {
+        const { data: profileData, error: profileError } = await supabase
           .from("profiles")
           .select("*")
           .eq("id", session.user.id)
           .single();
-        profile = retry.data;
-      } else {
-        profile = profileData;
+
+        if (profileError) {
+          await ensureProfile(session);
+          const retry = await supabase
+            .from("profiles")
+            .select("*")
+            .eq("id", session.user.id)
+            .single();
+          profile = retry.data;
+        } else {
+          profile = profileData;
+        }
+      } catch (e) {
+        console.warn('[layout] profile fetch failed, showing login:', e);
       }
 
-      if (authContainer) {
+      // If profile fetch failed completely, show login button
+      if (!profile) {
+        if (authContainer) {
+          authContainer.innerHTML = `<div class="auth-login-wrap"><a href="/login" class="px-5 py-2 bg-[var(--text)] text-[var(--bg)] text-[10px] xl:text-[11px] font-black uppercase tracking-[0.15em] rounded-full hover:bg-[var(--primary)] transition-all shadow-lg">Entrar</a></div>`;
+        }
+      } else if (authContainer) {
         // Build display name: use nombre, or fall back to email prefix, else "Usuario"
         const displayName =
           profile?.nombre?.split(" ")[0] ||
