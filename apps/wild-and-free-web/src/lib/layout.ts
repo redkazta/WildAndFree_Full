@@ -228,7 +228,7 @@ const updateCartUI = (detail: CartDetail) => {
         <div class="space-y-1 max-h-[300px] overflow-y-auto pr-1 custom-scrollbar">
           ${itemsHtml}
         </div>
-        <a href="/perfil" class="block w-full py-2 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text)] text-center text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-[var(--primary)] hover:text-[var(--bg)] hover:border-[var(--primary)] transition-all mt-3">Ver Todos</a>
+        <a href="/wishlist" class="block w-full py-2 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text)] text-center text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-[var(--primary)] hover:text-[var(--bg)] hover:border-[var(--primary)] transition-all mt-3">Ver Todos</a>
       `;
 
       wishlistContent
