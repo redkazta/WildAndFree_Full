@@ -248,7 +248,10 @@ const updateCartUI = (detail: CartDetail) => {
 };
 
 // --- Auth & Session Logic ---
+let _updatingAuth = false;
 const updateAuthUI = async () => {
+  if (_updatingAuth) return;  // Prevent concurrent calls
+  _updatingAuth = true;
   try {
     const authContainer = document.querySelector(".auth-actions-container");
     const {
@@ -389,6 +392,8 @@ const updateAuthUI = async () => {
 
   } catch (err) {
     console.error('[layout] updateAuthUI error:', err);
+  } finally {
+    _updatingAuth = false;
   }
 };
 
@@ -447,10 +452,9 @@ const init = async () => {
   window.addEventListener('wg:auth-changed', function() { updateAuthUI(); });
 
   // Now init cart - notifyListeners() inside will trigger updateCartUI via listener
+  // wg:auth-changed listener is already registered, so any onAuthStateChange
+  // during cartStore.init() will trigger updateAuthUI() if needed
   await cartStore.init();
-
-  // Re-run auth UI after cart init (onAuthStateChange in cartStore may have triggered wg:auth-changed or not)
-  await updateAuthUI();
 };
 
 // --- Header Scroll Effect ---
