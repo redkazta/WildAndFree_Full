@@ -117,11 +117,24 @@ const updateCartUI = (detail: CartDetail) => {
   const cartContent = document.querySelector(
     "#cart-popover .auth-popover-content",
   );
+  const cartUnauth = document.querySelector(
+    "#cart-popover .unauth-popover-msg",
+  );
   if (cartContent) {
     if (cart.length === 0) {
       cartContent.innerHTML =
         '<p class="text-[10px] text-center text-[var(--text-muted)] font-bold uppercase tracking-widest py-8">Tu carrito está vacío</p>';
+      // Show auth content (empty) for logged in, unauth for guests
+      cartContent.classList.remove("hidden");
+      if (cartUnauth) {
+        // Only show unauth if there's truly no session (guest)
+        cartUnauth.classList.toggle("hidden", !!cartStore.user);
+      }
     } else {
+      // Cart has items: ALWAYS show auth content, hide unauth
+      if (cartUnauth) cartUnauth.classList.add("hidden");
+      cartContent.classList.remove("hidden");
+
       const itemsHtml = cart
         .map(
           (item) => `
@@ -178,11 +191,20 @@ const updateCartUI = (detail: CartDetail) => {
   const wishlistContent = document.querySelector(
     "#wishlist-popover .auth-popover-content",
   );
+  const wishlistUnauth = document.querySelector(
+    "#wishlist-popover .unauth-popover-msg",
+  );
   if (wishlistContent) {
     if (wishlist.length === 0) {
       wishlistContent.innerHTML =
         '<p class="text-[10px] text-center text-[var(--text-muted)] font-bold uppercase tracking-widest py-8">Tu lista está vacía</p>';
+      wishlistContent.classList.remove("hidden");
+      if (wishlistUnauth) {
+        wishlistUnauth.classList.toggle("hidden", !!cartStore.user);
+      }
     } else {
+      if (wishlistUnauth) wishlistUnauth.classList.add("hidden");
+      wishlistContent.classList.remove("hidden");
       const itemsHtml = wishlist
         .map(
           (item) => `
@@ -358,23 +380,11 @@ const updateAuthUI = async () => {
         });
     }
 
-    document
-      .querySelectorAll(".unauth-popover-msg")
-      .forEach((el) => el.classList.add("hidden"));
-    document
-      .querySelectorAll(".auth-popover-content")
-      .forEach((el) => el.classList.remove("hidden"));
   } else {
     // Replace skeleton with login button (no session = guest)
     if (authContainer) {
       authContainer.innerHTML = `<div class="auth-login-wrap"><a href="/login" class="px-5 py-2 bg-[var(--text)] text-[var(--bg)] text-[10px] xl:text-[11px] font-black uppercase tracking-[0.15em] rounded-full hover:bg-[var(--primary)] transition-all shadow-lg">Entrar</a></div>`;
     }
-    document
-      .querySelectorAll(".unauth-popover-msg")
-      .forEach((el) => el.classList.remove("hidden"));
-    document
-      .querySelectorAll(".auth-popover-content")
-      .forEach((el) => el.classList.add("hidden"));
   }
 
   } catch (err) {
