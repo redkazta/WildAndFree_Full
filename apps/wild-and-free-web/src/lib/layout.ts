@@ -127,7 +127,7 @@ const updateCartUI = (detail: CartDetail) => {
           (item) => `
         <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-[var(--bg-hover)] transition-colors group relative">
                   <div class="w-12 h-12 rounded-md overflow-hidden bg-[var(--bg-card)] flex-shrink-0">
-            <img src="${item.image}" width="48" height="48" class="w-full h-full object-cover" />
+            ${item.image ? `<img src="${item.image}" width="48" height="48" class="w-full h-full object-cover" />` : `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>`}
           </div>
           <div class="flex-1 min-w-0">
             <h4 class="text-[10px] font-black uppercase text-[var(--text)] truncate group-hover:text-[var(--primary)] transition-colors">${item.name || 'Producto'}</h4>
