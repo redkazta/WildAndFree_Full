@@ -430,7 +430,7 @@ const init = async () => {
     updateCartUI((e as CustomEvent).detail),
   );
 
-  // Now init cart (awaited so updateCartUI below gets real data)
+  // Now init cart - notifyListeners() inside will trigger updateCartUI via listener
   await cartStore.init();
 
   // Re-run auth UI after cart init (session may have resolved by now)
@@ -438,15 +438,6 @@ const init = async () => {
 
   // Listen for delayed auth changes (Supabase session restore is async)
   window.addEventListener('wg:auth-changed', function() { updateAuthUI(); });
-
-  updateCartUI({
-    cart: cartStore.cart,
-    wishlist: cartStore.wishlist,
-    count: cartStore.cart.reduce(
-      (acc: number, item: CartItem) => acc + item.quantity,
-      0,
-    ),
-  });
 };
 
 // --- Header Scroll Effect ---
