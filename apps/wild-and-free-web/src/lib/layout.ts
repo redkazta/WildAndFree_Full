@@ -437,22 +437,20 @@ const init = async () => {
   initPopovers();
   await updateAuthUI();
 
-  // Register listeners BEFORE cartStore.init() to avoid losing the first event
+  // Register ALL listeners BEFORE cartStore.init() to avoid losing first events
   window.addEventListener(CartEvents.UPDATED, (e: Event) =>
     updateCartUI((e as CustomEvent).detail),
   );
   window.addEventListener(CartEvents.WISHLIST_UPDATED, (e: Event) =>
     updateCartUI((e as CustomEvent).detail),
   );
+  window.addEventListener('wg:auth-changed', function() { updateAuthUI(); });
 
   // Now init cart - notifyListeners() inside will trigger updateCartUI via listener
   await cartStore.init();
 
-  // Re-run auth UI after cart init (session may have resolved by now)
+  // Re-run auth UI after cart init (onAuthStateChange in cartStore may have triggered wg:auth-changed or not)
   await updateAuthUI();
-
-  // Listen for delayed auth changes (Supabase session restore is async)
-  window.addEventListener('wg:auth-changed', function() { updateAuthUI(); });
 };
 
 // --- Header Scroll Effect ---
