@@ -10,20 +10,41 @@ const config = {
 
 <Layout config={config}>
   <div class="wishlist-page">
-    <div class="wishlist-hero">
-      <div class="hero-content">
-        <div class="hero-badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" class="text-[var(--primary)]"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          <span class="badge-text">TUS FAVORITOS</span>
+    <!-- Header Stats Bar -->
+    <div class="wishlist-stats">
+      <div class="stats-inner">
+        <div class="stat-item">
+          <span class="stat-num" id="wishlist-count">0</span>
+          <span class="stat-label">Favoritos</span>
         </div>
-        <h1 class="hero-title">
-          <span class="title-main">WISHLIST</span>
-        </h1>
-        <p class="hero-subtitle">Productos que te han gustado</p>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num" id="cart-count">0</span>
+          <span class="stat-label">En carrito</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num" id="cart-total">$0</span>
+          <span class="stat-label">Total</span>
+        </div>
       </div>
     </div>
 
     <div class="container">
+      <div class="wishlist-toolbar">
+        <h1 class="toolbar-title">Wishlist</h1>
+        <div class="toolbar-actions">
+          <button id="clear-all-btn" class="toolbar-btn toolbar-btn--danger hidden">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            Limpiar todo
+          </button>
+          <a href="/tienda" class="toolbar-btn toolbar-btn--primary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            Seguir comprando
+          </a>
+        </div>
+      </div>
+
       <div id="wishlist-grid" class="wishlist-grid">
         <div class="loading-state">
           <div class="spinner"></div>
@@ -32,19 +53,36 @@ const config = {
       </div>
 
       <div id="wishlist-empty" class="empty-state hidden">
-        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <div class="empty-icon-wrap">
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <div class="empty-heart-broken">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/><line x1="16" y1="8" x2="8" y2="16"></line><line x1="8" y1="8" x2="16" y2="16"></line></svg>
+          </div>
+        </div>
         <h2 class="empty-title">Tu lista está vacía</h2>
-        <p class="empty-sub">Explora la tienda y agrega productos que te gusten</p>
-        <a href="/tienda" class="empty-cta">Ir a la Tienda</a>
+        <p class="empty-sub">Explora la tienda y agrega productos que te gusten. Todos tus favoritos aparecerán aquí.</p>
+        <div class="empty-actions">
+          <a href="/tienda" class="empty-cta">Ir a la Tienda</a>
+        </div>
       </div>
 
       <div id="wishlist-login-prompt" class="empty-state hidden">
-        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <div class="empty-icon-wrap">
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
         <h2 class="empty-title">Inicia sesión</h2>
-        <p class="empty-sub">Guarda tus productos favoritos y accede a ellos desde cualquier dispositivo</p>
-        <a href="/login" class="empty-cta">Iniciar Sesión</a>
+        <p class="empty-sub">Guarda tus productos favoritos y accede a ellos desde cualquier dispositivo. Tu wishlist se sincroniza automáticamente.</p>
+        <div class="empty-actions">
+          <a href="/login" class="empty-cta">Iniciar Sesión</a>
+          <a href="/tienda" class="empty-cta empty-cta--ghost">Explorar tienda</a>
+        </div>
       </div>
     </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="wishlist-toast" class="toast hidden">
+    <span id="toast-msg"></span>
   </div>
 </Layout>
 
@@ -59,56 +97,105 @@ const config = {
     padding: 0 20px 80px;
   }
 
-  /* HERO */
-  .wishlist-hero {
-    padding: 60px 24px 40px;
-    text-align: center;
+  /* STATS BAR */
+  .wishlist-stats {
     border-bottom: 1px solid var(--border-faint);
-  }
-  .hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 16px;
-    border-radius: 100px;
     background: var(--bg-card);
-    border: 1px solid var(--border-muted);
-    margin-bottom: 16px;
+    position: sticky;
+    top: 80px;
+    z-index: 50;
   }
-  .badge-text {
-    font-size: 10px;
+  .stats-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .stat-num {
+    font-size: 1rem;
     font-weight: 900;
-    letter-spacing: 0.2em;
+    color: var(--text);
+    min-width: 20px;
+  }
+  .stat-label {
+    font-size: 0.6rem;
+    font-weight: 700;
     text-transform: uppercase;
+    letter-spacing: 0.1em;
     color: var(--text-muted);
   }
-  .hero-title {
+  .stat-divider {
+    width: 1px;
+    height: 20px;
+    background: var(--border-faint);
+  }
+
+  /* TOOLBAR */
+  .wishlist-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 0 16px;
+    gap: 12px;
+  }
+  .toolbar-title {
+    font-size: 1.4rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    color: var(--text);
     margin: 0;
   }
-  .title-main {
-    font-size: 3rem;
-    font-weight: 900;
-    letter-spacing: -0.02em;
-    text-transform: uppercase;
-    color: var(--text);
-    background: linear-gradient(135deg, var(--primary), var(--text));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  .toolbar-actions {
+    display: flex;
+    gap: 8px;
   }
-  .hero-subtitle {
-    margin-top: 8px;
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    font-weight: 600;
+  .toolbar-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 0.6rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    font-family: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .toolbar-btn--primary {
+    background: var(--primary);
+    color: var(--bg);
+  }
+  .toolbar-btn--primary:hover {
+    background: var(--primary-hover);
+  }
+  .toolbar-btn--danger {
+    background: transparent;
+    border: 1px solid #ff4444;
+    color: #ff4444;
+  }
+  .toolbar-btn--danger:hover {
+    background: rgba(255,68,68,0.1);
   }
 
   /* GRID */
   .wishlist-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 20px;
-    padding: 40px 0;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+    padding: 0 0 40px;
   }
 
   /* CARD */
@@ -117,29 +204,36 @@ const config = {
     border: 1px solid var(--border-faint);
     border-radius: 16px;
     overflow: hidden;
-    transition: all 0.3s ease;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     flex-direction: column;
+    position: relative;
   }
   .wishlist-card:hover {
     border-color: var(--primary);
-    box-shadow: 0 8px 30px rgba(201, 131, 0, 0.1);
-    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(201,131,0,0.08);
+    transform: translateY(-3px);
+  }
+  .wishlist-card.removing {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: all 0.3s ease;
   }
   .card-image {
     aspect-ratio: 1;
     position: relative;
     overflow: hidden;
     background: var(--bg-card);
+    display: block;
   }
   .card-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.4s ease;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .wishlist-card:hover .card-image img {
-    transform: scale(1.05);
+    transform: scale(1.08);
   }
   .card-image .fallback {
     display: flex;
@@ -148,21 +242,68 @@ const config = {
     width: 100%;
     height: 100%;
   }
+
+  /* Quick actions overlay */
+  .card-quick-actions {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    gap: 4px;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: all 0.2s ease;
+    z-index: 5;
+  }
+  .wishlist-card:hover .card-quick-actions {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .quick-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    font-size: 14px;
+  }
+  .quick-btn:hover {
+    background: var(--primary);
+    transform: scale(1.1);
+  }
+  .quick-btn--remove:hover {
+    background: #ff4444;
+  }
+
   .card-info {
-    padding: 16px;
+    padding: 14px;
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
   }
   .card-name {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 800;
     color: var(--text);
     text-transform: uppercase;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.02em;
     line-height: 1.3;
     margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .card-name:hover {
+    color: var(--primary);
   }
   .card-price {
     font-size: 1.1rem;
@@ -173,7 +314,7 @@ const config = {
     display: flex;
     gap: 8px;
     margin-top: auto;
-    padding-top: 12px;
+    padding-top: 10px;
     border-top: 1px solid var(--border-faint);
   }
   .card-add {
@@ -186,16 +327,21 @@ const config = {
     font-size: 0.6rem;
     font-weight: 900;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.1em;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: all 0.2s;
     font-family: inherit;
   }
   .card-add:hover {
     background: var(--primary-hover);
+    transform: scale(1.02);
+  }
+  .card-add:active {
+    transform: scale(0.97);
   }
   .card-add.added {
     background: #00c853;
+    pointer-events: none;
   }
   .card-remove {
     width: 40px;
@@ -214,7 +360,33 @@ const config = {
   .card-remove:hover {
     border-color: #ff4444;
     color: #ff4444;
-    background: rgba(255, 68, 68, 0.1);
+    background: rgba(255,68,68,0.08);
+  }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 24px;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    z-index: 9999;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+  }
+  .toast.hidden {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+    pointer-events: none;
   }
 
   /* STATES */
@@ -224,46 +396,65 @@ const config = {
     padding: 80px 20px;
     color: var(--text-muted);
   }
+  .loading-state p { font-size: 0.8rem; font-weight: 600; }
   .spinner {
-    width: 32px;
-    height: 32px;
-    border: 3px solid var(--bg-card);
+    width: 28px;
+    height: 28px;
+    border: 2px solid var(--bg-card);
     border-top-color: var(--primary);
     border-radius: 50%;
-    animation: spin 0.8s linear infinite;
+    animation: spin 0.7s linear infinite;
     margin: 0 auto 16px;
   }
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
   .empty-state {
     text-align: center;
-    padding: 80px 20px;
+    padding: 60px 20px 100px;
   }
-  .empty-state svg {
-    margin-bottom: 16px;
+  .empty-icon-wrap {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 20px;
+  }
+  .empty-heart-broken {
+    position: absolute;
+    bottom: -4px;
+    right: -8px;
+    background: var(--bg);
+    border-radius: 50%;
+    padding: 4px;
   }
   .empty-title {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 900;
     color: var(--text);
     text-transform: uppercase;
     margin: 0 0 8px;
+    letter-spacing: -0.01em;
   }
   .empty-sub {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--text-muted);
-    margin: 0 0 24px;
+    margin: 0 auto 28px;
+    max-width: 420px;
+    line-height: 1.6;
+  }
+  .empty-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
   }
   .empty-cta {
-    display: inline-block;
-    padding: 14px 32px;
+    display: inline-flex;
+    padding: 12px 28px;
     background: var(--primary);
     color: var(--bg);
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     font-weight: 900;
     text-transform: uppercase;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.12em;
     border-radius: 12px;
     text-decoration: none;
     transition: all 0.2s;
@@ -272,32 +463,77 @@ const config = {
     background: var(--primary-hover);
     transform: translateY(-2px);
   }
+  .empty-cta--ghost {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .empty-cta--ghost:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-soft);
+  }
 
   @media (max-width: 768px) {
-    .wishlist-hero { padding: 40px 16px 24px; }
-    .title-main { font-size: 2rem; }
-    .wishlist-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 24px 0; }
-    .card-info { padding: 12px; }
-    .card-name { font-size: 0.75rem; }
-    .card-price { font-size: 0.95rem; }
+    .stats-inner { padding: 10px 16px; gap: 12px; }
+    .stat-num { font-size: 0.85rem; }
+    .wishlist-toolbar { flex-direction: column; align-items: flex-start; padding: 16px 0; }
+    .toolbar-actions { width: 100%; }
+    .toolbar-btn { flex: 1; justify-content: center; }
+    .wishlist-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .card-info { padding: 10px; }
+    .card-name { font-size: 0.7rem; }
+    .card-price { font-size: 0.9rem; }
+    .card-actions { flex-direction: column; }
+    .card-remove { width: 100%; height: 36px; }
   }
   @media (max-width: 480px) {
-    .wishlist-grid { grid-template-columns: 1fr; }
+    .wishlist-grid { grid-template-columns: 1fr; max-width: 320px; margin: 0 auto; }
   }
 </style>
 
 <script>
   import { cartStore, CartEvents } from '../lib/cart.js';
-  import { supabase } from '../lib/supabase.js';
 
   (function() {
     var grid = document.getElementById('wishlist-grid');
     var emptyEl = document.getElementById('wishlist-empty');
     var loginPrompt = document.getElementById('wishlist-login-prompt');
+    var clearAllBtn = document.getElementById('clear-all-btn');
+    var countEl = document.getElementById('wishlist-count');
+    var cartCountEl = document.getElementById('cart-count');
+    var cartTotalEl = document.getElementById('cart-total');
+    var toast = document.getElementById('wishlist-toast');
+    var toastMsg = document.getElementById('toast-msg');
+
+    function showToast(msg, isError) {
+      if (!toast || !toastMsg) return;
+      toastMsg.textContent = msg;
+      toast.style.borderColor = isError ? '#ff4444' : 'var(--border)';
+      toast.classList.remove('hidden');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(function() { toast.classList.add('hidden'); }, 2500);
+    }
+
+    function updateStats() {
+      if (countEl) countEl.textContent = String(cartStore.wishlist.length);
+      if (cartCountEl) {
+        var count = cartStore.cart.reduce(function(a, i) { return a + i.quantity; }, 0);
+        cartCountEl.textContent = String(count);
+      }
+      if (cartTotalEl) {
+        var total = cartStore.cart.reduce(function(a, i) { return a + (i.price * i.quantity); }, 0);
+        cartTotalEl.textContent = '$' + total.toFixed(0);
+      }
+      if (clearAllBtn) {
+        clearAllBtn.classList.toggle('hidden', cartStore.wishlist.length < 2);
+      }
+    }
 
     function renderWishlist() {
       var items = cartStore.wishlist;
       var user = cartStore.user;
+      updateStats();
 
       // Show login prompt for guests with no items
       if (!user && items.length === 0) {
@@ -307,7 +543,7 @@ const config = {
         return;
       }
 
-      // Show empty state for logged-in users with no items, or guests with cleared items
+      // Show empty state
       if (items.length === 0) {
         grid.classList.add('hidden');
         emptyEl.classList.remove('hidden');
@@ -319,7 +555,6 @@ const config = {
       grid.classList.remove('hidden');
       emptyEl.classList.add('hidden');
       loginPrompt.classList.add('hidden');
-      grid.classList.remove('loading-state');
 
       grid.innerHTML = items.map(function(item) {
         var imgHtml = item.image
@@ -328,6 +563,14 @@ const config = {
 
         return '<div class="wishlist-card" data-id="' + item.id + '">' +
           '<a href="/tienda/' + (item.slug || item.id) + '" class="card-image">' + imgHtml + '</a>' +
+          '<div class="card-quick-actions">' +
+            '<button class="quick-btn quick-btn--cart" data-id="' + item.id + '" title="Agregar al carrito">' +
+              '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>' +
+            '</button>' +
+            '<button class="quick-btn quick-btn--remove" data-id="' + item.id + '" title="Eliminar">' +
+              '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>' +
+            '</button>' +
+          '</div>' +
           '<div class="card-info">' +
             '<a href="/tienda/' + (item.slug || item.id) + '" style="text-decoration:none;"><h3 class="card-name">' + (item.name || 'Producto') + '</h3></a>' +
             '<p class="card-price">$' + (Number(item.price) || 0).toFixed(2) + '</p>' +
@@ -341,7 +584,31 @@ const config = {
         '</div>';
       }).join('');
 
-      // Event listeners
+      // Quick action: add to cart
+      grid.querySelectorAll('.quick-btn--cart').forEach(function(btn) {
+        btn.addEventListener('click', async function(e) {
+          e.preventDefault();
+          var id = this.dataset.id;
+          var item = cartStore.wishlist.find(function(i) { return i.id == id; });
+          if (!item) return;
+          await cartStore.addToCart(item);
+          showToast(item.name + ' agregado al carrito');
+        });
+      });
+
+      // Quick action: remove with animation
+      grid.querySelectorAll('.quick-btn--remove').forEach(function(btn) {
+        btn.addEventListener('click', async function(e) {
+          e.preventDefault();
+          var id = this.dataset.id;
+          var card = this.closest('.wishlist-card');
+          if (card) card.classList.add('removing');
+          await cartStore.toggleWishlist({ id: id });
+          // Don't call render here - the WISHLIST_UPDATED event will trigger it
+        });
+      });
+
+      // Full add to cart
       grid.querySelectorAll('.wishlist-add-cart').forEach(function(btn) {
         btn.addEventListener('click', async function() {
           var id = this.dataset.id;
@@ -350,18 +617,32 @@ const config = {
           await cartStore.addToCart(item);
           this.textContent = '✓ Agregado';
           this.classList.add('added');
+          showToast(item.name + ' agregado al carrito');
           setTimeout(function() {
             if (btn) { btn.textContent = 'Agregar al Carrito'; btn.classList.remove('added'); }
           }, 2000);
         });
       });
 
+      // Full remove
       grid.querySelectorAll('.wishlist-remove').forEach(function(btn) {
         btn.addEventListener('click', async function() {
           var id = this.dataset.id;
+          var card = this.closest('.wishlist-card');
+          if (card) card.classList.add('removing');
           await cartStore.toggleWishlist({ id: id });
-          renderWishlist();
         });
+      });
+    }
+
+    // Clear all button
+    if (clearAllBtn) {
+      clearAllBtn.addEventListener('click', async function() {
+        var items = [...cartStore.wishlist];
+        for (var i = 0; i < items.length; i++) {
+          await cartStore.toggleWishlist(items[i]);
+        }
+        showToast('Wishlist limpiada');
       });
     }
 
@@ -372,5 +653,6 @@ const config = {
     })();
 
     window.addEventListener(CartEvents.WISHLIST_UPDATED, renderWishlist);
+    window.addEventListener(CartEvents.UPDATED, updateStats);
   })();
 </script>
