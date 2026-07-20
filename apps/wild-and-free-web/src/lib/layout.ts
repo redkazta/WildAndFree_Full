@@ -264,18 +264,31 @@ const updateAuthUI = async () => {
     document.documentElement.setAttribute("data-role", role || "");
 
     if (session) {
-      // Show shimmer immediately while profile loads
-      if (authContainer) {
-        authContainer.innerHTML = `<div class="auth-skeleton">
-          <div class="sk-circle sk-shimmer"></div>
-          <div class="sk-lines">
-            <div class="sk-line sk-shimmer"></div>
-            <div class="sk-line-sm sk-shimmer"></div>
-          </div>
+      // Show profile IMMEDIATELY using session data (name from email, guest role)
+      // then update in background when profile loads
+      // Render IMMEDIATELY with session data (email-based name, no wait)
+      // This prevents the 500ms+ blank/stuck shimmer
+      var immName = session.user.email?.split("@")[0] || "Usuario";
+      var immInitials = (session.user.email || "WG").substring(0, 2).toUpperCase();
+      authContainer.innerHTML = `
+        <div class="relative group/pop">
+          <a href="/perfil" class="auth-profile group">
+            <div class="relative w-8 h-8 rounded-full bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] flex items-center justify-center flex-shrink-0">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-[var(--text)]">
+                <circle cx="12" cy="8" r="4"/>
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              </svg>
+              <span class="absolute -top-1 -right-1 w-4 h-4 bg-[var(--primary)] rounded-full flex items-center justify-center text-[8px] font-black text-[var(--bg)]">?</span>
+            </div>
+            <div class="hidden md:flex flex-col">
+              <span class="text-[10px] font-black uppercase tracking-widest text-[var(--text)] group-hover:text-[var(--primary)] transition-colors leading-none mb-0.5">${immName}</span>
+              <span class="text-[8px] font-bold text-[var(--text-muted)] uppercase tracking-wider">CARGANDO...</span>
+            </div>
+          </a>
+          <div class="popover w-64 hidden"></div>
         </div>`;
-      }
 
-      // Try to fetch profile; if fails, fall back to login button
+      // Now fetch profile + role in background and update
       let profile: any = null;
       try {
         const { data: profileData, error: profileError } = await supabase
@@ -296,15 +309,12 @@ const updateAuthUI = async () => {
           profile = profileData;
         }
       } catch (e) {
-        console.warn('[layout] profile fetch failed, showing login:', e);
+        console.warn('[layout] profile fetch failed:', e);
       }
 
-      // If profile fetch failed completely, show login button
-      if (!profile) {
-        if (authContainer) {
-          authContainer.innerHTML = `<div class="auth-login-wrap"><a href="/login" class="px-5 py-2 bg-[var(--text)] text-[var(--bg)] text-[10px] xl:text-[11px] font-black uppercase tracking-[0.15em] rounded-full hover:bg-[var(--primary)] transition-all shadow-lg">Entrar</a></div>`;
-        }
-      } else if (authContainer) {
+      if (!profile) return;
+
+      if (authContainer) {
         // Build display name: use nombre, or fall back to email prefix, else "Usuario"
         const displayName =
           profile?.nombre?.split(" ")[0] ||
