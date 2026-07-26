@@ -173,7 +173,7 @@ const config = {
               <span class="featured-badge" style="background:${typeInfo.color}20;color:${typeInfo.color}">${typeInfo.label}</span>
               <span class="text-[10px] text-[var(--text-muted)] font-mono">${new Date(post.published_at).toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
             </div>
-            <button class="featured-close" onclick="closeFeaturedArticle()" title="Cerrar">✕</button>
+            <button class="featured-close" title="Cerrar">✕</button>
           </div>
           <h2 class="featured-title">${post.title || ''}</h2>
           <div class="featured-author-row">
@@ -188,16 +188,22 @@ const config = {
         </div>
       </div>`;
 
+    // Attach close button handler
+    const closeBtn = container.querySelector('.featured-close');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeFeaturedArticle);
+    }
+
     container.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  window.closeFeaturedArticle = () => {
+  function closeFeaturedArticle() {
     const container = document.getElementById('featured-article');
     if (container) {
       container.classList.add('hidden');
       container.innerHTML = '';
     }
-  };
+  }
 
   // ─── 3. CREW FEED (crew_posts con reacciones) ───
   let currentFilter = 'all';
