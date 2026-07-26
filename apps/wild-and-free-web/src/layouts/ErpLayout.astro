@@ -17,6 +17,7 @@ const modules = [
   { id: 'tags', label: 'Tags', icon: '🏷️', href: '/erp/tags' },
   { id: 'eventos', label: 'Eventos', icon: '🎤', href: '/erp/eventos' },
   { id: 'versus', label: 'Versus', icon: '⚔️', href: '/erp/versus' },
+  { id: 'noticias', label: 'Noticias', icon: '📰', href: '/erp/noticias' },
   { id: 'radio', label: 'Radio', icon: '📻', href: '/erp/radio' },
   { id: 'correos', label: 'Correos', icon: '📧', href: '/erp/correos' },
   { id: 'configuracion', label: 'Config', icon: '⚙️', href: '/erp/configuracion' },
@@ -854,6 +855,7 @@ const modules = [
     const permMap: Record<string, string> = {
       'inventario': 'inventory.view',
       'contenido': 'content.view',
+      'noticias': 'content.manage',
       'usuarios': 'users.view',
       'tags': 'tags.manage',
       'eventos': 'events.manage',

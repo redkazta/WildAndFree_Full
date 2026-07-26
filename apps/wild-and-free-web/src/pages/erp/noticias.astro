@@ -1,0 +1,290 @@
+---
+import ErpLayout from '../../layouts/ErpLayout.astro';
+---
+
+<ErpLayout title="Noticias" activeModule="noticias">
+  <!-- Stats -->
+  <div class="erp-grid" style="margin-bottom:20px;">
+    <div class="erp-card">
+      <div class="erp-card-title">Publicadas</div>
+      <div class="erp-stat" id="statPublished">-</div>
+    </div>
+    <div class="erp-card">
+      <div class="erp-card-title">Borradores</div>
+      <div class="erp-stat" id="statDrafts">-</div>
+    </div>
+    <div class="erp-card">
+      <div class="erp-card-title">Total</div>
+      <div class="erp-stat" id="statTotal">-</div>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
+    <div style="display:flex;gap:8px;">
+      <button class="erp-btn erp-btn--ghost filter-btn active" data-filter="all">Todas</button>
+      <button class="erp-btn erp-btn--ghost filter-btn" data-filter="published">Publicadas</button>
+      <button class="erp-btn erp-btn--ghost filter-btn" data-filter="pending">Borradores</button>
+      <button class="erp-btn erp-btn--ghost filter-btn" data-filter="announcement">Anuncios</button>
+      <button class="erp-btn erp-btn--ghost filter-btn" data-filter="event">Eventos</button>
+      <button class="erp-btn erp-btn--ghost filter-btn" data-filter="promotion">Promos</button>
+    </div>
+    <button class="erp-btn erp-btn--primary" id="newPostBtn">+ Nueva Noticia</button>
+  </div>
+
+  <!-- New/Edit Post Form -->
+  <div id="postForm" class="erp-card" style="display:none;margin-bottom:24px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <div class="erp-card-title" style="margin-bottom:0;" id="formTitle">Nueva Noticia</div>
+      <button class="erp-btn erp-btn--ghost" onclick="closeForm()" style="font-size:11px;">✕ Cerrar</button>
+    </div>
+    <input type="hidden" id="editPostId" />
+    <div style="display:grid;gap:12px;">
+      <div>
+        <label style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Título *</label>
+        <input id="postTitle" type="text" placeholder="Título de la noticia" style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:var(--text);font-size:13px;" />
+      </div>
+      <div>
+        <label style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Contenido *</label>
+        <textarea id="postContent" rows="4" placeholder="Contenido de la noticia..." style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:var(--text);font-size:13px;resize:vertical;font-family:inherit;"></textarea>
+      </div>
+      <div>
+        <label style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">URL de imagen</label>
+        <input id="postImage" type="text" placeholder="https://..." style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:var(--text);font-size:13px;" />
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+        <div>
+          <label style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Tipo</label>
+          <select id="postType" style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:var(--text);font-size:13px;">
+            <option value="announcement">📢 Anuncio</option>
+            <option value="event">🎤 Evento</option>
+            <option value="promotion">🏷️ Promoción</option>
+            <option value="general">📝 General</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Estado</label>
+          <select id="postStatus" style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:var(--text);font-size:13px;">
+            <option value="published">Publicado</option>
+            <option value="pending">Borrador</option>
+          </select>
+        </div>
+        <div style="display:flex;align-items:flex-end;">
+          <button class="erp-btn erp-btn--primary" onclick="savePost()" style="width:100%;">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Posts Table -->
+  <div class="erp-card" style="overflow-x:auto;">
+    <table class="erp-table">
+      <thead>
+        <tr>
+          <th>Título</th>
+          <th>Tipo</th>
+          <th>Estado</th>
+          <th>Autor</th>
+          <th>Fecha</th>
+          <th>Vista Previa</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="postsBody">
+        <tr><td colspan="7" class="erp-loading">Cargando noticias...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</ErpLayout>
+
+<script>
+  import { supabase } from '../../lib/supabase';
+  import { waitForPermissions } from '../../lib/erp-permissions';
+
+  const { perms, role } = await waitForPermissions();
+  const canManage = perms.includes('*') || perms.includes('content.manage');
+
+  if (!canManage) {
+    document.querySelector('.erp-content')!.innerHTML = '<div class="erp-card" style="text-align:center;padding:60px;"><p style="color:var(--border-soft);">No tienes permiso para gestionar noticias.</p></div>';
+    throw new Error('Permission denied');
+  }
+
+  let allPosts: any[] = [];
+  let currentFilter = 'all';
+
+  async function loadPosts() {
+    const { data: posts, error } = await supabase
+      .from('crew_posts')
+      .select('*, profiles:author_id(nombre, username, avatar_url)')
+      .order('created_at', { ascending: false });
+
+    if (error || !posts) {
+      document.getElementById('postsBody')!.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--border-soft);padding:30px;">Error al cargar</td></tr>';
+      return;
+    }
+
+    allPosts = posts;
+    applyFilter();
+    updateStats();
+  }
+
+  function applyFilter() {
+    let filtered = allPosts;
+    if (currentFilter === 'published') filtered = filtered.filter(p => p.status === 'published');
+    else if (currentFilter === 'pending') filtered = filtered.filter(p => p.status === 'pending');
+    else if (currentFilter !== 'all') filtered = filtered.filter(p => p.post_type === currentFilter);
+
+    renderPosts(filtered);
+  }
+
+  function updateStats() {
+    const published = allPosts.filter(p => p.status === 'published').length;
+    const drafts = allPosts.filter(p => p.status === 'pending').length;
+    document.getElementById('statPublished')!.textContent = String(published);
+    document.getElementById('statDrafts')!.textContent = String(drafts);
+    document.getElementById('statTotal')!.textContent = String(allPosts.length);
+  }
+
+  function renderPosts(posts: any[]) {
+    const tbody = document.getElementById('postsBody')!;
+    if (posts.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--border-soft);padding:30px;">Sin noticias</td></tr>';
+      return;
+    }
+
+    const typeLabels: Record<string, string> = {
+      announcement: '📢 Anuncio', event: '🎤 Evento', promotion: '🏷️ Promo', general: '📝 General'
+    };
+    const statusLabels: Record<string, string> = {
+      published: '✅ Publicado', pending: '📝 Borrador', rejected: '❌ Rechazado'
+    };
+
+    tbody.innerHTML = posts.map(p => `
+      <tr>
+        <td style="font-weight:700;max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.title || 'Sin título'}</td>
+        <td><span style="font-size:11px;">${typeLabels[p.post_type] || p.post_type}</span></td>
+        <td><span class="erp-status erp-status--${p.status === 'published' ? 'approved' : p.status === 'rejected' ? 'danger' : 'pending'}">${statusLabels[p.status] || p.status}</span></td>
+        <td style="font-size:12px;color:var(--text-secondary);">${p.profiles?.nombre || p.profiles?.username || '—'}</td>
+        <td style="font-size:11px;color:var(--text-muted);">${new Date(p.published_at || p.created_at).toLocaleDateString('es-MX')}</td>
+        <td>
+          <button class="erp-btn erp-btn--ghost" style="padding:4px 8px;font-size:11px;" onclick="previewPost('${p.id}')">👁️</button>
+        </td>
+        <td>
+          <div style="display:flex;gap:6px;">
+            <button class="erp-btn erp-btn--ghost" style="padding:4px 8px;font-size:11px;" onclick="editPost('${p.id}')">Editar</button>
+            <button class="erp-btn erp-btn--danger" style="padding:4px 8px;font-size:11px;" onclick="deletePost('${p.id}')">Eliminar</button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  (window as any).previewPost = (id: string) => {
+    const p = allPosts.find(x => x.id === id);
+    if (!p) return;
+    alert(`TÍTULO: ${p.title}\n\n${p.content}\n\nTipo: ${p.post_type}\nEstado: ${p.status}`);
+  };
+
+  (window as any).openForm = () => {
+    document.getElementById('postForm')!.style.display = 'block';
+    document.getElementById('formTitle')!.textContent = 'Nueva Noticia';
+    document.getElementById('editPostId')!.value = '';
+    (document.getElementById('postTitle') as HTMLInputElement).value = '';
+    (document.getElementById('postContent') as HTMLTextAreaElement).value = '';
+    (document.getElementById('postImage') as HTMLInputElement).value = '';
+    (document.getElementById('postType') as HTMLSelectElement).value = 'announcement';
+    (document.getElementById('postStatus') as HTMLSelectElement).value = 'published';
+    document.getElementById('postForm')!.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  (window as any).closeForm = () => {
+    document.getElementById('postForm')!.style.display = 'none';
+  };
+
+  (window as any).savePost = async () => {
+    const editId = (document.getElementById('editPostId') as HTMLInputElement).value;
+    const title = (document.getElementById('postTitle') as HTMLInputElement).value.trim();
+    const content = (document.getElementById('postContent') as HTMLTextAreaElement).value.trim();
+    const imageUrl = (document.getElementById('postImage') as HTMLInputElement).value.trim();
+    const postType = (document.getElementById('postType') as HTMLSelectElement).value;
+    const status = (document.getElementById('postStatus') as HTMLSelectElement).value;
+
+    if (!title || !content) return alert('Título y contenido son requeridos');
+
+    const { data: { session } } = await supabase.auth.getSession();
+    const authorId = session?.user?.id;
+
+    if (editId) {
+      const { error } = await supabase.from('crew_posts').update({
+        title, content,
+        image_url: imageUrl || null,
+        post_type: postType,
+        status,
+        published_at: status === 'published' ? new Date().toISOString() : undefined,
+        updated_at: new Date().toISOString(),
+      }).eq('id', editId);
+
+      if (error) { alert('Error al actualizar'); return; }
+    } else {
+      if (!authorId) { alert('Debes iniciar sesión'); return; }
+
+      const now = new Date().toISOString();
+      const { error } = await supabase.from('crew_posts').insert({
+        author_id: authorId,
+        title, content,
+        image_url: imageUrl || null,
+        post_type: postType,
+        status,
+        published_at: status === 'published' ? now : null,
+      });
+
+      if (error) { alert('Error al crear'); return; }
+    }
+
+    (window as any).closeForm();
+    loadPosts();
+  };
+
+  (window as any).editPost = (id: string) => {
+    const p = allPosts.find(x => x.id === id);
+    if (!p) return;
+
+    document.getElementById('postForm')!.style.display = 'block';
+    document.getElementById('formTitle')!.textContent = 'Editar Noticia';
+    document.getElementById('editPostId')!.value = p.id;
+    (document.getElementById('postTitle') as HTMLInputElement).value = p.title || '';
+    (document.getElementById('postContent') as HTMLTextAreaElement).value = p.content || '';
+    (document.getElementById('postImage') as HTMLInputElement).value = p.image_url || '';
+    (document.getElementById('postType') as HTMLSelectElement).value = p.post_type || 'announcement';
+    (document.getElementById('postStatus') as HTMLSelectElement).value = p.status || 'pending';
+    document.getElementById('postForm')!.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  (window as any).deletePost = async (id: string) => {
+    if (!confirm('¿Eliminar esta noticia?')) return;
+    const { error } = await supabase.from('crew_posts').delete().eq('id', id);
+    if (error) { alert('Error al eliminar'); return; }
+    loadPosts();
+  };
+
+  // Filters
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => {
+        b.classList.remove('active');
+        b.style.background = '';
+        b.style.color = '';
+      });
+      btn.classList.add('active');
+      (btn as HTMLElement).style.background = 'var(--primary)';
+      (btn as HTMLElement).style.color = '#000';
+      currentFilter = btn.getAttribute('data-filter') || 'all';
+      applyFilter();
+    });
+  });
+
+  document.getElementById('newPostBtn')?.addEventListener('click', () => (window as any).openForm());
+
+  // Init
+  loadPosts();
+</script>
