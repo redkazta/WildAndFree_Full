@@ -77,8 +77,11 @@ const config = {
   </div>
 </Layout>
 
-<script>
-  import { supabase } from '../lib/supabase';
+<script is:inline>
+  // ─── INIT ───
+  (async function() {
+    const mod = await import('../lib/supabase');
+    const supabase = mod.supabase;
 
   // ─── HELPERS ───
   const typeLabels = {
@@ -107,7 +110,7 @@ const config = {
     if (!el) return;
 
     try {
-      const { data: posts, error } = await supabase
+      const { data: posts, error } = await sb
         .from('crew_posts')
         .select('*, author:author_id(nombre, username, avatar_url)')
         .eq('status', 'published')
@@ -471,6 +474,8 @@ const config = {
     loadNewsSidebar();
     loadCrewFeed();
   });
+
+  })();
 </script>
 
 <style>
