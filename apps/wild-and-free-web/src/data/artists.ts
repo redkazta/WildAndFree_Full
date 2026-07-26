@@ -214,18 +214,19 @@ export async function getArtistsFromDB(): Promise<Artist[]> {
     const artistIdsWithProfiles = profiles.map((p: any) => p.id);
     const { data: allUserTags } = await supabase
       .from('user_has_tags')
-      .select('user_id, tags(name, color, animation)')
+      .select('user_id, tags:tag_id(name, color, animation)')
       .in('user_id', artistIdsWithProfiles);
 
     const tagsByUser: Record<string, { name: string; color: string; animation: string }[]> = {};
     if (allUserTags) {
       for (const ut of allUserTags) {
-        if (!ut.tags) continue;
+        const tag = Array.isArray(ut.tags) ? ut.tags[0] : ut.tags;
+        if (!tag) continue;
         if (!tagsByUser[ut.user_id]) tagsByUser[ut.user_id] = [];
         tagsByUser[ut.user_id].push({
-          name: ut.tags.name,
-          color: ut.tags.color || '#C98300',
-          animation: ut.tags.animation || 'none',
+          name: tag.name,
+          color: tag.color || '#C98300',
+          animation: tag.animation || 'none',
         });
       }
     }
