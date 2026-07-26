@@ -12,12 +12,49 @@ export async function getStaticPaths() {
 }
 
 const { username } = Astro.params;
+// Fetch artists from Supabase at build time
 const artists = await getArtistsFromDB();
 const artist = artists.find((a: Artist) => a.slug === username) || artists[0];
 
 let posts: ArtistPost[] = [];
 if (artist) {
   posts = await getArtistPosts(artist.id);
+}
+
+// Fetch real reaction counts for crew posts
+let postsWithCounts: ArtistPost[] = [];
+try {
+  const { data: feedPosts } = await supabase
+    .rpc('get_crew_feed', {
+      p_author_id: artist?.id || '',
+      p_limit: 20,
+      p_offset: 0,
+      p_user_id: null,
+    });
+  
+  if (feedPosts && feedPosts.length > 0) {
+    postsWithCounts = feedPosts.map((p: any) => ({
+      id: p.id,
+      artist_id: p.author_id,
+      content: p.content || '',
+      post_type: p.post_type || 'general',
+      image_url: p.image_url,
+      embed_url: null,
+      embed_title: p.title || null,
+      likes_count: Number(p.likes_count) || 0,
+      comments_count: Number(p.comments_count) || 0,
+      reposts_count: Number(p.reposts_count) || 0,
+      is_pinned: false,
+      created_at: p.published_at || p.created_at,
+    }));
+  }
+} catch (e) {
+  console.warn('[artist] Could not fetch feed counts, using defaults');
+}
+
+// Use real counts if available, otherwise fallback to posts from getArtistPosts
+if (postsWithCounts.length > 0) {
+  posts = postsWithCounts;
 }
 
 function timeAgo(dateStr: string): string {
@@ -33,7 +70,7 @@ function timeAgo(dateStr: string): string {
 ---
 
 <Layout config={{ name: `Wild Gvng - ${artist.nombre}`, primary_color: "#C98300", secondary_color: "#8A0303" }}>
-  <div class="ap">
+  <div class="ap" data-artist-id="{artist.id}">
 
     <!-- PROFILE HEADER -->
     <div class="ap-header">
@@ -131,6 +168,7 @@ function timeAgo(dateStr: string): string {
           <div class="feed-tabs">
             <button class="feed-tab active" data-tab="feed">Feed</button>
             <button class="feed-tab" data-tab="music">Música</button>
+            <button class="feed-tab" data-tab="exclusive">Exclusivo</button>
           </div>
 
           <!-- Feed Tab -->
@@ -221,6 +259,17 @@ function timeAgo(dateStr: string): string {
                 ))}
               </>
             )}
+          </div>
+
+          <!-- Exclusive Content Tab -->
+          <div class="feed-content" id="tab-exclusive">
+            <div id="exclusive-content-root">
+              <div class="feed-empty">
+                <div class="empty-icon">🔒</div>
+                <p class="empty-title">Contenido Exclusivo</p>
+                <p class="empty-sub">Cargando contenido exclusivo...</p>
+              </div>
+            </div>
           </div>
 
           <!-- Music Tab -->
@@ -345,6 +394,137 @@ function timeAgo(dateStr: string): string {
   .music-info span { font-size: 0.6rem; color: var(--text-muted); }
   .music-play { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; text-decoration: none; }
 
+  .post-action.liked { border-color: var(--danger); color: var(--danger); background: rgba(255,68,68,0.08); }
+  .post-action.reposted { border-color: var(--success); color: var(--success); background: rgba(0,255,136,0.08); }
+
+  .comment-section { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-faint); }
+  .comment-list { max-height: 300px; overflow-y: auto; margin-bottom: 12px; }
+  .comment-loading, .comment-empty { font-size: 0.65rem; color: var(--text-muted); padding: 12px; text-align: center; }
+  .comment-item { display: flex; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--border-faint); }
+  .comment-item:last-child { border-bottom: none; }
+  .comment-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 0.5rem; font-weight: 900; color: var(--primary); flex-shrink: 0; background-size: cover; background-position: center; }
+  .comment-body { flex: 1; }
+  .comment-author { font-size: 0.6rem; font-weight: 800; color: var(--text); }
+  .comment-time { font-size: 0.5rem; color: var(--text-muted); font-weight: 400; }
+  .comment-text { font-size: 0.7rem; color: var(--text-secondary); margin-top: 2px; }
+  .comment-form { display: flex; gap: 8px; }
+  .comment-input { flex: 1; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-faint); background: var(--bg); color: var(--text); font-size: 0.7rem; font-family: inherit; outline: none; }
+  .comment-input:focus { border-color: var(--primary); }
+  .comment-send { padding: 8px 16px; border-radius: 8px; border: none; background: var(--primary); color: var(--bg); font-size: 0.6rem; font-weight: 900; text-transform: uppercase; cursor: pointer; font-family: inherit; }
+  .comment-send:hover { background: var(--primary-hover); }
+
+  .exclusive-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+  }
+  .exclusive-balance {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    background: var(--bg-card);
+    padding: 6px 14px;
+    border-radius: 100px;
+    border: 1px solid var(--border-faint);
+  }
+  .exclusive-balance strong {
+    color: var(--primary);
+  }
+  .exclusive-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .exclusive-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .exclusive-preview {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+  }
+  .exclusive-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .exclusive-info {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .exclusive-title {
+    font-size: 0.85rem;
+    font-weight: 900;
+    color: var(--text);
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .exclusive-desc {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+  .exclusive-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .exclusive-type {
+    color: var(--primary);
+    background: var(--primary-soft);
+    padding: 2px 8px;
+    border-radius: 100px;
+  }
+  .exclusive-price {
+    color: var(--text-muted);
+  }
+  .exclusive-btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 100px;
+    font-size: 0.65rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    text-align: center;
+    text-decoration: none;
+  }
+  .exclusive-btn--unlocked {
+    background: var(--success);
+    color: #000;
+    display: block;
+  }
+  .exclusive-btn--unlocked:hover {
+    opacity: 0.8;
+  }
+  .exclusive-btn--buy {
+    background: var(--primary);
+    color: var(--bg);
+  }
+  .exclusive-btn--buy:hover {
+    background: var(--primary-hover);
+  }
+  .exclusive-btn--locked {
+    background: var(--bg-card);
+    color: var(--text-muted);
+    cursor: not-allowed;
+    border: 1px solid var(--border-faint);
+  }
+
   @media (max-width: 768px) {
     .ap-grid { grid-template-columns: 1fr; }
     .ap-side { position: static; }
@@ -356,7 +536,12 @@ function timeAgo(dateStr: string): string {
 </style>
 
 <script>
-  (function() {
+  import { supabase } from '../../lib/supabase';
+
+  (async function() {
+    const { data: { session } } = await supabase.auth.getSession();
+    const currentUserId = session?.user?.id;
+
     // Tabs
     document.querySelectorAll('.feed-tab').forEach(tab => {
       tab.addEventListener('click', function() {
@@ -371,7 +556,11 @@ function timeAgo(dateStr: string): string {
     // Partnear button
     const partnearBtn = document.getElementById('partnear-btn');
     if (partnearBtn) {
-      partnearBtn.addEventListener('click', () => {
+      partnearBtn.addEventListener('click', async () => {
+        if (!currentUserId) {
+          window.location.href = '/login';
+          return;
+        }
         const active = partnearBtn.classList.toggle('active');
         partnearBtn.textContent = active ? 'PARTNEANDO' : 'PARTNEAR';
         partnearBtn.classList.toggle('btn-gold', !active);
@@ -391,5 +580,349 @@ function timeAgo(dateStr: string): string {
         setTimeout(() => { if (btn) btn.textContent = orig; }, 2000);
       }
     });
+
+    // --- FEED INTERACTIONS (Likes, Comments, Reposts) ---
+    async function toggleLike(postId: string, btn: HTMLElement) {
+      if (!currentUserId) { window.location.href = '/login'; return; }
+
+      const countEl = btn.querySelector('.action-count');
+      const isLiked = btn.classList.contains('liked');
+
+      const { data: liked } = await supabase.rpc('toggle_like', {
+        p_post_id: postId,
+        p_user_id: currentUserId,
+      });
+
+      if (liked) {
+        btn.classList.add('liked');
+        btn.style.borderColor = 'var(--danger)';
+        btn.style.color = 'var(--danger)';
+        if (countEl) countEl.textContent = String(parseInt(countEl.textContent || '0') + 1);
+      } else {
+        btn.classList.remove('liked');
+        btn.style.borderColor = '';
+        btn.style.color = '';
+        if (countEl) countEl.textContent = String(Math.max(0, parseInt(countEl.textContent || '0') - 1));
+      }
+    }
+
+    async function toggleRepost(postId: string, btn: HTMLElement) {
+      if (!currentUserId) { window.location.href = '/login'; return; }
+
+      const countEl = btn.querySelector('.action-count');
+      const isReposted = btn.classList.contains('reposted');
+
+      const { data: reposted } = await supabase.rpc('toggle_repost', {
+        p_post_id: postId,
+        p_user_id: currentUserId,
+      });
+
+      if (reposted) {
+        btn.classList.add('reposted');
+        btn.style.borderColor = 'var(--success)';
+        btn.style.color = 'var(--success)';
+        if (countEl) countEl.textContent = String(parseInt(countEl.textContent || '0') + 1);
+      } else {
+        btn.classList.remove('reposted');
+        btn.style.borderColor = '';
+        btn.style.color = '';
+        if (countEl) countEl.textContent = String(Math.max(0, parseInt(countEl.textContent || '0') - 1));
+      }
+    }
+
+    async function openComments(postId: string) {
+      if (!currentUserId) { window.location.href = '/login'; return; }
+
+      // Toggle comment section below the post
+      let commentSection = document.getElementById(`comments-${postId}`);
+      if (commentSection) {
+        commentSection.style.display = commentSection.style.display === 'none' ? 'block' : 'none';
+        return;
+      }
+
+      // Create comment section
+      const postEl = document.querySelector(`[data-post-id="${postId}"]`)?.closest('.feed-post');
+      if (!postEl) return;
+
+      commentSection = document.createElement('div');
+      commentSection.id = `comments-${postId}`;
+      commentSection.className = 'comment-section';
+      commentSection.innerHTML = `
+        <div class="comment-list" id="comment-list-${postId}">
+          <div class="comment-loading">Cargando comentarios...</div>
+        </div>
+        <div class="comment-form">
+          <input type="text" id="comment-input-${postId}" placeholder="Escribe un comentario..." class="comment-input" />
+          <button class="comment-send" data-post-id="${postId}">Enviar</button>
+        </div>
+      `;
+      postEl.appendChild(commentSection);
+
+      // Load comments
+      const { data: comments } = await supabase
+        .from('wall_comments')
+        .select('id, content, created_at, user_id')
+        .eq('post_id', postId)
+        .is('deleted_at', null)
+        .order('created_at', { ascending: true });
+
+      // Load profiles for comment authors
+      const userIds = [...new Set(comments?.map(c => c.user_id) || [])];
+      let profiles: any[] = [];
+      if (userIds.length > 0) {
+        const { data: p } = await supabase.from('profiles').select('id, nombre, username, avatar_url').in('id', userIds);
+        profiles = p || [];
+      }
+
+      const list = document.getElementById(`comment-list-${postId}`);
+      if (list) {
+        if (!comments || comments.length === 0) {
+          list.innerHTML = '<div class="comment-empty">Sin comentarios aún. Sé el primero.</div>';
+        } else {
+          list.innerHTML = comments.map(c => {
+            const profile = profiles.find(p => p.id === c.user_id);
+            const name = profile?.nombre || profile?.username || 'Anónimo';
+            const initials = name.substring(0, 2).toUpperCase();
+            const avatar = profile?.avatar_url;
+            const timeAgo = getTimeAgo(c.created_at);
+            return `
+              <div class="comment-item">
+                <div class="comment-avatar" style="${avatar ? `background-image:url(${avatar})` : ''}">${avatar ? '' : initials}</div>
+                <div class="comment-body">
+                  <div class="comment-author">${name} <span class="comment-time">${timeAgo}</span></div>
+                  <div class="comment-text">${c.content}</div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      // Send comment
+      const sendBtn = commentSection.querySelector('.comment-send');
+      const input = document.getElementById(`comment-input-${postId}`) as HTMLInputElement;
+      sendBtn?.addEventListener('click', async () => {
+        const text = input?.value?.trim();
+        if (!text) return;
+        const { error } = await supabase.from('wall_comments').insert({
+          post_id: postId,
+          user_id: currentUserId,
+          content: text,
+        });
+        if (!error) {
+          input.value = '';
+          // Reload comments
+          openComments(postId);
+          // Update count
+          const commentBtn = document.querySelector(`[data-post-id="${postId}"]`);
+          const countEl = commentBtn?.closest('.post-actions-bar')?.querySelector('.comment-btn .action-count');
+          if (countEl) countEl.textContent = String(parseInt(countEl.textContent || '0') + 1);
+        }
+      });
+    }
+
+    function getTimeAgo(dateStr: string): string {
+      const diff = Date.now() - new Date(dateStr).getTime();
+      const mins = Math.floor(diff / 60000);
+      if (mins < 60) return `${mins}m`;
+      const hrs = Math.floor(mins / 60);
+      if (hrs < 24) return `${hrs}h`;
+      const days = Math.floor(hrs / 24);
+      return `${days}d`;
+    }
+
+    // Attach event listeners to post action buttons
+    document.querySelectorAll('.like-btn').forEach(btn => {
+      const postId = btn.getAttribute('data-post-id');
+      if (postId) btn.addEventListener('click', () => toggleLike(postId, btn as HTMLElement));
+    });
+
+    document.querySelectorAll('.repost-btn').forEach(btn => {
+      const postId = btn.getAttribute('data-post-id');
+      if (postId) btn.addEventListener('click', () => toggleRepost(postId, btn as HTMLElement));
+    });
+
+    document.querySelectorAll('.comment-btn').forEach(btn => {
+      const postId = btn.getAttribute('data-post-id');
+      if (postId) btn.addEventListener('click', () => openComments(postId));
+    });
+
+    // Follow button - check if user already follows this artist
+    const artistId = document.querySelector('[data-artist-id]')?.getAttribute('data-artist-id');
+    if (currentUserId && artistId && artistId !== currentUserId) {
+      const { data: existingFollow } = await supabase
+        .from('follows')
+        .select('id')
+        .eq('follower_id', currentUserId)
+        .eq('following_id', artistId)
+        .single();
+
+      const partnearBtn = document.getElementById('partnear-btn');
+      if (partnearBtn && existingFollow) {
+        partnearBtn.classList.add('active');
+        partnearBtn.textContent = 'PARTNEANDO';
+        partnearBtn.classList.remove('btn-gold');
+        partnearBtn.classList.add('btn-ghost');
+      }
+
+      if (partnearBtn) {
+        partnearBtn.addEventListener('click', async () => {
+          const isActive = partnearBtn.classList.contains('active');
+          if (isActive) {
+            await supabase.from('follows').delete().eq('follower_id', currentUserId).eq('following_id', artistId);
+            partnearBtn.classList.remove('active');
+            partnearBtn.textContent = 'PARTNEAR';
+            partnearBtn.classList.add('btn-gold');
+            partnearBtn.classList.remove('btn-ghost');
+          } else {
+            await supabase.from('follows').insert({ follower_id: currentUserId, following_id: artistId });
+            partnearBtn.classList.add('active');
+            partnearBtn.textContent = 'PARTNEANDO';
+            partnearBtn.classList.remove('btn-gold');
+            partnearBtn.classList.add('btn-ghost');
+          }
+        });
+      }
+    }
+
+    // ── EXCLUSIVE CONTENT ──
+    async function loadExclusiveContent() {
+      const root = document.getElementById('exclusive-content-root');
+      if (!root || !artistId) return;
+
+      const { data: content, error } = await supabase
+        .from('exclusive_content')
+        .select('*')
+        .eq('user_id', artistId)
+        .eq('status', 'published')
+        .order('created_at', { ascending: false });
+
+      if (error || !content || content.length === 0) {
+        root.innerHTML = `
+          <div class="feed-empty">
+            <div class="empty-icon">🔒</div>
+            <p class="empty-title">Sin contenido exclusivo aún</p>
+            <p class="empty-sub">Este artista no ha publicado contenido exclusivo.</p>
+          </div>`;
+        return;
+      }
+
+      // Get user's token balance
+      let userBalance = 0;
+      if (currentUserId) {
+        const { data: tokens } = await supabase
+          .from('user_tokens')
+          .select('balance')
+          .eq('user_id', currentUserId)
+          .single();
+        userBalance = tokens?.balance || 0;
+      }
+
+      // Get user's purchases
+      let purchasedIds: string[] = [];
+      if (currentUserId) {
+        const { data: purchases } = await supabase
+          .from('content_purchases')
+          .select('content_id')
+          .eq('user_id', currentUserId);
+        purchasedIds = purchases?.map(p => p.content_id) || [];
+      }
+
+      root.innerHTML = `
+        <div class="exclusive-header">
+          <span class="exclusive-balance">💰 Tu saldo: <strong>${userBalance} tokens</strong></span>
+        </div>
+        <div class="exclusive-grid">
+          ${content.map(item => {
+            const isPurchased = purchasedIds.includes(item.id);
+            const canAfford = userBalance >= (item.token_price || 0);
+            return `
+              <div class="exclusive-card" data-content-id="${item.id}">
+                ${item.preview_url ? `<div class="exclusive-preview"><img src="${item.preview_url}" alt="${item.title}" loading="lazy" /></div>` : ''}
+                <div class="exclusive-info">
+                  <h4 class="exclusive-title">${item.title}</h4>
+                  <p class="exclusive-desc">${item.description || ''}</p>
+                  <div class="exclusive-meta">
+                    <span class="exclusive-type">${item.content_type.toUpperCase()}</span>
+                    <span class="exclusive-price">${item.token_price || 0} tokens</span>
+                  </div>
+                  ${isPurchased
+                    ? `<a href="${item.file_url || '#'}" target="_blank" class="exclusive-btn exclusive-btn--unlocked">🔓 Acceder</a>`
+                    : `<button class="exclusive-btn ${canAfford ? 'exclusive-btn--buy' : 'exclusive-btn--locked'}" onclick="unlockContent('${item.id}', ${item.token_price || 0})" ${canAfford ? '' : 'disabled'}>
+                        ${canAfford ? '🔑 Desbloquear' : '🔒 Sin saldo'}
+                      </button>`
+                  }
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>`;
+    }
+
+    (window as any).unlockContent = async (contentId: string, price: number) => {
+      if (!currentUserId) { window.location.href = '/login'; return; }
+      if (!artistId) return;
+
+      const btn = document.querySelector(`[data-content-id="${contentId}"] .exclusive-btn`) as HTMLButtonElement;
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Procesando...';
+      }
+
+      // Deduct tokens & create purchase record
+      const { error: tokenError } = await supabase
+        .from('token_transactions')
+        .insert({
+          user_id: currentUserId,
+          type: 'spend',
+          amount: -price,
+          reference: 'content_purchase',
+          reference_id: contentId,
+          description: 'Compra de contenido exclusivo',
+        });
+
+      if (tokenError) {
+        console.error('Token error:', tokenError);
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = '🔑 Desbloquear';
+        }
+        return;
+      }
+
+      // Deduct tokens
+      await supabase.rpc('decrement_tokens', {
+        p_user_id: currentUserId,
+        p_amount: price,
+      }).catch(async () => {
+        // Fallback: direct update
+        const { data: current } = await supabase
+          .from('user_tokens')
+          .select('balance')
+          .eq('user_id', currentUserId)
+          .single();
+        const newBalance = Math.max((current?.balance || 0) - price, 0);
+        await supabase
+          .from('user_tokens')
+          .update({ balance: newBalance, updated_at: new Date().toISOString() })
+          .eq('user_id', currentUserId);
+      });
+
+      // Create purchase
+      await supabase.from('content_purchases').insert({
+        user_id: currentUserId,
+        content_id: contentId,
+        payment_type: 'token',
+        tokens_spent: price,
+      });
+
+      // Reload to show unlocked state
+      loadExclusiveContent();
+    };
+
+    // Load exclusive content if tab exists
+    if (document.getElementById('exclusive-content-root')) {
+      loadExclusiveContent();
+    }
   })();
 </script>

@@ -3,251 +3,173 @@ import Layout from '../layouts/Layout.astro';
 import { supabase } from '../lib/supabase';
 import tenantConfig from '../../../../packages/shared-types/tenant-config.json';
 
-// --- DATA FETCHING ---
-let dbArtists = null;
-try {
-  const { data, error } = await supabase
-    .from('artists')
-    .select('*')
-    .order('nombre');
-  if (!error) dbArtists = data;
-} catch (e) {
-  console.warn('Could not fetch artists from Supabase during build.');
+// --- DATA FETCHING from freestylers + freestyler_stats ---
+interface VersusFreestyler {
+  id: string;
+  nombre: string;
+  slug: string;
+  imagenes: { profile: string };
+  stats: { power: number; speed: number; technique: number; seguidores: string; oyentes: string };
+  tracks: string[];
+  bio: string;
+  estilo: string;
+  origen: string;
 }
 
-// Fallback / Mock Data enriched with "Special Moves" (Tracks)
-const mockArtists = [
-  {
-    id: 1,
-    nombre: 'Rayos X',
-    slug: 'rayos-x',
-    imagenes: { profile: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=800&q=80' },
-    stats: { seguidores: '1.2M', oyentes: '850K', power: 88, speed: 92, technique: 75 },
-    bio: 'El relámpago del norte. Sus rimas cortan como el cristal y su flow es pura electricidad.',
-    tracks: ['Voltaje Máximo', 'Cero Grados', 'Norteño Flow', 'Rayos y Centellas'],
-    estilo: 'Rap Eléctrico',
-    origen: 'Monterrey, NL'
-  },
-  {
-    id: 2,
-    nombre: 'Sombra 47',
-    slug: 'sombra-47',
-    imagenes: { profile: 'https://images.unsplash.com/photo-1521119989659-a83eee488004?w=800&q=80' },
-    stats: { seguidores: '2.5M', oyentes: '1.8M', power: 95, speed: 85, technique: 90 },
-    bio: 'Directo de los callejones más oscuros de la CDMX. La sombra que camina sola.',
-    tracks: ['Callejón Sin Salida', 'Sombra Eterna', 'Distrito Federal', '47 Balas'],
-    estilo: 'Trap Oscuro',
-    origen: 'CDMX, MX'
-  },
-  {
-    id: 3,
-    nombre: 'Fuego Lírico',
-    slug: 'fuego-lirico',
-    imagenes: { profile: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=800&q=80' },
-    stats: { seguidores: '800K', oyentes: '1.1M', power: 82, speed: 96, technique: 88 },
-    bio: 'Incendiando cada escenario que pisa. Sus letras queman a la competencia.',
-    tracks: ['Llama Eterna', 'Incendio Musical', 'Calor de Barrio', 'Fuego en la Sangre'],
-    estilo: 'Freestyle',
-    origen: 'Guadalajara, JAL'
-  },
-  {
-    id: 4,
-    nombre: 'Diamante Negro',
-    slug: 'diamante-negro',
-    imagenes: { profile: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&q=80' },
-    stats: { seguidores: '4.2M', oyentes: '3.5M', power: 90, speed: 80, technique: 95 },
-    bio: 'Brillante bajo presión. La joya más valiosa del hip-hop nacional.',
-    tracks: ['Presión Extrema', 'Brillo Eterno', 'Lujo Callejero', 'Diamante en Bruto'],
-    estilo: 'Luxury Rap',
-    origen: 'Tijuana, BC'
-  },
-  {
-    id: 5,
-    nombre: 'Neon Kid',
-    slug: 'neon-kid',
-    imagenes: { profile: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=800&q=80' },
-    stats: { seguidores: '3.7M', oyentes: '4.2M', power: 85, speed: 98, technique: 92 },
-    bio: 'La luz que nunca se apaga. Ritmos futuristas para una generación sin sueño.',
-    tracks: ['Ciudad Neón', 'Luces de Ciudad', 'Cyber Flow', 'Noche Eterna'],
-    estilo: 'Synth Trap',
-    origen: 'Puebla, MX'
-  },
-  {
-    id: 6,
-    nombre: 'Relámpago',
-    slug: 'relampago',
-    imagenes: { profile: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80' },
-    stats: { seguidores: '1.8M', oyentes: '2.1M', power: 94, speed: 99, technique: 80 },
-    bio: 'Más rápido que el sonido. Antes de que lo veas, ya te ha derrotado.',
-    tracks: ['Velocidad Terminal', 'Trueno Callejero', 'Impacto Crítico', 'Sin Rastro'],
-    estilo: 'Speed Flow',
-    origen: 'Juárez, CHIH'
-  },
-  {
-    id: 7,
-    nombre: 'Garras',
-    slug: 'garras',
-    imagenes: { profile: 'https://images.unsplash.com/photo-1534030347209-7147fd9e791a?w=800&q=80' },
-    stats: { seguidores: '5.2M', oyentes: '3.9M', power: 98, speed: 75, technique: 85 },
-    bio: 'Desgarrando el beat con cada verso. Un animal salvaje en el estudio.',
-    tracks: ['Instinto Animal', 'Garras Afiladas', 'Caza Nocturna', 'Selva de Asfalto'],
-    estilo: 'Hardcore Rap',
-    origen: 'Hermosillo, SON'
-  },
-  {
-    id: 8,
-    nombre: 'Tormenta',
-    slug: 'tormenta',
-    imagenes: { profile: 'https://images.unsplash.com/photo-1504257432389-52343af06ae3?w=800&q=80' },
-    stats: { seguidores: '950K', oyentes: '600K', power: 92, speed: 88, technique: 80 },
-    bio: 'Energía pura de Gómez Palacio. Imparable como un huracán.',
-    tracks: ['Golpe de Trueno', 'Velocidad del Rayo', 'Alerta de Tormenta', 'Lluvia Pesada'],
-    estilo: 'Hardcore Rap',
-    origen: 'Gómez Palacio, DGO'
-  },
-  {
-    id: 9,
-    nombre: 'Víbora X',
-    slug: 'vibora-x',
-    imagenes: { profile: 'https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?w=800&q=80' },
-    stats: { seguidores: '3.1M', oyentes: '2.8M', power: 96, speed: 99, technique: 95 },
-    bio: 'El veneno lírico más potente del norte. Nadie sobrevive a su tiradera.',
-    tracks: ['Mordida de Veneno', 'Ojos de Serpiente', 'Flow Tóxico', 'Golpe Mortal'],
-    estilo: 'Fast Flow',
-    origen: 'Chihuahua, MX'
-  },
-  {
-    id: 10,
-    nombre: 'Luna Negra',
-    slug: 'luna-negra',
-    imagenes: { profile: 'https://images.unsplash.com/photo-1531123897727-8f129e16fd3c?w=800&q=80' },
-    stats: { seguidores: '1.9M', oyentes: '2.2M', power: 85, speed: 90, technique: 92 },
-    bio: 'Voces etéreas sobre bajos pesados. La bruja del R&B.',
-    tracks: ['Luz de Luna', 'Cielo Oscuro', 'Eclipse Total', 'Susurro Nocturno'],
-    estilo: 'Dark R&B',
-    origen: 'Veracruz, MX'
-  },
-  {
-    id: 11,
-    nombre: 'Rojo Fuego',
-    slug: 'rojo-fuego',
-    imagenes: { profile: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80' },
-    stats: { seguidores: '500K', oyentes: '800K', power: 94, speed: 96, technique: 85 },
-    bio: 'La nueva promesa del trap duro. Incendiando escenarios.',
-    tracks: ['Iniciador de Fuego', 'Al Rojo Vivo', 'Quémalo Todo', 'Infierno'],
-    estilo: 'Trap Metal',
-    origen: 'Ecatepec, MX'
-  },
-  {
-    id: 12,
-    nombre: 'Ciber Punk',
-    slug: 'ciber-punk',
-    imagenes: { profile: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=800&q=80' },
-    stats: { seguidores: '4.5M', oyentes: '5.1M', power: 90, speed: 92, technique: 99 },
-    bio: 'Sonidos del futuro hoy. Hackeando el sistema musical.',
-    tracks: ['Ciudad Futura', 'Alma Cibernética', 'Ritmo Tech', 'Lluvia Neón'],
-    estilo: 'Glitch Hop',
-    origen: 'Zapopan, MX'
-  },
-  {
-    id: 13,
-    nombre: 'Fantasma G',
-    slug: 'fantasma-g',
-    imagenes: { profile: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80' },
-    stats: { seguidores: '1.4M', oyentes: '980K', power: 88, speed: 94, technique: 90 },
-    bio: 'El espectro del beat, apareciendo donde menos lo esperas.',
-    tracks: ['Modo Fantasma', 'Golpe Invisible', 'Dolor Fantasma', 'Mundo Espiritual'],
-    estilo: 'Horrorcore',
-    origen: 'Toluca, MX'
-  },
-  {
-    id: 14,
-    nombre: 'Micrófono de Hierro',
-    slug: 'microfono-de-hierro',
-    imagenes: { profile: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&q=80' },
-    stats: { seguidores: '3.2M', oyentes: '2.9M', power: 99, speed: 70, technique: 85 },
-    bio: 'Barras de acero y voluntad inquebrantable. Peso pesado.',
-    tracks: ['Voluntad de Hierro', 'Metal Pesado', 'Barras de Acero', 'Óxido y Polvo'],
-    estilo: 'Boom Bap',
-    origen: 'Torreón, COAH'
-  },
-  {
-    id: 15,
-    nombre: 'Rosa de Terciopelo',
-    slug: 'rosa-de-terciopelo',
-    imagenes: { profile: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&q=80' },
-    stats: { seguidores: '4.1M', oyentes: '5.5M', power: 80, speed: 90, technique: 98 },
-    bio: 'Suavidad que mata. R&B con espinas.',
-    tracks: ['Muerte Suave', 'Pinchazo de Espina', 'Pétalos Rojos', 'Camino de Seda'],
-    estilo: 'Soul Trap',
-    origen: 'Mérida, MX'
-  },
-  {
-    id: 16,
-    nombre: 'Tóxico B',
-    slug: 'toxico-b',
-    imagenes: { profile: 'https://images.unsplash.com/photo-1521119989659-a83eee488004?w=800&q=80' },
-    stats: { seguidores: '2.0M', oyentes: '1.5M', power: 92, speed: 95, technique: 88 },
-    bio: 'El veneno está en la dosis. Trap ácido que corroe.',
-    tracks: ['Lluvia Ãcida', 'Amor Tóxico', 'Hiedra Venenosa', 'Peligro'],
-    estilo: 'Acid Rap',
-    origen: 'León, MX'
-  },
-  {
-    id: 17,
-    nombre: 'Llamarada Solar',
-    slug: 'llamarada-solar',
-    imagenes: { profile: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=800&q=80' },
-    stats: { seguidores: '1.1M', oyentes: '800K', power: 95, speed: 85, technique: 90 },
-    bio: 'Brillando más fuerte que el sol de mediodía. Cega a la competencia.',
-    tracks: ['Quemadura', 'Ola de Calor', 'Poder Solar', 'Luz Cegadora'],
-    estilo: 'Reggaetón',
-    origen: 'Cancún, MX'
-  },
-  {
-    id: 18,
-    nombre: 'Hielo Seco',
-    slug: 'hielo-seco',
-    imagenes: { profile: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80' },
-    stats: { seguidores: '1.9M', oyentes: '2.1M', power: 85, speed: 92, technique: 96 },
-    bio: 'Flow helado que congela la pista. Sangre fría.',
-    tracks: ['Congelación', 'Cero Grados', 'Era de Hielo', 'Glaciar'],
-    estilo: 'Drill',
-    origen: 'Saltillo, MX'
-  },
-  {
-    id: 19,
-    nombre: 'La Bestia',
-    slug: 'la-bestia',
-    imagenes: { profile: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=800&q=80' },
-    stats: { seguidores: '5.0M', oyentes: '6.2M', power: 99, speed: 85, technique: 80 },
-    bio: 'Fuerza bruta desatada. Rompiendo bocinas desde el 2010.',
-    tracks: ['Modo Bestia', 'Rugido', 'Fuerza Bruta', 'Sin Cadenas'],
-    estilo: 'Hardcore',
-    origen: 'Culiacán, MX'
-  },
-  {
-    id: 20,
-    nombre: 'Karmma',
-    slug: 'karmma',
-    imagenes: { profile: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80' },
-    stats: { seguidores: '800K', oyentes: '1.5M', power: 88, speed: 94, technique: 97 },
-    bio: 'Lo que das, recibes. Barras que regresan para golpearte.',
-    tracks: ['Causa y Efecto', 'Justicia Divina', 'Ciclo Sin Fin', 'Destino'],
-    estilo: 'Consciente',
-    origen: 'Morelia, MX'
+let dbFreestylers: VersusFreestyler[] = [];
+try {
+  // Fetch freestylers
+  const { data: freestylers, error: fError } = await supabase
+    .from('freestylers')
+    .select('*')
+    .eq('is_active', true);
+
+  if (!fError && freestylers && freestylers.length > 0) {
+    // Fetch stats for all freestylers
+    const freestylerIds = freestylers.map(f => f.id);
+    const { data: statsData } = await supabase
+      .from('freestyler_stats')
+      .select('*')
+      .in('freestyler_id', freestylerIds);
+
+    // Group stats by freestyler_id
+    const statsByFreestyler: Record<string, Record<string, number>> = {};
+    if (statsData) {
+      for (const s of statsData) {
+        if (!statsByFreestyler[s.freestyler_id]) statsByFreestyler[s.freestyler_id] = {};
+        statsByFreestyler[s.freestyler_id][s.stat_name] = s.stat_value;
+      }
+    }
+
+    // Map to the format the frontend expects
+    const avatarUrl = 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=400&q=80';
+    dbFreestylers = freestylers.map((f: any, i: number) => {
+      const s = statsByFreestyler[f.id] || {};
+      return {
+        id: f.id,
+        nombre: f.name.toUpperCase(),
+        slug: f.slug,
+        imagenes: { 
+          profile: f.avatar_url || `https://images.unsplash.com/photo-${1516280440614 + i}?w=400&q=80` 
+        },
+        stats: {
+          power: s.power || s.puesta_en_escena || 80,
+          speed: s.speed || s.doble_tempo || s.flow || 80,
+          technique: s.technique || s.punchline || s.figuras_literarias || 75,
+          seguidores: '0',
+          oyentes: '0',
+        },
+        tracks: [],
+        bio: f.bio || '',
+        estilo: 'Freestyle',
+        origen: '',
+      };
+    });
   }
+} catch (e) {
+  console.warn('Could not fetch freestylers from Supabase during build.');
+}
+
+// Fallback mock data (20 freestylers con stats variadas)
+const unsplashIds = [
+  '1516280440614-37939bbacd81','1521119989659-a83eee488004','1492562080023-ab3db95bfbce',
+  '1500648767791-00dcc994a43e','1539571696357-5a69c17a67c6','1507003211169-0a1dd7228f2d',
+  '1534030347209-7147fd9e791a','1504257432389-52343af06ae3','1500917293891-ef795e70e1f6',
+  '1531123897727-8f129e16fd3c','1506794778202-cad84cf45f1d','1519085360753-af0119f7cbe7',
+  '1507003211169-0a1dd7228f2d','1500648767791-00dcc994a43e','1494790108377-be9c29b29330',
+  '1521119989659-a83eee488004','1492562080023-ab3db95bfbce','1506794778202-cad84cf45f1d',
+  '1539571696357-5a69c17a67c6','1524504388940-b1c1722653e1'
 ];
 
-// If DB returns data, we might need to map it or merge with mock for "tracks" and "stats" if missing
-const artists = (dbArtists && dbArtists.length > 0) ? dbArtists.map((a: any, i: number) => ({
-    ...a,
-    // Ensure missing fields have defaults
-    stats: a.stats || mockArtists[i % mockArtists.length].stats,
-    tracks: mockArtists[i % mockArtists.length].tracks,
-    estilo: mockArtists[i % mockArtists.length].estilo,
-    origen: mockArtists[i % mockArtists.length].origen
-})) : mockArtists;
+const mockFreestylerNames = [
+  'RAYOS X', 'SOMBRA 47', 'FUEGO LÍRICO', 'DIAMANTE NEGRO', 'NEON KID',
+  'RELÁMPAGO', 'GARRAS', 'TORMENTA', 'VÍBORA X', 'LUNA NEGRA',
+  'ROJO FUEGO', 'CIBER PUNK', 'FANTASMA G', 'MICRÓFONO DE HIERRO', 'ROSA DE TERCIOPELO',
+  'TÓXICO B', 'LLAMARADA SOLAR', 'HIELO SECO', 'LA BESTIA', 'KARMMA'
+];
+
+const mockFreestylerSlugs = [
+  'rayos-x','sombra-47','fuego-lirico','diamante-negro','neon-kid',
+  'relampago','garras','tormenta','vibora-x','luna-negra',
+  'rojo-fuego','ciber-punk','fantasma-g','microfono-de-hierro','rosa-de-terciopelo',
+  'toxico-b','llamarada-solar','hielo-seco','la-bestia','karmma'
+];
+
+const mockFreestylerBios = [
+  'El relámpago del norte. Sus rimas cortan como el cristal.',
+  'Directo de los callejones más oscuros de la CDMX.',
+  'Incendiando cada escenario que pisa.',
+  'Brillante bajo presión. La joya del hip-hop nacional.',
+  'La luz que nunca se apaga. Ritmos futuristas.',
+  'Más rápido que el sonido. Te gana antes de que lo veas.',
+  'Desgarrando el beat con cada verso.',
+  'Energía pura. Imparable como un huracán.',
+  'El veneno lírico más potente del norte.',
+  'Voces etéreas sobre bajos pesados.',
+  'La nueva promesa del trap duro.',
+  'Sonidos del futuro hoy. Hackeando el sistema.',
+  'El espectro del beat. Aparece donde menos lo esperas.',
+  'Barras de acero. Peso pesado del freestyle.',
+  'Suavidad que mata. R&B con espinas.',
+  'Trap ácido que corroe el micrófono.',
+  'Brillando más fuerte que el sol.',
+  'Flow helado que congela la pista.',
+  'Fuerza bruta desatada. Bestia del micrófono.',
+  'Lo que das, recibes. Barras que golpean.'
+];
+
+const mockFreestylerEstilos = [
+  'Rap Eléctrico','Trap Oscuro','Freestyle','Luxury Rap','Synth Trap',
+  'Speed Flow','Hardcore Rap','Hardcore Rap','Fast Flow','Dark R&B',
+  'Trap Metal','Glitch Hop','Horrorcore','Boom Bap','Soul Trap',
+  'Acid Rap','Reggaetón','Drill','Hardcore','Consciente'
+];
+
+const mockFreestylerOrigen = [
+  'Monterrey, NL','CDMX, MX','Guadalajara, JAL','Tijuana, BC','Puebla, MX',
+  'Juárez, CHIH','Hermosillo, SON','Gómez Palacio, DGO','Chihuahua, MX','Veracruz, MX',
+  'Ecatepec, MX','Zapopan, MX','Toluca, MX','Torreón, COAH','Mérida, MX',
+  'León, MX','Cancún, MX','Saltillo, MX','Culiacán, MX','Morelia, MX'
+];
+
+// Stats aleatorias pero con identidad
+const mockStatsArray = [
+  { power: 88, speed: 92, technique: 75 },
+  { power: 95, speed: 85, technique: 90 },
+  { power: 82, speed: 96, technique: 88 },
+  { power: 90, speed: 80, technique: 95 },
+  { power: 85, speed: 98, technique: 92 },
+  { power: 94, speed: 99, technique: 80 },
+  { power: 98, speed: 75, technique: 85 },
+  { power: 92, speed: 88, technique: 80 },
+  { power: 96, speed: 99, technique: 95 },
+  { power: 85, speed: 90, technique: 92 },
+  { power: 94, speed: 96, technique: 85 },
+  { power: 90, speed: 92, technique: 99 },
+  { power: 88, speed: 94, technique: 90 },
+  { power: 99, speed: 70, technique: 85 },
+  { power: 80, speed: 90, technique: 98 },
+  { power: 92, speed: 95, technique: 88 },
+  { power: 95, speed: 85, technique: 90 },
+  { power: 85, speed: 92, technique: 96 },
+  { power: 99, speed: 85, technique: 80 },
+  { power: 88, speed: 94, technique: 97 }
+];
+
+const mockArtists: VersusFreestyler[] = mockFreestylerNames.map((nombre, i) => ({
+  id: `mock-${i + 1}`,
+  nombre,
+  slug: mockFreestylerSlugs[i],
+  imagenes: { profile: `https://images.unsplash.com/photo-${unsplashIds[i]}?w=400&q=80` },
+  stats: { ...mockStatsArray[i], seguidores: '0', oyentes: '0' },
+  tracks: [],
+  bio: mockFreestylerBios[i],
+  estilo: mockFreestylerEstilos[i],
+  origen: mockFreestylerOrigen[i],
+}));
+
+// Use DB data if available, otherwise fallback to mock
+const artists = dbFreestylers.length > 0 ? dbFreestylers : mockArtists;
 
 const tenant = tenantConfig['wild-and-free'];
 const config = {

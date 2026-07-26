@@ -764,11 +764,11 @@ const modules = [
     import { supabase } from '../lib/supabase';
     import { getRole } from '../lib/role';
 
-    // Auth guard
+    // Auth guard — check if user has erp.access or is admin
     const { role, session } = await getRole();
-    const allowed = ['admin', 'staff_manager', 'staff', 'staff_marketing'];
+    const erpRoles = ['admin', 'staff'];
 
-    if (!session || !allowed.includes(role)) {
+    if (!session || !erpRoles.includes(role)) {
       document.body.innerHTML = `
         <div style="min-height:100vh;display:grid;place-items:center;background:var(--bg);color:var(--text);font-family:'Space Grotesk',system-ui;">
           <div style="text-align:center;padding:40px;">

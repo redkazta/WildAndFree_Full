@@ -42,3 +42,24 @@ export const waitForPermissions = async (
 export const hasPermission = (perms: string[], perm: string): boolean => {
   return perms.includes("*") || perms.includes(perm);
 };
+
+/**
+ * Check if the current user has access to the ERP
+ */
+export const canAccessErp = (role: string): boolean => {
+  return ["admin", "staff"].includes(role);
+};
+
+/**
+ * Get role display info
+ */
+export const getRoleInfo = (role: string): { label: string; color: string } => {
+  const map: Record<string, { label: string; color: string }> = {
+    admin: { label: "Administrador", color: "#ff4444" },
+    staff: { label: "Staff", color: "#00bfff" },
+    artist: { label: "Artista", color: "#c98300" },
+    fan: { label: "Fan", color: "#00ff88" },
+    guest: { label: "Invitado", color: "#666666" },
+  };
+  return map[role] || { label: role, color: "#666666" };
+};

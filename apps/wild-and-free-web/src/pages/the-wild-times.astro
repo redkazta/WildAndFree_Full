@@ -109,43 +109,46 @@ const config = {
     if (!container) return;
 
     try {
-      let query = supabase
-        .from('artist_posts')
-        .select('*, profiles:artist_id(nombre, username, avatar_url)')
-        .order('created_at', { ascending: false })
-        .limit(20);
+      const { data: { session } } = await supabase.auth.getSession();
 
-      if (filter !== 'all') {
-        query = query.eq('post_type', filter);
-      }
-
-      const { data: posts, error } = await query;
+      // Use RPC to get feed posts with real reaction counts
+      let { data: posts, error } = await supabase
+        .rpc('get_feed_posts', {
+          p_limit: 20,
+          p_offset: 0,
+          p_user_id: session?.user?.id || null,
+        });
 
       if (error || !posts?.length) {
         container.innerHTML = '<p class="text-sm text-[var(--text-muted)] italic text-center py-12">No hay publicaciones aún.</p>';
         return;
       }
 
-      container.innerHTML = posts.map((p: any) => renderPost(p)).join('');
+      // Apply filter if needed
+      if (filter !== 'all') {
+        // Simple filter: 'text' = no image, 'photo' = has image, 'music' = has embed
+        if (filter === 'photo') posts = posts.filter((p: any) => p.image_url);
+        else if (filter === 'text') posts = posts.filter((p: any) => !p.image_url);
+      }
 
-      // Attach reaction handlers
+      container.innerHTML = posts.map((p: any) => renderPost(p, session?.user?.id)).join('');
       attachReactionHandlers();
     } catch (e) {
+      console.error('Feed error:', e);
       container.innerHTML = '<p class="text-sm text-[var(--text-muted)] italic text-center py-12">Error al cargar feed.</p>';
     }
   }
 
-  function renderPost(p: any) {
-    const profile = p.profiles || {};
-    const avatar = profile.avatar_url || '/wg_logo.png';
-    const name = profile.nombre || profile.username || 'Artista WG';
+  function renderPost(p: any, currentUserId?: string) {
+    const avatar = p.avatar_url || '/wg_logo.png';
+    const name = p.nombre || p.username || 'Wild Gvng';
     const timeAgo = getTimeAgo(new Date(p.created_at));
+    const isLiked = p.is_liked || false;
+    const isReposted = p.is_reposted || false;
 
     let mediaHtml = '';
-    if (p.post_type === 'photo' && p.image_url) {
+    if (p.image_url) {
       mediaHtml = `<img src="${p.image_url}" class="w-full rounded-lg mt-3 border border-[var(--border)]" loading="lazy" />`;
-    } else if (p.post_type === 'music' && p.embed_url) {
-      mediaHtml = `<iframe src="${p.embed_url}" width="100%" height="80" frameborder="0" allowfullscreen class="rounded-lg mt-3"></iframe>`;
     }
 
     return `
@@ -157,7 +160,6 @@ const config = {
             <h4 class="text-sm font-black uppercase tracking-wider text-[var(--text)]">${name}</h4>
             <span class="text-[10px] text-[var(--text-muted)]">${timeAgo}</span>
           </div>
-          ${p.is_pinned ? '<span class="ml-auto text-[9px] font-black uppercase text-[var(--primary)] border border-[var(--primary)] px-2 py-0.5 rounded-full">📌 Fijado</span>' : ''}
         </div>
 
         <!-- Content -->
@@ -166,17 +168,17 @@ const config = {
 
         <!-- Reactions Bar -->
         <div class="flex items-center gap-4 mt-4 pt-3 border-t border-[var(--border-faint)]">
-          <button class="reaction-btn flex items-center gap-1.5 text-[11px] font-bold text-[var(--text-muted)] hover:text-[var(--primary)] transition-colors" data-post-id="${p.id}" data-action="like">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <button class="reaction-btn flex items-center gap-1.5 text-[11px] font-bold transition-colors ${isLiked ? 'text-[var(--primary)]' : 'text-[var(--text-muted)] hover:text-[var(--primary)]'}" data-post-id="${p.id}" data-action="like">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="${isLiked ? 'var(--primary)' : 'none'}" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
             <span class="like-count">${p.likes_count || 0}</span>
           </button>
           <button class="reaction-btn flex items-center gap-1.5 text-[11px] font-bold text-[var(--text-muted)] hover:text-[var(--text)] transition-colors" data-post-id="${p.id}" data-action="comment">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             <span class="comment-count">${p.comments_count || 0}</span>
           </button>
-          <button class="reaction-btn flex items-center gap-1.5 text-[11px] font-bold text-[var(--text-muted)] hover:text-[var(--repost)] transition-colors" data-post-id="${p.id}" data-action="repost">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-            <span>${p.reposts_count || 0}</span>
+          <button class="reaction-btn flex items-center gap-1.5 text-[11px] font-bold transition-colors ${isReposted ? 'text-[var(--primary)]' : 'text-[var(--text-muted)] hover:text-[var(--primary)]'}" data-post-id="${p.id}" data-action="repost">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="${isReposted ? 'var(--primary)' : 'none'}" stroke="currentColor" stroke-width="2.5"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+            <span class="repost-count">${p.reposts_count || 0}</span>
           </button>
           <button class="reaction-btn flex items-center gap-1.5 text-[11px] font-bold text-[var(--text-muted)] hover:text-[var(--text)] transition-colors ml-auto" data-post-id="${p.id}" data-action="share">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
@@ -263,53 +265,53 @@ const config = {
 
   async function toggleLike(postId: string, userId: string, btn: HTMLElement) {
     try {
-      const { data: existing } = await supabase
-        .from('wall_likes')
-        .select('id')
-        .eq('post_id', postId)
-        .eq('user_id', userId)
-        .maybeSingle();
-
-      if (existing) {
-        await supabase.from('wall_likes').delete().eq('id', existing.id);
-        btn.classList.remove('text-[var(--primary)]');
-      } else {
-        await supabase.from('wall_likes').insert({ post_id: postId, user_id: userId });
+      const { data: liked } = await supabase.rpc('toggle_like', {
+        p_post_id: postId,
+        p_user_id: userId,
+      });
+      
+      if (liked) {
         btn.classList.add('text-[var(--primary)]');
+        btn.querySelector('svg')?.setAttribute('fill', 'var(--primary)');
+      } else {
+        btn.classList.remove('text-[var(--primary)]');
+        btn.querySelector('svg')?.setAttribute('fill', 'none');
       }
-      // Refresh count
-      await refreshLikeCount(postId, btn);
-    } catch (e) {}
+      
+      // Update count optimistically
+      const countEl = btn.querySelector('.like-count');
+      if (countEl) {
+        const current = parseInt(countEl.textContent || '0');
+        countEl.textContent = String(liked ? current + 1 : Math.max(0, current - 1));
+      }
+    } catch (e) {
+      console.error('Like error:', e);
+    }
   }
 
   async function toggleRepost(postId: string, userId: string, btn: HTMLElement) {
     try {
-      const { data: existing } = await supabase
-        .from('wall_reposts')
-        .select('id')
-        .eq('post_id', postId)
-        .eq('user_id', userId)
-        .maybeSingle();
-
-      if (existing) {
-        await supabase.from('wall_reposts').delete().eq('id', existing.id);
-        btn.classList.remove('text-[var(--repost)]');
+      const { data: reposted } = await supabase.rpc('toggle_repost', {
+        p_post_id: postId,
+        p_user_id: userId,
+      });
+      
+      if (reposted) {
+        btn.classList.add('text-[var(--primary)]');
+        btn.querySelector('svg')?.setAttribute('fill', 'var(--primary)');
       } else {
-        await supabase.from('wall_reposts').insert({ post_id: postId, user_id: userId });
-        btn.classList.add('text-[var(--repost)]');
+        btn.classList.remove('text-[var(--primary)]');
+        btn.querySelector('svg')?.setAttribute('fill', 'none');
       }
-    } catch (e) {}
-  }
-
-  async function refreshLikeCount(postId: string, btn: HTMLElement) {
-    try {
-      const { count } = await supabase
-        .from('wall_likes')
-        .select('*', { count: 'exact', head: true })
-        .eq('post_id', postId);
-      const countEl = btn.querySelector('.like-count');
-      if (countEl) countEl.textContent = String(count || 0);
-    } catch (e) {}
+      
+      const countEl = btn.querySelector('.repost-count');
+      if (countEl) {
+        const current = parseInt(countEl.textContent || '0');
+        countEl.textContent = String(reposted ? current + 1 : Math.max(0, current - 1));
+      }
+    } catch (e) {
+      console.error('Repost error:', e);
+    }
   }
 
   async function loadComments(postId: string, section: HTMLElement) {
@@ -317,11 +319,7 @@ const config = {
     if (!list) return;
     try {
       const { data: comments } = await supabase
-        .from('wall_comments')
-        .select('id, content, created_at, profiles:user_id(nombre, username, avatar_url)')
-        .eq('post_id', postId)
-        .is('deleted_at', null)
-        .order('created_at', { ascending: true });
+        .rpc('get_post_comments', { p_post_id: postId });
 
       if (!comments?.length) {
         list.innerHTML = '<p class="text-[10px] text-[var(--text-muted)] italic">Sin comentarios aún.</p>';
@@ -329,12 +327,15 @@ const config = {
       }
 
       list.innerHTML = comments.map((c: any) => {
-        const p = c.profiles || {};
+        const avatar = c.avatar_url || '/wg_logo.png';
+        const name = c.nombre || c.username || 'Anónimo';
+        const timeAgo = getTimeAgo(new Date(c.created_at));
         return `
           <div class="flex gap-2">
-            <img src="${p.avatar_url || '/wg_logo.png'}" class="w-6 h-6 rounded-full object-cover flex-shrink-0 mt-0.5" />
+            <img src="${avatar}" class="w-6 h-6 rounded-full object-cover flex-shrink-0 mt-0.5" />
             <div>
-              <span class="text-[10px] font-black text-[var(--text)]">${p.nombre || p.username || 'Anónimo'}</span>
+              <span class="text-[10px] font-black text-[var(--text)]">${name}</span>
+              <span class="text-[8px] text-[var(--text-muted)] ml-1">${timeAgo}</span>
               <p class="text-[11px] text-[var(--text-secondary)]">${c.content}</p>
             </div>
           </div>
@@ -359,19 +360,21 @@ const config = {
     }
 
     try {
-      await supabase.from('wall_comments').insert({
+      const { error } = await supabase.from('wall_comments').insert({
         post_id: postId,
         user_id: session.user.id,
         content: input.value.trim()
       });
-      input.value = '';
-      loadComments(postId, section);
-      
-      // Update comment count
-      const commentBtn = document.querySelector(`.reaction-btn[data-post-id="${postId}"][data-action="comment"] .comment-count`);
-      if (commentBtn) {
-        const val = parseInt(commentBtn.textContent || '0') + 1;
-        commentBtn.textContent = String(val);
+      if (!error) {
+        input.value = '';
+        loadComments(postId, section);
+        
+        // Update comment count
+        const commentBtn = section.closest('article')?.querySelector('[data-action="comment"] .comment-count');
+        if (commentBtn) {
+          const val = parseInt(commentBtn.textContent || '0') + 1;
+          commentBtn.textContent = String(val);
+        }
       }
     } catch (e) {}
   }

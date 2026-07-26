@@ -346,57 +346,30 @@ const config = {
     btn.disabled = true;
     btn.textContent = 'Procesando...';
 
-    const paymentMethod = (document.querySelector('input[name="payment"]:checked') as HTMLInputElement)?.value || 'card';
-    const shipping = {
-      name: (document.getElementById('ship-name') as HTMLInputElement)?.value || '',
-      phone: (document.getElementById('ship-phone') as HTMLInputElement)?.value || '',
-      address: (document.getElementById('ship-address') as HTMLInputElement)?.value || '',
-      colonia: (document.getElementById('ship-colonia') as HTMLInputElement)?.value || '',
-      city: (document.getElementById('ship-city') as HTMLInputElement)?.value || '',
-      state: (document.getElementById('ship-state') as HTMLInputElement)?.value || '',
-      zip: (document.getElementById('ship-zip') as HTMLInputElement)?.value || '',
-      references: (document.getElementById('ship-references') as HTMLTextAreaElement)?.value || ''
-    };
-
-    const cart = cartStore.cart;
-    const total = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-    const orderId = 'WG-' + Math.random().toString(36).substring(2, 6).toUpperCase();
-
-    // Try to save order to Supabase
-    try {
-      const { supabase } = await import('../lib/supabase');
-      const { data: { session } } = await supabase.auth.getSession();
-      const userId = session?.user?.id || null;
-
-      const { data: newOrder, error: orderError } = await supabase.from('store_orders').insert({
-        user_id: userId,
-        total: total,
-        shipping_address: `${shipping.name} | ${shipping.phone} | ${shipping.address}, ${shipping.colonia}, ${shipping.city}, ${shipping.state} ${shipping.zip} | Ref: ${shipping.references}`,
-        payment_method: paymentMethod,
-        status: 'pending',
-        shipping_type: 'estandar'
-      }).select('id').single();
-
-      if (!orderError && newOrder) {
-        const orderItems = cart.map(item => ({
-          order_id: newOrder.id,
-          variant_id: item.variant_id || null,
-          quantity: item.quantity,
-          unit_price: item.price
-        }));
-        await supabase.from('store_order_items').insert(orderItems);
-      }
-    } catch (e) { console.log('Order save skipped (no DB connection)'); }
-
-    // Clear cart
-    for (const item of [...cart]) {
-      await cartStore.removeFromCart(item.cart_key || item.id);
+    // 🚧 BLOQUER: Stripe no implementado aún
+    await new Promise(r => setTimeout(r, 1500));
+    
+    // Mostrar mensaje de que la funcionalidad está en proceso
+    const step3El = document.getElementById('step-3');
+    if (step3El) {
+      step3El.innerHTML = `
+        <div class="text-center py-20">
+          <div class="w-20 h-20 rounded-full bg-[var(--primary)]/10 flex items-center justify-center mx-auto mb-6">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h2 class="text-3xl font-black uppercase mb-3">Pago en Proceso</h2>
+          <p class="text-[var(--text-muted)] mb-2 max-w-md mx-auto">
+            El sistema de pagos con tarjeta, OXXO y PayPal estará disponible próximamente.
+          </p>
+          <p class="text-sm text-[var(--primary)] font-bold mb-8">
+            CARACTERÍSTICA EN PROCESO — VUELVE MÁS TARDE
+          </p>
+          <a href="/tienda" class="inline-block px-8 py-3 bg-[var(--primary)] text-[var(--bg)] rounded-xl font-black text-xs uppercase tracking-[0.15em] hover:brightness-110 transition-all">Seguir Comprando</a>
+        </div>`;
     }
-
-    document.getElementById('order-id').textContent = orderId;
+    
     btn.disabled = false;
     btn.textContent = 'Pagar';
-    showStep(4);
   });
 
   // Card number formatting
