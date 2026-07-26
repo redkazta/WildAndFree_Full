@@ -31,21 +31,24 @@ const config = {
       </div>
     </header>
 
-    <!-- MAIN LAYOUT: Left (25%) News Feed + Right (75%) Artist Feed -->
+    <!-- MAIN LAYOUT: Left (25%) News + Right (75%) Feed -->
     <div class="max-w-[1400px] mx-auto px-4 md:px-8 py-8">
       <div class="flex flex-col lg:flex-row gap-8">
 
-        <!-- LEFT: THE WILD TIMES News Feed (25%) -->
+        <!-- LEFT: NEWS FEED (25%) -->
         <aside class="lg:w-[25%] flex-shrink-0" id="news-feed">
           <div class="sticky top-24 space-y-6">
-            <h2 class="text-xs font-black uppercase tracking-[0.3em] text-[var(--text-muted)] border-b border-[var(--border)] pb-3">📰 Últimas Noticias</h2>
+            <div class="flex items-center justify-between border-b border-[var(--border)] pb-3">
+              <h2 class="text-xs font-black uppercase tracking-[0.3em] text-[var(--text-muted)]">📰 Noticias</h2>
+              <span class="text-[8px] text-[var(--primary)] font-black" id="news-count"></span>
+            </div>
             <div id="news-list" class="space-y-4">
               <!-- Populated by JS -->
             </div>
           </div>
         </aside>
 
-        <!-- RIGHT: Artist Feed (75%) -->
+        <!-- RIGHT: FEED DE LA CREW (75%) -->
         <main class="lg:w-[75%]" id="artist-feed">
           <div class="flex items-center justify-between mb-6 border-b border-[var(--border)] pb-3">
             <h2 class="text-xs font-black uppercase tracking-[0.3em] text-[var(--text-muted)]">🎤 Feed de la Crew</h2>
@@ -69,38 +72,90 @@ const config = {
 <script>
   import { supabase } from '../lib/supabase';
 
-  // ============ NEWS FEED ============
+  // ─── NEWS FEED (crew_posts) ───
   async function loadNewsFeed() {
-    const container = document.getElementById('news-list');
-    if (!container) return;
+    const el = document.getElementById('news-list');
+    const countEl = document.getElementById('news-count');
+    if (!el) return;
 
     try {
       const { data: posts, error } = await supabase
         .from('crew_posts')
-        .select('*')
+        .select('*, profiles:author_id(nombre, username, avatar_url)')
         .eq('status', 'published')
         .order('published_at', { ascending: false })
         .limit(8);
 
       if (error || !posts?.length) {
-        container.innerHTML = '<p class="text-xs text-[var(--text-muted)] italic">Próximamente noticias de la crew.</p>';
+        el.innerHTML = '<p class="text-xs text-[var(--text-muted)] italic">Próximamente noticias de la crew.</p>';
         return;
       }
 
-      container.innerHTML = posts.map((p: any) => `
-        <article class="group border-l-2 border-[var(--border)] pl-4 hover:border-[var(--primary)] transition-colors">
-          <span class="text-[9px] font-black uppercase tracking-wider text-[var(--primary)]">${p.post_type || 'Noticia'}</span>
-          <h4 class="text-sm font-black uppercase leading-tight mt-1 group-hover:text-[var(--primary)] transition-colors cursor-pointer">${p.title || 'Sin título'}</h4>
-          <p class="text-[11px] text-[var(--text-muted)] mt-1 line-clamp-2">${p.content?.slice(0, 100) || ''}</p>
-          <time class="text-[9px] text-[var(--text-faint)] mt-2 block">${new Date(p.published_at).toLocaleDateString('es-MX')}</time>
-        </article>
-      `).join('');
+      if (countEl) countEl.textContent = String(posts.length);
+
+      const typeLabels = {
+        announcement: '📢 ANUNCIO', event: '🎤 EVENTO',
+        promotion: '🏷️ PROMO', general: '📝 NOTICIA'
+      };
+
+      el.innerHTML = posts.map(p => {
+        const author = p.profiles || {};
+        return `<article class="group border-l-2 border-[var(--border)] pl-3 hover:border-[var(--primary)] transition-colors cursor-pointer" onclick="openNewsModal('${p.id}')">
+          <div class="flex items-center gap-1.5 mb-0.5">
+            <span class="text-[7px] font-black uppercase tracking-wider text-[var(--primary)] bg-[var(--primary-soft)] px-1 py-0.5 rounded-sm">${typeLabels[p.post_type] || '📝'}</span>
+            ${p.image_url ? '<span class="text-[7px]">🖼️</span>' : ''}
+          </div>
+          <h4 class="text-xs font-black uppercase leading-tight mt-1 group-hover:text-[var(--primary)] transition-colors">${p.title || ''}</h4>
+          <p class="text-[10px] text-[var(--text-muted)] mt-0.5 line-clamp-2">${(p.content || '').slice(0, 100)}</p>
+          <div class="flex items-center gap-1.5 mt-1.5 text-[7px] text-[var(--text-faint)]">
+            <span>${author.nombre || author.username || 'Crew'}</span>
+            <span>·</span>
+            <time>${new Date(p.published_at).toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })}</time>
+          </div>
+        </article>`;
+      }).join('');
     } catch (e) {
-      container.innerHTML = '<p class="text-xs text-[var(--text-muted)] italic">Error al cargar noticias.</p>';
+      el.innerHTML = '<p class="text-xs text-[var(--text-muted)] italic">Error al cargar noticias.</p>';
     }
   }
 
-  // ============ ARTIST FEED ============
+  // News modal
+  let newsCache = {};
+  (window as any).openNewsModal = async (id: string) => {
+    if (newsCache[id]) { showNewsModal(newsCache[id]); return; }
+    const { data } = await supabase.from('crew_posts').select('*, profiles:author_id(nombre, username)').eq('id', id).single();
+    if (data) { newsCache[id] = data; showNewsModal(data); }
+  };
+
+  function showNewsModal(p: any) {
+    const author = p.profiles || {};
+    const existing = document.getElementById('news-modal');
+    if (existing) existing.remove();
+
+    const modal = document.createElement('div');
+    modal.id = 'news-modal';
+    modal.innerHTML = `
+      <div class="news-modal-backdrop" onclick="closeNewsModal()"></div>
+      <div class="news-modal-panel">
+        <button class="news-modal-close" onclick="closeNewsModal()">✕</button>
+        ${p.image_url ? `<img src="${p.image_url}" class="news-modal-img" />` : ''}
+        <div class="news-modal-body">
+          <span class="news-modal-type">${p.post_type || 'noticia'}</span>
+          <h2 class="news-modal-title">${p.title || ''}</h2>
+          <div class="news-modal-meta">Por ${author.nombre || author.username || 'Crew'} · ${new Date(p.published_at).toLocaleDateString('es-MX')}</div>
+          <p class="news-modal-content">${p.content || ''}</p>
+        </div>
+      </div>`;
+    document.body.appendChild(modal);
+    setTimeout(() => modal.classList.add('open'), 10);
+  }
+
+  (window as any).closeNewsModal = () => {
+    const modal = document.getElementById('news-modal');
+    if (modal) { modal.classList.remove('open'); setTimeout(() => modal.remove(), 300); }
+  };
+
+  // ─── FEED DE LA CREW (wall_posts) ───
   let currentFilter = 'all';
 
   async function loadArtistFeed(filter = 'all') {
@@ -111,27 +166,23 @@ const config = {
     try {
       const { data: { session } } = await supabase.auth.getSession();
 
-      // Use RPC to get feed posts with real reaction counts
       let { data: posts, error } = await supabase
-        .rpc('get_feed_posts', {
-          p_limit: 20,
-          p_offset: 0,
-          p_user_id: session?.user?.id || null,
-        });
+        .rpc('get_feed_posts', { p_limit: 20, p_offset: 0, p_user_id: session?.user?.id || null });
 
       if (error || !posts?.length) {
-        container.innerHTML = '<p class="text-sm text-[var(--text-muted)] italic text-center py-12">No hay publicaciones aún.</p>';
+        container.innerHTML = '<p class="text-sm text-[var(--text-muted)] italic text-center py-12">No hay publicaciones aún. ¡Sé el primero en publicar!</p>';
         return;
       }
 
-      // Apply filter if needed
-      if (filter !== 'all') {
-        // Simple filter: 'text' = no image, 'photo' = has image, 'music' = has embed
-        if (filter === 'photo') posts = posts.filter((p: any) => p.image_url);
-        else if (filter === 'text') posts = posts.filter((p: any) => !p.image_url);
+      // Apply filter
+      if (filter === 'photo') posts = posts.filter(p => p.image_url);
+      else if (filter === 'text') posts = posts.filter(p => !p.image_url);
+      else if (filter === 'music') {
+        container.innerHTML = '<p class="text-sm text-[var(--text-muted)] italic text-center py-12">🎵 Los tracks musicales aparecerán aquí pronto. Mientras tanto, checa la sección de Música.</p>';
+        return;
       }
 
-      container.innerHTML = posts.map((p: any) => renderPost(p, session?.user?.id)).join('');
+      container.innerHTML = posts.map(p => renderPost(p, session?.user?.id)).join('');
       attachReactionHandlers();
     } catch (e) {
       console.error('Feed error:', e);
@@ -151,50 +202,41 @@ const config = {
       mediaHtml = `<img src="${p.image_url}" class="w-full rounded-lg mt-3 border border-[var(--border)]" loading="lazy" />`;
     }
 
-    return `
-      <article class="bg-[var(--bg)] border border-[var(--border)] rounded-xl p-4 md:p-6 hover:border-[var(--primary-border)] transition-colors">
-        <!-- Header -->
-        <div class="flex items-center gap-3 mb-3">
-          <img src="${avatar}" class="w-10 h-10 rounded-full object-cover border border-[var(--border)]" />
-          <div>
-            <h4 class="text-sm font-black uppercase tracking-wider text-[var(--text)]">${name}</h4>
-            <span class="text-[10px] text-[var(--text-muted)]">${timeAgo}</span>
-          </div>
+    return `<article class="bg-[var(--bg)] border border-[var(--border)] rounded-xl p-4 md:p-6 hover:border-[var(--primary-border)] transition-colors">
+      <div class="flex items-center gap-3 mb-3">
+        <img src="${avatar}" class="w-10 h-10 rounded-full object-cover border border-[var(--border)]" />
+        <div>
+          <h4 class="text-sm font-black uppercase tracking-wider text-[var(--text)]">${name}</h4>
+          <span class="text-[10px] text-[var(--text-muted)]">${timeAgo}</span>
         </div>
-
-        <!-- Content -->
-        <p class="text-sm text-[var(--text)] leading-relaxed whitespace-pre-wrap">${p.content || ''}</p>
-        ${mediaHtml}
-
-        <!-- Reactions Bar -->
-        <div class="flex items-center gap-4 mt-4 pt-3 border-t border-[var(--border-faint)]">
-          <button class="reaction-btn flex items-center gap-1.5 text-[11px] font-bold transition-colors ${isLiked ? 'text-[var(--primary)]' : 'text-[var(--text-muted)] hover:text-[var(--primary)]'}" data-post-id="${p.id}" data-action="like">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="${isLiked ? 'var(--primary)' : 'none'}" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            <span class="like-count">${p.likes_count || 0}</span>
-          </button>
-          <button class="reaction-btn flex items-center gap-1.5 text-[11px] font-bold text-[var(--text-muted)] hover:text-[var(--text)] transition-colors" data-post-id="${p.id}" data-action="comment">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            <span class="comment-count">${p.comments_count || 0}</span>
-          </button>
-          <button class="reaction-btn flex items-center gap-1.5 text-[11px] font-bold transition-colors ${isReposted ? 'text-[var(--primary)]' : 'text-[var(--text-muted)] hover:text-[var(--primary)]'}" data-post-id="${p.id}" data-action="repost">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="${isReposted ? 'var(--primary)' : 'none'}" stroke="currentColor" stroke-width="2.5"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-            <span class="repost-count">${p.reposts_count || 0}</span>
-          </button>
-          <button class="reaction-btn flex items-center gap-1.5 text-[11px] font-bold text-[var(--text-muted)] hover:text-[var(--text)] transition-colors ml-auto" data-post-id="${p.id}" data-action="share">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-          </button>
+      </div>
+      <p class="text-sm text-[var(--text)] leading-relaxed whitespace-pre-wrap">${p.content || ''}</p>
+      ${mediaHtml}
+      <div class="flex items-center gap-4 mt-4 pt-3 border-t border-[var(--border-faint)]">
+        <button class="reaction-btn flex items-center gap-1.5 text-[11px] font-bold transition-colors ${isLiked ? 'text-[var(--primary)]' : 'text-[var(--text-muted)] hover:text-[var(--primary)]'}" data-post-id="${p.id}" data-action="like">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="${isLiked ? 'var(--primary)' : 'none'}" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <span class="like-count">${p.likes_count || 0}</span>
+        </button>
+        <button class="reaction-btn flex items-center gap-1.5 text-[11px] font-bold text-[var(--text-muted)] hover:text-[var(--text)] transition-colors" data-post-id="${p.id}" data-action="comment">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span class="comment-count">${p.comments_count || 0}</span>
+        </button>
+        <button class="reaction-btn flex items-center gap-1.5 text-[11px] font-bold transition-colors ${isReposted ? 'text-[var(--primary)]' : 'text-[var(--text-muted)] hover:text-[var(--primary)]'}" data-post-id="${p.id}" data-action="repost">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="${isReposted ? 'var(--primary)' : 'none'}" stroke="currentColor" stroke-width="2.5"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+          <span class="repost-count">${p.reposts_count || 0}</span>
+        </button>
+        <button class="reaction-btn flex items-center gap-1.5 text-[11px] font-bold text-[var(--text-muted)] hover:text-[var(--text)] transition-colors ml-auto" data-post-id="${p.id}" data-action="share">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        </button>
+      </div>
+      <div class="comments-section hidden mt-3 pt-3 border-t border-[var(--border-faint)]" data-post-id="${p.id}">
+        <div class="comments-list space-y-2 mb-3"></div>
+        <div class="flex gap-2">
+          <input type="text" placeholder="Escribe un comentario..." class="comment-input flex-1 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg px-3 py-2 text-xs text-[var(--text)] placeholder:text-[var(--text-muted)] outline-none focus:border-[var(--primary)]" />
+          <button class="comment-submit px-3 py-2 bg-[var(--primary)] text-[var(--bg)] text-[10px] font-black uppercase rounded-lg hover:bg-[var(--primary-hover)] transition-colors">Enviar</button>
         </div>
-
-        <!-- Comments Section (hidden by default) -->
-        <div class="comments-section hidden mt-3 pt-3 border-t border-[var(--border-faint)]" data-post-id="${p.id}">
-          <div class="comments-list space-y-2 mb-3"></div>
-          <div class="flex gap-2">
-            <input type="text" placeholder="Escribe un comentario..." class="comment-input flex-1 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg px-3 py-2 text-xs text-[var(--text)] placeholder:text-[var(--text-muted)] outline-none focus:border-[var(--primary)]" />
-            <button class="comment-submit px-3 py-2 bg-[var(--primary)] text-[var(--bg)] text-[10px] font-black uppercase rounded-lg hover:bg-[var(--primary-hover)] transition-colors">Enviar</button>
-          </div>
-        </div>
-      </article>
-    `;
+      </div>
+    </article>`;
   }
 
   function getTimeAgo(date: Date) {
@@ -209,137 +251,96 @@ const config = {
     return date.toLocaleDateString('es-MX');
   }
 
-  // ============ REACTIONS ============
+  // ─── REACTIONS ───
   function attachReactionHandlers() {
     document.querySelectorAll('.reaction-btn').forEach(btn => {
       btn.removeEventListener('click', handleReaction);
       btn.addEventListener('click', handleReaction);
     });
-
     document.querySelectorAll('.comment-submit').forEach(btn => {
       btn.removeEventListener('click', handleCommentSubmit);
       btn.addEventListener('click', handleCommentSubmit);
-    });
-
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.removeEventListener('click', handleFilter);
-      btn.addEventListener('click', handleFilter);
     });
   }
 
   async function handleReaction(this: HTMLElement, e: Event) {
     e.preventDefault();
-    const btn = this as HTMLElement;
+    const btn = this;
     const postId = btn.dataset.postId;
     const action = btn.dataset.action;
     if (!postId || !action) return;
 
-    // Check auth
     const { data: { session } } = await supabase.auth.getSession();
-    if (!session?.user) {
-      alert('Inicia sesión para interactuar');
-      return;
-    }
+    if (!session?.user) { alert('Inicia sesión para interactuar'); return; }
 
-    if (action === 'like') {
-      await toggleLike(postId, session.user.id, btn);
-    } else if (action === 'comment') {
-      // Toggle comments section
+    if (action === 'like') await toggleLike(postId, session.user.id, btn);
+    else if (action === 'comment') {
       const postEl = btn.closest('article');
-      const commentsSection = postEl?.querySelector('.comments-section') as HTMLElement;
-      if (commentsSection) {
-        commentsSection.classList.toggle('hidden');
-        if (!commentsSection.classList.contains('hidden')) {
-          loadComments(postId, commentsSection);
-        }
+      const section = postEl?.querySelector('.comments-section');
+      if (section) {
+        section.classList.toggle('hidden');
+        if (!section.classList.contains('hidden')) loadComments(postId, section);
       }
-    } else if (action === 'repost') {
-      await toggleRepost(postId, session.user.id, btn);
-    } else if (action === 'share') {
-      const url = `${window.location.origin}/wild-writings?post=${postId}`;
-      await navigator.clipboard.writeText(url);
+    } else if (action === 'repost') await toggleRepost(postId, session.user.id, btn);
+    else if (action === 'share') {
+      await navigator.clipboard.writeText(`${window.location.origin}/the-wild-times?post=${postId}`);
       btn.style.color = 'var(--primary)';
       setTimeout(() => btn.style.color = '', 1500);
     }
   }
 
   async function toggleLike(postId: string, userId: string, btn: HTMLElement) {
-    try {
-      const { data: liked } = await supabase.rpc('toggle_like', {
-        p_post_id: postId,
-        p_user_id: userId,
-      });
-      
-      if (liked) {
-        btn.classList.add('text-[var(--primary)]');
-        btn.querySelector('svg')?.setAttribute('fill', 'var(--primary)');
-      } else {
-        btn.classList.remove('text-[var(--primary)]');
-        btn.querySelector('svg')?.setAttribute('fill', 'none');
-      }
-      
-      // Update count optimistically
-      const countEl = btn.querySelector('.like-count');
-      if (countEl) {
-        const current = parseInt(countEl.textContent || '0');
-        countEl.textContent = String(liked ? current + 1 : Math.max(0, current - 1));
-      }
-    } catch (e) {
-      console.error('Like error:', e);
+    const { data: liked } = await supabase.rpc('toggle_like', { p_post_id: postId, p_user_id: userId });
+    if (liked) {
+      btn.classList.add('text-[var(--primary)]');
+      btn.querySelector('svg')?.setAttribute('fill', 'var(--primary)');
+    } else {
+      btn.classList.remove('text-[var(--primary)]');
+      btn.querySelector('svg')?.setAttribute('fill', 'none');
+    }
+    const countEl = btn.querySelector('.like-count');
+    if (countEl) {
+      const c = parseInt(countEl.textContent || '0');
+      countEl.textContent = String(liked ? c + 1 : Math.max(0, c - 1));
     }
   }
 
   async function toggleRepost(postId: string, userId: string, btn: HTMLElement) {
-    try {
-      const { data: reposted } = await supabase.rpc('toggle_repost', {
-        p_post_id: postId,
-        p_user_id: userId,
-      });
-      
-      if (reposted) {
-        btn.classList.add('text-[var(--primary)]');
-        btn.querySelector('svg')?.setAttribute('fill', 'var(--primary)');
-      } else {
-        btn.classList.remove('text-[var(--primary)]');
-        btn.querySelector('svg')?.setAttribute('fill', 'none');
-      }
-      
-      const countEl = btn.querySelector('.repost-count');
-      if (countEl) {
-        const current = parseInt(countEl.textContent || '0');
-        countEl.textContent = String(reposted ? current + 1 : Math.max(0, current - 1));
-      }
-    } catch (e) {
-      console.error('Repost error:', e);
+    const { data: reposted } = await supabase.rpc('toggle_repost', { p_post_id: postId, p_user_id: userId });
+    if (reposted) {
+      btn.classList.add('text-[var(--primary)]');
+      btn.querySelector('svg')?.setAttribute('fill', 'var(--primary)');
+    } else {
+      btn.classList.remove('text-[var(--primary)]');
+      btn.querySelector('svg')?.setAttribute('fill', 'none');
+    }
+    const countEl = btn.querySelector('.repost-count');
+    if (countEl) {
+      const c = parseInt(countEl.textContent || '0');
+      countEl.textContent = String(reposted ? c + 1 : Math.max(0, c - 1));
     }
   }
 
-  async function loadComments(postId: string, section: HTMLElement) {
+  async function loadComments(postId: string, section: Element) {
     const list = section.querySelector('.comments-list');
     if (!list) return;
     try {
-      const { data: comments } = await supabase
-        .rpc('get_post_comments', { p_post_id: postId });
-
+      const { data: comments } = await supabase.rpc('get_post_comments', { p_post_id: postId });
       if (!comments?.length) {
         list.innerHTML = '<p class="text-[10px] text-[var(--text-muted)] italic">Sin comentarios aún.</p>';
         return;
       }
-
-      list.innerHTML = comments.map((c: any) => {
+      list.innerHTML = comments.map(c => {
         const avatar = c.avatar_url || '/wg_logo.png';
         const name = c.nombre || c.username || 'Anónimo';
-        const timeAgo = getTimeAgo(new Date(c.created_at));
-        return `
-          <div class="flex gap-2">
-            <img src="${avatar}" class="w-6 h-6 rounded-full object-cover flex-shrink-0 mt-0.5" />
-            <div>
-              <span class="text-[10px] font-black text-[var(--text)]">${name}</span>
-              <span class="text-[8px] text-[var(--text-muted)] ml-1">${timeAgo}</span>
-              <p class="text-[11px] text-[var(--text-secondary)]">${c.content}</p>
-            </div>
+        return `<div class="flex gap-2">
+          <img src="${avatar}" class="w-6 h-6 rounded-full object-cover flex-shrink-0 mt-0.5" />
+          <div>
+            <span class="text-[10px] font-black text-[var(--text)]">${name}</span>
+            <span class="text-[8px] text-[var(--text-muted)] ml-1">${getTimeAgo(new Date(c.created_at))}</span>
+            <p class="text-[11px] text-[var(--text-secondary)]">${c.content}</p>
           </div>
-        `;
+        </div>`;
       }).join('');
     } catch (e) {
       list.innerHTML = '<p class="text-[10px] text-[var(--text-muted)] italic">Error al cargar comentarios.</p>';
@@ -347,36 +348,24 @@ const config = {
   }
 
   async function handleCommentSubmit(this: HTMLElement, e: Event) {
-    const btn = this as HTMLElement;
-    const section = btn.closest('.comments-section') as HTMLElement;
-    const input = section?.querySelector('.comment-input') as HTMLInputElement;
+    const btn = this;
+    const section = btn.closest('.comments-section');
+    const input = section?.querySelector('.comment-input');
     const postId = section?.dataset.postId;
     if (!input || !postId || !input.value.trim()) return;
 
     const { data: { session } } = await supabase.auth.getSession();
-    if (!session?.user) {
-      alert('Inicia sesión para comentar');
-      return;
-    }
+    if (!session?.user) { alert('Inicia sesión para comentar'); return; }
 
-    try {
-      const { error } = await supabase.from('wall_comments').insert({
-        post_id: postId,
-        user_id: session.user.id,
-        content: input.value.trim()
-      });
-      if (!error) {
-        input.value = '';
-        loadComments(postId, section);
-        
-        // Update comment count
-        const commentBtn = section.closest('article')?.querySelector('[data-action="comment"] .comment-count');
-        if (commentBtn) {
-          const val = parseInt(commentBtn.textContent || '0') + 1;
-          commentBtn.textContent = String(val);
-        }
-      }
-    } catch (e) {}
+    const { error } = await supabase.from('wall_comments').insert({
+      post_id: postId, user_id: session.user.id, content: input.value.trim()
+    });
+    if (!error) {
+      input.value = '';
+      loadComments(postId, section);
+      const commentBtn = section.closest('article')?.querySelector('[data-action="comment"] .comment-count');
+      if (commentBtn) commentBtn.textContent = String(parseInt(commentBtn.textContent || '0') + 1);
+    }
   }
 
   function handleFilter(this: HTMLElement, e: Event) {
@@ -384,13 +373,27 @@ const config = {
       b.classList.remove('active', 'bg-[var(--primary)]', 'text-[var(--bg)]');
       b.classList.add('text-[var(--text-secondary)]', 'border-[var(--border)]');
     });
-    const btn = this as HTMLElement;
+    const btn = this;
     btn.classList.add('active', 'bg-[var(--primary)]', 'text-[var(--bg)]');
     btn.classList.remove('text-[var(--text-secondary)]', 'border-[var(--border)]');
     loadArtistFeed(btn.dataset.filter || 'all');
   }
 
-  // ============ INIT ============
+  // ─── FILTERS (delegated, never removed) ───
+  document.getElementById('feed-filters')?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest('.filter-btn');
+    if (!btn) return;
+
+    document.querySelectorAll('.filter-btn').forEach(b => {
+      b.classList.remove('active', 'bg-[var(--primary)]', 'text-[var(--bg)]');
+      b.classList.add('text-[var(--text-secondary)]', 'border-[var(--border)]');
+    });
+    btn.classList.add('active', 'bg-[var(--primary)]', 'text-[var(--bg)]');
+    btn.classList.remove('text-[var(--text-secondary)]', 'border-[var(--border)]');
+    loadArtistFeed(btn.getAttribute('data-filter') || 'all');
+  });
+
+  // ─── INIT ───
   loadNewsFeed();
   loadArtistFeed();
   document.addEventListener('astro:after-swap', () => {
@@ -408,7 +411,34 @@ const config = {
   .reaction-btn.text-\[var\(--primary\)\] svg {
     fill: var(--primary);
   }
-  .reaction-btn.text-\[var\(--repost\)\] svg {
-    fill: var(--repost);
+
+  /* News Modal */
+  .news-modal-backdrop {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 9998;
+    backdrop-filter: blur(4px);
   }
+  .news-modal-panel {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0.95); z-index: 9999;
+    max-width: 600px; width: 90%; max-height: 85vh; overflow-y: auto;
+    background: var(--bg); border: 1px solid var(--border); border-radius: 20px;
+    opacity: 0; transition: all 0.3s ease;
+  }
+  .news-modal-panel.open { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+  .news-modal-close {
+    position: absolute; top: 12px; right: 12px; width: 32px; height: 32px;
+    border-radius: 50%; border: none; background: var(--bg-card); color: var(--text);
+    font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    z-index: 10; font-family: inherit;
+  }
+  .news-modal-close:hover { background: var(--bg-hover); }
+  .news-modal-img { width: 100%; height: 280px; object-fit: cover; border-radius: 20px 20px 0 0; }
+  .news-modal-body { padding: 24px; }
+  .news-modal-type {
+    display: inline-block; font-size: 9px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--primary); background: var(--primary-soft);
+    padding: 3px 10px; border-radius: 100px; margin-bottom: 12px;
+  }
+  .news-modal-title { font-size: 1.5rem; font-weight: 900; text-transform: uppercase; line-height: 1.1; margin: 0 0 8px; }
+  .news-modal-meta { font-size: 11px; color: var(--text-muted); margin-bottom: 20px; }
+  .news-modal-content { font-size: 14px; line-height: 1.8; color: var(--text-secondary); white-space: pre-wrap; }
 </style>
