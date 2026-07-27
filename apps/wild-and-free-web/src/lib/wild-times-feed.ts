@@ -19,6 +19,14 @@ function getTimeAgo(date: Date): string {
   return date.toLocaleDateString('es-MX');
 }
 
+function authorLink(author: any, name: string): string {
+  const slug = author.username || '';
+  if (slug) {
+    return `<a href="/artista/${slug}" class="author-name-link">${name}</a>`;
+  }
+  return `<span class="author-name-link">${name}</span>`;
+}
+
 // ─── SIDEBAR: ANNOUNCEMENTS ───
 export async function loadNewsSidebar(): Promise<void> {
   const el = document.getElementById('news-list');
@@ -49,7 +57,7 @@ export async function loadNewsSidebar(): Promise<void> {
         <div class="flex-1 min-w-0">
           <h4 class="text-xs font-black uppercase leading-tight group-hover:text-[var(--primary)] transition-colors">${p.title || ''}</h4>
           <div class="flex items-center gap-2 mt-1 text-[8px] text-[var(--text-faint)]">
-            <span>${author.nombre || author.username || 'Crew'}</span>
+            <a href="/artista/${author.username || ''}" class="author-name-link">${author.nombre || author.username || 'Crew'}</a>
             <span>·</span>
             <time>${new Date(p.published_at).toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })}</time>
             ${p.image_url ? '<span>· 🖼️</span>' : ''}
@@ -97,7 +105,7 @@ function showFeaturedArticle(post: any): void {
         <div class="featured-author-row">
           <div class="featured-author-avatar">${(author.nombre || author.username || 'C').substring(0, 2).toUpperCase()}</div>
           <div>
-            <div class="featured-author-name">${author.nombre || author.username || 'Wild Gvng Crew'}</div>
+            <a href="/artista/${author.username || ''}" class="author-name-link featured-author-name">${author.nombre || author.username || 'Wild Gvng Crew'}</a>
             <div class="featured-author-role">Staff</div>
           </div>
         </div>
@@ -209,7 +217,7 @@ function renderCrewPost(p: any, meta: { likes: number; comments: number; reposts
       <div class="feed-card-author">
         <div class="feed-card-avatar" style="${avatar ? `background-image:url('${avatar}')` : ''}">${avatar ? '' : initials}</div>
         <div>
-          <div class="feed-card-name">${name}</div>
+          <a href="/artista/${author.username || ''}" class="author-name-link feed-card-name">${name}</a>
           <div class="feed-card-meta">
             <span class="feed-card-type" style="background:${typeInfo.color}15;color:${typeInfo.color}">${typeInfo.label}</span>
             <span>${timeAgo}</span>
