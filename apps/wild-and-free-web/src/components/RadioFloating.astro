@@ -129,7 +129,7 @@
             const { data } = await supabase
                 .from('radio_config')
                 .select('*')
-                .eq('id', 'main')
+                .eq('id', 1)
                 .single();
             if (data) {
                 if (data.live_url) currentMetadata.liveUrl = data.live_url;
