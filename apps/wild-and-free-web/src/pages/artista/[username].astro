@@ -72,41 +72,42 @@ function timeAgo(dateStr: string): string {
 <Layout config={{ name: `Wild Gvng - ${artist.nombre}`, primary_color: "#C98300", secondary_color: "#8A0303" }}>
   <div class="ap" data-artist-id="{artist.id}">
 
-    <!-- PROFILE HEADER -->
+    <!-- PROFILE HEADER: horizontal split, large photo -->
     <div class="ap-header">
-      <div class="ap-header-inner">
-        <div class="ap-avatar">
+      <div class="ap-header-bg"></div>
+      <div class="ap-header-content">
+        <div class="ap-header-photo">
           {artist.imagenes.profile ? (
             <img src={artist.imagenes.profile} alt={artist.nombre} />
           ) : (
-            <div class="ap-avatar-initials">{artist.nombre.substring(0, 2).toUpperCase()}</div>
+            <div class="ap-header-photo-initials">{artist.nombre.substring(0, 2).toUpperCase()}</div>
           )}
         </div>
-        <div class="ap-info">
-          <div class="ap-name-row">
-            <h1 class="ap-name">{artist.nombre}</h1>
-            <span class="ap-verified">✓</span>
+        <div class="ap-header-info">
+          <div class="ap-header-name-row">
+            <h1 class="ap-header-name">{artist.nombre}</h1>
+            <span class="ap-header-verified">✓</span>
           </div>
-          <div class="ap-genres">
+          <div class="ap-header-genres">
             {artist.estilo.split(' / ').map((g: string) => (
               <span class="ap-chip">{g}</span>
             ))}
           </div>
-          <div class="ap-meta">
-            <span>{artist.origen}</span>
+          <div class="ap-header-meta">
+            <span>📍 {artist.origen}</span>
             <span class="dot">·</span>
-            <span>{artist.stats.partnean} Partnean</span>
+            <span>🔥 {artist.stats.partnean} Partnean</span>
             <span class="dot">·</span>
-            <span>{artist.stats.oyentes} oyentes</span>
+            <span>🎵 {artist.tracks.length} tracks</span>
           </div>
           {artist.tags && artist.tags.length > 0 && (
-            <div class="ap-tags">
+            <div class="ap-header-tags">
               {artist.tags.map((tag: any) => (
-                <span class={`tag-badge tag-sm ${tag.animation && tag.animation !== 'none' ? `tag-anim-${tag.animation}` : ''}`} style={`--tag-c: ${tag.color}`}><span class="tag-badge-dot"></span>{tag.name}</span>
+                <span class={`tag-badge ${tag.animation && tag.animation !== 'none' ? `tag-anim-${tag.animation}` : ''}`} style={`--tag-c: ${tag.color}`}><span class="tag-badge-dot"></span>{tag.name}</span>
               ))}
             </div>
           )}
-          <div class="ap-actions">
+          <div class="ap-header-actions">
             <button class="btn-p btn-gold" id="partnear-btn">PARTNEAR</button>
             <button class="btn-p btn-ghost" id="share-btn">COMPARTIR</button>
           </div>
@@ -114,61 +115,52 @@ function timeAgo(dateStr: string): string {
       </div>
     </div>
 
-    <!-- TWO COLUMNS -->
+    <!-- BODY: 80% width, sidebar left + feed right -->
     <div class="ap-body">
-      <div class="ap-grid">
+      <div class="ap-body-inner">
 
-        <!-- LEFT (25%) SIDEBAR -->
+        <!-- SIDEBAR (left) -->
         <aside class="ap-side">
-          <div class="side-card">
-            <div class="side-avatar-wrap">
-              {artist.imagenes.profile ? (
-                <img src={artist.imagenes.profile} alt={artist.nombre} class="side-avatar" />
-              ) : (
-                <div class="side-avatar side-avatar-initials">{artist.nombre.substring(0, 2).toUpperCase()}</div>
-              )}
+          <div class="ap-side-bio">
+            <p>{artist.bio || 'Sin biografía aún.'}</p>
+          </div>
+          <div class="ap-side-section">
+            <h4 class="ap-side-title">Estadísticas</h4>
+            <div class="ap-side-stats">
+              <div class="ap-side-stat"><span class="num">{artist.stats.partnean}</span>Partnean</div>
+              <div class="ap-side-stat"><span class="num">{artist.stats.seguidores}</span>Seguidores</div>
+              <div class="ap-side-stat"><span class="num">{artist.stats.oyentes}</span>Oyentes</div>
+              <div class="ap-side-stat"><span class="num">{artist.tracks.length}</span>Tracks</div>
             </div>
-            <h2 class="side-name">{artist.nombre}</h2>
-            <div class="side-genres">
-              {artist.estilo.split(' / ').map((g: string) => (
-                <span class="side-chip">{g}</span>
-              ))}
+          </div>
+          {artist.redes && Object.keys(artist.redes).length > 0 && (
+            <div class="ap-side-section">
+              <h4 class="ap-side-title">Redes</h4>
+              <div class="ap-side-links">
+                {Object.entries(artist.redes).map(([name, url]: [string, string]) => (
+                  <a href={url} target="_blank" class="ap-side-link">{name}</a>
+                ))}
+              </div>
             </div>
-            <div class="side-bio">{artist.bio}</div>
-
-            {artist.tags && artist.tags.length > 0 && (
-              <div class="side-tags">
+          )}
+          {artist.tags && artist.tags.length > 0 && (
+            <div class="ap-side-section">
+              <h4 class="ap-side-title">Tags</h4>
+              <div class="ap-side-tags">
                 {artist.tags.map((tag: any) => (
                   <span class={`tag-badge ${tag.animation && tag.animation !== 'none' ? `tag-anim-${tag.animation}` : ''}`} style={`--tag-c: ${tag.color}`}><span class="tag-badge-dot"></span>{tag.name}</span>
                 ))}
               </div>
-            )}
-
-            <div class="side-stats">
-              <div class="side-stat"><span class="num">{artist.stats.partnean}</span> Partnean</div>
-              <div class="side-stat"><span class="num">{artist.stats.seguidores}</span> Seguidores</div>
-              <div class="side-stat"><span class="num">{artist.stats.oyentes}</span> Oyentes</div>
-              <div class="side-stat"><span class="num">{artist.tracks.length}</span> Tracks</div>
             </div>
-
-            {artist.redes && Object.keys(artist.redes).length > 0 && (
-              <div class="side-links">
-                {Object.entries(artist.redes).map(([name, url]: [string, string]) => (
-                  <a href={url} target="_blank" class="side-link">{name}</a>
-                ))}
-              </div>
-            )}
-          </div>
+          )}
         </aside>
 
-        <!-- RIGHT (75%) FEED -->
+        <!-- FEED (right) -->
         <main class="ap-feed">
-
-          <!-- TABS -->
           <div class="feed-tabs">
             <button class="feed-tab active" data-tab="feed">Feed</button>
             <button class="feed-tab" data-tab="music">Música</button>
-            <button class="feed-tab" data-tab="exclusive">Exclusivo</button>
+            <button class="feed-tab exclusive-tab" data-tab="exclusive">Exclusivo</button>
           </div>
 
           <!-- Feed Tab -->
@@ -307,231 +299,391 @@ function timeAgo(dateStr: string): string {
 </Layout>
 
 <style>
+  /* ─── PAGE CONTAINER ─── */
   .ap { min-height: 100vh; background: var(--bg); }
+
+  /* ─── HEADER: horizontal split ─── */
   .ap-header {
-    background: linear-gradient(135deg, rgba(201,131,0,0.12), rgba(0,0,0,0.4));
+    position: relative;
     border-bottom: 1px solid var(--border);
-    padding: 48px 24px 32px;
+    overflow: hidden;
   }
-  .ap-header-inner { max-width: 1200px; margin: 0 auto; display: flex; gap: 28px; align-items: center; }
-  .ap-avatar { width: 100px; height: 100px; border-radius: 50%; overflow: hidden; border: 3px solid var(--primary); flex-shrink: 0; }
-  .ap-avatar img { width: 100%; height: 100%; object-fit: cover; }
-  .ap-avatar-initials { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--bg-card); font-size: 1.8rem; font-weight: 900; color: var(--primary); }
-  .ap-info { display: flex; flex-direction: column; gap: 6px; }
-  .ap-name-row { display: flex; align-items: center; gap: 8px; }
-  .ap-name { font-size: 1.8rem; font-weight: 900; color: var(--text); margin: 0; text-transform: uppercase; }
-  .ap-verified { color: var(--primary); font-size: 1.2rem; }
-  .ap-genres { display: flex; gap: 6px; flex-wrap: wrap; }
-  .ap-chip { padding: 3px 10px; border-radius: 100px; font-size: 0.55rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; background: var(--primary-soft); color: var(--primary); border: 1px solid var(--primary-border); }
-  .ap-meta { font-size: 0.65rem; color: var(--text-secondary); display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .ap-header-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(201,131,0,0.12), rgba(0,0,0,0.4));
+    pointer-events: none;
+  }
+  .ap-header-content {
+    position: relative; z-index: 1;
+    max-width: 1400px; margin: 0 auto;
+    display: flex; gap: 40px;
+    padding: 0;
+  }
+  /* Photo: 80% of viewport height, capped */
+  .ap-header-photo {
+    width: 38%;
+    min-height: 60vh;
+    max-height: 80vh;
+    overflow: hidden;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .ap-header-photo img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    position: absolute; inset: 0;
+  }
+  .ap-header-photo-initials {
+    width: 100%; height: 100%;
+    min-height: 60vh;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--bg-card);
+    font-size: 5rem; font-weight: 900; color: var(--primary);
+  }
+  /* Info panel */
+  .ap-header-info {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 48px 48px 48px 0;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+  }
+  .ap-header-name-row { display: flex; align-items: center; gap: 10px; }
+  .ap-header-name {
+    font-size: 3rem; font-weight: 900; color: var(--text);
+    margin: 0; text-transform: uppercase;
+    letter-spacing: -0.02em; line-height: 1;
+  }
+  .ap-header-verified {
+    color: var(--primary); font-size: 1.5rem;
+    background: var(--primary-soft);
+    width: 32px; height: 32px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .ap-header-genres { display: flex; gap: 6px; flex-wrap: wrap; }
+  .ap-chip {
+    padding: 4px 12px; border-radius: 100px;
+    font-size: 0.55rem; font-weight: 800; letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--primary-soft); color: var(--primary);
+    border: 1px solid var(--primary-border);
+  }
+  .ap-header-meta {
+    font-size: 0.7rem; color: var(--text-secondary);
+    display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+  }
   .dot { color: var(--text-muted); }
-  .ap-tags { display: flex; gap: 4px; flex-wrap: wrap; }
-  .ap-actions { display: flex; gap: 8px; margin-top: 4px; }
-  .btn-p { padding: 8px 20px; border-radius: 100px; font-size: 0.6rem; font-weight: 900; letter-spacing: 0.15em; text-transform: uppercase; border: none; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+  .ap-header-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+  .ap-header-actions { display: flex; gap: 10px; margin-top: 8px; }
+  .btn-p {
+    padding: 10px 24px; border-radius: 100px;
+    font-size: 0.6rem; font-weight: 900;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    border: none; cursor: pointer; transition: all 0.2s;
+    font-family: inherit;
+  }
   .btn-gold { background: var(--primary); color: var(--bg); }
   .btn-gold:hover { background: var(--primary-hover); }
   .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text); }
   .btn-ghost:hover { border-color: var(--primary); color: var(--primary); }
 
-  .ap-body { max-width: 1200px; margin: 0 auto; padding: 0 24px 60px; margin-top: -20px; position: relative; z-index: 2; }
-  .ap-grid { display: grid; grid-template-columns: 1fr 2.5fr; gap: 24px; align-items: start; }
+  /* ─── BODY: 80% width container ─── */
+  .ap-body {
+    max-width: 1400px; margin: 0 auto;
+    padding: 0 32px 60px;
+    margin-top: 40px;
+    position: relative; z-index: 2;
+  }
+  .ap-body-inner {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 32px;
+    align-items: start;
+  }
 
+  /* ─── SIDEBAR ─── */
   .ap-side { position: sticky; top: 90px; }
-  .side-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 24px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
-  .side-avatar-wrap { width: 120px; height: 120px; border-radius: 50%; overflow: hidden; border: 3px solid var(--primary); }
-  .side-avatar { width: 100%; height: 100%; object-fit: cover; }
-  .side-avatar-initials { display: flex; align-items: center; justify-content: center; background: var(--bg-card); font-size: 2rem; font-weight: 900; color: var(--primary); }
-  .side-name { font-size: 1.2rem; font-weight: 900; color: var(--text); text-transform: uppercase; margin: 0; }
-  .side-genres { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; }
-  .side-chip { padding: 2px 8px; border-radius: 100px; font-size: 0.5rem; font-weight: 700; text-transform: uppercase; background: var(--primary-soft); color: var(--primary); }
-  .side-bio { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.5; }
-  .side-tags { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; }
-  .side-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-top: 8px; }
-  .side-stat { background: var(--bg); border: 1px solid var(--border-faint); border-radius: 10px; padding: 10px; font-size: 0.55rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); }
-  .side-stat .num { font-size: 1rem; font-weight: 900; color: var(--text); display: block; }
-  .side-links { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
-  .side-link { font-size: 0.55rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; padding: 4px 10px; border-radius: 100px; background: var(--bg); border: 1px solid var(--border-faint); color: var(--text); text-decoration: none; }
-  .side-link:hover { border-color: var(--primary); color: var(--primary); }
+  .ap-side-bio {
+    font-size: 0.8rem; line-height: 1.7;
+    color: var(--text-secondary);
+    padding: 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-faint);
+    border-radius: 12px;
+    margin-bottom: 16px;
+  }
+  .ap-side-bio p { margin: 0; }
+  .ap-side-section { margin-bottom: 20px; padding: 0 4px; }
+  .ap-side-title {
+    font-size: 0.5rem; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 0.15em;
+    color: var(--text-muted);
+    margin: 0 0 10px;
+  }
+  .ap-side-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .ap-side-stat {
+    background: var(--bg-card);
+    border: 1px solid var(--border-faint);
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+  }
+  .ap-side-stat .num {
+    display: block;
+    font-size: 1.1rem; font-weight: 900; color: var(--text);
+    margin-bottom: 2px;
+  }
+  .ap-side-stat {
+    font-size: 0.5rem; font-weight: 700;
+    text-transform: uppercase; color: var(--text-muted);
+  }
+  .ap-side-links { display: flex; flex-wrap: wrap; gap: 6px; }
+  .ap-side-link {
+    font-size: 0.5rem; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    padding: 4px 10px; border-radius: 100px;
+    background: var(--bg); border: 1px solid var(--border-faint);
+    color: var(--text); text-decoration: none;
+  }
+  .ap-side-link:hover { border-color: var(--primary); color: var(--primary); }
+  .ap-side-tags { display: flex; flex-wrap: wrap; gap: 4px; }
 
-  .ap-feed { display: flex; flex-direction: column; gap: 16px; }
-  .feed-tabs { display: flex; gap: 4px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 4px; }
-  .feed-tab { flex: 1; padding: 10px; border: none; background: transparent; color: var(--text-muted); font-size: 0.6rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.12em; border-radius: 10px; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+  /* ─── FEED ─── */
+  .ap-feed { display: flex; flex-direction: column; gap: 20px; }
+  .feed-tabs {
+    display: flex; gap: 4px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px; padding: 4px;
+  }
+  .feed-tab {
+    flex: 1; padding: 12px;
+    border: none; background: transparent;
+    color: var(--text-muted);
+    font-size: 0.65rem; font-weight: 900;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    border-radius: 10px;
+    cursor: pointer; transition: all 0.15s;
+    font-family: inherit;
+  }
   .feed-tab.active { background: var(--bg); color: var(--text); }
-  .feed-content { display: none; flex-direction: column; gap: 12px; }
+  .feed-tab.hidden-tab { display: none; }
+  .feed-content { display: none; flex-direction: column; gap: 16px; }
   .feed-content.active { display: flex; }
 
-  .feed-empty { text-align: center; padding: 40px 20px; border: 1px solid var(--border); border-radius: 16px; background: var(--bg-card); }
-  .empty-icon { font-size: 2rem; margin-bottom: 8px; }
-  .empty-title { font-size: 0.85rem; font-weight: 900; color: var(--text); margin: 0; }
-  .empty-sub { font-size: 0.7rem; color: var(--text-muted); margin: 4px 0 0; }
+  .feed-empty {
+    text-align: center; padding: 60px 20px;
+    border: 1px solid var(--border);
+    border-radius: 16px; background: var(--bg-card);
+  }
+  .empty-icon { font-size: 2.5rem; margin-bottom: 12px; }
+  .empty-title { font-size: 1rem; font-weight: 900; color: var(--text); margin: 0; }
+  .empty-sub { font-size: 0.75rem; color: var(--text-muted); margin: 6px 0 0; }
 
-  .feed-post { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
-  .post-header { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; }
-  .post-avatar-sm { width: 36px; height: 36px; border-radius: 50%; overflow: hidden; border: 2px solid var(--primary); flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: var(--bg-card); font-weight: 900; font-size: 0.65rem; color: var(--primary); }
+  /* Feed post cards */
+  .feed-post {
+    background: var(--bg-card);
+    border: 1px solid var(--border-faint);
+    border-radius: 16px; padding: 24px;
+    transition: border-color 0.2s;
+  }
+  .feed-post:hover { border-color: var(--primary-border); }
+  .post-header { display: flex; gap: 12px; align-items: center; margin-bottom: 14px; }
+  .post-avatar-sm {
+    width: 40px; height: 40px; border-radius: 50%;
+    overflow: hidden; border: 2px solid var(--primary);
+    flex-shrink: 0; display: flex; align-items: center;
+    justify-content: center; background: var(--bg-card);
+    font-weight: 900; font-size: 0.7rem; color: var(--primary);
+  }
   .post-avatar-sm img { width: 100%; height: 100%; object-fit: cover; }
   .post-author { display: flex; flex-direction: column; }
-  .post-author strong { font-size: 0.75rem; color: var(--text); }
-  .post-time { font-size: 0.55rem; color: var(--text-muted); }
-  .post-body p { font-size: 0.85rem; color: var(--text); line-height: 1.6; margin: 0 0 12px; }
+  .post-author strong { font-size: 0.8rem; color: var(--text); }
+  .post-time { font-size: 0.6rem; color: var(--text-muted); }
+  .post-body p {
+    font-size: 0.9rem; color: var(--text);
+    line-height: 1.7; margin: 0 0 14px;
+  }
   .post-img-wrap { border-radius: 12px; overflow: hidden; margin-bottom: 8px; }
-  .post-img-wrap img { width: 100%; height: auto; max-height: 400px; object-fit: cover; }
+  .post-img-wrap img { width: 100%; height: auto; max-height: 420px; object-fit: cover; }
   .post-embed { border: 1px solid var(--border-faint); border-radius: 12px; overflow: hidden; }
-  .embed-placeholder { display: flex; align-items: center; gap: 12px; padding: 16px; background: var(--bg); }
-  .embed-icon { font-size: 1.4rem; }
-  .embed-title { font-weight: 700; font-size: 0.75rem; color: var(--text); }
+  .embed-placeholder {
+    display: flex; align-items: center; gap: 12px;
+    padding: 16px; background: var(--bg);
+  }
+  .embed-icon { font-size: 1.5rem; }
+  .embed-title { font-weight: 700; font-size: 0.8rem; color: var(--text); }
 
-  .post-actions-bar { display: flex; gap: 16px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-faint); }
-  .post-action { display: flex; align-items: center; gap: 4px; background: none; border: 1px solid var(--border-faint); border-radius: 8px; padding: 6px 10px; font-size: 0.6rem; font-weight: 700; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; font-family: inherit; }
+  .post-actions-bar {
+    display: flex; gap: 8px;
+    margin-top: 14px; padding-top: 14px;
+    border-top: 1px solid var(--border-faint);
+  }
+  .post-action {
+    display: flex; align-items: center; gap: 6px;
+    background: none; border: 1px solid var(--border-faint);
+    border-radius: 8px; padding: 7px 12px;
+    font-size: 0.65rem; font-weight: 700;
+    color: var(--text-secondary); cursor: pointer;
+    transition: all 0.15s; font-family: inherit;
+  }
   .post-action:hover { border-color: var(--border); color: var(--text); background: var(--bg-hover); }
-  .action-icon { font-size: 0.8rem; }
-  .action-count { font-size: 0.6rem; }
-
-  .music-list { display: flex; flex-direction: column; gap: 6px; }
-  .music-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--bg-card); border: 1px solid var(--border-faint); border-radius: 12px; }
-  .music-cover { width: 40px; height: 40px; border-radius: 8px; background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
-  .music-info { flex: 1; }
-  .music-info strong { display: block; font-size: 0.75rem; color: var(--text); }
-  .music-info span { font-size: 0.6rem; color: var(--text-muted); }
-  .music-play { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; text-decoration: none; }
-
+  .action-icon { font-size: 0.85rem; }
+  .action-count { font-size: 0.65rem; }
   .post-action.liked { border-color: var(--danger); color: var(--danger); background: rgba(255,68,68,0.08); }
   .post-action.reposted { border-color: var(--success); color: var(--success); background: rgba(0,255,136,0.08); }
 
-  .comment-section { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-faint); }
-  .comment-list { max-height: 300px; overflow-y: auto; margin-bottom: 12px; }
-  .comment-loading, .comment-empty { font-size: 0.65rem; color: var(--text-muted); padding: 12px; text-align: center; }
-  .comment-item { display: flex; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--border-faint); }
+  /* Music tab */
+  .music-list { display: flex; flex-direction: column; gap: 8px; }
+  .music-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px; background: var(--bg-card);
+    border: 1px solid var(--border-faint); border-radius: 12px;
+  }
+  .music-cover {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: var(--bg); display: flex;
+    align-items: center; justify-content: center;
+    font-size: 1.3rem; flex-shrink: 0;
+  }
+  .music-info { flex: 1; }
+  .music-info strong { display: block; font-size: 0.8rem; color: var(--text); }
+  .music-info span { font-size: 0.65rem; color: var(--text-muted); }
+  .music-play {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--primary); color: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; text-decoration: none;
+  }
+
+  /* ─── COMMENTS ─── */
+  .comment-section { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border-faint); }
+  .comment-list { max-height: 300px; overflow-y: auto; margin-bottom: 14px; }
+  .comment-loading, .comment-empty { font-size: 0.7rem; color: var(--text-muted); padding: 12px; text-align: center; }
+  .comment-item { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border-faint); }
   .comment-item:last-child { border-bottom: none; }
-  .comment-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--bg-card); display: flex; align-items: center; justify-content: center; font-size: 0.5rem; font-weight: 900; color: var(--primary); flex-shrink: 0; background-size: cover; background-position: center; }
+  .comment-avatar {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--bg-card); display: flex;
+    align-items: center; justify-content: center;
+    font-size: 0.55rem; font-weight: 900; color: var(--primary);
+    flex-shrink: 0; background-size: cover; background-position: center;
+  }
   .comment-body { flex: 1; }
-  .comment-author { font-size: 0.6rem; font-weight: 800; color: var(--text); }
-  .comment-time { font-size: 0.5rem; color: var(--text-muted); font-weight: 400; }
-  .comment-text { font-size: 0.7rem; color: var(--text-secondary); margin-top: 2px; }
+  .comment-author { font-size: 0.65rem; font-weight: 800; color: var(--text); }
+  .comment-time { font-size: 0.55rem; color: var(--text-muted); font-weight: 400; }
+  .comment-text { font-size: 0.75rem; color: var(--text-secondary); margin-top: 3px; }
   .comment-form { display: flex; gap: 8px; }
-  .comment-input { flex: 1; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-faint); background: var(--bg); color: var(--text); font-size: 0.7rem; font-family: inherit; outline: none; }
+  .comment-input {
+    flex: 1; padding: 10px 14px; border-radius: 8px;
+    border: 1px solid var(--border-faint);
+    background: var(--bg); color: var(--text);
+    font-size: 0.75rem; font-family: inherit; outline: none;
+  }
   .comment-input:focus { border-color: var(--primary); }
-  .comment-send { padding: 8px 16px; border-radius: 8px; border: none; background: var(--primary); color: var(--bg); font-size: 0.6rem; font-weight: 900; text-transform: uppercase; cursor: pointer; font-family: inherit; }
+  .comment-send {
+    padding: 10px 18px; border-radius: 8px; border: none;
+    background: var(--primary); color: var(--bg);
+    font-size: 0.65rem; font-weight: 900;
+    text-transform: uppercase; cursor: pointer; font-family: inherit;
+  }
   .comment-send:hover { background: var(--primary-hover); }
 
+  /* ─── EXCLUSIVE CONTENT ─── */
   .exclusive-header {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 16px;
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 16px; flex-wrap: wrap; gap: 8px;
   }
   .exclusive-balance {
-    font-size: 0.7rem;
-    color: var(--text-secondary);
-    background: var(--bg-card);
-    padding: 6px 14px;
-    border-radius: 100px;
-    border: 1px solid var(--border-faint);
+    font-size: 0.7rem; color: var(--text-secondary);
+    background: var(--bg-card); padding: 6px 14px;
+    border-radius: 100px; border: 1px solid var(--border-faint);
   }
-  .exclusive-balance strong {
-    color: var(--primary);
-  }
+  .exclusive-balance strong { color: var(--primary); }
   .exclusive-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
   }
   .exclusive-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: 16px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
+    border-radius: 16px; overflow: hidden;
+    transition: border-color 0.2s;
   }
-  .exclusive-preview {
-    width: 100%;
-    height: 180px;
-    overflow: hidden;
+  .exclusive-card:hover {
+    border-color: var(--primary-border);
   }
-  .exclusive-preview img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  .exclusive-card-img {
+    width: 100%; height: 180px; overflow: hidden;
   }
-  .exclusive-info {
+  .exclusive-card-img img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  .exclusive-card-body {
     padding: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    display: flex; flex-direction: column; gap: 8px;
   }
-  .exclusive-title {
-    font-size: 0.85rem;
-    font-weight: 900;
-    color: var(--text);
-    text-transform: uppercase;
-    margin: 0;
-  }
-  .exclusive-desc {
-    font-size: 0.7rem;
-    color: var(--text-secondary);
-    line-height: 1.5;
-  }
-  .exclusive-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.6rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .exclusive-type {
+  .exclusive-card-type {
+    display: inline-block;
+    font-size: 8px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 0.08em;
     color: var(--primary);
     background: var(--primary-soft);
-    padding: 2px 8px;
-    border-radius: 100px;
+    padding: 2px 10px; border-radius: 100px;
+    width: fit-content;
   }
-  .exclusive-price {
-    color: var(--text-muted);
+  .exclusive-card-title {
+    font-size: 0.85rem; font-weight: 900;
+    color: var(--text); text-transform: uppercase;
+    margin: 0; line-height: 1.2;
+  }
+  .exclusive-card-desc {
+    font-size: 0.7rem; color: var(--text-secondary);
+    line-height: 1.5;
+  }
+  .exclusive-card-footer {
+    display: flex; justify-content: space-between;
+    align-items: center;
+    padding-top: 8px; border-top: 1px solid var(--border-faint);
+  }
+  .exclusive-card-price {
+    font-size: 0.6rem; font-weight: 700;
+    color: var(--text-muted); text-transform: uppercase;
   }
   .exclusive-btn {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 100px;
-    font-size: 0.65rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: inherit;
-    text-align: center;
-    text-decoration: none;
+    padding: 8px 16px; border: none; border-radius: 100px;
+    font-size: 0.6rem; font-weight: 900;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    cursor: pointer; transition: all 0.2s;
+    font-family: inherit; text-align: center;
+    text-decoration: none; display: inline-block;
   }
   .exclusive-btn--unlocked {
-    background: var(--success);
-    color: #000;
-    display: block;
+    background: var(--success); color: #000;
   }
-  .exclusive-btn--unlocked:hover {
-    opacity: 0.8;
-  }
+  .exclusive-btn--unlocked:hover { opacity: 0.8; }
   .exclusive-btn--buy {
-    background: var(--primary);
-    color: var(--bg);
+    background: var(--primary); color: var(--bg);
   }
-  .exclusive-btn--buy:hover {
-    background: var(--primary-hover);
-  }
+  .exclusive-btn--buy:hover { background: var(--primary-hover); }
   .exclusive-btn--locked {
-    background: var(--bg-card);
-    color: var(--text-muted);
-    cursor: not-allowed;
-    border: 1px solid var(--border-faint);
+    background: var(--bg-card); color: var(--text-muted);
+    cursor: not-allowed; border: 1px solid var(--border-faint);
   }
 
   @media (max-width: 768px) {
-    .ap-grid { grid-template-columns: 1fr; }
+    .ap-header-content { flex-direction: column; }
+    .ap-header-photo { width: 100%; min-height: 40vh; max-height: 50vh; }
+    .ap-header-info { padding: 24px; }
+    .ap-header-name { font-size: 2rem; }
+    .ap-body-inner { grid-template-columns: 1fr; }
     .ap-side { position: static; }
-    .ap-header-inner { flex-direction: column; text-align: center; }
-    .ap-actions { justify-content: center; }
-    .ap-body { margin-top: 0; }
-    .ap-header { padding: 24px 16px; }
+    .exclusive-grid { grid-template-columns: 1fr; }
   }
 </style>
 
@@ -785,6 +937,44 @@ function timeAgo(dateStr: string): string {
       }
     }
 
+    // ── GET USER ROLE ──
+    let userRole: string | null = null;
+    if (currentUserId) {
+      try {
+        const { data: roleRows } = await supabase
+          .from('user_roles')
+          .select('role_id')
+          .eq('user_id', currentUserId);
+        if (roleRows && roleRows.length > 0) {
+          const roleIds = roleRows.map((r: any) => r.role_id);
+          const { data: roles } = await supabase
+            .from('roles')
+            .select('name')
+            .in('id', roleIds);
+          if (roles) {
+            const names = roles.map((r: any) => r.name);
+            if (names.includes('admin')) userRole = 'admin';
+            else if (names.includes('staff')) userRole = 'staff';
+            else if (names.includes('artist')) userRole = 'artist';
+            else userRole = 'fan';
+          }
+        }
+      } catch (e) {
+        console.warn('Could not fetch role:', e);
+      }
+    }
+
+    // Show exclusive tab only for admin/staff/artist (or if viewing own profile)
+    const exclusiveTab = document.querySelector('.exclusive-tab');
+    if (exclusiveTab) {
+      const allowedRoles = ['admin', 'staff', 'artist'];
+      if (currentUserId && artistId && (allowedRoles.includes(userRole || '') || currentUserId === artistId)) {
+        exclusiveTab.classList.remove('hidden-tab');
+      } else {
+        exclusiveTab.classList.add('hidden-tab');
+      }
+    }
+
     // ── EXCLUSIVE CONTENT ──
     async function loadExclusiveContent() {
       const root = document.getElementById('exclusive-content-root');
@@ -828,30 +1018,35 @@ function timeAgo(dateStr: string): string {
         purchasedIds = purchases?.map(p => p.content_id) || [];
       }
 
+      const typeLabels: Record<string, string> = {
+        video: '🎬 Video', audio: '🎵 Audio', download: '📦 Download'
+      };
+
       root.innerHTML = `
         <div class="exclusive-header">
-          <span class="exclusive-balance">💰 Tu saldo: <strong>${userBalance} tokens</strong></span>
+          <span class="exclusive-balance">💰 <strong>${userBalance}</strong> tokens disponibles</span>
+          <span class="exclusive-balance">📦 <strong>${content.length}</strong> items</span>
         </div>
         <div class="exclusive-grid">
-          ${content.map(item => {
+          ${content.map((item: any) => {
             const isPurchased = purchasedIds.includes(item.id);
             const canAfford = userBalance >= (item.token_price || 0);
             return `
               <div class="exclusive-card" data-content-id="${item.id}">
-                ${item.preview_url ? `<div class="exclusive-preview"><img src="${item.preview_url}" alt="${item.title}" loading="lazy" /></div>` : ''}
-                <div class="exclusive-info">
-                  <h4 class="exclusive-title">${item.title}</h4>
-                  <p class="exclusive-desc">${item.description || ''}</p>
-                  <div class="exclusive-meta">
-                    <span class="exclusive-type">${item.content_type.toUpperCase()}</span>
-                    <span class="exclusive-price">${item.token_price || 0} tokens</span>
+                ${item.preview_url ? `<div class="exclusive-card-img"><img src="${item.preview_url}" alt="${item.title}" loading="lazy" /></div>` : ''}
+                <div class="exclusive-card-body">
+                  <span class="exclusive-card-type">${typeLabels[item.content_type] || item.content_type.toUpperCase()}</span>
+                  <h4 class="exclusive-card-title">${item.title}</h4>
+                  <p class="exclusive-card-desc">${item.description || ''}</p>
+                  <div class="exclusive-card-footer">
+                    <span class="exclusive-card-price">${item.token_price || 0} tokens</span>
+                    ${isPurchased
+                      ? `<a href="${item.file_url || '#'}" target="_blank" class="exclusive-btn exclusive-btn--unlocked">🔓 Acceder</a>`
+                      : `<button class="exclusive-btn ${canAfford ? 'exclusive-btn--buy' : 'exclusive-btn--locked'}" onclick="unlockContent('${item.id}', ${item.token_price || 0})" ${canAfford ? '' : 'disabled'}>
+                          ${canAfford ? '🔑 Desbloquear' : '🔒 Sin saldo'}
+                        </button>`
+                    }
                   </div>
-                  ${isPurchased
-                    ? `<a href="${item.file_url || '#'}" target="_blank" class="exclusive-btn exclusive-btn--unlocked">🔓 Acceder</a>`
-                    : `<button class="exclusive-btn ${canAfford ? 'exclusive-btn--buy' : 'exclusive-btn--locked'}" onclick="unlockContent('${item.id}', ${item.token_price || 0})" ${canAfford ? '' : 'disabled'}>
-                        ${canAfford ? '🔑 Desbloquear' : '🔒 Sin saldo'}
-                      </button>`
-                  }
                 </div>
               </div>
             `;
@@ -859,6 +1054,7 @@ function timeAgo(dateStr: string): string {
         </div>`;
     }
 
+    // Override unlockContent to use new class names
     (window as any).unlockContent = async (contentId: string, price: number) => {
       if (!currentUserId) { window.location.href = '/login'; return; }
       if (!artistId) return;
@@ -869,7 +1065,6 @@ function timeAgo(dateStr: string): string {
         btn.textContent = 'Procesando...';
       }
 
-      // Deduct tokens & create purchase record
       const { error: tokenError } = await supabase
         .from('token_transactions')
         .insert({
@@ -890,12 +1085,10 @@ function timeAgo(dateStr: string): string {
         return;
       }
 
-      // Deduct tokens
       await supabase.rpc('decrement_tokens', {
         p_user_id: currentUserId,
         p_amount: price,
       }).catch(async () => {
-        // Fallback: direct update
         const { data: current } = await supabase
           .from('user_tokens')
           .select('balance')
@@ -908,7 +1101,6 @@ function timeAgo(dateStr: string): string {
           .eq('user_id', currentUserId);
       });
 
-      // Create purchase
       await supabase.from('content_purchases').insert({
         user_id: currentUserId,
         content_id: contentId,
@@ -916,7 +1108,6 @@ function timeAgo(dateStr: string): string {
         tokens_spent: price,
       });
 
-      // Reload to show unlocked state
       loadExclusiveContent();
     };
 
