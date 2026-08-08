@@ -1,5 +1,6 @@
 import { supabase } from './supabase';
-import { renderRichContent } from './linkify';
+import { renderRichContent, initGiphyFallback } from './linkify';
+import { getRole } from './role';
 
 const typeLabels: Record<string, { label: string; color: string }> = {
   announcement: { label: '📢 Anuncio', color: 'var(--primary)' },
@@ -185,12 +186,17 @@ export async function loadCrewFeed(filter = 'all'): Promise<void> {
       return;
     }
 
+    initGiphyFallback();
+    const { role } = await getRole();
+    const canViewReactions = role === 'admin' || role === 'staff';
+
     container.innerHTML = filtered.map((p: any) => renderCrewPost(p, {
       likes: likeCounts[p.id] || 0,
       comments: commentCounts[p.id] || 0,
       reposts: repostCounts[p.id] || 0,
       isLiked: userLikes.has(p.id),
       isReposted: userReposts.has(p.id),
+      canViewReactions,
     })).join('');
 
     attachHandlers(posts as any[]);
@@ -200,7 +206,7 @@ export async function loadCrewFeed(filter = 'all'): Promise<void> {
   }
 }
 
-function renderCrewPost(p: any, meta: { likes: number; comments: number; reposts: number; isLiked: boolean; isReposted: boolean }): string {
+function renderCrewPost(p: any, meta: { likes: number; comments: number; reposts: number; isLiked: boolean; isReposted: boolean; canViewReactions: boolean }): string {
   const author = p.author || {};
   const avatar = author.avatar_url || '';
   const name = author.nombre || author.username || 'Crew';
@@ -244,6 +250,10 @@ function renderCrewPost(p: any, meta: { likes: number; comments: number; reposts
         <svg width="16" height="16" viewBox="0 0 24 24" fill="${meta.isReposted ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2.5"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
         <span>${meta.reposts}</span>
       </button>
+      ${meta.canViewReactions ? `<button class="action-btn" data-action="opinions" title="Ver quién reaccionó">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        <span>${meta.likes + meta.comments + meta.reposts}</span>
+      </button>` : ''}
       <button class="action-btn ml-auto" data-action="share">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
       </button>
@@ -302,6 +312,9 @@ async function handleAction(e: Event): Promise<void> {
       (section as HTMLElement).classList.toggle('hidden');
       if (!(section as HTMLElement).classList.contains('hidden')) loadPostComments(postId, section as HTMLElement);
     }
+  } else if (action === 'opinions') {
+    const postTitle = postEl.querySelector('.feed-card-title')?.textContent || 'Publicación';
+    await openReactionsDialog(postId, postTitle);
   } else if (action === 'share') {
     await navigator.clipboard.writeText(window.location.href);
     btn.style.color = 'var(--primary)';
@@ -399,4 +412,94 @@ function refreshFeed(): void {
     loadCrewFeed(currentFilter);
     loadNewsSidebar();
   }, 400);
+}
+
+// ─── DIALOG DE REACCIONES (ojito, admin/staff) ───
+let reactionDialog: HTMLDialogElement | null = null;
+
+function ensureReactionDialog(): HTMLDialogElement {
+  if (reactionDialog && document.body.contains(reactionDialog)) return reactionDialog;
+  reactionDialog = document.createElement('dialog');
+  reactionDialog.className = 'reactions-dialog';
+  reactionDialog.innerHTML = `
+    <div class="reactions-dialog-inner">
+      <div class="reactions-dialog-head">
+        <h3 class="reactions-dialog-title">Reacciones</h3>
+        <button class="reactions-dialog-close" data-close title="Cerrar">✕</button>
+      </div>
+      <div class="reactions-tabs" role="tablist">
+        <button class="reactions-tab active" data-reaction-tab="likes">❤️ Likes</button>
+        <button class="reactions-tab" data-reaction-tab="comments">💬 Comentarios</button>
+        <button class="reactions-tab" data-reaction-tab="reposts">🔁 Reposts</button>
+      </div>
+      <div class="reactions-body">
+        <p class="reactions-loading">Cargando...</p>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(reactionDialog);
+  reactionDialog.querySelector('.reactions-dialog-close')?.addEventListener('click', () => reactionDialog!.close());
+  reactionDialog.addEventListener('click', (ev) => {
+    const target = ev.target as HTMLElement;
+    if (target === reactionDialog) reactionDialog!.close();
+  });
+  reactionDialog.querySelectorAll('.reactions-tab').forEach((tab) => {
+    tab.addEventListener('click', () => {
+      reactionDialog!.querySelectorAll('.reactions-tab').forEach((t) => t.classList.remove('active'));
+      tab.classList.add('active');
+      const type = (tab as HTMLElement).dataset.reactionTab;
+      if (type) loadReactionTab(type as 'likes' | 'comments' | 'reposts');
+    });
+  });
+  return reactionDialog;
+}
+
+let currentReactionPostId = '';
+
+async function openReactionsDialog(postId: string, title: string): Promise<void> {
+  const dialog = ensureReactionDialog();
+  dialog.querySelector('.reactions-dialog-title')!.textContent = `Reacciones · ${title}`;
+  (dialog.querySelector('.reactions-tab.active') as HTMLElement).classList.remove('active');
+  (dialog.querySelector('[data-reaction-tab="likes"]') as HTMLElement).classList.add('active');
+  currentReactionPostId = postId;
+  await loadReactionTab('likes');
+  if (!dialog.open) dialog.showModal();
+}
+
+function userRowHtml(u: any, extra: string): string {
+  const avatar = u.avatar_url || '';
+  const name = u.nombre || u.username || 'Anónimo';
+  const initials = name.substring(0, 2).toUpperCase();
+  return `<div class="reaction-user">
+    <div class="reaction-user-avatar" style="${avatar ? `background-image:url('${avatar}')` : ''}">${avatar ? '' : initials}</div>
+    <div class="reaction-user-info">
+      <a href="/artista/${u.username || ''}" class="reaction-user-name">${name}</a>
+      <span class="reaction-user-meta">${extra}</span>
+    </div>
+  </div>`;
+}
+
+async function loadReactionTab(type: 'likes' | 'comments' | 'reposts'): Promise<void> {
+  const dialog = ensureReactionDialog();
+  const body = dialog.querySelector('.reactions-body') as HTMLElement;
+  if (!body) return;
+  body.innerHTML = '<p class="reactions-loading">Cargando...</p>';
+
+  try {
+    if (type === 'comments') {
+      const { data } = await supabase.rpc('get_post_comments', { p_post_id: currentReactionPostId });
+      body.innerHTML = (data && data.length)
+        ? (data as any[]).map((c) => userRowHtml(c, `comentó · ${getTimeAgo(new Date(c.created_at))}`) + `<div class="reaction-comment">${c.content}</div>`).join('')
+        : '<p class="reactions-empty">Sin comentarios.</p>';
+    } else {
+      const fn = type === 'likes' ? 'get_post_likes' : 'get_post_reposts';
+      const verb = type === 'likes' ? 'reaccionó' : 'recompartió';
+      const { data } = await supabase.rpc(fn, { p_post_id: currentReactionPostId });
+      body.innerHTML = (data && data.length)
+        ? (data as any[]).map((u) => userRowHtml(u, `${verb} · ${getTimeAgo(new Date(u.created_at))}`)).join('')
+        : `<p class="reactions-empty">Sin ${type === 'likes' ? 'reacciones' : 'reposts'}.</p>`;
+    }
+  } catch (e) {
+    body.innerHTML = '<p class="reactions-empty">Error al cargar.</p>';
+  }
 }

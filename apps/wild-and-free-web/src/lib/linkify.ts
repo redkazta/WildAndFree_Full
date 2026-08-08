@@ -29,7 +29,8 @@ function renderToken(token: string): string {
 
   if (GIPHY_RE.test(rawUrl)) {
     const id = extractGiphyId(rawUrl);
-    return `<a href="${escapeHtml(rawUrl)}" target="_blank" rel="noopener nofollow" class="content-embed content-embed--giphy"><img src="https://media.giphy.com/media/${id}/giphy.gif" alt="Giphy" class="content-embed-img" /></a>`;
+    // Tries media.giphy.com first; if broken, resolves the real URL via oEmbed
+    return `<a href="${escapeHtml(rawUrl)}" target="_blank" rel="noopener nofollow" class="content-embed content-embed--giphy"><img src="https://media.giphy.com/media/${escapeHtml(id)}/giphy.gif" alt="Giphy" data-giphy-orig="${escapeHtml(rawUrl)}" onerror="window.__WG_resolveGiphy&&window.__WG_resolveGiphy(this)" loading="lazy" class="content-embed-img giphy-img" /></a>`;
   }
 
   const yt = rawUrl.match(YOUTUBE_RE);
@@ -51,4 +52,33 @@ export function renderRichContent(text: string): string {
     .split(/(\s+)/)
     .map((chunk) => (chunk.trim() ? renderToken(chunk) : chunk))
     .join('');
+}
+
+const giphyCache = new Map<string, string>();
+
+/**
+ * Fallback para GIFs de Giphy: si el dominio genérico (media.giphy.com)
+ * no responde, resuelve la URL real vía oEmbed y actualiza el <img>.
+ * Se registra en window para poder invocarlo desde el atributo onerror.
+ */
+export function initGiphyFallback(): void {
+  (window as any).__WG_resolveGiphy = async function (el: HTMLImageElement) {
+    const orig = el.getAttribute('data-giphy-orig');
+    if (!orig) return;
+    if (giphyCache.has(orig)) {
+      el.src = giphyCache.get(orig)!;
+      return;
+    }
+    try {
+      const res = await fetch(`https://giphy.com/services/oembed?url=${encodeURIComponent(orig)}`);
+      const data = await res.json();
+      const real = data?.url;
+      if (real && typeof real === 'string') {
+        giphyCache.set(orig, real);
+        el.src = real;
+      }
+    } catch {
+      // fallo silencioso, deja el sobre del link visible
+    }
+  };
 }
