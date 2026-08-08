@@ -78,9 +78,10 @@ const config = {
 </Layout>
 
 <script>
-  import { loadNewsSidebar, loadCrewFeed, initFilters } from '../lib/wild-times-feed';
+  import { loadNewsSidebar, loadCrewFeed, initFilters, initRealtime } from '../lib/wild-times-feed';
 
   initFilters();
+  initRealtime();
   loadNewsSidebar();
   loadCrewFeed();
   document.addEventListener('astro:after-swap', () => {

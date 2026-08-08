@@ -367,3 +367,35 @@ export function initFilters(): void {
     loadCrewFeed(btn.getAttribute('data-filter') || 'all');
   });
 }
+
+// ─── REALTIME: actualiza el feed sin recargar ───
+let realtimeInit = false;
+
+export function initRealtime(): void {
+  if (realtimeInit) return;
+  realtimeInit = true;
+
+  try {
+    const channel = supabase
+      .channel('crew-posts-feed')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'crew_posts' }, () => refreshFeed())
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'crew_posts' }, () => refreshFeed())
+      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'crew_posts' }, () => refreshFeed())
+      .subscribe();
+
+    // Guardar el canal para poder limpiarlo si hace falta
+    (window as any).__crewFeedChannel = channel;
+  } catch (e) {
+    console.warn('Realtime no disponible:', e);
+  }
+}
+
+// Debounce para no spamear requests si llegan varios cambios seguidos
+let refreshTimer: ReturnType<typeof setTimeout> | null = null;
+function refreshFeed(): void {
+  if (refreshTimer) clearTimeout(refreshTimer);
+  refreshTimer = setTimeout(() => {
+    loadCrewFeed(currentFilter);
+    loadNewsSidebar();
+  }, 400);
+}
