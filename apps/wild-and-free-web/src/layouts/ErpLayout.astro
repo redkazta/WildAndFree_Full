@@ -17,11 +17,27 @@ const modules = [
   { id: 'tags', label: 'Tags', icon: '🏷️', href: '/erp/tags' },
   { id: 'eventos', label: 'Eventos', icon: '🎤', href: '/erp/eventos' },
   { id: 'versus', label: 'Versus', icon: '⚔️', href: '/erp/versus' },
-  { id: 'noticias', label: 'Noticias', icon: '📰', href: '/erp/noticias' },
   { id: 'radio', label: 'Radio', icon: '📻', href: '/erp/radio' },
   { id: 'correos', label: 'Correos', icon: '📧', href: '/erp/correos' },
-  { id: 'configuracion', label: 'Config', icon: '⚙️', href: '/erp/configuracion' },
 ];
+
+// Dropdowns: módulos con sub-módulos
+const dropdownModules = [
+  {
+    id: 'wild-times',
+    label: 'The Wild Times',
+    icon: '📰',
+    items: [
+      { id: 'anuncios', label: 'Anuncios', icon: '📢', href: '/erp/wild-times/anuncios' },
+      { id: 'publicaciones', label: 'Publicaciones', icon: '✍️', href: '/erp/wild-times/publicaciones' },
+    ],
+  },
+];
+
+// Determina si un dropdown está activo según el sub-módulo actual
+function isDropdownActive(dropdown: { id: string; items: { id: string }[] }): boolean {
+  return dropdown.items.some((item) => item.id === activeModule);
+}
 ---
 
 <!DOCTYPE html>
@@ -72,6 +88,27 @@ const modules = [
           {activeModule === m.id && <span class="erp-nav-indicator"></span>}
         </a>
       ))}
+
+      {dropdownModules.map(d => (
+        <div class={`erp-dropdown ${isDropdownActive(d) ? 'erp-dropdown--open' : ''}`} data-dropdown={d.id}>
+          <button class="erp-nav-item erp-dropdown-toggle ${isDropdownActive(d) ? 'erp-nav-item--active' : ''}" style="width:100%;text-align:left;background:none;border:none;cursor:pointer;font-family:inherit;">
+            <span class="erp-nav-icon">{d.icon}</span>
+            <span class="erp-nav-label">{d.label}</span>
+            <svg class="erp-dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="erp-dropdown-menu">
+            {d.items.map(item => (
+              <a
+                href={item.href}
+                class={`erp-dropdown-item ${activeModule === item.id ? 'erp-dropdown-item--active' : ''}`}
+              >
+                <span class="erp-nav-icon" style="font-size:13px;">{item.icon}</span>
+                <span class="erp-nav-label" style="font-size:12px;">{item.label}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      ))}
     </nav>
 
     <div class="erp-sidebar-footer">
@@ -79,16 +116,20 @@ const modules = [
         <span class="erp-nav-icon">🌓</span>
         <span class="erp-nav-label">Tema</span>
       </button>
+      <a href="/erp/configuracion" class={`erp-nav-item ${activeModule === 'configuracion' ? 'erp-nav-item--active' : ''}`} style="width:100%;text-align:left;text-decoration:none;">
+        <span class="erp-nav-icon">⚙️</span>
+        <span class="erp-nav-label">Config</span>
+      </a>
+      <a href="/" class="erp-nav-item erp-nav-item--exit" style="width:100%;text-align:left;text-decoration:none;">
+        <span class="erp-nav-icon">🌐</span>
+        <span class="erp-nav-label">Ir a la web</span>
+      </a>
       <a href="/erp/perfil" class="erp-user-section" style="text-decoration:none;position:relative;">
         <div class="erp-user-avatar" id="erpUserAvatar" style="cursor:pointer;overflow:hidden;background-size:cover;background-position:center;">A</div>
         <div class="erp-user-info">
           <span class="erp-user-name" id="erpUserName">Admin</span>
           <span class="erp-user-role" id="erpUserBadge">Cargando...</span>
         </div>
-      </a>
-      <a href="/" class="erp-nav-item erp-nav-item--exit" style="display:none;">
-        <span class="erp-nav-icon">🚪</span>
-        <span class="erp-nav-label">Salir</span>
       </a>
     </div>
   </aside>
@@ -354,8 +395,60 @@ const modules = [
     }
 
     .erp-nav-item--exit:hover {
-      background: rgba(255,68,68,0.1);
-      color: var(--danger);
+      background: rgba(201,131,0,0.1);
+      color: var(--primary);
+    }
+
+    /* Dropdown */
+    .erp-dropdown {
+      position: relative;
+    }
+    .erp-dropdown-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .erp-dropdown-toggle .erp-nav-label {
+      flex: 1;
+    }
+    .erp-dropdown-arrow {
+      margin-right: 4px;
+      transition: transform 0.2s ease;
+      flex-shrink: 0;
+    }
+    .erp-dropdown--open .erp-dropdown-arrow {
+      transform: rotate(180deg);
+    }
+    .erp-dropdown-menu {
+      display: none;
+      padding: 4px 0 4px 12px;
+      margin-left: 16px;
+      border-left: 1px solid var(--bg-card);
+    }
+    .erp-dropdown--open .erp-dropdown-menu {
+      display: block;
+    }
+    .erp-dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      margin: 2px 0;
+      border-radius: 8px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    .erp-dropdown-item:hover {
+      background: var(--bg-card);
+      color: var(--text);
+    }
+    .erp-dropdown-item--active {
+      background: rgba(201,131,0,0.1);
+      color: var(--primary);
+      font-weight: 600;
     }
 
     /* Main */
@@ -855,7 +948,7 @@ const modules = [
     const permMap: Record<string, string> = {
       'inventario': 'inventory.view',
       'contenido': 'content.view',
-      'noticias': 'content.manage',
+      'wild-times': 'content.manage',
       'usuarios': 'users.view',
       'tags': 'tags.manage',
       'eventos': 'events.manage',
@@ -875,7 +968,31 @@ const modules = [
           item.style.display = 'none';
         }
       });
+      // Ocultar dropdown completo si no tiene permiso
+      document.querySelectorAll('.erp-dropdown').forEach(drop => {
+        const dropId = drop.getAttribute('data-dropdown') || '';
+        const perm = permMap[dropId];
+        if (perm && !permissions.includes(perm)) {
+          (drop as HTMLElement).style.display = 'none';
+        }
+      });
     }
+
+    // Dropdown toggle
+    document.querySelectorAll('.erp-dropdown-toggle').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const drop = (btn as HTMLElement).closest('.erp-dropdown');
+        if (drop) drop.classList.toggle('erp-dropdown--open');
+      });
+    });
+    // Cerrar dropdown si se hace clic fuera
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.erp-dropdown')) {
+        document.querySelectorAll('.erp-dropdown').forEach(d => d.classList.remove('erp-dropdown--open'));
+      }
+    });
 
     // Mobile menu
     const toggle = document.getElementById('menuToggle');
