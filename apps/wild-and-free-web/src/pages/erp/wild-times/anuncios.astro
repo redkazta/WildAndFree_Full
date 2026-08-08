@@ -28,8 +28,14 @@ import ErpLayout from '../../../layouts/ErpLayout.astro';
         <textarea id="postContent" rows="4" placeholder="Contenido del anuncio..." style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:var(--text);font-size:13px;resize:vertical;font-family:inherit;"></textarea>
       </div>
       <div>
-        <label style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">URL de imagen</label>
-        <input id="postImage" type="text" placeholder="https://..." style="width:100%;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:10px;color:var(--text);font-size:13px;" />
+        <label style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:4px;">Imagen</label>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+          <input type="file" id="postImageFile" accept="image/jpeg,image/png,image/webp,image/gif" style="flex:1;min-width:180px;background:var(--bg-card);border:1px solid var(--border-muted);border-radius:8px;padding:8px;color:var(--text);font-size:12px;" />
+          <input type="hidden" id="postImage" />
+          <div id="postImagePreview" style="display:none;width:80px;height:60px;border-radius:8px;overflow:hidden;border:1px solid var(--border-muted);flex-shrink:0;"><img id="postImagePreviewImg" src="" alt="" style="width:100%;height:100%;object-fit:cover;" /></div>
+          <button type="button" id="postImageRemove" style="display:none;padding:6px 10px;border-radius:8px;border:1px solid var(--border-muted);background:var(--bg-card);color:var(--danger);font-size:11px;cursor:pointer;font-family:inherit;">✕ Quitar</button>
+        </div>
+        <p style="font-size:10px;color:var(--text-muted);margin:4px 0 0;">JPG, PNG, WebP o GIF · máx 5MB</p>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
         <div>
@@ -126,8 +132,59 @@ import ErpLayout from '../../../layouts/ErpLayout.astro';
     (document.getElementById('postContent') as HTMLTextAreaElement).value = '';
     (document.getElementById('postImage') as HTMLInputElement).value = '';
     (document.getElementById('postStatus') as HTMLSelectElement).value = 'published';
+    clearImagePreview();
     document.getElementById('postForm')!.scrollIntoView({ behavior: 'smooth' });
   };
+
+  // ── Upload imagen desde dispositivo ──
+  function clearImagePreview() {
+    const preview = document.getElementById('postImagePreview') as HTMLElement;
+    const removeBtn = document.getElementById('postImageRemove') as HTMLElement;
+    (document.getElementById('postImage') as HTMLInputElement).value = '';
+    (document.getElementById('postImageFile') as HTMLInputElement).value = '';
+    if (preview) preview.style.display = 'none';
+    if (removeBtn) removeBtn.style.display = 'none';
+  }
+
+  async function uploadImage(file: File): Promise<string | null> {
+    const formData = new FormData();
+    formData.append('image', file);
+    try {
+      const res = await fetch('/api/upload-image', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        alert(data.error || 'Error al subir imagen');
+        return null;
+      }
+      return data.url;
+    } catch (e) {
+      alert('Error al subir imagen');
+      return null;
+    }
+  }
+
+  (document.getElementById('postImageFile') as HTMLInputElement)?.addEventListener('change', async (e) => {
+    const input = e.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+    const url = await uploadImage(file);
+    if (url) {
+      (document.getElementById('postImage') as HTMLInputElement).value = url;
+      const preview = document.getElementById('postImagePreview') as HTMLElement;
+      const previewImg = document.getElementById('postImagePreviewImg') as HTMLImageElement;
+      const removeBtn = document.getElementById('postImageRemove') as HTMLElement;
+      if (previewImg) previewImg.src = url;
+      if (preview) preview.style.display = 'block';
+      if (removeBtn) removeBtn.style.display = 'inline-block';
+    } else {
+      input.value = '';
+    }
+  });
+
+  (document.getElementById('postImageRemove') as HTMLElement)?.addEventListener('click', clearImagePreview);
 
   (window as any).closeForm = () => {
     document.getElementById('postForm')!.style.display = 'none';
@@ -182,6 +239,17 @@ import ErpLayout from '../../../layouts/ErpLayout.astro';
     (document.getElementById('postContent') as HTMLTextAreaElement).value = p.content || '';
     (document.getElementById('postImage') as HTMLInputElement).value = p.image_url || '';
     (document.getElementById('postStatus') as HTMLSelectElement).value = p.status || 'pending';
+    // Preview si ya tiene imagen
+    if (p.image_url) {
+      const preview = document.getElementById('postImagePreview') as HTMLElement;
+      const previewImg = document.getElementById('postImagePreviewImg') as HTMLImageElement;
+      const removeBtn = document.getElementById('postImageRemove') as HTMLElement;
+      if (previewImg) previewImg.src = p.image_url;
+      if (preview) preview.style.display = 'block';
+      if (removeBtn) removeBtn.style.display = 'inline-block';
+    } else {
+      clearImagePreview();
+    }
     document.getElementById('postForm')!.scrollIntoView({ behavior: 'smooth' });
   };
 
