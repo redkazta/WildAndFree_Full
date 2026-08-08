@@ -164,6 +164,7 @@ function isDropdownActive(dropdown: { id: string; items: { id: string }[] }): bo
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
+      color-scheme: dark;
       --primary: #c98300;
       --primary-hover: #e69500;
       --primary-soft: rgba(201,131,0,0.15);
@@ -182,6 +183,7 @@ function isDropdownActive(dropdown: { id: string; items: { id: string }[] }): bo
     }
 
     [data-theme="light"] {
+      color-scheme: light;
       --primary: #b37400;
       --primary-hover: #c98300;
       --primary-soft: rgba(179,116,0,0.08);
@@ -197,6 +199,15 @@ function isDropdownActive(dropdown: { id: string; items: { id: string }[] }): bo
       --success: #008844;
       --warning: #cc8800;
       --info: #0088cc;
+    }
+
+    /* Selects nativos: lista desplegable oscura */
+    select option {
+      background-color: #0a0a0a;
+      color: #e0e0e0;
+    }
+    select {
+      color-scheme: dark;
     }
 
     .erp-body {
