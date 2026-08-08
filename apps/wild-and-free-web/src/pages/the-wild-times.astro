@@ -407,4 +407,31 @@ const config = {
   .comment-send:active {
     transform: scale(0.95);
   }
+
+  /* ─── RICH CONTENT (linkify) ─── */
+  .content-link {
+    color: var(--primary);
+    text-decoration: underline;
+    word-break: break-word;
+  }
+  .content-embed {
+    display: block;
+    margin: 12px 0;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .content-embed--video iframe {
+    width: 100%;
+    aspect-ratio: 16/9;
+    border: 0;
+    border-radius: 12px;
+  }
+  .content-embed-img {
+    width: 100%;
+    border-radius: 12px;
+    display: block;
+  }
+  .content-embed--giphy {
+    max-width: 480px;
+  }
 </style>

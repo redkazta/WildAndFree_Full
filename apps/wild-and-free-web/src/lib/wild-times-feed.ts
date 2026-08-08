@@ -1,4 +1,5 @@
 import { supabase } from './supabase';
+import { renderRichContent } from './linkify';
 
 const typeLabels: Record<string, { label: string; color: string }> = {
   announcement: { label: '📢 Anuncio', color: 'var(--primary)' },
@@ -110,7 +111,7 @@ function showFeaturedArticle(post: any): void {
           </div>
         </div>
         <div class="featured-divider"></div>
-        <div class="featured-content">${post.content || ''}</div>
+        <div class="featured-content">${renderRichContent(post.content || '')}</div>
       </div>
     </div>`;
 
@@ -227,7 +228,7 @@ function renderCrewPost(p: any, meta: { likes: number; comments: number; reposts
       ${p.title ? `<h3 class="feed-card-title">${p.title}</h3>` : ''}
     </div>
     <div class="feed-card-body">
-      <p class="feed-card-text">${p.content || ''}</p>
+      <p class="feed-card-text">${renderRichContent(p.content || '')}</p>
       ${imageHtml}
     </div>
     <div class="feed-card-actions">
