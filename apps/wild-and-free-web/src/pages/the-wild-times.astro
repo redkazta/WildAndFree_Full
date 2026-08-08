@@ -54,6 +54,33 @@ const config = {
           <!-- Featured Article (shown when clicking a news item) -->
           <div id="featured-article" class="hidden mb-10"></div>
 
+          <!-- Composer (admin/staff only) -->
+          <div id="wt-composer" class="hidden mb-8">
+            <div class="wt-composer-card">
+              <div class="wt-composer-header">
+                <span class="wt-composer-title">✍️ Publicar en el Feed</span>
+                <span class="wt-composer-badge">Staff</span>
+              </div>
+              <div class="wt-composer-body">
+                <input type="text" id="wt-title" class="wt-input wt-title" placeholder="Título (opcional)" maxlength="120" />
+                <textarea id="wt-content" class="wt-input wt-content" rows="3" placeholder="Escribe tu publicación..." maxlength="2000"></textarea>
+                <div class="wt-composer-row">
+                  <div class="wt-composer-left">
+                    <select id="wt-type" class="wt-input wt-select">
+                      <option value="general">📝 General</option>
+                      <option value="announcement">📢 Anuncio</option>
+                      <option value="event">🎤 Evento</option>
+                      <option value="promotion">🏷️ Promoción</option>
+                    </select>
+                    <input type="url" id="wt-image" class="wt-input wt-image" placeholder="URL de imagen (opcional)" />
+                  </div>
+                  <button id="wt-publish" class="wt-publish-btn" disabled>Publicar</button>
+                </div>
+                <p class="wt-composer-hint" id="wt-hint">Solo los anuncios aparecen en la barra lateral.</p>
+              </div>
+            </div>
+          </div>
+
           <!-- Feed Section -->
           <div id="crew-feed-section">
             <div class="flex items-center justify-between mb-6 border-b border-[var(--border)] pb-3">
@@ -78,9 +105,10 @@ const config = {
 </Layout>
 
 <script>
-  import { loadNewsSidebar, loadCrewFeed, initFilters } from '../lib/wild-times-feed';
+  import { loadNewsSidebar, loadCrewFeed, initFilters, initComposer } from '../lib/wild-times-feed';
 
   initFilters();
+  initComposer();
   loadNewsSidebar();
   loadCrewFeed();
   document.addEventListener('astro:after-swap', () => {
@@ -90,6 +118,113 @@ const config = {
 </script>
 
 <style is:global>
+  /* ─── COMPOSER ─── */
+  .wt-composer-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .wt-composer-card:focus-within {
+    border-color: var(--primary-border);
+  }
+  .wt-composer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-faint);
+    background: rgba(201,131,0,0.05);
+  }
+  .wt-composer-title {
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text);
+  }
+  .wt-composer-badge {
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--primary);
+    background: var(--primary-soft);
+    padding: 3px 10px;
+    border-radius: 100px;
+  }
+  .wt-composer-body {
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .wt-input {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border-faint);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 13px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+  .wt-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(201, 131, 0, 0.1);
+  }
+  .wt-title { font-weight: 700; }
+  .wt-content { resize: vertical; line-height: 1.6; }
+  .wt-composer-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .wt-composer-left {
+    flex: 1;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .wt-select {
+    width: 160px;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+  .wt-image { flex: 1; min-width: 160px; }
+  .wt-publish-btn {
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+    color: #000;
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+  .wt-publish-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(201, 131, 0, 0.3);
+  }
+  .wt-publish-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .wt-composer-hint {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin: 0;
+    font-style: italic;
+  }
+
   /* ─── FILTERS ─── */
   .filter-btn.active {
     border-color: var(--primary);

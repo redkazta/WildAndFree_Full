@@ -353,6 +353,89 @@ async function handleCommentSend(e: Event): Promise<void> {
   if (commentBtn) commentBtn.textContent = String(parseInt(commentBtn.textContent || '0') + 1);
 }
 
+// ─── COMPOSER (admin/staff only) ───
+export function initComposer(): void {
+  const composer = document.getElementById('wt-composer');
+  if (!composer) return;
+
+  (async () => {
+    // Check role
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session?.user) return;
+
+    let role: string | null = null;
+    try {
+      const { data: roleRows } = await supabase
+        .from('user_roles')
+        .select('role_id')
+        .eq('user_id', session.user.id);
+      if (roleRows?.length) {
+        const ids = roleRows.map((r: any) => r.role_id);
+        const { data: roles } = await supabase.from('roles').select('name').in('id', ids);
+        if (roles) {
+          const names = roles.map((r: any) => r.name);
+          if (names.includes('admin')) role = 'admin';
+          else if (names.includes('staff')) role = 'staff';
+        }
+      }
+    } catch (e) {
+      console.warn('Role check failed:', e);
+    }
+
+    // Show composer only for admin/staff
+    if (role !== 'admin' && role !== 'staff') return;
+    composer.classList.remove('hidden');
+
+    // Enable publish when content is non-empty
+    const contentEl = document.getElementById('wt-content') as HTMLTextAreaElement;
+    const publishBtn = document.getElementById('wt-publish') as HTMLButtonElement;
+    contentEl?.addEventListener('input', () => {
+      if (publishBtn) {
+        publishBtn.disabled = !contentEl.value.trim() && !(document.getElementById('wt-image') as HTMLInputElement)?.value;
+      }
+    });
+
+    publishBtn?.addEventListener('click', async () => {
+      const title = (document.getElementById('wt-title') as HTMLInputElement)?.value.trim() || null;
+      const content = contentEl.value.trim();
+      const type = (document.getElementById('wt-type') as HTMLSelectElement)?.value || 'general';
+      const imageEl = document.getElementById('wt-image') as HTMLInputElement;
+      const imageUrl = imageEl?.value.trim() || null;
+      const hint = document.getElementById('wt-hint');
+
+      publishBtn.disabled = true;
+      if (hint) hint.textContent = 'Publicando...';
+
+      const { error } = await supabase.from('crew_posts').insert({
+        author_id: session.user.id,
+        title,
+        content,
+        post_type: type,
+        image_url: imageUrl,
+        status: 'published',
+        published_at: new Date().toISOString(),
+      });
+
+      if (error) {
+        if (hint) hint.textContent = 'Error: ' + (error.message || 'intenta de nuevo');
+        publishBtn.disabled = false;
+        return;
+      }
+
+      // Reset form
+      (document.getElementById('wt-title') as HTMLInputElement).value = '';
+      contentEl.value = '';
+      if (imageEl) imageEl.value = '';
+      if (hint) hint.textContent = '✓ Publicado. Recargando feed...';
+
+      // Refresh feed and sidebar
+      loadCrewFeed(currentFilter);
+      loadNewsSidebar();
+      setTimeout(() => { publishBtn.disabled = true; if (hint) hint.textContent = 'Solo los anuncios aparecen en la barra lateral.'; }, 2500);
+    });
+  })();
+}
+
 // ─── FILTERS ───
 export function initFilters(): void {
   document.getElementById('feed-filters')?.addEventListener('click', (e) => {
