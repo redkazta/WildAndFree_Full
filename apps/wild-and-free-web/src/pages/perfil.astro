@@ -45,6 +45,7 @@ import Layout from '../layouts/Layout.astro';
               <h2 class="side-name" id="profile-name">Cargando...</h2>
               <p class="side-username" id="profile-username">@usuario</p>
               <div class="side-tags" id="profile-role-tags"></div>
+              <a href="/erp" id="erp-dashboard-btn" class="erp-shortcut-btn hidden">⚙️ Ir al ERP</a>
             </div>
 
             <!-- Bio Card -->
@@ -460,6 +461,30 @@ import Layout from '../layouts/Layout.astro';
     justify-content: center;
     margin-bottom: 4px;
   }
+  .erp-shortcut-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    margin-top: 10px;
+    padding: 9px 14px;
+    border-radius: 10px;
+    font-size: 0.6rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--bg);
+    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-family: inherit;
+  }
+  .erp-shortcut-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(201, 131, 0, 0.3);
+  }
+  .erp-shortcut-btn.hidden { display: none; }
   .side-label {
     font-size: 0.5rem;
     font-weight: 800;
@@ -939,8 +964,18 @@ import Layout from '../layouts/Layout.astro';
     // Load tags
     loadUserTags(profile);
 
-    // Check if user is artist and show dashboard
+    // Show ERP button for admin/staff
     const { role: userRole } = await getRole();
+    const erpBtn = document.getElementById('erp-dashboard-btn');
+    if (erpBtn) {
+      if (userRole === 'admin' || userRole === 'staff') {
+        erpBtn.classList.remove('hidden');
+      } else {
+        erpBtn.classList.add('hidden');
+      }
+    }
+
+    // Check if user is artist and show dashboard
     if (userRole === 'artist') {
       const dashboard = document.getElementById('artist-dashboard');
       if (dashboard) {
