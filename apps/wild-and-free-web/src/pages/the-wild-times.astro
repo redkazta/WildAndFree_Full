@@ -338,6 +338,26 @@ const config = {
   .action-btn--active svg {
     fill: currentColor;
   }
+  /* Botón "Ir a publicación" */
+  .action-btn--go {
+    background: var(--primary-soft);
+    color: var(--primary);
+    border: 1px solid transparent;
+  }
+  .action-btn--go:hover {
+    background: var(--primary);
+    color: var(--bg);
+    border-color: var(--primary);
+  }
+  .action-btn--go svg {
+    stroke-width: 2.5;
+  }
+  /* Feedback al compartir */
+  .action-btn.share--copied {
+    background: var(--primary-soft);
+    border-radius: 10px;
+    color: var(--primary);
+  }
 
   /* Ojito: estadísticas separadas por tipo (reacciones · comentarios · reposts) */
   .eye-btn {

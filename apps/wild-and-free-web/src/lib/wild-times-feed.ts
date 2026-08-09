@@ -235,6 +235,79 @@ export async function loadCrewFeed(filter = 'all'): Promise<void> {
   }
 }
 
+// Carga UNA publicación individual (página de detalle /the-wild-times/p/[id]).
+// Reutiliza renderCrewPost e initFeedInteractions para que funcione igual que el feed.
+export async function loadCrewPost(postId: string): Promise<void> {
+  const container = document.getElementById('post-container');
+  if (!container) return;
+  container.innerHTML = '<p class="text-sm text-[var(--text-muted)] italic text-center py-12">Cargando publicación...</p>';
+
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+
+    const { data: post, error } = await supabase
+      .from('crew_posts')
+      .select('*, author:author_id(nombre, username, avatar_url)')
+      .eq('id', postId)
+      .eq('status', 'published')
+      .single();
+
+    if (error || !post) {
+      container.innerHTML = '<div class="text-center py-16"><p class="text-sm text-[var(--text-muted)] italic">No encontramos esa publicación.</p><a href="/the-wild-times" class="btn-link mt-4 inline-block">← Volver a The Wild Times</a></div>';
+      return;
+    }
+
+    // Conteos del post individual
+    const [likesData, commentsData, repostsData] = await Promise.all([
+      supabase.from('wall_likes').select('post_id, reaction_type').eq('post_id', postId),
+      supabase.from('wall_comments').select('post_id', { count: 'exact' }).eq('post_id', postId).is('deleted_at', null),
+      supabase.from('wall_reposts').select('post_id', { count: 'exact' }).eq('post_id', postId),
+    ]);
+
+    let myReaction: string | null = null;
+    let isReposted = false;
+    if (session?.user?.id) {
+      const { data: myLikes } = await supabase.from('wall_likes').select('reaction_type').eq('post_id', postId).eq('user_id', session.user.id).maybeSingle();
+      const { data: myRepost } = await supabase.from('wall_reposts').select('post_id').eq('post_id', postId).eq('user_id', session.user.id).maybeSingle();
+      myReaction = myLikes?.reaction_type || null;
+      isReposted = !!myRepost;
+    }
+
+    const reactions: Record<string, number> = {};
+    (likesData.data || []).forEach((l: any) => {
+      const t = l.reaction_type || 'like';
+      reactions[t] = (reactions[t] || 0) + 1;
+    });
+    const comments = commentsData.count || 0;
+    const reposts = repostsData.count || 0;
+    const totalReactions = Object.values(reactions).reduce((a, b) => Number(a) + Number(b), 0);
+
+    initGiphyFallback();
+    const { role } = await getRole();
+    const canViewReactions = role === 'admin' || role === 'staff';
+
+    // Actualiza el título del documento/navegador
+    const t = post.title || 'Publicación · The Wild Times';
+    if (document.title) document.title = `${t} · The Wild Times`;
+
+    container.innerHTML = renderCrewPost(post, {
+      reactions,
+      comments,
+      reposts,
+      totalReactions,
+      myReaction,
+      isReposted,
+      canViewReactions,
+    });
+
+    // Abrir comentarios por defecto + auto-cargar interacciones
+    initFeedInteractions();
+  } catch (e) {
+    console.error('Post error:', e);
+    container.innerHTML = '<p class="text-sm text-[var(--text-muted)] italic text-center py-12">Error al cargar la publicación.</p>';
+  }
+}
+
 function renderCrewPost(p: any, meta: { reactions: Record<string, number>; comments: number; reposts: number; totalReactions: number; myReaction: string | null; isReposted: boolean; canViewReactions: boolean }): string {
   const author = p.author || {};
   const avatar = author.avatar_url || '';
@@ -312,8 +385,13 @@ function renderCrewPost(p: any, meta: { reactions: Record<string, number>; comme
           <span class="eye-stat eye-stat-reposts" title="Reposts">🔁<b>${meta.reposts}</b></span>
         </span>
       </button>` : ''}
-      <button class="action-btn ml-auto" data-action="share">
+      <button class="action-btn" data-action="share" data-post-id="${p.id}" data-link="/the-wild-times/p/${p.id}">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        <span>Compartir</span>
+      </button>
+      <button class="action-btn ml-auto action-btn--go" data-action="go-post" data-link="/the-wild-times/p/${p.id}">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+        <span>Ir a publicación</span>
       </button>
     </div>
     <div class="comments-section hidden" data-post-id="${p.id}">
@@ -437,10 +515,32 @@ async function handleAction(btnLike: HTMLElement | Event): Promise<void> {
   } else if (action === 'opinions') {
     const postTitle = postEl.querySelector('.feed-card-title')?.textContent || 'Publicación';
     await openReactionsDialog(postId, postTitle);
+  } else if (action === 'go-post') {
+    window.location.href = btn.dataset.link || `/the-wild-times/p/${postId}`;
   } else if (action === 'share') {
-    await navigator.clipboard.writeText(window.location.href);
+    const link = btn.dataset.link || `/the-wild-times/p/${postId}`;
+    const url = new URL(link, window.location.origin).href;
+    let ok = false;
+    try {
+      await navigator.clipboard.writeText(url);
+      ok = true;
+    } catch {
+      ok = false;
+    }
+    // Feedback visual para ambos casos (web share > clipboard > fallback)
+    const label = btn.querySelector('span');
+    const original = label?.textContent || '';
+    if (label) label.textContent = ok ? '¡Copiado!' : url;
+    if (!ok && navigator.share) {
+      try { await navigator.share({ title: 'The Wild Times', url }); ok = true; } catch {}
+    }
+    btn.classList.add('share--copied');
     btn.style.color = 'var(--primary)';
-    setTimeout(() => btn.style.color = '', 1200);
+    if (label) label.textContent = original;
+    setTimeout(() => {
+      btn.style.color = '';
+      btn.classList.remove('share--copied');
+    }, 1800);
   }
 }
 
