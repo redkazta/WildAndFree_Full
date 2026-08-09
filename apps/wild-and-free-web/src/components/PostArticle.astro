@@ -49,7 +49,7 @@ const config = {
           <span class="note-back-label">Nota editorial</span>
         </nav>
 
-        <div id="post-container" class="note-wrap">
+        <div id="post-container" class="note-wrap" data-post-id={postId}>
           <p class="text-sm text-[var(--text-muted)] italic text-center py-12">Cargando publicación...</p>
         </div>
 
@@ -62,13 +62,15 @@ const config = {
   </div>
 </Layout>
 
-<script define:vars={{ postId }} is:inline>
+<script>
   import { loadCrewPost, initFeedInteractions } from '../lib/wild-times-feed';
 
+  // Lee el id completo del post, inyectado en el HTML en build time.
   function resolveId(): string {
-    if (postId) return postId;
-    const m = window.location.pathname.match(/\/([^/]+)$/);
-    return m ? decodeURIComponent(m[1]) : '';
+    const c = document.getElementById('post-container');
+    const attr = c?.getAttribute('data-post-id');
+    if (attr) return attr;
+    return '';
   }
 
   initFeedInteractions();
