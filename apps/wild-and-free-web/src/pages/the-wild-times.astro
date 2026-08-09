@@ -617,12 +617,15 @@ const config = {
     font-weight: 700;
     opacity: 0.8;
   }
-	  /* Popover que aparece al hover/abrir (hacia abajo, no tapa el contenido) */
+	  /* Popover que aparece al hover/abrir (hacia abajo).
+	     Se usa opacity+visibility (no display:none) y un ::before invisible
+	     que conecta el boton con el popover para que el hover no se rompa
+	     en el hueco entre ambos. */
 	  .reaction-wrap .reaction-picker {
 	    position: absolute;
-	    top: calc(100% + 12px);
+	    top: calc(100% + 8px);
 	    left: 0;
-	    display: none;
+	    display: flex;
 	    align-items: center;
 	    gap: 4px;
 	    padding: 8px 12px;
@@ -633,15 +636,29 @@ const config = {
 	    backdrop-filter: blur(8px);
 	    z-index: 40;
 	    white-space: nowrap;
+	    opacity: 0;
+	    visibility: hidden;
+	    pointer-events: none;
+	    transform: translateY(10px) scale(0.9);
+	    transition: opacity 0.18s ease, transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), visibility 0.18s;
+	  }
+	  /* Zona conectora invisible entre el boton y el popover (evita perder hover) */
+	  .reaction-picker::before {
+	    content: '';
+	    position: absolute;
+	    bottom: 100%;
+	    left: 0;
+	    right: 0;
+	    height: 20px;
+	    background: transparent;
 	  }
 	  .reaction-wrap:hover .reaction-picker,
+	  .reaction-wrap:focus-within .reaction-picker,
 	  .reaction-picker.open {
-	    display: flex;
-	    animation: reactionPop 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-	  }
-	  @keyframes reactionPop {
-	    from { opacity: 0; transform: translateY(10px) scale(0.7); }
-	    to { opacity: 1; transform: translateY(0) scale(1); }
+	    opacity: 1;
+	    visibility: visible;
+	    pointer-events: auto;
+	    transform: translateY(0) scale(1);
 	  }
 	  .reaction-option {
 	    position: relative;
@@ -657,25 +674,15 @@ const config = {
 	    font-family: inherit;
 	    flex-direction: column;
 	    gap: 0;
-	    transform: translateY(0);
-	    transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
-	    animation: emojiBump 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-	    animation-delay: calc(var(--i, 0) * 35ms);
-	  }
-	  .reaction-option:nth-child(1) { --i: 0; }
-	  .reaction-option:nth-child(2) { --i: 1; }
-	  .reaction-option:nth-child(3) { --i: 2; }
-	  .reaction-option:nth-child(4) { --i: 3; }
-	  .reaction-option:nth-child(5) { --i: 4; }
-	  @keyframes emojiBump {
-	    from { opacity: 0; transform: translateY(14px) scale(0.5); }
-	    to { opacity: 1; transform: translateY(0) scale(1); }
+	    opacity: 1;
+	    transform: translateY(0) scale(1);
+	    transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.15s ease;
 	  }
 	  .reaction-option:hover {
-	    transform: translateY(-6px) scale(1.3);
+	    transform: translateY(-4px) scale(1.25);
 	  }
 	  .reaction-option:active {
-	    transform: translateY(-2px) scale(1.1);
+	    transform: translateY(-1px) scale(1.1);
 	  }
 	  .reaction-option-emoji {
 	    font-size: 26px;

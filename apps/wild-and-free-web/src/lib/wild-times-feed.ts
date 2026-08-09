@@ -369,19 +369,17 @@ async function handleAction(e: Event): Promise<void> {
     const active = btn.getAttribute('data-reaction-active') || '';
     if (picker) {
       const wasOpen = picker.classList.contains('open');
+      // Cerrar cualquier otro picker abierto
       closeReactionPickers();
       if (!wasOpen && !active) {
-        // Sin reacción activa: abrir el picker para elegir (móvil/click)
+        // Sin reaccion activa -> abrir el picker para elegir
         picker.classList.add('open');
       } else if (wasOpen) {
-        closeReactionPickers();
-      }
-      // Si ya había reacción activa y no abrimos el picker => quitarla (toggle off)
-      if (active && !picker.classList.contains('open')) {
+        // Ya estaba abierto (por click) -> cerrarlo sin reaccionar
+      } else if (active) {
+        // Tiene reaccion activa y el picker no estaba abierto -> quitarla
         await setReaction(postId, session.user.id, active);
       }
-    } else {
-      closeReactionPickers();
     }
   } else if (action === 'repost') {
     const { data: reposted } = await supabase.rpc('toggle_repost', { p_post_id: postId, p_user_id: session.user.id });
