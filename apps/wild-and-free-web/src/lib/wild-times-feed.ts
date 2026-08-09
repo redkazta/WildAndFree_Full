@@ -212,17 +212,13 @@ export async function loadCrewFeed(filter = 'all'): Promise<void> {
     const canViewReactions = role === 'admin' || role === 'staff';
 
     container.innerHTML = filtered.map((p: any) => {
-      // Calcular total de reacciones: likes + comentarios + reposts
-      const likes = reactionCounts[p.id]?.like || 0;
       const comments = commentCounts[p.id] || 0;
       const reposts = repostCounts[p.id] || 0;
-      const totalReactions = likes + comments + reposts;
 
       return renderCrewPost(p, {
         reactions: reactionCounts[p.id] || {},
-        comments: commentCounts[p.id] || 0,
-        reposts: repostCounts[p.id] || 0,
-        totalReactions,
+        comments,
+        reposts,
         myReaction: myReactionByPost[p.id] || null,
         isReposted: userReposts.has(p.id),
         canViewReactions,
@@ -236,7 +232,7 @@ export async function loadCrewFeed(filter = 'all'): Promise<void> {
   }
 }
 
-function renderCrewPost(p: any, meta: { reactions: Record<string, number>; comments: number; reposts: number; totalReactions: number; myReaction: string | null; isReposted: boolean; canViewReactions: boolean }): string {
+function renderCrewPost(p: any, meta: { reactions: Record<string, number>; comments: number; reposts: number; myReaction: string | null; isReposted: boolean; canViewReactions: boolean }): string {
   const author = p.author || {};
   const avatar = author.avatar_url || '';
   const name = author.nombre || author.username || 'Crew';
@@ -305,7 +301,7 @@ function renderCrewPost(p: any, meta: { reactions: Record<string, number>; comme
       </button>
       ${meta.canViewReactions ? `<button class="action-btn" data-action="opinions" title="Ver quién reaccionó">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-        <span>${totalReactions + meta.comments + meta.reposts}</span>
+        <span>${totalReactions}</span>
       </button>` : ''}
       <button class="action-btn ml-auto" data-action="share">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
@@ -549,16 +545,16 @@ function ensureReactionDialog(): HTMLDialogElement {
 
       <!-- PESTAÑAS -->
       <div class="reactions-tabs" role="tablist">
-        <button class="reactions-tab active" data-reaction-tab="likes"><span class="tab-emoji">👍</span> Reacciones</button>
-        <button class="reactions-tab" data-reaction-tab="comments"><span class="tab-emoji">💬</span> Comentarios</button>
-        <button class="reactions-tab" data-reaction-tab="reposts"><span class="tab-emoji">🔁</span> Reposts</button>
+        <button class="reactions-tab active" data-reaction-tab="likes"><span class="tab-emoji">👍</span><span>Reacciones</span><span class="tab-count" data-tab-count="likes">0</span></button>
+        <button class="reactions-tab" data-reaction-tab="comments"><span class="tab-emoji">💬</span><span>Comentarios</span><span class="tab-count" data-tab-count="comments">0</span></button>
+        <button class="reactions-tab" data-reaction-tab="reposts"><span class="tab-emoji">🔁</span><span>Reposts</span><span class="tab-count" data-tab-count="reposts">0</span></button>
       </div>
 
       <!-- FILTRO POR TIPO DE REACCION -->
       <div class="reactions-type-bar" id="reactions-type-bar">
         <span class="reactions-type-label">Filtrar</span>
-        <button class="reaction-type-filter active" data-filter-type="">Todos</button>
-        ${REACTION_TYPES.map((t) => `<button class="reaction-type-filter" data-filter-type="${t}" title="${REACTIONS[t]?.label || t}">${reactionEmoji(t)}</button>`).join('')}
+        <button class="reaction-type-filter active" data-filter-type=""><span class="f-emoji">✦</span>Todos</button>
+        ${REACTION_TYPES.map((t) => `<button class="reaction-type-filter" data-filter-type="${t}" title="${REACTIONS[t]?.label || t}"><span class="f-emoji">${reactionEmoji(t)}</span>${REACTIONS[t]?.label || t}</button>`).join('')}
       </div>
 
       <!-- LISTA -->
@@ -603,10 +599,27 @@ async function openReactionsDialog(postId: string, title: string): Promise<void>
   (dialog.querySelector('[data-reaction-tab="likes"]') as HTMLElement).classList.add('active');
   currentFilterType = '';
   (dialog.querySelectorAll('.reaction-type-filter')).forEach((f) => f.classList.toggle('active', (f as HTMLElement).dataset.filterType === ''));
-  (dialog.querySelector('[data-reaction-tab="likes"]') as HTMLElement).classList.add('active');
   currentReactionPostId = postId;
+  syncDialogTabCounts(postId);
   await loadReactionTab('likes');
   if (!dialog.open) dialog.showModal();
+}
+
+// Sincroniza los contadores de las pestañas del diálogo con los badges de la tarjeta.
+function syncDialogTabCounts(postId: string): void {
+  const card = document.querySelector(`.feed-card[data-post-id="${postId}"]`);
+  if (!card) return;
+  const read = (sel: string): string => {
+    const el = card.querySelector(sel);
+    return el?.textContent?.trim() || '0';
+  };
+  const set = (key: string, val: string) => {
+    const el = document.querySelector(`.reactions-dialog [data-tab-count="${key}"]`);
+    if (el) el.textContent = val;
+  };
+  set('likes', read('[data-action="reaction-toggle"] .reaction-btn-count'));
+  set('comments', read('[data-action="comment"] span'));
+  set('reposts', read('[data-action="repost"] span'));
 }
 
 function userRowHtml(u: any, extra: string): string {

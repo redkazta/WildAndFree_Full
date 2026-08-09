@@ -442,11 +442,11 @@ const config = {
   /* ─── REACTIONS DIALOG (ojito, admin/staff) — rediseñado ─── */
   .reactions-dialog {
     border: 1px solid var(--border);
-    border-radius: 22px;
+    border-radius: 18px;
     background: var(--surface-solid, var(--bg));
     color: var(--text);
-    width: min(560px, 94vw);
-    max-width: 560px;
+    width: min(540px, 94vw);
+    max-width: 540px;
     max-height: 84vh;
     padding: 0;
     overflow: hidden;
@@ -467,16 +467,17 @@ const config = {
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    padding: 18px 22px 14px;
+    padding: 20px 22px 16px;
+    border-bottom: 1px solid var(--border-faint);
   }
   .reactions-dialog-heading {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 3px;
     min-width: 0;
   }
   .reactions-dialog-title {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -512,57 +513,78 @@ const config = {
     border-color: var(--primary);
     transform: rotate(90deg);
   }
-  /* PESTAÑAS */
+  /* PESTAÑAS (segmented control) */
   .reactions-tabs {
     display: flex;
-    gap: 8px;
-    padding: 6px 20px 0;
+    gap: 4px;
+    padding: 4px;
+    margin: 14px 20px 4px;
+    background: var(--bg-hover);
+    border: 1px solid var(--border-faint);
+    border-radius: 12px;
   }
   .reactions-tab {
+    flex: 1;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 6px;
-    padding: 10px 16px;
-    border-radius: 12px 12px 0 0;
-    border: 1px solid transparent;
-    border-bottom: none;
+    padding: 9px 10px;
+    border-radius: 9px;
+    border: none;
     background: transparent;
     color: var(--text-secondary);
     font-size: 11px;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.03em;
     cursor: pointer;
     font-family: inherit;
     transition: all 0.2s ease;
-    position: relative;
+    white-space: nowrap;
   }
   .reactions-tab .tab-emoji {
     font-size: 14px;
-    opacity: 0.7;
+    opacity: 0.75;
   }
   .reactions-tab:hover {
     color: var(--text);
-    background: var(--bg-hover);
+    background: rgba(255, 255, 255, 0.06);
   }
   .reactions-tab.active {
     background: var(--primary);
-    border-color: var(--primary);
     color: #000;
-    box-shadow: 0 -4px 20px rgba(201, 131, 0, 0.18);
+    box-shadow: 0 4px 16px rgba(201, 131, 0, 0.3);
   }
   .reactions-tab.active .tab-emoji {
     opacity: 1;
   }
-  /* BARRA FILTRO REACCIONES */
+  .tab-count {
+    min-width: 20px;
+    height: 18px;
+    padding: 0 6px;
+    border-radius: 9px;
+    background: var(--bg);
+    border: 1px solid var(--border-faint);
+    color: var(--text-secondary);
+    font-size: 10px;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .reactions-tab.active .tab-count {
+    background: rgba(0, 0, 0, 0.18);
+    border-color: transparent;
+    color: #000;
+  }
+  /* BARRA FILTRO REACCIONES (chips) */
   .reactions-type-bar {
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 12px 20px;
-    border-bottom: 1px solid var(--border-faint);
-    background: var(--surface-solid-elev, var(--bg));
     flex-wrap: wrap;
+    gap: 6px;
+    padding: 12px 20px 14px;
   }
   .reactions-type-label {
     font-size: 9px;
@@ -570,43 +592,51 @@ const config = {
     text-transform: uppercase;
     letter-spacing: 0.12em;
     color: var(--text-muted);
-    margin-right: 4px;
-    opacity: 0.7;
+    margin-right: 2px;
+    opacity: 0.8;
   }
   .reaction-type-filter {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 12px;
+    border-radius: 999px;
     border: 1px solid var(--border);
     background: transparent;
-    font-size: 18px;
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 700;
     line-height: 1;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+    font-family: inherit;
+    white-space: nowrap;
+    transition: all 0.18s ease;
+  }
+  .reaction-type-filter .f-emoji {
+    font-size: 14px;
+    line-height: 1;
   }
   .reaction-type-filter:hover {
-    transform: scale(1.12);
     border-color: var(--primary);
+    color: var(--text);
     background: var(--bg-hover);
+    transform: translateY(-1px);
   }
   .reaction-type-filter.active {
-    border-color: var(--primary);
     background: var(--primary);
-    transform: scale(1.12);
+    border-color: var(--primary);
+    color: #000;
     box-shadow: 0 4px 14px rgba(201, 131, 0, 0.35);
   }
   /* LISTA */
   .reactions-body {
     overflow-y: auto;
-    padding: 16px 18px 20px;
+    padding: 18px 18px 22px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
     min-height: 160px;
-    max-height: 54vh;
+    max-height: 52vh;
   }
   .reactions-body::-webkit-scrollbar {
     width: 8px;
@@ -614,6 +644,9 @@ const config = {
   .reactions-body::-webkit-scrollbar-thumb {
     background: var(--border);
     border-radius: 8px;
+  }
+  .reactions-body::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
   }
   .reactions-loading,
   .reactions-empty {
@@ -638,6 +671,7 @@ const config = {
     background: var(--bg-hover);
     border-color: var(--primary-border);
     transform: translateX(2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
   }
   .reaction-user-avatar {
     width: 40px;
@@ -704,15 +738,16 @@ const config = {
   }
   /* COMENTARIO EN LA FILA */
   .reaction-comment {
-    margin: -2px 0 4px 52px;
-    padding: 9px 12px;
-    border-radius: 10px;
+    margin: -4px 0 6px 52px;
+    padding: 10px 14px;
+    border-radius: 12px;
     background: var(--surface-solid, var(--bg));
     border: 1px solid var(--border-faint);
     font-size: 12px;
     color: var(--text-secondary);
     line-height: 1.6;
     border-left: 3px solid var(--primary);
+    word-break: break-word;
   }
 
   /* ─── MULTIPLE REACTIONS (Facebook-style) ─── */
