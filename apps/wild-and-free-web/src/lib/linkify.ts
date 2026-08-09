@@ -54,6 +54,24 @@ export function renderRichContent(text: string): string {
     .join('');
 }
 
+/**
+ * Procesa una URL individual (p.ej. el campo image_url de un post) y la
+ * convierte en el HTML de embed adecuado (Giphy, YouTube, imagen o enlace).
+ * Si no es una URL valida devuelve un <img> sencillo con la URL tal cual.
+ */
+export function renderEmbedUrl(url: string | null | undefined): string {
+  if (!url || !url.trim()) return '';
+  const trimmed = url.trim();
+  // Si es imagen directa y ademas contiene un embed conocido, delega en renderToken
+  const rendered = renderToken(trimmed);
+  // renderToken devuelve el token escapado si no eta enlazado; detecta si empieza con <a o <div
+  if (rendered.startsWith('<a') || rendered.startsWith('<div')) {
+    return rendered;
+  }
+  // fallback: imagen directa
+  return `<div class="feed-img-wrap"><a href="${escapeHtml(trimmed)}" target="_blank" rel="noopener nofollow"><img src="${escapeHtml(trimmed)}" alt="" class="feed-img" loading="lazy" /></a></div>`;
+}
+
 const giphyCache = new Map<string, string>();
 
 /**

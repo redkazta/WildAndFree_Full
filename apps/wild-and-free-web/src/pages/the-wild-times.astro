@@ -220,7 +220,7 @@ const config = {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 16px;
-    overflow: hidden;
+    overflow: visible;
     transition: all 0.3s ease;
     position: relative;
   }
@@ -434,6 +434,9 @@ const config = {
   .content-embed--giphy {
     max-width: 480px;
   }
+  .featured-embed .content-embed--giphy { max-width: 100%; }
+  .featured-embed .content-embed-img { border-radius: 12px 12px 0 0; }
+  .featured-embed .content-embed { margin: 0; }
 
   /* ─── REACTIONS DIALOG (ojito, admin/staff) ─── */
   .reactions-dialog {
@@ -614,10 +617,10 @@ const config = {
     font-weight: 700;
     opacity: 0.8;
   }
-  /* Popover que aparece al hover/abrir */
+  /* Popover que aparece al hover/abrir (hacia abajo, no tapa el contenido) */
   .reaction-wrap .reaction-picker {
     position: absolute;
-    bottom: calc(100% + 10px);
+    top: calc(100% + 10px);
     left: 0;
     display: none;
     align-items: center;

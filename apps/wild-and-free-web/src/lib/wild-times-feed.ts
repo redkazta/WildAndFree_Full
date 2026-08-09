@@ -1,5 +1,5 @@
 import { supabase } from './supabase';
-import { renderRichContent, initGiphyFallback } from './linkify';
+import { renderRichContent, initGiphyFallback, renderEmbedUrl } from './linkify';
 import { getRole } from './role';
 
 const typeLabels: Record<string, { label: string; color: string }> = {
@@ -110,10 +110,7 @@ function showFeaturedArticle(post: any): void {
   container.classList.remove('hidden');
   container.innerHTML = `
     <div class="featured-card bg-[var(--bg)] border-2 border-[var(--primary)] rounded-2xl overflow-hidden shadow-[0_0_40px_rgba(201,131,0,0.08)]">
-      ${post.image_url ? `
-      <div class="featured-img-wrap">
-        <img src="${post.image_url}" class="featured-img" alt="${post.title || ''}" />
-      </div>` : ''}
+      ${post.image_url ? `<div class="featured-embed">${renderEmbedUrl(post.image_url)}</div>` : ''}
       <div class="featured-body">
         <div class="flex items-start justify-between gap-4 mb-5">
           <div class="flex items-center gap-3">
@@ -256,7 +253,7 @@ function renderCrewPost(p: any, meta: { reactions: Record<string, number>; comme
 
   let imageHtml = '';
   if (p.image_url) {
-    imageHtml = `<div class="feed-img-wrap"><img src="${p.image_url}" class="feed-img" loading="lazy" /></div>`;
+    imageHtml = renderEmbedUrl(p.image_url);
   }
 
   return `<article class="feed-card" data-post-id="${p.id}">
