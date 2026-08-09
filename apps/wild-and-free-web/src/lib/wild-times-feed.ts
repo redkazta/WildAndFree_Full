@@ -211,14 +211,23 @@ export async function loadCrewFeed(filter = 'all'): Promise<void> {
     const { role } = await getRole();
     const canViewReactions = role === 'admin' || role === 'staff';
 
-    container.innerHTML = filtered.map((p: any) => renderCrewPost(p, {
-      reactions: reactionCounts[p.id] || {},
-      comments: commentCounts[p.id] || 0,
-      reposts: repostCounts[p.id] || 0,
-      myReaction: myReactionByPost[p.id] || null,
-      isReposted: userReposts.has(p.id),
-      canViewReactions,
-    })).join('');
+    container.innerHTML = filtered.map((p: any) => {
+      // Calcular total de reacciones: likes + comentarios + reposts
+      const likes = reactionCounts[p.id]?.like || 0;
+      const comments = commentCounts[p.id] || 0;
+      const reposts = repostCounts[p.id] || 0;
+      const totalReactions = likes + comments + reposts;
+
+      return renderCrewPost(p, {
+        reactions: reactionCounts[p.id] || {},
+        comments: commentCounts[p.id] || 0,
+        reposts: repostCounts[p.id] || 0,
+        totalReactions,
+        myReaction: myReactionByPost[p.id] || null,
+        isReposted: userReposts.has(p.id),
+        canViewReactions,
+      });
+    }).join('');
 
     attachHandlers(posts as any[]);
   } catch (e) {
@@ -227,7 +236,7 @@ export async function loadCrewFeed(filter = 'all'): Promise<void> {
   }
 }
 
-function renderCrewPost(p: any, meta: { reactions: Record<string, number>; comments: number; reposts: number; myReaction: string | null; isReposted: boolean; canViewReactions: boolean }): string {
+function renderCrewPost(p: any, meta: { reactions: Record<string, number>; comments: number; reposts: number; totalReactions: number; myReaction: string | null; isReposted: boolean; canViewReactions: boolean }): string {
   const author = p.author || {};
   const avatar = author.avatar_url || '';
   const name = author.nombre || author.username || 'Crew';
