@@ -137,6 +137,57 @@ const isActive = (href: string) => {
 			}
 
 			/* ═══════════════════════════════════════════════
+			   CONTRAST RULE — depende 100% del theme
+			   Dark  -> texto/bordes/lineas en BLANCO o claros
+			   Light -> texto/bordes/lineas en NEGRO u oscuros
+			   La logica vive aqui (variables base) y se hereda
+			   en los componentes via var(--text) / var(--border).
+			   ═══════════════════════════════════════════════ */
+			:root {
+				color-scheme: dark;
+				/* Texto y lineas del tema */
+				--line: var(--border);
+				--line-faint: var(--border-faint);
+				--line-strong: var(--border-strong);
+				--foreground: var(--text);
+				--foreground-muted: var(--text-muted);
+				--ink: #ffffff;
+				--ink-strong: #ffffff;
+				--ink-muted: rgba(255,255,255,0.7);
+				--surface: var(--bg);
+			}
+			[data-theme="light"] {
+				color-scheme: light;
+				--line: var(--border);
+				--line-faint: var(--border-faint);
+				--line-strong: var(--border-strong);
+				--foreground: var(--text);
+				--foreground-muted: var(--text-muted);
+				--ink: #000000;
+				--ink-strong: #000000;
+				--ink-muted: rgba(0,0,0,0.7);
+				--surface: var(--bg);
+			}
+
+			/* Nativos (select/input/date) siguen el color-scheme del theme */
+			input, select, textarea, button {
+				color-scheme: inherit;
+			}
+
+			/* Fiadores de contraste: neutros claros en dark, oscuros en light */
+			.contrast-line { border-color: var(--line); }
+			.contrast-line-faint { border-color: var(--line-faint); }
+			.contrast-line-strong { border-color: var(--line-strong); }
+			.contrast-text { color: var(--foreground); }
+			.contrast-text-muted { color: var(--foreground-muted); }
+
+			/* Cualquier elemento sin color de texto explicito hereda el del tema */
+			body, .theme-fg {
+				color: var(--text);
+				border-color: var(--border);
+			}
+
+			/* ═══════════════════════════════════════════════
 			   BASE STYLES
 			   ═══════════════════════════════════════════════ */
 			html {

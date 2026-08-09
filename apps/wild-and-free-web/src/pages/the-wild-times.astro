@@ -617,60 +617,90 @@ const config = {
     font-weight: 700;
     opacity: 0.8;
   }
-  /* Popover que aparece al hover/abrir (hacia abajo, no tapa el contenido) */
-  .reaction-wrap .reaction-picker {
-    position: absolute;
-    top: calc(100% + 10px);
-    left: 0;
-    display: none;
-    align-items: center;
-    gap: 4px;
-    padding: 6px 10px;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 100px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
-    z-index: 30;
-    white-space: nowrap;
-    animation: reactionPop 0.18s ease;
-  }
-  @keyframes reactionPop {
-    from { opacity: 0; transform: translateY(8px) scale(0.8); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
-  }
-  .reaction-wrap:hover .reaction-picker,
-  .reaction-picker.open {
-    display: flex;
-  }
-  .reaction-option {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 38px;
-    height: 38px;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    border-radius: 50%;
-    transition: transform 0.15s ease;
-    font-family: inherit;
-    flex-direction: column;
-    gap: 0;
-  }
-  .reaction-option:hover {
-    transform: translateY(-8px) scale(1.2);
-  }
-  .reaction-option-emoji {
-    font-size: 24px;
-    line-height: 1;
-  }
-  .reaction-option-count {
-    font-size: 9px;
-    font-weight: 800;
-    color: var(--text-muted);
-    margin-top: 1px;
-  }
+	  /* Popover que aparece al hover/abrir (hacia abajo, no tapa el contenido) */
+	  .reaction-wrap .reaction-picker {
+	    position: absolute;
+	    top: calc(100% + 12px);
+	    left: 0;
+	    display: none;
+	    align-items: center;
+	    gap: 4px;
+	    padding: 8px 12px;
+	    background: var(--bg-card);
+	    border: 1px solid var(--border);
+	    border-radius: 100px;
+	    box-shadow: 0 14px 44px rgba(0, 0, 0, 0.45);
+	    backdrop-filter: blur(8px);
+	    z-index: 40;
+	    white-space: nowrap;
+	  }
+	  .reaction-wrap:hover .reaction-picker,
+	  .reaction-picker.open {
+	    display: flex;
+	    animation: reactionPop 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+	  }
+	  @keyframes reactionPop {
+	    from { opacity: 0; transform: translateY(10px) scale(0.7); }
+	    to { opacity: 1; transform: translateY(0) scale(1); }
+	  }
+	  .reaction-option {
+	    position: relative;
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+	    width: 42px;
+	    height: 42px;
+	    border: none;
+	    background: transparent;
+	    cursor: pointer;
+	    border-radius: 50%;
+	    font-family: inherit;
+	    flex-direction: column;
+	    gap: 0;
+	    transform: translateY(0);
+	    transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+	    animation: emojiBump 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+	    animation-delay: calc(var(--i, 0) * 35ms);
+	  }
+	  .reaction-option:nth-child(1) { --i: 0; }
+	  .reaction-option:nth-child(2) { --i: 1; }
+	  .reaction-option:nth-child(3) { --i: 2; }
+	  .reaction-option:nth-child(4) { --i: 3; }
+	  .reaction-option:nth-child(5) { --i: 4; }
+	  @keyframes emojiBump {
+	    from { opacity: 0; transform: translateY(14px) scale(0.5); }
+	    to { opacity: 1; transform: translateY(0) scale(1); }
+	  }
+	  .reaction-option:hover {
+	    transform: translateY(-6px) scale(1.3);
+	  }
+	  .reaction-option:active {
+	    transform: translateY(-2px) scale(1.1);
+	  }
+	  .reaction-option-emoji {
+	    font-size: 26px;
+	    line-height: 1;
+	    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+	    transition: filter 0.15s ease;
+	  }
+	  .reaction-option:hover .reaction-option-emoji {
+	    filter: drop-shadow(0 3px 8px rgba(0,0,0,0.3));
+	  }
+	  .reaction-option-count {
+	    font-size: 9px;
+	    font-weight: 800;
+	    color: var(--text-muted);
+	    margin-top: 1px;
+	  }
+	  /* Boton principal: hover suave y color de fondo claro en hover */
+	  .reaction-main-btn:hover {
+	    background: var(--bg-hover);
+	    color: var(--primary);
+	    transform: translateY(-1px);
+	  }
+	  .reaction-main-btn {
+	    transition: all 0.18s ease;
+	  }
   /* Resumen de reacciones debajo del contenido */
   .feed-card-reactions-summary {
     display: block;
@@ -688,13 +718,13 @@ const config = {
     color: var(--text-secondary);
   }
   /* Filtro por tipo en el dialog */
-  .reactions-type-bar {
-    display: none;
-    padding: 8px 14px;
-    gap: 6px;
-    border-bottom: 1px solid var(--border);
-    background: rgba(0, 0, 0, 0.04);
-  }
+	  .reactions-type-bar {
+	    display: none;
+	    padding: 8px 14px;
+	    gap: 6px;
+	    border-bottom: 1px solid var(--border);
+	    background: var(--bg);
+	  }
   .reactions-type-bar.block {
     display: flex;
   }
