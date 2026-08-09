@@ -359,40 +359,44 @@ function renderCrewPost(p: any, meta: { reactions: Record<string, number>; comme
       <span class="reactions-pills">${REACTION_TYPES.map((t) => reactions[t] ? `<span class="reaction-pill">${reactionEmoji(t)}&nbsp;${reactions[t]}</span>` : '').join('')}</span>
     </div>` : ''}
     <div class="feed-card-actions">
-      <div class="reaction-wrap">
-        <button class="action-btn reaction-main-btn ${isReacted ? 'action-btn--active' : ''}" data-action="reaction-toggle" style="${myReactionMeta ? `color:${myReactionMeta.color}` : ''}" data-reaction-active="${meta.myReaction || ''}">
-          <span class="reaction-btn-emoji">${myReactionMeta ? `${myReactionMeta.emoji} ` : '👍 '}</span>
-          <span class="reaction-btn-label">${myReactionMeta ? myReactionMeta.label : 'Me gusta'}</span>
-          <span class="reaction-btn-count">${totalReactions > 0 ? totalReactions : ''}</span>
+      <div class="feed-actions-main">
+        <div class="reaction-wrap">
+          <button class="action-btn reaction-main-btn ${isReacted ? 'action-btn--active' : ''}" data-action="reaction-toggle" style="${myReactionMeta ? `color:${myReactionMeta.color}` : ''}" data-reaction-active="${meta.myReaction || ''}">
+            <span class="reaction-btn-emoji">${myReactionMeta ? `${myReactionMeta.emoji} ` : '👍 '}</span>
+            <span class="reaction-btn-label">${myReactionMeta ? myReactionMeta.label : 'Me gusta'}</span>
+            <span class="reaction-btn-count">${totalReactions > 0 ? totalReactions : ''}</span>
+          </button>
+          <div class="reaction-picker" data-post-id="${p.id}">${reactionPicker}</div>
+        </div>
+        <button class="action-btn" data-action="comment">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>${meta.comments}</span>
         </button>
-        <div class="reaction-picker" data-post-id="${p.id}">${reactionPicker}</div>
+        <button class="action-btn ${meta.isReposted ? 'action-btn--active' : ''}" data-action="repost">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="${meta.isReposted ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2.5"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+          <span>${meta.reposts}</span>
+        </button>
+        ${meta.canViewReactions ? `<button class="action-btn eye-btn" data-action="opinions" title="Reacciones · Comentarios · Reposts">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span class="eye-stats">
+            <span class="eye-stat eye-stat-reactions" title="Reacciones (${totalReactions} total)">${REACTION_TYPES.filter((t) => reactions[t] > 0).map((t) => `<span class="eye-pool" data-reaction-type="${REACTIONS[t].label}">${reactionEmoji(t)}<b>${reactions[t]}</b></span>`).join('')}</span>
+            <span class="eye-stat-sep">·</span>
+            <span class="eye-stat eye-stat-comments" title="Comentarios">💬<b>${meta.comments}</b></span>
+            <span class="eye-stat-sep">·</span>
+            <span class="eye-stat eye-stat-reposts" title="Reposts">🔁<b>${meta.reposts}</b></span>
+          </span>
+        </button>` : ''}
       </div>
-      <button class="action-btn" data-action="comment">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        <span>${meta.comments}</span>
-      </button>
-      <button class="action-btn ${meta.isReposted ? 'action-btn--active' : ''}" data-action="repost">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="${meta.isReposted ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2.5"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-        <span>${meta.reposts}</span>
-      </button>
-      <span>${meta.canViewReactions ? `<button class="action-btn eye-btn" data-action="opinions" title="Reacciones · Comentarios · Reposts">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-        <span class="eye-stats">
-          <span class="eye-stat eye-stat-reactions" title="Reacciones (${totalReactions} total)">${REACTION_TYPES.filter((t) => reactions[t] > 0).map((t) => `<span class="eye-pool" data-reaction-type="${REACTIONS[t].label}">${reactionEmoji(t)}<b>${reactions[t]}</b></span>`).join('')}</span>
-          <span class="eye-stat-sep">·</span>
-          <span class="eye-stat eye-stat-comments" title="Comentarios">💬<b>${meta.comments}</b></span>
-          <span class="eye-stat-sep">·</span>
-          <span class="eye-stat eye-stat-reposts" title="Reposts">🔁<b>${meta.reposts}</b></span>
-        </span>
-      </button>` : ''}
-      <button class="action-btn" data-action="share" data-post-id="${p.id}" data-link="/the-wild-times/p/${p.id}">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-        <span>Compartir</span>
-      </button>
-      <button class="action-btn ml-auto action-btn--go" data-action="go-post" data-link="/the-wild-times/p/${p.id}">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
-        <span>Ir a publicación</span>
-      </button>
+      <div class="feed-actions-extra">
+        <button class="action-btn action-btn--icononly" data-action="share" data-post-id="${p.id}" data-link="/noticias/${p.id}" title="Copiar enlace">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          <span>Compartir</span>
+        </button>
+        <button class="action-btn ml-auto action-btn--go" data-action="go-post" data-link="/noticias/${p.id}">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+          <span>Ir a publicación</span>
+        </button>
+      </div>
     </div>
     <div class="comments-section hidden" data-post-id="${p.id}">
       <div class="comments-list"></div>
@@ -516,9 +520,9 @@ async function handleAction(btnLike: HTMLElement | Event): Promise<void> {
     const postTitle = postEl.querySelector('.feed-card-title')?.textContent || 'Publicación';
     await openReactionsDialog(postId, postTitle);
   } else if (action === 'go-post') {
-    window.location.href = btn.dataset.link || `/the-wild-times/p/${postId}`;
+    window.location.href = btn.dataset.link || `/noticias/${postId}`;
   } else if (action === 'share') {
-    const link = btn.dataset.link || `/the-wild-times/p/${postId}`;
+    const link = btn.dataset.link || `/noticias/${postId}`;
     const url = new URL(link, window.location.origin).href;
     let ok = false;
     try {
