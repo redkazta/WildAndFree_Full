@@ -1,0 +1,27 @@
+---
+import PostArticle from '../../components/PostArticle.astro';
+import { createClient } from '@supabase/supabase-js';
+import { postShortId } from '../../lib/slug';
+
+// Promos (post_type = promotion): /promos/[shortId]
+export async function getStaticPaths() {
+  const __supabase = createClient(
+    import.meta.env.PUBLIC_SUPABASE_URL as string,
+    import.meta.env.PUBLIC_SUPABASE_ANON_KEY as string
+  );
+  const { data: posts } = await __supabase
+    .from('crew_posts')
+    .select('id')
+    .eq('status', 'published')
+    .eq('post_type', 'promotion');
+  const paths: Array<{ params: { shortId: string }; props: { postId: string } }> = [];
+  for (const p of posts || []) {
+    paths.push({ params: { shortId: postShortId(p.id) }, props: { postId: p.id } });
+  }
+  return paths;
+}
+
+const { postId } = Astro.props;
+---
+
+<PostArticle postId={postId} />

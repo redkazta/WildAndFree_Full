@@ -1,0 +1,117 @@
+---
+import Layout from '../layouts/Layout.astro';
+import tenantConfig from '../../../../packages/shared-types/tenant-config.json';
+import '../styles/wild-times-feed.css';
+
+interface Props {
+  postId: string;
+}
+const { postId } = Astro.props;
+
+const tenant = tenantConfig['wild-and-free'];
+const config = {
+  name: "Wild Gvng - THE WILD TIMES",
+  primary_color: tenant.primary_color,
+  secondary_color: tenant.secondary_color
+};
+---
+
+<Layout config={config}>
+  <div class="min-h-screen bg-[var(--bg)] text-[var(--text)] font-sans pb-20">
+
+    <!-- MASTHEAD -->
+    <header class="border-b-2 border-[var(--border)] py-6 px-4 md:px-8">
+      <div class="max-w-[1400px] mx-auto">
+        <div class="flex justify-between items-end border-b border-[var(--border)] pb-2 mb-2 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--text-muted)]">
+          <span>Vol. 1 — Edición Digital</span>
+          <span>Torreón, Coahuila, MX</span>
+          <span class="text-[var(--primary)]">GRATIS</span>
+        </div>
+        <h1 class="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter uppercase leading-[0.85] text-[var(--text)]">
+          THE WILD <span class="text-[var(--primary)]">TIMES</span>
+        </h1>
+        <div class="flex items-center gap-4 mt-2 border-t border-[var(--border)] pt-2">
+          <span class="bg-[var(--primary)] text-[var(--bg)] px-3 py-0.5 text-[10px] font-black uppercase tracking-wider">Fanzine Oficial</span>
+          <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--text-muted)]">Noticias · Cultura · Música · Calle</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ARTICULO: PUBLICACION -->
+    <div class="repo-wrap px-4 md:px-8">
+      <div class="repo-inner">
+        <nav class="note-back mb-6">
+          <a href="/the-wild-times" class="note-back-link">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+            Volver a The Wild Times
+          </a>
+          <span class="note-back-dot">·</span>
+          <span class="note-back-label">Nota editorial</span>
+        </nav>
+
+        <div id="post-container" class="note-wrap">
+          <p class="text-sm text-[var(--text-muted)] italic text-center py-12">Cargando publicación...</p>
+        </div>
+
+        <div class="note-footer">
+          <a href="/the-wild-times" class="note-back-link">← Más publicaciones</a>
+          <span class="note-back-label">© The Wild Times · Wild Gvng</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script define:vars={{ postId }} is:inline>
+  import { loadCrewPost, initFeedInteractions } from '../lib/wild-times-feed';
+
+  function resolveId(): string {
+    if (postId) return postId;
+    const m = window.location.pathname.match(/\/([^/]+)$/);
+    return m ? decodeURIComponent(m[1]) : '';
+  }
+
+  initFeedInteractions();
+  loadCrewPost(resolveId());
+
+  const hideGo = () => {
+    document.querySelectorAll('.action-btn--go').forEach((b) => { (b as HTMLElement).style.display = 'none'; });
+  };
+  document.addEventListener('astro:astro-load', hideGo);
+  document.addEventListener('DOMContentLoaded', hideGo);
+  setTimeout(hideGo, 700);
+</script>
+
+<style is:global>
+  .repo-wrap { max-width: 1200px; margin: 0 auto; }
+  .repo-inner { max-width: 820px; margin: 0 auto; padding: 40px 0; }
+  .note-back {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 22px; flex-wrap: wrap;
+  }
+  .note-back-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--text-muted); text-decoration: none; transition: color 0.2s ease;
+  }
+  .note-back-link:hover { color: var(--primary); }
+  .note-back-dot { color: var(--primary); opacity: 0.5; }
+  .note-back-label {
+    font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--primary); background: var(--primary-soft); padding: 3px 12px; border-radius: 100px;
+    white-space: nowrap;
+  }
+
+  #post-container .feed-card { border-radius: 20px; transition: box-shadow 0.3s ease; }
+  #post-container .feed-card:hover { transform: none; }
+  #post-container .feed-card-header { padding: 28px 28px 0; }
+  #post-container .feed-card-body { padding: 0 28px; }
+  #post-container .feed-card-text { font-size: 15.5px; line-height: 1.9; }
+  #post-container .feed-card-title { font-size: 1.75rem; line-height: 1.15; margin-bottom: 14px; }
+  #post-container .feed-card-actions,
+  #post-container .feed-card-reactions-summary { padding-left: 28px; padding-right: 28px; }
+
+  .note-footer {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    margin-top: 28px; padding-top: 22px; border-top: 1px solid var(--border-faint); flex-wrap: wrap;
+  }
+</style>

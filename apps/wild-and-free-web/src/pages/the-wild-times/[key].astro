@@ -1,0 +1,36 @@
+---
+import { createClient } from '@supabase/supabase-js';
+import { postShortId, postSlug, postTypePath } from '../../lib/slug';
+
+// RDCP: mantiene vivas las URLs viejas de The Wild Times (/the-wild-times/[slug]
+// o /the-wild-times/[shortId]) y las redirige a la nueva URL separada por tipo.
+export async function getStaticPaths() {
+  const __supabase = createClient(
+    import.meta.env.PUBLIC_SUPABASE_URL as string,
+    import.meta.env.PUBLIC_SUPABASE_ANON_KEY as string
+  );
+  const { data: posts } = await __supabase
+    .from('crew_posts')
+    .select('id, title, post_type')
+    .eq('status', 'published');
+
+  const paths: Array<{ params: { key: string }; props: { target: string } }> = [];
+  for (const p of posts || []) {
+    const base = postTypePath(p.post_type);
+    const targetShort = `${base}/${postShortId(p.id)}`;
+    paths.push({ params: { key: postShortId(p.id) }, props: { target: targetShort } });
+    if (p.title) {
+      paths.push({ params: { key: postSlug(p.id, p.title) }, props: { target: targetShort } });
+    }
+  }
+  return paths;
+}
+
+const { target } = Astro.props;
+---
+
+<p style="padding:16px;font-family:sans-serif;">Redirigiendo a la publicación…</p>
+
+<script define:vars={{ target }}>
+  window.location.replace(target);
+</script>
