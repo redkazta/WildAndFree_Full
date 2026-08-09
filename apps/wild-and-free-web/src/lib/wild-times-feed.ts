@@ -529,19 +529,30 @@ function ensureReactionDialog(): HTMLDialogElement {
   reactionDialog.className = 'reactions-dialog';
   reactionDialog.innerHTML = `
     <div class="reactions-dialog-inner">
+      <!-- CABECERA -->
       <div class="reactions-dialog-head">
-        <h3 class="reactions-dialog-title">Reacciones</h3>
+        <div class="reactions-dialog-heading">
+          <h3 class="reactions-dialog-title">Reacciones</h3>
+          <span class="reactions-dialog-sub">Actividad de esta publicación</span>
+        </div>
         <button class="reactions-dialog-close" data-close title="Cerrar">✕</button>
       </div>
+
+      <!-- PESTAÑAS -->
       <div class="reactions-tabs" role="tablist">
-        <button class="reactions-tab active" data-reaction-tab="likes">Reacciones</button>
-        <button class="reactions-tab" data-reaction-tab="comments">💬 Comentarios</button>
-        <button class="reactions-tab" data-reaction-tab="reposts">🔁 Reposts</button>
+        <button class="reactions-tab active" data-reaction-tab="likes"><span class="tab-emoji">👍</span> Reacciones</button>
+        <button class="reactions-tab" data-reaction-tab="comments"><span class="tab-emoji">💬</span> Comentarios</button>
+        <button class="reactions-tab" data-reaction-tab="reposts"><span class="tab-emoji">🔁</span> Reposts</button>
       </div>
+
+      <!-- FILTRO POR TIPO DE REACCION -->
       <div class="reactions-type-bar" id="reactions-type-bar">
+        <span class="reactions-type-label">Filtrar</span>
         <button class="reaction-type-filter active" data-filter-type="">Todos</button>
-        ${REACTION_TYPES.map((t) => `<button class="reaction-type-filter" data-filter-type="${t}">${reactionEmoji(t)}</button>`).join('')}
+        ${REACTION_TYPES.map((t) => `<button class="reaction-type-filter" data-filter-type="${t}" title="${REACTIONS[t]?.label || t}">${reactionEmoji(t)}</button>`).join('')}
       </div>
+
+      <!-- LISTA -->
       <div class="reactions-body">
         <p class="reactions-loading">Cargando...</p>
       </div>
@@ -594,11 +605,13 @@ function userRowHtml(u: any, extra: string): string {
   const name = u.nombre || u.username || 'Anónimo';
   const initials = name.substring(0, 2).toUpperCase();
   const reactEmoji = u.reaction_type ? reactionEmoji(u.reaction_type) : '';
+  const reactColor = u.reaction_type ? (reactionMeta(u.reaction_type).color || '') : '';
   return `<div class="reaction-user">
     <div class="reaction-user-avatar" style="${avatar ? `background-image:url('${avatar}')` : ''}">${avatar ? '' : initials}</div>
+    ${reactEmoji ? `<span class="reaction-row-emoji" style="${reactColor ? `color:${reactColor}` : ''}">${reactEmoji}</span>` : ''}
     <div class="reaction-user-info">
-      <a href="/artista/${u.username || ''}" class="reaction-user-name">${name}</a>
-      <span class="reaction-user-meta">${reactEmoji ? `<span class="reaction-inline-emoji">${reactEmoji}</span> ` : ''}${extra}</span>
+      <a href="/artista/${u.username || ''}" class="reaction-user-name">${name}<span class="reaction-row-arrow">↗</span></a>
+      <span class="reaction-user-meta">${extra}</span>
     </div>
   </div>`;
 }
@@ -609,7 +622,7 @@ async function loadReactionTab(type: 'likes' | 'comments' | 'reposts'): Promise<
   if (!body) return;
   body.innerHTML = '<p class="reactions-loading">Cargando...</p>';
   const typeBar = dialog.querySelector('#reactions-type-bar') as HTMLElement;
-  if (typeBar) typeBar.style.display = type === 'likes' ? 'block' : 'none';
+  if (typeBar) typeBar.style.display = type === 'likes' ? 'flex' : 'none';
 
   try {
     if (type === 'comments') {

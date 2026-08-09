@@ -439,54 +439,69 @@ const config = {
   .featured-embed .content-embed-img { border-radius: 12px 12px 0 0; }
   .featured-embed .content-embed { margin: 0; }
 
-  /* ─── REACTIONS DIALOG (ojito, admin/staff) ─── */
+  /* ─── REACTIONS DIALOG (ojito, admin/staff) — rediseñado ─── */
   .reactions-dialog {
     border: 1px solid var(--border);
-    border-radius: 20px;
-    background: var(--bg);
+    border-radius: 22px;
+    background: var(--surface-solid, var(--bg));
     color: var(--text);
-    width: min(520px, 92vw);
-    max-width: 520px;
-    max-height: 80vh;
+    width: min(560px, 94vw);
+    max-width: 560px;
+    max-height: 84vh;
     padding: 0;
     overflow: hidden;
-    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 32px 90px rgba(0, 0, 0, 0.55);
   }
   .reactions-dialog::backdrop {
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(2px);
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(3px);
   }
   .reactions-dialog-inner {
     display: flex;
     flex-direction: column;
-    max-height: 80vh;
+    max-height: 84vh;
   }
+  /* CABECERA */
   .reactions-dialog-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--border);
+    gap: 12px;
+    padding: 18px 22px 14px;
+  }
+  .reactions-dialog-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
   }
   .reactions-dialog-title {
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 900;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.06em;
     margin: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    color: var(--text);
+  }
+  .reactions-dialog-sub {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
   .reactions-dialog-close {
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
-    border: none;
+    border: 1px solid var(--border);
     background: var(--bg-hover);
     color: var(--text);
     cursor: pointer;
-    font-size: 14px;
+    font-size: 15px;
     font-family: inherit;
     flex-shrink: 0;
     transition: all 0.2s ease;
@@ -494,20 +509,23 @@ const config = {
   .reactions-dialog-close:hover {
     background: var(--primary);
     color: #000;
+    border-color: var(--primary);
     transform: rotate(90deg);
   }
+  /* PESTAÑAS */
   .reactions-tabs {
     display: flex;
-    gap: 4px;
-    padding: 10px 14px;
-    border-bottom: 1px solid var(--border);
-    background: rgba(0, 0, 0, 0.06);
+    gap: 8px;
+    padding: 6px 20px 0;
   }
   .reactions-tab {
-    flex: 1;
-    padding: 8px 10px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    border-radius: 12px 12px 0 0;
+    border: 1px solid transparent;
+    border-bottom: none;
     background: transparent;
     color: var(--text-secondary);
     font-size: 11px;
@@ -517,20 +535,85 @@ const config = {
     cursor: pointer;
     font-family: inherit;
     transition: all 0.2s ease;
+    position: relative;
+  }
+  .reactions-tab .tab-emoji {
+    font-size: 14px;
+    opacity: 0.7;
+  }
+  .reactions-tab:hover {
+    color: var(--text);
+    background: var(--bg-hover);
   }
   .reactions-tab.active {
     background: var(--primary);
     border-color: var(--primary);
     color: #000;
+    box-shadow: 0 -4px 20px rgba(201, 131, 0, 0.18);
   }
+  .reactions-tab.active .tab-emoji {
+    opacity: 1;
+  }
+  /* BARRA FILTRO REACCIONES */
+  .reactions-type-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border-faint);
+    background: var(--surface-solid-elev, var(--bg));
+    flex-wrap: wrap;
+  }
+  .reactions-type-label {
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    margin-right: 4px;
+    opacity: 0.7;
+  }
+  .reaction-type-filter {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: transparent;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .reaction-type-filter:hover {
+    transform: scale(1.12);
+    border-color: var(--primary);
+    background: var(--bg-hover);
+  }
+  .reaction-type-filter.active {
+    border-color: var(--primary);
+    background: var(--primary);
+    transform: scale(1.12);
+    box-shadow: 0 4px 14px rgba(201, 131, 0, 0.35);
+  }
+  /* LISTA */
   .reactions-body {
     overflow-y: auto;
-    padding: 14px 16px;
+    padding: 16px 18px 20px;
     display: flex;
     flex-direction: column;
-    gap: 2px;
-    min-height: 120px;
-    max-height: 50vh;
+    gap: 8px;
+    min-height: 160px;
+    max-height: 54vh;
+  }
+  .reactions-body::-webkit-scrollbar {
+    width: 8px;
+  }
+  .reactions-body::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 8px;
   }
   .reactions-loading,
   .reactions-empty {
@@ -538,26 +621,33 @@ const config = {
     font-size: 12px;
     font-style: italic;
     text-align: center;
-    padding: 24px 0;
+    padding: 30px 0;
   }
+  /* FILA DE USUARIO */
   .reaction-user {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 8px 10px;
-    border-radius: 10px;
+    padding: 10px 12px;
+    border-radius: 13px;
+    background: var(--surface-solid-elev, var(--bg));
+    border: 1px solid var(--border-faint);
+    transition: all 0.18s ease;
   }
   .reaction-user:hover {
     background: var(--bg-hover);
+    border-color: var(--primary-border);
+    transform: translateX(2px);
   }
   .reaction-user-avatar {
-    width: 38px;
-    height: 38px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     flex-shrink: 0;
     background: linear-gradient(135deg, var(--primary-soft), var(--primary));
     background-size: cover;
     background-position: center;
+    border: 2px solid var(--border);
     color: #000;
     font-size: 11px;
     font-weight: 900;
@@ -565,33 +655,64 @@ const config = {
     align-items: center;
     justify-content: center;
   }
+  .reaction-row-emoji {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1px solid var(--border-faint);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+    margin-left: -6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
   .reaction-user-info {
     display: flex;
     flex-direction: column;
     min-width: 0;
+    flex: 1;
   }
   .reaction-user-name {
     color: var(--text);
     font-size: 13px;
     font-weight: 800;
     text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
   }
   .reaction-user-name:hover {
     color: var(--primary);
   }
+  .reaction-row-arrow {
+    font-size: 11px;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: all 0.18s ease;
+  }
+  .reaction-user:hover .reaction-row-arrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
   .reaction-user-meta {
     font-size: 10px;
     color: var(--text-muted);
+    margin-top: 2px;
   }
+  /* COMENTARIO EN LA FILA */
   .reaction-comment {
-    margin: -4px 0 10px 60px;
-    padding: 8px 12px;
+    margin: -2px 0 4px 52px;
+    padding: 9px 12px;
     border-radius: 10px;
-    background: var(--bg);
+    background: var(--surface-solid, var(--bg));
     border: 1px solid var(--border-faint);
     font-size: 12px;
     color: var(--text-secondary);
-    line-height: 1.5;
+    line-height: 1.6;
+    border-left: 3px solid var(--primary);
   }
 
   /* ─── MULTIPLE REACTIONS (Facebook-style) ─── */
@@ -713,38 +834,5 @@ const config = {
   .reaction-pill {
     font-size: 12px;
     color: var(--text-secondary);
-  }
-  /* Filtro por tipo en el dialog */
-	  .reactions-type-bar {
-	    display: none;
-	    padding: 8px 14px;
-	    gap: 6px;
-	    border-bottom: 1px solid var(--border);
-	    background: var(--bg);
-	  }
-  .reactions-type-bar.block {
-    display: flex;
-  }
-  .reaction-type-filter {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    border: 1px solid var(--border);
-    background: transparent;
-    font-size: 20px;
-    line-height: 1;
-    cursor: pointer;
-    transition: all 0.15s ease;
-  }
-  .reaction-type-filter.active {
-    border-color: var(--primary);
-    background: rgba(201, 131, 0, 0.12);
-    transform: scale(1.1);
-  }
-  .reaction-type-filter:hover {
-    border-color: var(--primary);
-  }
-  .reaction-inline-emoji {
-    font-size: 14px;
   }
 </style>
