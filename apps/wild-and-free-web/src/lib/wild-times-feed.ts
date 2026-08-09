@@ -314,26 +314,51 @@ function renderCrewPost(p: any, meta: { reactions: Record<string, number>; comme
 
 let allPostsCache: any[] = [];
 
-function attachHandlers(posts: any[]): void {
-  allPostsCache = posts;
-  document.querySelectorAll('.action-btn').forEach(btn => {
-    btn.removeEventListener('click', handleAction);
-    btn.addEventListener('click', handleAction);
-  });
-  document.querySelectorAll('.reaction-option').forEach(opt => {
-    opt.removeEventListener('click', handleReactionOption);
-    opt.addEventListener('click', handleReactionOption);
-  });
-  document.querySelectorAll('.comment-send').forEach(btn => {
-    btn.removeEventListener('click', handleCommentSend);
-    btn.addEventListener('click', handleCommentSend);
+let delegateInit = false;
+
+/**
+ * Registra UN delegado global de clicks para las reacciones/acciones del feed.
+ * Se llama una sola vez; funciona aunque el feed se re-renderice.
+ */
+export function initFeedInteractions(): void {
+  if (delegateInit) return;
+  delegateInit = true;
+  document.addEventListener('click', (ev) => {
+    const target = ev.target as HTMLElement;
+
+    // Opcion de reaccion (emoji del picker)
+    const opt = target.closest('.reaction-option') as HTMLElement | null;
+    if (opt) {
+      ev.stopPropagation();
+      ev.preventDefault();
+      handleReactionOption(opt);
+      return;
+    }
+
+    // Botones de accion (.action-btn)
+    const actionBtn = target.closest('.action-btn') as HTMLElement | null;
+    if (actionBtn) {
+      handleAction(actionBtn);
+      return;
+    }
+
+    // Enviar comentario
+    const sendBtn = target.closest('.comment-send') as HTMLElement | null;
+    if (sendBtn) {
+      handleCommentSend(sendBtn);
+      return;
+    }
+
+    // Click fuera de cualquier reaction-wrap -> cerrar pickers
+    if (!target.closest('.reaction-wrap')) closeReactionPickers();
   });
 }
 
-async function handleReactionOption(e: Event): Promise<void> {
-  e.stopPropagation();
-  e.preventDefault();
-  const opt = e.currentTarget as HTMLElement;
+function attachHandlers(posts: any[]): void {
+  allPostsCache = posts;
+}
+
+async function handleReactionOption(opt: HTMLElement): Promise<void> {
   const postId = opt.dataset.postId;
   const reactionType = opt.dataset.reaction || 'like';
   if (!postId) return;
@@ -353,8 +378,8 @@ function closeReactionPickers(): void {
   document.querySelectorAll('.reaction-picker').forEach((p) => (p as HTMLElement).classList.remove('open'));
 }
 
-async function handleAction(e: Event): Promise<void> {
-  const btn = e.currentTarget as HTMLElement;
+async function handleAction(btnLike: HTMLElement | Event): Promise<void> {
+  const btn = (btnLike instanceof Event ? btnLike.currentTarget : btnLike) as HTMLElement;
   const postEl = btn.closest('.feed-card') as HTMLElement;
   const postId = postEl?.dataset.postId;
   const action = btn.dataset.action;
@@ -430,8 +455,7 @@ async function loadPostComments(postId: string, section: HTMLElement): Promise<v
   }
 }
 
-async function handleCommentSend(e: Event): Promise<void> {
-  const btn = e.currentTarget as HTMLElement;
+async function handleCommentSend(btn: HTMLElement): Promise<void> {
   const section = btn.closest('.comments-section') as HTMLElement;
   const input = section?.querySelector('.comment-input') as HTMLInputElement;
   const postId = section?.dataset.postId;
@@ -484,12 +508,6 @@ export function initRealtime(): void {
   } catch (e) {
     console.warn('Realtime no disponible:', e);
   }
-
-  // Cerrar pickers de reacción al hacer clic fuera
-  document.addEventListener('click', (ev) => {
-    const target = ev.target as HTMLElement;
-    if (!target.closest('.reaction-wrap')) closeReactionPickers();
-  });
 }
 
 // Debounce para no spamear requests si llegan varios cambios seguidos

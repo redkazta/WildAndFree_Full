@@ -78,10 +78,11 @@ const config = {
 </Layout>
 
 <script>
-  import { loadNewsSidebar, loadCrewFeed, initFilters, initRealtime } from '../lib/wild-times-feed';
+  import { loadNewsSidebar, loadCrewFeed, initFilters, initRealtime, initFeedInteractions } from '../lib/wild-times-feed';
 
   initFilters();
   initRealtime();
+  initFeedInteractions();
   loadNewsSidebar();
   loadCrewFeed();
   document.addEventListener('astro:after-swap', () => {
@@ -594,10 +595,10 @@ const config = {
   }
 
   /* ─── MULTIPLE REACTIONS (Facebook-style) ─── */
-  .reaction-wrap {
-    position: relative;
-    display: inline-flex;
-  }
+	  .reaction-wrap {
+	    position: relative;
+	    display: inline-flex;
+	  }
   .reaction-main-btn {
     display: inline-flex;
     align-items: center;
@@ -617,15 +618,14 @@ const config = {
     font-weight: 700;
     opacity: 0.8;
   }
-	  /* Popover que aparece al hover/abrir (hacia abajo).
-	     Se usa opacity+visibility (no display:none) y un ::before invisible
-	     que conecta el boton con el popover para que el hover no se rompa
-	     en el hueco entre ambos. */
+	  /* Popover que aparece al hacer hover (dropdown probado y robusto).
+	     Un ::before invisible conecta el boton con el popover para no
+	     perder el hover en el hueco entre ellos. */
 	  .reaction-wrap .reaction-picker {
 	    position: absolute;
-	    top: calc(100% + 8px);
+	    top: calc(100% + 4px);
 	    left: 0;
-	    display: flex;
+	    display: none;
 	    align-items: center;
 	    gap: 4px;
 	    padding: 8px 12px;
@@ -633,32 +633,22 @@ const config = {
 	    border: 1px solid var(--border);
 	    border-radius: 100px;
 	    box-shadow: 0 14px 44px rgba(0, 0, 0, 0.45);
-	    backdrop-filter: blur(8px);
 	    z-index: 40;
 	    white-space: nowrap;
-	    opacity: 0;
-	    visibility: hidden;
-	    pointer-events: none;
-	    transform: translateY(10px) scale(0.9);
-	    transition: opacity 0.18s ease, transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), visibility 0.18s;
 	  }
-	  /* Zona conectora invisible entre el boton y el popover (evita perder hover) */
 	  .reaction-picker::before {
 	    content: '';
 	    position: absolute;
 	    bottom: 100%;
 	    left: 0;
 	    right: 0;
-	    height: 20px;
+	    height: 18px;
 	    background: transparent;
 	  }
 	  .reaction-wrap:hover .reaction-picker,
 	  .reaction-wrap:focus-within .reaction-picker,
 	  .reaction-picker.open {
-	    opacity: 1;
-	    visibility: visible;
-	    pointer-events: auto;
-	    transform: translateY(0) scale(1);
+	    display: flex;
 	  }
 	  .reaction-option {
 	    position: relative;
