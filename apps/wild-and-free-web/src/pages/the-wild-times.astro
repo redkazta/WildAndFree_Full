@@ -339,6 +339,34 @@ const config = {
     fill: currentColor;
   }
 
+  /* Ojito: estadísticas separadas por tipo (reacciones · comentarios · reposts) */
+  .eye-btn {
+    gap: 5px;
+  }
+  .eye-stats {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .eye-stat {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+  }
+  .eye-stat b {
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+  .eye-stat-sep {
+    color: var(--text-muted);
+    opacity: 0.45;
+    font-size: 9px;
+  }
+
   /* ─── COMMENTS ─── */
   .comments-section {
     border-top: 1px solid var(--border-faint);

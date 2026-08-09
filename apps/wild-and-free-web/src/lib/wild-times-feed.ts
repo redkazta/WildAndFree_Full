@@ -214,11 +214,14 @@ export async function loadCrewFeed(filter = 'all'): Promise<void> {
     container.innerHTML = filtered.map((p: any) => {
       const comments = commentCounts[p.id] || 0;
       const reposts = repostCounts[p.id] || 0;
+      const reactions = reactionCounts[p.id] || {};
+      const totalReactions = Object.values(reactions).reduce((a, b) => Number(a) + Number(b), 0);
 
       return renderCrewPost(p, {
         reactions: reactionCounts[p.id] || {},
         comments,
         reposts,
+        totalReactions,
         myReaction: myReactionByPost[p.id] || null,
         isReposted: userReposts.has(p.id),
         canViewReactions,
@@ -232,7 +235,7 @@ export async function loadCrewFeed(filter = 'all'): Promise<void> {
   }
 }
 
-function renderCrewPost(p: any, meta: { reactions: Record<string, number>; comments: number; reposts: number; myReaction: string | null; isReposted: boolean; canViewReactions: boolean }): string {
+function renderCrewPost(p: any, meta: { reactions: Record<string, number>; comments: number; reposts: number; totalReactions: number; myReaction: string | null; isReposted: boolean; canViewReactions: boolean }): string {
   const author = p.author || {};
   const avatar = author.avatar_url || '';
   const name = author.nombre || author.username || 'Crew';
@@ -299,9 +302,15 @@ function renderCrewPost(p: any, meta: { reactions: Record<string, number>; comme
         <svg width="16" height="16" viewBox="0 0 24 24" fill="${meta.isReposted ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2.5"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
         <span>${meta.reposts}</span>
       </button>
-      ${meta.canViewReactions ? `<button class="action-btn" data-action="opinions" title="Ver quién reaccionó">
+      <span>${meta.canViewReactions ? `<button class="action-btn eye-btn" data-action="opinions" title="Reacciones · Comentarios · Reposts">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-        <span>${totalReactions}</span>
+        <span class="eye-stats">
+          <span class="eye-stat eye-stat-reactions" title="Reacciones">👍<b>${totalReactions}</b></span>
+          <span class="eye-stat-sep">·</span>
+          <span class="eye-stat eye-stat-comments" title="Comentarios">💬<b>${meta.comments}</b></span>
+          <span class="eye-stat-sep">·</span>
+          <span class="eye-stat eye-stat-reposts" title="Reposts">🔁<b>${meta.reposts}</b></span>
+        </span>
       </button>` : ''}
       <button class="action-btn ml-auto" data-action="share">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
@@ -418,6 +427,7 @@ async function handleAction(btnLike: HTMLElement | Event): Promise<void> {
     btn.classList.toggle('action-btn--active', !!reposted);
     btn.querySelector('svg')?.setAttribute('fill', reposted ? 'currentColor' : 'none');
     if (countEl) countEl.textContent = String(reposted ? c + 1 : Math.max(0, c - 1));
+    syncEyeStats(postEl);
   } else if (action === 'comment') {
     const section = postEl.querySelector('.comments-section');
     if (section) {
@@ -476,6 +486,24 @@ async function handleCommentSend(btn: HTMLElement): Promise<void> {
   loadPostComments(postId, section);
   const commentBtn = section.closest('.feed-card')?.querySelector('[data-action="comment"] span');
   if (commentBtn) commentBtn.textContent = String(parseInt(commentBtn.textContent || '0') + 1);
+  syncEyeStats(section.closest('.feed-card') as Element);
+}
+
+// Mantiene el ojito sincronizado con los contadores de la tarjeta
+// (reacciones · comentarios · reposts) tras acciones en línea.
+function syncEyeStats(postEl: Element): void {
+  const eye = postEl.querySelector('[data-action="opinions"] .eye-stats');
+  if (!eye) return;
+  const read = (sel: string): string => {
+    const el = postEl.querySelector(sel);
+    return el?.textContent?.trim() || '0';
+  };
+  const reactionsEl = eye.querySelector('.eye-stat-reactions b');
+  const commentsEl = eye.querySelector('.eye-stat-comments b');
+  const repostsEl = eye.querySelector('.eye-stat-reposts b');
+  if (reactionsEl) reactionsEl.textContent = read('[data-action="reaction-toggle"] .reaction-btn-count');
+  if (commentsEl) commentsEl.textContent = read('[data-action="comment"] span');
+  if (repostsEl) repostsEl.textContent = read('[data-action="repost"] span');
 }
 
 // ─── FILTERS ───
