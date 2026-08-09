@@ -1,18 +1,8 @@
-// Genera un slug legible y sencillo a partir del título de una publicación.
-// Si no hay título, usa un id corto como identificación estable.
-export function postSlug(pid: string, title?: string | null): string {
-  if (title) {
-    const base = String(title)
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '') // quita acentos
-      .replace(/[^a-z0-9\s-]/g, '')     // solo letras, números, espacios y guiones
-      .trim()
-      .replace(/[\s_]+/g, '-')          // espacios -> guiones
-      .replace(/-+/g, '-')
-      .replace(/^-+|-+$/g, '');
-    if (base) return base;
-  }
-  // Fallback estable: primeros 8 chars del UUID
-  return (pid || '').replace(/-/g, '').slice(0, 8) || pid || 'post';
+// Identificador corto y estable para la URL pública de una publicación.
+// El post se identifica por su UUID completo internamente, pero en la URL
+// mostramos solo el prefijo corto (primeros 8 chars sin guiones) para que
+// sea legible y corto: /the-wild-times/d8f3fde8
+export function postShortId(pid: string | undefined | null): string {
+  const clean = (pid || '').replace(/-/g, '').toLowerCase();
+  return (clean.slice(0, 8) || 'post');
 }

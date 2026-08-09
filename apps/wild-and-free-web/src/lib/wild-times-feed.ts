@@ -1,7 +1,7 @@
 import { supabase } from './supabase';
 import { renderRichContent, initGiphyFallback, renderEmbedUrl } from './linkify';
 import { getRole } from './role';
-import { postSlug } from './slug';
+import { postShortId } from './slug';
 
 const typeLabels: Record<string, { label: string; color: string }> = {
   announcement: { label: '📢 Anuncio', color: 'var(--primary)' },
@@ -338,8 +338,8 @@ function renderCrewPost(p: any, meta: { reactions: Record<string, number>; comme
     imageHtml = renderEmbedUrl(p.image_url);
   }
 
-  // URL pública del post (con slug legible)
-  const postUrl = `/the-wild-times/${postSlug(p.id, p.title)}`;
+  // URL pública del post (con id corto)
+  const postUrl = `/the-wild-times/${postShortId(p.id)}`;
 
   return `<article class="feed-card" data-post-id="${p.id}">
     <div class="feed-card-header">
@@ -524,7 +524,7 @@ async function handleAction(btnLike: HTMLElement | Event): Promise<void> {
     const postTitle = postEl.querySelector('.feed-card-title')?.textContent || 'Publicación';
     await openReactionsDialog(postId, postTitle);
   } else if (action === 'go-post') {
-    window.location.href = btn.dataset.link || `/the-wild-times/${postSlug(postId, '')}`;
+    window.location.href = btn.dataset.link || `/the-wild-times/${postShortId(postId)}`;
   } else if (action === 'share') {
     const link = btn.dataset.link || `/the-wild-times/${postId}`;
     const url = new URL(link, window.location.origin).href;

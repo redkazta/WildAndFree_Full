@@ -1,8 +1,8 @@
 ---
 import { createClient } from '@supabase/supabase-js';
-import { postSlug } from '../../../lib/slug';
+import { postShortId } from '../../../lib/slug';
 
-// RDCP: la URL antigua /the-wild-times/p/[id] redirige a la URL nueva con slug.
+// RDCP: la URL antigua /the-wild-times/p/[id] redirige a la URL nueva con id corto.
 export async function getStaticPaths() {
   const __supabase = createClient(
     import.meta.env.PUBLIC_SUPABASE_URL as string,
@@ -10,30 +10,30 @@ export async function getStaticPaths() {
   );
   const { data: posts } = await __supabase
     .from('crew_posts')
-    .select('id, title')
+    .select('id')
     .eq('status', 'published');
-  const rows: Array<{ slug: string; id: string; title?: string | null }> = [];
+  const rows: Array<{ id: string; shortId: string }> = [];
   const seen = new Map<string, number>();
   for (const p of posts || []) {
-    let slug = postSlug(p.id, p.title);
-    const count = seen.get(postSlug(p.id, p.title)) || 0;
-    if (count > 0) slug = `${slug}-${count + 1}`;
-    seen.set(postSlug(p.id, p.title), count + 1);
-    rows.push({ slug, id: p.id, title: p.title });
+    let short = postShortId(p.id);
+    const count = seen.get(postShortId(p.id)) || 0;
+    if (count > 0) short = `${short}-${count + 1}`;
+    seen.set(postShortId(p.id), count + 1);
+    rows.push({ id: p.id, shortId: short });
   }
   return rows.map((r) => ({
     params: { id: r.id },
-    props: { slug: r.slug },
+    props: { shortId: r.shortId },
   }));
 }
 
-const { slug } = Astro.props;
-const target = `/the-wild-times/${slug}`;
+const { shortId } = Astro.props;
+const target = `/the-wild-times/${shortId}`;
 ---
 
 <p style="padding:16px;font-family:sans-serif;">Redirigiendo a la publicación…</p>
 
 <script define:vars={{ target }}>
-  // Doble seguridad: si el meta no es suficiente (client router), forzamos navegación.
+  // Redirige a la URL nueva con id corto.
   window.location.replace(target);
 </script>

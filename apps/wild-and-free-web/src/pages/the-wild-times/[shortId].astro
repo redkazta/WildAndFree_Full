@@ -2,10 +2,10 @@
 import Layout from '../../layouts/Layout.astro';
 import tenantConfig from '../../../../../packages/shared-types/tenant-config.json';
 import { createClient } from '@supabase/supabase-js';
-import { postSlug } from '../../lib/slug';
+import { postShortId } from '../../lib/slug';
 import '../../styles/wild-times-feed.css';
 
-// URL limpia con slug: /the-wild-times/[slug]. Genera una página por post publicado.
+// URL limpia con id corto: /the-wild-times/[shortId]. Genera una página por post publicado.
 export async function getStaticPaths() {
   const __supabase = createClient(
     import.meta.env.PUBLIC_SUPABASE_URL as string,
@@ -17,17 +17,17 @@ export async function getStaticPaths() {
     .eq('status', 'published')
     .order('published_at', { ascending: false });
 
-  const rows: Array<{ slug: string; id: string }> = [];
+  const rows: Array<{ shortId: string; id: string }> = [];
   const seen = new Map<string, number>();
   for (const p of posts || []) {
-    let slug = postSlug(p.id, p.title);
-    // Garantiza unicidad del slug si hay títulos repetidos.
-    const count = seen.get(slug) || 0;
-    if (count > 0) slug = `${slug}-${count + 1}`;
-    seen.set(postSlug(p.id, p.title), count + 1);
-    rows.push({ slug, id: p.id });
+    // Garantiza unicidad del shortId (colision de primer segmento) via sufijo numerico.
+    let short = postShortId(p.id);
+    const count = seen.get(short) || 0;
+    if (count > 0) short = `${short}-${count + 1}`;
+    seen.set(postShortId(p.id), count + 1);
+    rows.push({ shortId: short, id: p.id });
   }
-  return rows.map((r) => ({ params: { slug: r.slug }, props: { id: r.id } }));
+  return rows.map((r) => ({ params: { shortId: r.shortId }, props: { id: r.id } }));
 }
 
 const { id } = Astro.props;
