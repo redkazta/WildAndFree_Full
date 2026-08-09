@@ -1,6 +1,7 @@
 import { supabase } from './supabase';
 import { renderRichContent, initGiphyFallback, renderEmbedUrl } from './linkify';
 import { getRole } from './role';
+import { postSlug } from './slug';
 
 const typeLabels: Record<string, { label: string; color: string }> = {
   announcement: { label: '📢 Anuncio', color: 'var(--primary)' },
@@ -337,6 +338,9 @@ function renderCrewPost(p: any, meta: { reactions: Record<string, number>; comme
     imageHtml = renderEmbedUrl(p.image_url);
   }
 
+  // URL pública del post (con slug legible)
+  const postUrl = `/the-wild-times/${postSlug(p.id, p.title)}`;
+
   return `<article class="feed-card" data-post-id="${p.id}">
     <div class="feed-card-header">
       <div class="feed-card-author">
@@ -388,11 +392,11 @@ function renderCrewPost(p: any, meta: { reactions: Record<string, number>; comme
         </button>` : ''}
       </div>
       <div class="feed-actions-extra">
-        <button class="action-btn action-btn--icononly" data-action="share" data-post-id="${p.id}" data-link="/noticias/${p.id}" title="Copiar enlace">
+        <button class="action-btn action-btn--icononly" data-action="share" data-post-id="${p.id}" data-link="${postUrl}" title="Copiar enlace">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
           <span>Compartir</span>
         </button>
-        <button class="action-btn ml-auto action-btn--go" data-action="go-post" data-link="/noticias/${p.id}">
+        <button class="action-btn ml-auto action-btn--go" data-action="go-post" data-link="${postUrl}">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
           <span>Ir a publicación</span>
         </button>
@@ -520,9 +524,9 @@ async function handleAction(btnLike: HTMLElement | Event): Promise<void> {
     const postTitle = postEl.querySelector('.feed-card-title')?.textContent || 'Publicación';
     await openReactionsDialog(postId, postTitle);
   } else if (action === 'go-post') {
-    window.location.href = btn.dataset.link || `/noticias/${postId}`;
+    window.location.href = btn.dataset.link || `/the-wild-times/${postSlug(postId, '')}`;
   } else if (action === 'share') {
-    const link = btn.dataset.link || `/noticias/${postId}`;
+    const link = btn.dataset.link || `/the-wild-times/${postId}`;
     const url = new URL(link, window.location.origin).href;
     let ok = false;
     try {

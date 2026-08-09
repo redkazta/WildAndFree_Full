@@ -2,9 +2,10 @@
 import Layout from '../../layouts/Layout.astro';
 import tenantConfig from '../../../../../packages/shared-types/tenant-config.json';
 import { createClient } from '@supabase/supabase-js';
+import { postSlug } from '../../lib/slug';
 import '../../styles/wild-times-feed.css';
 
-// Genera una página estática por cada post publicado, con URL limpia: /noticias/[id].
+// URL limpia con slug: /the-wild-times/[slug]. Genera una página por post publicado.
 export async function getStaticPaths() {
   const __supabase = createClient(
     import.meta.env.PUBLIC_SUPABASE_URL as string,
@@ -12,12 +13,24 @@ export async function getStaticPaths() {
   );
   const { data: posts } = await __supabase
     .from('crew_posts')
-    .select('id')
+    .select('id, title')
     .eq('status', 'published')
     .order('published_at', { ascending: false });
-  const rows = posts || [];
-  return rows.map((p: any) => ({ params: { id: p.id } }));
+
+  const rows: Array<{ slug: string; id: string }> = [];
+  const seen = new Map<string, number>();
+  for (const p of posts || []) {
+    let slug = postSlug(p.id, p.title);
+    // Garantiza unicidad del slug si hay títulos repetidos.
+    const count = seen.get(slug) || 0;
+    if (count > 0) slug = `${slug}-${count + 1}`;
+    seen.set(postSlug(p.id, p.title), count + 1);
+    rows.push({ slug, id: p.id });
+  }
+  return rows.map((r) => ({ params: { slug: r.slug }, props: { id: r.id } }));
 }
+
+const { id } = Astro.props;
 
 const tenant = tenantConfig['wild-and-free'];
 const config = {
@@ -73,16 +86,19 @@ const config = {
   </div>
 </Layout>
 
-<script>
+<script define:vars={{ postId: id }}>
   import { loadCrewPost, initFeedInteractions } from '../../lib/wild-times-feed';
 
-  function getPostId(): string {
-    const match = window.location.pathname.match(/\/noticias\/([^/?]+)/);
-    return match ? match[1] : '';
+  // El id se inyecta en build time vía define:vars desde Astro.props.
+  // Fallback: lee el ultimo segmento del path por si no está disponible.
+  function resolveId(): string {
+    if (postId) return postId;
+    const m = window.location.pathname.match(/\/[^/]+$/);
+    return m ? decodeURIComponent(m[0].slice(1)) : '';
   }
 
   initFeedInteractions();
-  loadCrewPost(getPostId());
+  loadCrewPost(resolveId());
 
   // En la página de detalle, el botón "Ir a publicación" es redundante: lo ocultamos.
   const hideGo = () => {
@@ -94,7 +110,6 @@ const config = {
 </script>
 
 <style is:global>
-  /* ── Layout editorial de la nota ── */
   .repo-wrap {
     max-width: 1200px;
     margin: 0 auto;
@@ -109,6 +124,7 @@ const config = {
     align-items: center;
     gap: 10px;
     margin-bottom: 22px;
+    flex-wrap: wrap;
   }
   .note-back-link {
     display: inline-flex;
@@ -133,12 +149,12 @@ const config = {
     background: var(--primary-soft);
     padding: 3px 12px;
     border-radius: 100px;
+    white-space: nowrap;
   }
 
   /* ── La tarjeta del post hereda los estilos del feed; aquí se realza ── */
   #post-container .feed-card {
     border-radius: 20px;
-    /* Ya no flota la tarjeta hacia arriba en hover, esto es un artículo estático */
     transition: box-shadow 0.3s ease;
   }
   #post-container .feed-card:hover {
