@@ -73,12 +73,16 @@ const config = {
     return '';
   }
 
-  initFeedInteractions();
-  loadCrewPost(resolveId());
-
+  // oculta "Ir a publicación" tras cargar el post (es redundante en la página de detalle)
   const hideGo = () => {
     document.querySelectorAll('.action-btn--go').forEach((b) => { (b as HTMLElement).style.display = 'none'; });
   };
+
+  initFeedInteractions();
+  (async () => {
+    await loadCrewPost(resolveId());
+    hideGo();
+  })();
   document.addEventListener('astro:astro-load', hideGo);
   document.addEventListener('DOMContentLoaded', hideGo);
   setTimeout(hideGo, 700);
