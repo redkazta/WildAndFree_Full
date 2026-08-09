@@ -1,20 +1,29 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getArtistsFromDB, getArtistPosts } from '../../data/artists';
+import { getAllPublicProfiles, getArtistPosts } from '../../data/artists';
 import type { Artist, ArtistPost } from '../../data/artists';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  import.meta.env.PUBLIC_SUPABASE_URL as string,
+  import.meta.env.PUBLIC_SUPABASE_ANON_KEY as string
+);
 
 export async function getStaticPaths() {
-  const artists = await getArtistsFromDB();
-  return artists.map((a: Artist) => ({
+  const profiles = await getAllPublicProfiles();
+  return profiles.map((a: Artist) => ({
     params: { username: a.slug },
     props: { artist: a, posts: [] as ArtistPost[] },
   }));
 }
 
 const { username } = Astro.params;
-// Fetch artists from Supabase at build time
-const artists = await getArtistsFromDB();
-const artist = artists.find((a: Artist) => a.slug === username) || artists[0];
+const profiles = await getAllPublicProfiles();
+const artist = profiles.find((a: Artist) => a.slug === username) || null;
+const notFound = !artist;
+// Normaliza roles de staff (staff, staff_manager, staff_marketing) a "staff"
+const ownerRole = ((artist?.role || 'fan') + '').toLowerCase();
+const ownerRoleKey = ownerRole.startsWith('staff') ? 'staff' : ownerRole;
 
 let posts: ArtistPost[] = [];
 if (artist) {
@@ -70,7 +79,17 @@ function timeAgo(dateStr: string): string {
 ---
 
 <Layout config={{ name: `Wild Gvng - ${artist.nombre}`, primary_color: "#C98300", secondary_color: "#8A0303" }}>
-  <div class="ap" data-artist-id="{artist.id}">
+  {notFound ? (
+  <div class="ap min-h-screen bg-[var(--bg)] flex items-center justify-center">
+      <div class="text-center px-6">
+        <div class="text-[5rem] font-black text-[var(--primary)]">404</div>
+        <h1 class="text-2xl font-black uppercase tracking-tight text-[var(--text)] mb-2">Perfil no encontrado</h1>
+        <p class="text-sm text-[var(--text-muted)] mb-6">Este usuario no existe o no tiene perfil público.</p>
+        <a href="/artistas" class="inline-block px-6 py-3 rounded-xl bg-[var(--primary)] text-[var(--bg)] font-black uppercase tracking-wider text-xs">Ver roster</a>
+      </div>
+    </div>
+  ) : (
+  <div class="ap" data-artist-id={artist.id} data-artist-role={ownerRoleKey}>
 
     <!-- PROFILE HEADER: horizontal split, large photo -->
     <div class="ap-header">
@@ -296,6 +315,7 @@ function timeAgo(dateStr: string): string {
       </div>
     </div>
   </div>
+  )}
 </Layout>
 
 <style>
@@ -386,6 +406,17 @@ function timeAgo(dateStr: string): string {
   .btn-gold:hover { background: var(--primary-hover); }
   .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text); }
   .btn-ghost:hover { border-color: var(--primary); color: var(--primary); }
+  .ap-header-erp-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 24px; border-radius: 100px;
+    background: transparent; border: 1px solid var(--primary); color: var(--primary);
+    font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+    text-decoration: none; cursor: pointer; font-family: inherit;
+    transition: all 0.2s ease;
+  }
+  .ap-header-erp-btn:hover {
+    background: var(--primary); color: var(--bg);
+  }
 
   /* ─── BODY: 80% width container ─── */
   .ap-body {
@@ -694,6 +725,20 @@ function timeAgo(dateStr: string): string {
     const { data: { session } } = await supabase.auth.getSession();
     const currentUserId = session?.user?.id;
 
+    // Rol real del dueño del perfil (se resuelve en build y viaja por data-)
+    const root = document.querySelector('.ap') as HTMLElement | null;
+    const profileOwnerRole = (root?.dataset.artistRole || 'fan').toLowerCase();
+    const profileOwnerId = root?.dataset.artistId;
+
+    // Si es tu propio perfil y eres admin/staff, atajo al ERP
+    if (currentUserId && profileOwnerId === currentUserId && ['admin', 'staff'].includes(profileOwnerRole)) {
+      const erpShortcut = document.createElement('a');
+      erpShortcut.href = '/erp';
+      erpShortcut.className = 'ap-header-erp-btn';
+      erpShortcut.textContent = '⚙️ Ir al ERP';
+      document.querySelector('.ap-header-actions')?.appendChild(erpShortcut);
+    }
+
     // Tabs
     document.querySelectorAll('.feed-tab').forEach(tab => {
       tab.addEventListener('click', function() {
@@ -964,11 +1009,16 @@ function timeAgo(dateStr: string): string {
       }
     }
 
-    // Show exclusive tab only for admin/staff/artist (or if viewing own profile)
+    // Show exclusive tab only when the OWNER can publish exclusive content
+    // (artist/admin/staff), and the visitor has permission OR is the owner.
     const exclusiveTab = document.querySelector('.exclusive-tab');
     if (exclusiveTab) {
+      const ownerCanPublishExclusive = ['admin', 'staff', 'artist'].includes(profileOwnerRole);
       const allowedRoles = ['admin', 'staff', 'artist'];
-      if (currentUserId && artistId && (allowedRoles.includes(userRole || '') || currentUserId === artistId)) {
+      const canViewExclusive =
+        currentUserId && artistId &&
+        (allowedRoles.includes(userRole || '') || currentUserId === artistId);
+      if (ownerCanPublishExclusive && canViewExclusive) {
         exclusiveTab.classList.remove('hidden-tab');
       } else {
         exclusiveTab.classList.add('hidden-tab');

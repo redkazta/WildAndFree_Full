@@ -132,10 +132,12 @@ function mapProfileToArtist(profile: any): Artist {
 }
 
 /**
- * Fetches artists from Supabase at build time.
+ * Fetches ALL public profiles (any role) with their real role resolved
+ * from user_roles (fallback to profiles.role). Used by /artista/[username]
+ * so every member (artist, admin, staff, fan) gets a working public page.
  * Falls back to mock data if Supabase is unreachable.
  */
-export async function getArtistsFromDB(): Promise<Artist[]> {
+export async function getAllPublicProfiles(): Promise<Artist[]> {
   const url = import.meta.env.PUBLIC_SUPABASE_URL;
   const key = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
 
@@ -144,36 +146,35 @@ export async function getArtistsFromDB(): Promise<Artist[]> {
   try {
     const supabase = createClient(url, key);
 
-    // Get artist role id
-    const { data: artistRole } = await supabase
-      .from("roles")
-      .select("id")
-      .or("name.eq.artist,internal_name.eq.artist")
-      .single();
+    // Resolve real role per user: user_roles join roles (admin > staff > artist > fan)
+    const { data: allRoles } = await supabase.from("roles").select("id, name, internal_name");
+    const { data: allUserRoles } = await supabase.from("user_roles").select("user_id, role_id");
 
-    const artistRoleId = artistRole?.id;
+    const roleRank: Record<string, number> = {
+      owner: 5, admin: 5, staff: 4, staff_manager: 4, staff_marketing: 4,
+      artist: 3, fan: 2, user: 1, guest: 0,
+    };
+    const roleById: Record<string, { name: string; internal_name: string }> = {};
+    (allRoles || []).forEach((r: any) => {
+      roleById[r.id] = { name: r.name, internal_name: r.internal_name };
+    });
 
-    // Get user IDs with artist role
-    let artistIds: string[] = [];
-    if (artistRoleId) {
-      const { data: userRoleRows } = await supabase
-        .from("user_roles")
-        .select("user_id")
-        .eq("role_id", artistRoleId);
-      if (userRoleRows) artistIds = userRoleRows.map(r => r.user_id);
-    }
+    const roleByUser: Record<string, string> = {};
+    (allUserRoles || []).forEach((ur: any) => {
+      const r = roleById[ur.role_id];
+      if (!r) return;
+      const name = r.name || r.internal_name;
+      const current = roleByUser[ur.user_id];
+      if (!current || (roleRank[name] ?? 0) > (roleRank[current] ?? 0)) {
+        roleByUser[ur.user_id] = name;
+      }
+    });
 
-    // Fallback to mock if no artist IDs found
-    if (artistIds.length === 0) {
-      console.warn("[artists] No artist IDs found, using mock data");
-      return mockArtists;
-    }
-
-    // Fetch profiles for those IDs
+    // Fetch ALL profiles that have a username (public identity)
     const { data: profiles, error } = await supabase
       .from("profiles")
       .select("*")
-      .in("id", artistIds)
+      .not("username", "is", null)
       .order("created_at", { ascending: true });
 
     if (error || !profiles || profiles.length === 0) {
@@ -181,7 +182,7 @@ export async function getArtistsFromDB(): Promise<Artist[]> {
       return mockArtists;
     }
 
-    // Fetch partnear counts per artist
+    // Fetch partnear counts
     const { data: partnearData } = await supabase
       .from("partnear")
       .select("artist_id");
@@ -194,14 +195,13 @@ export async function getArtistsFromDB(): Promise<Artist[]> {
       }
     }
 
-    // Fetch tracks for all artists
+    // Fetch tracks
     const { data: tracksData } = await supabase
       .from("artist_tracks")
       .select("*")
       .eq("is_published", true)
       .order("track_number", { ascending: true });
 
-    // Group tracks by artist_id
     const tracksByArtist: Record<string, any[]> = {};
     if (tracksData) {
       for (const t of tracksData) {
@@ -210,12 +210,12 @@ export async function getArtistsFromDB(): Promise<Artist[]> {
       }
     }
 
-    // Fetch tags for all artists
-    const artistIdsWithProfiles = profiles.map((p: any) => p.id);
+    // Fetch tags
+    const profileIds = profiles.map((p: any) => p.id);
     const { data: allUserTags } = await supabase
       .from('user_has_tags')
       .select('user_id, tags:tag_id(name, color, animation)')
-      .in('user_id', artistIdsWithProfiles);
+      .in('user_id', profileIds);
 
     const tagsByUser: Record<string, { name: string; color: string; animation: string }[]> = {};
     if (allUserTags) {
@@ -233,6 +233,7 @@ export async function getArtistsFromDB(): Promise<Artist[]> {
 
     return profiles.map((p: any) => {
       const artist = mapProfileToArtist(p);
+      artist.role = roleByUser[p.id] || p.role || 'fan';
       artist.stats.partnean = partnearCounts[p.id] || 0;
       artist.tracks = (tracksByArtist[p.id] || []).map((t: any) => ({
         title: t.title,
@@ -249,11 +250,23 @@ export async function getArtistsFromDB(): Promise<Artist[]> {
 }
 
 /**
- * Find a single artist by username/slug.
+ * Fetches artists (role=artist) from Supabase at build time.
+ * Falls back to mock data if Supabase is unreachable.
+ */
+export async function getArtistsFromDB(): Promise<Artist[]> {
+  const all = await getAllPublicProfiles();
+  const artists = all.filter((a) => a.role === 'artist');
+  if (artists.length > 0) return artists;
+  // If real data failed (mock fallback) return mock as-is
+  return all.length > 0 ? artists : mockArtists;
+}
+
+/**
+ * Find a single profile by username/slug (any role).
  */
 export async function getArtistBySlug(slug: string): Promise<Artist | null> {
-  const artists = await getArtistsFromDB();
-  return artists.find((a) => a.slug === slug) || null;
+  const profiles = await getAllPublicProfiles();
+  return profiles.find((a) => a.slug === slug) || null;
 }
 
 /**

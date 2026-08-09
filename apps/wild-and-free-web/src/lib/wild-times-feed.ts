@@ -9,6 +9,25 @@ const typeLabels: Record<string, { label: string; color: string }> = {
   general: { label: '📝 Noticia', color: '#888' },
 };
 
+// Reacciones tipo Facebook: emoticono, etiqueta y color.
+export const REACTIONS: Record<string, { emoji: string; label: string; color: string }> = {
+  like: { emoji: '👍', label: 'Me gusta', color: '#1877f2' },
+  love: { emoji: '❤️', label: 'Me encanta', color: '#e0245e' },
+  haha: { emoji: '😂', label: 'Me divierte', color: '#f7b928' },
+  sad: { emoji: '😢', label: 'Me entristece', color: '#f7b928' },
+  angry: { emoji: '😡', label: 'Me enoja', color: '#e0245e' },
+};
+
+export const REACTION_TYPES = Object.keys(REACTIONS);
+
+function reactionEmoji(id: string): string {
+  return REACTIONS[id]?.emoji || '👍';
+}
+
+function reactionMeta(id: string): { emoji: string; label: string; color: string } {
+  return REACTIONS[id] || REACTIONS.like;
+}
+
 function getTimeAgo(date: Date): string {
   const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
   if (seconds < 60) return 'Ahora';
@@ -155,24 +174,29 @@ export async function loadCrewFeed(filter = 'all'): Promise<void> {
 
     const postIds = posts.map((p: any) => p.id);
     const [likesData, commentsData, repostsData] = await Promise.all([
-      supabase.from('wall_likes').select('post_id', { count: 'exact' }).in('post_id', postIds),
+      supabase.from('wall_likes').select('post_id, reaction_type').in('post_id', postIds),
       supabase.from('wall_comments').select('post_id', { count: 'exact' }).in('post_id', postIds).is('deleted_at', null),
       supabase.from('wall_reposts').select('post_id', { count: 'exact' }).in('post_id', postIds),
     ]);
 
-    let userLikes = new Set<string>();
+    let myReactionByPost: Record<string, string> = {};
     let userReposts = new Set<string>();
     if (session?.user?.id) {
-      const { data: myLikes } = await supabase.from('wall_likes').select('post_id').in('post_id', postIds).eq('user_id', session.user.id);
+      const { data: myLikes } = await supabase.from('wall_likes').select('post_id, reaction_type').in('post_id', postIds).eq('user_id', session.user.id);
       const { data: myReposts } = await supabase.from('wall_reposts').select('post_id').in('post_id', postIds).eq('user_id', session.user.id);
-      if (myLikes) myLikes.forEach((l: any) => userLikes.add(l.post_id));
+      if (myLikes) myLikes.forEach((l: any) => { myReactionByPost[l.post_id] = l.reaction_type || 'like'; });
       if (myReposts) myReposts.forEach((r: any) => userReposts.add(r.post_id));
     }
 
-    const likeCounts: Record<string, number> = {};
+    // reactionCounts[postId][reactionType] = n
+    const reactionCounts: Record<string, Record<string, number>> = {};
     const commentCounts: Record<string, number> = {};
     const repostCounts: Record<string, number> = {};
-    (likesData.data || []).forEach((l: any) => { likeCounts[l.post_id] = (likeCounts[l.post_id] || 0) + 1; });
+    (likesData.data || []).forEach((l: any) => {
+      if (!reactionCounts[l.post_id]) reactionCounts[l.post_id] = {};
+      const t = l.reaction_type || 'like';
+      reactionCounts[l.post_id][t] = (reactionCounts[l.post_id][t] || 0) + 1;
+    });
     (commentsData.data || []).forEach((c: any) => { commentCounts[c.post_id] = (commentCounts[c.post_id] || 0) + 1; });
     (repostsData.data || []).forEach((r: any) => { repostCounts[r.post_id] = (repostCounts[r.post_id] || 0) + 1; });
 
@@ -191,10 +215,10 @@ export async function loadCrewFeed(filter = 'all'): Promise<void> {
     const canViewReactions = role === 'admin' || role === 'staff';
 
     container.innerHTML = filtered.map((p: any) => renderCrewPost(p, {
-      likes: likeCounts[p.id] || 0,
+      reactions: reactionCounts[p.id] || {},
       comments: commentCounts[p.id] || 0,
       reposts: repostCounts[p.id] || 0,
-      isLiked: userLikes.has(p.id),
+      myReaction: myReactionByPost[p.id] || null,
       isReposted: userReposts.has(p.id),
       canViewReactions,
     })).join('');
@@ -206,13 +230,29 @@ export async function loadCrewFeed(filter = 'all'): Promise<void> {
   }
 }
 
-function renderCrewPost(p: any, meta: { likes: number; comments: number; reposts: number; isLiked: boolean; isReposted: boolean; canViewReactions: boolean }): string {
+function renderCrewPost(p: any, meta: { reactions: Record<string, number>; comments: number; reposts: number; myReaction: string | null; isReposted: boolean; canViewReactions: boolean }): string {
   const author = p.author || {};
   const avatar = author.avatar_url || '';
   const name = author.nombre || author.username || 'Crew';
   const initials = name.substring(0, 2).toUpperCase();
   const timeAgo = getTimeAgo(new Date(p.published_at));
   const typeInfo = typeLabels[p.post_type] || { label: '📝', color: '#888' };
+
+  // Total de reacciones
+  const reactions = meta.reactions || {};
+  const totalReactions = Object.values(reactions).reduce((a, b) => a + b, 0);
+  const myReactionMeta = meta.myReaction ? reactionMeta(meta.myReaction) : null;
+  const isReacted = !!meta.myReaction;
+
+  // Popover de reacciones (pestaña / hover)
+  const reactionPicker = REACTION_TYPES.map((t) => {
+    const r = REACTIONS[t];
+    const count = reactions[t] || 0;
+    return `<button class="reaction-option" data-reaction="${t}" data-post-id="${p.id}" title="${r.label}">
+      <span class="reaction-option-emoji">${r.emoji}</span>
+      ${count > 0 ? `<span class="reaction-option-count">${count}</span>` : ''}
+    </button>`;
+  }).join('');
 
   let imageHtml = '';
   if (p.image_url) {
@@ -237,11 +277,18 @@ function renderCrewPost(p: any, meta: { likes: number; comments: number; reposts
       <p class="feed-card-text">${renderRichContent(p.content || '')}</p>
       ${imageHtml}
     </div>
+    ${totalReactions > 0 ? `<div class="feed-card-reactions-summary" data-action="opinions" title="Ver quién reaccionó">
+      <span class="reactions-pills">${REACTION_TYPES.map((t) => reactions[t] ? `<span class="reaction-pill">${reactionEmoji(t)}&nbsp;${reactions[t]}</span>` : '').join('')}</span>
+    </div>` : ''}
     <div class="feed-card-actions">
-      <button class="action-btn ${meta.isLiked ? 'action-btn--active' : ''}" data-action="like">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="${meta.isLiked ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        <span>${meta.likes}</span>
-      </button>
+      <div class="reaction-wrap">
+        <button class="action-btn reaction-main-btn ${isReacted ? 'action-btn--active' : ''}" data-action="reaction-toggle" style="${myReactionMeta ? `color:${myReactionMeta.color}` : ''}" data-reaction-active="${meta.myReaction || ''}">
+          <span class="reaction-btn-emoji">${myReactionMeta ? `${myReactionMeta.emoji} ` : '👍 '}</span>
+          <span class="reaction-btn-label">${myReactionMeta ? myReactionMeta.label : 'Me gusta'}</span>
+          <span class="reaction-btn-count">${totalReactions > 0 ? totalReactions : ''}</span>
+        </button>
+        <div class="reaction-picker" data-post-id="${p.id}">${reactionPicker}</div>
+      </div>
       <button class="action-btn" data-action="comment">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         <span>${meta.comments}</span>
@@ -252,7 +299,7 @@ function renderCrewPost(p: any, meta: { likes: number; comments: number; reposts
       </button>
       ${meta.canViewReactions ? `<button class="action-btn" data-action="opinions" title="Ver quién reaccionó">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-        <span>${meta.likes + meta.comments + meta.reposts}</span>
+        <span>${totalReactions + meta.comments + meta.reposts}</span>
       </button>` : ''}
       <button class="action-btn ml-auto" data-action="share">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
@@ -276,10 +323,37 @@ function attachHandlers(posts: any[]): void {
     btn.removeEventListener('click', handleAction);
     btn.addEventListener('click', handleAction);
   });
+  document.querySelectorAll('.reaction-option').forEach(opt => {
+    opt.removeEventListener('click', handleReactionOption);
+    opt.addEventListener('click', handleReactionOption);
+  });
   document.querySelectorAll('.comment-send').forEach(btn => {
     btn.removeEventListener('click', handleCommentSend);
     btn.addEventListener('click', handleCommentSend);
   });
+}
+
+async function handleReactionOption(e: Event): Promise<void> {
+  e.stopPropagation();
+  e.preventDefault();
+  const opt = e.currentTarget as HTMLElement;
+  const postId = opt.dataset.postId;
+  const reactionType = opt.dataset.reaction || 'like';
+  if (!postId) return;
+  closeReactionPickers();
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session?.user) { alert('Inicia sesión para interactuar'); return; }
+  await setReaction(postId, session.user.id, reactionType);
+}
+
+async function setReaction(postId: string, userId: string, reactionType: string): Promise<void> {
+  // Si el mismo usuario ya tiene ese tipo, toggle lo quita; si es otro tipo, lo cambia.
+  await supabase.rpc('toggle_reaction', { p_post_id: postId, p_user_id: userId, p_reaction_type: reactionType });
+  refreshFeed();
+}
+
+function closeReactionPickers(): void {
+  document.querySelectorAll('.reaction-picker').forEach((p) => (p as HTMLElement).classList.remove('open'));
 }
 
 async function handleAction(e: Event): Promise<void> {
@@ -292,13 +366,26 @@ async function handleAction(e: Event): Promise<void> {
   const { data: { session } } = await supabase.auth.getSession();
   if (!session?.user) { alert('Inicia sesión para interactuar'); return; }
 
-  if (action === 'like') {
-    const { data: liked } = await supabase.rpc('toggle_like', { p_post_id: postId, p_user_id: session.user.id });
-    const countEl = btn.querySelector('span');
-    const c = parseInt(countEl?.textContent || '0');
-    btn.classList.toggle('action-btn--active', !!liked);
-    btn.querySelector('svg')?.setAttribute('fill', liked ? 'currentColor' : 'none');
-    if (countEl) countEl.textContent = String(liked ? c + 1 : Math.max(0, c - 1));
+  if (action === 'reaction-toggle') {
+    const wrap = btn.closest('.reaction-wrap');
+    const picker = wrap?.querySelector('.reaction-picker');
+    const active = btn.getAttribute('data-reaction-active') || '';
+    if (picker) {
+      const wasOpen = picker.classList.contains('open');
+      closeReactionPickers();
+      if (!wasOpen && !active) {
+        // Sin reacción activa: abrir el picker para elegir (móvil/click)
+        picker.classList.add('open');
+      } else if (wasOpen) {
+        closeReactionPickers();
+      }
+      // Si ya había reacción activa y no abrimos el picker => quitarla (toggle off)
+      if (active && !picker.classList.contains('open')) {
+        await setReaction(postId, session.user.id, active);
+      }
+    } else {
+      closeReactionPickers();
+    }
   } else if (action === 'repost') {
     const { data: reposted } = await supabase.rpc('toggle_repost', { p_post_id: postId, p_user_id: session.user.id });
     const countEl = btn.querySelector('span');
@@ -402,6 +489,12 @@ export function initRealtime(): void {
   } catch (e) {
     console.warn('Realtime no disponible:', e);
   }
+
+  // Cerrar pickers de reacción al hacer clic fuera
+  document.addEventListener('click', (ev) => {
+    const target = ev.target as HTMLElement;
+    if (!target.closest('.reaction-wrap')) closeReactionPickers();
+  });
 }
 
 // Debounce para no spamear requests si llegan varios cambios seguidos
@@ -428,9 +521,13 @@ function ensureReactionDialog(): HTMLDialogElement {
         <button class="reactions-dialog-close" data-close title="Cerrar">✕</button>
       </div>
       <div class="reactions-tabs" role="tablist">
-        <button class="reactions-tab active" data-reaction-tab="likes">❤️ Likes</button>
+        <button class="reactions-tab active" data-reaction-tab="likes">Reacciones</button>
         <button class="reactions-tab" data-reaction-tab="comments">💬 Comentarios</button>
         <button class="reactions-tab" data-reaction-tab="reposts">🔁 Reposts</button>
+      </div>
+      <div class="reactions-type-bar" id="reactions-type-bar">
+        <button class="reaction-type-filter active" data-filter-type="">Todos</button>
+        ${REACTION_TYPES.map((t) => `<button class="reaction-type-filter" data-filter-type="${t}">${reactionEmoji(t)}</button>`).join('')}
       </div>
       <div class="reactions-body">
         <p class="reactions-loading">Cargando...</p>
@@ -451,15 +548,28 @@ function ensureReactionDialog(): HTMLDialogElement {
       if (type) loadReactionTab(type as 'likes' | 'comments' | 'reposts');
     });
   });
+  reactionDialog.querySelectorAll('.reaction-type-filter').forEach((f) => {
+    f.addEventListener('click', () => {
+      reactionDialog!.querySelectorAll('.reaction-type-filter').forEach((x) => x.classList.remove('active'));
+      f.classList.add('active');
+      currentFilterType = ((f as HTMLElement).dataset.filterType || '') as ReactionFilter;
+      loadReactionTab((reactionDialog!.querySelector('.reactions-tab.active') as HTMLElement).dataset.reactionTab as 'likes' | 'comments' | 'reposts');
+    });
+  });
   return reactionDialog;
 }
 
+type ReactionFilter = '' | 'like' | 'love' | 'haha' | 'sad' | 'angry';
+let currentFilterType: ReactionFilter = '';
 let currentReactionPostId = '';
 
 async function openReactionsDialog(postId: string, title: string): Promise<void> {
   const dialog = ensureReactionDialog();
   dialog.querySelector('.reactions-dialog-title')!.textContent = `Reacciones · ${title}`;
   (dialog.querySelector('.reactions-tab.active') as HTMLElement).classList.remove('active');
+  (dialog.querySelector('[data-reaction-tab="likes"]') as HTMLElement).classList.add('active');
+  currentFilterType = '';
+  (dialog.querySelectorAll('.reaction-type-filter')).forEach((f) => f.classList.toggle('active', (f as HTMLElement).dataset.filterType === ''));
   (dialog.querySelector('[data-reaction-tab="likes"]') as HTMLElement).classList.add('active');
   currentReactionPostId = postId;
   await loadReactionTab('likes');
@@ -470,11 +580,12 @@ function userRowHtml(u: any, extra: string): string {
   const avatar = u.avatar_url || '';
   const name = u.nombre || u.username || 'Anónimo';
   const initials = name.substring(0, 2).toUpperCase();
+  const reactEmoji = u.reaction_type ? reactionEmoji(u.reaction_type) : '';
   return `<div class="reaction-user">
     <div class="reaction-user-avatar" style="${avatar ? `background-image:url('${avatar}')` : ''}">${avatar ? '' : initials}</div>
     <div class="reaction-user-info">
       <a href="/artista/${u.username || ''}" class="reaction-user-name">${name}</a>
-      <span class="reaction-user-meta">${extra}</span>
+      <span class="reaction-user-meta">${reactEmoji ? `<span class="reaction-inline-emoji">${reactEmoji}</span> ` : ''}${extra}</span>
     </div>
   </div>`;
 }
@@ -484,6 +595,8 @@ async function loadReactionTab(type: 'likes' | 'comments' | 'reposts'): Promise<
   const body = dialog.querySelector('.reactions-body') as HTMLElement;
   if (!body) return;
   body.innerHTML = '<p class="reactions-loading">Cargando...</p>';
+  const typeBar = dialog.querySelector('#reactions-type-bar') as HTMLElement;
+  if (typeBar) typeBar.style.display = type === 'likes' ? 'block' : 'none';
 
   try {
     if (type === 'comments') {
@@ -491,13 +604,17 @@ async function loadReactionTab(type: 'likes' | 'comments' | 'reposts'): Promise<
       body.innerHTML = (data && data.length)
         ? (data as any[]).map((c) => userRowHtml(c, `comentó · ${getTimeAgo(new Date(c.created_at))}`) + `<div class="reaction-comment">${c.content}</div>`).join('')
         : '<p class="reactions-empty">Sin comentarios.</p>';
-    } else {
-      const fn = type === 'likes' ? 'get_post_likes' : 'get_post_reposts';
-      const verb = type === 'likes' ? 'reaccionó' : 'recompartió';
-      const { data } = await supabase.rpc(fn, { p_post_id: currentReactionPostId });
+    } else if (type === 'reposts') {
+      const { data } = await supabase.rpc('get_post_reposts', { p_post_id: currentReactionPostId });
       body.innerHTML = (data && data.length)
-        ? (data as any[]).map((u) => userRowHtml(u, `${verb} · ${getTimeAgo(new Date(u.created_at))}`)).join('')
-        : `<p class="reactions-empty">Sin ${type === 'likes' ? 'reacciones' : 'reposts'}.</p>`;
+        ? (data as any[]).map((u) => userRowHtml(u, `recompartió · ${getTimeAgo(new Date(u.created_at))}`)).join('')
+        : '<p class="reactions-empty">Sin reposts.</p>';
+    } else {
+      // Reacciones con filtro por tipo
+      const { data } = await supabase.rpc('get_post_likes', { p_post_id: currentReactionPostId, p_reaction_type: currentFilterType || null });
+      body.innerHTML = (data && data.length)
+        ? (data as any[]).map((u) => userRowHtml(u, `reaccionó · ${getTimeAgo(new Date(u.created_at))}`)).join('')
+        : '<p class="reactions-empty">Sin reacciones de este tipo.</p>';
     }
   } catch (e) {
     body.innerHTML = '<p class="reactions-empty">Error al cargar.</p>';
