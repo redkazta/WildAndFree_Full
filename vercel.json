@@ -1,7 +1,8 @@
 {
   "framework": "astro",
-  "installCommand": "corepack enable && pnpm install --frozen-lockfile",
-  "buildCommand": "if [ -d apps/wild-and-free-web ]; then pnpm --filter wild-and-free-web build && rm -rf .vercel && cp -R apps/wild-and-free-web/.vercel .vercel; else pnpm build; fi",
+  "rootDirectory": "apps/wild-and-free-web",
+  "installCommand": "cd ../.. && corepack enable && pnpm install --frozen-lockfile",
+  "buildCommand": "astro build",
   "github": {
     "silent": true
   }
