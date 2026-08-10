@@ -11,11 +11,6 @@ const config = {
 
 // Fetch artists from Supabase at build time
 const artists = await getArtistsFromDB();
-
-// Extract unique genres from all artists
-const allGenres = new Set<string>();
-artists.forEach(a => a.estilo.split(' / ').forEach(g => allGenres.add(g)));
-const genres = ['Todos', ...Array.from(allGenres).sort()];
 ---
 
 <Layout config={config}>
@@ -29,23 +24,10 @@ const genres = ['Todos', ...Array.from(allGenres).sort()];
       </div>
     </header>
 
-    <!-- FILTERS -->
-    <section class="filters-section">
+    <!-- FILTERS (minimalista, sin géneros) -->
+    <section class="roster-meta">
       <div class="container">
-        <div class="filters-row">
-          {genres.map((g, i) => (
-            <button
-              class={`filter-chip ${i === 0 ? 'active' : ''}`}
-              data-genre={g.toLowerCase()}
-              onclick={`filterArtists('${g.toLowerCase()}')`}
-            >
-              {g}
-            </button>
-          ))}
-        </div>
-        <div class="results-count">
-          <span id="artist-count">{artists.length}</span> artistas en el roster
-        </div>
+        <span id="artist-count">{artists.length}</span> artistas en el roster
       </div>
     </section>
 
@@ -81,7 +63,6 @@ const genres = ['Todos', ...Array.from(allGenres).sort()];
               <!-- Info -->
               <div class="card-info">
                 <h3 class="card-name">{artist.nombre}</h3>
-                <span class="card-genre">{artist.estilo}</span>
                 <span class="card-origin">📍 {artist.origen}</span>
                 {artist.tags && artist.tags.length > 0 && (
                   <div class="card-tags">
@@ -174,43 +155,10 @@ const genres = ['Todos', ...Array.from(allGenres).sort()];
     .roster-title { font-size: 2.2rem; }
   }
 
-  /* ===== FILTERS ===== */
-  .filters-section {
-    padding: 32px 0 16px;
+  /* ===== META (minimalista) ===== */
+  .roster-meta {
+    padding: 18px 0;
     border-bottom: 1px solid var(--border-faint);
-  }
-  .filters-row {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  .filter-chip {
-    padding: 8px 18px;
-    border-radius: 100px;
-    font-size: 0.65rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    background: var(--bg-card);
-    border: 1px solid var(--bg-hover);
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: inherit;
-  }
-  .filter-chip:hover {
-    border-color: var(--border-soft);
-    color: var(--text);
-  }
-  .filter-chip.active {
-    background: rgba(201,131,0,0.15);
-    border-color: rgba(201,131,0,0.5);
-    color: #C98300;
-  }
-  .results-count {
-    text-align: center;
-    margin-top: 12px;
     font-size: 0.6rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -308,14 +256,6 @@ const genres = ['Todos', ...Array.from(allGenres).sort()];
     text-transform: uppercase;
     letter-spacing: 0.05em;
     margin: 0;
-  }
-  .card-genre {
-    font-size: 0.6rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: #C98300;
-    font-family: monospace;
   }
   .card-origin {
     font-size: 0.65rem;
