@@ -1,11 +1,27 @@
 ---
-export const prerender = false;
 import PostArticle from '../../components/PostArticle.astro';
-import NotFound from '../../components/PostNotFound.astro';
-import { resolvePostIdByShortId } from '../../lib/post-resolve';
+import { createClient } from '@supabase/supabase-js';
+import { postShortId } from '../../lib/slug';
 
-const { shortId } = Astro.params;
-const postId = (await resolvePostIdByShortId(shortId || '', 'announcement')) || null;
+// Anuncios (post_type = announcement): /anuncios/[shortId]
+export async function getStaticPaths() {
+  const __supabase = createClient(
+    import.meta.env.PUBLIC_SUPABASE_URL as string,
+    import.meta.env.PUBLIC_SUPABASE_ANON_KEY as string
+  );
+  const { data: posts } = await __supabase
+    .from('crew_posts')
+    .select('id')
+    .eq('status', 'published')
+    .eq('post_type', 'announcement');
+  const paths: Array<{ params: { shortId: string }; props: { postId: string } }> = [];
+  for (const p of posts || []) {
+    paths.push({ params: { shortId: postShortId(p.id) }, props: { postId: p.id } });
+  }
+  return paths;
+}
+
+const { postId } = Astro.props;
 ---
 
-{postId ? <PostArticle postId={postId} /> : <NotFound typeLabel="anuncio" />}
+<PostArticle postId={postId} />

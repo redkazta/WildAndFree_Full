@@ -1,33 +1,35 @@
 ---
-export const prerender = false;
 import { createClient } from '@supabase/supabase-js';
 import { postShortId, postSlug, postTypePath } from '../../lib/slug';
 
-// RDCP: redirige las URLs viejas de The Wild Times (/the-wild-times/[shortId]
-// o /the-wild-times/[slug]) a la nueva URL separada por tipo con id corto.
-const { key } = Astro.params;
+// RDCP: mantiene vivas las URLs viejas de The Wild Times (/the-wild-times/[slug]
+// o /the-wild-times/[shortId]) y las redirige a la nueva URL separada por tipo.
+export async function getStaticPaths() {
+  const __supabase = createClient(
+    import.meta.env.PUBLIC_SUPABASE_URL as string,
+    import.meta.env.PUBLIC_SUPABASE_ANON_KEY as string
+  );
+  const { data: posts } = await __supabase
+    .from('crew_posts')
+    .select('id, title, post_type')
+    .eq('status', 'published');
 
-const supabase = createClient(
-  import.meta.env.PUBLIC_SUPABASE_URL as string,
-  import.meta.env.PUBLIC_SUPABASE_ANON_KEY as string
-);
-
-// Busca un post publicado cuyo shortId o slug coincida.
-const { data: posts } = await supabase
-  .from('crew_posts')
-  .select('id, title, post_type')
-  .eq('status', 'published');
-
-const target = (posts || []).reduce<string | null>((acc, p) => {
-  if (acc) return acc;
-  if (postShortId(p.id) === key || (p.title && postSlug(p.id, p.title) === key)) {
-    return `${postTypePath(p.post_type)}/${postShortId(p.id)}`;
+  const paths: Array<{ params: { key: string }; props: { target: string } }> = [];
+  for (const p of posts || []) {
+    const base = postTypePath(p.post_type);
+    const targetShort = `${base}/${postShortId(p.id)}`;
+    paths.push({ params: { key: postShortId(p.id) }, props: { target: targetShort } });
+    if (p.title) {
+      paths.push({ params: { key: postSlug(p.id, p.title) }, props: { target: targetShort } });
+    }
   }
-  return null;
-}, null) || '/the-wild-times';
+  return paths;
+}
+
+const { target } = Astro.props;
 ---
 
-<meta charset="UTF-8"><meta http-equiv="refresh" content="0; url={target}">
+<p style="padding:16px;font-family:sans-serif;">Redirigiendo a la publicación…</p>
 
 <script define:vars={{ target }}>
   window.location.replace(target);
