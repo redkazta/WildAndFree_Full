@@ -1,34 +1,29 @@
 ---
+export const prerender = false;
 import { createClient } from '@supabase/supabase-js';
 import { postShortId, postTypePath } from '../../../lib/slug';
 
 // RDCP: la URL antigua /the-wild-times/p/[id] redirige a la nueva URL por tipo con id corto.
-export async function getStaticPaths() {
-  const __supabase = createClient(
-    import.meta.env.PUBLIC_SUPABASE_URL as string,
-    import.meta.env.PUBLIC_SUPABASE_ANON_KEY as string
-  );
-  const { data: posts } = await __supabase
-    .from('crew_posts')
-    .select('id, post_type')
-    .eq('status', 'published');
-  const rows: Array<{ id: string; target: string }> = [];
-  for (const p of posts || []) {
-    rows.push({
-      id: p.id,
-      target: `${postTypePath(p.post_type)}/${postShortId(p.id)}`,
-    });
-  }
-  return rows.map((r) => ({
-    params: { id: r.id },
-    props: { target: r.target },
-  }));
-}
+const { id } = Astro.params;
 
-const { target } = Astro.props;
+const supabase = createClient(
+  import.meta.env.PUBLIC_SUPABASE_URL as string,
+  import.meta.env.PUBLIC_SUPABASE_ANON_KEY as string
+);
+
+const { data: post } = await supabase
+  .from('crew_posts')
+  .select('id, title, post_type')
+  .eq('id', id)
+  .eq('status', 'published')
+  .maybeSingle();
+
+const target = post
+  ? `${postTypePath(post.post_type)}/${postShortId(post.id)}`
+  : '/the-wild-times';
 ---
 
-<p style="padding:16px;font-family:sans-serif;">Redirigiendo a la publicación…</p>
+<meta charset="UTF-8"><meta http-equiv="refresh" content="0; url={target}">
 
 <script define:vars={{ target }}>
   window.location.replace(target);
