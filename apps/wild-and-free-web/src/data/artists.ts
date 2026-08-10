@@ -38,63 +38,7 @@ export interface ArtistPost {
 }
 
 // Fallback mock data (used if Supabase is unreachable at build time)
-const mockArtists: Artist[] = [
-  {
-    id: "66fd9133-87bc-43eb-9095-23b11f44de5c",
-    nombre: "Young Kazta",
-    slug: "young_kazta",
-    imagenes: {
-      profile:
-        "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80",
-    },
-    stats: { seguidores: "1.2K", oyentes: "3.4K", partnean: 142 },
-    bio: "CEO & Founder de Wild Gvng. Productor musical y freestyler.",
-    tracks: [
-      { title: "Fuego del Desierto", duration: "3:24" },
-      { title: "Noche de Arena", duration: "2:58" },
-      { title: "Torreón Nights", duration: "3:11" },
-    ],
-    estilo: "Trap / Freestyle",
-    origen: "Torreón, Coahuila",
-    redes: { Instagram: "#", Spotify: "#", YouTube: "#" },
-  },
-  {
-    id: "2406328b-ad5b-4271-a923-36af6b9c5a29",
-    nombre: "MC Delta",
-    slug: "mc_delta",
-    imagenes: {
-      profile:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&q=80",
-    },
-    stats: { seguidores: "670", oyentes: "1.9K", partnean: 56 },
-    bio: "Voz del bajo mundo. Flow imparable.",
-    tracks: [
-      { title: "Crucero Nocturno", duration: "3:08" },
-      { title: "Reglas de la Vieja Escuela", duration: "2:55" },
-    ],
-    estilo: "Gangsta Rap",
-    origen: "Torreón, Coahuila",
-    redes: { Instagram: "#", Spotify: "#" },
-  },
-  {
-    id: "1a2eac9c-50e9-48d1-9026-54286147c149",
-    nombre: "Lil Fuego",
-    slug: "lil_fuego",
-    imagenes: {
-      profile:
-        "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=800&q=80",
-    },
-    stats: { seguidores: "430", oyentes: "1.1K", partnean: 34 },
-    bio: "Joven promesa del freestyle torreonense.",
-    tracks: [
-      { title: "Sin Cuartel", duration: "2:44" },
-      { title: "Barro y Sangre", duration: "3:18" },
-    ],
-    estilo: "Freestyle / Drill",
-    origen: "Torreón, Coahuila",
-    redes: { Instagram: "#", TikTok: "#" },
-  },
-];
+const mockArtists: Artist[] = [];
 
 function parseSocialLinks(raw: string | null): Record<string, string> {
   if (!raw) return {};
@@ -276,7 +220,7 @@ export async function getArtistPosts(artistId: string): Promise<ArtistPost[]> {
   const url = import.meta.env.PUBLIC_SUPABASE_URL;
   const key = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
 
-  if (!url || !key) return mockPosts.filter((p) => p.artist_id === artistId);
+  if (!url || !key) return [];
 
   try {
     const supabase = createClient(url, key);
@@ -288,8 +232,8 @@ export async function getArtistPosts(artistId: string): Promise<ArtistPost[]> {
       .order('published_at', { ascending: false });
 
     if (error || !data || data.length === 0) {
-      console.warn('[artists] Posts fallback to mock:', error?.message);
-      return mockPosts.filter((p) => p.artist_id === artistId);
+      console.warn('[artists] Posts error:', error?.message);
+      return [];
     }
 
     // Map crew_posts to ArtistPost interface - try RPC first for real counts
@@ -342,34 +286,10 @@ export async function getArtistPosts(artistId: string): Promise<ArtistPost[]> {
     return posts;
   } catch (err) {
     console.warn('[artists] Posts network error:', err);
-    return mockPosts.filter((p) => p.artist_id === artistId);
+    return [];
   }
 }
 
-// Re-export mock data for client-side scripts that reference it directly
-export const artistsData = mockArtists;
-
-// Mock posts fallback — matching the admin UUIDs
-const mockPosts: ArtistPost[] = [
-  {
-    id: 'mock-1', artist_id: 'ec7ba40e-971a-4729-ad17-e83a0fdd42b5',
-    content: 'Nuevo track en proceso 🔥 Pronto les llega.',
-    post_type: 'announcement', image_url: null, embed_url: null, embed_title: null,
-    likes_count: 24, comments_count: 8, reposts_count: 3, is_pinned: false,
-    created_at: new Date(Date.now() - 7200000).toISOString(),
-  },
-  {
-    id: 'mock-2', artist_id: 'cd2611f7-1ad1-4fff-8032-77f8ee616fbb',
-    content: 'Nueva colaboración en camino con un artista sorpresa 🤫',
-    post_type: 'promotion', image_url: null, embed_url: null, embed_title: null,
-    likes_count: 78, comments_count: 19, reposts_count: 12, is_pinned: false,
-    created_at: new Date(Date.now() - 14400000).toISOString(),
-  },
-  {
-    id: 'mock-3', artist_id: '66fd9133-87bc-43eb-9095-23b11f44de5c',
-    content: 'Sin Cuartel es oficialmente fuera 🚀 Ya disponible en todas las plataformas.',
-    post_type: 'announcement', image_url: null, embed_url: null, embed_title: 'Sin Cuartel - Young Kazta',
-    likes_count: 92, comments_count: 21, reposts_count: 8, is_pinned: false,
-    created_at: new Date(Date.now() - 21600000).toISOString(),
-  },
-];
+// Re-export (vacío) para scripts que lo referencien directamente
+const artistsData: ArtistPost[] = [];
+export { artistsData as artistsData };
