@@ -2,8 +2,12 @@ const URL_RE = /(https?:\/\/[^\s]+)/i;
 const GIPHY_RE =
   /(?:giphy\.com\/gifs\/[^\s]+|media\.giphy\.com\/media\/([\w-]+)\/[^\s]+)/i;
 const YOUTUBE_RE =
-  /(?:youtube\.com\/watch\?(?:[^&]*&)*v=([\w-]{11})|youtu\.be\/([\w-]{11})|youtube\.com\/shorts\/([\w-]{11})|youtube\.com\/embed\/([\w-]{11}))/i;
+  /(?:"youtube\.com\/watch\?(?:[^&]*&)*v=([\w-]{11})|youtu\.be\/([\w-]{11})|youtube\.com\/shorts\/([\w-]{11})|youtube\.com\/embed\/([\w-]{11}))/i;
 const IMAGE_EXT_RE = /\.(jpe?g|png|gif|webp|avif)([?#].*)?$/i;
+// Hosts de CDNs de imágenes que sirven imágenes sin necesariamente terminar en extensión
+// (p.ej. images.unsplash.com/photo-...?w=1200). Aquí los tratamos como imagen directa.
+const IMAGE_HOST_RE =
+  /(^|\.)(images\.unsplash\.com|unsplash\.com(?:\/photos)?|images\.pexels\.com|i\.imgur\.com|media\.licdn\.com|images\.ctfassets\.net|cdn\.discordapp\.com|i\.redd\.it)$/i;
 
 function escapeHtml(s: string): string {
   return s
@@ -42,6 +46,16 @@ function renderToken(token: string): string {
   if (IMAGE_EXT_RE.test(rawUrl)) {
     return `<a href="${escapeHtml(rawUrl)}" target="_blank" rel="noopener nofollow"><img src="${escapeHtml(rawUrl)}" alt="" class="content-embed-img" /></a>`;
   }
+
+  // Imagen servida por un CDN de imágenes conocido aunque no lleve extension
+  // (p.ej. https://images.unsplash.com/photo-xxx?w=1200)
+  try {
+    const url = new URL(rawUrl);
+    const host = url.hostname.replace(/^www\./, '');
+    if (IMAGE_HOST_RE.test(host)) {
+      return `<a href="${escapeHtml(rawUrl)}" target="_blank" rel="noopener nofollow"><img src="${escapeHtml(rawUrl)}" alt="" class="content-embed-img" loading="lazy" /></a>`;
+    }
+  } catch {}
 
   const host = new URL(rawUrl).hostname.replace(/^www\./, '');
   return `<a href="${escapeHtml(rawUrl)}" target="_blank" rel="noopener nofollow" class="content-link">${escapeHtml(host)}</a>`;
