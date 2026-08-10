@@ -392,10 +392,13 @@ function renderCrewPost(p: any, meta: { reactions: Record<string, number>; comme
         </button>` : ''}
       </div>
       <div class="feed-actions-extra">
-        <button class="action-btn action-btn--icononly" data-action="share" data-post-id="${p.id}" data-link="${postUrl}" title="Copiar enlace">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-          <span>Compartir</span>
-        </button>
+        <div class="feed-share-wrap">
+          <button type="button" class="action-btn action-btn--icononly" data-action="share" data-post-id="${p.id}" data-link="${postUrl}" aria-label="Compartir">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            <span>Compartir</span>
+          </button>
+          <div class="share-menu" role="menu"></div>
+        </div>
         <button class="action-btn ml-auto action-btn--go" data-action="go-post" data-link="${postUrl}">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
           <span>Ir a publicación</span>
@@ -426,6 +429,15 @@ export function initFeedInteractions(): void {
   document.addEventListener('click', (ev) => {
     const target = ev.target as HTMLElement;
 
+    // Opcion del menu de compartir
+    const shareOpt = target.closest('[data-share]') as HTMLElement | null;
+    if (shareOpt) {
+      ev.stopPropagation();
+      ev.preventDefault();
+      runShareAction(shareOpt);
+      return;
+    }
+
     // Opcion de reaccion (emoji del picker)
     const opt = target.closest('.reaction-option') as HTMLElement | null;
     if (opt) {
@@ -449,8 +461,9 @@ export function initFeedInteractions(): void {
       return;
     }
 
-    // Click fuera de cualquier reaction-wrap -> cerrar pickers
+    // Click fuera de reaction-wrap o share-wrap -> cerrar pickers/menus
     if (!target.closest('.reaction-wrap')) closeReactionPickers();
+    if (!target.closest('.feed-share-wrap')) closeShareMenus();
   });
 }
 
@@ -526,30 +539,86 @@ async function handleAction(btnLike: HTMLElement | Event): Promise<void> {
   } else if (action === 'go-post') {
     window.location.href = btn.dataset.link || `${postTypePath('')}/${postShortId(postId)}`;
   } else if (action === 'share') {
-    const link = btn.dataset.link || `/the-wild-times/${postId}`;
+    const link = btn.dataset.link || `${postTypePath('')}/${postShortId(postId)}`;
     const url = new URL(link, window.location.origin).href;
-    let ok = false;
-    try {
-      await navigator.clipboard.writeText(url);
-      ok = true;
-    } catch {
-      ok = false;
-    }
-    // Feedback visual para ambos casos (web share > clipboard > fallback)
-    const label = btn.querySelector('span');
-    const original = label?.textContent || '';
-    if (label) label.textContent = ok ? '¡Copiado!' : url;
-    if (!ok && navigator.share) {
-      try { await navigator.share({ title: 'The Wild Times', url }); ok = true; } catch {}
-    }
-    btn.classList.add('share--copied');
-    btn.style.color = 'var(--primary)';
-    if (label) label.textContent = original;
-    setTimeout(() => {
-      btn.style.color = '';
-      btn.classList.remove('share--copied');
-    }, 1800);
+    toggleShareMenu(btn, url);
   }
+}
+
+// ── COMPARTIR: menu con opciones de enlace ──
+function closeShareMenus(): void {
+  document.querySelectorAll('.feed-share-wrap.open').forEach((w) => (w as HTMLElement).classList.remove('open'));
+}
+
+function shareTargets(title: string, url: string): Array<{ id: string; label: string; icon: string }> {
+  const enc = encodeURIComponent(url);
+  const t = encodeURIComponent(title);
+  return [
+    { id: 'copy', label: 'Copiar enlace', icon: '🔗' },
+    { id: 'whatsapp', label: 'WhatsApp', icon: '💬' },
+    { id: 'x', label: 'X (Twitter)', icon: '𝕏' },
+    { id: 'facebook', label: 'Facebook', icon: '📘' },
+    { id: 'telegram', label: 'Telegram', icon: '✈️' },
+  ];
+}
+
+function toggleShareMenu(btn: HTMLElement, url: string): void {
+  const wrap = btn.closest('.feed-share-wrap') as HTMLElement | null;
+  if (!wrap) return;
+
+  const postEl = btn.closest('.feed-card');
+  const title = postEl?.querySelector('.feed-card-title')?.textContent?.trim() || 'The Wild Times — publicación';
+  const menu = wrap.querySelector('.share-menu') as HTMLElement;
+
+  if (wrap.classList.contains('open')) {
+    wrap.classList.remove('open');
+    return;
+  }
+  closeShareMenus();
+  closeReactionPickers();
+
+  if (menu) {
+    menu.innerHTML = shareTargets(title, url).map((s) =>
+      `<button type="button" class="share-option" data-share="${s.id}" data-share-title="${escapeAttr(title)}" data-share-url="${escapeAttr(url)}">
+        <span class="share-option-icon">${s.icon}</span><span>${s.label}</span>
+      </button>`
+    ).join('');
+  }
+  wrap.classList.add('open');
+}
+
+function escapeAttr(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+async function runShareAction(opt: HTMLElement): Promise<void> {
+  const kind = opt.dataset.share || 'copy';
+  const url = opt.dataset.shareUrl || '';
+  const title = opt.dataset.shareTitle || 'The Wild Times — publicación';
+  const btn = opt.closest('.feed-share-wrap')?.querySelector('[data-action="share"]') as HTMLElement | null;
+
+  if (kind === 'copy') {
+    try { await navigator.clipboard.writeText(url); } catch { /* fallback */ }
+    if (btn) {
+      const label = btn.querySelector('span');
+      const orig = label?.textContent || '';
+      if (label) label.textContent = '¡Copiado! ✓';
+      closeShareMenus();
+      setTimeout(() => { if (label) label.textContent = orig; }, 1500);
+    } else {
+      closeShareMenus();
+    }
+    return;
+  }
+
+  const urls: Record<string, string> = {
+    whatsapp: `https://wa.me/?text=${encodeURIComponent(title + ' ' + url)}`,
+    x: `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`,
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
+    telegram: `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`,
+  };
+  if (urls[kind]) window.open(urls[kind], '_blank', 'noopener,noreferrer,width=600,height=500');
+  closeShareMenus();
 }
 
 async function loadPostComments(postId: string, section: HTMLElement): Promise<void> {
