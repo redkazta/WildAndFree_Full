@@ -50,10 +50,61 @@ function authorLink(author: any, name: string): string {
 }
 
 // ─── SIDEBAR: ANNOUNCEMENTS ───
+// ─── SHIMMER / SKELETON HELPERS ───
+function newsSkeletonHtml(n = 4): string {
+  return Array.from({ length: n }, () => `
+    <div class="sk sk-news">
+      <div class="sk-fill sk-avatar sk-avatar--sm"></div>
+      <div class="sk-lines">
+        <div class="sk-fill sk-line sk-line--news"></div>
+        <div class="sk-fill sk-line sk-line--news-sm"></div>
+      </div>
+    </div>`).join('');
+}
+
+function reactionRowsSkeletonHtml(n = 5): string {
+  return Array.from({ length: n }, () => `
+    <div class="sk-reactions sk">
+      <div class="sk-fill sk-avatar"></div>
+      <div class="sk-lines">
+        <div class="sk-fill sk-line sk-line--react-name"></div>
+        <div class="sk-fill sk-line sk-line--react-meta"></div>
+      </div>
+      <div class="sk-fill sk-fill--pill"></div>
+    </div>`).join('');
+}
+
+function feedSkeletonHtml(n = 3): string {
+  return Array.from({ length: n }, () => `
+    <div class="sk sk-feed">
+      <div class="sk-feed-row">
+        <div class="sk-fill sk-avatar"></div>
+        <div class="sk-lines">
+          <div class="sk-fill sk-line sk-line--name"></div>
+          <div class="sk-fill sk-line sk-line--meta"></div>
+        </div>
+      </div>
+      <div class="sk-fill sk-line sk-line--title"></div>
+      <div class="sk-fill sk-line sk-line--lg"></div>
+      <div class="sk-fill sk-line sk-line--md"></div>
+      <div class="sk-fill sk-line sk-line--sm"></div>
+      <div class="sk-fill sk-block"></div>
+      <div class="sk-actions">
+        <div class="sk-fill sk-chip"></div>
+        <div class="sk-fill sk-chip"></div>
+        <div class="sk-fill sk-chip sk-chip--w"></div>
+        <div class="sk-spacer"></div>
+        <div class="sk-fill sk-chip"></div>
+      </div>
+    </div>`).join('');
+}
+
 export async function loadNewsSidebar(): Promise<void> {
   const el = document.getElementById('news-list');
   const countEl = document.getElementById('news-count');
   if (!el) return;
+
+  el.innerHTML = newsSkeletonHtml();
 
   try {
     const { data: posts, error } = await supabase
@@ -155,6 +206,9 @@ export async function loadCrewFeed(filter = 'all'): Promise<void> {
   const container = document.getElementById('posts-container');
   if (!container) return;
 
+  // Show shimmer skeleton while loading
+  container.innerHTML = feedSkeletonHtml();
+
   try {
     const { data: { session } } = await supabase.auth.getSession();
 
@@ -212,7 +266,7 @@ export async function loadCrewFeed(filter = 'all'): Promise<void> {
     const { role } = await getRole();
     const canViewReactions = role === 'admin' || role === 'staff';
 
-    container.innerHTML = filtered.map((p: any) => {
+    container.innerHTML = `<div class="sk-content">` + filtered.map((p: any) => {
       const comments = commentCounts[p.id] || 0;
       const reposts = repostCounts[p.id] || 0;
       const reactions = reactionCounts[p.id] || {};
@@ -227,7 +281,7 @@ export async function loadCrewFeed(filter = 'all'): Promise<void> {
         isReposted: userReposts.has(p.id),
         canViewReactions,
       });
-    }).join('');
+    }).join('') + `</div>`;
 
     attachHandlers(posts as any[]);
   } catch (e) {
@@ -241,7 +295,7 @@ export async function loadCrewFeed(filter = 'all'): Promise<void> {
 export async function loadCrewPost(postId: string): Promise<void> {
   const container = document.getElementById('post-container');
   if (!container) return;
-  container.innerHTML = '<p class="text-sm text-[var(--text-muted)] italic text-center py-12">Cargando publicación...</p>';
+  container.innerHTML = feedSkeletonHtml(1);
 
   try {
     const { data: { session } } = await supabase.auth.getSession();
@@ -291,7 +345,7 @@ export async function loadCrewPost(postId: string): Promise<void> {
     const t = post.title || 'Publicación · The Wild Times';
     if (document.title) document.title = `${t} · The Wild Times`;
 
-    container.innerHTML = renderCrewPost(post, {
+    container.innerHTML = `<div class="sk-content">` + renderCrewPost(post, {
       reactions,
       comments,
       reposts,
@@ -299,7 +353,7 @@ export async function loadCrewPost(postId: string): Promise<void> {
       myReaction,
       isReposted,
       canViewReactions,
-    });
+    }) + `</div>`;
 
     // Abrir comentarios por defecto + auto-cargar interacciones
     initFeedInteractions();
@@ -764,7 +818,7 @@ function ensureReactionDialog(): HTMLDialogElement {
 
       <!-- LISTA -->
       <div class="reactions-body">
-        <p class="reactions-loading">Cargando...</p>
+        ${reactionRowsSkeletonHtml()}
       </div>
     </div>
   `;
@@ -847,7 +901,7 @@ async function loadReactionTab(type: 'likes' | 'comments' | 'reposts'): Promise<
   const dialog = ensureReactionDialog();
   const body = dialog.querySelector('.reactions-body') as HTMLElement;
   if (!body) return;
-  body.innerHTML = '<p class="reactions-loading">Cargando...</p>';
+  body.innerHTML = reactionRowsSkeletonHtml();
   const typeBar = dialog.querySelector('#reactions-type-bar') as HTMLElement;
   if (typeBar) typeBar.style.display = type === 'likes' ? 'flex' : 'none';
 

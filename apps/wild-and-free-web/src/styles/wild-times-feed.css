@@ -944,3 +944,212 @@
   text-align: center;
   flex-shrink: 0;
 }
+
+/* ════════════════════════════════════════════
+   SHIMMERS / SKELETON LOADING STATES
+   ════════════════════════════════════════════ */
+
+/* Base shimmer block: animated gradient sweep */
+.sk {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-card);
+  border: 1px solid var(--border-faint, var(--border));
+}
+.sk::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(201, 131, 0, 0.06) 40%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(201, 131, 0, 0.06) 60%,
+    transparent 100%
+  );
+  animation: sk-sweep 1.6s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes sk-sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Pure fill units (no border) used inside bordered shells */
+.sk-fill {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-hover, rgba(128,128,128,0.12));
+  border-radius: 8px;
+}
+.sk-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.14),
+    transparent
+  );
+  animation: sk-sweep 1.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ── FEED CARD SKELETON ── */
+.sk-feed {
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.sk-feed-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sk-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.sk-avatar--sm {
+  width: 36px;
+  height: 36px;
+}
+.sk-lines {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.sk-line {
+  height: 12px;
+  border-radius: 6px;
+}
+.sk-line--name {
+  height: 14px;
+  width: 42%;
+}
+.sk-line--meta {
+  height: 9px;
+  width: 28%;
+}
+.sk-line--title {
+  height: 18px;
+  width: 78%;
+}
+.sk-line--lg {
+  height: 14px;
+  width: 100%;
+}
+.sk-line--md {
+  height: 14px;
+  width: 88%;
+}
+.sk-line--sm {
+  height: 14px;
+  width: 60%;
+}
+.sk-block {
+  height: 180px;
+  border-radius: 12px;
+}
+.sk-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 4px;
+}
+.sk-chip {
+  height: 30px;
+  width: 72px;
+  border-radius: 10px;
+}
+.sk-chip--w {
+  width: 88px;
+}
+.sk-spacer {
+  flex: 1;
+}
+
+/* ── SIDEBAR NEWS SKELETON ── */
+.sk-news {
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.sk-news .sk-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+}
+.sk-news .sk-lines {
+  gap: 8px;
+}
+.sk-line--news {
+  height: 11px;
+  width: 90%;
+}
+.sk-line--news-sm {
+  height: 9px;
+  width: 52%;
+}
+
+/* ── REACTION ROW SKELETON (dialog + eye) ── */
+.sk-reactions {
+  padding: 8px 12px;
+  border-radius: 13px;
+  background: var(--surface-solid-elev, var(--bg));
+  border: 1px solid var(--border-faint);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.sk-reactions .sk-avatar {
+  width: 34px;
+  height: 34px;
+}
+.sk-reactions .sk-lines {
+  gap: 6px;
+}
+.sk-line--react-name {
+  height: 11px;
+  width: 38%;
+}
+.sk-line--react-meta {
+  height: 8px;
+  width: 55%;
+}
+.sk-fill--pill {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* Reduce animation load when user prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .sk::after,
+  .sk-fill::after {
+    animation: none;
+  }
+}
+
+/* Smooth fade-in for real content after skeleton */
+.sk-content {
+  animation: sk-in 0.35s ease-out;
+}
+@keyframes sk-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
