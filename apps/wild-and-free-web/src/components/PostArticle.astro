@@ -50,7 +50,20 @@ const config = {
         </nav>
 
         <div id="post-container" class="note-wrap" data-post-id={postId}>
-          <p class="text-sm text-[var(--text-muted)] italic text-center py-12">Cargando publicación...</p>
+          <div class="sk sk-feed">
+            <div class="sk-feed-row">
+              <div class="sk-fill sk-avatar"></div>
+              <div class="sk-lines">
+                <div class="sk-fill sk-line sk-line--name"></div>
+                <div class="sk-fill sk-line sk-line--meta"></div>
+              </div>
+            </div>
+            <div class="sk-fill sk-line sk-line--title"></div>
+            <div class="sk-fill sk-line sk-line--lg"></div>
+            <div class="sk-fill sk-line sk-line--md"></div>
+            <div class="sk-fill sk-line sk-line--sm"></div>
+            <div class="sk-fill sk-block"></div>
+          </div>
         </div>
 
         <div class="note-footer">
