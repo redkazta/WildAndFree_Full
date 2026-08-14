@@ -947,59 +947,95 @@
 
 /* ════════════════════════════════════════════
    SHIMMERS / SKELETON LOADING STATES
+   ─────────────────────────────────────────────
+   Técnica profesional: en lugar de un pseudo‑
+   elemento que se desliza, animamos
+   background-position sobre un gradiente ancho
+   (background-size > 100%). El destello es una
+   franja de luz que viaja limpiamente a través
+   del bloque, imitando LinkedIn/Facebook.
+   Los colores se derivan de las variables del
+   tema para adaptarse a dark y light.
    ════════════════════════════════════════════ */
 
-/* Base shimmer block: animated gradient sweep */
+/* Gradiente de shimmer + fondo base + keyframes compartidos */
 .sk {
-  position: relative;
-  overflow: hidden;
-  background: var(--bg-card);
-  border: 1px solid var(--border-faint, var(--border));
-}
-.sk::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  transform: translateX(-100%);
-  background: linear-gradient(
+  --sk-b: var(--bg-card);               /* color base del bloque */
+  --sk-h: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(201, 131, 0, 0.06) 40%,
-    rgba(255, 255, 255, 0.12) 50%,
-    rgba(201, 131, 0, 0.06) 60%,
+    rgba(255, 255, 255, 0.16) 40%,
+    rgba(255, 255, 255, 0.28) 50%,
+    rgba(255, 255, 255, 0.16) 60%,
     transparent 100%
   );
-  animation: sk-sweep 1.6s ease-in-out infinite;
-  pointer-events: none;
-}
-@keyframes sk-sweep {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-
-/* Pure fill units (no border) used inside bordered shells */
-.sk-fill {
   position: relative;
   overflow: hidden;
-  background: var(--bg-hover, rgba(128,128,128,0.12));
+  background-color: var(--sk-b);
+  background-image: var(--sk-h);
+  background-repeat: no-repeat;
+  background-size: 220% 100%;
+  background-position: 100% 0;
+  animation: sk-sweep 1.4s ease-in-out infinite;
+  border: 1px solid var(--border-faint, var(--border));
+}
+[data-theme="light"] .sk {
+  --sk-h: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.05) 40%,
+    rgba(0, 0, 0, 0.09) 50%,
+    rgba(0, 0, 0, 0.05) 60%,
+    transparent 100%
+  );
+}
+@keyframes sk-sweep {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* Unidades de relleno (sin borde) usadas dentro de contenedores */
+.sk-fill {
+  --sk-b: var(--bg-hover);
+  --sk-h: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.18) 45%,
+    rgba(255, 255, 255, 0.32) 50%,
+    rgba(255, 255, 255, 0.18) 55%,
+    transparent 100%
+  );
+  position: relative;
+  overflow: hidden;
+  background-color: var(--sk-b);
+  background-image: var(--sk-h);
+  background-repeat: no-repeat;
+  background-size: 300% 100%;
+  background-position: 100% 0;
+  animation: sk-sweep 1.4s ease-in-out infinite;
   border-radius: 8px;
 }
-.sk-fill::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  transform: translateX(-100%);
-  background: linear-gradient(
+[data-theme="light"] .sk-fill {
+  --sk-h: linear-gradient(
     90deg,
-    transparent,
-    rgba(255,255,255,0.14),
-    transparent
+    transparent 0%,
+    rgba(0, 0, 0, 0.06) 45%,
+    rgba(0, 0, 0, 0.10) 50%,
+    rgba(0, 0, 0, 0.06) 55%,
+    transparent 100%
   );
-  animation: sk-sweep 1.6s ease-in-out infinite;
-  pointer-events: none;
 }
 
 /* ── FEED CARD SKELETON ── */
+/* Contenedores estructurales muestran la base y el borde, pero el
+   destello lo llevan las unidades internas .sk-fill (evita doble shimmer) */
+.sk-feed,
+.sk-news,
+.sk-reactions {
+  background-color: var(--sk-b, var(--bg-card));
+  background-image: none;
+  animation: none;
+}
 .sk-feed {
   border-radius: 16px;
   padding: 20px;
@@ -1078,6 +1114,23 @@
   flex: 1;
 }
 
+/* Stagger sutil: las unidades adyacentes desfilan una tras otra
+   para que el barrido se sienta orgánico y no en bloque. */
+.sk-feed > *:nth-child(1) { animation-delay: 0s; }
+.sk-feed > *:nth-child(2) { animation-delay: 0.08s; }
+.sk-feed > *:nth-child(3) { animation-delay: 0.16s; }
+.sk-feed > *:nth-child(4) { animation-delay: 0.24s; }
+.sk-feed > *:nth-child(5) { animation-delay: 0.32s; }
+.sk-feed > *:nth-child(6) { animation-delay: 0.40s; }
+.sk-lines > *:nth-child(1) { animation-delay: 0s; }
+.sk-lines > *:nth-child(2) { animation-delay: 0.06s; }
+@media (prefers-reduced-motion: reduce) {
+  .sk-feed > *,
+  .sk-lines > * {
+    animation-delay: 0s !important;
+  }
+}
+
 /* ── SIDEBAR NEWS SKELETON ── */
 .sk-news {
   border-radius: 12px;
@@ -1107,7 +1160,7 @@
 .sk-reactions {
   padding: 8px 12px;
   border-radius: 13px;
-  background: var(--surface-solid-elev, var(--bg));
+  background-color: var(--surface-solid-elev, var(--bg));
   border: 1px solid var(--border-faint);
   display: flex;
   align-items: center;
@@ -1139,9 +1192,10 @@
 
 /* Reduce animation load when user prefers reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .sk::after,
-  .sk-fill::after {
-    animation: none;
+  .sk,
+  .sk-fill {
+    animation-duration: 0.001s;
+    animation-iteration-count: 1;
   }
 }
 
