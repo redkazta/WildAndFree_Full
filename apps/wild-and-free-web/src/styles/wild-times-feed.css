@@ -338,18 +338,20 @@
 .eye-pool {
   display: inline-flex;
   align-items: center;
-  gap: 1px;
-  margin-right: 1px;
+  gap: 0px;
+  margin-left: 2px;
   color: var(--text-secondary);
 }
-.eye-pool b {
-  font-size: 9px;
-  color: var(--text-muted);
+.eye-reactions-total {
+  font-size: 11px;
   font-weight: 800;
-  margin-left: 1px;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
 }
-.eye-pool:hover {
-  color: var(--primary);
+.eye-pool-emoji {
+  font-size: 10px;
+  line-height: 1;
+  margin-left: 1px;
 }
 
 /* ─── COMMENTS ─── */

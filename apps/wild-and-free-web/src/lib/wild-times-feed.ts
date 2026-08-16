@@ -437,7 +437,10 @@ function renderCrewPost(p: any, meta: { reactions: Record<string, number>; comme
         ${meta.canViewReactions ? `<button class="action-btn eye-btn" data-action="opinions" title="Reacciones · Comentarios · Reposts">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
           <span class="eye-stats">
-            <span class="eye-stat eye-stat-reactions" title="Reacciones (${totalReactions} total)">${REACTION_TYPES.filter((t) => reactions[t] > 0).map((t) => `<span class="eye-pool" data-reaction-type="${REACTIONS[t].label}">${reactionEmoji(t)}<b>${reactions[t]}</b></span>`).join('')}</span>
+            <span class="eye-stat eye-stat-reactions" title="Reacciones (${totalReactions} total)">
+              <b class="eye-reactions-total">${totalReactions}</b>
+              <span class="eye-pool">${REACTION_TYPES.filter((t) => reactions[t] > 0).map((t) => `<span class="eye-pool-emoji" data-reaction-type="${REACTIONS[t].label}">${reactionEmoji(t)}</span>`).join('')}</span>
+            </span>
             <span class="eye-stat-sep">·</span>
             <span class="eye-stat eye-stat-comments" title="Comentarios">💬<b>${meta.comments}</b></span>
             <span class="eye-stat-sep">·</span>
@@ -730,9 +733,12 @@ function syncEyeStats(postEl: Element): void {
     return el?.textContent?.trim() || '0';
   };
   const reactionsEl = eye.querySelector('.eye-stat-reactions');
+  const reactionsTotal = eye.querySelector('.eye-reactions-total');
   const commentsEl = eye.querySelector('.eye-stat-comments b');
   const repostsEl = eye.querySelector('.eye-stat-reposts b');
-  if (reactionsEl) (reactionsEl as HTMLElement).title = `Reacciones (${read('[data-action="reaction-toggle"] .reaction-btn-count')} total)`;
+  const total = read('[data-action="reaction-toggle"] .reaction-btn-count');
+  if (reactionsEl) (reactionsEl as HTMLElement).title = `Reacciones (${total} total)`;
+  if (reactionsTotal) reactionsTotal.textContent = total;
   if (commentsEl) commentsEl.textContent = read('[data-action="comment"] span');
   if (repostsEl) repostsEl.textContent = read('[data-action="repost"] span');
 }
