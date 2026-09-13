@@ -136,4 +136,64 @@ import Layout from '../layouts/Layout.astro';
         font-size: 2rem;
       }
     }
+  </style>
+
+  <script>
+    import { supabase } from '../lib/supabase'
+    import { ensureProfile } from '../lib/profile.js'
+    import { withLoadingState, getInputValue } from '../lib/form-helpers'
+
+    // Toggle password visibility
+    const toggleBtn = document.getElementById('togglePassword')
+    const passInput = document.getElementById('password') as HTMLInputElement | null
+    const eyeOpen = document.getElementById('eyeOpen')
+    const eyeClosed = document.getElementById('eyeClosed')
+    if (toggleBtn && passInput) {
+      toggleBtn.addEventListener('click', () => {
+        const isPassword = passInput.type === 'password'
+        passInput.type = isPassword ? 'text' : 'password'
+        eyeOpen?.classList.toggle('hidden', !isPassword)
+        eyeClosed?.classList.toggle('hidden', isPassword)
+      })
+    }
+
+    const form = document.querySelector('.login-form')
+    const googleBtn = document.getElementById('googleBtn')
+
+    if (googleBtn) {
+      googleBtn.addEventListener('click', async () => {
+        const { error } = await supabase.auth.signInWithOAuth({
+          provider: 'google',
+          options: { redirectTo: `${window.location.origin}/auth/callback` }
+        })
+        if (error) alert(error.message)
+      })
+    }
+
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault()
+        const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement | null
+
+        const email = getInputValue('email').trim()
+        const password = getInputValue('password')
+
+        if (!email || !password) {
+          alert('Completa correo y contraseña.')
+          return
+        }
+
+        await withLoadingState(submitBtn, 'Iniciando sesión...', async () => {
+          const { error } = await supabase.auth.signInWithPassword({ email, password })
+          if (error) {
+            alert(error.message)
+            return
+          }
+
+          const { data } = await supabase.auth.getSession()
+          if (data?.session) await ensureProfile(data.session)
+          window.location.href = '/'
+        })
+      })
+    }
   </script>
