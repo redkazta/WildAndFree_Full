@@ -1,0 +1,104 @@
+---
+---
+
+<section class="relative min-h-[80vh] h-full flex items-center justify-center overflow-hidden bg-black">
+	<!-- Animated background grid -->
+	<div class="absolute inset-0 z-0 bg-black [background-image:radial-gradient(#111_1px,transparent_1px)] [background-size:24px_24px]" />
+	<div class="absolute inset-0 z-0 opacity-10 [background-image:linear-gradient(45deg,transparent_49%,rgba(201,131,0,0.03)_49%,rgba(201,131,0,0.03)_51%,transparent_51%)] [background-size:40px_40px]" />
+
+	<!-- Diagonal accent lines -->
+	<div class="absolute top-0 left-0 w-full h-[1px] bg-wild-orange/20 z-0"></div>
+	<div class="absolute bottom-0 right-0 w-full h-[1px] bg-wild-red/20 z-0"></div>
+
+	<div class="relative z-10 max-w-[1350px] mx-auto px-6 w-full grid lg:grid-cols-2 gap-6 lg:gap-10 items-center">
+
+		<!-- Left Column - Channel Info -->
+		<div class="space-y-6 lg:space-y-8 text-center lg:text-left order-2 lg:order-1">
+
+			<!-- Channel Card -->
+			<div class="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-5">
+				<div class="flex items-center gap-3">
+					<img src="/assets/wildgvng-logo.svg" alt="Wild Gvng Logo" class="w-5 h-5 object-contain" />
+					<span class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">Wild And Free</span>
+				</div>
+				<div class="text-xl font-bold text-wild-orange">Wild And Free</div>
+				<div class="text-[10px] text-[var(--text-muted)]">Liga de Freestyle</div>
+			</div>
+
+			<!-- Latest Videos Section -->
+			<div class="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-4">
+				<h3 class="text-2xl font-bold text-wild-orange mb-4">Latest Videos</h3>
+				<div class="space-y-3">
+					<!-- Video 1 -->
+					<div class="flex items-center gap-3">
+						<div class="w-10 h-10 rounded-lg bg-[var(--bg-card)] flex-shrink-0">
+							<img src="https://img.youtube.com/vi/5z0BSF9xWfH0PMBcmq30qZ/0.jpg" alt="Video 1" class="w-full h-full object-cover rounded-lg" />
+						</div>
+						<p class="text-xs text-[var(--text-muted)]">Wild And Free - Live Session</p>
+					</div>
+					<!-- Video 2 -->
+					<div class="flex items-center gap-3">
+						<div class="w-10 h-10 rounded-lg bg-[var(--bg-card)] flex-shrink-0">
+							<img src="https://img.youtube.com/vi/example-id/0.jpg" alt="Video 2" class="w-full h-full object-cover rounded-lg" />
+						</div>
+						<p class="text-xs text-[var(--text-muted)]">Wild And Free - Mix 2026</p>
+					</div>
+					<!-- Video 3 -->
+					<div class="flex items-center gap-3">
+						<div class="w-10 h-10 rounded-lg bg-[var(--bg-card)] flex-shrink-0">
+							<img src="https://img.youtube.com/vi/example-id-2/0.jpg" alt="Video 3" class="w-full h-full object-cover rounded-lg" />
+						</div>
+						<p class="text-xs text-[var(--text-muted)]">Wild And Free - Freestyle Battle</p>
+					</div>
+				</div>
+			</div>
+
+			<!-- Right Column - Channel Stats -->
+			<div class="hidden lg:flex items-center justify-center order-1 lg:order-2">
+				<div class="relative">
+					<div class="w-[260px] h-[260px] xl:w-[340px] xl:h-[340px] rounded-3xl border border-[var(--border)] bg-[var(--bg-card)] flex items-center justify-center p-8 relative overflow-hidden group">
+						<div class="absolute inset-1 rounded-3xl border border-wild-orange/15 group-hover:border-wild-orange/30 transition-all duration-500" />
+						<div class="absolute top-2 left-2 w-4 h-[1px] bg-wild-orange/50"></div>
+						<div class="absolute top-2 left-2 h-4 w-[1px] bg-wild-orange/50"></div>
+						<div class="absolute bottom-2 right-2 w-4 h-[1px] bg-wild-red/50"></div>
+
+						<img
+							src="/wg_logo.png"
+							alt="Wild And Free Logo"
+							width="260"
+							height="260"
+							class="w-full h-full object-contain relative z-10 drop-shadow-xl group-hover:scale-105 transition-transform duration-500"
+						/>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Bottom divider -->
+		<div class="absolute bottom-0 left-0 w-full h-[1px] bg-[var(--border)]/10 z-10" />
+	</div>
+</section>
+
+<style>
+	@keyframes grid-move {
+		0% { background-position: 0 0; }
+		100% { background-position: 24px 24px; }
+	}
+	.animate-grid {
+		animation: grid-move 20s linear infinite;
+	}
+</style>
+
+<script>
+	// Subtle parallax on mouse move for the logo card
+	const logoCard = document.querySelector('.relative > .bg-[var(--bg-card)] .rounded-xl');
+	if (logoCard) {
+		document.addEventListener('mousemove', (e) => {
+			const x = (window.innerWidth / 2 - e.pageX) / 40;
+			const y = (window.innerHeight / 2 - e.pageY) / 40;
+			logoCard.style.transform = `translate(${x}px, ${y}px)`;
+		});
+	}
+</script>
+
+</section>
