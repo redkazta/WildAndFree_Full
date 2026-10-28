@@ -1,88 +1,132 @@
 ﻿---
 ---
 
-<section class="relative min-h-screen flex items-center justify-center overflow-hidden">
-		<!-- Animated Geometric Background Pattern -->
-		<div class="absolute inset-0 z-0 bg-[var(--bg)]"></div>
+<section class="relative min-h-[80vh] h-full flex items-center justify-center overflow-hidden bg-black">
+	<!-- Animated background grid -->
+	<div class="absolute inset-0 z-0 bg-black [background-image:radial-gradient(#111_1px,transparent_1px)] [background-size:24px_24px]" />
+	<div class="absolute inset-0 z-0 opacity-10 [background-image:linear-gradient(45deg,transparent_49%,rgba(201,131,0,0.03)_49%,rgba(201,131,0,0.03)_51%,transparent_51%)] [background-size:40px_40px]" />
 
-	<div class="relative z-10 max-w-[1400px] mx-auto px-6 w-full grid lg:grid-cols-2 gap-8 lg:gap-24 items-center">
+	<!-- Diagonal accent lines -->
+	<div class="absolute top-0 left-0 w-full h-[1px] bg-wild-orange/20 z-0"></div>
+	<div class="absolute bottom-0 right-0 w-full h-[1px] bg-wild-red/20 z-0"></div>
+
+	<div class="relative z-10 max-w-[1350px] mx-auto px-6 w-full grid lg:grid-cols-2 gap-6 lg:gap-10 items-center">
 		<!-- Left Column - Content -->
-		<div class="space-y-8 text-center lg:text-left order-2 lg:order-1">
+		<div class="space-y-6 lg:space-y-8 text-center lg:text-left order-2 lg:order-1">
+
 			<!-- Badge -->
-			<div class="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-[var(--bg-card)] border border-[var(--border)]">
-				<img src="/assets/wildgvng-logo.svg" alt="Wild Gvng Logo" class="w-6 h-6 object-contain" />
-				<span class="text-xs font-black uppercase tracking-[0.2em] text-[var(--text-muted)]">DESDE 2018, TORREÓN, COAHUILA, MÉXICO</span>
+			<div class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-[var(--bg-card)] border border-[var(--border)]">
+				<img src="/assets/wildgvng-logo.svg" alt="Wild Gvng Logo" class="w-5 h-5 object-contain" />
+				<span class="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-muted)]">Torreón, Coahuila • 2018</span>
 			</div>
 
 			<!-- Title -->
-			<div class="space-y-3">
-				<h1 class="text-5xl md:text-8xl lg:text-[9rem] font-black leading-[0.85] tracking-tighter">
+			<div class="space-y-2">
+				<h1 class="text-4xl md:text-6xl lg:text-7xl font-black leading-none tracking-tighter">
 					<span class="block text-[var(--text)]">WILD</span>
 					<span class="block text-wild-orange">GVNG</span>
 				</h1>
+				<div class="relative inline-block mt-2">
+					<span class="text-[12px] font-black uppercase tracking-widest text-wild-red block">COLECTIVO MUSICAL UNDER</span>
+					<div class="absolute -inset-px bg-wild-red rounded-full blur opacity-30" />
+				</div>
 			</div>
 
 			<!-- Wild And Free League segment -->
-			<div class="inline-flex items-center gap-4 bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl p-5 md:p-3 wg-league-card">
-								<img src="/wild_and_free.jpg" alt="Wild And Free League" class="w-14 h-14 md:w-10 md:h-10 object-cover rounded-xl flex-shrink-0 wg-league-img" />
-				<div class="text-left">
-					<div class="text-[11px] font-black uppercase tracking-[0.2em] text-wild-orange mb-1">WILD AND FREE LEAGUE</div>
-					<p class="text-sm text-[var(--text-secondary)] font-medium leading-relaxed max-w-md">
-						Liga de Freestyle nacida en Torreón, Coahuila, México, 2018. Bosque Venustiano Carranza.
+			<div class="inline-flex items-center gap-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-4 text-left">
+				<img src="/wild_and_free.jpg" alt="Wild And Free League" class="w-10 h-10 object-cover rounded-lg flex-shrink-0" />
+				<div>
+					<div class="text-[10px] font-black uppercase tracking-[0.15em] text-wild-orange mb-0.5">Wild And Free League</div>
+					<p class="text-[12px] text-[var(--text-secondary)] font-medium leading-tight max-w-sm">
+						Liga de freestyle nacida en Torreón, Coahuila, México, 2018.
 					</p>
 				</div>
 			</div>
 
 			<!-- CTA Buttons -->
-			<div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 sm:gap-5 pt-2">
+			<div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-2 pt-1">
 				<a
 					href="/artistas"
-					class="group relative w-full sm:w-auto px-6 sm:px-10 py-3 sm:py-5 bg-wild-orange text-black text-sm font-black uppercase tracking-[0.15em] rounded-full overflow-hidden transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-wild-orange/30 text-center"
+					class="w-full sm:w-auto px-5 py-3 bg-wild-orange text-black text-xs sm:text-sm font-black uppercase tracking-[0.15em] rounded-full transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-wild-orange/40 text-center"
 				>
-					<span class="relative z-10">Explorar Crew</span>
-					<div class="absolute inset-0 bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+					Explorar Crew
 				</a>
 				<a
 					href="/musica"
-					class="w-full sm:w-auto px-6 sm:px-10 py-3 sm:py-5 border border-[var(--border-strong)] text-[var(--text)] text-sm font-black uppercase tracking-[0.15em] rounded-full hover:bg-[var(--bg-card)] hover:border-wild-orange/50 transition-all duration-300 text-center"
+					class="w-full sm:w-auto px-5 py-3 border border-wild-orange/50 text-wild-orange text-xs sm:text-sm font-black uppercase tracking-[0.15em] rounded-full hover:bg-wild-orange hover:text-black transition-all text-center"
 				>
 					Escuchar Música
 				</a>
 				<a
 					href="/registro"
-					class="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] text-xs font-black uppercase tracking-[0.15em] rounded-full hover:bg-wild-orange hover:text-black hover:border-wild-orange transition-all duration-300 text-center"
+					class="w-full sm:w-auto px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] text-[10px] sm:text-xs font-black uppercase tracking-[0.15em] rounded-full hover:bg-wild-red hover:text-white hover:border-wild-red transition-all text-center"
 				>
 					Únete a la Crew
 				</a>
 			</div>
+
+			<!-- Mini stats row -->
+			<div class="grid grid-cols-2 gap-3 mt-4 lg:mt-6">
+				<div class="p-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-xl text-center">
+					<div class="text-[11px] font-black uppercase tracking-widest text-[var(--text-muted)]">+500</div>
+					<div class="text-xs font-black text-[var(--text)]">MC Registrados</div>
+				</div>
+				<div class="p-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-xl text-center">
+					<div class="text-[11px] font-black uppercase tracking-widest text-[var(--text-muted)]">+200</div>
+					<div class="text-xs font-black text-[var(--text)]">Batallas Grabadas</div>
+				</div>
+			</div>
+
 		</div>
 
 		<!-- Right Column - Logo Visual -->
 		<div class="hidden lg:flex items-center justify-center order-1 lg:order-2">
 			<div class="relative">
-				<div class="relative w-[400px] h-[400px] xl:w-[480px] xl:h-[480px] rounded-wild-lg border border-[var(--border)] bg-[var(--bg-card)] flex items-center justify-center p-10 overflow-hidden group">
-					<div class="absolute inset-4 rounded-wild-lg border border-wild-orange/10 group-hover:border-wild-orange/30 transition-all duration-700"></div>
-
-					<div class="absolute top-0 left-0 w-12 h-[2px] bg-wild-orange/40"></div>
-					<div class="absolute top-0 left-0 w-[2px] h-12 bg-wild-orange/40"></div>
-					<div class="absolute top-0 right-0 w-12 h-[2px] bg-wild-orange/40"></div>
-					<div class="absolute top-0 right-0 w-[2px] h-12 bg-wild-orange/40"></div>
-					<div class="absolute bottom-0 left-0 w-12 h-[2px] bg-wild-orange/40"></div>
-					<div class="absolute bottom-0 left-0 w-[2px] h-12 bg-wild-orange/40"></div>
-					<div class="absolute bottom-0 right-0 w-12 h-[2px] bg-wild-orange/40"></div>
-					<div class="absolute bottom-0 right-0 w-[2px] h-12 bg-wild-orange/40"></div>
+				<div class="w-[260px] h-[260px] xl:w-[340px] xl:h-[340px] rounded-3xl border border-[var(--border)] bg-[var(--bg-card)] flex items-center justify-center p-8 relative overflow-hidden group">
+					<!-- Inner glitch box -->
+					<div class="absolute inset-1 rounded-3xl border border-wild-orange/15 group-hover:border-wild-orange/30 transition-all duration-500" />
+					<!-- Corner brackets -->
+					<div class="absolute top-2 left-2 w-4 h-[1px] bg-wild-orange/50"></div>
+					<div class="absolute top-2 left-2 h-4 w-[1px] bg-wild-orange/50"></div>
+					<div class="absolute bottom-2 right-2 w-4 h-[1px] bg-wild-red/50"></div>
+					<div class="absolute bottom-2 right-2 h-4 w-[1px] bg-wild-red/50"></div>
 
 					<img
 						src="/wg_logo.png"
 						alt="WILD GVNG Logo"
-						width="480"
-						height="480"
-						class="w-full h-full object-contain relative z-10 drop-shadow-2xl group-hover:scale-105 transition-transform duration-700"
+						width="260"
+						height="260"
+						class="w-full h-full object-contain relative z-10 drop-shadow-xl group-hover:scale-105 transition-transform duration-500"
 					/>
 				</div>
 			</div>
 		</div>
 	</div>
 
+	<!-- Bottom divider -->
+	<div class="absolute bottom-0 left-0 w-full h-[1px] bg-[var(--border)]/10 z-10" />
+</section>
+
+<style>
+	@keyframes grid-move {
+		0% { background-position: 0 0; }
+		100% { background-position: 24px 24px; }
+	}
+	.animate-grid {
+		animation: grid-move 20s linear infinite;
+	}
+</style>
+
+<script>
+	// Subtle parallax on mouse move for the logo card
+	const logoCard = document.querySelector('.group > .w-\\[260px\\]') || document.querySelector('.w-\\[260px\\]');
+	if (logoCard) {
+		document.addEventListener('mousemove', (e) => {
+			const x = (window.innerWidth / 2 - e.pageX) / 40;
+			const y = (window.innerHeight / 2 - e.pageY) / 40;
+			logoCard.style.transform = `translate(${x}px, ${y}px)`;
+		});
+	}
+</script>
 
 </section>
