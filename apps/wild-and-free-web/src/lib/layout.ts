@@ -396,7 +396,7 @@ const updateAuthUI = async () => {
   } else {
     // Replace skeleton with login button (no session = guest)
     if (authContainer) {
-      authContainer.innerHTML = `<div class="auth-login-wrap"><a href="/login" class="px-5 py-2 bg-[var(--text)] text-[var(--bg)] text-[10px] xl:text-[11px] font-black uppercase tracking-[0.15em] rounded-full hover:bg-[var(--primary)] transition-all shadow-lg">Entrar</a></div>`;
+      authContainer.innerHTML = `<div class="auth-login-wrap"><a href="/login" class="px-5 py-2 bg-[var(--text)] text-[var(--bg)] text-[10px] xl:text-[11px] font-black uppercase tracking-[0.15em] rounded-full hover:bg-[var(--primary)] transition-all shadow-lg">Registrarse o iniciar sesión</a></div>`;
     }
   }
 

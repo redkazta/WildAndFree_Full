@@ -370,6 +370,15 @@ const isActive = (href: string) => {
 				background: var(--primary);
 			}
 
+			/* Hide scrollbar for header nav */
+			.scrollbar-hide {
+				-ms-overflow-style: none;
+				scrollbar-width: none;
+			}
+			.scrollbar-hide::-webkit-scrollbar {
+				display: none;
+			}
+
 			.sidebar-open #sidebar {
 				left: 0 !important;
 			}
@@ -725,7 +734,7 @@ const isActive = (href: string) => {
 								</a>
 							</div>
 
-				<nav class="hidden lg:flex items-center gap-0 flex-1 justify-center overflow-x-auto">
+				<nav class="hidden lg:flex items-center gap-0 flex-1 justify-center overflow-x-auto scrollbar-hide">
 					{navItems.map(item => (
 						<a
 							href={item.href}
