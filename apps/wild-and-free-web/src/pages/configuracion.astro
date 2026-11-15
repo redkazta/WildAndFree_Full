@@ -264,6 +264,30 @@ import Layout from '../layouts/Layout.astro';
               <button class="cfg-toggle" data-cfg-toggle="offline_mode" data-setting="offline_mode"><span class="cfg-toggle-dot"></span></button>
             </div>
           </div>
+          <div class="cfg-card">
+            <h4 class="cfg-card-label">ELEMENTOS FLOTANTES</h4>
+            <div class="cfg-row">
+              <div class="cfg-field">
+                <span class="cfg-label">Radio flotante</span>
+                <span class="cfg-value cfg-muted">Player de Wild Gvng Radio en la esquina inferior.</span>
+              </div>
+              <button class="cfg-toggle" data-floating="radio" aria-label="Activar radio flotante"><span class="cfg-toggle-dot"></span></button>
+            </div>
+            <div class="cfg-row">
+              <div class="cfg-field">
+                <span class="cfg-label">Música flotante (Spotify)</span>
+                <span class="cfg-value cfg-muted">Playlist de Spotify integrada.</span>
+              </div>
+              <button class="cfg-toggle" data-floating="music" aria-label="Activar música flotante"><span class="cfg-toggle-dot"></span></button>
+            </div>
+            <div class="cfg-row">
+              <div class="cfg-field">
+                <span class="cfg-label">Aviso de bienvenida</span>
+                <span class="cfg-value cfg-muted">Vuelve a mostrar la invitación para activarlos.</span>
+              </div>
+              <button class="cfg-btn-small" id="cfg-floating-reset">Mostrar aviso</button>
+            </div>
+          </div>
         </div>
 
         <!-- IDIOMA -->
@@ -1062,6 +1086,40 @@ import Layout from '../layouts/Layout.astro';
           const locale = btn.getAttribute('data-locale')!;
           saveSetting('locale', locale);
         });
+      });
+
+      // Floating players — preferencias locales del navegador
+      function syncFloatingToggles() {
+        const radioOn = localStorage.getItem('wg-floating-radio') === '1';
+        const musicOn = localStorage.getItem('wg-floating-music') === '1';
+        document.querySelectorAll<HTMLElement>('.cfg-toggle[data-floating]').forEach((toggle) => {
+          const kind = toggle.getAttribute('data-floating');
+          toggle.classList.toggle('active', kind === 'radio' ? radioOn : musicOn);
+        });
+      }
+      syncFloatingToggles();
+
+      document.querySelectorAll<HTMLElement>('.cfg-toggle[data-floating]').forEach((toggle) => {
+        toggle.addEventListener('click', () => {
+          toggle.classList.toggle('active');
+          const kind = toggle.getAttribute('data-floating');
+          const enabled = toggle.classList.contains('active');
+          const label = kind === 'radio' ? 'Radio flotante' : 'Música flotante';
+
+          localStorage.setItem(kind === 'radio' ? 'wg-floating-radio' : 'wg-floating-music', enabled ? '1' : '0');
+          localStorage.setItem('wg-floating-prompt-seen', '1');
+          showToast(`${label} ${enabled ? 'activada' : 'desactivada'}`);
+          window.dispatchEvent(new CustomEvent('wg:floating-prefs-changed'));
+        });
+      });
+
+      document.getElementById('cfg-floating-reset')?.addEventListener('click', () => {
+        localStorage.removeItem('wg-floating-prompt-seen');
+        localStorage.removeItem('wg-floating-radio');
+        localStorage.removeItem('wg-floating-music');
+        syncFloatingToggles();
+        window.dispatchEvent(new CustomEvent('wg:floating-prompt-show'));
+        showToast('Aviso restablecido. Te preguntaremos de nuevo.');
       });
 
       // Deletion modal

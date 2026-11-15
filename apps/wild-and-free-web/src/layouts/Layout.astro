@@ -1,7 +1,6 @@
 ﻿---
 import SidebarLeft from '../components/SidebarLeft.astro';
-import RadioFloating from '../components/RadioFloating.astro';
-import SpotifyFloating from '../components/SpotifyFloating.astro';
+import FloatingControls from '../components/FloatingControls.astro';
 				import { ClientRouter } from 'astro:transitions';
 				import Analytics from '@vercel/analytics/astro';
 
@@ -826,8 +825,7 @@ const isActive = (href: string) => {
 
 		<div id="sidebar-overlay"></div>
 		<SidebarLeft />
-		<RadioFloating />
-		<SpotifyFloating />
+		<FloatingControls />
 
 		<main class="pt-20 wg-main">
 			<slot />

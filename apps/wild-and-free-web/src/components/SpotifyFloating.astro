@@ -13,7 +13,8 @@
       <iframe 
           id="spotify-iframe"
           style="border-radius:12px;border:none" 
-          src="https://open.spotify.com/embed/playlist/5z0BSF9xWfH0PMBcmq30qZ?utm_source=generator&theme=0" 
+          src="about:blank"
+          data-src="https://open.spotify.com/embed/playlist/5z0BSF9xWfH0PMBcmq30qZ?utm_source=generator&theme=0"
           width="100%" 
           height="100%" 
           allowfullscreen="" 
@@ -35,6 +36,23 @@
 
 <script>
     const spotifyIframe = document.getElementById('spotify-iframe') as HTMLIFrameElement;
+
+    function loadSpotifyEmbed() {
+        if (!spotifyIframe) return;
+        const target = spotifyIframe.dataset.src;
+        if (target && spotifyIframe.getAttribute('src') !== target) {
+            spotifyIframe.setAttribute('src', target);
+        }
+    }
+
+    // Solo se carga cuando el usuario habilita la música flotante.
+    window.addEventListener('wg:floating-enable-spotify', loadSpotifyEmbed);
+    if (spotifyIframe && spotifyIframe.offsetParent !== null) loadSpotifyEmbed();
+    try {
+        if (localStorage.getItem('wg-floating-music') === '1') loadSpotifyEmbed();
+    } catch {
+        /* almacenamiento no disponible */
+    }
     
     // Mobile expand/collapse
     const spotifyExpand = document.getElementById('spotify-expand');
