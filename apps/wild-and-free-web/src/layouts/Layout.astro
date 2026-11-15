@@ -551,7 +551,24 @@ const isActive = (href: string) => {
 				}
 
 				.wg-header .wg-right-section {
-					display: none !important;
+					display: flex !important;
+				}
+
+				.wg-header .auth-actions-container {
+					min-width: 0 !important;
+					min-height: 40px !important;
+				}
+
+				.wg-header .auth-profile {
+					min-width: 0 !important;
+					padding: 4px !important;
+					gap: 6px !important;
+				}
+
+				.wg-header .auth-login-wrap a {
+					padding: 8px 12px !important;
+					font-size: 9px !important;
+					letter-spacing: 0.08em !important;
 				}
 
 				.wg-header .wg-login-link {
@@ -818,7 +835,8 @@ const isActive = (href: string) => {
 					</div>
 
 					<div class="auth-actions-container">
-															</div>
+							<a href="/login" class="px-4 py-2 bg-[var(--text)] text-[var(--bg)] text-[10px] font-black uppercase tracking-[0.15em] rounded-full hover:bg-[var(--primary)] transition-all shadow-lg">Entrar</a>
+						</div>
 										</div>
 			</div>
 		</header>
@@ -838,8 +856,6 @@ const isActive = (href: string) => {
 				import('../lib/layout').then(({ initLayout }) => initLayout());
 			});
 		</script>
-		<Analytics />
-	</body>
 		<Analytics />
 	</body>
 </html>
