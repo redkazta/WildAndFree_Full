@@ -527,20 +527,15 @@ import SpotifyFloating from './SpotifyFloating.astro';
     /* almacenamiento no disponible */
   }
 
-  // No interrumpir flujos de acceso, pago o configuración.
+  // El aviso solo aparece en las páginas de radio y música.
   const path = window.location.pathname;
-  const quietPaths = [
-    '/login',
-    '/registro',
-    '/recuperar-password',
-    '/actualizar-contrasena',
-    '/actualizar-password',
-    '/configuracion',
-    '/checkout',
-  ];
-  const isQuietPage = path.indexOf('/auth') === 0 || quietPaths.indexOf(path) !== -1;
+  const isMediaPage =
+    path === '/radio' ||
+    path.indexOf('/radio/') === 0 ||
+    path === '/musica' ||
+    path.indexOf('/musica/') === 0;
 
-  if (!isQuietPage && !hasPreference && !promptSeen && !snoozed) {
+  if (isMediaPage && !hasPreference && !promptSeen && !snoozed) {
     window.setTimeout(openPrompt, 1200);
   }
 
