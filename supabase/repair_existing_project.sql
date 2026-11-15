@@ -41,7 +41,9 @@ SELECT
   COALESCE(u.raw_user_meta_data->>'username', split_part(u.email, '@', 1)),
   u.raw_user_meta_data->>'avatar_url'
 FROM auth.users u
-ON CONFLICT (id) DO NOTHING;
+WHERE NOT EXISTS (
+  SELECT 1 FROM public.profiles p WHERE p.id = u.id
+);
 
 -- 4) roles y user_roles
 CREATE TABLE IF NOT EXISTS public.roles (
@@ -55,6 +57,21 @@ CREATE TABLE IF NOT EXISTS public.roles (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- roles: agregar columnas faltantes en tablas viejas
+ALTER TABLE public.roles ADD COLUMN IF NOT EXISTS internal_name TEXT;
+ALTER TABLE public.roles ADD COLUMN IF NOT EXISTS display_name TEXT;
+ALTER TABLE public.roles ADD COLUMN IF NOT EXISTS description TEXT;
+ALTER TABLE public.roles ADD COLUMN IF NOT EXISTS is_system BOOLEAN DEFAULT FALSE;
+ALTER TABLE public.roles ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT NOW();
+ALTER TABLE public.roles ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW();
+
+-- rellenar las columnas nuevas a partir de name
+UPDATE public.roles SET internal_name = name WHERE internal_name IS NULL;
+UPDATE public.roles SET display_name = name WHERE display_name IS NULL;
+
+CREATE UNIQUE INDEX IF NOT EXISTS roles_name_key ON public.roles(name);
+CREATE UNIQUE INDEX IF NOT EXISTS roles_internal_name_key ON public.roles(internal_name);
+
 CREATE TABLE IF NOT EXISTS public.user_roles (
   user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
   role_id INTEGER REFERENCES public.roles(id) ON DELETE CASCADE,
@@ -63,12 +80,20 @@ CREATE TABLE IF NOT EXISTS public.user_roles (
   PRIMARY KEY (user_id, role_id)
 );
 
-INSERT INTO public.roles (name, internal_name, display_name, description, is_system) VALUES
+ALTER TABLE public.user_roles ADD COLUMN IF NOT EXISTS assigned_at TIMESTAMPTZ DEFAULT NOW();
+ALTER TABLE public.user_roles ADD COLUMN IF NOT EXISTS assigned_by UUID REFERENCES public.profiles(id);
+
+INSERT INTO public.roles (name, internal_name, display_name, description, is_system)
+SELECT v.name, v.internal_name, v.display_name, v.description, v.is_system
+FROM (VALUES
   ('admin',  'admin',  'Admin',  'Acceso total al sistema', TRUE),
   ('staff',  'staff',  'Staff',  'Gestión operativa', TRUE),
   ('artist', 'artist', 'Artista','Perfil de artista', TRUE),
   ('fan',    'fan',    'Fan',    'Miembro de la comunidad', TRUE)
-ON CONFLICT (name) DO NOTHING;
+) AS v(name, internal_name, display_name, description, is_system)
+WHERE NOT EXISTS (
+  SELECT 1 FROM public.roles r WHERE r.name = v.name
+);
 
 -- 5) redkazta@gmail.com como admin; el resto como fan
 INSERT INTO public.user_roles (user_id, role_id)
@@ -76,14 +101,20 @@ SELECT u.id, r.id
 FROM auth.users u
 JOIN public.roles r ON r.name = 'admin'
 WHERE lower(u.email) = 'redkazta@gmail.com'
-ON CONFLICT DO NOTHING;
+  AND NOT EXISTS (
+    SELECT 1 FROM public.user_roles ur
+    WHERE ur.user_id = u.id AND ur.role_id = r.id
+  );
 
 INSERT INTO public.user_roles (user_id, role_id)
 SELECT u.id, r.id
 FROM auth.users u
 JOIN public.roles r ON r.name = 'fan'
 WHERE lower(u.email) <> 'redkazta@gmail.com'
-ON CONFLICT DO NOTHING;
+  AND NOT EXISTS (
+    SELECT 1 FROM public.user_roles ur
+    WHERE ur.user_id = u.id AND ur.role_id = r.id
+  );
 
 -- 6) Verificación
 SELECT
