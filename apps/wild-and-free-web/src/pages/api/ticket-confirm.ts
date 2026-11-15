@@ -17,7 +17,7 @@ function json(body: any, status = 200): Response {
 export const POST: APIRoute = async ({ request }) => {
   const config = getServerConfig();
 
-  if (!config.serviceKey) {
+  if (!config.serviceKey || !config.supabaseUrl) {
     return json({ error: 'supabase_not_configured' }, 503);
   }
   if (!config.stripeKey) {

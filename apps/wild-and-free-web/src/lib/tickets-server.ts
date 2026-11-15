@@ -6,7 +6,7 @@
 const SUPABASE_URL =
   import.meta.env.SUPABASE_URL ||
   import.meta.env.PUBLIC_SUPABASE_URL ||
-  'https://cfsqhbisrkqhbupyjrwz.supabase.co';
+  '';
 
 const SUPABASE_ANON_KEY =
   import.meta.env.PUBLIC_SUPABASE_ANON_KEY ||
@@ -38,7 +38,7 @@ export function getServerConfig() {
 export async function getAuthUser(request: Request): Promise<AuthUser | null> {
   const header = request.headers.get('authorization') || '';
   const token = header.toLowerCase().startsWith('bearer ') ? header.slice(7).trim() : '';
-  if (!token || !SUPABASE_ANON_KEY) return null;
+  if (!token || !SUPABASE_ANON_KEY || !SUPABASE_URL) return null;
 
   try {
     const response = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
@@ -55,8 +55,8 @@ export async function getAuthUser(request: Request): Promise<AuthUser | null> {
 }
 
 export async function supabaseRest<T = any>(path: string, init?: RequestInit): Promise<T> {
-  if (!SUPABASE_SERVICE_KEY) {
-    throw new Error('SUPABASE_SERVICE_KEY no configurada');
+  if (!SUPABASE_SERVICE_KEY || !SUPABASE_URL) {
+    throw new Error('Supabase no está configurado en el servidor');
   }
 
   const response = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
