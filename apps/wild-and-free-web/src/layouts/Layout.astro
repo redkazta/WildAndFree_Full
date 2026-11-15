@@ -17,7 +17,7 @@ const { config } = Astro.props;
 const currentPath = Astro.url.pathname;
 
 const navItems = [
-	{ href: '/the-wild-times', label: 'THE WILD TIMES', iconPaths: ['M4 22h16a2 2 0 002-2V4a2 2 0 00-2-2H4a2 2 0 00-2 2v16a2 2 0 002 2z', 'M6 8h5M6 12h8M6 16h12', 'M17 8h1M17 10h1'] },
+	{ href: '/the-wild-times', label: 'THE WILD TIMES', iconPaths: ['M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2', 'M18 14h-8', 'M15 18h-5', 'M10 6h8v4h-8V6Z'] },
 	  { href: '/artistas', label: 'Artistas', iconPaths: ['M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2', 'M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z'] },
   { href: '/versus', label: 'Versus', iconPaths: ['M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z', 'M14 2v6h6', 'M8 13h2', 'M8 17h2', 'M14 13h2', 'M14 17h2'] },
   { href: '/musica', label: 'Música', iconPaths: ['M9 18V5l12-2v13', 'M9 18a2 2 0 1 0 0-4', 'M21 16a2 2 0 1 0 0-4'] },
@@ -537,6 +537,10 @@ const isActive = (href: string) => {
 					height: 56px !important;
 				}
 
+				.wg-main {
+					padding-top: 56px !important;
+				}
+
 				.wg-header .wg-logo-img {
 					width: 20px !important;
 					height: 20px !important;
@@ -721,8 +725,8 @@ const isActive = (href: string) => {
 					</style>
 	</head>
 	<body class="selection:bg-wild-orange/50 selection:text-[var(--text)] overflow-x-hidden" style={`--primary: ${config.primary_color}; --secondary: ${config.secondary_color}; --wild-orange: ${config.primary_color}; --wild-red: ${config.secondary_color}; --tenant-primary: ${config.primary_color}; --tenant-secondary: ${config.secondary_color}; --tenant-glow: ${config.primary_color}33;`}>
-		<header class="fixed top-0 left-0 right-0 z-[1000] border-b-2 border-[var(--border)] shadow-2xl transition-all duration-500 wg-header" style="background: var(--bg);">
-						<div class="w-full mx-auto px-4 md:px-8 h-20 flex items-center justify-between gap-2">
+		<header class="fixed top-0 left-0 right-0 z-[1000] h-20 border-b-2 border-[var(--border)] shadow-2xl transition-all duration-500 wg-header" style="background: var(--bg);">
+						<div class="w-full mx-auto px-4 md:px-8 h-full flex items-center justify-between gap-2">
 							<div class="flex items-center gap-2 md:gap-4 flex-shrink-0">
 								<button id="sidebar-trigger" class="p-2 text-[var(--text)] hover:text-[var(--primary)] transition-all transform active:scale-90" aria-label="Abrir menú">
 									<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
@@ -735,7 +739,8 @@ const isActive = (href: string) => {
 								</a>
 							</div>
 
-				<nav class="hidden lg:flex items-center gap-0 flex-1 justify-center overflow-x-auto scrollbar-hide">
+				<nav class="hidden lg:block flex-1 min-w-0 overflow-x-auto scrollbar-hide">
+					<div class="flex items-center gap-0 w-max mx-auto px-1">
 					{navItems.map(item => (
 						<a
 							href={item.href}
@@ -749,6 +754,7 @@ const isActive = (href: string) => {
 							</span>
 						</a>
 					))}
+					</div>
 				</nav>
 
 				<div class="flex items-center gap-1 xl:gap-2 flex-shrink-0 pr-1 xl:pr-2 wg-right-section">
@@ -823,7 +829,7 @@ const isActive = (href: string) => {
 		<RadioFloating />
 		<SpotifyFloating />
 
-		<main class="pt-20">
+		<main class="pt-20 wg-main">
 			<slot />
 		</main>
 

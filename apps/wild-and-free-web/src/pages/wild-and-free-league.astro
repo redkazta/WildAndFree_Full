@@ -1,5 +1,6 @@
 ﻿---
 import Layout from '../layouts/Layout.astro';
+import Sponsors from '../components/Sponsors.astro';
 import tenantConfig from '../../../../packages/shared-types/tenant-config.json';
 
 const tenant = tenantConfig['wild-and-free'];
@@ -145,6 +146,8 @@ const initialParticipants = [
       </div>
     </div>
   </div>
+
+  <Sponsors />
 </Layout>
 
 <style>

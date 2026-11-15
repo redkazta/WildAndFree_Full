@@ -71,6 +71,21 @@ import '../styles/wild-times-feed.css';
               </div>
             </div>
             <div id="posts-container" class="space-y-8">
+              <!-- Create post -->
+              <form id="create-post-form" class="bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl p-5 space-y-3" onsubmit="event.preventDefault(); createPost();">
+                <div class="flex gap-2">
+                  <select id="post-type" class="bg-[var(--bg)] border border-[var(--border)] rounded-lg px-3 py-2 text-[10px] font-black uppercase tracking-wider text-[var(--text)]">
+                    <option value="announcement">Anuncio</option>
+                    <option value="event">Evento</option>
+                    <option value="promotion">Promo</option>
+                    <option value="general">General</option>
+                  </select>
+                  <input id="post-title" type="text" placeholder="Título..." class="flex-1 bg-[var(--bg)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm font-bold text-[var(--text)] placeholder:text-[var(--text-muted)]" />
+                </div>
+                <textarea id="post-body" rows="2" placeholder="¿Qué pasa en la crew?" class="w-full bg-[var(--bg)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm font-bold text-[var(--text)] placeholder:text-[var(--text-muted)] resize-none"></textarea>
+                <div class="flex justify-end"><button type="submit" class="px-4 py-2 bg-[var(--primary)] text-[var(--bg)] text-[10px] font-black uppercase tracking-[0.2em] rounded-xl hover:brightness-110 transition">Publicar</button></div>
+              </form>
+
               <div class="sk sk-feed"><div class="sk-feed-row"><div class="sk-fill sk-avatar"></div><div class="sk-lines"><div class="sk-fill sk-line sk-line--name"></div><div class="sk-fill sk-line sk-line--meta"></div></div></div><div class="sk-fill sk-line sk-line--title"></div><div class="sk-fill sk-line sk-line--lg"></div><div class="sk-fill sk-line sk-line--md"></div><div class="sk-fill sk-line sk-line--sm"></div><div class="sk-fill sk-block"></div><div class="sk-actions"><div class="sk-fill sk-chip"></div><div class="sk-fill sk-chip"></div><div class="sk-fill sk-chip sk-chip--w"></div><div class="sk-spacer"></div><div class="sk-fill sk-chip"></div></div></div>
             </div>
           </div>
@@ -84,6 +99,27 @@ import '../styles/wild-times-feed.css';
 
 <script>
   import { loadNewsSidebar, loadCrewFeed, initFilters, initRealtime, initFeedInteractions } from '../lib/wild-times-feed';
+  import { supabase } from '../lib/supabase';
+
+  // Create post from feed
+  window.createPost = async function() {
+    const type = (document.getElementById('post-type') as HTMLSelectElement)?.value || 'general';
+    const title = (document.getElementById('post-title') as HTMLInputElement)?.value?.trim();
+    const body = (document.getElementById('post-body') as HTMLTextAreaElement)?.value?.trim();
+    if (!title && !body) return;
+    const { data, error } = await supabase.from('crew_posts').insert({
+      type,
+      title: title || null,
+      content: body || null,
+      status: 'published',
+      author_id: (await supabase.auth.getUser()).data.user?.id || null
+    }).select();
+    if (!error) {
+      (document.getElementById('post-title') as HTMLInputElement).value = '';
+      (document.getElementById('post-body') as HTMLTextAreaElement).value = '';
+      loadCrewFeed();
+    }
+  };
 
   initFilters();
   initRealtime();

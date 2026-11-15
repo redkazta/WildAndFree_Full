@@ -1,0 +1,350 @@
+================================================================================
+PROMPT MAESTRO — PROYECTO "WILD GVNG" (WILD AND FREE)
+================================================================================
+
+INSTRUCCIÓN PARA EL AGENTE:
+Este documento describe de forma exhaustiva qué es el proyecto Wild Gvng, para
+qué sirve, cómo está construido, qué módulos tiene, qué reglas de negocio y
+convenciones debe respetar, y cuál es su estado actual. Úsalo como contexto
+permanente antes de proponer o ejecutar cualquier cambio de código, migración,
+diseño o arquitectura. Todo el texto de interfaz de usuario debe estar en
+español. El tono visual y de marca es brutalista, oscuro, callejero y musical.
+
+================================================================================
+1. QUÉ ES EL PROYECTO
+================================================================================
+
+Wild Gvng (también escrito "Wild and Free" en algunos identificadores internos)
+es un ecosistema digital completo para una crew / sello / colectivo de música
+urbana con base en Torreón, Coahuila, México. No es solo una página web: es una
+plataforma que combina presencia pública, comunidad social, operación interna
+tipo ERP, ecommerce, monetización por tokens, contenido exclusivo, batallas de
+freestyle (versus), radio, eventos y perfiles de artistas.
+
+El objetivo del producto es concentrar en un solo lugar:
+  - La cara pública de la marca (landing, artistas, música, eventos, tienda).
+  - Un medio/fanzine digital llamado "THE WILD TIMES" con noticias, anuncios,
+    eventos, promociones y feed social de la crew.
+  - Un backoffice (ERP) para que admin y staff gestionen contenido, usuarios,
+    pedidos, inventario, tags, radio, eventos, versus, correos y configuración.
+  - Una app móvil Flutter del ERP para operar desde teléfono.
+  - Un sistema de roles y permisos (admin, staff, artist, fan) protegido con
+    Row Level Security (RLS) en Supabase.
+  - Monetización: tienda de merch, tokens internos, contenido premium y
+    eventos; el checkout aún no genera órdenes reales porque falta Stripe.
+
+Audiencia principal:
+  - Fans ("Wild Ones"): consumen contenido, reaccionan, comentan, compran,
+    votan en versus y desbloquean contenido exclusivo.
+  - Artistas: tienen perfil público, publican y gestionan su contenido.
+  - Staff: opera el ERP y publica noticias.
+  - Admin: control total del sistema.
+  - Patrocinadores, colaboradores y medios: flujo de solicitud desde registro.
+
+================================================================================
+2. IDENTIDAD Y MARCA
+================================================================================
+
+  - Nombre: Wild Gvng / Wild and Free.
+  - Concepto: crew musical, cultura urbana, freestyle, rap, trap, desierto,
+    calle, comunidad, autogestión.
+  - Ubicación narrativa: Torreón, Coahuila, MX.
+  - Paleta principal: naranja #C98300 como primario, negro/pure black como
+    fondo, blanco puro como texto y bordes; rojo #8A0303 como secundario en
+    algunas páginas. El tenant config además define accent #00FF9D y
+    discount #FF0055.
+  - Estilo visual: brutalista / dark / editorial / fanzine. Tipografía pesada
+    en mayúsculas, tracking amplio, bordes marcados, tarjetas con contraste,
+    microinteracciones, animaciones de entrada, skeletons de carga.
+  - Voz: directa, callejera, en español, sin corporativismo.
+
+================================================================================
+3. ARQUITECTURA GENERAL
+================================================================================
+
+Monorepo gestionado con pnpm workspaces:
+
+  WildAndFree_Full/
+  ├── apps/
+  │   ├── wild-and-free-web/     → Web pública + ERP en Astro 5
+  │   └── wild-erp-mobile/       → App móvil ERP en Flutter
+  ├── packages/
+  │   ├── shared-types/          → Tipos y tenant-config compartidos
+  │   └── design-system/         → Reservado para design system (vacío)
+  ├── services/
+  │   ├── api-gateway/           → NestJS (placeholder, NO usar aún)
+  │   └── core-engine/           → Go (placeholder, NO usar aún)
+  ├── supabase/migrations/       → Migraciones SQL del esquema y RLS
+  ├── docs/                      → Documentación, ADRs, módulos y runbooks
+  ├── run-migrations.cjs         → Aplica migraciones a Supabase remoto
+  ├── run-single-migration.cjs   → Aplica una migración individual
+  ├── seed-posts.cjs             → Seed de crew_posts/wall_posts vía pg
+  ├── seed-anuncio.cjs           → Seed de anuncios
+  ├── setup-admin.cjs            → Configuración de admin
+  ├── AGENTS.md                  → Contexto estable para agentes de IA
+  └── VERSIONS.md                → Versiones fijadas y compatibilidad
+
+Stack:
+  - Web: Astro 5, TypeScript, Tailwind CSS 3/4, @supabase/supabase-js,
+    lucide-astro, lottie-web, clsx, tailwind-merge, @vercel/analytics,
+    resend (correos). Despliegue estático en Vercel.
+  - Móvil: Flutter 3.44.4 / Dart >=3.0.0 <4.0.0, supabase_flutter ^2.8.0,
+    provider, shared_preferences, intl, url_launcher, file_picker ^8.3.7.
+  - Backend: Supabase project ref cfsqhbisrkqhbupyjrwz — PostgreSQL, Auth,
+    RLS, Realtime y RPCs.
+  - CI/CD: GitHub Actions; web en Vercel; móvil compilado con Flutter.
+  - Servicios NestJS/Go: existen como carpetas placeholder, no forman parte
+    del flujo actual y no deben usarse sin decisión explícita.
+
+================================================================================
+4. APLICACIÓN WEB (apps/wild-and-free-web)
+================================================================================
+
+4.1 LAYOUTS
+  - src/layouts/Layout.astro: layout público global. Incluye header fijo con
+    navegación, sidebar, radio flotante, Spotify flotante, perfil de auth,
+    temas (dark/light con [data-theme]), escalado de fuente, CSS variables
+    (--primary, --secondary, --bg, --bg-card, --bg-hover, --border, --text,
+    --text-muted, --surface-solid), estilos globales, ClientRouter de Astro,
+    analytics de Vercel y selector de ubicación.
+  - src/layouts/ErpLayout.astro: layout del backoffice, con navegación por
+    módulos, estilos propios de ERP y protección de acceso.
+
+4.2 PÁGINAS PÚBLICAS
+  - / (index.astro): landing con Hero y Footer. Configura tenant "wild-and-free"
+    desde packages/shared-types/tenant-config.json.
+  - /login: inicio de sesión con email/contraseña y Google OAuth. Feedback
+    visual integrado (banner de error/éxito, validación de campos, traducción
+    de errores de Supabase, toggle de contraseña corregido).
+  - /registro: selección de rol (Wild Ones/fan, artista, staff/patrocinador)
+    con formularios por rol, validación, términos y Google OAuth.
+  - /recuperar-password, /actualizar-contrasena, /actualizar-password:
+    flujo de recuperación y cambio de contraseña.
+  - /perfil, /configuracion, /pedidos, /wishlist: cuenta del usuario.
+  - /artistas + /artista/[username]: directorio y perfil público de artistas.
+  - /musica: catálogo musical.
+  - /eventos + /eventos/[shortId]: eventos y detalle.
+  - /tienda + /tienda/[slug]: ecommerce y detalle de producto.
+  - /checkout: checkout con blocker intencional (no genera órdenes hasta Stripe).
+  - /the-wild-times + /the-wild-times/[key] + /the-wild-times/p/[key]:
+    fanzine digital con sidebar de anuncios, feed de crew, filtros, featured
+    article y detalle de post.
+  - /noticias/[shortId]: detalle de noticias.
+  - /versus: batallas de freestyle, votaciones y estadísticas.
+  - /radio, /podcasts: radio y episodios.
+  - /wild-and-free-tv, /wild-and-free-league, /wild-writings, /ascension,
+    /honor-and-free: secciones de contenido/marca.
+  - /anuncios, /promos: listados.
+  - /terminos: términos y condiciones.
+  - /auth/callback: intercambio de código OAuth por sesión y creación de perfil.
+  - /admin/tags: administración de tags.
+  - /admin-dashboard: dashboard administrativo.
+
+4.3 PÁGINAS ERP (/erp)
+  - /erp (index): dashboard con métricas de usuarios, artistas verificados,
+    pedidos pendientes, contenido pendiente, tokens en circulación y eventos
+    activos; feed de actividad reciente desde activity_log.
+  - /erp/noticias: módulo para crear, editar y publicar crew_posts con permisos
+    content.manage o wildcard. Es la vía oficial para publicar contenido.
+  - /erp/contenido, /erp/eventos, /erp/inventario, /erp/pedidos,
+    /erp/usuarios, /erp/tags, /erp/versus, /erp/radio, /erp/correos,
+    /erp/configuracion, /erp/perfil, /erp/wild-times.
+
+4.4 COMPONENTES
+  ArtistCard, ArtistGrid, Button, EventsList, Footer, Hero, MusicGrid, Player,
+  PostArticle, ProfileModal, RadioFloating, SectionHeader, ShopGrid,
+  SidebarLeft, SpotifyFloating, TagBadge, Welcome, YouTubeSection,
+  sidebarStore.js.
+
+4.5 LIBRERÍAS (src/lib)
+  - supabase.ts / supabase.js: cliente Supabase y stub para entornos sin
+    variables.
+  - role.js: getRole() para obtener el rol del usuario.
+  - erp-permissions.ts: waitForPermissions(), permisos ERP y wildcard.
+  - wild-times-feed.ts: feed público de The Wild Times (carga de sidebar,
+    crew feed, filtros, realtime, reacciones, comentarios, reposts, share,
+    diálogo de reacciones, skeletons).
+  - profile.js: ensureProfile() para crear/actualizar perfil tras auth.
+  - form-helpers.ts: withLoadingState(), getInputValue().
+  - cart.js, favorites.js: carrito y favoritos con persistencia.
+  - tags.js, tags-gateway.js, tags-admin-gateway.js: sistema de tags y badges.
+  - linkify.ts, slug.ts, layout.ts: utilidades.
+
+4.6 DATOS
+  - src/data/artists.ts: fetch de artistas con fallback a mock.
+
+================================================================================
+5. APP MÓVIL ERP (apps/wild-erp-mobile)
+================================================================================
+
+App Flutter del ERP con tema oscuro y navegación por rutas:
+  /login, /dashboard, /orders, /inventory, /content, /users, /tags, /events,
+  /versus, /radio, /settings, además de /order-detail, /product-detail y
+  /user-detail con argumentos.
+Usa supabase_flutter, provider, shared_preferences, intl, url_launcher y
+file_picker. Estructura lib/: config, core (theme), data, ui/screens.
+Versiones críticas: Flutter 3.44.4, file_picker >= 8.3.7 (v2 embedding).
+No cambiar versiones sin revisar VERSIONS.md.
+
+================================================================================
+6. BACKEND SUPABASE
+================================================================================
+
+Proyecto: cfsqhbisrkqhbupyjrwz (PostgreSQL + Auth + RLS + Realtime).
+
+6.1 ROLES Y PERMISOS
+  - admin: acceso total al ERP, wildcard "*".
+  - staff: acceso al ERP, permiso content.manage para noticias.
+  - artist: sin acceso al ERP; gestiona solo su contenido.
+  - fan (Wild Ones): sin acceso al ERP.
+  - Modelo: user_roles + roles + permissions + role_permissions.
+  - Función is_staff_or_admin() para políticas RLS.
+  - Regla de oro: publicar crew_posts SOLO desde /erp/noticias; las páginas
+    públicas solo muestran.
+
+6.2 TABLAS PRINCIPALES
+  - profiles: id, nombre, username, avatar_url, bio, phone, birthdate,
+    ubicacion, redes sociales, is_verified_artist, verification_status,
+    spotify_artist_id, is_online, last_seen_at, timestamps. NO usar
+    display_name ni email como nombre visible.
+  - roles, permissions, role_permissions, user_roles.
+  - crew_posts: publicaciones del fanzine/feed. Campos: id, author_id, title,
+    content, image_url, post_type (general/announcement/event/promotion),
+    status (pending/published/rejected), published_at, created_at,
+    updated_at. RLS: lectura pública de publicados; insert/update/delete solo
+    admin/staff. Realtime habilitado.
+  - wall_posts, wall_comments, wall_likes, wall_reposts: feed social. La FK de
+    post_id es polimórfica (acepta crew_posts o wall_posts) desde la migración
+    20260729_polymorphic_reactions.sql.
+  - tags, user_has_tags: badges y etiquetas.
+  - exclusive_content, content_purchases, user_tokens, token_purchases,
+    token_transactions: contenido premium y tokens.
+  - store_orders, store_products, product_variants, cart_items, wishlist_items,
+    favorites: ecommerce.
+  - freestylers, freestyler_stats, versus_battles, versus_votes: versus.
+  - events, radio_config, radio_episodes, radio_schedule, notifications,
+    activity_log, messages/conversations, friendships/follows, artistas.
+  - Migraciones relevantes: 20240627_complete_schema_v2.sql (esquema base),
+    20260726_functions_feed.sql, 20260726_functions_tokens.sql,
+    20260727_seed_crew_posts_final.sql, 20260729_crew_posts_rls_policies.sql,
+    20260729_polymorphic_reactions.sql, 20260816_reaction_pool.sql,
+    20260726_seed_roles_permissions.sql, 20260728_seed_exclusive_content.sql,
+    radio_system.sql.
+
+6.3 RPCs IMPORTANTES
+  - get_feed_posts, get_crew_feed, get_post_comments: feed con conteos.
+  - toggle_like, toggle_repost: reacciones atómicas.
+  - decrement_tokens, get_token_balance: tokens.
+  - is_staff_or_admin: helper de permisos.
+  - Funciones de tags, versus, radio y perfil según migraciones.
+
+6.4 SEGURIDAD
+  - RLS activo en tablas sensibles.
+  - Políticas de lectura pública para contenido publicado.
+  - Escritura restringida por rol.
+  - Nunca exponer SUPABASE_SERVICE_KEY en cliente.
+  - OAuth Google con redirect a /auth/callback.
+
+================================================================================
+7. FLUJOS DE NEGOCIO CLAVE
+================================================================================
+
+  - Registro: el usuario elige camino (Wild Ones, artista, staff/patrocinador),
+    completa formulario, se crea auth.user, se crea/actualiza profile con
+    metadata (nombre, rol, username, teléfono, ubicación, nacimiento, campos de
+    artista o staff) y se envía correo de confirmación.
+  - Login: email/contraseña o Google. Al autenticar se asegura el perfil y se
+    redirige al inicio.
+  - Publicación de noticias: solo admin/staff desde /erp/noticias crean
+    crew_posts; el público los ve en /the-wild-times.
+  - Feed social: usuarios autenticados publican wall_posts, reaccionan con
+    likes/reacciones, comentan y repostean; las FK polimórficas permiten
+    reaccionar tanto a crew_posts como a wall_posts.
+  - Tokens: el usuario obtiene saldo, compra o gana tokens y los gasta en
+    contenido exclusivo; RPCs atómicas evitan condiciones de carrera.
+  - Ecommerce: catálogo, carrito, wishlist y checkout; por ahora el checkout
+    está bloqueado y NO debe generar órdenes hasta integrar Stripe.
+  - Versus: inscripción de freestylers, creación de batallas, votación y
+    estadísticas.
+  - Radio: configuración, episodios y programación.
+  - Eventos: creación, listado público y detalle.
+  - Notificaciones y correos transaccionales (Resend en web).
+
+================================================================================
+8. REGLAS Y CONVENCIONES OBLIGATORIAS
+================================================================================
+
+  1. Todo el texto de UI en español.
+  2. Estilo visual brutalista/dark; respetar --primary #C98300, --bg,
+     --bg-card, --border, --text y variables del Layout.
+  3. Usar <style is:global> en páginas cuyo contenido se renderice por JS,
+     porque Astro escopea estilos y no aplicarían a HTML inyectado.
+  4. En profiles usar nombre y username; no display_name ni email.
+  5. Publicar crew_posts solo desde el ERP (/erp/noticias).
+  6. No generar órdenes de checkout hasta implementar Stripe.
+  7. No tocar VERSIONS.md ni el esquema sin verificar compatibilidad.
+  8. Las migraciones se ejecutan con:
+       node run-migrations.cjs
+     (usan el paquete pg global; requieren conexión al proyecto Supabase).
+  9. Los scripts seed usan pg global y conexión directa a la base.
+ 10. Los servicios api-gateway (NestJS) y core-engine (Go) son placeholder;
+     no usarlos sin decisión explícita.
+ 11. Evitar alerts nativos del navegador: usar feedback visual integrado
+     (banners con role="alert", campos inválidos, mensajes traducidos).
+ 12. Manejar errores de Supabase con mensajes claros en español.
+ 13. Respetar RLS: nunca asumir permisos de escritura sin rol.
+ 14. Mantener AGENTS.md estable; solo actualizarlo ante cambios estructurales.
+ 15. No hardcodear secretos; usar variables de entorno.
+
+================================================================================
+9. ESTADO ACTUAL Y ROADMAP
+================================================================================
+
+Implementado / en curso:
+  - Autenticación email/contraseña y Google OAuth.
+  - Feedback visual en login y registro (banners, errores traducidos,
+    validación, toggle de contraseña sin colisión con .hidden global).
+  - Feed de The Wild Times: carga de crew_posts, sidebar de anuncios, filtros,
+    reacciones, comentarios, reposts, realtime, skeletons y featured article.
+  - Formulario para crear crew_posts desde el feed.
+  - ERP con dashboard, noticias, usuarios, pedidos, inventario, tags, eventos,
+    versus, radio, correos y configuración.
+  - App Flutter ERP con pantallas de login, dashboard, pedidos, inventario,
+    contenido, usuarios, tags, eventos, versus, radio y ajustes.
+  - Esquema Supabase amplio con RLS y RPCs.
+  - Documentación en docs/ (ADRs, módulos, runbooks, guías).
+
+Pendiente / siguiente:
+  - Terminar de conectar el feed con datos reales y verificar seeds.
+  - Completar el módulo de noticias del ERP (CRUD, imágenes, programación,
+    vista previa).
+  - Integrar Stripe y habilitar checkout real.
+  - Completar tokens + contenido exclusivo end-to-end.
+  - Completar versus (brackets, votaciones en vivo, resultados).
+  - Radio, eventos y notificaciones end-to-end.
+  - Pulir UX/UI, accesibilidad y estados de carga/error.
+  - Pruebas automatizadas y CI más estricto.
+
+================================================================================
+10. CÓMO TRABAJAR EN ESTE PROYECTO (INSTRUCCIONES PARA EL AGENTE)
+================================================================================
+
+  - Antes de cambiar código, lee AGENTS.md y este prompt.
+  - Inspecciona primero los archivos relevantes; no inventes rutas ni APIs.
+  - Haz cambios mínimos y quirúrgicos, respetando el estilo existente.
+  - Si tocas auth, permisos, RLS o esquema, verifica compatibilidad y explica
+    el impacto.
+  - Si agregas una tabla o columna, crea una migración en supabase/migrations
+    con fecha AAAAMMDD_nombre_descriptivo.sql.
+  - Si agregas datos de ejemplo, usa los scripts seed existentes o SQL
+    idempotente (ON CONFLICT DO NOTHING).
+  - No generes órdenes hasta que Stripe esté implementado.
+  - No uses alerts nativos; usa el patrón de banner visual.
+  - Todo texto nuevo de UI en español.
+  - Documenta cambios estructurales en docs/ y, solo si es estructural,
+    actualiza AGENTS.md.
+  - Al terminar, resume qué cambió, en qué archivos y qué validación se corrió.
+
+================================================================================
+FIN DEL PROMPT
+================================================================================

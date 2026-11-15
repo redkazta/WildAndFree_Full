@@ -9,7 +9,18 @@ import Layout from '../layouts/Layout.astro';
 }}>
 
 <!-- ==================== STEP 1: CHARACTER SELECT ==================== -->
-<div id="step-select" class="register-container">
+<div class="register-page">
+  <!-- Alert banner -->
+  <div id="reg-alert" class="reg-alert" role="alert" aria-live="polite" hidden>
+    <span class="reg-alert-icon" aria-hidden="true">
+      <svg class="icon-err" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <svg class="icon-ok" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg>
+    </span>
+    <p id="reg-alert-text" class="reg-alert-text"></p>
+    <button type="button" onclick="hideRegAlert()" aria-label="Cerrar" class="reg-alert-close">×</button>
+  </div>
+
+  <div id="step-select" class="register-container">
   <div class="select-wrapper">
     <!-- Logo -->
     <div class="flex flex-col items-center mb-4">
@@ -806,6 +817,39 @@ import Layout from '../layouts/Layout.astro';
     margin-bottom: 16px;
   }
 
+  /* ===== ALERT BANNER ===== */
+  .reg-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(138, 3, 3, 0.4);
+    background: rgba(138, 3, 3, 0.12);
+    color: var(--text);
+    animation: alertIn 0.25s ease-out;
+    margin-bottom: 20px;
+  }
+  .reg-alert[hidden] { display: none !important; }
+  .reg-alert.is-error { border-color: rgba(138, 3, 3, 0.6); background: rgba(138, 3, 3, 0.14); }
+  .reg-alert.is-success { border-color: var(--primary, #c98300); background: var(--primary-soft, rgba(201, 131, 0, 0.12)); }
+  .reg-alert-icon { display: flex; flex-shrink: 0; margin-top: 1px; color: var(--secondary, #8a0303); }
+  .reg-alert.is-success .reg-alert-icon { color: var(--primary, #c98300); }
+  .reg-alert .icon-ok { display: none; }
+  .reg-alert.is-success .icon-err { display: none; }
+  .reg-alert.is-success .icon-ok { display: block; }
+  .reg-alert-text { flex: 1; font-size: 11px; font-weight: 700; line-height: 1.5; }
+  .reg-alert-close {
+    flex-shrink: 0;
+    color: var(--text-muted, rgba(255,255,255,0.5));
+    font-size: 18px; line-height: 1;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .reg-alert-close:hover { color: var(--text, #ffffff); }
+
+  @keyframes alertIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
   /* ===== ANIMATIONS ===== */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(20px); }
@@ -822,6 +866,33 @@ import Layout from '../layouts/Layout.astro';
 <script>
   import { supabase } from '../lib/supabase'
   import { ensureProfile } from '../lib/profile.js'
+
+  function showRegAlert(message: string, type: 'error' | 'success' = 'error') {
+    if (!document.getElementById('reg-alert') || !document.getElementById('reg-alert-text') || !document.getElementById('reg-alert-close')) return
+    const alert = document.getElementById('reg-alert')
+    const text = document.getElementById('reg-alert-text')
+    if (text) text.textContent = message
+    alert.classList.remove('is-error', 'is-success')
+    if (type === 'success') alert.classList.add('is-success')
+    alert.hidden = false
+    void alert.offsetWidth
+    alert.classList.add(type === 'success' ? 'is-success' : 'is-error')
+  }
+
+  function hideRegAlert() {
+    document.getElementById('reg-alert')?.hidden = true
+  }
+
+  function translateAuthError(msg: string): string {
+    const lower = (msg || '').toLowerCase()
+    if (lower.includes('invalid login credentials')) return 'Correo o contraseña incorrectos. Intenta de nuevo.'
+    if (lower.includes('email not confirmed')) return 'Aún no confirmas tu correo. Revisa tu bandeja de entrada.'
+    if (lower.includes('too many requests') || lower.includes('rate limit')) return 'Demasiados intentos. Espera un momento e intenta de nuevo.'
+    if (lower.includes('user not found')) return 'No existe una cuenta con ese correo.'
+    if (lower.includes('invalid email')) return 'El correo no tiene un formato válido.'
+    if (lower.includes('network') || lower.includes('failed to fetch')) return 'Sin conexión. Revisa tu internet e intenta de nuevo.'
+    return 'No pudimos iniciar sesión. Verifica tus datos e intenta de nuevo.'
+  }
 
   function showStep(step: string) {
     document.querySelectorAll('.register-container').forEach(el => el.classList.add('hidden'))
@@ -860,7 +931,7 @@ import Layout from '../layouts/Layout.astro';
       const birthdate = fd.get('birthdate') as string || ''
 
       if (!email || !password || !fullName) {
-        alert('Completa nombre, correo y contraseña.')
+        showRegAlert('Completa nombre, correo y contraseña.')
         return
       }
 
@@ -908,7 +979,7 @@ import Layout from '../layouts/Layout.astro';
         })
 
         if (error) {
-          alert(error.message)
+          showRegAlert(translateAuthError(error.message))
           if (btn) { btn.disabled = false; btn.textContent = role === 'staff' ? 'ENVIAR SOLICITUD' : role === 'artista' ? 'CREAR PERFIL DE ARTISTA' : 'UNIRME A LA CREW' }
           return
         }
@@ -925,7 +996,7 @@ import Layout from '../layouts/Layout.astro';
         }
         showStep('confirm')
       } catch (err) {
-        alert('Error inesperado. Intenta de nuevo.')
+        showRegAlert('Error inesperado. Intenta de nuevo.')
         if (btn) { btn.disabled = false; btn.textContent = role === 'staff' ? 'ENVIAR SOLICITUD' : role === 'artista' ? 'CREAR PERFIL DE ARTISTA' : 'UNIRME A LA CREW' }
       }
     })
@@ -939,7 +1010,7 @@ import Layout from '../layouts/Layout.astro';
         provider: 'google',
         options: { redirectTo: `${window.location.origin}/auth/callback` }
       })
-      if (error) alert(error.message)
+      if (error) showRegAlert(translateAuthError(error.message))
     })
   }
 
