@@ -6,6 +6,81 @@
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 -- =====================================================
+-- 0. TABLAS BASE (por si el esquema original no está aplicado)
+-- =====================================================
+CREATE TABLE IF NOT EXISTS public.roles (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL UNIQUE,
+  internal_name TEXT NOT NULL UNIQUE,
+  display_name TEXT NOT NULL,
+  description TEXT,
+  is_system BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS public.user_roles (
+  user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
+  role_id INTEGER REFERENCES public.roles(id) ON DELETE CASCADE,
+  assigned_at TIMESTAMPTZ DEFAULT NOW(),
+  assigned_by UUID REFERENCES public.profiles(id),
+  PRIMARY KEY (user_id, role_id)
+);
+
+CREATE TABLE IF NOT EXISTS public.events (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  name TEXT NOT NULL,
+  description TEXT,
+  event_type TEXT CHECK (event_type IN ('battle', 'concert', 'meet_greet', 'other')),
+  event_date TIMESTAMPTZ NOT NULL,
+  location TEXT,
+  image_url TEXT,
+  is_active BOOLEAN DEFAULT TRUE,
+  created_by UUID REFERENCES public.profiles(id),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS public.freestylers (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  name TEXT NOT NULL,
+  slug TEXT NOT NULL UNIQUE,
+  avatar_url TEXT,
+  bio TEXT,
+  is_active BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS public.versus_battles (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  freestyler1_id UUID REFERENCES public.freestylers(id),
+  freestyler2_id UUID REFERENCES public.freestylers(id),
+  winner_id UUID REFERENCES public.freestylers(id),
+  total_votes INTEGER DEFAULT 0,
+  status TEXT DEFAULT 'active' CHECK (status IN ('active', 'completed')),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  completed_at TIMESTAMPTZ
+);
+
+CREATE OR REPLACE FUNCTION public.is_staff_or_admin()
+RETURNS BOOLEAN
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+AS $$
+  SELECT EXISTS (
+    SELECT 1
+    FROM public.user_roles ur
+    JOIN public.roles r ON r.id = ur.role_id
+    WHERE ur.user_id = auth.uid()
+      AND r.name IN ('admin', 'staff')
+  );
+$$;
+
+GRANT EXECUTE ON FUNCTION public.is_staff_or_admin() TO authenticated;
+
+-- =====================================================
 -- 1. PATROCINADORES
 -- =====================================================
 CREATE TABLE IF NOT EXISTS public.sponsors (
