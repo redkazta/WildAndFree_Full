@@ -880,7 +880,8 @@ import Layout from '../layouts/Layout.astro';
   }
 
   function hideRegAlert() {
-    document.getElementById('reg-alert')?.hidden = true
+    const alert = document.getElementById('reg-alert')
+    if (alert) alert.hidden = true
   }
 
   function translateAuthError(msg: string): string {
