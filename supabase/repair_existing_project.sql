@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS public.roles (
 );
 
 -- roles: agregar columnas faltantes en tablas viejas
+ALTER TABLE public.roles ADD COLUMN IF NOT EXISTS name TEXT;
 ALTER TABLE public.roles ADD COLUMN IF NOT EXISTS internal_name TEXT;
 ALTER TABLE public.roles ADD COLUMN IF NOT EXISTS display_name TEXT;
 ALTER TABLE public.roles ADD COLUMN IF NOT EXISTS description TEXT;
