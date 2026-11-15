@@ -3,8 +3,11 @@ const { Client } = require(globalRoot + "/pg");
 const fs = require("fs");
 const path = require("path");
 
-const DB_URL =
-  "postgresql://postgres:Pedrito1122**@db.cfsqhbisrkqhbupyjrwz.supabase.co:5432/postgres";
+const DB_URL = process.env.SUPABASE_DB_URL || process.env.DATABASE_URL;
+if (!DB_URL) {
+  console.error('Falta SUPABASE_DB_URL (o DATABASE_URL) con la cadena de conexión de Postgres.');
+  process.exit(1);
+}
 
 const file = process.argv[2] || "supabase/migrations/20260816_reaction_pool.sql";
 

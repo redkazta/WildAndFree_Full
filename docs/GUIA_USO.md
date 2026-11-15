@@ -227,7 +227,7 @@ Las environment variables deben configurarse en el Dashboard de Vercel:
 
 | Variable | Valor | Environments |
 |----------|-------|--------------|
-| `PUBLIC_SUPABASE_URL` | `https://cfsqhbisrkqhbupyjrwz.supabase.co` | Production, Preview, Development |
+| `PUBLIC_SUPABASE_URL` | `https://hepsyuwaymwlvyaddecs.supabase.co` | Production, Preview, Development |
 | `PUBLIC_SUPABASE_ANON_KEY` | `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...` | Production, Preview, Development |
 
 4. Redeploy manual para que tome las variables
@@ -256,8 +256,8 @@ Las environment variables deben configurarse en el Dashboard de Vercel:
 ## 📊 Base de Datos (Supabase)
 
 ### Conexión
-- URL: `https://cfsqhbisrkqhbupyjrwz.supabase.co`
-- Dashboard: `https://supabase.com/dashboard/project/cfsqhbisrkqhbupyjrwz`
+- URL: `https://hepsyuwaymwlvyaddecs.supabase.co`
+- Dashboard: `https://supabase.com/dashboard/project/hepsyuwaymwlvyaddecs`
 
 ### Tablas Principales (33 tablas, 14 capas)
 - **Auth**: `auth.users` (Supabase)

@@ -4,8 +4,15 @@ const fs = require("fs");
 const path = require("path");
 
 // Credenciales de la DB de Supabase (service role)
-const DB_URL =
-  "postgresql://postgres:Pedrito1122**@db.cfsqhbisrkqhbupyjrwz.supabase.co:5432/postgres";
+// Configura SUPABASE_DB_URL en tu entorno antes de ejecutar.
+const DB_URL = process.env.SUPABASE_DB_URL || process.env.DATABASE_URL;
+if (!DB_URL) {
+  console.error('Falta SUPABASE_DB_URL (o DATABASE_URL) con la cadena de conexión de Postgres.');
+  process.exit(1);
+}
+
+// NOTA: en un proyecto Supabase nuevo, ejecuta primero
+// supabase/bootstrap_new_project.sql en el SQL Editor.
 
 // Migraciones a ejecutar en orden
 const migrations = [

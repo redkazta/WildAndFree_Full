@@ -8,7 +8,7 @@
 - Monorepo **pnpm workspaces** (`apps/*`, `packages/*`, `services/*`)
 - **Web**: Astro 5 + Tailwind (Vercel, estático) — `apps/wild-and-free-web`
 - **Móvil**: Flutter — `apps/wild-erp-mobile`
-- **Backend**: Supabase (PostgreSQL + RLS + Auth) — project ref `cfsqhbisrkqhbupyjrwz`
+- **Backend**: Supabase (PostgreSQL + RLS + Auth) — project ref `hepsyuwaymwlvyaddecs`
 - **Servicios** (NO USAR por ahora, son placeholder): `services/api-gateway` (NestJS), `services/core-engine` (Go)
 
 ## Estructura clave (web)

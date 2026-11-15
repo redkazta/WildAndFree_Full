@@ -1,7 +1,11 @@
 const { Client } = require('pg');
 const crypto = require('crypto');
 
-const CONNECTION = 'postgresql://postgres:Pedrito1122**@db.cfsqhbisrkqhbupyjrwz.supabase.co:5432/postgres';
+const CONNECTION = process.env.SUPABASE_DB_URL || process.env.DATABASE_URL;
+if (!CONNECTION) {
+  console.error('Falta SUPABASE_DB_URL (o DATABASE_URL) con la cadena de conexión de Postgres.');
+  process.exit(1);
+}
 
 // Generate UUID v4
 function uuidv4() {

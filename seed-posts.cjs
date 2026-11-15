@@ -1,8 +1,11 @@
 const globalRoot = require("child_process").execSync("npm root -g").toString().trim();
 const { Client } = require(globalRoot + "/pg");
 
-const DB_URL =
-  "postgresql://postgres:Pedrito1122**@db.cfsqhbisrkqhbupyjrwz.supabase.co:5432/postgres";
+const DB_URL = process.env.SUPABASE_DB_URL || process.env.DATABASE_URL;
+if (!DB_URL) {
+  console.error('Falta SUPABASE_DB_URL (o DATABASE_URL) con la cadena de conexión de Postgres.');
+  process.exit(1);
+}
 
 // KAZTA y Ralf UUIDs
 const KAZTA = "ec7ba40e-971a-4729-ad17-e83a0fdd42b5";

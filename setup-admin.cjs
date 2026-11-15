@@ -1,10 +1,13 @@
 const { Client } = require("pg");
 
-const DB_URL =
-  "postgresql://postgres:Pedrito1122**@db.cfsqhbisrkqhbupyjrwz.supabase.co:5432/postgres";
-const SUPABASE_URL = "https://cfsqhbisrkqhbupyjrwz.supabase.co";
-const SERVICE_ROLE_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmc3FoYmlzcmtxaGJ1cHlqcnd6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MjYwMTA0OSwiZXhwIjoyMDk4MTc3MDQ5fQ.neLLjRHAkZ8yBS0LulP7M5qa2Vh2IA2KycD6t5x7-dM";
+const DB_URL = process.env.SUPABASE_DB_URL || process.env.DATABASE_URL;
+const SUPABASE_URL = process.env.SUPABASE_URL || process.env.PUBLIC_SUPABASE_URL;
+const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!DB_URL || !SUPABASE_URL || !SERVICE_ROLE_KEY) {
+  console.error('Faltan SUPABASE_DB_URL, SUPABASE_URL o SUPABASE_SERVICE_KEY.');
+  process.exit(1);
+}
 
 const client = new Client({
   connectionString: DB_URL,

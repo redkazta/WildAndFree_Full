@@ -64,8 +64,8 @@
 
 | Campo | Valor |
 |-------|-------|
-| Project Ref | `cfsqhbisrkqhbupyjrwz` |
-| URL | `https://cfsqhbisrkqhbupyjrwz.supabase.co` |
+| Project Ref | `hepsyuwaymwlvyaddecs` |
+| URL | `https://hepsyuwaymwlvyaddecs.supabase.co` |
 | SDK | supabase_flutter ^2.8.0 (usa PostgREST v12+) |
 
 ### DB Tables (43 total)

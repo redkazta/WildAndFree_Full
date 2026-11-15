@@ -17,12 +17,14 @@ CREATE INDEX IF NOT EXISTS idx_wall_reposts_post_id ON public.wall_reposts(post_
 -- Also ensure the seed crew_posts get some reactions
 -- (add likes/comments for the crew posts we just inserted)
 INSERT INTO public.wall_likes (post_id, user_id)
-SELECT cp.id, 'cd2611f7-1ad1-4fff-8032-77f8ee616fbb'
+SELECT cp.id, p.id
 FROM public.crew_posts cp
+JOIN public.profiles p ON p.id = 'cd2611f7-1ad1-4fff-8032-77f8ee616fbb'
 ON CONFLICT DO NOTHING;
 
 INSERT INTO public.wall_likes (post_id, user_id)
-SELECT cp.id, 'ab563ebf-1396-4b0f-a4b7-8d1dec846790'
+SELECT cp.id, p.id
 FROM public.crew_posts cp
+JOIN public.profiles p ON p.id = 'ab563ebf-1396-4b0f-a4b7-8d1dec846790'
 WHERE cp.author_id = 'ec7ba40e-971a-4729-ad17-e83a0fdd42b5'
 ON CONFLICT DO NOTHING;

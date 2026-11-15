@@ -27,7 +27,7 @@ Crea:
 En Vercel (y en `.env` local):
 
 ```
-PUBLIC_SUPABASE_URL=https://cfsqhbisrkqhbupyjrwz.supabase.co
+PUBLIC_SUPABASE_URL=https://hepsyuwaymwlvyaddecs.supabase.co
 PUBLIC_SUPABASE_ANON_KEY=...
 SUPABASE_SERVICE_KEY=...          # solo servidor
 STRIPE_SECRET_KEY=sk_live_...     # o sk_test_...
