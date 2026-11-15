@@ -1,0 +1,453 @@
+---
+import { supabase } from '../lib/supabase';
+
+let tournament: any = null;
+try {
+  const { data, error } = await supabase
+    .from('versus_battles')
+    .select('*')
+    .eq('modality', 'written')
+    .eq('status', 'active')
+    .order('created_at', { ascending: false })
+    .limit(1);
+  if (!error && data && data.length > 0) tournament = data[0];
+} catch {
+  // La modalidad aún no está migrada: se muestra convocatoria abierta.
+}
+
+const deadline = tournament?.submission_deadline
+  ? new Date(tournament.submission_deadline).toLocaleDateString('es-MX', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    })
+  : null;
+---
+
+<section id="torneo-escritas" class="written-section" aria-labelledby="written-title">
+  <div class="written-shell">
+    <header class="written-head">
+      <span class="written-kicker">Segunda modalidad · Torneo</span>
+      <h2 id="written-title" class="written-title">
+        Torneo de <span>Escritas</span>
+      </h2>
+      <p class="written-sub">
+        Manda tu letra, tu cuento o tu poema. Los jueces evalúan estructura, narrativa,
+        métrica y voz. La mejor escritura se lleva el reconocimiento de la crew.
+      </p>
+    </header>
+
+    <div class="written-grid">
+      <aside class="written-rules">
+        <h3 class="written-rules-title">
+          {tournament?.title || 'Convocatoria abierta'}
+        </h3>
+
+        <ul class="written-list">
+          <li>Texto original e inédito, sin límite de extensión.</li>
+          <li>Puedes escribir en español o spanglish.</li>
+          <li>Adjunta un archivo opcional (TXT, PDF o DOCX).</li>
+          <li>Un envío por persona. Los jueces puntúan de 0 a 100.</li>
+        </ul>
+
+        <div class="written-meta">
+          <div>
+            <span class="written-meta-label">Estado</span>
+            <span class="written-meta-value">{tournament ? 'Inscripciones abiertas' : 'Próximamente'}</span>
+          </div>
+          <div>
+            <span class="written-meta-label">Cierre</span>
+            <span class="written-meta-value">{deadline || 'Por anunciar'}</span>
+          </div>
+          <div>
+            <span class="written-meta-label">Modalidad</span>
+            <span class="written-meta-value">Escritas</span>
+          </div>
+        </div>
+      </aside>
+
+      <form id="written-form" class="written-form" data-tournament={tournament?.id || ''}>
+        <div class="written-field">
+          <label for="written-title-input">Título del texto</label>
+          <input id="written-title-input" name="title" type="text" maxlength="120" required placeholder="Ej. El desierto también canta" />
+        </div>
+
+        <div class="written-field">
+          <label for="written-content">Tu texto</label>
+          <textarea id="written-content" name="content" rows="9" required minlength="20" placeholder="Pega aquí tu letra, cuento o poema..."></textarea>
+        </div>
+
+        <div class="written-field">
+          <label for="written-file">Archivo opcional</label>
+          <input id="written-file" name="file" type="file" accept=".txt,.pdf,.doc,.docx,.rtf" />
+          <span class="written-hint">Máximo 10 MB. Si subes archivo, también pega el texto para que los jueces lean rápido.</span>
+        </div>
+
+        <div class="written-actions">
+          <button type="submit" class="written-submit">Enviar al torneo</button>
+          <span id="written-status" class="written-status" role="status" aria-live="polite"></span>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<style>
+  .written-section {
+    position: relative;
+    padding: 72px 20px;
+    background: #050505;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .written-shell {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .written-head {
+    max-width: 720px;
+    margin-bottom: 36px;
+  }
+
+  .written-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 9px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: var(--primary, #c98300);
+    margin-bottom: 14px;
+  }
+
+  .written-kicker::before {
+    content: '';
+    width: 28px;
+    height: 2px;
+    background: var(--primary, #c98300);
+  }
+
+  .written-title {
+    margin: 0;
+    font-size: clamp(2.2rem, 7vw, 4.2rem);
+    line-height: 0.9;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    color: #ffffff;
+  }
+
+  .written-title span {
+    color: var(--primary, #c98300);
+  }
+
+  .written-sub {
+    margin: 16px 0 0;
+    font-size: 13px;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .written-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  @media (min-width: 900px) {
+    .written-grid {
+      grid-template-columns: 0.85fr 1.15fr;
+    }
+  }
+
+  .written-rules,
+  .written-form {
+    background: #0b0b0b;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 28px;
+  }
+
+  .written-rules-title {
+    margin: 0 0 18px;
+    font-size: 15px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #ffffff;
+  }
+
+  .written-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 12px;
+  }
+
+  .written-list li {
+    position: relative;
+    padding-left: 20px;
+    font-size: 12px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.62);
+  }
+
+  .written-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 6px;
+    height: 6px;
+    background: var(--primary, #c98300);
+    transform: rotate(45deg);
+  }
+
+  .written-meta {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .written-meta-label {
+    display: block;
+    font-size: 8px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: rgba(255, 255, 255, 0.35);
+    margin-bottom: 5px;
+  }
+
+  .written-meta-value {
+    display: block;
+    font-size: 11px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.3;
+  }
+
+  .written-form {
+    display: grid;
+    gap: 18px;
+  }
+
+  .written-field {
+    display: grid;
+    gap: 8px;
+  }
+
+  .written-field label {
+    font-size: 9px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  .written-field input[type='text'],
+  .written-field textarea,
+  .written-field input[type='file'] {
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 13px 14px;
+    color: #ffffff;
+    font-size: 13px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .written-field textarea {
+    resize: vertical;
+    min-height: 180px;
+    line-height: 1.6;
+  }
+
+  .written-field input:focus,
+  .written-field textarea:focus {
+    border-color: var(--primary, #c98300);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .written-field input::placeholder,
+  .written-field textarea::placeholder {
+    color: rgba(255, 255, 255, 0.25);
+  }
+
+  .written-field input[type='file'] {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .written-field input[type='file']::file-selector-button {
+    margin-right: 12px;
+    padding: 7px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    font-size: 9px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+  }
+
+  .written-hint {
+    font-size: 10px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.32);
+  }
+
+  .written-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .written-submit {
+    padding: 14px 24px;
+    border: 0;
+    border-radius: 12px;
+    background: var(--primary, #c98300);
+    color: #000000;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    cursor: pointer;
+    transition: filter 0.2s ease, transform 0.15s ease;
+  }
+
+  .written-submit:hover {
+    filter: brightness(1.1);
+  }
+
+  .written-submit:active {
+    transform: scale(0.98);
+  }
+
+  .written-submit:disabled {
+    opacity: 0.5;
+    cursor: wait;
+  }
+
+  .written-status {
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .written-status.is-error {
+    color: #ef4444;
+  }
+
+  .written-status.is-ok {
+    color: #22c55e;
+  }
+</style>
+
+<script>
+  import { supabase } from '../lib/supabase';
+
+  const form = document.getElementById('written-form') as HTMLFormElement | null;
+  const status = document.getElementById('written-status');
+  const submitBtn = form?.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+  const fileInput = document.getElementById('written-file') as HTMLInputElement | null;
+
+  function setStatus(message: string, type: 'ok' | 'error' | 'neutral' = 'neutral'): void {
+    if (!status) return;
+    status.textContent = message;
+    status.classList.remove('is-error', 'is-ok');
+    if (type === 'error') status.classList.add('is-error');
+    if (type === 'ok') status.classList.add('is-ok');
+  }
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const { data: sessionData } = await supabase.auth.getSession();
+    const session = sessionData?.session;
+    if (!session) {
+      setStatus('Inicia sesión para enviar tu texto.', 'error');
+      return;
+    }
+
+    const titleInput = document.getElementById('written-title-input') as HTMLInputElement | null;
+    const contentInput = document.getElementById('written-content') as HTMLTextAreaElement | null;
+    const title = (titleInput?.value || '').trim();
+    const content = (contentInput?.value || '').trim();
+
+    if (title.length < 3) {
+      setStatus('Ponle un título a tu texto.', 'error');
+      return;
+    }
+    if (content.length < 20) {
+      setStatus('Tu texto necesita al menos 20 caracteres.', 'error');
+      return;
+    }
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Enviando...';
+    }
+    setStatus('Enviando tu texto...');
+
+    try {
+      let fileUrl: string | null = null;
+
+      const file = fileInput?.files?.[0];
+      if (file) {
+        const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+        const path = `${session.user.id}/${Date.now()}-${safeName}`;
+        const { error: uploadError } = await supabase.storage
+          .from('written-submissions')
+          .upload(path, file, { upsert: false });
+
+        if (!uploadError) {
+          const { data: publicUrl } = supabase.storage
+            .from('written-submissions')
+            .getPublicUrl(path);
+          fileUrl = publicUrl.publicUrl;
+        } else {
+          console.warn('[written] upload error', uploadError);
+        }
+      }
+
+      const tournamentId = form.getAttribute('data-tournament') || null;
+
+      const { error } = await supabase.from('written_submissions').insert({
+        tournament_id: tournamentId,
+        user_id: session.user.id,
+        title,
+        content,
+        file_url: fileUrl,
+      });
+
+      if (error) throw error;
+
+      form.reset();
+      setStatus('¡Recibido! Los jueces revisarán tu texto y te contactaremos si avanzas.', 'ok');
+    } catch (error: any) {
+      console.error('[written]', error);
+      setStatus(error?.message || 'No pudimos enviar tu texto. Intenta de nuevo.', 'error');
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Enviar al torneo';
+      }
+    }
+  });
+</script>

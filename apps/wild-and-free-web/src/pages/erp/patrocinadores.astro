@@ -1,0 +1,263 @@
+---
+import ErpLayout from '../../layouts/ErpLayout.astro';
+---
+
+<ErpLayout title="Patrocinadores" activeModule="patrocinadores">
+  <div class="erp-grid" style="margin-bottom:24px;">
+    <div class="erp-card">
+      <div class="erp-card-title">Total</div>
+      <div class="erp-stat" id="statTotal">-</div>
+    </div>
+    <div class="erp-card">
+      <div class="erp-card-title">Activos</div>
+      <div class="erp-stat" id="statActive">-</div>
+    </div>
+    <div class="erp-card">
+      <div class="erp-card-title">Principales</div>
+      <div class="erp-stat" id="statMain">-</div>
+    </div>
+  </div>
+
+  <div class="erp-card" style="margin-bottom:24px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <div class="erp-card-title" style="margin-bottom:0;">Marcas aliadas</div>
+      <button class="erp-btn erp-btn--primary" id="newSponsorBtn">+ Nuevo patrocinador</button>
+    </div>
+
+    <div id="sponsorForm" style="display:none;margin-bottom:16px;padding:16px;background:var(--bg-card);border-radius:8px;border:1px solid var(--border-faint);">
+      <input type="hidden" id="sponsorId" />
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div>
+          <label class="field-label">Nombre</label>
+          <input id="sponsorName" class="field-input" type="text" placeholder="Showlow Caps" />
+        </div>
+        <div>
+          <label class="field-label">Slug</label>
+          <input id="sponsorSlug" class="field-input" type="text" placeholder="showlow-caps" />
+        </div>
+        <div>
+          <label class="field-label">Sitio web</label>
+          <input id="sponsorWebsite" class="field-input" type="url" placeholder="https://..." />
+        </div>
+        <div>
+          <label class="field-label">Logo (URL)</label>
+          <input id="sponsorLogo" class="field-input" type="url" placeholder="https://.../logo.png" />
+        </div>
+        <div>
+          <label class="field-label">Nivel</label>
+          <select id="sponsorTier" class="field-input">
+            <option value="main">Principal</option>
+            <option value="secondary">Secundario</option>
+          </select>
+        </div>
+        <div>
+          <label class="field-label">Orden</label>
+          <input id="sponsorOrder" class="field-input" type="number" min="0" step="1" value="0" />
+        </div>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label class="field-label">Descripción</label>
+        <textarea id="sponsorDescription" class="field-input" rows="2" style="resize:vertical;" placeholder="Qué aporta esta marca al movimiento"></textarea>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+        <input id="sponsorActive" type="checkbox" checked style="accent-color:var(--primary);width:16px;height:16px;cursor:pointer;" />
+        <span style="font-size:12px;color:var(--text-muted);">Visible en el sitio público</span>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="erp-btn erp-btn--primary" id="saveSponsorBtn">Guardar</button>
+        <button class="erp-btn erp-btn--ghost" id="cancelSponsorBtn">Cancelar</button>
+      </div>
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table class="erp-table">
+        <thead>
+          <tr>
+            <th>Patrocinador</th>
+            <th>Nivel</th>
+            <th>Web</th>
+            <th>Orden</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="sponsorsBody">
+          <tr><td colspan="6" class="erp-loading">Cargando patrocinadores...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ErpLayout>
+
+<script>
+  import { supabase } from '../../lib/supabase';
+  import { waitForPermissions } from '../../lib/erp-permissions';
+
+  const { perms } = await waitForPermissions();
+  const canManage = perms.includes('*') || perms.includes('content.manage');
+
+  if (!canManage) {
+    document.querySelector('.erp-content')!.innerHTML = '<div class="erp-card" style="text-align:center;padding:60px;"><p style="color:var(--border-soft);">No tienes permiso para gestionar patrocinadores.</p></div>';
+    throw new Error('Permission denied');
+  }
+
+  let sponsors: any[] = [];
+  const body = document.getElementById('sponsorsBody');
+  const form = document.getElementById('sponsorForm');
+
+  function escapeHtml(value: unknown): string {
+    return String(value ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function slugify(value: string): string {
+    return value
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+
+  function showForm(show: boolean): void {
+    if (form) form.style.display = show ? 'block' : 'none';
+  }
+
+  function resetForm(): void {
+    (document.getElementById('sponsorId') as HTMLInputElement).value = '';
+    (document.getElementById('sponsorName') as HTMLInputElement).value = '';
+    (document.getElementById('sponsorSlug') as HTMLInputElement).value = '';
+    (document.getElementById('sponsorWebsite') as HTMLInputElement).value = '';
+    (document.getElementById('sponsorLogo') as HTMLInputElement).value = '';
+    (document.getElementById('sponsorDescription') as HTMLTextAreaElement).value = '';
+    (document.getElementById('sponsorTier') as HTMLSelectElement).value = 'secondary';
+    (document.getElementById('sponsorOrder') as HTMLInputElement).value = '0';
+    (document.getElementById('sponsorActive') as HTMLInputElement).checked = true;
+  }
+
+  async function loadSponsors(): Promise<void> {
+    const { data, error } = await supabase
+      .from('sponsors')
+      .select('*')
+      .order('sort_order', { ascending: true });
+
+    if (error) {
+      console.error(error);
+      if (body) body.innerHTML = '<tr><td colspan="6" class="erp-loading">No se pudieron cargar los patrocinadores.</td></tr>';
+      return;
+    }
+
+    sponsors = data || [];
+    document.getElementById('statTotal')!.textContent = String(sponsors.length);
+    document.getElementById('statActive')!.textContent = String(sponsors.filter((s) => s.is_active).length);
+    document.getElementById('statMain')!.textContent = String(sponsors.filter((s) => s.tier === 'main').length);
+
+    if (!body) return;
+
+    if (sponsors.length === 0) {
+      body.innerHTML = '<tr><td colspan="6" class="erp-loading">Aún no hay patrocinadores registrados.</td></tr>';
+      return;
+    }
+
+    body.innerHTML = sponsors.map((sponsor) => `
+      <tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px;">
+            ${sponsor.logo_url ? `<img src="${escapeHtml(sponsor.logo_url)}" alt="" width="28" height="28" style="width:28px;height:28px;object-fit:contain;border-radius:6px;background:#111;" />` : ''}
+            <div>
+              <div style="font-weight:700;">${escapeHtml(sponsor.name)}</div>
+              <div style="font-size:11px;color:var(--text-muted);">${escapeHtml(sponsor.description || '')}</div>
+            </div>
+          </div>
+        </td>
+        <td>${sponsor.tier === 'main' ? 'Principal' : 'Secundario'}</td>
+        <td>${sponsor.website_url ? `<a href="${escapeHtml(sponsor.website_url)}" target="_blank" rel="noopener noreferrer" style="color:var(--primary);">Abrir</a>` : '—'}</td>
+        <td>${sponsor.sort_order ?? 0}</td>
+        <td style="color:${sponsor.is_active ? '#22c55e' : 'var(--text-muted)'};font-weight:700;">${sponsor.is_active ? 'Activo' : 'Oculto'}</td>
+        <td style="white-space:nowrap;">
+          <button class="erp-btn erp-btn--ghost" style="padding:4px 8px;font-size:11px;" data-edit="${sponsor.id}">Editar</button>
+          <button class="erp-btn erp-btn--danger" style="padding:4px 8px;font-size:11px;" data-delete="${sponsor.id}">Eliminar</button>
+        </td>
+      </tr>`).join('');
+
+    body.querySelectorAll<HTMLButtonElement>('[data-edit]').forEach((button) => {
+      button.addEventListener('click', () => editSponsor(button.dataset.edit || ''));
+    });
+    body.querySelectorAll<HTMLButtonElement>('[data-delete]').forEach((button) => {
+      button.addEventListener('click', () => deleteSponsor(button.dataset.delete || ''));
+    });
+  }
+
+  function editSponsor(id: string): void {
+    const sponsor = sponsors.find((item) => item.id === id);
+    if (!sponsor) return;
+    (document.getElementById('sponsorId') as HTMLInputElement).value = sponsor.id;
+    (document.getElementById('sponsorName') as HTMLInputElement).value = sponsor.name || '';
+    (document.getElementById('sponsorSlug') as HTMLInputElement).value = sponsor.slug || '';
+    (document.getElementById('sponsorWebsite') as HTMLInputElement).value = sponsor.website_url || '';
+    (document.getElementById('sponsorLogo') as HTMLInputElement).value = sponsor.logo_url || '';
+    (document.getElementById('sponsorDescription') as HTMLTextAreaElement).value = sponsor.description || '';
+    (document.getElementById('sponsorTier') as HTMLSelectElement).value = sponsor.tier || 'secondary';
+    (document.getElementById('sponsorOrder') as HTMLInputElement).value = String(sponsor.sort_order ?? 0);
+    (document.getElementById('sponsorActive') as HTMLInputElement).checked = sponsor.is_active ?? true;
+    showForm(true);
+  }
+
+  async function deleteSponsor(id: string): Promise<void> {
+    if (!confirm('¿Eliminar este patrocinador?')) return;
+    const { error } = await supabase.from('sponsors').delete().eq('id', id);
+    if (error) { console.error(error); alert('No se pudo eliminar.'); return; }
+    await loadSponsors();
+  }
+
+  async function saveSponsor(): Promise<void> {
+    const id = (document.getElementById('sponsorId') as HTMLInputElement).value;
+    const name = (document.getElementById('sponsorName') as HTMLInputElement).value.trim();
+    const slugRaw = (document.getElementById('sponsorSlug') as HTMLInputElement).value.trim();
+    const description = (document.getElementById('sponsorDescription') as HTMLTextAreaElement).value.trim();
+    const website = (document.getElementById('sponsorWebsite') as HTMLInputElement).value.trim();
+    const logo = (document.getElementById('sponsorLogo') as HTMLInputElement).value.trim();
+    const tier = (document.getElementById('sponsorTier') as HTMLSelectElement).value;
+    const sortOrder = Number((document.getElementById('sponsorOrder') as HTMLInputElement).value || 0);
+    const isActive = (document.getElementById('sponsorActive') as HTMLInputElement).checked;
+
+    if (!name) { alert('El nombre es obligatorio.'); return; }
+
+    const payload = {
+      name,
+      slug: slugRaw || slugify(name),
+      description: description || null,
+      website_url: website || null,
+      logo_url: logo || null,
+      tier,
+      sort_order: sortOrder,
+      is_active: isActive,
+      updated_at: new Date().toISOString(),
+    };
+
+    const { error } = id
+      ? await supabase.from('sponsors').update(payload).eq('id', id)
+      : await supabase.from('sponsors').insert(payload);
+
+    if (error) { console.error(error); alert(error.message || 'No se pudo guardar.'); return; }
+
+    showForm(false);
+    resetForm();
+    await loadSponsors();
+  }
+
+  document.getElementById('newSponsorBtn')?.addEventListener('click', () => {
+    resetForm();
+    showForm(true);
+  });
+  document.getElementById('cancelSponsorBtn')?.addEventListener('click', () => {
+    showForm(false);
+    resetForm();
+  });
+  document.getElementById('saveSponsorBtn')?.addEventListener('click', saveSponsor);
+
+  await loadSponsors();
+</script>

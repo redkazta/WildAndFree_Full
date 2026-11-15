@@ -1,5 +1,6 @@
 ﻿---
 import Layout from '../layouts/Layout.astro';
+import Sponsors from '../components/Sponsors.astro';
 import { supabase } from '../lib/supabase';
 import tenantConfig from '../../../../packages/shared-types/tenant-config.json';
 
@@ -35,7 +36,8 @@ try {
         ciudad: e.location?.split(',').pop()?.trim() || 'Torreón',
         imagen: e.image_url || 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=800&q=80',
         descripcion: e.description || '',
-        precio_min: 0,
+        lineup: Array.isArray(e.lineup) ? e.lineup : [],
+        precio_min: Number(e.ticket_price ?? 0),
         status: statusMap[e.event_type] || 'proximo'
       };
     });
@@ -54,6 +56,7 @@ try {
       ciudad: 'TORREÓN',
       imagen: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=800&q=80',
       descripcion: 'BATALLA DE FREESTYLE 1V1. 16 COMPETIDORES. PREMIO: $5,000 MXN + TOKENS.',
+      lineup: [],
       precio_min: 200,
       status: 'disponible'
     },
@@ -66,6 +69,7 @@ try {
       ciudad: 'TORREÓN',
       imagen: 'https://images.unsplash.com/photo-1459749411177-042180ce673c?auto=format&fit=crop&w=800&q=80',
       descripcion: 'CONCIERTO CON ARTISTAS DE LA CREW. INVITADOS ESPECIALES DEL NORTE.',
+      lineup: [],
       precio_min: 350,
       status: 'proximo'
     },
@@ -78,6 +82,7 @@ try {
       ciudad: 'TORREÓN',
       imagen: 'https://images.unsplash.com/photo-1589578236639-5381345b6687?auto=format&fit=crop&w=800&q=80',
       descripcion: 'CONOCE A LOS ARTISTAS DE WILD GVNG. FOTOS, AUTÓGRAFOS Y MERCH EXCLUSIVO.',
+      lineup: [],
       precio_min: 0,
       status: 'disponible'
     }
@@ -171,6 +176,19 @@ try {
                   <p class="text-[var(--text-muted)] font-medium max-w-xl text-sm md:text-base uppercase tracking-wide border-l-4 border-wild-orange pl-4 py-1">
                      {event.descripcion}
                   </p>
+
+                  {event.lineup.length > 0 && (
+                    <div class="pt-2">
+                      <span class="block text-[10px] font-black uppercase tracking-[0.25em] text-wild-orange mb-2">Line-up</span>
+                      <div class="flex flex-wrap gap-2">
+                        {event.lineup.map((artist: any) => (
+                          <span class="px-3 py-1 text-[10px] font-black uppercase tracking-wider border border-wild-orange/40 text-[var(--text)] rounded-full bg-[var(--bg-card)]">
+                            {typeof artist === 'string' ? artist : artist?.name || 'Invitado'}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                </div>
             </div>
 
@@ -192,7 +210,7 @@ try {
                   ))}
                </div>
 
-               <a href={`/evento/${event.id}`} class={`w-full py-4 px-6 font-black uppercase text-center text-xs tracking-[0.2em] rounded-wild-lg transition-all duration-300 transform active:scale-95 ${
+               <a href={`/evento?id=${event.id}`} class={`w-full py-4 px-6 font-black uppercase text-center text-xs tracking-[0.2em] rounded-wild-lg transition-all duration-300 transform active:scale-95 ${
                   event.status === 'sold_out'
                   ? 'bg-[var(--bg-card)] text-[var(--text-muted)] cursor-not-allowed border border-[var(--border-faint)]'
                   : 'bg-white text-black hover:bg-wild-orange hover:text-[var(--text)] hover:shadow-lg hover:shadow-wild-orange/30'
@@ -206,6 +224,8 @@ try {
       </div>
 
     </div>
+
+    <Sponsors />
   </div>
 </Layout>
 

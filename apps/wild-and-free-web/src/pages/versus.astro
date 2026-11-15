@@ -1,5 +1,7 @@
 ﻿---
 import Layout from '../layouts/Layout.astro';
+import WrittenTournament from '../components/WrittenTournament.astro';
+import Sponsors from '../components/Sponsors.astro';
 import { supabase } from '../lib/supabase';
 import tenantConfig from '../../../../packages/shared-types/tenant-config.json';
 
@@ -348,6 +350,9 @@ const config = {
              </div>
         </div>
     </div>
+
+    <WrittenTournament />
+    <Sponsors />
 
   </div>
 </Layout>

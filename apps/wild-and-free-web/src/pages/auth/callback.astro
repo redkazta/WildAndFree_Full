@@ -19,6 +19,8 @@ import Layout from '../../layouts/Layout.astro';
     const { data } = await supabase.auth.exchangeCodeForSession(window.location.href)
     if (data?.session) await ensureProfile(data.session)
   } finally {
-    window.location.replace('/')
+    const next = new URLSearchParams(window.location.search).get('next') || '/'
+    const safeNext = next.startsWith('/') && !next.startsWith('//') ? next : '/'
+    window.location.replace(safeNext)
   }
 </script>

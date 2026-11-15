@@ -75,6 +75,12 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
         <input id="eventLocation" type="text" placeholder="Ubicación del evento" class="field-input" />
         <label class="field-label">URL de Imagen</label>
         <input id="eventImageUrl" type="text" placeholder="https://..." class="field-input" />
+        <label class="field-label">Precio del boleto (MXN)</label>
+        <input id="eventTicketPrice" type="number" min="0" step="0.01" placeholder="0" class="field-input" />
+        <label class="field-label">Aforo (opcional)</label>
+        <input id="eventCapacity" type="number" min="0" step="1" placeholder="200" class="field-input" />
+        <label class="field-label">Line-up (separado por comas)</label>
+        <input id="eventLineup" type="text" placeholder="KAZTA, Ralf Díaz, Invitado" class="field-input" />
         <label class="field-label">Activo</label>
         <div style="display:flex;align-items:center;gap:8px;">
           <input id="eventIsActive" type="checkbox" checked style="accent-color:var(--primary);width:16px;height:16px;cursor:pointer;" />
@@ -369,6 +375,10 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
     (document.getElementById('eventDate') as HTMLInputElement).value = toLocalDatetime(event.event_date);
     (document.getElementById('eventLocation') as HTMLInputElement).value = event.location || '';
     (document.getElementById('eventImageUrl') as HTMLInputElement).value = event.image_url || '';
+    (document.getElementById('eventTicketPrice') as HTMLInputElement).value = event.ticket_price ?? 0;
+    (document.getElementById('eventCapacity') as HTMLInputElement).value = event.capacity ?? '';
+    const lineup = Array.isArray(event.lineup) ? event.lineup : [];
+    (document.getElementById('eventLineup') as HTMLInputElement).value = lineup.map((item: any) => typeof item === 'string' ? item : item?.name || '').filter(Boolean).join(', ');
     (document.getElementById('eventIsActive') as HTMLInputElement).checked = event.is_active ?? true;
     openModal('eventModal');
   };
@@ -381,6 +391,9 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
     const event_date_val = (document.getElementById('eventDate') as HTMLInputElement).value;
     const location = (document.getElementById('eventLocation') as HTMLInputElement).value.trim();
     const image_url = (document.getElementById('eventImageUrl') as HTMLInputElement).value.trim();
+    const ticketPriceRaw = (document.getElementById('eventTicketPrice') as HTMLInputElement).value;
+    const capacityRaw = (document.getElementById('eventCapacity') as HTMLInputElement).value;
+    const lineupRaw = (document.getElementById('eventLineup') as HTMLInputElement).value.trim();
     const is_active = (document.getElementById('eventIsActive') as HTMLInputElement).checked;
 
     if (!name) { alert('El nombre es obligatorio'); return; }
@@ -388,6 +401,7 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
 
     const event_date = new Date(event_date_val).toISOString();
     const { data: { user } } = await supabase.auth.getUser();
+    const lineup = lineupRaw ? lineupRaw.split(',').map((name) => name.trim()).filter(Boolean) : [];
 
     const payload = {
       name,
@@ -396,6 +410,10 @@ import ErpLayout from '../../layouts/ErpLayout.astro';
       event_date,
       location: location || null,
       image_url: image_url || null,
+      ticket_price: ticketPriceRaw ? Number(ticketPriceRaw) : 0,
+      ticket_currency: 'MXN',
+      capacity: capacityRaw ? Number(capacityRaw) : null,
+      lineup,
       is_active,
       created_by: user?.id || null,
       updated_at: new Date().toISOString(),

@@ -1,0 +1,251 @@
+---
+import ErpLayout from '../../layouts/ErpLayout.astro';
+---
+
+<ErpLayout title="Boletos" activeModule="boletos">
+  <div class="erp-grid" style="margin-bottom:24px;">
+    <div class="erp-card">
+      <div class="erp-card-title">Boletos vendidos</div>
+      <div class="erp-stat" id="statSold">-</div>
+    </div>
+    <div class="erp-card">
+      <div class="erp-card-title">Válidos</div>
+      <div class="erp-stat" id="statValid">-</div>
+    </div>
+    <div class="erp-card">
+      <div class="erp-card-title">Usados</div>
+      <div class="erp-stat" id="statUsed">-</div>
+    </div>
+    <div class="erp-card">
+      <div class="erp-card-title">Ingresos</div>
+      <div class="erp-stat" id="statRevenue">-</div>
+    </div>
+  </div>
+
+  <div class="erp-card" style="margin-bottom:24px;">
+    <div class="erp-card-title">Validar QR en la entrada</div>
+    <p style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">
+      Escanea el QR con un lector USB o pega el código manualmente. El boleto se marca como usado al validar.
+    </p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <input id="ticketCodeInput" class="erp-input" style="flex:1;min-width:240px;" placeholder="WG-XXXXX-XXXXXXXX" autocomplete="off" />
+      <button id="validateBtn" class="erp-btn erp-btn--primary">Validar acceso</button>
+    </div>
+    <div id="validateResult" style="display:none;margin-top:12px;padding:12px;border-radius:8px;font-size:13px;font-weight:700;"></div>
+  </div>
+
+  <div class="erp-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px;">
+      <div class="erp-card-title" style="margin-bottom:0;">Asistentes</div>
+      <select id="eventFilter" class="erp-input" style="max-width:320px;">
+        <option value="">Todos los eventos</option>
+      </select>
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table class="erp-table">
+        <thead>
+          <tr>
+            <th>Comprador</th>
+            <th>Evento</th>
+            <th>Tipo</th>
+            <th>Precio</th>
+            <th>Estado</th>
+            <th>Código</th>
+            <th>Comprado</th>
+            <th>Validado</th>
+          </tr>
+        </thead>
+        <tbody id="ticketsBody">
+          <tr><td colspan="8" class="erp-loading">Cargando boletos...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ErpLayout>
+
+<script>
+  import { supabase } from '../../lib/supabase';
+  import { waitForPermissions } from '../../lib/erp-permissions';
+
+  const { perms } = await waitForPermissions();
+  const canManage = perms.includes('*') || perms.includes('events.manage');
+
+  if (!canManage) {
+    document.querySelector('.erp-content')!.innerHTML = '<div class="erp-card" style="text-align:center;padding:60px;"><p style="color:var(--border-soft);">No tienes permiso para gestionar boletos.</p></div>';
+    throw new Error('Permission denied');
+  }
+
+  let allTickets: any[] = [];
+  const body = document.getElementById('ticketsBody');
+  const eventFilter = document.getElementById('eventFilter') as HTMLSelectElement | null;
+  const codeInput = document.getElementById('ticketCodeInput') as HTMLInputElement | null;
+  const validateBtn = document.getElementById('validateBtn');
+  const validateResult = document.getElementById('validateResult');
+
+  function escapeHtml(value: unknown): string {
+    return String(value ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function money(value: number, currency = 'MXN'): string {
+    return `$${Number(value || 0).toFixed(2)} ${currency}`;
+  }
+
+  function statusBadge(status: string): string {
+    const labels: Record<string, string> = {
+      paid: 'Válido',
+      used: 'Usado',
+      pending: 'Pendiente',
+      cancelled: 'Cancelado',
+      refunded: 'Reembolsado',
+    };
+    const colors: Record<string, string> = {
+      paid: 'var(--event, #22c55e)',
+      used: 'var(--text-muted)',
+      pending: 'var(--primary)',
+      cancelled: 'var(--border-soft)',
+      refunded: '#f97316',
+    };
+    return `<span style="display:inline-block;padding:3px 8px;border-radius:999px;border:1px solid ${colors[status] || 'var(--border-soft)'};color:${colors[status] || 'var(--text-muted)'};font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;">${labels[status] || status}</span>`;
+  }
+
+  function renderStats(): void {
+    const sold = allTickets.length;
+    const valid = allTickets.filter((t) => t.status === 'paid').length;
+    const used = allTickets.filter((t) => t.status === 'used').length;
+    const revenue = allTickets
+      .filter((t) => t.status === 'paid' || t.status === 'used')
+      .reduce((sum, t) => sum + Number(t.price || 0), 0);
+
+    document.getElementById('statSold')!.textContent = String(sold);
+    document.getElementById('statValid')!.textContent = String(valid);
+    document.getElementById('statUsed')!.textContent = String(used);
+    document.getElementById('statRevenue')!.textContent = money(revenue);
+  }
+
+  function renderTickets(): void {
+    if (!body) return;
+    const filter = eventFilter?.value || '';
+    const list = filter ? allTickets.filter((t) => t.event_id === filter) : allTickets;
+
+    if (list.length === 0) {
+      body.innerHTML = '<tr><td colspan="8" class="erp-loading">Sin boletos para mostrar.</td></tr>';
+      return;
+    }
+
+    body.innerHTML = list.map((ticket) => {
+      const eventName = ticket.event?.name || 'Evento';
+      const buyer = ticket.profile?.nombre || ticket.profile?.username || 'Invitado';
+      const purchased = ticket.purchased_at || ticket.created_at;
+      return `
+        <tr>
+          <td>${escapeHtml(buyer)}</td>
+          <td>${escapeHtml(eventName)}</td>
+          <td>${escapeHtml(ticket.ticket_type || 'general')}</td>
+          <td>${escapeHtml(money(ticket.price, ticket.currency))}</td>
+          <td>${statusBadge(ticket.status)}</td>
+          <td style="font-family:monospace;font-size:11px;">${escapeHtml(ticket.qr_code)}</td>
+          <td>${purchased ? new Date(purchased).toLocaleDateString('es-MX') : '—'}</td>
+          <td>${ticket.used_at ? new Date(ticket.used_at).toLocaleString('es-MX') : '—'}</td>
+        </tr>`;
+    }).join('');
+  }
+
+  async function loadEvents(): Promise<void> {
+    const { data } = await supabase.from('events').select('id, name').order('event_date', { ascending: false });
+    if (!eventFilter) return;
+    (data || []).forEach((event: any) => {
+      const option = document.createElement('option');
+      option.value = event.id;
+      option.textContent = event.name;
+      eventFilter.appendChild(option);
+    });
+  }
+
+  async function loadTickets(): Promise<void> {
+    const { data, error } = await supabase
+      .from('tickets')
+      .select('*, event:event_id(name), profile:user_id(nombre, username)')
+      .order('created_at', { ascending: false })
+      .limit(500);
+
+    if (error) {
+      console.error('[erp/boletos]', error);
+      if (body) body.innerHTML = '<tr><td colspan="8" class="erp-loading">No se pudieron cargar los boletos.</td></tr>';
+      return;
+    }
+
+    allTickets = data || [];
+    renderStats();
+    renderTickets();
+  }
+
+  async function validateCode(): Promise<void> {
+    const code = (codeInput?.value || '').trim();
+    if (!code) return;
+    if (validateResult) {
+      validateResult.style.display = 'none';
+    }
+
+    let valid = false;
+    let message = 'Boleto no encontrado.';
+
+    try {
+      const { data, error } = await supabase.rpc('validate_ticket', { p_code: code });
+      if (!error && Array.isArray(data) && data.length > 0) {
+        valid = Boolean(data[0].valid);
+        message = data[0].message || message;
+      } else if (error) {
+        // Fallback si la función aún no existe.
+        const { data: ticket } = await supabase
+          .from('tickets')
+          .select('*')
+          .eq('qr_code', code)
+          .single();
+
+        if (ticket) {
+          if (ticket.status === 'used') {
+            valid = false;
+            message = 'Boleto ya utilizado.';
+          } else if (ticket.status !== 'paid') {
+            valid = false;
+            message = 'Boleto no pagado.';
+          } else {
+            await supabase.from('tickets').update({ status: 'used', used_at: new Date().toISOString() }).eq('id', ticket.id);
+            valid = true;
+            message = 'Acceso válido.';
+          }
+        }
+      }
+    } catch {
+      valid = false;
+      message = 'Error al validar el boleto.';
+    }
+
+    if (validateResult) {
+      validateResult.style.display = 'block';
+      validateResult.textContent = message;
+      validateResult.style.background = valid ? 'rgba(34,197,94,0.12)' : 'rgba(239,68,68,0.12)';
+      validateResult.style.border = `1px solid ${valid ? 'rgba(34,197,94,0.4)' : 'rgba(239,68,68,0.4)'}`;
+      validateResult.style.color = valid ? '#22c55e' : '#ef4444';
+    }
+
+    if (valid) {
+      if (codeInput) codeInput.value = '';
+      await loadTickets();
+    }
+  }
+
+  eventFilter?.addEventListener('change', renderTickets);
+  validateBtn?.addEventListener('click', validateCode);
+  codeInput?.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') validateCode();
+  });
+
+  await loadEvents();
+  await loadTickets();
+</script>
