@@ -254,16 +254,35 @@ const updateAuthUI = async () => {
   _updatingAuth = true;
   try {
     const authContainer = document.querySelector(".auth-actions-container");
-    const {
-      data: { session },
-      error: sessionError,
-    } = await supabase.auth.getSession();
-    const { role } = await getRole();
+
+    // Placeholder inmediato para que el header nunca quede vacío si Supabase
+    // tarda o no responde.
+    if (authContainer && !authContainer.innerHTML.trim()) {
+      authContainer.innerHTML = `<div class="auth-login-wrap"><a href="/login" class="px-5 py-2 bg-[var(--text)] text-[var(--bg)] text-[10px] xl:text-[11px] font-black uppercase tracking-[0.15em] rounded-full hover:bg-[var(--primary)] transition-all shadow-lg">Registrarse o iniciar sesión</a></div>`;
+    }
+
+    let session: any = null;
+    let role = "";
+
+    try {
+      const { data } = await supabase.auth.getSession();
+      session = data?.session || null;
+    } catch (e) {
+      console.warn("[layout] session unavailable:", e);
+    }
+
+    try {
+      const roleResult = await getRole();
+      role = roleResult?.role || "";
+    } catch (e) {
+      console.warn("[layout] role unavailable:", e);
+    }
+
     (window as any).__wildRole = role;
     (window as any).requireRole = requireRole;
     document.documentElement.setAttribute("data-role", role || "");
 
-    if (session) {
+    if (session && authContainer) {
       // Show profile IMMEDIATELY using session data (name from email, guest role)
       // then update in background when profile loads
       // Render IMMEDIATELY with session data (email-based name, no wait)
