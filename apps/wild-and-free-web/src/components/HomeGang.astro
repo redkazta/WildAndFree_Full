@@ -1,0 +1,305 @@
+---
+const links = [
+  {
+    href: '/the-wild-times',
+    label: 'The Wild Times',
+    description: 'Noticias, anuncios y el feed de la crew.',
+    iconPaths: ['M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2', 'M18 14h-8', 'M15 18h-5', 'M10 6h8v4h-8V6Z'],
+  },
+  {
+    href: '/musica',
+    label: 'Música',
+    description: 'Tracks, EPs y lanzamientos del colectivo.',
+    iconPaths: ['M9 18V5l12-2v13', 'M9 18a2 2 0 1 0 0-4', 'M21 16a2 2 0 1 0 0-4'],
+  },
+  {
+    href: '/radio',
+    label: 'Radio',
+    description: 'La señal de Wild Gvng, 24/7.',
+    iconPaths: ['M4.9 19.1C1 15.2 1 8.8 4.9 4.9', 'M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5', 'M12 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6z', 'M12 12v9'],
+  },
+  {
+    href: '/podcasts',
+    label: 'Podcasts',
+    description: 'Conversaciones, historias y voces del barrio.',
+    iconPaths: ['M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z', 'M19 10v2a7 7 0 0 1-14 0v-2', 'M12 19v4', 'M8 23h8'],
+  },
+  {
+    href: '/wild-and-free-tv',
+    label: 'Wild TV',
+    description: 'Sesiones, visuales y contenido en video.',
+    iconPaths: ['M4 4h16v16H4z', 'M10 8l6 4-6 4z'],
+  },
+  {
+    href: '/artistas',
+    label: 'Artistas',
+    description: 'La alineación oficial de la gang.',
+    iconPaths: ['M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2', 'M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z'],
+  },
+  {
+    href: '/versus',
+    label: 'Versus',
+    description: 'Batallas de freestyle y torneo de escritas.',
+    iconPaths: ['M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z', 'M14 2v6h6', 'M8 13h2', 'M8 17h2', 'M14 13h2', 'M14 17h2'],
+  },
+  {
+    href: '/eventos',
+    label: 'Eventos',
+    description: 'Fechas, line-ups y boletos con QR.',
+    iconPaths: ['M3 6h18', 'M3 12h18', 'M3 18h18'],
+  },
+  {
+    href: '/tienda',
+    label: 'Tienda',
+    description: 'Merch oficial y ediciones limitadas.',
+    iconPaths: ['M6 9h12l-1.2 11H7.2L6 9z', 'M9 9V6a3 3 0 0 1 6 0v3'],
+  },
+  {
+    href: '/wild-and-free-league',
+    label: 'Wild and Free League',
+    description: 'La liga de freestyle nacida en Torreón.',
+    iconPaths: ['M12 2C9 2 6.5 4 6.5 6.5C6.5 8.1 7.2 9.5 8.5 10.5C8.8 10.7 9 11 9 11.5V15C9 15.6 9.4 16 10 16H14C14.6 16 15 15.6 15 15V11.5C15 11 15.2 10.7 15.5 10.5C16.8 9.5 17.5 8.1 17.5 6.5C17.5 4 15 2 12 2ZM12 4C13.7 4 15 5.1 15 6.5C15 7.4 14.6 8.2 13.9 8.7C13.3 9.1 13 9.8 13 10.5V14H11V10.5C11 9.8 10.7 9.1 10.1 8.7C9.4 8.2 9 7.4 9 6.5C9 5.1 10.3 4 12 4Z M9 18H15V20H9V18Z'],
+  },
+  {
+    href: '/wild-writings',
+    label: 'Wild Writings',
+    description: 'Letras, ensayos y palabra escrita.',
+    iconPaths: ['M4 20h16', 'M6 16l8-8 4 4-8 8-4 0 0-4z'],
+  },
+  {
+    href: '/#patrocinadores',
+    label: 'Patrocinadores',
+    description: 'Las marcas que sostienen el movimiento.',
+    iconPaths: ['M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z'],
+  },
+];
+---
+
+<section id="la-gang" class="gang-section">
+  <div class="gang-bg" aria-hidden="true"></div>
+  <div class="gang-glow" aria-hidden="true"></div>
+
+  <div class="relative z-10 max-w-[1400px] mx-auto px-5 sm:px-8 py-20 md:py-28">
+    <div class="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-16 items-end mb-14 md:mb-20">
+      <div>
+        <span class="gang-kicker">
+          <span class="w-8 h-[2px] bg-[var(--primary)]"></span>
+          Wild Gvng · Torreón · Desde 2018
+        </span>
+        <h2 class="gang-title">
+          La gang<br />
+          <span>no pide permiso</span>
+        </h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="gang-copy">
+          Somos colectivo, sello y calle. Aquí vive el freestyle, la música, la radio,
+          los torneos y la cultura que se construye desde abajo. No seguimos tendencias:
+          las hacemos.
+        </p>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="gang-stat">
+            <span class="gang-stat-value">+500</span>
+            <span class="gang-stat-label">MC registrados</span>
+          </div>
+          <div class="gang-stat">
+            <span class="gang-stat-value">+200</span>
+            <span class="gang-stat-label">Batallas</span>
+          </div>
+          <div class="gang-stat">
+            <span class="gang-stat-value">24/7</span>
+            <span class="gang-stat-label">Radio</span>
+          </div>
+          <div class="gang-stat">
+            <span class="gang-stat-value">01</span>
+            <span class="gang-stat-label">Crew</span>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-3">
+          <a href="/registro" class="gang-cta gang-cta--primary">Únete a la crew</a>
+          <a href="/radio" class="gang-cta gang-cta--ghost">Escucha la radio</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between gap-4 mb-6 border-t border-white/10 pt-6">
+      <h3 class="text-[11px] font-black uppercase tracking-[0.3em] text-[var(--primary)]">Explora el universo</h3>
+      <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30">12 accesos directos</span>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
+      {links.map((link, index) => (
+        <a href={link.href} class="gang-card group">
+          <div class="flex items-start justify-between mb-6">
+            <svg class="w-5 h-5 text-[var(--primary)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              {link.iconPaths.map((path) => <path d={path} />)}
+            </svg>
+            <span class="text-[9px] font-black tracking-[0.2em] text-white/20">{String(index + 1).padStart(2, '0')}</span>
+          </div>
+          <div class="flex-1">
+            <h4 class="text-xs font-black uppercase tracking-[0.08em] text-white group-hover:text-[var(--primary)] transition-colors leading-tight">
+              {link.label}
+            </h4>
+            <p class="mt-2 text-[10px] leading-relaxed text-white/45">{link.description}</p>
+          </div>
+          <span class="mt-4 inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-[0.2em] text-white/30 group-hover:text-[var(--primary)] transition-colors">
+            Entrar
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .gang-section {
+    position: relative;
+    overflow: hidden;
+    background: #050505;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .gang-bg {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+    background-size: 28px 28px;
+    mask-image: linear-gradient(to bottom, black 0%, transparent 90%);
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 90%);
+    pointer-events: none;
+  }
+
+  .gang-glow {
+    position: absolute;
+    top: -160px;
+    left: -120px;
+    width: 560px;
+    height: 560px;
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(201, 131, 0, 0.16) 0%, transparent 65%);
+    filter: blur(24px);
+    pointer-events: none;
+  }
+
+  .gang-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 9px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    color: var(--primary, #c98300);
+    margin-bottom: 14px;
+  }
+
+  .gang-title {
+    margin: 0;
+    font-size: clamp(2.6rem, 8vw, 5.5rem);
+    line-height: 0.86;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.04em;
+    color: #ffffff;
+  }
+
+  .gang-title span {
+    color: var(--primary, #c98300);
+  }
+
+  .gang-copy {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.6);
+    max-width: 520px;
+  }
+
+  .gang-stat {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 10px 12px;
+  }
+
+  .gang-stat-value {
+    display: block;
+    font-size: 13px;
+    font-weight: 900;
+    color: var(--primary, #c98300);
+    letter-spacing: 0.02em;
+  }
+
+  .gang-stat-label {
+    display: block;
+    margin-top: 2px;
+    font-size: 7px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  .gang-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 18px;
+    border-radius: 9999px;
+    font-size: 9px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    transition: all 0.2s ease;
+  }
+
+  .gang-cta--primary {
+    background: var(--primary, #c98300);
+    color: #000000;
+  }
+
+  .gang-cta--primary:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+  }
+
+  .gang-cta--ghost {
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .gang-cta--ghost:hover {
+    border-color: var(--primary, #c98300);
+    color: var(--primary, #c98300);
+  }
+
+  .gang-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 180px;
+    padding: 18px;
+    background: #0b0b0b;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 16px;
+    text-decoration: none;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  }
+
+  .gang-card:hover {
+    border-color: rgba(201, 131, 0, 0.55);
+    box-shadow: 0 0 42px -18px rgba(201, 131, 0, 0.5);
+    transform: translateY(-2px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gang-card,
+    .gang-cta {
+      transition: none;
+    }
+  }
+</style>
