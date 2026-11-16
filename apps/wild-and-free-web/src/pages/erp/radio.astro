@@ -289,7 +289,7 @@ const tenant = tenantConfig['wild-and-free'];
   async function loadStatus() {
     const content = document.getElementById('radio-status-content');
     try {
-      const { data: config } = await supabase.from('radio_config').select('*').limit(1).single();
+      const { data: config } = await supabase.from('radio_config').select('*').limit(1).maybeSingle();
       if (!config) { content.innerHTML = '<span style="color:var(--border-soft);">Sin configuración</span>'; return; }
 
       const isLive = config.is_live ? '<span style="color:#ff4444; font-weight:700;">🔴 EN VIVO</span>' : '<span style="color:var(--text-muted);">OFFLINE</span>';
@@ -327,7 +327,7 @@ const tenant = tenantConfig['wild-and-free'];
   // ====== CONFIG ======
   async function loadConfigForm() {
     try {
-      const { data: config } = await supabase.from('radio_config').select('*').limit(1).single();
+      const { data: config } = await supabase.from('radio_config').select('*').limit(1).maybeSingle();
       if (!config) return;
       (document.getElementById('cfg-zeno-stream') as HTMLInputElement).value = config.zeno_stream_url || '';
       (document.getElementById('cfg-zeno-embed') as HTMLInputElement).value = config.zeno_embed_url || '';

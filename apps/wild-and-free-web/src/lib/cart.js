@@ -3,6 +3,17 @@ import { supabase } from './supabase';
 const GUEST_CART_KEY = 'wild_guest_cart';
 const GUEST_WISHLIST_KEY = 'wild_guest_wishlist';
 
+// El proyecto Supabase anterior está eliminado: no pedir sus imágenes.
+const DEAD_IMAGE_HOSTS = ['cfsqhbisrkqhbupyjrwz.supabase.co'];
+
+function cleanImageUrl(url) {
+  if (!url) return '';
+  for (var i = 0; i < DEAD_IMAGE_HOSTS.length; i++) {
+    if (String(url).indexOf(DEAD_IMAGE_HOSTS[i]) !== -1) return '';
+  }
+  return url;
+}
+
 // Tipos básicos
 export const CartEvents = {
   UPDATED: 'cart:updated',
@@ -81,7 +92,7 @@ class CartStore {
           cart_key: item.cart_key || (item.variant_id ? item.id + '_' + item.variant_id : String(item.id)),
           name: item.name || 'Producto',
           price: Number(item.price) || 0,
-          image: (item.image && item.image !== '') ? item.image : '',
+          image: cleanImageUrl(item.image),
           variant_id: item.variant_id || null,
           size: item.size || null,
           color: item.color || null,
@@ -108,7 +119,7 @@ class CartStore {
           id: item.id,
           name: item.name || 'Producto',
           price: Number(item.price) || 0,
-          image: item.image || ''
+          image: cleanImageUrl(item.image)
         };
       });
     } catch { return []; }
@@ -132,7 +143,7 @@ class CartStore {
         cart_key: item.variant_id ? `${item.product_id}_${item.variant_id}` : String(item.product_id),
         name: item.product_name || 'Producto',
         price: Number(item.product_price) || 0,
-        image: item.product_image || '',
+        image: cleanImageUrl(item.product_image),
         variant_id: item.variant_id,
         size: item.variant_size || null,
         color: item.variant_color || null,
@@ -151,7 +162,7 @@ class CartStore {
         id: item.product_id,
         name: item.product_name || 'Producto',
         price: Number(item.product_price) || 0,
-        image: item.product_image || ''
+        image: cleanImageUrl(item.product_image)
       }));
       this.notifyListeners(CartEvents.WISHLIST_UPDATED);
     }
@@ -163,7 +174,7 @@ class CartStore {
     // Build a clean cart item with all required fields explicitly
     var name = product.name || 'Producto';
     var price = Number(product.price) || 0;
-    var image = product.image || '';
+    var image = cleanImageUrl(product.image);
     var cartKey = product.variant_id ? product.id + '_' + product.variant_id : String(product.id);
     
     if (this.user) {

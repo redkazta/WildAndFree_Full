@@ -130,7 +130,7 @@
                 .from('radio_config')
                 .select('*')
                 .eq('id', 1)
-                .single();
+                .maybeSingle();
             if (data) {
                 if (data.live_url) currentMetadata.liveUrl = data.live_url;
                 if (data.auto_radio_url) currentMetadata.autoUrl = data.auto_radio_url;

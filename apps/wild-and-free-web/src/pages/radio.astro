@@ -199,7 +199,7 @@ const config = {
     try {
       // Fetch all data in parallel
       const [configRes, episodesRes, scheduleRes, autoTracksRes] = await Promise.all([
-        supabase.from('radio_config').select('*').limit(1).single(),
+        supabase.from('radio_config').select('*').limit(1).maybeSingle(),
         supabase.from('radio_episodes').select('*').or('is_published.eq.true,is_live.eq.true').order('created_at', { ascending: false }).limit(10),
         supabase.from('radio_schedule').select('*').eq('is_active', true).order('day_of_week').order('start_time'),
         supabase.from('radio_auto_tracks').select('*').eq('is_active', true).order('sort_order').order('created_at', { ascending: false }),
