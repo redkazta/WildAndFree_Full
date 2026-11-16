@@ -65,9 +65,10 @@ CREATE POLICY "product-images staff write" ON storage.objects
   WITH CHECK (bucket_id = 'product-images' AND public.is_staff_or_admin());
 
 -- -----------------------------------------------------
--- 2. Reapuntar URLs del proyecto eliminado
+-- 2. Limpiar URLs del proyecto eliminado
 --    (cfsqhbisrkqhbupyjrwz -> hepsyuwaymwlvyaddecs)
---    Recorre todas las columnas de texto de public.
+--    Las imágenes de producto ahora viven en /product-images,
+--    así que esas columnas se limpian en el paso 2b.
 -- -----------------------------------------------------
 DO $$
 DECLARE
@@ -84,6 +85,9 @@ BEGIN
     WHERE c.table_schema = 'public'
       AND t.table_type = 'BASE TABLE'
       AND c.data_type IN ('text', 'character varying')
+      AND NOT (c.table_name = 'store_products' AND c.column_name = 'image_url')
+      AND NOT (c.table_name = 'cart_items' AND c.column_name = 'product_image')
+      AND NOT (c.table_name = 'wishlist_items' AND c.column_name = 'product_image')
   LOOP
     EXECUTE format(
       'UPDATE public.%I SET %I = replace(%I, %L, %L) WHERE %I LIKE %L',
@@ -94,7 +98,7 @@ BEGIN
   END LOOP;
 END $$;
 
--- Galerías en JSONB (store_products.gallery)
+-- Galerías en JSONB: descartar entradas con URL del proyecto muerto
 DO $$
 BEGIN
   IF EXISTS (
@@ -105,9 +109,52 @@ BEGIN
   ) THEN
     EXECUTE $sql$
       UPDATE public.store_products
-      SET gallery = replace(gallery::text, 'cfsqhbisrkqhbupyjrwz', 'hepsyuwaymwlvyaddecs')::jsonb
-      WHERE gallery::text LIKE '%cfsqhbisrkqhbupyjrwz%'
+      SET gallery = COALESCE((
+        SELECT jsonb_agg(elem)
+        FROM jsonb_array_elements(gallery) elem
+        WHERE elem->>'url' IS NULL
+           OR elem->>'url' NOT LIKE '%cfsqhbisrkqhbupyjrwz%'
+      ), '[]'::jsonb)
+      WHERE gallery IS NOT NULL
+        AND jsonb_typeof(gallery) = 'array'
+        AND gallery::text LIKE '%cfsqhbisrkqhbupyjrwz%'
     $sql$;
+  END IF;
+END $$;
+
+-- -----------------------------------------------------
+-- 2b. Productos/carrito/wishlist: borrar URLs muertas
+--     (los archivos no se migraron al proyecto nuevo)
+-- -----------------------------------------------------
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public' AND table_name = 'store_products' AND column_name = 'image_url'
+  ) THEN
+    UPDATE public.store_products
+    SET image_url = NULL
+    WHERE image_url LIKE '%cfsqhbisrkqhbupyjrwz%'
+       OR image_url LIKE '%/product-images/gorra_wg.jpg'
+       OR image_url LIKE '%/product-images/playera_wg.jpg';
+  END IF;
+
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public' AND table_name = 'cart_items' AND column_name = 'product_image'
+  ) THEN
+    UPDATE public.cart_items
+    SET product_image = NULL
+    WHERE product_image LIKE '%cfsqhbisrkqhbupyjrwz%';
+  END IF;
+
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public' AND table_name = 'wishlist_items' AND column_name = 'product_image'
+  ) THEN
+    UPDATE public.wishlist_items
+    SET product_image = NULL
+    WHERE product_image LIKE '%cfsqhbisrkqhbupyjrwz%';
   END IF;
 END $$;
 
