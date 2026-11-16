@@ -25,7 +25,7 @@ VALUES
     'Gorro Beanie WILD GVNG Anubis "Banda Salvaje" (Árabe)',
     $desc$Mantente abrigado sin perder el estilo. Este beanie negro de WILD GVNG cuenta con bordados de alta calidad del dios Anubis y la frase en árabe "Banda Salvaje".$desc$,
     449.00,
-    NULL,
+    '/product-images/beanie-anubis-arabe/vista-principal-anubis.jpg',
     'gorras',
     TRUE,
     'beanie-wild-gvng-anubis-arabe',
@@ -34,7 +34,7 @@ VALUES
     'Gorro beanie negro WILD GVNG con diseño de Anubis y texto en árabe en el dobladillo.',
     'Gorro Beanie WILD GVNG Anubis "Banda Salvaje" (Árabe)',
     'Beanie negro WILD GVNG con bordado de Anubis y frase árabe. Colección Wild Gang.',
-    '[{"alt":"Beanie negro WILD GVNG frente con bordado de Anubis","url":null},{"alt":"Beanie negro WILD GVNG con texto árabe Banda Salvaje en el dobladillo","url":null},{"alt":"Etiqueta interior WILD GVNG con texto árabe","url":null},{"alt":"Close-up del bordado de Anubis","url":null},{"alt":"Close-up de la etiqueta con QR","url":null}]'::jsonb
+    '[{"alt":"Beanie negro WILD GVNG con bordado de Anubis en el frente","url":"/product-images/beanie-anubis-arabe/vista-principal-anubis.jpg"},{"alt":"Beanie negro WILD GVNG con logo geométrico y texto árabe en el dobladillo","url":"/product-images/beanie-anubis-arabe/vista-principal-logo.jpg"},{"alt":"Etiqueta interior WILD GVNG con el texto árabe Banda Salvaje","url":"/product-images/beanie-anubis-arabe/etiqueta-interior.jpg"},{"alt":"Close-up del bordado de Anubis con detalles dorados","url":"/product-images/beanie-anubis-arabe/bordado-anubis.jpg"},{"alt":"Close-up de la etiqueta con QR","url":"/product-images/beanie-anubis-arabe/etiqueta-qr.jpg"}]'::jsonb
   ),
   (
     'Playera Oversize WILD GVNG Anubis "Banda Salvaje" (Árabe)',
@@ -116,6 +116,7 @@ ON CONFLICT (slug) DO UPDATE SET
   description = EXCLUDED.description,
   base_price = EXCLUDED.base_price,
   category = EXCLUDED.category,
+  image_url = COALESCE(EXCLUDED.image_url, public.store_products.image_url),
   collection = EXCLUDED.collection,
   tags = EXCLUDED.tags,
   alt_text = EXCLUDED.alt_text,
