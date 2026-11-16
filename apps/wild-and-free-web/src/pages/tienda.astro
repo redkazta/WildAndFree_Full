@@ -48,6 +48,9 @@ try {
       inStock: p.is_active !== false,
       description: p.description || '',
       slug: p.slug || '',
+      collection: p.collection || '',
+      tags: p.tags || [],
+      alt_text: p.alt_text || '',
       stock: productStock[p.id] || 0
     }));
   } else {
@@ -205,6 +208,9 @@ try {
                           )}
                         </div>
                         <div class="p-4 flex flex-col flex-grow">
+                          {product.collection && (
+                            <span class="block text-[8px] font-black uppercase tracking-[0.18em] text-[var(--primary)] mb-1.5">{product.collection}</span>
+                          )}
                           <h3 class="font-bold text-sm text-[var(--text)] leading-tight line-clamp-2 mb-3">{product.name}</h3>
                           <div class="mt-auto pt-3 border-t border-[var(--border-faint)] flex items-center justify-between">
                             <span class="text-lg font-black text-[var(--text)]">${product.price}</span>
