@@ -94,7 +94,7 @@ VALUES
     'Sudadera negra WILD GVNG con logo en el pecho y texto chino grande en la espalda.',
     'Sudadera con Capucha WILD GVNG "Banda Salvaje" (Chino - Espalda)',
     'Hoodie negro WILD GVNG con tipografía china 狂野帮派 en la espalda. Colección Wild Gang.',
-    '[]'::jsonb
+    '[{"alt":"Sudadera negra con capucha WILD GVNG frente con logo bordado en el pecho","url":null},{"alt":"Sudadera negra WILD GVNG espalda con tipografía china 狂野帮派","url":null},{"alt":"Etiqueta interior WILD GVNG 狂野帮派","url":null},{"alt":"Close-up del logo geométrico bordado","url":null},{"alt":"Close-up de la etiqueta con QR","url":null}]'::jsonb
   ),
   (
     'Playera Oversize WILD GVNG "Banda Salvaje" (Chino)',

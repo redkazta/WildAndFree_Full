@@ -81,6 +81,7 @@ Etiquetas base para todos los productos:
 - **Descripción:** Haz una declaración de intenciones. Sudadera negra con el logo bordado en el pecho y la frase en chino "狂野帮派" (Banda Salvaje) estampada en gran formato en la espalda.
 - **Alt text:** Sudadera negra WILD GVNG con logo en el pecho y texto chino grande en la espalda.
 - **SKU base:** `WG-HOODIE-CN-BACK-BLK`
+- **Galería:** frente con logo, espalda con 狂野帮派, etiqueta interior, close-up del logo y etiqueta con QR.
 
 ## 7. Playera "Wild Gang - Chino"
 
