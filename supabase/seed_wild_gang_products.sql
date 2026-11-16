@@ -70,7 +70,7 @@ VALUES
     'Sudadera con Capucha WILD GVNG "Banda Salvaje" (Chino - Mangas)',
     $desc$Diseño minimalista en la espalda, pero con un mensaje contundente en las mangas. Esta sudadera negra de WILD GVNG presenta el logo geométrico en el pecho y texto chino en las mangas que reafirma tu pertenencia a la "Banda Salvaje".$desc$,
     1299.00,
-    NULL,
+    '/product-images/hoodie-chino-mangas/vista-principal-frente.jpg',
     'sudaderas',
     TRUE,
     'hoodie-wild-gvng-banda-salvaje-chino-mangas',
@@ -79,7 +79,7 @@ VALUES
     'Sudadera negra WILD GVNG con logo en el pecho y texto en chino a lo largo de las mangas.',
     'Sudadera con Capucha WILD GVNG "Banda Salvaje" (Chino - Mangas)',
     'Hoodie negro WILD GVNG con logo bordado y texto chino en mangas. Colección Wild Gang.',
-    '[{"alt":"Sudadera negra con capucha WILD GVNG frente con logo bordado en el pecho","url":null},{"alt":"Sudadera negra WILD GVNG espalda lisa","url":null},{"alt":"Close-up del texto chino 狂野帮派 en la manga","url":null},{"alt":"Etiqueta interior WILD GVNG 狂野帮派","url":null},{"alt":"Close-up del logo geométrico bordado","url":null},{"alt":"Close-up de la etiqueta con QR","url":null}]'::jsonb
+    '[{"alt":"Sudadera negra con capucha WILD GVNG frente con logo en el pecho y 狂野帮派 en las mangas","url":"/product-images/hoodie-chino-mangas/vista-principal-frente.jpg"},{"alt":"Sudadera negra WILD GVNG espalda lisa","url":"/product-images/hoodie-chino-mangas/vista-principal-espalda.jpg"},{"alt":"Etiqueta interior WILD GVNG 狂野帮派","url":"/product-images/hoodie-chino-mangas/etiqueta-interior.jpg"},{"alt":"Close-up de la etiqueta con QR","url":"/product-images/hoodie-chino-mangas/etiqueta-qr.jpg"},{"alt":"Close-up del logo geométrico bordado","url":"/product-images/hoodie-chino-mangas/bordado-logo.jpg"}]'::jsonb
   ),
   (
     'Sudadera con Capucha WILD GVNG "Banda Salvaje" (Chino - Espalda)',

@@ -31,6 +31,8 @@ export async function getStaticPaths() {
 }
 
 const { slug } = Astro.params;
+const DEAD_IMAGE_HOST = 'cfsqhbisrkqhbupyjrwz';
+const isDeadImage = (url: string) => url.includes(DEAD_IMAGE_HOST);
 let product: any = null;
 let variants: any[] = [];
 let relatedProducts: any[] = [];
@@ -45,10 +47,10 @@ if (slug) {
   if (data) {
     const rawGallery = Array.isArray(data.gallery) ? data.gallery : [];
     galleryImages = rawGallery
-      .filter((g: any) => g && typeof g.url === 'string' && g.url.trim() !== '')
+      .filter((g: any) => g && typeof g.url === 'string' && g.url.trim() !== '' && !isDeadImage(g.url))
       .map((g: any) => ({ url: g.url.trim(), alt: String(g.alt || data.name) }));
 
-    if (data.image_url) {
+    if (data.image_url && !isDeadImage(data.image_url)) {
       galleryImages = [{ url: data.image_url, alt: data.alt_text || data.name }, ...galleryImages];
     }
 
@@ -60,7 +62,9 @@ if (slug) {
       return true;
     });
 
-    const mainImage = data.image_url || (galleryImages[0] ? galleryImages[0].url : '');
+    const mainImage = data.image_url && !isDeadImage(data.image_url)
+      ? data.image_url
+      : (galleryImages[0] ? galleryImages[0].url : '');
 
     product = {
       id: data.id, name: data.name, price: Number(data.base_price),
@@ -348,6 +352,12 @@ const uniqueSizesJson = JSON.stringify(uniqueSizes);
 <script>
   import { cartStore } from '../../lib/cart.js';
 
+  var DEAD_IMAGE_HOST = 'cfsqhbisrkqhbupyjrwz';
+  var cleanImageUrl = function(url) {
+    if (!url) return '';
+    return String(url).indexOf(DEAD_IMAGE_HOST) !== -1 ? '' : url;
+  };
+
   var attachGallery = function() {
     var main = document.getElementById('product-main-image');
     var thumbs = document.querySelectorAll('.gallery-thumb');
@@ -529,8 +539,12 @@ const uniqueSizesJson = JSON.stringify(uniqueSizes);
       if (!product.id) return;
       try {
         var viewed = JSON.parse(localStorage.getItem('wild_recently_viewed') || '[]');
+        viewed = viewed.map(function(p) {
+          p.image = cleanImageUrl(p.image);
+          return p;
+        });
         viewed = viewed.filter(function(p) { return p.id !== product.id; });
-        viewed.unshift({ id: product.id, name: product.name, price: product.price, image: product.image, slug: product.slug || '' });
+        viewed.unshift({ id: product.id, name: product.name, price: product.price, image: cleanImageUrl(product.image), slug: product.slug || '' });
         if (viewed.length > 8) viewed = viewed.slice(0, 8);
         localStorage.setItem('wild_recently_viewed', JSON.stringify(viewed));
       } catch(e) {}

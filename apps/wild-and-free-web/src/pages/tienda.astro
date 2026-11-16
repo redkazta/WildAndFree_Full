@@ -21,6 +21,10 @@ const categories = [
 ];
 
 let products: any[] = [];
+const DEAD_IMAGE_HOST = 'cfsqhbisrkqhbupyjrwz';
+const cleanImageUrl = (url: string | null | undefined) =>
+  url && !url.includes(DEAD_IMAGE_HOST) ? url : '';
+
 try {
   const { data, error } = await supabase
     .from('store_products')
@@ -44,7 +48,7 @@ try {
       id: p.id,
       name: p.name,
       price: Number(p.base_price),
-      image: p.image_url || '',
+      image: cleanImageUrl(p.image_url),
       category: (p.category || 'otros').toLowerCase(),
       inStock: p.is_active !== false,
       description: p.description || '',
@@ -285,6 +289,11 @@ try {
 
 <script>
   import { cartStore } from '../lib/cart.js';
+  const DEAD_IMAGE_HOST = 'cfsqhbisrkqhbupyjrwz';
+  const cleanImageUrl = (url: string | null) => {
+    if (!url) return '';
+    return String(url).includes(DEAD_IMAGE_HOST) ? '' : url;
+  };
   const dialog = document.getElementById('cart-confirm-dialog') as HTMLDialogElement;
   const modalProductName = document.getElementById('modal-product-name');
   const modalKeepShopping = document.getElementById('modal-keep-shopping');
@@ -402,8 +411,11 @@ try {
     const grid = document.getElementById('recently-viewed-grid');
     if (!section || !grid) return;
     try {
-      const viewed = JSON.parse(localStorage.getItem('wild_recently_viewed') || '[]');
+      const stored = JSON.parse(localStorage.getItem('wild_recently_viewed') || '[]');
+      const viewed = stored.map((p: any) => ({ ...p, image: cleanImageUrl(p.image) }));
       if (viewed.length === 0) return;
+      // Persistir la lista ya limpia para no volver a pedir URLs muertas
+      try { localStorage.setItem('wild_recently_viewed', JSON.stringify(viewed)); } catch (e) {}
       section.classList.remove('hidden');
       grid.innerHTML = viewed.map(p => `
         <a href="/tienda/${p.slug || p.id}" class="group bg-[var(--bg)] rounded-xl overflow-hidden border border-[var(--border-faint)] hover:border-[var(--primary)]/40 transition-all block">
