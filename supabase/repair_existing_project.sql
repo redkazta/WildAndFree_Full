@@ -96,6 +96,20 @@ WHERE NOT EXISTS (
   SELECT 1 FROM public.roles r WHERE r.name = v.name
 );
 
+-- permissions: agregar columnas faltantes en tablas viejas
+CREATE TABLE IF NOT EXISTS public.permissions (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL UNIQUE,
+  description TEXT,
+  module TEXT NOT NULL
+);
+
+ALTER TABLE public.permissions ADD COLUMN IF NOT EXISTS name TEXT;
+ALTER TABLE public.permissions ADD COLUMN IF NOT EXISTS description TEXT;
+ALTER TABLE public.permissions ADD COLUMN IF NOT EXISTS module TEXT;
+
+CREATE UNIQUE INDEX IF NOT EXISTS permissions_name_key ON public.permissions(name);
+
 -- 5) redkazta@gmail.com como admin; el resto como fan
 INSERT INTO public.user_roles (user_id, role_id)
 SELECT u.id, r.id
