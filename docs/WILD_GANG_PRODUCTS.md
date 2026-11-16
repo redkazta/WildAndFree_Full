@@ -57,6 +57,7 @@ Etiquetas base para todos los productos:
 - **Descripción:** Sudadera negra de WILD GVNG. Detalles bordados del logo en el pecho, una ilustración masiva de Anubis en la espalda y el texto árabe "Banda Salvaje" a lo largo de las mangas. Comodidad y actitud.
 - **Alt text:** Sudadera negra con capucha WILD GVNG, logo en el pecho, Anubis en la espalda y texto árabe en las mangas.
 - **SKU base:** `WG-HOODIE-ARAB-BLK`
+- **Galería:** frente con logo, espalda con Anubis, etiqueta interior, etiqueta con QR, close-up del logo y texto árabe en manga.
 
 ## 5. Hoodie "Wild Gang - Chino (Mangas)"
 

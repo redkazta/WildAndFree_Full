@@ -64,7 +64,7 @@ VALUES
     'Sudadera negra con capucha WILD GVNG, logo en el pecho, Anubis en la espalda y texto árabe en las mangas.',
     'Sudadera con Capucha WILD GVNG Anubis "Banda Salvaje" (Árabe)',
     'Hoodie negro WILD GVNG con Anubis bordado en la espalda y texto árabe en mangas. Colección Wild Gang.',
-    '[]'::jsonb
+    '[{"alt":"Sudadera negra con capucha WILD GVNG frente con logo bordado en el pecho","url":null},{"alt":"Sudadera negra WILD GVNG espalda con ilustración de Anubis","url":null},{"alt":"Etiqueta interior WILD GVNG con texto árabe Banda Salvaje","url":null},{"alt":"Close-up de la etiqueta con QR","url":null},{"alt":"Close-up del logo geométrico bordado","url":null},{"alt":"Close-up del texto árabe bordado en la manga","url":null}]'::jsonb
   ),
   (
     'Sudadera con Capucha WILD GVNG "Banda Salvaje" (Chino - Mangas)',
