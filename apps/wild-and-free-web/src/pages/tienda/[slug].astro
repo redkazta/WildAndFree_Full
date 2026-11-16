@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { storeMockProducts } from '../../data/storeMock';
 import { supabase } from '../../lib/supabase';
 import tenantConfig from '../../../../../packages/shared-types/tenant-config.json';
 
@@ -16,10 +17,17 @@ export async function getStaticPaths() {
     .select('slug')
     .eq('is_active', true);
 
-  if (!products) return [];
-  return products
+  const dbPaths = (products || [])
     .filter((p: any) => p.slug)
     .map((p: any) => ({ params: { slug: p.slug } }));
+
+  const mockPaths = storeMockProducts.map((p) => ({ params: { slug: p.slug } }));
+  const seen = new Set<string>();
+  return [...dbPaths, ...mockPaths].filter((entry) => {
+    if (seen.has(entry.params.slug)) return false;
+    seen.add(entry.params.slug);
+    return true;
+  });
 }
 
 const { slug } = Astro.params;
@@ -38,7 +46,7 @@ if (slug) {
       id: data.id, name: data.name, price: Number(data.base_price),
       image: data.image_url || '', category: data.category || 'otros',
       description: data.description || '', inStock: data.is_active !== false,
-      slug: data.slug || slug
+      slug: data.slug || slug, isMock: false
     };
 
     // Fetch variants
@@ -69,6 +77,35 @@ if (slug) {
         image: p.image_url || '', slug: p.slug || '', inStock: p.is_active !== false
       }));
     }
+  } else {
+    const mock = storeMockProducts.filter((p) => p.slug === slug)[0];
+    if (mock) {
+      product = {
+        id: mock.id,
+        name: mock.name,
+        price: mock.price,
+        image: mock.image,
+        category: mock.category,
+        description: mock.description,
+        inStock: true,
+        slug: mock.slug,
+        isMock: true,
+      };
+
+      const sizes = mock.category === 'gorras' ? ['Única'] : ['S', 'M', 'L', 'XL', 'XXL'];
+      variants = sizes.map((size) => ({
+        id: `mock-${mock.id}-${size}`,
+        size,
+        color: 'Negro',
+        stock: mock.stock,
+        sku: '',
+        image_url: '',
+      }));
+
+      relatedProducts = storeMockProducts
+        .filter((p) => p.slug !== slug)
+        .map((p) => ({ id: p.id, name: p.name, price: p.price, image: p.image, slug: p.slug, inStock: true }));
+    }
   }
 }
 
@@ -95,6 +132,14 @@ const uniqueSizesJson = JSON.stringify(uniqueSizes);
         <span class="text-[var(--primary)]">{product?.name || 'Producto'}</span>
       </nav>
     </div>
+
+    {product?.isMock && (
+      <div class="max-w-6xl mx-auto px-4 md:px-8 mt-4">
+        <div class="rounded-xl border border-[var(--primary)]/40 bg-[var(--primary)]/10 px-4 py-3 text-xs font-bold text-[var(--text)]">
+          Producto de demostración. Conecta Supabase y recarga para ver el catálogo real.
+        </div>
+      </div>
+    )}
 
     {product ? (
       <div class="max-w-6xl mx-auto px-4 md:px-8 py-8" id="product-page" data-variants={variantsJson} data-colors={uniqueColorsJson} data-sizes={uniqueSizesJson}>

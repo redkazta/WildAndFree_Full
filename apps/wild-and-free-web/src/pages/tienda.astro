@@ -1,5 +1,6 @@
 ﻿---
 import Layout from '../layouts/Layout.astro';
+import { storeMockProducts } from '../data/storeMock';
 import { supabase } from '../lib/supabase';
 import tenantConfig from '../../../../packages/shared-types/tenant-config.json';
 
@@ -51,17 +52,14 @@ try {
       collection: p.collection || '',
       tags: p.tags || [],
       alt_text: p.alt_text || '',
-      stock: productStock[p.id] || 0
+      stock: productStock[p.id] || 0,
+      isMock: false
     }));
   } else {
     throw new Error('No products');
   }
 } catch (_e) {
-  products = [
-      { id: 'p1', name: 'Playera Wild Gvng Logo', price: 350, image: '', category: 'playeras', inStock: true, description: 'Playera negra bordada con el logo original de Wild Gvng.', slug: 'playera_wild_gvng_logo', stock: 10 },
-      { id: 'p2', name: 'Gorra WG Snapback', price: 280, image: '', category: 'gorras', inStock: true, description: 'Gorra snapback negra con logo WG bordado.', slug: 'gorra_wg_snapback', stock: 10 },
-      { id: 'p3', name: 'Sudadera Wild Gvng Premium', price: 650, image: '', category: 'sudaderas', inStock: true, description: 'Sudadera con capucha, diseño exclusivo.', slug: 'sudadera_wild_gvng_premium', stock: 10 }
-    ];
+  products = storeMockProducts;
 }
 ---
 
@@ -173,7 +171,10 @@ try {
                   </div>
                   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                     {categoryProducts.map((product) => (
-                      <a href={`/tienda/${product.slug || product.id}`} class="product-card bg-[var(--bg)] rounded-xl overflow-hidden border border-[var(--border-faint)] hover:border-[var(--primary)]/40 transition-all duration-300 group flex flex-col h-full block"
+                      <a href={product.isMock ? '#' : `/tienda/${product.slug || product.id}`}
+                           onclick={product.isMock ? 'event.preventDefault()' : undefined}
+                           title={product.isMock ? 'Producto de demostración: conecta Supabase para ver la tienda real' : product.name}
+                           class="product-card bg-[var(--bg)] rounded-xl overflow-hidden border border-[var(--border-faint)] hover:border-[var(--primary)]/40 transition-all duration-300 group flex flex-col h-full block"
                            data-name={product.name.toLowerCase()}
                            data-price={product.price}
                            data-category={product.category}>
