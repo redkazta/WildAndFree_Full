@@ -59,14 +59,21 @@ export async function supabaseRest<T = any>(path: string, init?: RequestInit): P
     throw new Error('Supabase no está configurado en el servidor');
   }
 
+  const headers: Record<string, string> = {
+    apikey: SUPABASE_SERVICE_KEY,
+    'Content-Type': 'application/json',
+    ...((init?.headers as Record<string, string>) || {}),
+  };
+
+  // Las service keys nuevas (sb_secret_...) no son JWT: solo van en apikey.
+  // Las legacy (eyJ...) sí pueden ir también como Bearer.
+  if (SUPABASE_SERVICE_KEY.startsWith('eyJ')) {
+    headers.Authorization = `Bearer ${SUPABASE_SERVICE_KEY}`;
+  }
+
   const response = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
     ...init,
-    headers: {
-      apikey: SUPABASE_SERVICE_KEY,
-      Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,
-      'Content-Type': 'application/json',
-      ...(init?.headers || {}),
-    },
+    headers,
   });
 
   const text = await response.text();
