@@ -536,7 +536,7 @@ const uniqueSizesJson = JSON.stringify(uniqueSizes);
 
     // Save to recently viewed
     function saveRecentlyViewed() {
-      if (!product.id) return;
+      if (!product.id || !product.image) return;
       try {
         var viewed = JSON.parse(localStorage.getItem('wild_recently_viewed') || '[]');
         viewed = viewed.map(function(p) {

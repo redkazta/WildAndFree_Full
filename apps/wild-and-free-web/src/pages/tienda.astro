@@ -412,8 +412,15 @@ try {
     if (!section || !grid) return;
     try {
       const stored = JSON.parse(localStorage.getItem('wild_recently_viewed') || '[]');
-      const viewed = stored.map((p: any) => ({ ...p, image: cleanImageUrl(p.image) }));
-      if (viewed.length === 0) return;
+      const legacyMocks = ['playera_wild_gvng_logo', 'gorra_wg_snapback', 'sudadera_wild_gvng_premium'];
+      const viewed = stored
+        .map((p: any) => ({ ...p, image: cleanImageUrl(p.image) }))
+        .filter((p: any) => p.image && !legacyMocks.includes(p.slug));
+      if (viewed.length === 0) {
+        section.classList.add('hidden');
+        grid.innerHTML = '';
+        return;
+      }
       // Persistir la lista ya limpia para no volver a pedir URLs muertas
       try { localStorage.setItem('wild_recently_viewed', JSON.stringify(viewed)); } catch (e) {}
       section.classList.remove('hidden');
