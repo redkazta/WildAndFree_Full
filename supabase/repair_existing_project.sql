@@ -107,6 +107,27 @@ CREATE TABLE IF NOT EXISTS public.permissions (
 ALTER TABLE public.permissions ADD COLUMN IF NOT EXISTS name TEXT;
 ALTER TABLE public.permissions ADD COLUMN IF NOT EXISTS description TEXT;
 ALTER TABLE public.permissions ADD COLUMN IF NOT EXISTS module TEXT;
+ALTER TABLE public.permissions ADD COLUMN IF NOT EXISTS slug TEXT;
+
+UPDATE public.permissions
+SET slug = name
+WHERE slug IS NULL OR slug = '';
+
+CREATE OR REPLACE FUNCTION public.set_permission_slug()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.slug IS NULL OR NEW.slug = '' THEN
+    NEW.slug := NEW.name;
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trg_set_permission_slug ON public.permissions;
+CREATE TRIGGER trg_set_permission_slug
+BEFORE INSERT OR UPDATE ON public.permissions
+FOR EACH ROW
+EXECUTE FUNCTION public.set_permission_slug();
 
 CREATE UNIQUE INDEX IF NOT EXISTS permissions_name_key ON public.permissions(name);
 
