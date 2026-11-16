@@ -34,6 +34,7 @@ const { slug } = Astro.params;
 let product: any = null;
 let variants: any[] = [];
 let relatedProducts: any[] = [];
+let galleryImages: { url: string; alt: string }[] = [];
 
 if (slug) {
   const { data } = await supabase
@@ -42,9 +43,29 @@ if (slug) {
     .eq('slug', slug)
     .single();
   if (data) {
+    const rawGallery = Array.isArray(data.gallery) ? data.gallery : [];
+    galleryImages = rawGallery
+      .filter((g: any) => g && typeof g.url === 'string' && g.url.trim() !== '')
+      .map((g: any) => ({ url: g.url.trim(), alt: String(g.alt || data.name) }));
+
+    if (data.image_url) {
+      galleryImages = [{ url: data.image_url, alt: data.alt_text || data.name }, ...galleryImages];
+    }
+
+    // Dedupe by URL (la imagen principal puede estar también en la galería)
+    const seenUrls = new Set<string>();
+    galleryImages = galleryImages.filter((g) => {
+      if (seenUrls.has(g.url)) return false;
+      seenUrls.add(g.url);
+      return true;
+    });
+
+    const mainImage = data.image_url || (galleryImages[0] ? galleryImages[0].url : '');
+
     product = {
       id: data.id, name: data.name, price: Number(data.base_price),
-      image: data.image_url || '', category: data.category || 'otros',
+      image: mainImage, alt: data.alt_text || data.name,
+      category: data.category || 'otros',
       description: data.description || '', inStock: data.is_active !== false,
       slug: data.slug || slug, isMock: false
     };
@@ -109,6 +130,11 @@ if (slug) {
   }
 }
 
+// Fallback para mocks o productos sin galería: usar la imagen principal como única foto
+if (product && galleryImages.length === 0 && product.image) {
+  galleryImages = [{ url: product.image, alt: product.alt || product.name }];
+}
+
 // Extract unique sizes and colors maintaining order
 const uniqueSizes = [...new Set(variants.map((v: any) => v.size))];
 const uniqueColors = [...new Set(variants.map((v: any) => v.color))];
@@ -145,18 +171,36 @@ const uniqueSizesJson = JSON.stringify(uniqueSizes);
       <div class="max-w-6xl mx-auto px-4 md:px-8 py-8" id="product-page" data-variants={variantsJson} data-colors={uniqueColorsJson} data-sizes={uniqueSizesJson}>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
           <!-- IMAGE -->
-          <div class="relative aspect-square bg-[var(--bg-card)] rounded-2xl border border-[var(--border-faint)] overflow-hidden flex items-center justify-center">
-            {product.image ? (
-              <img src={product.image} alt={product.name} class="w-full h-full object-cover" />
-            ) : (
-              <div class="flex flex-col items-center gap-3 bg-[var(--bg-card)] w-full h-full absolute inset-0 justify-center">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-                <span class="text-sm font-bold text-[var(--text-muted)]">Sin imagen</span>
-              </div>
-            )}
-            {!product.inStock && (
-              <div class="absolute inset-0 bg-[var(--bg)]/80 flex items-center justify-center">
-                <span class="text-[var(--text)] text-lg font-black uppercase tracking-[0.2em] border-2 border-[var(--text)] px-4 py-2 -rotate-12">Agotado</span>
+          <div class="flex flex-col gap-3">
+            <div class="relative aspect-square bg-[var(--bg-card)] rounded-2xl border border-[var(--border-faint)] overflow-hidden flex items-center justify-center">
+              {product.image ? (
+                <img id="product-main-image" src={product.image} alt={product.alt || product.name} class="w-full h-full object-cover" />
+              ) : (
+                <div class="flex flex-col items-center gap-3 bg-[var(--bg-card)] w-full h-full absolute inset-0 justify-center">
+                  <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                  <span class="text-sm font-bold text-[var(--text-muted)]">Sin imagen</span>
+                </div>
+              )}
+              {!product.inStock && (
+                <div class="absolute inset-0 bg-[var(--bg)]/80 flex items-center justify-center">
+                  <span class="text-[var(--text)] text-lg font-black uppercase tracking-[0.2em] border-2 border-[var(--text)] px-4 py-2 -rotate-12">Agotado</span>
+                </div>
+              )}
+            </div>
+
+            {galleryImages.length > 1 && (
+              <div class="flex gap-2 overflow-x-auto pb-1" id="gallery-thumbs">
+                {galleryImages.map((img, i) => (
+                  <button
+                    type="button"
+                    class={`gallery-thumb shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-colors ${i === 0 ? 'border-[var(--primary)]' : 'border-[var(--border-faint)]'}`}
+                    data-src={img.url}
+                    data-alt={img.alt}
+                    aria-label={`Ver imagen ${i + 1}`}
+                  >
+                    <img src={img.url} alt={img.alt} class="w-full h-full object-cover" loading="lazy" />
+                  </button>
+                ))}
               </div>
             )}
           </div>
@@ -303,6 +347,26 @@ const uniqueSizesJson = JSON.stringify(uniqueSizes);
 
 <script>
   import { cartStore } from '../../lib/cart.js';
+
+  var attachGallery = function() {
+    var main = document.getElementById('product-main-image');
+    var thumbs = document.querySelectorAll('.gallery-thumb');
+    if (!main || !thumbs.length) return;
+
+    thumbs.forEach(function(thumb) {
+      thumb.onclick = function() {
+        if (!thumb.dataset.src) return;
+        main.src = thumb.dataset.src;
+        if (thumb.dataset.alt) main.alt = thumb.dataset.alt;
+        thumbs.forEach(function(t) {
+          t.classList.remove('border-[var(--primary)]');
+          t.classList.add('border-[var(--border-faint)]');
+        });
+        thumb.classList.add('border-[var(--primary)]');
+        thumb.classList.remove('border-[var(--border-faint)]');
+      };
+    });
+  };
 
   var attachProduct = function() {
     var pageEl = document.getElementById('product-page');
@@ -479,9 +543,11 @@ const uniqueSizesJson = JSON.stringify(uniqueSizes);
     if (!cartStore.initialized) await cartStore.init();
   };
   initDetail();
+  attachGallery();
   attachProduct();
   document.addEventListener('astro:page-load', function() {
     initDetail();
+    attachGallery();
     attachProduct();
   });
 </script>
