@@ -10,7 +10,7 @@ VALUES
     'Gorro Bucket WILD GVNG Anubis "Banda Salvaje" (Árabe)',
     $desc$Eleva tu estilo con este bucket hat negro. Presenta un logo geométrico bordado en el frente, un imponente diseño de Anubis y texto en árabe que significa "Banda Salvaje". Perfecto para completar un look urbano.$desc$,
     649.00,
-    NULL,
+    '/product-images/bucket-hat-anubis-arabe/vista-principal-anubis.jpg',
     'gorras',
     TRUE,
     'bucket-hat-wild-gvng-anubis-arabe',
@@ -19,7 +19,7 @@ VALUES
     'Gorro de pescador negro WILD GVNG con logo geométrico, gráfico de Anubis y texto en árabe.',
     'Gorro Bucket WILD GVNG Anubis "Banda Salvaje" (Árabe)',
     'Bucket hat negro WILD GVNG con bordado de Anubis y texto árabe. Streetwear premium de la colección Wild Gang.',
-    '[{"alt":"Bucket hat negro WILD GVNG frente con logo geométrico bordado","url":null},{"alt":"Bucket hat negro WILD GVNG vista lateral con ilustración de Anubis","url":null},{"alt":"Interior del bucket hat con etiqueta WILD GVNG y texto árabe Banda Salvaje","url":null},{"alt":"Close-up del logo geométrico bordado","url":null},{"alt":"Close-up de la etiqueta con QR","url":null},{"alt":"Close-up del bordado de Anubis","url":null}]'::jsonb
+    '[{"alt":"Bucket hat negro WILD GVNG con ilustración de Anubis y texto árabe en la banda","url":"/product-images/bucket-hat-anubis-arabe/vista-principal-anubis.jpg"},{"alt":"Bucket hat negro WILD GVNG con logo geométrico y texto árabe en la banda","url":"/product-images/bucket-hat-anubis-arabe/vista-principal-logo.jpg"},{"alt":"Interior del bucket hat con etiqueta WILD GVNG y texto árabe Banda Salvaje","url":"/product-images/bucket-hat-anubis-arabe/etiqueta-interior.jpg"},{"alt":"Close-up de la etiqueta con QR","url":"/product-images/bucket-hat-anubis-arabe/etiqueta-qr.jpg"},{"alt":"Close-up del bordado de Anubis con detalles dorados","url":"/product-images/bucket-hat-anubis-arabe/bordado-anubis.jpg"}]'::jsonb
   ),
   (
     'Gorro Beanie WILD GVNG Anubis "Banda Salvaje" (Árabe)',
