@@ -11,6 +11,42 @@
 -- =====================================================
 
 -- -----------------------------------------------------
+-- 0. Helpers de permisos (idempotente)
+-- -----------------------------------------------------
+CREATE OR REPLACE FUNCTION public.is_staff_or_admin()
+RETURNS boolean
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+AS $$
+  SELECT EXISTS (
+    SELECT 1
+    FROM public.user_roles ur
+    JOIN public.roles r ON r.id = ur.role_id
+    WHERE ur.user_id = auth.uid()
+      AND r.name IN ('admin', 'staff')
+  );
+$$;
+
+CREATE OR REPLACE FUNCTION public.is_admin()
+RETURNS boolean
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+AS $$
+  SELECT EXISTS (
+    SELECT 1
+    FROM public.user_roles ur
+    JOIN public.roles r ON r.id = ur.role_id
+    WHERE ur.user_id = auth.uid()
+      AND r.name = 'admin'
+  );
+$$;
+
+GRANT EXECUTE ON FUNCTION public.is_staff_or_admin() TO anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.is_admin() TO anon, authenticated;
+
+-- -----------------------------------------------------
 -- 1. Storage: bucket público 'product-images'
 -- -----------------------------------------------------
 INSERT INTO storage.buckets (id, name, public)
@@ -95,7 +131,18 @@ INSERT INTO public.radio_config
   (id, zeno_stream_url, zeno_embed_url, current_show, current_host)
 VALUES
   (1, 'https://stream.zeno.fm/a3gxu5m2rxzuv', 'https://zeno.fm/embed/a3gxu5m2rxzuv', 'Wild Gvng Radio', 'KAZTA')
-ON CONFLICT (id) DO NOTHING;
+ON CONFLICT (id) DO UPDATE SET
+  -- Solo reemplaza placeholders; respeta lo configurado desde el ERP
+  zeno_stream_url = CASE
+    WHEN public.radio_config.zeno_stream_url LIKE '%placeholder%'
+      THEN EXCLUDED.zeno_stream_url
+    ELSE public.radio_config.zeno_stream_url
+  END,
+  zeno_embed_url = CASE
+    WHEN public.radio_config.zeno_embed_url LIKE '%placeholder%'
+      THEN EXCLUDED.zeno_embed_url
+    ELSE public.radio_config.zeno_embed_url
+  END;
 
 -- Sincronizar la secuencia por si ya existían filas
 SELECT setval(
@@ -139,5 +186,4 @@ SELECT id, name, public FROM storage.buckets WHERE id = 'product-images';
 
 SELECT count(*) AS productos_con_ref_vieja
 FROM public.store_products
-WHERE image_url LIKE '%cfsqhbisrkqhbupyjrwz%'
-   OR gallery::text LIKE '%cfsqhbisrkqhbupyjrwz%';
+WHERE image_url LIKE '%cfsqhbisrkqhbupyjrwz%';
