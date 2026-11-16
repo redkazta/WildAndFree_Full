@@ -121,6 +121,7 @@ ON CONFLICT (slug) DO UPDATE SET
   alt_text = EXCLUDED.alt_text,
   seo_title = EXCLUDED.seo_title,
   seo_description = EXCLUDED.seo_description,
+  gallery = EXCLUDED.gallery,
   is_active = EXCLUDED.is_active,
   updated_at = NOW();
 
