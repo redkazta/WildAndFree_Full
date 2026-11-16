@@ -40,7 +40,7 @@ VALUES
     'Playera Oversize WILD GVNG Anubis "Banda Salvaje" (Árabe)',
     $desc$Playera negra de corte urbano. Logo en el pecho, gráfico de gran formato de Anubis en la espalda y detalles en las mangas con texto árabe. Confeccionada para destacar.$desc$,
     749.00,
-    NULL,
+    '/product-images/playera-anubis-arabe/vista-principal-anubis.jpg',
     'playeras',
     TRUE,
     'playera-oversize-wild-gvng-anubis-arabe',
@@ -49,13 +49,13 @@ VALUES
     'Playera negra WILD GVNG con logo en el pecho, gran gráfico de Anubis en la espalda y texto en árabe en las mangas.',
     'Playera Oversize WILD GVNG Anubis "Banda Salvaje" (Árabe)',
     'Playera oversize negra WILD GVNG con Anubis en la espalda y texto árabe en mangas. Colección Wild Gang.',
-    '[{"alt":"Playera negra WILD GVNG frente con logo en el pecho y texto árabe en mangas","url":null},{"alt":"Playera negra WILD GVNG espalda con ilustración de Anubis","url":null},{"alt":"Etiqueta interior WILD GVNG con texto árabe Banda Salvaje","url":null},{"alt":"Close-up de la etiqueta con QR","url":null},{"alt":"Close-up del logo geométrico bordado","url":null},{"alt":"Close-up del texto árabe bordado en la manga","url":null}]'::jsonb
+    '[{"alt":"Playera negra WILD GVNG espalda con ilustración de Anubis y texto árabe en mangas","url":"/product-images/playera-anubis-arabe/vista-principal-anubis.jpg"},{"alt":"Playera negra WILD GVNG frente con logo en el pecho y texto árabe en mangas","url":"/product-images/playera-anubis-arabe/vista-principal-frente.jpg"},{"alt":"Etiqueta interior WILD GVNG con texto árabe Banda Salvaje","url":"/product-images/playera-anubis-arabe/etiqueta-interior.jpg"},{"alt":"Close-up de la etiqueta con QR","url":"/product-images/playera-anubis-arabe/etiqueta-qr.jpg"},{"alt":"Close-up del logo geométrico bordado","url":"/product-images/playera-anubis-arabe/bordado-logo.jpg"},{"alt":"Close-up del texto árabe bordado en la manga","url":"/product-images/playera-anubis-arabe/bordado-manga-arabe.jpg"}]'::jsonb
   ),
   (
     'Sudadera con Capucha WILD GVNG Anubis "Banda Salvaje" (Árabe)',
     $desc$Sudadera negra de WILD GVNG. Detalles bordados del logo en el pecho, una ilustración masiva de Anubis en la espalda y el texto árabe "Banda Salvaje" a lo largo de las mangas. Comodidad y actitud.$desc$,
     1299.00,
-    NULL,
+    '/product-images/hoodie-anubis-arabe/vista-principal-anubis.jpg',
     'sudaderas',
     TRUE,
     'hoodie-wild-gvng-anubis-arabe',
@@ -64,7 +64,7 @@ VALUES
     'Sudadera negra con capucha WILD GVNG, logo en el pecho, Anubis en la espalda y texto árabe en las mangas.',
     'Sudadera con Capucha WILD GVNG Anubis "Banda Salvaje" (Árabe)',
     'Hoodie negro WILD GVNG con Anubis bordado en la espalda y texto árabe en mangas. Colección Wild Gang.',
-    '[{"alt":"Sudadera negra con capucha WILD GVNG frente con logo bordado en el pecho","url":null},{"alt":"Sudadera negra WILD GVNG espalda con ilustración de Anubis","url":null},{"alt":"Etiqueta interior WILD GVNG con texto árabe Banda Salvaje","url":null},{"alt":"Close-up de la etiqueta con QR","url":null},{"alt":"Close-up del logo geométrico bordado","url":null},{"alt":"Close-up del texto árabe bordado en la manga","url":null}]'::jsonb
+    '[{"alt":"Sudadera negra con capucha WILD GVNG espalda con ilustración de Anubis y mangas con texto árabe","url":"/product-images/hoodie-anubis-arabe/vista-principal-anubis.jpg"},{"alt":"Sudadera negra con capucha WILD GVNG frente con logo bordado en el pecho","url":"/product-images/hoodie-anubis-arabe/vista-principal-frente.jpg"},{"alt":"Etiqueta interior WILD GVNG con texto árabe Banda Salvaje","url":"/product-images/hoodie-anubis-arabe/etiqueta-interior.jpg"},{"alt":"Close-up de la etiqueta con QR","url":"/product-images/hoodie-anubis-arabe/etiqueta-qr.jpg"},{"alt":"Close-up del logo geométrico bordado","url":"/product-images/hoodie-anubis-arabe/bordado-logo.jpg"},{"alt":"Close-up del texto árabe bordado en la manga","url":"/product-images/hoodie-anubis-arabe/bordado-manga-arabe.jpg"}]'::jsonb
   ),
   (
     'Sudadera con Capucha WILD GVNG "Banda Salvaje" (Chino - Mangas)',
@@ -85,7 +85,7 @@ VALUES
     'Sudadera con Capucha WILD GVNG "Banda Salvaje" (Chino - Espalda)',
     $desc$Haz una declaración de intenciones. Sudadera negra con el logo bordado en el pecho y la frase en chino "狂野帮派" (Banda Salvaje) estampada en gran formato en la espalda.$desc$,
     1299.00,
-    NULL,
+    '/product-images/hoodie-chino-espalda/vista-principal-espalda.jpg',
     'sudaderas',
     TRUE,
     'hoodie-wild-gvng-banda-salvaje-chino-espalda',
@@ -94,13 +94,13 @@ VALUES
     'Sudadera negra WILD GVNG con logo en el pecho y texto chino grande en la espalda.',
     'Sudadera con Capucha WILD GVNG "Banda Salvaje" (Chino - Espalda)',
     'Hoodie negro WILD GVNG con tipografía china 狂野帮派 en la espalda. Colección Wild Gang.',
-    '[{"alt":"Sudadera negra con capucha WILD GVNG frente con logo bordado en el pecho","url":null},{"alt":"Sudadera negra WILD GVNG espalda con tipografía china 狂野帮派","url":null},{"alt":"Etiqueta interior WILD GVNG 狂野帮派","url":null},{"alt":"Close-up del logo geométrico bordado","url":null},{"alt":"Close-up de la etiqueta con QR","url":null}]'::jsonb
+    '[{"alt":"Sudadera negra WILD GVNG espalda con tipografía china 狂野帮派","url":"/product-images/hoodie-chino-espalda/vista-principal-espalda.jpg"},{"alt":"Sudadera negra con capucha WILD GVNG frente con logo bordado en el pecho","url":"/product-images/hoodie-chino-espalda/vista-principal-frente.jpg"},{"alt":"Etiqueta interior WILD GVNG 狂野帮派","url":"/product-images/hoodie-chino-espalda/etiqueta-interior.jpg"},{"alt":"Close-up de la etiqueta con QR","url":"/product-images/hoodie-chino-espalda/etiqueta-qr.jpg"},{"alt":"Close-up del logo geométrico bordado","url":"/product-images/hoodie-chino-espalda/bordado-logo.jpg"}]'::jsonb
   ),
   (
     'Playera Oversize WILD GVNG "Banda Salvaje" (Chino)',
     $desc$Playera negra de WILD GVNG. Un diseño limpio al frente con el logo de la marca, y un impacto visual en la espalda con la tipografía en chino "狂野帮派". Ideal para el día a día.$desc$,
     749.00,
-    NULL,
+    '/product-images/playera-chino/vista-principal-espalda.jpg',
     'playeras',
     TRUE,
     'playera-oversize-wild-gvng-banda-salvaje-chino',
@@ -109,7 +109,7 @@ VALUES
     'Playera negra WILD GVNG con logo en el pecho y texto chino en gran formato en la espalda.',
     'Playera Oversize WILD GVNG "Banda Salvaje" (Chino)',
     'Playera oversize negra WILD GVNG con tipografía china 狂野帮派 en la espalda. Colección Wild Gang.',
-    '[{"alt":"Playera negra WILD GVNG frente con logo bordado en el pecho","url":null},{"alt":"Playera negra WILD GVNG espalda con tipografía china 狂野帮派","url":null},{"alt":"Etiqueta interior WILD GVNG 狂野帮派","url":null},{"alt":"Close-up del logo geométrico bordado","url":null},{"alt":"Close-up de la etiqueta con QR","url":null}]'::jsonb
+    '[{"alt":"Playera negra WILD GVNG espalda con tipografía china 狂野帮派","url":"/product-images/playera-chino/vista-principal-espalda.jpg"},{"alt":"Playera negra WILD GVNG frente con logo bordado en el pecho","url":"/product-images/playera-chino/vista-principal-frente.jpg"},{"alt":"Etiqueta interior WILD GVNG 狂野帮派","url":"/product-images/playera-chino/etiqueta-interior.jpg"},{"alt":"Close-up de la etiqueta con QR","url":"/product-images/playera-chino/etiqueta-qr.jpg"},{"alt":"Close-up del logo geométrico bordado","url":"/product-images/playera-chino/bordado-logo.jpg"}]'::jsonb
   )
 ON CONFLICT (slug) DO UPDATE SET
   name = EXCLUDED.name,
