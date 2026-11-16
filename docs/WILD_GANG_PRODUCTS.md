@@ -93,6 +93,7 @@ Etiquetas base para todos los productos:
 - **Descripción:** Playera negra de WILD GVNG. Un diseño limpio al frente con el logo de la marca, y un impacto visual en la espalda con la tipografía en chino "狂野帮派". Ideal para el día a día.
 - **Alt text:** Playera negra WILD GVNG con logo en el pecho y texto chino en gran formato en la espalda.
 - **SKU base:** `WG-TEE-CN-BLK`
+- **Galería:** frente con logo, espalda con 狂野帮派, etiqueta interior, close-up del logo y etiqueta con QR.
 
 ---
 

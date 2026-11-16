@@ -109,7 +109,7 @@ VALUES
     'Playera negra WILD GVNG con logo en el pecho y texto chino en gran formato en la espalda.',
     'Playera Oversize WILD GVNG "Banda Salvaje" (Chino)',
     'Playera oversize negra WILD GVNG con tipografía china 狂野帮派 en la espalda. Colección Wild Gang.',
-    '[]'::jsonb
+    '[{"alt":"Playera negra WILD GVNG frente con logo bordado en el pecho","url":null},{"alt":"Playera negra WILD GVNG espalda con tipografía china 狂野帮派","url":null},{"alt":"Etiqueta interior WILD GVNG 狂野帮派","url":null},{"alt":"Close-up del logo geométrico bordado","url":null},{"alt":"Close-up de la etiqueta con QR","url":null}]'::jsonb
   )
 ON CONFLICT (slug) DO UPDATE SET
   name = EXCLUDED.name,
