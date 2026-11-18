@@ -3,6 +3,24 @@
 -- Ejecutar en el SQL Editor de Supabase.
 -- =====================================================
 
+-- Helper de permisos (idempotente): admin o staff
+CREATE OR REPLACE FUNCTION public.is_staff_or_admin()
+RETURNS BOOLEAN
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+AS $$
+  SELECT EXISTS (
+    SELECT 1
+    FROM public.user_roles ur
+    JOIN public.roles r ON r.id = ur.role_id
+    WHERE ur.user_id = auth.uid()
+      AND r.name IN ('admin', 'staff')
+  );
+$$;
+
+GRANT EXECUTE ON FUNCTION public.is_staff_or_admin() TO authenticated;
+
 CREATE TABLE IF NOT EXISTS public.league_bracket_state (
   id TEXT PRIMARY KEY,
   state JSONB NOT NULL DEFAULT '{}'::jsonb,

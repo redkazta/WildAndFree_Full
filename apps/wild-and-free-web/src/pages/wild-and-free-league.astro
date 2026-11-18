@@ -29,11 +29,16 @@ const participants = [
   { id: 'p16', name: 'Street Legend', image: 'https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?w=400&h=400&fit=crop&q=80' },
 ];
 
-const rounds = [
-  { key: 'r1', label: 'Ronda 1', matches: 8, span: 1 },
-  { key: 'r2', label: 'Cuartos', matches: 4, span: 2 },
-  { key: 'r3', label: 'Semifinal', matches: 2, span: 4 },
-  { key: 'final', label: 'Final', matches: 1, span: 8 },
+const leftRounds = [
+  { key: 'l1', label: 'Ronda 1', matches: 4, span: 1 },
+  { key: 'l2', label: 'Cuartos', matches: 2, span: 2 },
+  { key: 'l3', label: 'Semifinal', matches: 1, span: 4 },
+];
+
+const rightRounds = [
+  { key: 'r3', label: 'Semifinal', matches: 1, span: 4 },
+  { key: 'r2', label: 'Cuartos', matches: 2, span: 2 },
+  { key: 'r1', label: 'Ronda 1', matches: 4, span: 1 },
 ];
 ---
 
@@ -41,132 +46,181 @@ const rounds = [
   <div class="league-page">
     <div class="league-page-bg" aria-hidden="true"></div>
 
-    <div class="league-inner">
-      <header class="lb-hero">
-        <p class="lb-kicker">Wild Gvng presenta</p>
-        <h1 class="lb-title">
-          WILD <span>AND FREE</span>
-        </h1>
-        <p class="lb-sub">Liga de freestyle · Fase de eliminación</p>
-        <div class="lb-hero-badges">
-          <span class="lb-badge">16 PARTICIPANTES</span>
-          <span class="lb-badge">ELIMINACIÓN DIRECTA</span>
-          <span class="lb-badge">FECHA #1</span>
-        </div>
+    <div class="lb-rotate-gate" role="status">
+      <div class="lb-rotate-phone" aria-hidden="true"><span></span></div>
+      <p class="lb-kicker">Experiencia horizontal</p>
+      <h2 class="lb-rotate-title">Gira tu teléfono</h2>
+      <p class="lb-rotate-copy">La llave y el selector de participantes están diseñados para verse completos en horizontal.</p>
+    </div>
 
-        <div class="lb-toolbar">
-          <div class="lb-sync">
-            <span class="lb-live-dot" id="sync-dot"></span>
-            <span id="sync-label">Conectando…</span>
+    <div class="lb-app">
+      <div class="league-inner">
+        <header class="lb-hero">
+          <p class="lb-kicker">Wild Gvng presenta</p>
+          <h1 class="lb-title">
+            WILD <span>AND FREE</span>
+          </h1>
+          <p class="lb-sub">Liga de freestyle · Fase de eliminación</p>
+          <div class="lb-hero-badges">
+            <span class="lb-badge">16 PARTICIPANTES</span>
+            <span class="lb-badge">ELIMINACIÓN DIRECTA</span>
+            <span class="lb-badge">FECHA #1</span>
           </div>
-          <span class="lb-mode" id="mode-badge">SOLO LECTURA</span>
-          <button type="button" class="lb-reset lb-admin-only" id="reset-bracket">Reiniciar llave</button>
-        </div>
-      </header>
+        </header>
 
-      <section class="lb-panel lb-pool-panel">
-        <div class="lb-section-head">
-          <div>
-            <p class="lb-kicker">Draft</p>
-            <h2 class="lb-section-title">Elige a los 16</h2>
+        <section class="lb-panel lb-board-panel">
+          <div class="lb-section-head">
+            <div>
+              <p class="lb-kicker">Bracket</p>
+              <h2 class="lb-section-title">Camino al título</h2>
+            </div>
+            <div class="lb-toolbar">
+              <div class="lb-sync">
+                <span class="lb-live-dot" id="sync-dot"></span>
+                <span id="sync-label">Conectando…</span>
+              </div>
+              <span class="lb-mode" id="mode-badge">SOLO LECTURA</span>
+              <button type="button" class="lb-reset lb-admin-only" id="reset-bracket">Reiniciar llave</button>
+            </div>
           </div>
-          <p class="lb-pool-count" id="pool-count">16 libres</p>
-        </div>
+          <p class="lb-board-hint">Desliza horizontalmente si tu pantalla es pequeña.</p>
 
-        <div class="lb-carousel">
-          <button type="button" class="lb-carousel-btn" data-carousel="-1" aria-label="Ver participantes anteriores">‹</button>
-          <div class="lb-carousel-track" id="participant-track">
-            {participants.map((participant) => (
-              <article
-                class="lb-chip"
-                data-participant-id={participant.id}
-                data-name={participant.name}
-                data-image={participant.image}
-                draggable="false"
-              >
-                <div class="lb-chip-media">
-                  <img src={participant.image} alt={participant.name} loading="lazy" decoding="async" draggable="false" />
-                  <span class="lb-chip-state" data-chip-state>DISPONIBLE</span>
-                  <button
-                    type="button"
-                    class="lb-chip-x"
-                    data-chip-x={participant.id}
-                    aria-label={`Liberar a ${participant.name}`}
-                    hidden
-                  >×</button>
-                </div>
-                <span class="lb-chip-name">{participant.name}</span>
-              </article>
-            ))}
-          </div>
-          <button type="button" class="lb-carousel-btn" data-carousel="1" aria-label="Ver más participantes">›</button>
-        </div>
+          <div class="lb-board-scroll" id="board-scroll">
+            <div class="lb-board" id="league-board">
+              <svg id="bracket-lines" class="lb-lines" aria-hidden="true"></svg>
 
-        <p class="lb-hint lb-admin-only">
-          Arrastra una tarjeta a la ronda 1 o toca una tarjeta y luego un espacio. La X libera la última posición.
-        </p>
+              <div class="lb-side lb-side-left">
+                {leftRounds.map((round) => (
+                  <div class="lb-round" data-round={round.key}>
+                    <div class="lb-round-label">{round.label}</div>
+                    <div class="lb-round-matches">
+                      {Array.from({ length: round.matches }, (_, index) => {
+                        const matchId = `${round.key}-m${index + 1}`;
+                        return (
+                          <div
+                            class="lb-match"
+                            data-match={matchId}
+                            data-side="left"
+                            style={`grid-row: ${index * round.span + 1} / span ${round.span};`}
+                          >
+                            <div class="lb-slot" data-slot={`${matchId}-p1`} data-round={round.key}></div>
+                            <span class="lb-vs">VS</span>
+                            <div class="lb-slot" data-slot={`${matchId}-p2`} data-round={round.key}></div>
+                            <button type="button" class="lb-advance" data-advance={matchId} aria-label="Bloquear llave y elegir ganador">
+                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 12h15"></path>
+                                <path d="M13 6l6 6-6 6"></path>
+                              </svg>
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
 
-        <div class="lb-steps lb-admin-only">
-          <span><b>01</b> Arrastra 2 participantes</span>
-          <span><b>02</b> Pulsa la flecha de la llave</span>
-          <span><b>03</b> Elige al ganador</span>
-        </div>
-      </section>
-
-      <section class="lb-panel lb-board-panel">
-        <div class="lb-section-head">
-          <div>
-            <p class="lb-kicker">Bracket</p>
-            <h2 class="lb-section-title">Camino al título</h2>
-          </div>
-          <p class="lb-board-hint">Desliza horizontalmente para ver toda la llave.</p>
-        </div>
-
-        <div class="lb-board-scroll" id="board-scroll">
-          <div class="lb-board" id="league-board">
-            <svg id="bracket-lines" class="lb-lines" aria-hidden="true"></svg>
-
-            {rounds.map((round) => (
-              <div class="lb-round" data-round={round.key}>
-                <div class="lb-round-label">{round.label}</div>
-                <div class="lb-round-matches">
-                  {Array.from({ length: round.matches }, (_, index) => {
-                    const matchId = round.key === 'final' ? 'final' : `${round.key}-m${index + 1}`;
-                    return (
-                      <div
-                        class="lb-match"
-                        data-match={matchId}
-                        data-round={round.key}
-                        style={`grid-row: ${index * round.span + 1} / span ${round.span};`}
-                      >
-                        <div class="lb-slot" data-slot={`${matchId}-p1`} data-round={round.key}></div>
-                        <span class="lb-vs">VS</span>
-                        <div class="lb-slot" data-slot={`${matchId}-p2`} data-round={round.key}></div>
-                        <button type="button" class="lb-advance" data-advance={matchId} aria-label="Bloquear llave y elegir ganador">
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M4 12h15"></path>
-                            <path d="M13 6l6 6-6 6"></path>
-                          </svg>
-                        </button>
-                      </div>
-                    );
-                  })}
+              <div class="lb-center">
+                <div class="lb-round-label">Final</div>
+                <div class="lb-center-content">
+                  <div class="lb-champion-wrap">
+                    <span class="lb-champion-caption">Campeón</span>
+                    <div class="lb-slot lb-champion-slot" data-slot="winner" data-round="winner"></div>
+                  </div>
+                  <div class="lb-match lb-final-match" data-match="final" data-side="center">
+                    <div class="lb-slot" data-slot="final-p1" data-round="final"></div>
+                    <span class="lb-vs">VS</span>
+                    <div class="lb-slot" data-slot="final-p2" data-round="final"></div>
+                    <button type="button" class="lb-advance lb-advance-up" data-advance="final" aria-label="Elegir campeón">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 19V4"></path>
+                        <path d="M6 10l6-6 6 6"></path>
+                      </svg>
+                    </button>
+                  </div>
                 </div>
               </div>
-            ))}
 
-            <div class="lb-round lb-round-champion">
-              <div class="lb-round-label">Campeón</div>
-              <div class="lb-round-matches lb-champion-matches">
-                <div class="lb-slot lb-champion-slot" data-slot="winner" data-round="winner"></div>
+              <div class="lb-side lb-side-right">
+                {rightRounds.map((round) => (
+                  <div class="lb-round" data-round={round.key}>
+                    <div class="lb-round-label">{round.label}</div>
+                    <div class="lb-round-matches">
+                      {Array.from({ length: round.matches }, (_, index) => {
+                        const matchId = `${round.key}-m${index + 1}`;
+                        return (
+                          <div
+                            class="lb-match"
+                            data-match={matchId}
+                            data-side="right"
+                            style={`grid-row: ${index * round.span + 1} / span ${round.span};`}
+                          >
+                            <div class="lb-slot" data-slot={`${matchId}-p1`} data-round={round.key}></div>
+                            <span class="lb-vs">VS</span>
+                            <div class="lb-slot" data-slot={`${matchId}-p2`} data-round={round.key}></div>
+                            <button type="button" class="lb-advance" data-advance={matchId} aria-label="Bloquear llave y elegir ganador">
+                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 12h15"></path>
+                                <path d="M13 6l6 6-6 6"></path>
+                              </svg>
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
-        </div>
-      </section>
-    </div>
+        </section>
 
-    <Sponsors />
+        <section class="lb-panel lb-pool-panel">
+          <div class="lb-section-head">
+            <div>
+              <p class="lb-kicker">Draft</p>
+              <h2 class="lb-section-title">Elige a los 16</h2>
+            </div>
+            <p class="lb-pool-count" id="pool-count">16 libres</p>
+          </div>
+
+          <div class="lb-carousel">
+            <button type="button" class="lb-carousel-btn" data-carousel="-1" aria-label="Ver participantes anteriores">‹</button>
+            <div class="lb-carousel-track" id="participant-track">
+              {participants.map((participant) => (
+                <article
+                  class="lb-chip"
+                  data-participant-id={participant.id}
+                  data-name={participant.name}
+                  data-image={participant.image}
+                  draggable="false"
+                >
+                  <div class="lb-chip-media">
+                    <img src={participant.image} alt={participant.name} loading="lazy" decoding="async" draggable="false" />
+                    <span class="lb-chip-state" data-chip-state>DISPONIBLE</span>
+                    <button
+                      type="button"
+                      class="lb-chip-x"
+                      data-chip-x={participant.id}
+                      aria-label={`Liberar a ${participant.name}`}
+                      hidden
+                    >×</button>
+                  </div>
+                  <span class="lb-chip-name">{participant.name}</span>
+                </article>
+              ))}
+            </div>
+            <button type="button" class="lb-carousel-btn" data-carousel="1" aria-label="Ver más participantes">›</button>
+          </div>
+
+          <p class="lb-hint lb-admin-only">
+            Arrastra una tarjeta a la ronda 1 o toca una tarjeta y luego un espacio. La X libera la última posición.
+          </p>
+        </section>
+      </div>
+
+      <Sponsors />
+    </div>
   </div>
 
   <div class="lb-picker" id="winner-picker" hidden>
@@ -212,6 +266,61 @@ const rounds = [
     mask-image: radial-gradient(circle at 50% 20%, #000 20%, transparent 78%);
   }
 
+  .lb-app {
+    position: relative;
+    z-index: 1;
+  }
+
+  .lb-rotate-gate {
+    display: none;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    min-height: calc(100dvh - 48px);
+    align-content: center;
+    gap: 10px;
+    padding: 32px 22px;
+    text-align: center;
+  }
+
+  .lb-rotate-phone {
+    position: relative;
+    width: 58px;
+    height: 98px;
+    margin-bottom: 8px;
+    border: 2px solid var(--primary);
+    border-radius: 12px;
+    box-shadow: 0 0 30px rgba(201, 131, 0, 0.2);
+    animation: lbPhone 2.4s ease-in-out infinite;
+  }
+
+  .lb-rotate-phone span {
+    position: absolute;
+    left: 50%;
+    bottom: 7px;
+    width: 16px;
+    height: 2px;
+    border-radius: 99px;
+    background: rgba(255, 255, 255, 0.45);
+    transform: translateX(-50%);
+  }
+
+  .lb-rotate-title {
+    margin: 0;
+    color: var(--text);
+    font-size: clamp(2rem, 9vw, 3.2rem);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+  }
+
+  .lb-rotate-copy {
+    max-width: 340px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 11px;
+    line-height: 1.6;
+  }
+
   .league-inner {
     position: relative;
     z-index: 1;
@@ -221,7 +330,7 @@ const rounds = [
 
   .lb-hero {
     text-align: center;
-    padding: 18px 0 10px;
+    padding: 10px 0 6px;
   }
 
   .lb-kicker {
@@ -235,7 +344,7 @@ const rounds = [
 
   .lb-title {
     margin: 0;
-    font-size: clamp(2.8rem, 7.2vw, 6.4rem);
+    font-size: clamp(2.2rem, 5vw, 4.2rem);
     line-height: 0.88;
     font-weight: 900;
     font-style: italic;
@@ -253,11 +362,11 @@ const rounds = [
   }
 
   .lb-sub {
-    margin: 14px 0 0;
+    margin: 8px 0 0;
     color: var(--text-muted);
-    font-size: 10px;
+    font-size: 8px;
     font-weight: 800;
-    letter-spacing: 0.32em;
+    letter-spacing: 0.26em;
     text-transform: uppercase;
   }
 
@@ -265,44 +374,43 @@ const rounds = [
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 18px;
+    gap: 6px;
+    margin-top: 10px;
   }
 
   .lb-badge {
-    padding: 6px 11px;
+    padding: 4px 8px;
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.03);
     color: var(--text-muted);
-    font-size: 8px;
+    font-size: 7px;
     font-weight: 900;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
   }
 
   .lb-toolbar {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 18px;
+    gap: 6px;
   }
 
   .lb-sync,
   .lb-mode {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 7px 12px;
+    gap: 6px;
+    padding: 5px 9px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 999px;
     background: rgba(0, 0, 0, 0.28);
     color: var(--text-muted);
-    font-size: 8px;
+    font-size: 7px;
     font-weight: 900;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
   }
 
@@ -321,14 +429,14 @@ const rounds = [
   }
 
   .lb-reset {
-    padding: 7px 13px;
+    padding: 5px 9px;
     border: 1px solid rgba(138, 3, 3, 0.5);
     border-radius: 999px;
     background: rgba(138, 3, 3, 0.12);
     color: #ff8b8b;
-    font-size: 8px;
+    font-size: 7px;
     font-weight: 900;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     cursor: pointer;
     transition: 0.2s ease;
@@ -341,10 +449,10 @@ const rounds = [
   }
 
   .lb-panel {
-    margin-top: 22px;
-    padding: 18px;
+    margin-top: 12px;
+    padding: 12px;
     border: 1px solid rgba(255, 255, 255, 0.09);
-    border-radius: 24px;
+    border-radius: 22px;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 0, 0.3));
     box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
     backdrop-filter: blur(12px);
@@ -456,7 +564,7 @@ const rounds = [
 
   .lb-chip {
     position: relative;
-    flex: 0 0 112px;
+    flex: 0 0 88px;
     padding: 6px;
     border: 1px solid rgba(255, 255, 255, 0.09);
     border-radius: 16px;
@@ -567,7 +675,12 @@ const rounds = [
   }
 
   .lb-board-panel {
-    padding: 18px 10px 12px;
+    padding: 10px 8px 8px;
+  }
+
+  .lb-pool-panel {
+    margin-top: 10px;
+    padding: 10px 12px 8px;
   }
 
   .lb-board-panel .lb-section-head {
@@ -593,14 +706,24 @@ const rounds = [
   }
 
   .lb-board {
-    --lb-gap: 84px;
-    --lb-round-width: 196px;
-    --lb-board-height: 1240px;
+    --lb-gap: 44px;
+    --lb-round-width: 150px;
+    --lb-center-width: 190px;
+    --lb-center-gap: 46px;
+    --lb-board-height: 500px;
+    --lb-arrow-size: 34px;
     position: relative;
     display: flex;
+    align-items: flex-start;
     gap: var(--lb-gap);
     min-width: max-content;
-    padding: 4px 18px 16px;
+    padding: 4px 18px 12px;
+  }
+
+  .lb-side {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--lb-gap);
   }
 
   .lb-round {
@@ -611,22 +734,61 @@ const rounds = [
   }
 
   .lb-round-label {
-    height: 34px;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: rgba(255, 255, 255, 0.42);
-    font-size: 8px;
+    font-size: 7px;
     font-weight: 900;
-    letter-spacing: 0.24em;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
   }
 
   .lb-round-matches {
     display: grid;
-    grid-template-rows: repeat(8, 1fr);
-    gap: 14px;
+    grid-template-rows: repeat(4, 1fr);
+    gap: 12px;
     height: var(--lb-board-height);
+  }
+
+  .lb-center {
+    position: relative;
+    z-index: 2;
+    flex: 0 0 var(--lb-center-width);
+    width: var(--lb-center-width);
+  }
+
+  .lb-center-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--lb-center-gap);
+    height: var(--lb-board-height);
+  }
+
+  .lb-champion-wrap {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+  }
+
+  .lb-champion-caption {
+    color: var(--primary);
+    font-size: 7px;
+    font-weight: 900;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+  }
+
+  .lb-final-match {
+    width: 100%;
   }
 
   .lb-match {
@@ -663,7 +825,7 @@ const rounds = [
 
   .lb-slot {
     position: relative;
-    height: 52px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -829,10 +991,10 @@ const rounds = [
   .lb-advance {
     position: absolute;
     top: 50%;
-    right: -48px;
+    right: -39px;
     z-index: 7;
-    width: 34px;
-    height: 34px;
+    width: var(--lb-arrow-size);
+    height: var(--lb-arrow-size);
     display: none;
     align-items: center;
     justify-content: center;
@@ -845,6 +1007,23 @@ const rounds = [
     transition: 0.2s ease;
   }
 
+  .lb-match[data-side='right'] .lb-advance {
+    right: auto;
+    left: -39px;
+  }
+
+  .lb-match[data-side='right'] .lb-advance[data-status='open'] svg {
+    transform: rotate(180deg);
+  }
+
+  .lb-match[data-match='final'] .lb-advance {
+    top: -40px;
+    left: 50%;
+    right: auto;
+    margin-left: -17px;
+    transform: none;
+  }
+
   .lb-advance svg {
     width: 16px;
     height: 16px;
@@ -855,6 +1034,10 @@ const rounds = [
     background: var(--primary);
     color: #000;
     transform: translateY(-50%) scale(1.08);
+  }
+
+  .lb-match[data-match='final'] .lb-advance:hover:not(:disabled) {
+    transform: scale(1.08);
   }
 
   .lb-advance:disabled {
@@ -875,24 +1058,16 @@ const rounds = [
     opacity: 1;
   }
 
-  .lb-champion-matches {
-    display: grid;
-    grid-template-rows: repeat(8, 1fr);
-    height: var(--lb-board-height);
-  }
-
   .lb-champion-slot {
-    grid-row: 1 / span 8;
-    align-self: center;
-    width: 190px;
-    height: 92px;
+    width: 100%;
+    height: 72px;
     overflow: visible;
     border: 2px solid rgba(201, 131, 0, 0.42);
-    border-radius: 18px;
+    border-radius: 16px;
   }
 
   .lb-champion-slot .lb-slot-img {
-    border-radius: 16px;
+    border-radius: 14px;
   }
 
   .lb-champion-slot.is-filled {
@@ -901,7 +1076,7 @@ const rounds = [
   }
 
   .lb-champion-slot.is-filled .lb-slot-name {
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .lb-champion-slot.is-celebrating {
@@ -1195,6 +1370,11 @@ const rounds = [
     50% { box-shadow: 0 0 0 6px rgba(201, 131, 0, 0); }
   }
 
+  @keyframes lbPhone {
+    0%, 38% { transform: rotate(0deg); }
+    62%, 100% { transform: rotate(90deg); }
+  }
+
   @keyframes lbPop {
     0% { transform: scale(0.9); opacity: 0.2; }
     70% { transform: scale(1.04); }
@@ -1222,76 +1402,89 @@ const rounds = [
     50% { box-shadow: 0 0 60px rgba(201, 131, 0, 0.55); }
   }
 
-  @media (max-width: 900px) {
-    .league-page {
-      padding: 18px 9px 52px;
-    }
-
-    .lb-panel {
-      padding: 13px;
-      border-radius: 20px;
-    }
-
+  @media (max-width: 1200px) {
     .lb-board {
-      --lb-gap: 72px;
-      --lb-round-width: 172px;
-      --lb-board-height: 1120px;
-    }
-
-    .lb-slot {
-      height: 47px;
-    }
-
-    .lb-chip {
-      flex-basis: 98px;
-    }
-
-    .lb-advance {
-      right: -41px;
-      width: 30px;
-      height: 30px;
-    }
-
-    .lb-champion-slot {
-      width: 168px;
-      height: 84px;
-    }
-  }
-
-  @media (max-width: 600px) {
-    .lb-carousel-btn {
-      display: none;
-    }
-
-    .lb-carousel-track {
-      gap: 9px;
-    }
-
-    .lb-chip {
-      flex-basis: 88px;
-      border-radius: 13px;
-    }
-
-    .lb-board {
-      --lb-gap: 64px;
-      --lb-round-width: 152px;
-      --lb-board-height: 1060px;
+      --lb-gap: 34px;
+      --lb-round-width: 130px;
+      --lb-center-width: 168px;
+      --lb-center-gap: 40px;
+      --lb-board-height: 480px;
+      --lb-arrow-size: 30px;
     }
 
     .lb-slot {
       height: 43px;
-      border-radius: 10px;
-    }
-
-    .lb-slot-name {
-      font-size: 8px;
-      padding-left: 7px;
     }
 
     .lb-advance {
-      right: -37px;
-      width: 28px;
-      height: 28px;
+      right: -32px;
+    }
+
+    .lb-match[data-side='right'] .lb-advance {
+      right: auto;
+      left: -32px;
+    }
+
+    .lb-match[data-match='final'] .lb-advance {
+      top: -35px;
+      left: 50%;
+      right: auto;
+      margin-left: -15px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .league-page {
+      padding: 10px 7px 34px;
+    }
+
+    .lb-panel {
+      padding: 9px;
+      border-radius: 18px;
+    }
+
+    .lb-board {
+      --lb-gap: 30px;
+      --lb-round-width: 104px;
+      --lb-center-width: 138px;
+      --lb-center-gap: 30px;
+      --lb-board-height: 420px;
+      --lb-arrow-size: 26px;
+    }
+
+    .lb-slot {
+      height: 36px;
+      border-radius: 9px;
+    }
+
+    .lb-advance {
+      right: -28px;
+    }
+
+    .lb-match[data-side='right'] .lb-advance {
+      right: auto;
+      left: -28px;
+    }
+
+    .lb-match[data-match='final'] .lb-advance {
+      top: -28px;
+      left: 50%;
+      right: auto;
+      margin-left: -13px;
+    }
+
+    .lb-slot-name {
+      font-size: 7px;
+      padding: 0 22px 0 7px;
+    }
+
+    .lb-vs {
+      font-size: 5px;
+      margin: 1px 0;
+    }
+
+    .lb-chip {
+      flex-basis: 76px;
     }
 
     .lb-advance svg {
@@ -1300,10 +1493,251 @@ const rounds = [
     }
 
     .lb-champion-slot {
-      width: 148px;
-      height: 76px;
+      height: 54px;
     }
 
+    .lb-champion-slot.is-filled .lb-slot-name {
+      font-size: 8px;
+    }
+
+    .lb-round-label {
+      height: 24px;
+      font-size: 6px;
+    }
+
+    .lb-carousel-btn {
+      display: none;
+    }
+
+    .lb-board-hint {
+      display: none;
+    }
+  }
+
+  @media (orientation: portrait) and (max-width: 900px) {
+    .lb-rotate-gate {
+      display: grid;
+    }
+
+    .lb-app,
+    .lb-picker,
+    .lb-public-pending,
+    .lb-toast {
+      display: none !important;
+    }
+  }
+
+  @media (orientation: landscape) and (max-height: 560px) {
+    body:has(.league-page) .wg-header {
+      display: none !important;
+    }
+
+    body:has(.league-page) main.pt-20 {
+      padding-top: 4px !important;
+    }
+
+    .league-page {
+      padding: 4px 5px 12px;
+    }
+
+    .lb-hero {
+      display: none;
+    }
+
+    .lb-panel {
+      margin-top: 4px;
+      padding: 5px 7px;
+      border-radius: 12px;
+    }
+
+    .lb-board-panel {
+      padding: 4px 5px;
+    }
+
+    .lb-pool-panel {
+      margin-top: 4px;
+      padding: 4px 7px;
+    }
+
+    .lb-section-head {
+      margin-bottom: 3px;
+      align-items: center;
+    }
+
+    .lb-pool-panel .lb-section-head {
+      margin-bottom: 2px;
+    }
+
+    .lb-pool-panel .lb-section-title {
+      font-size: 0.7rem;
+    }
+
+    .lb-section-title {
+      font-size: 0.8rem;
+    }
+
+    .lb-kicker {
+      display: none;
+    }
+
+    .lb-sync,
+    .lb-mode,
+    .lb-reset {
+      padding: 3px 6px;
+      font-size: 6px;
+    }
+
+    .lb-board {
+      --lb-gap: 22px;
+      --lb-round-width: 84px;
+      --lb-center-width: 108px;
+      --lb-center-gap: 18px;
+      --lb-board-height: clamp(182px, calc(100dvh - 172px), 300px);
+      --lb-arrow-size: 22px;
+      padding: 0 8px 4px;
+    }
+
+    .lb-slot {
+      height: clamp(16px, calc(var(--lb-board-height) / 8 - 7px), 24px);
+      border-radius: 7px;
+    }
+
+    .lb-advance {
+      right: -22px;
+    }
+
+    .lb-match[data-side='right'] .lb-advance {
+      right: auto;
+      left: -22px;
+    }
+
+    .lb-match[data-match='final'] .lb-advance {
+      top: -22px;
+      left: 50%;
+      right: auto;
+      margin-left: -11px;
+    }
+
+    .lb-slot-name {
+      padding: 0 18px 0 5px;
+      font-size: 6px;
+    }
+
+    .lb-slot-empty {
+      font-size: 5px;
+    }
+
+    .lb-slot-x {
+      width: 14px;
+      height: 14px;
+      font-size: 8px;
+    }
+
+    .lb-vs {
+      display: none;
+    }
+
+    .lb-match {
+      padding: 4px;
+      border-radius: 10px;
+    }
+
+    .lb-round-matches {
+      gap: 5px;
+    }
+
+    .lb-round-label {
+      height: 14px;
+      font-size: 5px;
+      letter-spacing: 0.14em;
+    }
+
+    .lb-champion-slot {
+      height: 40px;
+      border-radius: 9px;
+    }
+
+    .lb-champion-caption {
+      display: none;
+    }
+
+    .lb-advance svg {
+      width: 11px;
+      height: 11px;
+    }
+
+    .lb-carousel-track {
+      gap: 6px;
+      padding: 0;
+    }
+
+    .lb-chip {
+      flex-basis: 42px;
+      padding: 3px;
+      border-radius: 8px;
+    }
+
+    .lb-chip-name {
+      margin-top: 2px;
+      font-size: 5px;
+    }
+
+    .lb-chip-state {
+      display: none;
+    }
+
+    .lb-chip-x {
+      width: 13px;
+      height: 13px;
+      font-size: 8px;
+    }
+
+    .lb-hint,
+    .lb-board-hint,
+    .lb-steps {
+      display: none !important;
+    }
+
+    .lb-pool-count {
+      font-size: 6px;
+    }
+  }
+
+  @media (orientation: landscape) and (max-height: 560px) and (max-width: 800px) {
+    .lb-board {
+      --lb-gap: 15px;
+      --lb-round-width: 70px;
+      --lb-center-width: 96px;
+      --lb-center-gap: 14px;
+      --lb-arrow-size: 18px;
+    }
+
+    .lb-slot-name {
+      padding: 0 14px 0 4px;
+      font-size: 5px;
+    }
+
+    .lb-advance {
+      right: -16px;
+    }
+
+    .lb-match[data-side='right'] .lb-advance {
+      right: auto;
+      left: -16px;
+    }
+
+    .lb-match[data-match='final'] .lb-advance {
+      top: -18px;
+      margin-left: -9px;
+    }
+
+    .lb-advance svg {
+      width: 9px;
+      height: 9px;
+    }
+  }
+
+  @media (max-width: 600px) {
     .lb-picker-options {
       grid-template-columns: 1fr;
     }
@@ -1311,10 +1745,6 @@ const rounds = [
     .lb-pick-card img,
     .lb-pick-fallback {
       height: 140px;
-    }
-
-    .lb-toolbar {
-      gap: 6px;
     }
   }
 
@@ -1368,11 +1798,34 @@ const rounds = [
 
   const TABLE = 'league_bracket_state';
   const ROW_ID = 'wild-and-free-league';
-  const LOCAL_KEY = 'wg-league-state-v2';
+  const LOCAL_KEY = 'wg-league-state-v3';
 
   const MATCHES: MatchDef[] = (() => {
     const list: MatchDef[] = [];
-    for (let i = 1; i <= 8; i += 1) {
+    for (let i = 1; i <= 4; i += 1) {
+      list.push({
+        id: `l1-m${i}`,
+        round: 1,
+        slots: [`l1-m${i}-p1`, `l1-m${i}-p2`],
+        next: `l2-m${Math.ceil(i / 2)}-p${i % 2 === 1 ? 1 : 2}`,
+      });
+    }
+    for (let i = 1; i <= 2; i += 1) {
+      list.push({
+        id: `l2-m${i}`,
+        round: 2,
+        slots: [`l2-m${i}-p1`, `l2-m${i}-p2`],
+        next: `l3-m1-p${i}`,
+      });
+    }
+    list.push({
+      id: 'l3-m1',
+      round: 3,
+      slots: ['l3-m1-p1', 'l3-m1-p2'],
+      next: 'final-p1',
+    });
+
+    for (let i = 1; i <= 4; i += 1) {
       list.push({
         id: `r1-m${i}`,
         round: 1,
@@ -1380,22 +1833,21 @@ const rounds = [
         next: `r2-m${Math.ceil(i / 2)}-p${i % 2 === 1 ? 1 : 2}`,
       });
     }
-    for (let i = 1; i <= 4; i += 1) {
+    for (let i = 1; i <= 2; i += 1) {
       list.push({
         id: `r2-m${i}`,
         round: 2,
         slots: [`r2-m${i}-p1`, `r2-m${i}-p2`],
-        next: `r3-m${Math.ceil(i / 2)}-p${i % 2 === 1 ? 1 : 2}`,
+        next: `r3-m1-p${i}`,
       });
     }
-    for (let i = 1; i <= 2; i += 1) {
-      list.push({
-        id: `r3-m${i}`,
-        round: 3,
-        slots: [`r3-m${i}-p1`, `r3-m${i}-p2`],
-        next: `final-p${i}`,
-      });
-    }
+    list.push({
+      id: 'r3-m1',
+      round: 3,
+      slots: ['r3-m1-p1', 'r3-m1-p2'],
+      next: 'final-p2',
+    });
+
     list.push({
       id: 'final',
       round: 4,
@@ -1425,7 +1877,7 @@ const rounds = [
   const resetButton = document.getElementById('reset-bracket') as HTMLButtonElement | null;
 
   const emptyState = (): BracketState => ({
-    version: 2,
+    version: 3,
     rev: 0,
     slots: {},
     matches: Object.fromEntries(
@@ -1466,9 +1918,9 @@ const rounds = [
   };
 
   const slotRound = (slotId: string): number => {
-    if (slotId.startsWith('r1-')) return 1;
-    if (slotId.startsWith('r2-')) return 2;
-    if (slotId.startsWith('r3-')) return 3;
+    if (/^[lr]1-/.test(slotId)) return 1;
+    if (/^[lr]2-/.test(slotId)) return 2;
+    if (/^[lr]3-/.test(slotId)) return 3;
     if (slotId === 'final-p1' || slotId === 'final-p2') return 4;
     if (slotId === 'winner') return 5;
     return 0;
@@ -1604,14 +2056,23 @@ const rounds = [
 
       const sourceRect = source.getBoundingClientRect();
       const targetRect = target.getBoundingClientRect();
-      const x1 = sourceRect.right - boardRect.left;
-      const y1 = sourceRect.top - boardRect.top + sourceRect.height / 2;
-      const x2 = targetRect.left - boardRect.left;
-      const y2 = targetRect.top - boardRect.top + targetRect.height / 2;
-      const midX = x1 + (x2 - x1) / 2;
-
       const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      path.setAttribute('d', `M ${Math.round(x1)} ${Math.round(y1)} H ${Math.round(midX)} V ${Math.round(y2)} H ${Math.round(x2)}`);
+
+      if (match.id === 'final') {
+        const x = Math.round(sourceRect.left - boardRect.left + sourceRect.width / 2);
+        const y1 = Math.round(sourceRect.top - boardRect.top);
+        const y2 = Math.round(targetRect.bottom - boardRect.top);
+        path.setAttribute('d', `M ${x} ${y1} V ${y2}`);
+      } else {
+        const isRight = match.id.startsWith('r');
+        const x1 = Math.round((isRight ? sourceRect.left : sourceRect.right) - boardRect.left);
+        const y1 = Math.round(sourceRect.top - boardRect.top + sourceRect.height / 2);
+        const x2 = Math.round((isRight ? targetRect.right : targetRect.left) - boardRect.left);
+        const y2 = Math.round(targetRect.top - boardRect.top + targetRect.height / 2);
+        const midX = Math.round(x1 + (x2 - x1) / 2);
+        path.setAttribute('d', `M ${x1} ${y1} H ${midX} V ${y2} H ${x2}`);
+      }
+
       path.setAttribute('class', 'lb-line');
 
       const status = state.matches[match.id]?.status;
@@ -1715,6 +2176,8 @@ const rounds = [
       arrow.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"></path></svg>';
     } else if (matchState.status === 'awaiting') {
       arrow.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg>';
+    } else if (matchId === 'final') {
+      arrow.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V4"></path><path d="M6 10l6-6 6 6"></path></svg>';
     } else {
       arrow.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="M13 6l6 6-6 6"></path></svg>';
     }
