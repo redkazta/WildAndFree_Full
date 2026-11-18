@@ -528,21 +528,15 @@ const rightRounds = [
   }
 
   .lb-carousel-track {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(16, minmax(0, 1fr));
     flex: 1;
-    gap: 12px;
+    gap: 10px;
     padding: 4px 2px 8px;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-  }
-
-  .lb-carousel-track::-webkit-scrollbar {
-    display: none;
   }
 
   .lb-carousel-btn {
+    display: none;
     flex: 0 0 auto;
     width: 36px;
     height: 36px;
@@ -564,7 +558,7 @@ const rightRounds = [
 
   .lb-chip {
     position: relative;
-    flex: 0 0 88px;
+    min-width: 0;
     padding: 6px;
     border: 1px solid rgba(255, 255, 255, 0.09);
     border-radius: 16px;
@@ -1431,6 +1425,10 @@ const rightRounds = [
       right: auto;
       margin-left: -15px;
     }
+
+    .lb-chip-state {
+      display: none;
+    }
   }
 
   @media (max-width: 900px) {
@@ -1484,7 +1482,8 @@ const rightRounds = [
     }
 
     .lb-chip {
-      flex-basis: 76px;
+      padding: 3px;
+      border-radius: 8px;
     }
 
     .lb-advance svg {
@@ -1672,7 +1671,6 @@ const rightRounds = [
     }
 
     .lb-chip {
-      flex-basis: 42px;
       padding: 3px;
       border-radius: 8px;
     }
