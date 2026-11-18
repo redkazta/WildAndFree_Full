@@ -23,6 +23,7 @@ const migrations = [
   "supabase/migrations/20260726_functions_tokens.sql",
   "supabase/migrations/20260727_seed_crew_posts_final.sql",
   "supabase/migrations/20260728_seed_exclusive_content.sql",
+  "supabase/migrations/20261118_league_bracket_realtime.sql",
 ];
 
 async function applyMigrations(client) {

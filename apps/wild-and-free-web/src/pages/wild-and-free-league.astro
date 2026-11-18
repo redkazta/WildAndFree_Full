@@ -5,13 +5,12 @@ import tenantConfig from '../../../../packages/shared-types/tenant-config.json';
 
 const tenant = tenantConfig['wild-and-free'];
 const config = {
-  name: "Wild Gvng - Wild and Free League",
+  name: 'Wild Gvng - Wild and Free League',
   primary_color: tenant.primary_color,
-  secondary_color: tenant.secondary_color
+  secondary_color: tenant.secondary_color,
 };
 
-// 16 Participantes iniciales (Mock) con fotografía callejera de alta calidad
-const initialParticipants = [
+const participants = [
   { id: 'p1', name: 'Lil Kiro', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&q=80' },
   { id: 'p2', name: 'Neon Ghost', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&q=80' },
   { id: 'p3', name: 'Shadow V', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&q=80' },
@@ -29,884 +28,2474 @@ const initialParticipants = [
   { id: 'p15', name: 'Ghetto Star', image: 'https://images.unsplash.com/photo-1463453091185-61582044d556?w=400&h=400&fit=crop&q=80' },
   { id: 'p16', name: 'Street Legend', image: 'https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?w=400&h=400&fit=crop&q=80' },
 ];
+
+const rounds = [
+  { key: 'r1', label: 'Ronda 1', matches: 8, span: 1 },
+  { key: 'r2', label: 'Cuartos', matches: 4, span: 2 },
+  { key: 'r3', label: 'Semifinal', matches: 2, span: 4 },
+  { key: 'final', label: 'Final', matches: 1, span: 8 },
+];
 ---
 
 <Layout config={config}>
-  <div class="min-h-screen bg-[var(--bg)] pb-40 px-4 overflow-x-hidden">
-    <div class="max-w-[1600px] mx-auto space-y-12 animate-fade-in-up">
-      <div class="space-y-4 text-center">
-        <h1 class="text-6xl md:text-8xl font-black tracking-tighter text-[var(--text)] uppercase leading-none hover:text-[var(--primary)] transition-colors duration-500 cursor-default">
-          WILD <span class="text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] to-red-600">AND FREE</span>
+  <div class="league-page">
+    <div class="league-page-bg" aria-hidden="true"></div>
+
+    <div class="league-inner">
+      <header class="lb-hero">
+        <p class="lb-kicker">Wild Gvng presenta</p>
+        <h1 class="lb-title">
+          WILD <span>AND FREE</span>
         </h1>
-        <p class="text-xl text-[var(--text-muted)] font-bold uppercase tracking-[0.3em] hover:text-[var(--text)] transition-colors duration-300">Liga de Freestyle • Fase de Eliminación</p>
-      </div>
-
-      <!-- Estado en Tiempo Real -->
-      <div class="flex justify-center animate-pulse-slow">
-        <div id="realtime-status" class="flex items-center gap-3 px-6 py-2 bg-[var(--bg)] border-2 border-[var(--border-strong)] hover:border-[var(--primary)] transition-colors duration-300 rounded-full group">
-          <span class="w-2 h-2 rounded-full bg-[var(--primary)] animate-ping"></span>
-          <span class="text-[10px] font-black text-[var(--text-secondary)] group-hover:text-[var(--text)] uppercase tracking-widest transition-colors">Sincronización en Tiempo Real Activa</span>
+        <p class="lb-sub">Liga de freestyle · Fase de eliminación</p>
+        <div class="lb-hero-badges">
+          <span class="lb-badge">16 PARTICIPANTES</span>
+          <span class="lb-badge">ELIMINACIÓN DIRECTA</span>
+          <span class="lb-badge">FECHA #1</span>
         </div>
-      </div>
 
-      <!-- Pool de Participantes -->
-      <div class="bg-[var(--bg-card)] border border-[var(--border)] hover:border-[var(--primary)]/50 transition-colors duration-500 rounded-[2rem] p-8 space-y-6 backdrop-blur-sm">
-        <h3 class="text-xs font-black text-[var(--primary)] uppercase tracking-[0.4em] text-center mb-8">Participantes Disponibles</h3>
-        <div id="participants-pool" class="grid grid-cols-4 md:grid-cols-8 gap-4 max-w-4xl mx-auto">
-          {initialParticipants.map((p, i) => (
-            <div 
-              draggable="true" 
-              id={p.id}
-              data-name={p.name}
-              data-image={p.image}
-              class="participant-item group relative aspect-square rounded-xl overflow-hidden cursor-grab active:cursor-grabbing border-2 border-[var(--border)] hover:border-[var(--primary)] transition-all duration-300 shadow-lg hover:shadow-[0_0_15px_var(--primary)] hover:-translate-y-1"
-              style={`animation-delay: ${i * 50}ms`}
-            >
-              <img src={p.image} alt={p.name} width="200" height="200" loading="lazy" decoding="async" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-500" />
-              <div class="participant-used hidden absolute inset-0 bg-[var(--bg)] backdrop-blur-[2px] flex items-center justify-center">
-                <div class="w-10 h-10 border-2 border-[var(--border-faint)]0 flex items-center justify-center text-[var(--text)] font-black text-xl leading-none rounded-full">×</div>
-              </div>
-              <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-2">
-                <span class="text-[8px] font-black text-[var(--text)] text-center uppercase tracking-widest px-1">{p.name}</span>
-              </div>
-            </div>
-          ))}
+        <div class="lb-toolbar">
+          <div class="lb-sync">
+            <span class="lb-live-dot" id="sync-dot"></span>
+            <span id="sync-label">Conectando…</span>
+          </div>
+          <span class="lb-mode" id="mode-badge">SOLO LECTURA</span>
+          <button type="button" class="lb-reset lb-admin-only" id="reset-bracket">Reiniciar llave</button>
         </div>
-      </div>
+      </header>
 
-      <!-- Llaves del Torneo -->
-      <div class="tournament-wrap py-10">
-        <div class="bracket">
-          <svg id="bracket-lines" class="bracket-lines" aria-hidden="true"></svg>
-          <div class="side side-left">
-            <div class="col col-r1">
-              {[1, 2, 3, 4].map(i => (
-                <div class="match match-r1 match-left">
-                  <div class="bracket-slot" data-side="left" data-round="1" data-slot={`l1-m${i}-p1`}></div>
-                  <div class="bracket-slot" data-side="left" data-round="1" data-slot={`l1-m${i}-p2`}></div>
+      <section class="lb-panel lb-pool-panel">
+        <div class="lb-section-head">
+          <div>
+            <p class="lb-kicker">Draft</p>
+            <h2 class="lb-section-title">Elige a los 16</h2>
+          </div>
+          <p class="lb-pool-count" id="pool-count">16 libres</p>
+        </div>
+
+        <div class="lb-carousel">
+          <button type="button" class="lb-carousel-btn" data-carousel="-1" aria-label="Ver participantes anteriores">‹</button>
+          <div class="lb-carousel-track" id="participant-track">
+            {participants.map((participant) => (
+              <article
+                class="lb-chip"
+                data-participant-id={participant.id}
+                data-name={participant.name}
+                data-image={participant.image}
+                draggable="false"
+              >
+                <div class="lb-chip-media">
+                  <img src={participant.image} alt={participant.name} loading="lazy" decoding="async" draggable="false" />
+                  <span class="lb-chip-state" data-chip-state>DISPONIBLE</span>
+                  <button
+                    type="button"
+                    class="lb-chip-x"
+                    data-chip-x={participant.id}
+                    aria-label={`Liberar a ${participant.name}`}
+                    hidden
+                  >×</button>
                 </div>
-              ))}
-            </div>
-            <div class="col col-r2">
-              {[1, 2].map(i => (
-                <div class="match match-r2 match-left">
-                  <div class="bracket-slot" data-side="left" data-round="2" data-slot={`l2-m${i}-p1`}></div>
-                  <div class="bracket-slot" data-side="left" data-round="2" data-slot={`l2-m${i}-p2`}></div>
+                <span class="lb-chip-name">{participant.name}</span>
+              </article>
+            ))}
+          </div>
+          <button type="button" class="lb-carousel-btn" data-carousel="1" aria-label="Ver más participantes">›</button>
+        </div>
+
+        <p class="lb-hint lb-admin-only">
+          Arrastra una tarjeta a la ronda 1 o toca una tarjeta y luego un espacio. La X libera la última posición.
+        </p>
+
+        <div class="lb-steps lb-admin-only">
+          <span><b>01</b> Arrastra 2 participantes</span>
+          <span><b>02</b> Pulsa la flecha de la llave</span>
+          <span><b>03</b> Elige al ganador</span>
+        </div>
+      </section>
+
+      <section class="lb-panel lb-board-panel">
+        <div class="lb-section-head">
+          <div>
+            <p class="lb-kicker">Bracket</p>
+            <h2 class="lb-section-title">Camino al título</h2>
+          </div>
+          <p class="lb-board-hint">Desliza horizontalmente para ver toda la llave.</p>
+        </div>
+
+        <div class="lb-board-scroll" id="board-scroll">
+          <div class="lb-board" id="league-board">
+            <svg id="bracket-lines" class="lb-lines" aria-hidden="true"></svg>
+
+            {rounds.map((round) => (
+              <div class="lb-round" data-round={round.key}>
+                <div class="lb-round-label">{round.label}</div>
+                <div class="lb-round-matches">
+                  {Array.from({ length: round.matches }, (_, index) => {
+                    const matchId = round.key === 'final' ? 'final' : `${round.key}-m${index + 1}`;
+                    return (
+                      <div
+                        class="lb-match"
+                        data-match={matchId}
+                        data-round={round.key}
+                        style={`grid-row: ${index * round.span + 1} / span ${round.span};`}
+                      >
+                        <div class="lb-slot" data-slot={`${matchId}-p1`} data-round={round.key}></div>
+                        <span class="lb-vs">VS</span>
+                        <div class="lb-slot" data-slot={`${matchId}-p2`} data-round={round.key}></div>
+                        <button type="button" class="lb-advance" data-advance={matchId} aria-label="Bloquear llave y elegir ganador">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 12h15"></path>
+                            <path d="M13 6l6 6-6 6"></path>
+                          </svg>
+                        </button>
+                      </div>
+                    );
+                  })}
                 </div>
-              ))}
-            </div>
-            <div class="col col-r3">
-              <div class="match match-r3 match-left">
-                <div class="bracket-slot" data-side="left" data-round="3" data-slot="l3-m1-p1"></div>
-                <div class="bracket-slot" data-side="left" data-round="3" data-slot="l3-m1-p2"></div>
+              </div>
+            ))}
+
+            <div class="lb-round lb-round-champion">
+              <div class="lb-round-label">Campeón</div>
+              <div class="lb-round-matches lb-champion-matches">
+                <div class="lb-slot lb-champion-slot" data-slot="winner" data-round="winner"></div>
               </div>
             </div>
           </div>
-
-          <div class="col col-final">
-            <div class="final-title">
-              <span class="text-[var(--primary)]">WILD</span> <span class="text-[var(--text)]">GVNG</span>
-            </div>
-            <div class="winner-row">
-              <div class="bracket-slot winner" data-side="center" data-round="5" data-slot="winner"></div>
-            </div>
-            <p class="champion-text">CAMPEÓN WILD AND FREE FECHA #1</p>
-            <div class="final-row">
-              <div class="bracket-slot final" data-side="left" data-round="4" data-slot="final-p1"></div>
-              <div class="final-vs animate-pulse">VS</div>
-              <div class="bracket-slot final" data-side="right" data-round="4" data-slot="final-p2"></div>
-            </div>
-          </div>
-
-          <div class="side side-right">
-            <div class="col col-r3">
-              <div class="match match-r3 match-right">
-                <div class="bracket-slot" data-side="right" data-round="3" data-slot="r3-m1-p1"></div>
-                <div class="bracket-slot" data-side="right" data-round="3" data-slot="r3-m1-p2"></div>
-              </div>
-            </div>
-            <div class="col col-r2">
-              {[1, 2].map(i => (
-                <div class="match match-r2 match-right">
-                  <div class="bracket-slot" data-side="right" data-round="2" data-slot={`r2-m${i}-p1`}></div>
-                  <div class="bracket-slot" data-side="right" data-round="2" data-slot={`r2-m${i}-p2`}></div>
-                </div>
-              ))}
-            </div>
-            <div class="col col-r1">
-              {[1, 2, 3, 4].map(i => (
-                <div class="match match-r1 match-right">
-                  <div class="bracket-slot" data-side="right" data-round="1" data-slot={`r1-m${i}-p1`}></div>
-                  <div class="bracket-slot" data-side="right" data-round="1" data-slot={`r1-m${i}-p2`}></div>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
-      </div>
+      </section>
+    </div>
+
+    <Sponsors />
+  </div>
+
+  <div class="lb-picker" id="winner-picker" hidden>
+    <div class="lb-picker-backdrop" data-picker-cancel></div>
+    <div class="lb-picker-panel" role="dialog" aria-modal="true" aria-labelledby="picker-title">
+      <p class="lb-kicker">Llave bloqueada</p>
+      <h3 class="lb-picker-title" id="picker-title">Elige al ganador</h3>
+      <p class="lb-picker-sub">El ganador pasa a la siguiente ronda y la llave anterior queda bloqueada.</p>
+      <div class="lb-picker-options" id="picker-options"></div>
+      <button type="button" class="lb-picker-cancel" data-picker-cancel>Cancelar selección</button>
     </div>
   </div>
 
-  <Sponsors />
+  <div class="lb-public-pending" id="public-pending" hidden>
+    <span class="lb-live-dot"></span>
+    <span id="public-pending-text">Eligiendo ganador…</span>
+  </div>
+
+  <div class="lb-toast" id="league-toast" role="status" aria-live="polite"></div>
 </Layout>
 
-<style>
-  .tournament-wrap {
-    display: flex;
-    justify-content: center;
-  }
-
-  .bracket {
-    width: 100%;
-    max-width: 1400px;
-    display: grid;
+<style is:global>
+  .league-page {
     position: relative;
-    align-items: flex-start;
-    justify-content: center;
-    grid-template-columns: 1fr 420px 1fr;
-    column-gap: 24px;
-  }
-
-  .bracket-lines {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    overflow: visible;
-    z-index: 10;
-  }
-
-  .side {
-    display: flex;
-    align-items: flex-start;
-    gap: 24px;
-  }
-
-  .side-left {
-    grid-column: 1;
-    justify-self: end;
-  }
-
-  .col-final {
-    grid-column: 2;
-  }
-
-  .side-right {
-    grid-column: 3;
-    justify-self: start;
-  }
-
-  .col {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-  }
-
-  .col-r1 {
-    gap: 24px;
-  }
-
-  .col-r2 {
-    padding-top: 66px;
-    gap: 156px;
-  }
-
-  .col-r3 {
-    padding-top: 198px;
-    gap: 0;
-  }
-
-  .match {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .col-final {
-    position: relative;
-    width: 420px;
-  }
-
-  .final-title {
-    position: absolute;
-    top: -12px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 28px;
-    font-weight: 900;
-    letter-spacing: -0.04em;
-    font-style: italic;
-    text-transform: uppercase;
-    white-space: nowrap;
-    z-index: 30;
-    text-shadow: 0 0 18px rgba(var(--primary-rgb), 0.25);
-  }
-
-  .final-row {
-    padding-top: 220px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    width: 420px;
-  }
-
-  .final-vs {
-    font-size: 18px;
-    font-weight: 900;
-    color: var(--primary);
-    letter-spacing: 0.2em;
-    font-style: italic;
-    width: 40px;
-    text-align: center;
-  }
-
-  .winner-row {
-    position: absolute;
-    top: 72px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    justify-content: center;
-    width: 420px;
-    z-index: 20;
-  }
-
-  .champion-text {
-    position: absolute;
-    top: 168px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 420px;
-    text-align: center;
-    font-size: 10px;
-    font-weight: 900;
-    color: var(--primary);
-    text-transform: uppercase;
-    letter-spacing: 0.4em;
-    white-space: nowrap;
-    z-index: 30;
-    text-shadow: 0 0 14px rgba(var(--primary-rgb), 0.55);
-  }
-
-  .bracket-slot {
-    width: 130px;
-    height: 50px;
-    background: var(--bg);
-    border: 1px solid var(--text-faint);
-    border-radius: 4px;
-    position: relative;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    align-items: center;
+    min-height: 100vh;
+    padding: 28px 14px 64px;
     overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.8);
+    background:
+      radial-gradient(1000px 520px at 50% -10%, rgba(201, 131, 0, 0.16), transparent 70%),
+      radial-gradient(700px 400px at 90% 40%, rgba(138, 3, 3, 0.12), transparent 70%),
+      var(--bg);
   }
 
-  .bracket-slot:hover {
-    border-color: var(--bg-card);
-    box-shadow: 0 0 15px var(--bg-card);
-  }
-
-  .bracket-slot.drag-over {
-    background: var(--bg);
-    border-color: var(--primary);
-    transform: scale(1.05);
-    z-index: 50;
-    box-shadow: 0 0 20px rgba(var(--primary-rgb), 0.3);
-  }
-
-  .bracket-slot.filled {
-    border-color: var(--text-secondary);
-  }
-
-  .bracket-slot.locked {
-    border-color: var(--primary);
-    box-shadow: 0 0 10px rgba(var(--primary-rgb), 0.2);
-  }
-
-  .bracket-slot.final {
-    width: 150px;
-    height: 60px;
-    border-width: 2px;
-  }
-
-  .bracket-slot.winner {
-    width: 180px;
-    height: 70px;
-    border: 3px solid var(--primary);
-    box-shadow: 0 0 30px rgba(var(--primary-rgb), 0.4);
-  }
-
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .animate-fade-in-up {
-    animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  }
-  
-  .participant-item {
-    opacity: 0;
-    animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  }
-
-  .slot-bg-img {
+  .league-page-bg {
     position: absolute;
     inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    opacity: 0.8;
-    filter: none;
+    pointer-events: none;
+    opacity: 0.32;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(circle at 50% 20%, #000 20%, transparent 78%);
   }
 
-  .bracket-slot.locked .slot-bg-img {
-    opacity: 1;
-    filter: grayscale(100%) contrast(1.1) brightness(0.55);
-  }
-
-  .slot-overlay {
+  .league-inner {
     position: relative;
-    z-index: 10;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0,0,0,0.2);
+    z-index: 1;
+    max-width: 1540px;
+    margin: 0 auto;
   }
 
-  .bracket-slot.locked .slot-overlay {
-    background: rgba(0,0,0,0.75);
+  .lb-hero {
+    text-align: center;
+    padding: 18px 0 10px;
   }
 
-  .slot-aka-box {
-    background: var(--bg);
-    padding: 2px 10px;
-    border: 1px solid #fff;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .bracket-slot.locked .slot-aka-box {
-    background: rgba(0,0,0,0.9);
-    border-width: 2px;
-    padding: 4px 12px;
-  }
-
-  .slot-name {
+  .lb-kicker {
+    margin: 0 0 8px;
+    color: var(--primary);
     font-size: 9px;
     font-weight: 900;
+    letter-spacing: 0.45em;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--text);
-    white-space: nowrap;
   }
 
-  .bracket-slot.locked .slot-name {
-    font-size: 10px;
-    letter-spacing: 0.15em;
-  }
-
-  .remove-btn {
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    z-index: 30;
-    width: 16px;
-    height: 16px;
-    background: var(--secondary);
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
+  .lb-title {
+    margin: 0;
+    font-size: clamp(2.8rem, 7.2vw, 6.4rem);
+    line-height: 0.88;
     font-weight: 900;
+    font-style: italic;
+    letter-spacing: -0.06em;
+    text-transform: uppercase;
     color: var(--text);
-    opacity: 0;
-    transition: opacity 0.3s ease;
+    text-shadow: 0 0 50px rgba(201, 131, 0, 0.18);
   }
 
-  .bracket-slot:hover .remove-btn {
-    opacity: 1;
+  .lb-title span {
+    background: linear-gradient(92deg, var(--primary) 8%, #ff6a00 52%, var(--secondary) 96%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 
-  .slot-menu-btn {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    z-index: 30;
-    width: 16px;
-    height: 16px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    color: var(--text);
+  .lb-sub {
+    margin: 14px 0 0;
+    color: var(--text-muted);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+  }
+
+  .lb-hero-badges {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 18px;
+  }
+
+  .lb-badge {
+    padding: 6px 11px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text-muted);
+    font-size: 8px;
+    font-weight: 900;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .lb-toolbar {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .lb-sync,
+  .lb-mode {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.28);
+    color: var(--text-muted);
+    font-size: 8px;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .lb-mode {
+    color: var(--primary);
+    border-color: rgba(201, 131, 0, 0.25);
+  }
+
+  .lb-live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--primary);
+    box-shadow: 0 0 0 0 rgba(201, 131, 0, 0.6);
+    animation: lbLive 1.8s ease-out infinite;
+  }
+
+  .lb-reset {
+    padding: 7px 13px;
+    border: 1px solid rgba(138, 3, 3, 0.5);
+    border-radius: 999px;
+    background: rgba(138, 3, 3, 0.12);
+    color: #ff8b8b;
+    font-size: 8px;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+
+  .lb-reset:hover {
+    background: var(--secondary);
+    color: #fff;
+    border-color: var(--secondary);
+  }
+
+  .lb-panel {
+    margin-top: 22px;
+    padding: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 24px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 0, 0.3));
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+    backdrop-filter: blur(12px);
+  }
+
+  .lb-section-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+
+  .lb-section-title {
+    margin: 0;
+    color: var(--text);
+    font-size: clamp(1.15rem, 2.6vw, 1.6rem);
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+  }
+
+  .lb-pool-count,
+  .lb-board-hint {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .lb-hint {
+    margin: 10px 0 0;
+    color: var(--text-muted);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+
+  .lb-steps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .lb-steps span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 9px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.22);
+    color: var(--text-muted);
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .lb-steps b {
+    color: var(--primary);
+    font-size: 8px;
+    letter-spacing: 0.08em;
+  }
+
+  .lb-carousel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .lb-carousel-track {
+    display: flex;
+    flex: 1;
+    gap: 12px;
+    padding: 4px 2px 8px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .lb-carousel-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .lb-carousel-btn {
+    flex: 0 0 auto;
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.35);
+    color: var(--text);
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+
+  .lb-carousel-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: rgba(201, 131, 0, 0.1);
+  }
+
+  .lb-chip {
+    position: relative;
+    flex: 0 0 112px;
+    padding: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 16px;
+    background: rgba(0, 0, 0, 0.3);
+    scroll-snap-align: start;
+    cursor: grab;
+    transition: transform 0.2s ease, border-color 0.2s ease, opacity 0.2s ease, filter 0.2s ease;
+  }
+
+  .lb-chip:hover {
+    border-color: rgba(201, 131, 0, 0.45);
+    transform: translateY(-2px);
+  }
+
+  .lb-chip.is-selected {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(201, 131, 0, 0.16), 0 16px 30px rgba(0, 0, 0, 0.38);
+    transform: translateY(-4px);
+  }
+
+  .lb-chip.is-used {
+    opacity: 0.55;
+    filter: grayscale(1);
+    cursor: not-allowed;
+  }
+
+  .lb-chip.is-used:hover {
+    transform: none;
+    border-color: rgba(255, 255, 255, 0.09);
+  }
+
+  .lb-chip.is-dragging {
+    opacity: 0.35;
+    transform: scale(0.96) rotate(-2deg);
+  }
+
+  .lb-chip-media {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 11px;
+    background: #101010;
+  }
+
+  .lb-chip-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .lb-chip-state {
+    position: absolute;
+    left: 4px;
+    bottom: 4px;
+    z-index: 2;
+    padding: 2px 5px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.78);
+    color: var(--text-muted);
+    font-size: 6px;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .lb-chip.is-used .lb-chip-state {
+    color: var(--primary);
+  }
+
+  .lb-chip-x {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    z-index: 4;
+    width: 20px;
+    height: 20px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    background: var(--secondary);
+    color: #fff;
     font-size: 12px;
     font-weight: 900;
     line-height: 1;
-    opacity: 0;
-    transition: opacity 0.2s ease;
+    cursor: pointer;
   }
 
-  .bracket-slot.filled:hover .slot-menu-btn {
+  .lb-chip-x:hover {
+    background: #ff2b2b;
+  }
+
+  .lb-chip-name {
+    display: block;
+    margin-top: 6px;
+    padding: 0 2px;
+    color: var(--text);
+    font-size: 8px;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-align: center;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .lb-board-panel {
+    padding: 18px 10px 12px;
+  }
+
+  .lb-board-panel .lb-section-head {
+    padding: 0 8px;
+  }
+
+  .lb-board-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 4px;
+    border-radius: 18px;
+    scrollbar-color: rgba(201, 131, 0, 0.4) transparent;
+    scrollbar-width: thin;
+  }
+
+  .lb-board-scroll::-webkit-scrollbar {
+    height: 7px;
+  }
+
+  .lb-board-scroll::-webkit-scrollbar-thumb {
+    border-radius: 99px;
+    background: rgba(201, 131, 0, 0.35);
+  }
+
+  .lb-board {
+    --lb-gap: 84px;
+    --lb-round-width: 196px;
+    --lb-board-height: 1240px;
+    position: relative;
+    display: flex;
+    gap: var(--lb-gap);
+    min-width: max-content;
+    padding: 4px 18px 16px;
+  }
+
+  .lb-round {
+    position: relative;
+    z-index: 2;
+    flex: 0 0 var(--lb-round-width);
+    width: var(--lb-round-width);
+  }
+
+  .lb-round-label {
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.42);
+    font-size: 8px;
+    font-weight: 900;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+  }
+
+  .lb-round-matches {
+    display: grid;
+    grid-template-rows: repeat(8, 1fr);
+    gap: 14px;
+    height: var(--lb-board-height);
+  }
+
+  .lb-match {
+    position: relative;
+    align-self: center;
+    padding: 8px;
+    border: 1px solid transparent;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.015);
+    transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .lb-match:hover {
+    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .lb-match.is-ready {
+    border-color: rgba(201, 131, 0, 0.28);
+  }
+
+  .lb-match.is-awaiting {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 1px rgba(201, 131, 0, 0.55), 0 0 44px rgba(201, 131, 0, 0.18);
+  }
+
+  .lb-match.is-resolved {
+    border-color: rgba(201, 131, 0, 0.16);
+  }
+
+  .lb-match.is-shaking {
+    animation: lbShake 0.36s ease;
+  }
+
+  .lb-slot {
+    position: relative;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px dashed rgba(255, 255, 255, 0.16);
+    border-radius: 12px;
+    background: #080808;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .lb-slot.is-filled {
+    border-style: solid;
+    border-color: rgba(255, 255, 255, 0.14);
+  }
+
+  .lb-slot.is-locked {
+    border-color: rgba(201, 131, 0, 0.44);
+  }
+
+  .lb-slot.is-drag-over {
+    border-color: var(--primary);
+    border-style: solid;
+    background: rgba(201, 131, 0, 0.12);
+    transform: scale(1.03);
+    box-shadow: 0 0 24px rgba(201, 131, 0, 0.2);
+  }
+
+  .lb-slot.is-dragging {
+    opacity: 0.4;
+  }
+
+  .lb-slot.is-candidate {
+    border-color: var(--primary);
+    border-style: solid;
+    cursor: pointer;
+    animation: lbCandidate 1.4s ease-in-out infinite;
+  }
+
+  .lb-slot.is-candidate:hover {
+    box-shadow: 0 0 28px rgba(201, 131, 0, 0.4);
+  }
+
+  [data-league-editor='false'] .lb-slot.is-candidate {
+    cursor: default;
+  }
+
+  .lb-slot.is-just-filled {
+    animation: lbPop 0.42s cubic-bezier(0.2, 0.9, 0.2, 1.2);
+  }
+
+  .lb-slot-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
+
+  .lb-slot.is-locked .lb-slot-img {
+    filter: grayscale(1) brightness(0.54);
+  }
+
+  .lb-slot-shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.25) 70%, rgba(0, 0, 0, 0.06) 100%);
+    pointer-events: none;
+  }
+
+  .lb-slot-name {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding: 0 30px 0 9px;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
+  }
+
+  .lb-slot-empty {
+    position: relative;
+    z-index: 2;
+    color: rgba(255, 255, 255, 0.24);
+    font-size: 7px;
+    font-weight: 900;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .lb-slot-x {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    z-index: 5;
+    width: 19px;
+    height: 19px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 50%;
+    background: var(--secondary);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 900;
+    line-height: 1;
+    cursor: pointer;
+    transition: 0.15s ease;
+  }
+
+  .lb-slot-x:hover {
+    background: #ff2b2b;
+    transform: scale(1.08);
+  }
+
+  .lb-slot-lock {
+    position: absolute;
+    top: 3px;
+    right: 4px;
+    z-index: 3;
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 8px;
+    line-height: 1;
+  }
+
+  .lb-slot-check {
+    color: var(--primary);
+    font-size: 10px;
+    font-weight: 900;
+  }
+
+  .lb-slot-flag {
+    position: absolute;
+    right: 5px;
+    bottom: 4px;
+    z-index: 4;
+    padding: 2px 5px;
+    border-radius: 4px;
+    background: var(--primary);
+    color: #000;
+    font-size: 6px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+  }
+
+  .lb-vs {
+    display: block;
+    margin: 2px 0;
+    color: rgba(255, 255, 255, 0.22);
+    font-size: 6px;
+    font-weight: 900;
+    letter-spacing: 0.24em;
+    text-align: center;
+  }
+
+  .lb-advance {
+    position: absolute;
+    top: 50%;
+    right: -48px;
+    z-index: 7;
+    width: 34px;
+    height: 34px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(255, 255, 255, 0.75);
+    border-radius: 50%;
+    background: #0b0b0b;
+    color: #fff;
+    transform: translateY(-50%);
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+
+  .lb-advance svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .lb-advance:hover:not(:disabled) {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: #000;
+    transform: translateY(-50%) scale(1.08);
+  }
+
+  .lb-advance:disabled {
+    opacity: 0.16;
+    cursor: not-allowed;
+  }
+
+  .lb-match.is-ready .lb-advance {
+    border-color: var(--primary);
+    color: var(--primary);
+    animation: lbArrow 1.7s ease-in-out infinite;
+  }
+
+  .lb-match.is-awaiting .lb-advance {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: #000;
     opacity: 1;
+  }
+
+  .lb-champion-matches {
+    display: grid;
+    grid-template-rows: repeat(8, 1fr);
+    height: var(--lb-board-height);
+  }
+
+  .lb-champion-slot {
+    grid-row: 1 / span 8;
+    align-self: center;
+    width: 190px;
+    height: 92px;
+    overflow: visible;
+    border: 2px solid rgba(201, 131, 0, 0.42);
+    border-radius: 18px;
+  }
+
+  .lb-champion-slot .lb-slot-img {
+    border-radius: 16px;
+  }
+
+  .lb-champion-slot.is-filled {
+    border-color: var(--primary);
+    box-shadow: 0 0 46px rgba(201, 131, 0, 0.3);
+  }
+
+  .lb-champion-slot.is-filled .lb-slot-name {
+    font-size: 12px;
+  }
+
+  .lb-champion-slot.is-celebrating {
+    animation: lbChampion 1.1s ease-in-out infinite;
+  }
+
+  .lb-crown {
+    position: absolute;
+    top: -13px;
+    left: 50%;
+    z-index: 4;
+    transform: translateX(-50%);
+    color: var(--primary);
+    font-size: 20px;
+    line-height: 1;
+    text-shadow: 0 0 16px rgba(201, 131, 0, 0.8);
+  }
+
+  .lb-lines {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .lb-line {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.14);
+    stroke-width: 2;
+    stroke-linecap: square;
+    transition: stroke 0.25s ease;
+  }
+
+  .lb-line.is-live {
+    stroke: rgba(201, 131, 0, 0.65);
+    stroke-width: 2.4;
+    filter: drop-shadow(0 0 4px rgba(201, 131, 0, 0.35));
+  }
+
+  .lb-line.is-awaiting {
+    stroke: var(--primary);
+    stroke-width: 2.6;
+    stroke-dasharray: 7 7;
+    animation: lbDash 0.9s linear infinite;
+  }
+
+  .lb-picker {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    display: grid;
+    place-items: center;
+    padding: 16px;
+  }
+
+  .lb-picker[hidden] {
+    display: none;
+  }
+
+  .lb-picker-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.78);
+    backdrop-filter: blur(10px);
+  }
+
+  .lb-picker-panel {
+    position: relative;
+    width: min(660px, 100%);
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
+    padding: 22px;
+    border: 1px solid rgba(201, 131, 0, 0.4);
+    border-radius: 24px;
+    background: linear-gradient(180deg, #111, #070707);
+    box-shadow: 0 34px 90px #000;
+    animation: lbRise 0.26s ease-out;
+  }
+
+  .lb-picker-title {
+    margin: 0;
+    color: var(--text);
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+  }
+
+  .lb-picker-sub {
+    margin: 8px 0 0;
+    color: var(--text-muted);
+    font-size: 10px;
+    line-height: 1.5;
+  }
+
+  .lb-picker-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 16px 0;
+  }
+
+  .lb-pick-card {
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 18px;
+    background: #111;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+
+  .lb-pick-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-3px);
+    box-shadow: 0 20px 44px rgba(0, 0, 0, 0.5);
+  }
+
+  .lb-pick-card img {
+    display: block;
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    filter: grayscale(0.35);
+    transition: 0.25s ease;
+  }
+
+  .lb-pick-card:hover img {
+    filter: none;
+    transform: scale(1.03);
+  }
+
+  .lb-pick-fallback {
+    height: 190px;
+    display: grid;
+    place-items: center;
+    color: var(--primary);
+    font-size: 2rem;
+    font-weight: 900;
+  }
+
+  .lb-pick-name {
+    display: block;
+    padding: 11px 13px 4px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .lb-pick-cta {
+    display: block;
+    padding: 0 13px 13px;
+    color: var(--primary);
+    font-size: 7px;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .lb-picker-cancel {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+
+  .lb-picker-cancel:hover {
+    border-color: var(--text-muted);
+    color: var(--text);
+  }
+
+  .lb-public-pending {
+    position: fixed;
+    left: 50%;
+    bottom: 20px;
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    max-width: calc(100vw - 24px);
+    padding: 10px 16px;
+    border: 1px solid rgba(201, 131, 0, 0.4);
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.86);
+    color: var(--text);
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transform: translateX(-50%);
+    backdrop-filter: blur(10px);
+    animation: lbRise 0.25s ease-out;
+  }
+
+  .lb-public-pending[hidden] {
+    display: none;
+  }
+
+  .lb-toast {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 600;
+    max-width: min(360px, calc(100vw - 32px));
+    padding: 11px 15px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    background: #111;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.55);
+    opacity: 0;
+    transform: translateY(16px);
+    pointer-events: none;
+    transition: 0.24s ease;
+  }
+
+  .lb-toast.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .lb-admin-only {
+    display: none;
+  }
+
+  [hidden] {
+    display: none !important;
+  }
+
+  [data-league-editor='true'] .lb-admin-only {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  [data-league-editor='true'] .lb-hint.lb-admin-only {
+    display: block;
+  }
+
+  [data-league-editor='true'] .lb-steps.lb-admin-only {
+    display: flex;
+  }
+
+  [data-league-editor='true'] .lb-advance {
+    display: flex;
+  }
+
+  [data-league-editor='true'] .lb-slot-x {
+    display: flex;
+  }
+
+  [data-league-editor='true'] .lb-chip-x {
+    display: flex;
+  }
+
+  [data-league-editor='false'] .lb-chip {
+    cursor: default;
+  }
+
+  @keyframes lbLive {
+    0% { box-shadow: 0 0 0 0 rgba(201, 131, 0, 0.55); }
+    70% { box-shadow: 0 0 0 8px rgba(201, 131, 0, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(201, 131, 0, 0); }
+  }
+
+  @keyframes lbCandidate {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(201, 131, 0, 0.2); }
+    50% { box-shadow: 0 0 0 4px rgba(201, 131, 0, 0.12), 0 0 26px rgba(201, 131, 0, 0.28); }
+  }
+
+  @keyframes lbArrow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(201, 131, 0, 0.28); }
+    50% { box-shadow: 0 0 0 6px rgba(201, 131, 0, 0); }
+  }
+
+  @keyframes lbPop {
+    0% { transform: scale(0.9); opacity: 0.2; }
+    70% { transform: scale(1.04); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  @keyframes lbShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    50% { transform: translateX(4px); }
+    75% { transform: translateX(-2px); }
+  }
+
+  @keyframes lbDash {
+    to { stroke-dashoffset: -14; }
+  }
+
+  @keyframes lbRise {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes lbChampion {
+    0%, 100% { box-shadow: 0 0 34px rgba(201, 131, 0, 0.3); }
+    50% { box-shadow: 0 0 60px rgba(201, 131, 0, 0.55); }
+  }
+
+  @media (max-width: 900px) {
+    .league-page {
+      padding: 18px 9px 52px;
+    }
+
+    .lb-panel {
+      padding: 13px;
+      border-radius: 20px;
+    }
+
+    .lb-board {
+      --lb-gap: 72px;
+      --lb-round-width: 172px;
+      --lb-board-height: 1120px;
+    }
+
+    .lb-slot {
+      height: 47px;
+    }
+
+    .lb-chip {
+      flex-basis: 98px;
+    }
+
+    .lb-advance {
+      right: -41px;
+      width: 30px;
+      height: 30px;
+    }
+
+    .lb-champion-slot {
+      width: 168px;
+      height: 84px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .lb-carousel-btn {
+      display: none;
+    }
+
+    .lb-carousel-track {
+      gap: 9px;
+    }
+
+    .lb-chip {
+      flex-basis: 88px;
+      border-radius: 13px;
+    }
+
+    .lb-board {
+      --lb-gap: 64px;
+      --lb-round-width: 152px;
+      --lb-board-height: 1060px;
+    }
+
+    .lb-slot {
+      height: 43px;
+      border-radius: 10px;
+    }
+
+    .lb-slot-name {
+      font-size: 8px;
+      padding-left: 7px;
+    }
+
+    .lb-advance {
+      right: -37px;
+      width: 28px;
+      height: 28px;
+    }
+
+    .lb-advance svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    .lb-champion-slot {
+      width: 148px;
+      height: 76px;
+    }
+
+    .lb-picker-options {
+      grid-template-columns: 1fr;
+    }
+
+    .lb-pick-card img,
+    .lb-pick-fallback {
+      height: 140px;
+    }
+
+    .lb-toolbar {
+      gap: 6px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .league-page *,
+    .league-page *::before,
+    .league-page *::after,
+    .lb-picker *,
+    .lb-picker *::before,
+    .lb-picker *::after,
+    .lb-public-pending,
+    .lb-toast {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      scroll-behavior: auto !important;
+    }
   }
 </style>
 
 <script>
   import { supabase } from '../lib/supabase';
+  import { getRole } from '../lib/role.js';
 
-  // --- Lógica de Arrastrar y Soltar (Drag and Drop) ---
-  const slots = document.querySelectorAll('.bracket-slot');
-  const participants = document.querySelectorAll('.participant-item');
-  let bracketState: any = {};
-
-  // Canal de Tiempo Real
-  const channel = supabase.channel('wild-league', {
-    config: {
-      broadcast: { self: true },
-    },
-  });
-
-  channel
-    .on('broadcast', { event: 'state-update' }, (payload: any) => {
-      updateBracketUI(payload.payload.state);
-    })
-    .subscribe();
-
-  const usedParticipantIds = () => {
-    const used = new Set();
-    Object.values(bracketState || {}).forEach((v: any) => {
-      if (v?.locked && v?.id) used.add(v.id);
-    });
-    return used;
+  type SlotData = {
+    id: string;
+    name: string;
+    image: string;
+    locked: boolean;
+    originMatch: string | null;
   };
 
-  const syncPoolUsedUI = () => {
-    const used = usedParticipantIds();
-    participants.forEach((p) => {
-      const isUsed = used.has(p.id);
-      const overlay = p.querySelector('.participant-used');
-      if (isUsed) {
-        p.classList.add('is-used');
-        p.setAttribute('draggable', 'false');
-        overlay?.classList.remove('hidden');
-      } else {
-        p.classList.remove('is-used');
-        p.setAttribute('draggable', 'true');
-        overlay?.classList.add('hidden');
-      }
-    });
+  type MatchState = {
+    status: 'open' | 'awaiting' | 'resolved';
+    winnerId: string | null;
   };
 
-  participants.forEach((p) => {
-    p.addEventListener('dragstart', (e: any) => {
-      if (p.classList.contains('is-used')) return;
-      if (!e.dataTransfer) return;
-      e.dataTransfer.setData('participantId', p.id);
-      e.dataTransfer.setData('name', p.getAttribute('data-name') || '');
-      e.dataTransfer.setData('image', p.getAttribute('data-image') || '');
-    });
-  });
+  type BracketState = {
+    version: number;
+    rev: number;
+    slots: Record<string, SlotData>;
+    matches: Record<string, MatchState>;
+    pending: string | null;
+  };
 
-  slots.forEach((slot) => {
-    slot.addEventListener('dragover', (e: any) => {
-      e.preventDefault();
-      slot.classList.add('drag-over');
-    });
+  type MatchDef = {
+    id: string;
+    round: number;
+    slots: [string, string];
+    next: string;
+  };
 
-    slot.addEventListener('dragleave', () => {
-      slot.classList.remove('drag-over');
-    });
+  const TABLE = 'league_bracket_state';
+  const ROW_ID = 'wild-and-free-league';
+  const LOCAL_KEY = 'wg-league-state-v2';
 
-    slot.addEventListener('drop', (e: any) => {
-      e.preventDefault();
-      slot.classList.remove('drag-over');
-      
-      if (!e.dataTransfer) return;
-      const id = e.dataTransfer.getData('participantId');
-      const name = e.dataTransfer.getData('name');
-      const image = e.dataTransfer.getData('image');
-      const sourceSlotId = e.dataTransfer.getData('sourceSlotId');
-      const slotId = slot.getAttribute('data-slot');
-
-      if (slotId && id) {
-        if (bracketState?.[slotId]?.locked) return;
-        if (sourceSlotId && bracketState?.[sourceSlotId]?.locked) return;
-        if (sourceSlotId && sourceSlotId !== slotId) {
-          delete bracketState[sourceSlotId];
-          const sourceEl = document.querySelector(`[data-slot="${sourceSlotId}"]`);
-          if (sourceEl instanceof HTMLElement) {
-            sourceEl.innerHTML = '';
-            sourceEl.classList.remove('filled');
-            sourceEl.classList.remove('locked');
-            sourceEl.setAttribute('draggable', 'false');
-          }
-        }
-        bracketState[slotId] = { id, name, image, locked: false };
-        renderSlot(slot, { id, name, image });
-        channel.send({
-          type: 'broadcast',
-          event: 'state-update',
-          payload: { state: bracketState },
-        });
-      }
+  const MATCHES: MatchDef[] = (() => {
+    const list: MatchDef[] = [];
+    for (let i = 1; i <= 8; i += 1) {
+      list.push({
+        id: `r1-m${i}`,
+        round: 1,
+        slots: [`r1-m${i}-p1`, `r1-m${i}-p2`],
+        next: `r2-m${Math.ceil(i / 2)}-p${i % 2 === 1 ? 1 : 2}`,
+      });
+    }
+    for (let i = 1; i <= 4; i += 1) {
+      list.push({
+        id: `r2-m${i}`,
+        round: 2,
+        slots: [`r2-m${i}-p1`, `r2-m${i}-p2`],
+        next: `r3-m${Math.ceil(i / 2)}-p${i % 2 === 1 ? 1 : 2}`,
+      });
+    }
+    for (let i = 1; i <= 2; i += 1) {
+      list.push({
+        id: `r3-m${i}`,
+        round: 3,
+        slots: [`r3-m${i}-p1`, `r3-m${i}-p2`],
+        next: `final-p${i}`,
+      });
+    }
+    list.push({
+      id: 'final',
+      round: 4,
+      slots: ['final-p1', 'final-p2'],
+      next: 'winner',
     });
-  });
+    return list;
+  })();
 
-  function renderSlot(slot: any, data: any) {
-    const slotId = slot.getAttribute('data-slot');
-    const locked = Boolean(bracketState?.[slotId || '']?.locked);
-    const draggable = Boolean(data?.id) && !locked;
-    slot.innerHTML = `
-      <img src="${data.image}" width="200" height="200" class="slot-bg-img" />
-      <div class="slot-overlay">
-        <div class="slot-aka-box ${locked ? '' : 'hidden'}">
-          <span class="slot-name">${data.name}</span>
-        </div>
-      </div>
-      <button class="slot-menu-btn" data-slot="${slotId}" aria-label="Opciones">â‹®</button>
-      <button class="remove-btn ${locked ? 'hidden' : ''}" data-slot="${slotId}">×</button>
-    `;
-    slot.classList.add('filled');
-    slot.classList.toggle('locked', locked);
-    if (slot instanceof HTMLElement) slot.setAttribute('draggable', draggable ? 'true' : 'false');
-    
-    slot.querySelector('.remove-btn')?.addEventListener('click', (e: any) => {
-      e.stopPropagation();
-      if (slotId) {
-        if (bracketState?.[slotId]?.locked) return;
-        delete bracketState[slotId];
-        channel.send({
-          type: 'broadcast',
-          event: 'state-update',
-          payload: { state: bracketState },
-        });
-        slot.innerHTML = '';
-        slot.classList.remove('filled');
-        syncPoolUsedUI();
-      }
-    });
-
-    slot.addEventListener('dragstart', (e: any) => {
-      if (!slotId) return;
-      const current = bracketState?.[slotId];
-      if (!current) return;
-      if (current.locked) return;
-      if (!e.dataTransfer) return;
-      e.dataTransfer.setData('participantId', current.id);
-      e.dataTransfer.setData('name', current.name);
-      e.dataTransfer.setData('image', current.image);
-      e.dataTransfer.setData('sourceSlotId', slotId);
-      e.dataTransfer.effectAllowed = 'move';
-    });
+  const MATCH_BY_ID = new Map(MATCHES.map((match) => [match.id, match]));
+  const MATCH_BY_SLOT = new Map<string, MatchDef>();
+  for (const match of MATCHES) {
+    for (const slot of match.slots) MATCH_BY_SLOT.set(slot, match);
   }
 
-  function updateBracketUI(state: any) {
-    bracketState = state;
-    document.querySelectorAll('.bracket-slot').forEach((slotEl) => {
-      const slotId = slotEl.getAttribute('data-slot');
-      if (!slotId) return;
-      const data = bracketState?.[slotId];
-      if (!data) {
-        slotEl.innerHTML = '';
-        slotEl.classList.remove('filled');
-        slotEl.classList.remove('locked');
-        if (slotEl instanceof HTMLElement) slotEl.setAttribute('draggable', 'false');
-        return;
+  const board = document.getElementById('league-board') as HTMLElement | null;
+  const boardScroll = document.getElementById('board-scroll') as HTMLElement | null;
+  const track = document.getElementById('participant-track') as HTMLElement | null;
+  const picker = document.getElementById('winner-picker') as HTMLElement | null;
+  const pickerOptions = document.getElementById('picker-options') as HTMLElement | null;
+  const publicPending = document.getElementById('public-pending') as HTMLElement | null;
+  const publicPendingText = document.getElementById('public-pending-text') as HTMLElement | null;
+  const toastEl = document.getElementById('league-toast') as HTMLElement | null;
+  const syncLabel = document.getElementById('sync-label') as HTMLElement | null;
+  const modeBadge = document.getElementById('mode-badge') as HTMLElement | null;
+  const poolCount = document.getElementById('pool-count') as HTMLElement | null;
+  const resetButton = document.getElementById('reset-bracket') as HTMLButtonElement | null;
+
+  const emptyState = (): BracketState => ({
+    version: 2,
+    rev: 0,
+    slots: {},
+    matches: Object.fromEntries(
+      MATCHES.map((match) => [match.id, { status: 'open', winnerId: null } as MatchState]),
+    ),
+    pending: null,
+  });
+
+  let state: BracketState = emptyState();
+  let isEditor = false;
+  let selectedParticipantId: string | null = null;
+  let dragging = false;
+  let remoteAvailable = true;
+  let warnedLocal = false;
+  let lastApplied = '';
+  let saveTimer: number | undefined;
+  let toastTimer: number | undefined;
+  let pollTimer: number | undefined;
+  let broadcastChannel: any = null;
+
+  const escapeHtml = (value: unknown): string => {
+    const text = String(value ?? '');
+    return text.replace(/[&<>"']/g, (char) => {
+      switch (char) {
+        case '&': return '&amp;';
+        case '<': return '&lt;';
+        case '>': return '&gt;';
+        case '"': return '&quot;';
+        default: return '&#39;';
       }
-      renderSlot(slotEl, data);
     });
-    syncPoolUsedUI();
-    requestAnimationFrame(drawBracketLines);
+  };
+
+  const safeImage = (url: unknown): string => {
+    const value = String(url ?? '');
+    if (/^https?:\/\//i.test(value) || value.startsWith('/')) return escapeHtml(value);
+    return '';
+  };
+
+  const slotRound = (slotId: string): number => {
+    if (slotId.startsWith('r1-')) return 1;
+    if (slotId.startsWith('r2-')) return 2;
+    if (slotId.startsWith('r3-')) return 3;
+    if (slotId === 'final-p1' || slotId === 'final-p2') return 4;
+    if (slotId === 'winner') return 5;
+    return 0;
+  };
+
+  const initials = (name: string): string =>
+    String(name || '?')
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0])
+      .join('')
+      .toUpperCase();
+
+  function normalizeState(raw: any): BracketState {
+    let source = raw;
+    if (typeof source === 'string') {
+      try {
+        source = JSON.parse(source);
+      } catch {
+        source = null;
+      }
+    }
+
+    const next = emptyState();
+    next.rev = Number(source?.rev) || 0;
+    next.pending = typeof source?.pending === 'string' ? source.pending : null;
+
+    if (source?.slots && typeof source.slots === 'object') {
+      for (const [slotId, value] of Object.entries<any>(source.slots)) {
+        const known = MATCH_BY_SLOT.has(slotId) || slotId === 'winner';
+        if (!known || !value || !value.id) continue;
+        next.slots[slotId] = {
+          id: String(value.id),
+          name: String(value.name || ''),
+          image: String(value.image || ''),
+          locked: Boolean(value.locked),
+          originMatch: value.originMatch ? String(value.originMatch) : null,
+        };
+      }
+    }
+
+    if (source?.matches && typeof source.matches === 'object') {
+      for (const match of MATCHES) {
+        const incoming = source.matches[match.id];
+        if (!incoming) continue;
+        const status = incoming.status === 'awaiting' || incoming.status === 'resolved'
+          ? incoming.status
+          : 'open';
+        next.matches[match.id] = {
+          status,
+          winnerId: incoming.winnerId ? String(incoming.winnerId) : null,
+        };
+      }
+    }
+
+    if (next.pending) {
+      const pendingMatch = MATCH_BY_ID.get(next.pending);
+      const hasBoth = pendingMatch
+        ? pendingMatch.slots.every((slotId) => Boolean(next.slots[slotId]))
+        : false;
+      if (!pendingMatch || !hasBoth) {
+        next.pending = null;
+      } else if (next.matches[next.pending]) {
+        next.matches[next.pending].status = 'awaiting';
+      }
+    }
+
+    for (const match of MATCHES) {
+      if (next.matches[match.id].status === 'awaiting' && next.pending !== match.id) {
+        next.matches[match.id].status = 'open';
+      }
+    }
+
+    return next;
   }
 
-  // --- Menú contextual: avanzar a la siguiente ronda ---
-  const getNextSlotId = (slotId: string) => {
-    if (slotId.startsWith('l1-m')) {
-      const m = parseInt(slotId.split('-')[1].slice(1), 10);
-      if (m === 1) return 'l2-m1-p1';
-      if (m === 2) return 'l2-m1-p2';
-      if (m === 3) return 'l2-m2-p1';
-      if (m === 4) return 'l2-m2-p2';
+  function latestSlotFor(participantId: string): { slotId: string; data: SlotData; round: number } | null {
+    let best: { slotId: string; data: SlotData; round: number } | null = null;
+    for (const [slotId, data] of Object.entries(state.slots)) {
+      if (data.id !== participantId) continue;
+      const round = slotRound(slotId);
+      if (!best || round > best.round || (round === best.round && slotId > best.slotId)) {
+        best = { slotId, data, round };
+      }
     }
-    if (slotId.startsWith('l2-m')) {
-      const m = parseInt(slotId.split('-')[1].slice(1), 10);
-      if (m === 1) return 'l3-m1-p1';
-      if (m === 2) return 'l3-m1-p2';
+    return best;
+  }
+
+  function toast(message: string): void {
+    if (!toastEl) return;
+    toastEl.textContent = message;
+    toastEl.classList.add('is-visible');
+    if (toastTimer) window.clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(() => {
+      if (toastEl) toastEl.classList.remove('is-visible');
+    }, 2800);
+  }
+
+  function setSyncLabel(label: string): void {
+    if (syncLabel) syncLabel.textContent = label;
+  }
+
+  function updateChrome(): void {
+    document.documentElement.dataset.leagueEditor = String(isEditor);
+    if (modeBadge) modeBadge.textContent = isEditor ? 'MODO EDITOR' : 'SOLO LECTURA';
+    if (!remoteAvailable) setSyncLabel('MODO LOCAL');
+    else if (isEditor) setSyncLabel('SINCRONIZADO');
+    else setSyncLabel('EN VIVO');
+    if (resetButton) {
+      resetButton.hidden = !isEditor;
     }
-    if (slotId.startsWith('l3-m')) return 'final-p1';
-    if (slotId.startsWith('r1-m')) {
-      const m = parseInt(slotId.split('-')[1].slice(1), 10);
-      if (m === 1) return 'r2-m1-p1';
-      if (m === 2) return 'r2-m1-p2';
-      if (m === 3) return 'r2-m2-p1';
-      if (m === 4) return 'r2-m2-p2';
-    }
-    if (slotId.startsWith('r2-m')) {
-      const m = parseInt(slotId.split('-')[1].slice(1), 10);
-      if (m === 1) return 'r3-m1-p1';
-      if (m === 2) return 'r3-m1-p2';
-    }
-    if (slotId.startsWith('r3-m')) return 'final-p2';
-    if (slotId === 'final-p1' || slotId === 'final-p2') return 'winner';
-    return null;
-  };
+  }
 
-  const menu = document.createElement('div');
-  menu.id = 'bracket-context-menu';
-  menu.className = 'fixed z-[20000] hidden';
-  menu.innerHTML = `
-    <div class="bg-[var(--bg)] border border-[var(--border-strong)] shadow-[0_10px_30px_rgba(0,0,0,1)] rounded-lg overflow-hidden backdrop-blur-xl">
-      <button data-action="advance" class="block w-full text-left px-4 py-3 text-xs font-black uppercase tracking-widest text-[var(--text)] hover:bg-[var(--bg-hover)] hover:text-black transition-colors">Avanzarlo a siguiente ronda</button>
-      <button data-action="lock" class="block w-full text-left px-4 py-3 text-xs font-black uppercase tracking-widest text-[var(--text)] hover:bg-[var(--primary)] hover:text-[var(--text)] border-t border-[var(--border)] transition-colors">Bloquear</button>
-    </div>
-  `;
-  document.body.appendChild(menu);
+  function drawLines(): void {
+    if (!board) return;
+    const svg = document.getElementById('bracket-lines') as SVGSVGElement | null;
+    if (!svg) return;
 
-  const hideMenu = () => menu.classList.add('hidden');
-  document.addEventListener('click', hideMenu);
-  document.addEventListener('scroll', hideMenu, true);
-
-  const connections = [
-    { from: ['l1-m1-p1', 'l1-m1-p2'], to: 'l2-m1-p1' },
-    { from: ['l1-m2-p1', 'l1-m2-p2'], to: 'l2-m1-p2' },
-    { from: ['l1-m3-p1', 'l1-m3-p2'], to: 'l2-m2-p1' },
-    { from: ['l1-m4-p1', 'l1-m4-p2'], to: 'l2-m2-p2' },
-    { from: ['l2-m1-p1', 'l2-m1-p2'], to: 'l3-m1-p1' },
-    { from: ['l2-m2-p1', 'l2-m2-p2'], to: 'l3-m1-p2' },
-    { from: ['l3-m1-p1', 'l3-m1-p2'], to: 'final-p1' },
-    { from: ['r1-m1-p1', 'r1-m1-p2'], to: 'r2-m1-p1' },
-    { from: ['r1-m2-p1', 'r1-m2-p2'], to: 'r2-m1-p2' },
-    { from: ['r1-m3-p1', 'r1-m3-p2'], to: 'r2-m2-p1' },
-    { from: ['r1-m4-p1', 'r1-m4-p2'], to: 'r2-m2-p2' },
-    { from: ['r2-m1-p1', 'r2-m1-p2'], to: 'r3-m1-p1' },
-    { from: ['r2-m2-p1', 'r2-m2-p2'], to: 'r3-m1-p2' },
-    { from: ['r3-m1-p1', 'r3-m1-p2'], to: 'final-p2' },
-    { from: ['final-p1', 'final-p2'], to: 'winner' },
-  ];
-
-  const getSlotEl = (slotId: any) => document.querySelector(`.bracket-slot[data-slot="${slotId}"]`);
-
-  const getPoint = (el: any, side: any) => {
-    const rect = el.getBoundingClientRect();
-    const parent = document.querySelector('.bracket')?.getBoundingClientRect();
-    if (!parent) return { x: 0, y: 0, rect, parent: { left: 0, top: 0 } };
-    const x = side === 'left' ? rect.left - parent.left : rect.right - parent.left;
-    const y = rect.top - parent.top + rect.height / 2;
-    return { x, y, rect, parent };
-  };
-
-  const getTopCenterPoint = (el: any) => {
-    const rect = el.getBoundingClientRect();
-    const parent = document.querySelector('.bracket')?.getBoundingClientRect();
-    if (!parent) return { x: 0, y: 0, rect, parent: { left: 0, top: 0 } };
-    const x = rect.left - parent.left + rect.width / 2;
-    const y = rect.top - parent.top;
-    return { x, y, rect, parent };
-  };
-
-  const drawPath = (svg: any, d: any) => {
-    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('d', d);
-    path.setAttribute('stroke', '#ffffff');
-    path.setAttribute('stroke-width', '2');
-    path.setAttribute('fill', 'none');
-    path.setAttribute('stroke-linecap', 'square');
-    svg.appendChild(path);
-  };
-
-  const drawBracketLines = () => {
-    const bracket = document.querySelector('.bracket');
-    const svg = document.getElementById('bracket-lines');
-    if (!bracket || !svg) return;
-
-    const rect = bracket.getBoundingClientRect();
-    const w = Math.max(1, Math.round(rect.width));
-    const h = Math.max(1, Math.round(rect.height));
-    svg.setAttribute('width', String(w));
-    svg.setAttribute('height', String(h));
-    svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    const width = Math.max(1, board.scrollWidth);
+    const height = Math.max(1, board.scrollHeight);
+    svg.setAttribute('width', String(width));
+    svg.setAttribute('height', String(height));
+    svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
     svg.innerHTML = '';
 
-    const offset1 = 12;
-    const offset2 = 12;
+    const boardRect = board.getBoundingClientRect();
 
-    for (const c of connections) {
-      const fromA = getSlotEl(c.from[0]);
-      const fromB = getSlotEl(c.from[1]);
-      const to = getSlotEl(c.to);
-      if (!fromA || !fromB || !to) continue;
+    for (const match of MATCHES) {
+      const source = board.querySelector(`[data-match="${match.id}"]`) as HTMLElement | null;
+      const target = board.querySelector(`[data-slot="${match.next}"]`) as HTMLElement | null;
+      if (!source || !target) continue;
 
-      if (c.to === 'winner') {
-        const base1 = getTopCenterPoint(fromA);
-        const base2 = getTopCenterPoint(fromB);
-        const winnerRect = to.getBoundingClientRect();
-        const parentRect = document.querySelector('.bracket')?.getBoundingClientRect();
-        if (!parentRect) continue;
-        
-        const label = document.querySelector('.champion-text');
-        const labelRect = label?.getBoundingClientRect();
+      const sourceRect = source.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      const x1 = sourceRect.right - boardRect.left;
+      const y1 = sourceRect.top - boardRect.top + sourceRect.height / 2;
+      const x2 = targetRect.left - boardRect.left;
+      const y2 = targetRect.top - boardRect.top + targetRect.height / 2;
+      const midX = x1 + (x2 - x1) / 2;
 
-        const start1 = {
-          x: base1.x,
-          y: base1.y + base1.rect.height * 0.18,
-        };
-        const start2 = {
-          x: base2.x,
-          y: base2.y + base2.rect.height * 0.18,
-        };
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', `M ${Math.round(x1)} ${Math.round(y1)} H ${Math.round(midX)} V ${Math.round(y2)} H ${Math.round(x2)}`);
+      path.setAttribute('class', 'lb-line');
 
-        const xJoin = Math.round(winnerRect.left - parentRect.left + winnerRect.width / 2);
-        const yWinnerTop = Math.round(winnerRect.top - parentRect.top);
-        const yLabelBottom = labelRect
-          ? Math.round(labelRect.bottom - parentRect.top)
-          : Math.round(Math.min(start1.y, start2.y) - 24);
-        const yJoin = Math.round(yLabelBottom + 14);
+      const status = state.matches[match.id]?.status;
+      if (status === 'resolved') path.classList.add('is-live');
+      if (status === 'awaiting') path.classList.add('is-awaiting');
 
-        const routeToJoin = (start: any) => {
-          const x = Math.round(start.x);
-          const y = Math.round(start.y);
-          drawPath(svg, `M ${x} ${y} L ${x} ${yJoin}`);
-          drawPath(svg, `M ${x} ${yJoin} L ${xJoin} ${yJoin}`);
-        };
-
-        routeToJoin(start1);
-        routeToJoin(start2);
-        drawPath(svg, `M ${xJoin} ${yJoin} L ${xJoin} ${yWinnerTop}`);
-        continue;
-      }
-
-      const sideA = (fromA.getAttribute('data-side') || 'left') as 'left' | 'right';
-      const dir = sideA === 'left' ? 1 : -1;
-      const startA = getPoint(fromA, sideA === 'left' ? 'right' : 'left');
-      const startB = getPoint(fromB, sideA === 'left' ? 'right' : 'left');
-      const targetSide = dir === 1 ? 'left' : 'right';
-      const end = getPoint(to, targetSide);
-
-      const x1 = Math.round(((startA.x + startB.x) / 2) + dir * offset1);
-      const x2 = Math.round(end.x - dir * offset2);
-      const yA = Math.round(startA.y);
-      const yB = Math.round(startB.y);
-      const yJoin = Math.round((yA + yB) / 2);
-      const yEnd = Math.round(end.y);
-
-      drawPath(svg, `M ${Math.round(startA.x)} ${yA} L ${x1} ${yA}`);
-      drawPath(svg, `M ${Math.round(startB.x)} ${yB} L ${x1} ${yB}`);
-      drawPath(svg, `M ${x1} ${yA} L ${x1} ${yB}`);
-      drawPath(svg, `M ${x1} ${yJoin} L ${x2} ${yJoin}`);
-      drawPath(svg, `M ${x2} ${yJoin} L ${x2} ${yEnd}`);
-      drawPath(svg, `M ${x2} ${yEnd} L ${Math.round(end.x)} ${yEnd}`);
+      svg.appendChild(path);
     }
-  };
+  }
 
-  window.addEventListener('resize', () => requestAnimationFrame(drawBracketLines));
+  function scheduleDraw(): void {
+    requestAnimationFrame(() => requestAnimationFrame(drawLines));
+  }
 
-  const showMenuAt = (x: any, y: any, slotId: any) => {
-    const menuEl = menu;
-    const menuWidth = 260;
-    const menuHeight = 96;
-    const padding = 8;
-    const clampedX = Math.min(Math.max(x, padding), window.innerWidth - menuWidth - padding);
-    const clampedY = Math.min(Math.max(y, padding), window.innerHeight - menuHeight - padding);
-    menuEl.style.left = `${clampedX}px`;
-    menuEl.style.top = `${clampedY}px`;
-    menuEl.style.width = `${menuWidth}px`;
-    menuEl.dataset.slot = slotId;
-
-    const locked = Boolean(bracketState?.[slotId]?.locked);
-    const lockBtn = menuEl.querySelector('button[data-action="lock"]');
-    const advanceBtn = menuEl.querySelector('button[data-action="advance"]');
-    [lockBtn, advanceBtn].forEach((b) => {
-      if (!b) return;
-      b.classList.remove('opacity-50', 'pointer-events-none');
-    });
-    if (locked) {
-      lockBtn?.classList.add('opacity-50', 'pointer-events-none');
-      advanceBtn?.classList.add('opacity-50', 'pointer-events-none');
-    }
-    menu.classList.remove('hidden');
-  };
-
-  document.addEventListener('contextmenu', (e: any) => {
-    const slot = e.target?.closest?.('.bracket-slot');
-    if (!slot) return;
-    const slotId = slot.getAttribute('data-slot');
+  function renderSlot(el: HTMLElement): void {
+    const slotId = el.dataset.slot;
     if (!slotId) return;
-    if (!bracketState?.[slotId]) return;
-    e.preventDefault();
-    showMenuAt(e.clientX, e.clientY, slotId);
-  });
 
-  document.addEventListener('click', (e: any) => {
-    const btn = e.target?.closest?.('.slot-menu-btn');
-    if (!btn) return;
-    e.preventDefault();
-    e.stopPropagation();
-    const slotId = btn.getAttribute('data-slot');
-    if (!slotId) return;
-    if (!bracketState?.[slotId]) return;
-    const rect = btn.getBoundingClientRect();
-    showMenuAt(rect.left, rect.bottom + 6, slotId);
-  });
+    const data = state.slots[slotId];
+    const match = MATCH_BY_SLOT.get(slotId) || null;
+    const matchState = match ? state.matches[match.id] : null;
+    const isCandidate = Boolean(match && state.pending === match.id && !data?.locked);
+    const interactiveCandidate = isCandidate && isEditor;
+    const awaiting = matchState?.status === 'awaiting';
+    const isChampion = slotId === 'winner';
+    const isWinner = Boolean(data && match?.winnerId && data.id === match.winnerId);
+    const firstRound = slotRound(slotId) === 1;
 
-  menu.addEventListener('click', (e: any) => {
-    const btn = e.target?.closest?.('button');
-    if (!btn) return;
-    const action = btn.getAttribute('data-action');
-    const fromSlot = menu.dataset.slot;
-    hideMenu();
-    if (!fromSlot) return;
-    const data = bracketState?.[fromSlot];
-    if (!data) return;
+    const classes = ['lb-slot'];
+    if (isChampion) classes.push('lb-champion-slot');
+    if (data) classes.push('is-filled');
+    if (data?.locked) classes.push('is-locked');
+    if (isCandidate) classes.push('is-candidate');
+    el.className = classes.join(' ');
 
-    if (action === 'lock') {
-      if (data.locked) return;
-      bracketState[fromSlot] = { ...data, locked: true };
-      const el = document.querySelector(`[data-slot="${fromSlot}"]`);
-      if (el) renderSlot(el, bracketState[fromSlot]);
-      syncPoolUsedUI();
-      channel.send({
-        type: 'broadcast',
-        event: 'state-update',
-        payload: { state: bracketState },
-      });
+    const canDrag = Boolean(isEditor && data && !data.locked && firstRound && !awaiting);
+    el.setAttribute('draggable', String(canDrag));
+    el.setAttribute('tabindex', interactiveCandidate ? '0' : '-1');
+    el.setAttribute('role', interactiveCandidate ? 'button' : 'group');
+
+    if (!data) {
+      const emptyLabel = firstRound && isEditor ? 'Arrastra aquí' : 'Pendiente';
+      el.innerHTML = `<span class="lb-slot-empty">${emptyLabel}</span>`;
       return;
     }
 
-    if (action === 'advance') {
-      if (data.locked) return;
-      const next = getNextSlotId(fromSlot);
-      if (!next) return;
-      if (bracketState?.[next]?.locked) return;
-      bracketState[next] = { ...data, locked: false };
-      const nextEl = document.querySelector(`[data-slot="${next}"]`);
-      if (nextEl) renderSlot(nextEl, bracketState[next]);
-      syncPoolUsedUI();
-      channel.send({
-        type: 'broadcast',
-        event: 'state-update',
-        payload: { state: bracketState },
-      });
+    const image = safeImage(data.image);
+    const xButton = isEditor && !data.locked && !awaiting
+      ? `<button type="button" class="lb-slot-x" data-slot-x="${escapeHtml(slotId)}" aria-label="Quitar a ${escapeHtml(data.name)}">×</button>`
+      : '';
+
+    el.innerHTML = `
+      ${image ? `<img class="lb-slot-img" src="${image}" alt="${escapeHtml(data.name)}" draggable="false" loading="lazy" />` : ''}
+      <div class="lb-slot-shade"></div>
+      ${isChampion ? '<span class="lb-crown" aria-hidden="true">♛</span>' : ''}
+      <span class="lb-slot-name">${escapeHtml(data.name)}</span>
+      ${isWinner
+        ? '<span class="lb-slot-lock lb-slot-check" aria-hidden="true">✓</span>'
+        : data.locked
+          ? '<span class="lb-slot-lock" aria-hidden="true">🔒</span>'
+          : ''}
+      ${xButton}
+      ${isCandidate ? '<span class="lb-slot-flag">ELEGIR</span>' : ''}
+    `;
+  }
+
+  function renderMatch(el: HTMLElement): void {
+    const matchId = el.dataset.match;
+    if (!matchId) return;
+
+    const def = MATCH_BY_ID.get(matchId);
+    const matchState = state.matches[matchId] || { status: 'open', winnerId: null };
+    if (!def) return;
+
+    const bothFilled = def.slots.every((slotId) => Boolean(state.slots[slotId]));
+    const nextData = state.slots[def.next];
+    const staleNext = Boolean(nextData && nextData.originMatch === matchId);
+    const nextBlocked = Boolean(nextData && !staleNext);
+    const ready = bothFilled && matchState.status === 'open' && !nextBlocked;
+
+    el.classList.toggle('is-ready', ready);
+    el.classList.toggle('is-awaiting', state.pending === matchId);
+    el.classList.toggle('is-resolved', matchState.status === 'resolved');
+
+    const arrow = el.querySelector('.lb-advance') as HTMLButtonElement | null;
+    if (!arrow) return;
+
+    arrow.disabled = !isEditor || !ready;
+    arrow.setAttribute('aria-disabled', String(!isEditor || !ready));
+    arrow.dataset.status = matchState.status;
+
+    let title = 'Bloquear llave y elegir ganador';
+    if (!isEditor) title = 'Solo lectura';
+    else if (matchState.status === 'resolved') title = 'Llave resuelta';
+    else if (matchState.status === 'awaiting') title = 'Elige al ganador';
+    else if (nextBlocked) title = 'Deshaz el avance de la siguiente ronda';
+    else if (!bothFilled) title = 'Coloca 2 participantes';
+    arrow.title = title;
+
+    if (matchState.status === 'resolved') {
+      arrow.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"></path></svg>';
+    } else if (matchState.status === 'awaiting') {
+      arrow.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg>';
+    } else {
+      arrow.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="M13 6l6 6-6 6"></path></svg>';
+    }
+  }
+
+  function renderPool(): void {
+    if (!track) return;
+
+    const placed = new Map<string, number>();
+    for (const data of Object.values(state.slots)) {
+      placed.set(data.id, (placed.get(data.id) || 0) + 1);
+    }
+
+    let free = 0;
+    track.querySelectorAll<HTMLElement>('.lb-chip').forEach((chip) => {
+      const participantId = chip.dataset.participantId || '';
+      const used = (placed.get(participantId) || 0) > 0;
+      const latest = latestSlotFor(participantId);
+      const latestMatch = latest ? MATCH_BY_SLOT.get(latest.slotId) : null;
+      const awaiting = Boolean(latestMatch && state.matches[latestMatch.id]?.status === 'awaiting');
+      const locked = Boolean(latest?.data.locked);
+      const canUndo = Boolean(isEditor && latest && !locked && !awaiting);
+
+      if (!used) free += 1;
+
+      chip.classList.toggle('is-used', used);
+      chip.classList.toggle('is-locked', locked);
+      chip.classList.toggle('is-selected', selectedParticipantId === participantId);
+      chip.setAttribute('draggable', String(isEditor && !used));
+
+      const status = chip.querySelector('[data-chip-state]') as HTMLElement | null;
+      if (status) {
+        status.textContent = used ? (locked ? 'BLOQUEADO' : 'EN LLAVE') : 'DISPONIBLE';
+      }
+
+      const x = chip.querySelector('[data-chip-x]') as HTMLButtonElement | null;
+      if (x) {
+        x.hidden = !canUndo;
+        x.disabled = !canUndo;
+      }
+    });
+
+    if (poolCount) {
+      poolCount.textContent = `${free} libre${free === 1 ? '' : 's'} / 16`;
+    }
+  }
+
+  function renderPicker(): void {
+    const pendingId = state.pending;
+    const match = pendingId ? MATCH_BY_ID.get(pendingId) : null;
+
+    if (!pendingId || !match) {
+      if (picker) picker.hidden = true;
+      if (publicPending) publicPending.hidden = true;
+      return;
+    }
+
+    const options = match.slots
+      .map((slotId) => ({ slotId, data: state.slots[slotId] }))
+      .filter((entry) => Boolean(entry.data));
+
+    if (options.length < 2) {
+      if (picker) picker.hidden = true;
+      if (publicPending) publicPending.hidden = true;
+      return;
+    }
+
+    if (isEditor) {
+      if (publicPending) publicPending.hidden = true;
+      if (picker) picker.hidden = false;
+      if (pickerOptions) {
+        pickerOptions.innerHTML = options.map(({ slotId, data }) => {
+          const image = safeImage(data.image);
+          return `
+            <button type="button" class="lb-pick-card" data-pick-slot="${escapeHtml(slotId)}">
+              ${image
+                ? `<img src="${image}" alt="${escapeHtml(data.name)}" loading="lazy" />`
+                : `<span class="lb-pick-fallback">${escapeHtml(initials(data.name))}</span>`}
+              <span class="lb-pick-name">${escapeHtml(data.name)}</span>
+              <span class="lb-pick-cta">Elegir ganador</span>
+            </button>
+          `;
+        }).join('');
+      }
+    } else {
+      if (picker) picker.hidden = true;
+      if (publicPending) publicPending.hidden = false;
+      if (publicPendingText) {
+        publicPendingText.textContent = `Eligiendo ganador: ${options[0].data.name} vs ${options[1].data.name}`;
+      }
+    }
+  }
+
+  function renderAll(): void {
+    if (!board) return;
+    board.querySelectorAll<HTMLElement>('.lb-slot').forEach(renderSlot);
+    board.querySelectorAll<HTMLElement>('.lb-match').forEach(renderMatch);
+    renderPool();
+    renderPicker();
+    updateChrome();
+    scheduleDraw();
+  }
+
+  function applyState(raw: unknown, source: string): void {
+    if (dragging) return;
+    const next = normalizeState(raw);
+    if (next.rev && state.rev && next.rev < state.rev) return;
+
+    const serialized = JSON.stringify(next);
+    if (serialized === lastApplied) return;
+
+    state = next;
+    lastApplied = serialized;
+    renderAll();
+
+    if (source === 'remote') {
+      remoteAvailable = true;
+    }
+  }
+
+  function readLocal(): BracketState | null {
+    try {
+      const raw = localStorage.getItem(LOCAL_KEY);
+      if (!raw) return null;
+      return normalizeState(JSON.parse(raw));
+    } catch {
+      return null;
+    }
+  }
+
+  function persist(): void {
+    state.rev = Date.now();
+    const snapshot = JSON.parse(JSON.stringify(state));
+    const serialized = JSON.stringify(snapshot);
+    lastApplied = serialized;
+
+    try {
+      localStorage.setItem(LOCAL_KEY, serialized);
+    } catch {
+      /* noop */
+    }
+
+    if (broadcastChannel) {
+      try {
+        broadcastChannel.send({ type: 'broadcast', event: 'state', payload: { state: snapshot } });
+      } catch {
+        /* noop */
+      }
+    }
+
+    if (!isEditor) return;
+    if (saveTimer) window.clearTimeout(saveTimer);
+    saveTimer = window.setTimeout(async () => {
+      if (!remoteAvailable) {
+        if (!warnedLocal) {
+          warnedLocal = true;
+          toast('Modo local: corre la migración de Supabase para sincronizar.');
+        }
+        return;
+      }
+      try {
+        const { error } = await supabase
+          .from(TABLE)
+          .upsert(
+            {
+              id: ROW_ID,
+              state: snapshot,
+              updated_at: new Date().toISOString(),
+            },
+            { onConflict: 'id' },
+          );
+
+        if (error) {
+          if (/does not exist|schema cache/i.test(error.message) || error.code === '42P01' || error.code === 'PGRST205') {
+            remoteAvailable = false;
+            if (!warnedLocal) {
+              warnedLocal = true;
+              toast('Modo local: corre la migración de Supabase para sincronizar.');
+            }
+          }
+          updateChrome();
+          return;
+        }
+
+        remoteAvailable = true;
+        setSyncLabel('SINCRONIZADO');
+      } catch {
+        remoteAvailable = false;
+        updateChrome();
+      }
+    }, 140);
+  }
+
+  async function loadRemote(): Promise<void> {
+    try {
+      const { data, error } = await supabase
+        .from(TABLE)
+        .select('state')
+        .eq('id', ROW_ID)
+        .maybeSingle();
+
+      if (error) {
+        if (/does not exist|schema cache/i.test(error.message) || error.code === '42P01' || error.code === 'PGRST205') {
+          remoteAvailable = false;
+          updateChrome();
+          return;
+        }
+        throw error;
+      }
+
+      remoteAvailable = true;
+      if (data?.state) applyState(data.state, 'remote');
+      updateChrome();
+    } catch {
+      remoteAvailable = false;
+      updateChrome();
+    }
+  }
+
+  function shakeMatch(matchId: string): void {
+    const el = board?.querySelector(`[data-match="${matchId}"]`) as HTMLElement | null;
+    if (!el) return;
+    el.classList.add('is-shaking');
+    window.setTimeout(() => el.classList.remove('is-shaking'), 380);
+  }
+
+  function markJustFilled(slotId: string): void {
+    const el = board?.querySelector(`[data-slot="${slotId}"]`) as HTMLElement | null;
+    if (!el) return;
+    el.classList.add('is-just-filled');
+    window.setTimeout(() => el.classList.remove('is-just-filled'), 480);
+    window.setTimeout(drawLines, 520);
+  }
+
+  function scrollToMatch(matchId: string): void {
+    if (!boardScroll || !board) return;
+    const el = board.querySelector(`[data-match="${matchId}"]`) as HTMLElement | null;
+    if (!el) return;
+    const elRect = el.getBoundingClientRect();
+    const scrollRect = boardScroll.getBoundingClientRect();
+    boardScroll.scrollTo({
+      left: boardScroll.scrollLeft + (elRect.left - scrollRect.left) - boardScroll.clientWidth / 2 + elRect.width / 2,
+      behavior: 'smooth',
+    });
+  }
+
+  function scrollToSlot(slotId: string): void {
+    if (!boardScroll || !board) return;
+    const el = board.querySelector(`[data-slot="${slotId}"]`) as HTMLElement | null;
+    if (!el) return;
+    const elRect = el.getBoundingClientRect();
+    const scrollRect = boardScroll.getBoundingClientRect();
+    boardScroll.scrollTo({
+      left: boardScroll.scrollLeft + (elRect.left - scrollRect.left) - boardScroll.clientWidth / 2 + elRect.width / 2,
+      behavior: 'smooth',
+    });
+  }
+
+  function startPending(matchId: string): void {
+    if (!isEditor) return;
+
+    const def = MATCH_BY_ID.get(matchId);
+    const match = state.matches[matchId];
+    if (!def || !match) return;
+
+    if (match.status === 'awaiting') {
+      cancelPending();
+      return;
+    }
+
+    if (match.status === 'resolved') {
+      toast('Esa llave ya está resuelta. Usa la X del ganador para deshacer.');
+      return;
+    }
+
+    const [slotA, slotB] = def.slots;
+    if (!state.slots[slotA] || !state.slots[slotB]) {
+      toast('Faltan participantes en esta llave.');
+      shakeMatch(matchId);
+      return;
+    }
+
+    const nextData = state.slots[def.next];
+    if (nextData && nextData.originMatch !== matchId) {
+      toast('Primero deshaz el avance de la siguiente ronda.');
+      return;
+    }
+
+    if (nextData && nextData.originMatch === matchId) {
+      delete state.slots[def.next];
+    }
+
+    if (state.pending && state.pending !== matchId) {
+      const previous = state.matches[state.pending];
+      if (previous) previous.status = 'open';
+    }
+
+    state.pending = matchId;
+    match.status = 'awaiting';
+    selectedParticipantId = null;
+    persist();
+    renderAll();
+    scrollToMatch(matchId);
+    toast('Llave bloqueada. Elige al ganador.');
+  }
+
+  function cancelPending(): void {
+    if (!isEditor || !state.pending) return;
+    const match = state.matches[state.pending];
+    if (match) match.status = 'open';
+    state.pending = null;
+    persist();
+    renderAll();
+    toast('Selección cancelada.');
+  }
+
+  function pickWinner(matchId: string, slotId: string): void {
+    if (!isEditor) return;
+    if (state.pending !== matchId) return;
+
+    const def = MATCH_BY_ID.get(matchId);
+    const match = state.matches[matchId];
+    if (!def || !match) return;
+    if (!def.slots.includes(slotId)) return;
+
+    const winner = state.slots[slotId];
+    const otherId = def.slots.find((slot) => slot !== slotId);
+    const loser = otherId ? state.slots[otherId] : null;
+    if (!winner || !otherId || !loser) return;
+
+    const nextData = state.slots[def.next];
+    if (nextData && nextData.originMatch !== matchId) {
+      toast('La siguiente ronda ya tiene un participante.');
+      return;
+    }
+
+    state.slots[def.next] = {
+      ...winner,
+      locked: false,
+      originMatch: matchId,
+    };
+    state.slots[slotId] = { ...winner, locked: true };
+    state.slots[otherId] = { ...loser, locked: true };
+
+    match.status = 'resolved';
+    match.winnerId = winner.id;
+    state.pending = null;
+    selectedParticipantId = null;
+
+    persist();
+    renderAll();
+    markJustFilled(def.next);
+    scrollToSlot(def.next);
+
+    if (matchId === 'final') {
+      const championSlot = board?.querySelector('[data-slot="winner"]') as HTMLElement | null;
+      if (championSlot) {
+        championSlot.classList.add('is-celebrating');
+        window.setTimeout(() => championSlot.classList.remove('is-celebrating'), 2800);
+      }
+      toast(`${winner.name} es el campeón de Wild and Free.`);
+    } else {
+      toast(`${winner.name} avanza a la siguiente ronda.`);
+    }
+  }
+
+  function removeSlot(slotId: string): void {
+    if (!isEditor) return;
+    const data = state.slots[slotId];
+    if (!data) return;
+
+    const sourceMatch = MATCH_BY_SLOT.get(slotId);
+    if (sourceMatch && state.matches[sourceMatch.id]?.status === 'awaiting') {
+      toast('Cancela la selección del ganador antes de mover participantes.');
+      return;
+    }
+
+    if (data.locked) {
+      toast('Ese participante está bloqueado en una ronda anterior.');
+      return;
+    }
+
+    const origin = data.originMatch;
+    delete state.slots[slotId];
+
+    if (origin && state.matches[origin]) {
+      const originDef = MATCH_BY_ID.get(origin);
+      const originState = state.matches[origin];
+      originState.status = 'open';
+      originState.winnerId = null;
+      if (originDef) {
+        for (const sourceSlot of originDef.slots) {
+          if (state.slots[sourceSlot]) {
+            state.slots[sourceSlot] = { ...state.slots[sourceSlot], locked: false };
+          }
+        }
+      }
+      if (state.pending === origin) state.pending = null;
+      toast('Avance deshecho. La llave anterior quedó abierta.');
+    } else {
+      toast('Participante liberado.');
+    }
+
+    persist();
+    renderAll();
+  }
+
+  function placeFromPool(participantId: string, slotId: string): void {
+    if (!isEditor) return;
+    if (state.pending) {
+      toast('Termina o cancela la selección actual antes de mover participantes.');
+      return;
+    }
+    if (slotRound(slotId) !== 1) {
+      toast('Solo puedes colocar participantes en la ronda 1.');
+      return;
+    }
+
+    const match = MATCH_BY_SLOT.get(slotId);
+    if (!match) return;
+    if (state.matches[match.id].status !== 'open') {
+      toast('Esa llave ya está bloqueada.');
+      return;
+    }
+    if (state.slots[slotId]) {
+      toast('Ese espacio ya está ocupado.');
+      return;
+    }
+
+    const chip = track?.querySelector(`[data-participant-id="${participantId}"]`) as HTMLElement | null;
+    if (!chip) return;
+    if (Object.values(state.slots).some((slot) => slot.id === participantId)) {
+      toast('Ese participante ya está en la llave.');
+      return;
+    }
+
+    state.slots[slotId] = {
+      id: participantId,
+      name: chip.dataset.name || '',
+      image: chip.dataset.image || '',
+      locked: false,
+      originMatch: null,
+    };
+    selectedParticipantId = null;
+
+    persist();
+    renderAll();
+    markJustFilled(slotId);
+  }
+
+  function moveOrSwap(fromSlotId: string, toSlotId: string): void {
+    if (!isEditor || fromSlotId === toSlotId) return;
+    if (state.pending) {
+      toast('Termina o cancela la selección actual antes de mover participantes.');
+      return;
+    }
+    if (slotRound(fromSlotId) !== 1 || slotRound(toSlotId) !== 1) return;
+
+    const fromData = state.slots[fromSlotId];
+    if (!fromData || fromData.locked) return;
+
+    const fromMatch = MATCH_BY_SLOT.get(fromSlotId);
+    const toMatch = MATCH_BY_SLOT.get(toSlotId);
+    if (!fromMatch || !toMatch) return;
+    if (state.matches[fromMatch.id].status !== 'open' || state.matches[toMatch.id].status !== 'open') {
+      toast('No puedes mover participantes de una llave bloqueada.');
+      return;
+    }
+
+    const toData = state.slots[toSlotId] || null;
+    if (toData?.locked) {
+      toast('Ese espacio está bloqueado.');
+      return;
+    }
+
+    state.slots[toSlotId] = { ...fromData, locked: false };
+    if (toData) {
+      state.slots[fromSlotId] = { ...toData, locked: false };
+    } else {
+      delete state.slots[fromSlotId];
+    }
+
+    persist();
+    renderAll();
+    markJustFilled(toSlotId);
+  }
+
+  function collectParticipant(participantId: string): void {
+    if (!isEditor) return;
+    const latest = latestSlotFor(participantId);
+    if (!latest) {
+      toast('Ese participante no está en la llave.');
+      return;
+    }
+    if (latest.data.locked) {
+      toast('Está bloqueado en una ronda anterior.');
+      return;
+    }
+    removeSlot(latest.slotId);
+  }
+
+  function resetBracket(): void {
+    if (!isEditor) return;
+    if (!window.confirm('¿Reiniciar toda la llave? Se borrarán todos los avances.')) return;
+    state = emptyState();
+    state.rev = Date.now();
+    selectedParticipantId = null;
+    persist();
+    renderAll();
+    toast('Llave reiniciada.');
+  }
+
+  // --- Drag & drop ---
+
+  document.addEventListener('dragstart', (event) => {
+    const target = event.target as HTMLElement | null;
+    if (!target) return;
+
+    const chip = target.closest('.lb-chip') as HTMLElement | null;
+    if (chip && track?.contains(chip)) {
+      if (!isEditor || chip.classList.contains('is-used')) {
+        event.preventDefault();
+        return;
+      }
+      dragging = true;
+      chip.classList.add('is-dragging');
+      if (event.dataTransfer) {
+        event.dataTransfer.effectAllowed = 'move';
+        event.dataTransfer.setData('participantId', chip.dataset.participantId || '');
+      }
+      return;
+    }
+
+    const slot = target.closest('.lb-slot') as HTMLElement | null;
+    if (!slot || !board?.contains(slot)) return;
+
+    const slotId = slot.dataset.slot;
+    const data = slotId ? state.slots[slotId] : null;
+    if (!isEditor || !slotId || !data || data.locked || slotRound(slotId) !== 1) {
+      event.preventDefault();
+      return;
+    }
+
+    const match = MATCH_BY_SLOT.get(slotId);
+    if (!match || state.matches[match.id].status !== 'open') {
+      event.preventDefault();
+      return;
+    }
+
+    dragging = true;
+    slot.classList.add('is-dragging');
+    if (event.dataTransfer) {
+      event.dataTransfer.effectAllowed = 'move';
+      event.dataTransfer.setData('sourceSlotId', slotId);
+      event.dataTransfer.setData('participantId', data.id);
     }
   });
 
-  // Sincronización inicial
-  syncPoolUsedUI();
-  requestAnimationFrame(drawBracketLines);
+  document.addEventListener('dragend', () => {
+    dragging = false;
+    document.querySelectorAll('.is-dragging').forEach((el) => el.classList.remove('is-dragging'));
+    document.querySelectorAll('.is-drag-over').forEach((el) => el.classList.remove('is-drag-over'));
+  });
+
+  document.addEventListener('dragover', (event) => {
+    const target = event.target as HTMLElement | null;
+    const slot = target?.closest?.('.lb-slot') as HTMLElement | null;
+    if (!slot || !board?.contains(slot)) return;
+
+    const slotId = slot.dataset.slot;
+    if (!isEditor || !slotId || slotRound(slotId) !== 1) return;
+
+    const match = MATCH_BY_SLOT.get(slotId);
+    if (!match || state.matches[match.id].status !== 'open') return;
+    if (state.slots[slotId]?.locked) return;
+
+    event.preventDefault();
+    if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+    document.querySelectorAll('.is-drag-over').forEach((el) => {
+      if (el !== slot) el.classList.remove('is-drag-over');
+    });
+    slot.classList.add('is-drag-over');
+  });
+
+  document.addEventListener('dragleave', (event) => {
+    const target = event.target as HTMLElement | null;
+    const slot = target?.closest?.('.lb-slot') as HTMLElement | null;
+    if (slot) slot.classList.remove('is-drag-over');
+  });
+
+  document.addEventListener('drop', (event) => {
+    const target = event.target as HTMLElement | null;
+    const slot = target?.closest?.('.lb-slot') as HTMLElement | null;
+    if (!slot || !board?.contains(slot)) return;
+
+    const slotId = slot.dataset.slot;
+    if (!isEditor || !slotId || slotRound(slotId) !== 1) return;
+
+    event.preventDefault();
+    slot.classList.remove('is-drag-over');
+    dragging = false;
+
+    const sourceSlotId = event.dataTransfer?.getData('sourceSlotId') || '';
+    const participantId = event.dataTransfer?.getData('participantId') || '';
+
+    if (sourceSlotId) {
+      moveOrSwap(sourceSlotId, slotId);
+    } else if (participantId) {
+      placeFromPool(participantId, slotId);
+    }
+  });
+
+  // --- Click / tap interactions ---
+
+  document.addEventListener('click', (event) => {
+    const target = event.target as HTMLElement | null;
+    if (!target) return;
+
+    const carousel = target.closest('[data-carousel]') as HTMLElement | null;
+    if (carousel && track) {
+      const direction = Number(carousel.dataset.carousel || '1');
+      track.scrollBy({ left: direction * Math.max(220, track.clientWidth * 0.75), behavior: 'smooth' });
+      return;
+    }
+
+    const chipX = target.closest('[data-chip-x]') as HTMLElement | null;
+    if (chipX) {
+      event.stopPropagation();
+      const participantId = chipX.dataset.chipX;
+      if (participantId) collectParticipant(participantId);
+      return;
+    }
+
+    const slotX = target.closest('[data-slot-x]') as HTMLElement | null;
+    if (slotX) {
+      event.stopPropagation();
+      const slotId = slotX.dataset.slotX;
+      if (slotId) removeSlot(slotId);
+      return;
+    }
+
+    const pickerCancel = target.closest('[data-picker-cancel]') as HTMLElement | null;
+    if (pickerCancel) {
+      cancelPending();
+      return;
+    }
+
+    const pick = target.closest('[data-pick-slot]') as HTMLElement | null;
+    if (pick && state.pending) {
+      const slotId = pick.dataset.pickSlot;
+      if (slotId) pickWinner(state.pending, slotId);
+      return;
+    }
+
+    const advance = target.closest('[data-advance]') as HTMLElement | null;
+    if (advance) {
+      if (!isEditor) return;
+      const matchId = advance.dataset.advance;
+      if (matchId) startPending(matchId);
+      return;
+    }
+
+    const slot = target.closest('.lb-slot') as HTMLElement | null;
+    if (slot && board?.contains(slot)) {
+      const slotId = slot.dataset.slot;
+      if (!slotId) return;
+
+      if (state.pending && isEditor) {
+        const match = MATCH_BY_SLOT.get(slotId);
+        if (match && match.id === state.pending) {
+          pickWinner(match.id, slotId);
+          return;
+        }
+      }
+
+      if (isEditor && slotRound(slotId) === 1 && !state.slots[slotId] && selectedParticipantId) {
+        placeFromPool(selectedParticipantId, slotId);
+        return;
+      }
+
+      return;
+    }
+
+    const chip = target.closest('.lb-chip') as HTMLElement | null;
+    if (chip && track?.contains(chip)) {
+      if (!isEditor) return;
+      const participantId = chip.dataset.participantId;
+      if (!participantId || chip.classList.contains('is-used')) return;
+      selectedParticipantId = selectedParticipantId === participantId ? null : participantId;
+      renderPool();
+      if (selectedParticipantId) toast('Ahora toca un espacio de la ronda 1.');
+      return;
+    }
+
+    if (selectedParticipantId) {
+      selectedParticipantId = null;
+      renderPool();
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      if (state.pending) cancelPending();
+      if (selectedParticipantId) {
+        selectedParticipantId = null;
+        renderPool();
+      }
+      return;
+    }
+
+    if ((event.key === 'Enter' || event.key === ' ') && isEditor) {
+      const target = event.target as HTMLElement | null;
+      const slot = target?.closest?.('.lb-slot.is-candidate') as HTMLElement | null;
+      if (slot) {
+        const slotId = slot.dataset.slot;
+        const match = slotId ? MATCH_BY_SLOT.get(slotId) : null;
+        if (slotId && match && state.pending === match.id) {
+          event.preventDefault();
+          pickWinner(match.id, slotId);
+        }
+      }
+    }
+  });
+
+  if (resetButton) {
+    resetButton.addEventListener('click', resetBracket);
+  }
+
+  // --- Realtime + boot ---
+
+  async function boot(): Promise<void> {
+    const { role } = await getRole();
+    isEditor = role === 'admin' || role === 'staff';
+
+    const local = readLocal();
+    if (local) {
+      state = local;
+      lastApplied = JSON.stringify(local);
+    }
+
+    updateChrome();
+    renderAll();
+
+    broadcastChannel = supabase.channel('wild-league-live', {
+      config: { broadcast: { self: false } },
+    });
+    broadcastChannel
+      .on('broadcast', { event: 'state' }, (payload: any) => {
+        if (payload?.payload?.state) applyState(payload.payload.state, 'broadcast');
+      })
+      .subscribe();
+
+    const dbChannel = supabase.channel('wild-league-db');
+    dbChannel
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: TABLE, filter: `id=eq.${ROW_ID}` },
+        (payload: any) => {
+          if (payload?.new?.state) applyState(payload.new.state, 'remote');
+        },
+      )
+      .subscribe();
+
+    await loadRemote();
+    scheduleDraw();
+
+    pollTimer = window.setInterval(() => {
+      if (!document.hidden) loadRemote();
+    }, 15000);
+
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) loadRemote();
+    });
+  }
+
+  window.addEventListener('resize', () => requestAnimationFrame(drawLines));
+  window.addEventListener('load', () => requestAnimationFrame(drawLines));
+
+  boot().catch((error) => {
+    console.error('[league] boot error:', error);
+    updateChrome();
+    renderAll();
+  });
 </script>
