@@ -201,13 +201,13 @@ function closeFeaturedArticle(): void {
 // ─── CREW FEED ───
 let currentFilter = 'all';
 
-export async function loadCrewFeed(filter = 'all'): Promise<void> {
+export async function loadCrewFeed(filter = 'all', showSkeleton = true): Promise<void> {
   currentFilter = filter;
   const container = document.getElementById('posts-container');
   if (!container) return;
 
-  // Show shimmer skeleton while loading
-  container.innerHTML = feedSkeletonHtml();
+  // Skeleton solo en la carga inicial; en refresh silencioso se mantiene el feed
+  if (showSkeleton) container.innerHTML = feedSkeletonHtml();
 
   try {
     const { data: { session } } = await supabase.auth.getSession();
@@ -552,8 +552,66 @@ async function handleReactionOption(opt: HTMLElement): Promise<void> {
 
 async function setReaction(postId: string, userId: string, reactionType: string): Promise<void> {
   // Si el mismo usuario ya tiene ese tipo, toggle lo quita; si es otro tipo, lo cambia.
-  await supabase.rpc('toggle_reaction', { p_post_id: postId, p_user_id: userId, p_reaction_type: reactionType });
-  refreshFeed();
+  const { data, error } = await supabase.rpc('toggle_reaction', {
+    p_post_id: postId,
+    p_user_id: userId,
+    p_reaction_type: reactionType,
+  });
+  if (error || !data) return;
+
+  const result = data as { active?: string | null; count?: number };
+  applyReactionResult(postId, result.active || '', Number(result.count || 0));
+}
+
+// Actualiza la tarjeta en sitio (sin recargar el feed ni mostrar skeleton).
+function applyReactionResult(postId: string, active: string, total: number): void {
+  const card = document.querySelector(`.feed-card[data-post-id="${postId}"]`) as HTMLElement | null;
+  if (!card) return;
+  const mainBtn = card.querySelector('[data-action="reaction-toggle"]') as HTMLElement | null;
+  if (!mainBtn) return;
+
+  const prev = mainBtn.getAttribute('data-reaction-active') || '';
+  const meta = active ? reactionMeta(active) : null;
+
+  mainBtn.setAttribute('data-reaction-active', active);
+  mainBtn.classList.toggle('action-btn--active', Boolean(active));
+  mainBtn.style.color = meta ? meta.color : '';
+
+  const emojiEl = mainBtn.querySelector('.reaction-btn-emoji');
+  if (emojiEl) emojiEl.textContent = meta ? `${meta.emoji} ` : '👍 ';
+  const labelEl = mainBtn.querySelector('.reaction-btn-label');
+  if (labelEl) labelEl.textContent = meta ? meta.label : 'Me gusta';
+  const countEl = mainBtn.querySelector('.reaction-btn-count');
+  if (countEl) countEl.textContent = total > 0 ? String(total) : '';
+
+  // Contadores por tipo dentro del picker
+  const bump = (type: string, delta: number): void => {
+    if (!type) return;
+    const opt = card.querySelector(`.reaction-option[data-reaction="${type}"]`) as HTMLElement | null;
+    if (!opt) return;
+    let optCount = opt.querySelector('.reaction-option-count') as HTMLElement | null;
+    const current = optCount ? parseInt(optCount.textContent || '0', 10) || 0 : 0;
+    const next = Math.max(0, current + delta);
+    if (next === 0) {
+      if (optCount) optCount.remove();
+      return;
+    }
+    if (!optCount) {
+      optCount = document.createElement('span');
+      optCount.className = 'reaction-option-count';
+      opt.appendChild(optCount);
+    }
+    optCount.textContent = String(next);
+  };
+
+  if (active) {
+    if (prev && prev !== active) bump(prev, -1);
+    bump(active, 1);
+  } else if (prev) {
+    bump(prev, -1);
+  }
+
+  syncEyeStats(card);
 }
 
 function closeReactionPickers(): void {
@@ -797,7 +855,7 @@ let refreshTimer: ReturnType<typeof setTimeout> | null = null;
 function refreshFeed(): void {
   if (refreshTimer) clearTimeout(refreshTimer);
   refreshTimer = setTimeout(() => {
-    loadCrewFeed(currentFilter);
+    loadCrewFeed(currentFilter, false);
     loadNewsSidebar();
   }, 400);
 }
