@@ -522,6 +522,18 @@ export function initFeedInteractions(): void {
     if (!target.closest('.reaction-wrap')) closeReactionPickers();
     if (!target.closest('.feed-share-wrap')) closeShareMenus();
   });
+
+  // Al salir del area de reaccion se cierra el picker, aunque se haya
+  // abierto con click (si no, se queda pegado en pantalla).
+  document.addEventListener('mouseout', (ev) => {
+    const target = ev.target as HTMLElement | null;
+    const wrap = target?.closest?.('.reaction-wrap') as HTMLElement | null;
+    if (!wrap) return;
+    const to = ev.relatedTarget as Node | null;
+    if (to && wrap.contains(to)) return;
+    const picker = wrap.querySelector('.reaction-picker') as HTMLElement | null;
+    if (picker) picker.classList.remove('open');
+  });
 }
 
 function attachHandlers(posts: any[]): void {

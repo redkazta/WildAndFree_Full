@@ -791,21 +791,29 @@
 }
 	  /* Popover que aparece al hacer hover (dropdown probado y robusto).
 	     Un ::before invisible conecta el boton con el popover para no
-	     perder el hover en el hueco entre ellos. */
+	     perder el hover en el hueco entre ellos.
+	     Fondo SOLIDO: si fuera translucido se ve la tarjeta de abajo
+	     a traves del popover y parece que esta roto. */
 	  .reaction-wrap .reaction-picker {
 	    position: absolute;
 	    top: calc(100% + 4px);
 	    left: 0;
-	    display: none;
+	    display: flex;
 	    align-items: center;
 	    gap: 4px;
 	    padding: 8px 12px;
-	    background: var(--bg-card);
-	    border: 1px solid var(--border);
-	    border-radius: 100px;
-	    box-shadow: 0 14px 44px rgba(0, 0, 0, 0.45);
-	    z-index: 40;
+	    background: var(--surface-solid-elev, var(--surface-solid, var(--bg)));
+	    border: 1px solid var(--border-muted, var(--border));
+	    border-radius: 18px;
+	    box-shadow: 0 14px 44px rgba(0, 0, 0, 0.55);
+	    z-index: 60;
 	    white-space: nowrap;
+	    opacity: 0;
+	    visibility: hidden;
+	    pointer-events: none;
+	    transform: translateY(-6px) scale(0.96);
+	    transform-origin: left bottom;
+	    transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s;
 	  }
 	  .reaction-picker::before {
 	    content: '';
@@ -817,9 +825,11 @@
 	    background: transparent;
 	  }
 	  .reaction-wrap:hover .reaction-picker,
-	  .reaction-wrap:focus-within .reaction-picker,
 	  .reaction-picker.open {
-	    display: flex;
+	    opacity: 1;
+	    visibility: visible;
+	    pointer-events: auto;
+	    transform: translateY(0) scale(1);
 	  }
 	  .reaction-option {
 	    position: relative;
