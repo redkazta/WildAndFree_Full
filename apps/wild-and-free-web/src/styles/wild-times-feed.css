@@ -1213,6 +1213,12 @@
 
 /* Smooth fade-in for real content after skeleton */
 .sk-content {
+  display: flex;
+  flex-direction: column;
+  /* Espacio entre publicaciones: el popover de reacciones mide ~50px
+     y cuelga de la tarjeta, así que necesita este hueco para no
+     encimarse con la siguiente (y no disparar su hover). */
+  gap: 56px;
   animation: sk-in 0.35s ease-out;
 }
 @keyframes sk-in {
