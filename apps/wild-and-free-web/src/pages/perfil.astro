@@ -85,6 +85,19 @@ import Layout from '../layouts/Layout.astro';
           <!-- RIGHT DASHBOARD (75%) -->
           <div class="pf-feed">
 
+            <!-- Mi informacion (todos los usuarios autenticados) -->
+            <div class="dash-card" id="profile-edit-card">
+              <div class="dash-card-header">📋 Mi Información</div>
+              <div class="dash-form">
+                <input id="edit-username" class="dash-input" placeholder="Usuario (tu perfil público)" autocomplete="username" />
+                <input id="edit-name" class="dash-input" placeholder="Nombre" autocomplete="name" />
+                <input id="edit-email" class="dash-input" placeholder="Correo" disabled />
+                <input id="edit-bio" class="dash-input" placeholder="Bio" />
+                <button id="edit-save" class="dash-submit" style="margin-top:4px;">Guardar Cambios</button>
+                <span id="edit-msg" class="dash-msg"></span>
+              </div>
+            </div>
+
             <!-- Artist Dashboard Actions -->
             <div id="artist-dashboard" class="hidden">
               <div class="dash-grid">
@@ -119,15 +132,6 @@ import Layout from '../layouts/Layout.astro';
                 </div>
 
                 <!-- Editar perfil -->
-                <div class="dash-card">
-                  <div class="dash-card-header">📋 Editar Perfil</div>
-                  <div class="dash-form">
-                    <input id="edit-name" class="dash-input" placeholder="Nombre" />
-                    <input id="edit-bio" class="dash-input" placeholder="Bio" />
-                    <button id="edit-save" class="dash-submit" style="margin-top:4px;">Guardar Cambios</button>
-                    <span id="edit-msg" class="dash-msg"></span>
-                  </div>
-                </div>
 
                 <!-- Links Sociales -->
                 <div class="dash-card">
@@ -235,6 +239,7 @@ import Layout from '../layouts/Layout.astro';
   .pf-grid { display:flex; gap:24px; align-items:flex-start; }
   .pf-side { width:32%; min-width:280px; flex-shrink:0; display:flex; flex-direction:column; gap:12px; }
   .pf-feed { flex:1; min-width:0; }
+  #profile-edit-card { margin-bottom: 16px; }
 
   /* ── UNAUTH STATE ── */
   .unauth {
@@ -942,6 +947,12 @@ import Layout from '../layouts/Layout.astro';
     currentProfile = profile;
     authContent?.classList.remove('hidden');
 
+    // Fallbacks al metadata de auth cuando el perfil esta incompleto
+    const meta = currentUser.user_metadata || {};
+    const emailPrefix = (currentUser.email || '').split('@')[0] || '';
+    const displayName = profile.nombre || meta.nombre || meta.name || meta.full_name || emailPrefix || 'Usuario Wild';
+    const handle = String(profile.username || meta.username || meta.user_name || emailPrefix || 'usuario').toLowerCase();
+
     // Update UI
     const nameEl = document.getElementById('profile-name');
     const usernameEl = document.getElementById('profile-username');
@@ -949,8 +960,8 @@ import Layout from '../layouts/Layout.astro';
     const avatarImg = document.getElementById('profile-avatar-img');
     const avatarPlaceholder = document.getElementById('avatar-placeholder');
 
-    if (nameEl) nameEl.textContent = profile.nombre || 'Usuario Wild';
-    if (usernameEl) usernameEl.textContent = `@${profile.nombre?.toLowerCase().replace(/\s/g, '_') || 'usuario'}`;
+    if (nameEl) nameEl.textContent = displayName;
+    if (usernameEl) usernameEl.textContent = `@${handle}`;
     if (bioEl) bioEl.textContent = profile.bio || 'Miembro de Wild Gvng • Amante del hip-hop urbano';
 
     if (profile.avatar_url && avatarImg instanceof HTMLImageElement) {
@@ -958,8 +969,18 @@ import Layout from '../layouts/Layout.astro';
       avatarImg.classList.remove('hidden');
       avatarPlaceholder?.classList.add('hidden');
     } else if (avatarPlaceholder) {
-      avatarPlaceholder.textContent = profile.nombre?.substring(0, 2).toUpperCase() || 'WG';
+      avatarPlaceholder.textContent = displayName.substring(0, 2).toUpperCase() || 'WG';
     }
+
+    // Formulario de perfil (disponible para todos)
+    const editUsernameEl = document.getElementById('edit-username') as HTMLInputElement | null;
+    const editNameEl = document.getElementById('edit-name') as HTMLInputElement | null;
+    const editEmailEl = document.getElementById('edit-email') as HTMLInputElement | null;
+    const editBioEl = document.getElementById('edit-bio') as HTMLInputElement | null;
+    if (editUsernameEl) editUsernameEl.value = profile.username || '';
+    if (editNameEl) editNameEl.value = profile.nombre || displayName;
+    if (editEmailEl) editEmailEl.value = currentUser.email || '';
+    if (editBioEl) editBioEl.value = profile.bio || '';
 
     // Load tags
     loadUserTags(profile);
@@ -1740,14 +1761,39 @@ import Layout from '../layouts/Layout.astro';
 
   // Save profile
   document.getElementById('edit-save')?.addEventListener('click', async () => {
+    const rawUsername = (document.getElementById('edit-username') as HTMLInputElement)?.value?.trim() || '';
+    const username = rawUsername.toLowerCase().replace(/[^a-z0-9._-]/g, '');
     const nombre = (document.getElementById('edit-name') as HTMLInputElement)?.value?.trim();
     const bio = (document.getElementById('edit-bio') as HTMLInputElement)?.value?.trim();
-    if (!nombre) return;
-    await supabase.from('profiles').upsert({ id: currentUser.id, nombre, bio }, { onConflict: 'id' });
     const m = document.getElementById('edit-msg');
-    if (m) m.textContent = '✅ Guardado';
+    if (!nombre) {
+      if (m) m.textContent = 'El nombre es obligatorio';
+      return;
+    }
+    if (username && username.length < 3) {
+      if (m) m.textContent = 'El usuario debe tener al menos 3 caracteres';
+      return;
+    }
+
+    const payload: Record<string, any> = { id: currentUser.id, nombre, bio: bio || null };
+    if (username) payload.username = username;
+
+    const { error } = await supabase.from('profiles').upsert(payload, { onConflict: 'id' });
+    if (error) {
+      if (m) m.textContent = error.code === '23505' ? '❌ Ese usuario ya está ocupado' : '❌ No se pudo guardar';
+      return;
+    }
+
+    if (currentProfile) {
+      currentProfile.nombre = nombre;
+      currentProfile.bio = bio;
+      if (username) currentProfile.username = username;
+    }
     const nEl = document.getElementById('profile-name');
     if (nEl) nEl.textContent = nombre;
+    const uEl = document.getElementById('profile-username');
+    if (uEl && username) uEl.textContent = `@${username}`;
+    if (m) m.textContent = '✅ Guardado';
   });
 
   // Save social links

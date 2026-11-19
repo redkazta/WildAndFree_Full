@@ -385,6 +385,15 @@
 .comment-author {
   font-size: 11px; font-weight: 800; color: var(--text);
 }
+.comment-author-link {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.comment-author-link:hover {
+  color: var(--primary);
+  text-decoration: underline;
+}
 .comment-time {
   font-size: 9px; color: var(--text-muted); font-weight: 400;
   margin-left: 4px;

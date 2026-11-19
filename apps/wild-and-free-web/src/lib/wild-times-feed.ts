@@ -761,10 +761,12 @@ async function loadPostComments(postId: string, section: HTMLElement): Promise<v
       const avatar = c.avatar_url || '';
       const name = c.nombre || c.username || 'Anónimo';
       const initials = name.substring(0, 2).toUpperCase();
+      const href = c.username ? `/artista/${encodeURIComponent(c.username)}` : '';
+      const nameHtml = href ? `<a class="comment-author-link" href="${href}">${name}</a>` : name;
       return `<div class="comment-item">
         <div class="comment-avatar" style="${avatar ? `background-image:url('${avatar}')` : ''}">${avatar ? '' : initials}</div>
         <div>
-          <div class="comment-author">${name} <span class="comment-time">${getTimeAgo(new Date(c.created_at))}</span></div>
+          <div class="comment-author">${nameHtml} <span class="comment-time">${getTimeAgo(new Date(c.created_at))}</span></div>
           <div class="comment-text">${c.content}</div>
         </div>
       </div>`;
@@ -967,7 +969,9 @@ function userRowHtml(u: any, extra: string): string {
     <div class="reaction-user-avatar" style="${avatar ? `background-image:url('${avatar}')` : ''}">${avatar ? '' : initials}</div>
     ${reactEmoji ? `<span class="reaction-row-emoji" style="${reactColor ? `color:${reactColor}` : ''}">${reactEmoji}</span>` : ''}
     <div class="reaction-user-info">
-      <a href="/artista/${u.username || ''}" class="reaction-user-name">${name}<span class="reaction-row-arrow">↗</span></a>
+      ${u.username
+        ? `<a href="/artista/${u.username}" class="reaction-user-name">${name}<span class="reaction-row-arrow">↗</span></a>`
+        : `<span class="reaction-user-name">${name}</span>`}
       <span class="reaction-user-meta">${extra}</span>
     </div>
   </div>`;
