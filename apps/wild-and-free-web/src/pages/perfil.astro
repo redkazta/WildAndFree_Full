@@ -86,6 +86,8 @@ import Layout from '../layouts/Layout.astro';
           <!-- RIGHT DASHBOARD (75%) -->
           <div class="pf-feed">
 
+            <div id="highlights-row" class="wg-highlights"></div>
+
             <!-- Artist Dashboard Actions -->
             <div id="artist-dashboard" class="hidden">
               <div class="dash-grid">
@@ -901,6 +903,7 @@ import Layout from '../layouts/Layout.astro';
   import { supabase } from '../lib/supabase.js';
   import { getRole } from '../lib/role.js';
   import { getUserTags } from '../lib/tags-gateway.js';
+  import { initHighlights } from '../lib/highlights';
 
   let currentUser: any = null;
   let currentProfile: any = null;
@@ -1036,6 +1039,7 @@ import Layout from '../layouts/Layout.astro';
     loadMyPosts(profile.id);
     loadLikedPosts();
     loadRepostedPosts();
+    initHighlights('highlights-row', profile.id);
   };
 
   /* ── ARTIST-SPECIFIC ── */

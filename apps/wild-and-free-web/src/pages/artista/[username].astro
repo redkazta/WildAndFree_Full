@@ -129,6 +129,9 @@ function timeAgo(dateStr: string): string {
       </div>
     </div>
 
+    <!-- Historias destacadas -->
+    <div id="highlights-row" class="wg-highlights"></div>
+
     <!-- BODY: 80% width, sidebar left + feed right -->
     <div class="ap-body">
       <div class="ap-body-inner">
@@ -709,6 +712,7 @@ function timeAgo(dateStr: string): string {
 
 <script>
   import { supabase } from '../../lib/supabase';
+  import { initHighlights } from '../../lib/highlights';
 
   (async function() {
     const { data: { session } } = await supabase.auth.getSession();
@@ -1155,4 +1159,17 @@ function timeAgo(dateStr: string): string {
       loadExclusiveContent();
     }
   })();
+
+  // Historias destacadas (se reinicia en cada navegación del ClientRouter)
+  function bootHighlights(): void {
+    const pageRoot = document.querySelector('.ap') as HTMLElement | null;
+    const id = pageRoot?.dataset.artistId;
+    const row = document.getElementById('highlights-row');
+    if (!id || !row || row.dataset.hlInit === '1') return;
+    row.dataset.hlInit = '1';
+    initHighlights('highlights-row', id);
+  }
+
+  bootHighlights();
+  document.addEventListener('astro:page-load', bootHighlights);
 </script>
