@@ -45,7 +45,7 @@ function ensureStyles(): void {
 .wg-highlights { margin: 18px 0 6px; }
 .wg-hl-row {
   display: flex; gap: 18px; padding: 4px 2px 10px;
-  overflow-x: auto; scrollbar-width: none;
+  overflow-x: auto; scrollbar-width: none; justify-content: safe center;
 }
 .wg-hl-row::-webkit-scrollbar { display: none; }
 .wg-hl-item {
@@ -102,6 +102,15 @@ function ensureStyles(): void {
 .wg-hl-viewer { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,.93); }
 .wg-hl-viewer img { max-width: min(520px, 92vw); max-height: 86vh; border-radius: 12px; object-fit: contain; cursor: pointer; }
 .wg-hl-viewer-x { position: absolute; top: 16px; right: 16px; border: none; background: none; color: #fff; font-size: 28px; cursor: pointer; }
+@media (max-width: 600px) {
+  .wg-highlights { margin: 14px 0 4px; }
+  .wg-hl-row { gap: 14px; }
+  .wg-hl-item { width: 72px; }
+  .wg-hl-ring { width: 64px; height: 64px; }
+  .wg-hl-label { max-width: 72px; font-size: 9px; }
+  .wg-hl-body { padding: 14px; }
+  .wg-hl-head h3 { font-size: 13px; }
+}
 `;
   document.head.appendChild(style);
 }

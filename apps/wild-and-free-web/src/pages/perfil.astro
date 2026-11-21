@@ -363,9 +363,9 @@ import Layout from '../layouts/Layout.astro';
   /* ── GRID ── */
   .auth.hidden { display: none; }
   .pf-body {
-    max-width: 90%;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 0 0 60px;
+    padding: 0 16px 60px;
   }
   .pf-grid {
     display: grid;
@@ -853,9 +853,6 @@ import Layout from '../layouts/Layout.astro';
       order: -1;
       position: static;
     }
-    .side-card:nth-child(n+3) {
-      display: none;
-    }
     .side-avatar-box {
       width: 80px;
       height: 80px;
@@ -865,13 +862,10 @@ import Layout from '../layouts/Layout.astro';
   /* ── MOBILE ── */
   @media (max-width: 600px) {
     .pf-body {
-      padding: 0 0 40px;
+      padding: 0 12px 40px;
     }
     .pf-grid {
       gap: 12px;
-    }
-    .side-card:nth-child(n+2) {
-      display: none;
     }
     .side-card:first-child {
       text-align: center;

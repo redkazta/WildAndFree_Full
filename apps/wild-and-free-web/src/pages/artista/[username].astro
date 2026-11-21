@@ -130,7 +130,7 @@ function timeAgo(dateStr: string): string {
     </div>
 
     <!-- Historias destacadas -->
-    <div id="highlights-row" class="wg-highlights"></div>
+    <div id="highlights-row" class="wg-highlights ap-highlights"></div>
 
     <!-- BODY: 80% width, sidebar left + feed right -->
     <div class="ap-body">
@@ -417,6 +417,11 @@ function timeAgo(dateStr: string): string {
     margin-top: 40px;
     position: relative; z-index: 2;
   }
+  .ap-highlights {
+    max-width: 1400px;
+    margin: 28px auto 0;
+    padding: 0 32px;
+  }
   .ap-body-inner {
     display: grid;
     grid-template-columns: 240px 1fr;
@@ -701,9 +706,11 @@ function timeAgo(dateStr: string): string {
 
   @media (max-width: 768px) {
     .ap-header-content { flex-direction: column; }
-    .ap-header-photo { width: 100%; min-height: 40vh; max-height: 50vh; }
+    .ap-header-photo { width: 132px; height: 132px; min-height: 0; max-height: none; }
     .ap-header-info { padding: 24px; }
     .ap-header-name { font-size: 2rem; }
+    .ap-body { padding: 0 16px 40px; margin-top: 24px; }
+    .ap-highlights { margin-top: 20px; padding: 0 16px; }
     .ap-body-inner { grid-template-columns: 1fr; }
     .ap-side { position: static; }
     .exclusive-grid { grid-template-columns: 1fr; }
