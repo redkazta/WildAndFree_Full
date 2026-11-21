@@ -421,8 +421,8 @@ function renderCrewPost(p: any, meta: { reactions: Record<string, number>; comme
       <div class="feed-actions-main">
         <div class="reaction-wrap">
           <button class="action-btn reaction-main-btn ${isReacted ? 'action-btn--active' : ''}" data-action="reaction-toggle" style="${myReactionMeta ? `color:${myReactionMeta.color}` : ''}" data-reaction-active="${meta.myReaction || ''}">
-            <span class="reaction-btn-emoji">${myReactionMeta ? `${myReactionMeta.emoji} ` : '👍 '}</span>
-            <span class="reaction-btn-label">${myReactionMeta ? myReactionMeta.label : 'Me gusta'}</span>
+            ${myReactionMeta ? `<span class="reaction-btn-emoji">${myReactionMeta.emoji}</span>` : ''}
+            <span class="reaction-btn-label">${myReactionMeta ? myReactionMeta.label : 'Reaccionar'}</span>
             <span class="reaction-btn-count">${totalReactions > 0 ? totalReactions : ''}</span>
           </button>
           <div class="reaction-picker" data-post-id="${p.id}">${reactionPicker}</div>
@@ -581,10 +581,19 @@ function applyReactionResult(postId: string, active: string, total: number): voi
   mainBtn.classList.toggle('action-btn--active', Boolean(active));
   mainBtn.style.color = meta ? meta.color : '';
 
-  const emojiEl = mainBtn.querySelector('.reaction-btn-emoji');
-  if (emojiEl) emojiEl.textContent = meta ? `${meta.emoji} ` : '👍 ';
+  let emojiEl = mainBtn.querySelector('.reaction-btn-emoji') as HTMLElement | null;
+  if (meta) {
+    if (!emojiEl) {
+      emojiEl = document.createElement('span');
+      emojiEl.className = 'reaction-btn-emoji';
+      mainBtn.insertBefore(emojiEl, mainBtn.firstChild);
+    }
+    emojiEl.textContent = meta.emoji;
+  } else if (emojiEl) {
+    emojiEl.remove();
+  }
   const labelEl = mainBtn.querySelector('.reaction-btn-label');
-  if (labelEl) labelEl.textContent = meta ? meta.label : 'Me gusta';
+  if (labelEl) labelEl.textContent = meta ? meta.label : 'Reaccionar';
   const countEl = mainBtn.querySelector('.reaction-btn-count');
   if (countEl) countEl.textContent = total > 0 ? String(total) : '';
 
