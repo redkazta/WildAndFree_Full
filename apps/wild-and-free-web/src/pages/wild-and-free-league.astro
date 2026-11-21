@@ -236,7 +236,7 @@ const rightRounds = [
 
   <div class="lb-public-pending" id="public-pending" hidden>
     <span class="lb-live-dot"></span>
-    <span id="public-pending-text">Eligiendo ganador…</span>
+    <span id="public-pending-text">Combate en curso…</span>
   </div>
 
   <div class="lb-toast" id="league-toast" role="status" aria-live="polite"></div>
@@ -956,20 +956,6 @@ const rightRounds = [
     color: var(--primary);
     font-size: 10px;
     font-weight: 900;
-  }
-
-  .lb-slot-flag {
-    position: absolute;
-    right: 5px;
-    bottom: 4px;
-    z-index: 4;
-    padding: 2px 5px;
-    border-radius: 4px;
-    background: var(--primary);
-    color: #000;
-    font-size: 6px;
-    font-weight: 900;
-    letter-spacing: 0.12em;
   }
 
   .lb-vs {
@@ -2092,8 +2078,8 @@ const rightRounds = [
     const data = state.slots[slotId];
     const match = MATCH_BY_SLOT.get(slotId) || null;
     const matchState = match ? state.matches[match.id] : null;
-    const isCandidate = Boolean(match && state.pending === match.id && !data?.locked);
-    const interactiveCandidate = isCandidate && isEditor;
+    const isCandidate = Boolean(isEditor && match && state.pending === match.id && !data?.locked);
+    const interactiveCandidate = isCandidate;
     const awaiting = matchState?.status === 'awaiting';
     const isChampion = slotId === 'winner';
     const isWinner = Boolean(data && match?.winnerId && data.id === match.winnerId);
@@ -2133,7 +2119,6 @@ const rightRounds = [
           ? '<span class="lb-slot-lock" aria-hidden="true">🔒</span>'
           : ''}
       ${xButton}
-      ${isCandidate ? '<span class="lb-slot-flag">ELEGIR</span>' : ''}
     `;
   }
 
@@ -2264,7 +2249,7 @@ const rightRounds = [
       if (picker) picker.hidden = true;
       if (publicPending) publicPending.hidden = false;
       if (publicPendingText) {
-        publicPendingText.textContent = `Eligiendo ganador: ${options[0].data.name} vs ${options[1].data.name}`;
+        publicPendingText.textContent = 'Combate en curso…';
       }
     }
   }
