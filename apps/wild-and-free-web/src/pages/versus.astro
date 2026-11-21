@@ -707,7 +707,7 @@ const config = {
         const totalNeeded = document.querySelectorAll('.team-slot').length;
         
         if (filledSlots < totalNeeded) {
-            alert('¡Completa ambos equipos antes de la batalla!');
+            if (window.WGToast) window.WGToast('¡Completa ambos equipos antes de la batalla!', { type: 'error' });
             return;
         }
 

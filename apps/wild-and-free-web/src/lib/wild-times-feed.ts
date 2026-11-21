@@ -2,6 +2,7 @@ import { supabase } from './supabase';
 import { renderRichContent, initGiphyFallback, renderEmbedUrl } from './linkify';
 import { getRole } from './role';
 import { postShortId, postTypePath } from './slug';
+import { showToast } from './toast';
 
 const typeLabels: Record<string, { label: string; color: string }> = {
   announcement: { label: '📢 Anuncio', color: 'var(--primary)' },
@@ -546,7 +547,10 @@ async function handleReactionOption(opt: HTMLElement): Promise<void> {
   if (!postId) return;
   closeReactionPickers();
   const { data: { session } } = await supabase.auth.getSession();
-  if (!session?.user) { alert('Inicia sesión para interactuar'); return; }
+  if (!session?.user) {
+    showToast('Inicia sesión para interactuar', { action: { label: 'Iniciar sesión', href: '/login' } });
+    return;
+  }
   await setReaction(postId, session.user.id, reactionType);
 }
 
@@ -626,7 +630,10 @@ async function handleAction(btnLike: HTMLElement | Event): Promise<void> {
   if (!postId || !action) return;
 
   const { data: { session } } = await supabase.auth.getSession();
-  if (!session?.user) { alert('Inicia sesión para interactuar'); return; }
+  if (!session?.user) {
+    showToast('Inicia sesión para interactuar', { action: { label: 'Iniciar sesión', href: '/login' } });
+    return;
+  }
 
   if (action === 'reaction-toggle') {
     const wrap = btn.closest('.reaction-wrap');
@@ -783,7 +790,10 @@ async function handleCommentSend(btn: HTMLElement): Promise<void> {
   if (!input || !postId || !input.value.trim()) return;
 
   const { data: { session } } = await supabase.auth.getSession();
-  if (!session?.user) { alert('Inicia sesión'); return; }
+  if (!session?.user) {
+    showToast('Inicia sesión para comentar', { action: { label: 'Iniciar sesión', href: '/login' } });
+    return;
+  }
 
   await supabase.from('wall_comments').insert({
     post_id: postId, user_id: session.user.id, content: input.value.trim()

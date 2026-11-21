@@ -351,6 +351,7 @@ const uniqueSizesJson = JSON.stringify(uniqueSizes);
 
 <script>
   import { cartStore } from '../../lib/cart.js';
+  import { showToast } from '../../lib/toast';
 
   var DEAD_IMAGE_HOST = 'cfsqhbisrkqhbupyjrwz';
   var cleanImageUrl = function(url) {
@@ -476,7 +477,7 @@ const uniqueSizesJson = JSON.stringify(uniqueSizes);
       try {
         if (hasVariants) {
           currentVariant = getVariant(selectedColor, selectedSize) || allVariants[0];
-          if (!currentVariant || currentVariant.stock <= 0) { alert('Esta variante está agotada'); return; }
+          if (!currentVariant || currentVariant.stock <= 0) { showToast('Esta variante está agotada', { type: 'error' }); return; }
         }
 
         var item = {

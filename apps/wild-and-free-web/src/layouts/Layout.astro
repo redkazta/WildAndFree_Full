@@ -920,6 +920,11 @@ const isGroupActive = (group: { items: { href: string }[] }) =>
 
 		<script>
 			import { initLayout } from '../lib/layout';
+			import { showToast } from '../lib/toast';
+
+			// Disponible también para scripts inline (páginas con define:vars)
+			(window as any).WGToast = showToast;
+
 			initLayout();
 			document.addEventListener('astro:after-swap', () => {
 				import('../lib/layout').then(({ initLayout }) => initLayout());
