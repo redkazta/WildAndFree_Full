@@ -46,6 +46,7 @@ import Layout from '../layouts/Layout.astro';
               <p class="side-username" id="profile-username">@usuario</p>
               <div class="side-tags" id="profile-role-tags"></div>
               <a href="/erp" id="erp-dashboard-btn" class="erp-shortcut-btn hidden">⚙️ Ir al ERP</a>
+              <a href="/configuracion" id="edit-profile-btn" class="erp-shortcut-btn">✏️ Editar perfil</a>
             </div>
 
             <!-- Bio Card -->
@@ -84,19 +85,6 @@ import Layout from '../layouts/Layout.astro';
 
           <!-- RIGHT DASHBOARD (75%) -->
           <div class="pf-feed">
-
-            <!-- Mi informacion (todos los usuarios autenticados) -->
-            <div class="dash-card" id="profile-edit-card">
-              <div class="dash-card-header">📋 Mi Información</div>
-              <div class="dash-form">
-                <input id="edit-username" class="dash-input" placeholder="Usuario (tu perfil público)" autocomplete="username" />
-                <input id="edit-name" class="dash-input" placeholder="Nombre" autocomplete="name" />
-                <input id="edit-email" class="dash-input" placeholder="Correo" disabled />
-                <input id="edit-bio" class="dash-input" placeholder="Bio" />
-                <button id="edit-save" class="dash-submit" style="margin-top:4px;">Guardar Cambios</button>
-                <span id="edit-msg" class="dash-msg"></span>
-              </div>
-            </div>
 
             <!-- Artist Dashboard Actions -->
             <div id="artist-dashboard" class="hidden">
@@ -144,18 +132,18 @@ import Layout from '../layouts/Layout.astro';
                     <span id="edit-social-msg" class="dash-msg"></span>
                   </div>
                 </div>
+              </div>
+            </div>
 
-                <!-- Sección de navegación secundaria -->
-                <div class="dash-card dash-nav-card">
-                  <div class="dash-card-header">📂 Mi Actividad</div>
-                  <div class="dash-nav-links">
-                    <a href="#" class="dash-nav-item" data-nav="feed">📰 Ver mi Feed</a>
-                    <a href="#" class="dash-nav-item" data-nav="likes">❤️ Ver mis Me Gusta</a>
-                    <a href="#" class="dash-nav-item" data-nav="reposts">🔄 Ver mis Reposts</a>
-                    <a href="/artista?" id="dash-public-link" class="dash-nav-item">👤 Mi Perfil Público</a>
-                    <a href="/configuracion" class="dash-nav-item">⚙️ Configuración</a>
-                  </div>
-                </div>
+            <!-- Mi Actividad (todos los usuarios) -->
+            <div class="dash-card dash-nav-card" id="profile-nav-card">
+              <div class="dash-card-header">📂 Mi Actividad</div>
+              <div class="dash-nav-links">
+                <a href="#" class="dash-nav-item" data-nav="feed">📰 Mi Feed</a>
+                <a href="#" class="dash-nav-item" data-nav="likes">❤️ Mis Me Gusta</a>
+                <a href="#" class="dash-nav-item" data-nav="reposts">🔄 Mis Reposts</a>
+                <a href="#" id="dash-public-link" class="dash-nav-item">👤 Mi Perfil Público</a>
+                <a href="/configuracion" class="dash-nav-item">⚙️ Configuración</a>
               </div>
             </div>
 
@@ -963,6 +951,17 @@ import Layout from '../layouts/Layout.astro';
     if (nameEl) nameEl.textContent = displayName;
     if (usernameEl) usernameEl.textContent = `@${handle}`;
     if (bioEl) bioEl.textContent = profile.bio || 'Miembro de Wild Gvng • Amante del hip-hop urbano';
+
+    // Enlace al perfil público (visible para todos)
+    const publicLink = document.getElementById('dash-public-link') as HTMLAnchorElement | null;
+    if (publicLink) {
+      if (profile.username) {
+        publicLink.href = `/artista/${encodeURIComponent(profile.username)}`;
+      } else {
+        publicLink.href = '/configuracion';
+        publicLink.textContent = '👤 Configura tu perfil público';
+      }
+    }
 
     if (profile.avatar_url && avatarImg instanceof HTMLImageElement) {
       avatarImg.src = profile.avatar_url;

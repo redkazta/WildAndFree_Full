@@ -110,26 +110,28 @@ import Layout from '../layouts/Layout.astro';
 
           <div class="cfg-card">
             <h4 class="cfg-card-label">INFORMACIÓN PERSONAL</h4>
-            <div class="cfg-row">
-              <div class="cfg-field">
-                <span class="cfg-label">Nombre completo</span>
-                <span class="cfg-value" id="cfg-name">Cargando...</span>
-              </div>
-              <button class="cfg-btn-small">Editar</button>
-            </div>
-            <div class="cfg-row">
-              <div class="cfg-field">
-                <span class="cfg-label">Correo electrónico</span>
-                <span class="cfg-value" id="cfg-email">Cargando...</span>
-              </div>
-              <button class="cfg-btn-small">Cambiar</button>
-            </div>
-            <div class="cfg-row">
+            <div class="cfg-form">
               <div class="cfg-field">
                 <span class="cfg-label">Nombre de usuario</span>
-                <span class="cfg-value" id="cfg-username">@cargando</span>
+                <input id="cfg-username-input" class="cfg-input" placeholder="tu_usuario" autocomplete="username" />
+                <span class="cfg-hint">Tu perfil público: /artista/tu_usuario</span>
               </div>
-              <button class="cfg-btn-small">Editar</button>
+              <div class="cfg-field">
+                <span class="cfg-label">Nombre</span>
+                <input id="cfg-name-input" class="cfg-input" placeholder="Tu nombre" autocomplete="name" />
+              </div>
+              <div class="cfg-field">
+                <span class="cfg-label">Correo electrónico</span>
+                <input id="cfg-email-input" class="cfg-input" disabled />
+              </div>
+              <div class="cfg-field">
+                <span class="cfg-label">Bio</span>
+                <textarea id="cfg-bio-input" class="cfg-input" rows="3" placeholder="Cuéntale a la crew quién eres"></textarea>
+              </div>
+              <div class="cfg-form-actions">
+                <button id="cfg-save-profile" class="cfg-btn-small">Guardar cambios</button>
+                <span id="cfg-profile-msg" class="cfg-profile-msg"></span>
+              </div>
             </div>
           </div>
 
@@ -602,6 +604,47 @@ import Layout from '../layouts/Layout.astro';
       color: var(--primary);
     }
 
+    /* ── FORMULARIO DE PERFIL ── */
+    .cfg-form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .cfg-input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 600;
+      outline: none;
+      resize: vertical;
+    }
+    .cfg-input:focus {
+      border-color: var(--primary);
+    }
+    .cfg-input:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+    .cfg-hint {
+      font-size: 0.6rem;
+      color: var(--text-muted);
+    }
+    .cfg-form-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .cfg-profile-msg {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
     /* ── DANGER BUTTONS ── */
     .cfg-btn-danger {
       padding: 5px 12px;
@@ -962,14 +1005,68 @@ import Layout from '../layouts/Layout.astro';
       });
     }
 
-    function loadUserInfo() {
+    async function loadUserInfo() {
       if (!currentUser) return;
-      const nameEl = document.getElementById('cfg-name');
-      const emailEl = document.getElementById('cfg-email');
-      const usernameEl = document.getElementById('cfg-username');
-      if (nameEl) nameEl.textContent = currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'Wild One';
-      if (emailEl) emailEl.textContent = currentUser.email || 'sin correo';
-      if (usernameEl) usernameEl.textContent = '@' + (currentUser.user_metadata?.username || currentUser.email?.split('@')[0] || 'wildone');
+      const meta = currentUser.user_metadata || {};
+      const emailPrefix = currentUser.email?.split('@')[0] || 'wildone';
+
+      let profile: any = null;
+      try {
+        const { data } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', currentUser.id)
+          .maybeSingle();
+        profile = data;
+      } catch (e) { console.error('Profile fetch error:', e); }
+
+      const nombre = profile?.nombre || meta.nombre || meta.full_name || meta.name || emailPrefix;
+      const username = profile?.username || meta.username || emailPrefix;
+
+      const usernameInput = document.getElementById('cfg-username-input') as HTMLInputElement | null;
+      const nameInput = document.getElementById('cfg-name-input') as HTMLInputElement | null;
+      const emailInput = document.getElementById('cfg-email-input') as HTMLInputElement | null;
+      const bioInput = document.getElementById('cfg-bio-input') as HTMLTextAreaElement | null;
+
+      if (usernameInput) usernameInput.value = username || '';
+      if (nameInput) nameInput.value = nombre || '';
+      if (emailInput) emailInput.value = currentUser.email || '';
+      if (bioInput) bioInput.value = profile?.bio || '';
+    }
+
+    async function saveProfileInfo() {
+      if (!currentUser) { showToast('Inicia sesión para continuar'); return; }
+      const usernameInput = document.getElementById('cfg-username-input') as HTMLInputElement | null;
+      const nameInput = document.getElementById('cfg-name-input') as HTMLInputElement | null;
+      const bioInput = document.getElementById('cfg-bio-input') as HTMLTextAreaElement | null;
+      const msg = document.getElementById('cfg-profile-msg');
+
+      const rawUsername = (usernameInput?.value || '').trim();
+      const username = rawUsername.toLowerCase().replace(/[^a-z0-9._-]/g, '');
+      const nombre = (nameInput?.value || '').trim();
+      const bio = (bioInput?.value || '').trim();
+
+      if (!nombre) {
+        if (msg) msg.textContent = 'El nombre es obligatorio';
+        return;
+      }
+      if (username && username.length < 3) {
+        if (msg) msg.textContent = 'El usuario debe tener al menos 3 caracteres';
+        return;
+      }
+
+      const payload: Record<string, any> = { id: currentUser.id, nombre, bio: bio || null };
+      if (username) payload.username = username;
+
+      const { error } = await supabase.from('profiles').upsert(payload, { onConflict: 'id' });
+      if (error) {
+        if (msg) msg.textContent = error.code === '23505' ? 'Ese usuario ya está ocupado' : 'No se pudo guardar';
+        return;
+      }
+
+      if (usernameInput) usernameInput.value = username;
+      if (msg) msg.textContent = '✅ Guardado';
+      showToast('Perfil actualizado');
     }
 
     async function checkDeletionRequest() {
@@ -1025,6 +1122,7 @@ import Layout from '../layouts/Layout.astro';
       if (isLoggedIn) {
         loadUserInfo();
         checkDeletionRequest();
+        document.getElementById('cfg-save-profile')?.addEventListener('click', saveProfileInfo);
       }
 
       // Section navigation
